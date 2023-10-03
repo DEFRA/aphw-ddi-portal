@@ -1,0 +1,95 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Check your the owner's details before continuing</h1>
+
+    <form method="post" novalidate>
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "First name"
+            },
+            value: {
+              text: firstName
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/name",
+                  text: "Change",
+                  visuallyHiddenText: "first name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Last name"
+            },
+            value: {
+              text: lastName
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/name",
+                  text: "Change",
+                  visuallyHiddenText: "last name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: address | join("<br>")
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/address",
+                  text: "Change",
+                  visuallyHiddenText: "address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Keeper"
+            },
+            value: {
+              text: isKeeper
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/is-keeper",
+                  text: "Change",
+                  visuallyHiddenText: "is keeper"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
+</div>
+
+{% endblock %}
