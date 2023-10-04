@@ -1,0 +1,44 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">What is the name of the dog's owner?</h1>
+
+    <form method="post" novalidate>
+      {{ govukInput({
+        label: {
+          text: "First name"
+        },
+        id: "first-name",
+        name: "firstName",
+        value: firstName,
+        autocomplete: "name",
+        spellcheck: false
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Last name"
+        },
+        id: "last-name",
+        name: "lastName",
+        value: lastName,
+        autocomplete: "name",
+        spellcheck: false
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

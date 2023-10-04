@@ -8,7 +8,4 @@ services:
     environment:
       APPINSIGHTS_CLOUDROLE: dangerous-dogs-act-portal-local
       APPINSIGHTS_CONNECTIONSTRING: ${APPINSIGHTS_CONNECTIONSTRING}
-      COOKIE_PASSWORD: cookiecookiecookiecookiecookiecookie
-      REDIS_HOSTNAME: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: ""
+      COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
