@@ -1,0 +1,97 @@
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+@import "~govuk-frontend/govuk/all";
+
+.govuk-cards__item {
+  box-sizing: border-box;
+
+  @include govuk-media-query($until: tablet) {
+      margin-bottom: 20px;
+  }
+
+  @include govuk-media-query($from: tablet) {
+      float: left;
+      margin-bottom: 40px;
+  }
+
+  @include govuk-media-query($from: desktop) {
+      width: 33.333333%;
+
+      &:not(:nth-child(3n+3)) {
+          padding-right: 20px;
+      }
+  }
+
+  @include govuk-media-query($from: tablet, $until: desktop) {
+      width: 50%;
+
+      &:not(:nth-child(2n+2)) {
+          padding-right: 15px;
+      }
+  }
+}
+
+/**
+* V2 cards with background colour
+*/
+.govuk-cards::after,
+.govuk-cards--2::after,
+.govuk-cards--3::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.govuk-cards--2__item {
+  box-sizing: border-box;
+  border: 1px solid #b1b4b6;
+  background-color: #f3f2f1;
+  padding: 20px;
+  margin-bottom: 20px;
+  float: left;
+
+  :last-child {
+      margin-bottom: 0;
+  }
+
+  @include govuk-media-query($from: desktop) {
+    width: calc(33% - 11px);
+    min-height: 220px;
+
+    &.govuk-card--company {
+        width: calc(66.8% - 10px);
+    }
+
+    &:not(:nth-child(3n+3)) {
+        margin-right: 20px;
+    }
+
+    .govuk-cards--3 &.govuk-card--contacts {
+        margin-right: 0;
+    }
+  }
+
+  @include govuk-media-query($from: tablet, $until: desktop) {
+    width: calc(50% - 8px);
+    min-height: 220px;
+
+    &.govuk-card--company {
+        width: calc(66% - 8px);
+    }
+
+    &:not(:nth-child(2n+2)) {
+        margin-right: 15px;
+    }
+
+    .govuk-cards--3 &.govuk-card--contacts {
+        margin-right: 0;
+    }
+  }
+
+  @include govuk-media-query($until: tablet) {
+    width: 100%;
+
+    &.govuk-card--company {
+        width: 100%;
+    }
+  }
+}

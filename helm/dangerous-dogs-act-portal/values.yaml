@@ -1,9 +1,9 @@
 environment: production
 environmentCode:
-name: ffc-template-node
-namespace: ffc-demo
-workstream: ffc-demo
-image: ffc-template-node
+name: dangerous-dogs-act-portal
+namespace: dangerous-dogs
+workstream: dangerous-dogs
+image: dangerous-dogs-act-portal
 
 labels:
   component: service
@@ -12,10 +12,10 @@ appInsights:
   connectionString:
 
 containerConfigMap:
-  name: ffc-template-node-config-map
+  name: dangerous-dogs-act-portal-config-map
 
 containerSecret:
-  name: ffc-template-node-container-secret
+  name: dangerous-dogs-act-portal-container-secret
   type: Opaque
 
 deployment: {}

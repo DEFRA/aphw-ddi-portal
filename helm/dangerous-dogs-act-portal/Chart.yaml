@@ -1,6 +1,6 @@
 apiVersion: v2
-description: description-of-project-goes-here
-name: ffc-template-node
+description: Web frontend for managing the dogs index
+name: dangerous-dogs-act-portal
 # this version is automatically updated in the build pipeline
 version: 1.0.0
 dependencies:

@@ -2,11 +2,11 @@
 # to provide dependencies and expose ports for local testing
 
 services:
-  ffc-template-node:
+  dangerous-dogs-act-portal:
     build:
       target: development
-    image: ffc-template-node-development
-    container_name: ffc-template-node-development
+    image: dangerous-dogs-act-portal-development
+    container_name: dangerous-dogs-act-portal-development
     ports:
       - "3000:3000"
       - "9229:9229"
