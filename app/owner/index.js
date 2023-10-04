@@ -17,6 +17,18 @@ const setOwnerName = (session, payload) => {
   return owner
 }
 
+const setOwnerPostcode = (session, payload) => {
+  const owner = getOwner(session)
+
+  owner.address = {
+    postcode: payload.postcode
+  }
+
+  session.set(key, owner)
+
+  return owner
+}
+
 const setOwnerAddress = (session, payload) => {
   const owner = getOwner(session)
 
@@ -47,6 +59,7 @@ const setOwnerKeeper = (session, payload) => {
 module.exports = {
   getOwner,
   setOwnerName,
+  setOwnerPostcode,
   setOwnerAddress,
   setOwnerKeeper
 }

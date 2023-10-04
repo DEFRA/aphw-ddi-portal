@@ -19,7 +19,7 @@ module.exports = [
     handler: (request, h) => {
       setOwnerName(request.yar, request.payload)
 
-      return h.redirect('/register/owner/address')
+      return h.redirect('/register/owner/postcode')
     }
   },
 ]

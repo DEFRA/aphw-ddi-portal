@@ -1,0 +1,39 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Select an address</h1>
+    <form method="post" novalidate>
+      <div class="govuk-form-group" id="postcode">
+        <p class="govuk-label">Postcode</p>
+        <p class="govuk-body">
+          <strong style="text-transform: uppercase;">{{ postcode }}</strong>
+          <a href="/register/owner/postcode" class="govuk-link">Change Postcode</a>
+        </p>
+      </div>
+
+      {{ govukSelect({
+        id: "addresses",
+        name: "address",
+        label: {
+          text: "Select an address"
+        },
+        items: addressResults
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

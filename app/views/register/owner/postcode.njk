@@ -1,0 +1,43 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">   
+    {% call govukFieldset({
+      legend: {
+        text: "What is the owner's postcode?",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: true
+      }
+    }) %}
+
+      <form method="post" novalidate>
+        {{ govukInput({
+          label: {
+            text: "Postcode"
+          },
+          id: "postcode",
+          classes: "govuk-input--width-10",
+          name: "postcode",
+          value: postcode,
+          autocomplete: "postcode"
+        }) }}
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </form>
+    
+    {% endcall %}
+    
+  </div>
+</div>
+
+{% endblock %}

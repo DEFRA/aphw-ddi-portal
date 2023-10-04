@@ -8,4 +8,5 @@ services:
     environment:
       APPINSIGHTS_CLOUDROLE: dangerous-dogs-act-portal-local
       APPINSIGHTS_CONNECTIONSTRING: ${APPINSIGHTS_CONNECTIONSTRING}
+      OS_PLACES_API_KEY: ${DDA_OS_PLACES_API_KEY}
       COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
