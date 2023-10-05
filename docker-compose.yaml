@@ -9,3 +9,4 @@ services:
       APPINSIGHTS_CLOUDROLE: dangerous-dogs-act-portal-local
       APPINSIGHTS_CONNECTIONSTRING: ${APPINSIGHTS_CONNECTIONSTRING}
       COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
+      CAPTURE_SITE_KEY: ${CAPTURE_SITE_KEY}

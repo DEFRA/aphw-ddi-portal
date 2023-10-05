@@ -6,6 +6,7 @@ const schema = Joi.object({
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   useRedis: Joi.boolean().default(false),
+  captureSiteKey: Joi.string(),
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
     options: {
@@ -41,6 +42,7 @@ const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   useRedis: process.env.NODE_ENV !== 'test',
+  captureSiteKey: process.env.CcaptureSiteKey,
   cache: {
     options: {
       host: process.env.REDIS_HOSTNAME,

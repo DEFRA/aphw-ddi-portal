@@ -1,4 +1,5 @@
 const { serviceName } = require('../config')
+const { captureSiteKey } = require('../config')
 
 module.exports = {
   plugin: {
@@ -12,6 +13,7 @@ module.exports = {
 
           const serviceUrl = '/'
 
+          ctx.captureSiteKey = captureSiteKey
           ctx.serviceName = serviceName
           ctx.serviceUrl = serviceUrl
 
