@@ -5,7 +5,7 @@ module.exports = {
   path: routes.confirmation.get,
   options: {
     handler: async (request, h) => {
-      const registrationNumber = request.yar.get('registration-number')
+      const registrationNumber = request.yar.get('person-registration-number')
 
       return h.view(views.confirmation, { registrationNumber })
     }

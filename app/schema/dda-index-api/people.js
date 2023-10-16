@@ -8,8 +8,8 @@ const schema = Joi.object({
       last_name: Joi.string().required(),
       address: Joi.object({
         address_line_1: Joi.string().required(),
-        address_line_2: Joi.string().allow(null).optional(),
-        address_line_3: Joi.string().allow(null).optional(),
+        address_line_2: Joi.string().allow(null).allow('').optional(),
+        address_line_3: Joi.string().allow(null).allow('').optional(),
         postcode: Joi.string().required(),
         county: Joi.string().required(),
         country: Joi.string().required()
