@@ -4,7 +4,7 @@ const schema = Joi.object({
   addressLine1: Joi.string().trim().required().messages({
     'string.empty': 'Enter the first line of the address'
   }),
-  addressLine2: Joi.string().trim().allow(null).allow(''),
+  addressLine2: Joi.string().trim().allow(null).optional(),
   town: Joi.string().trim().required().messages({
     'string.empty': 'Enter the town or city'
   }),
