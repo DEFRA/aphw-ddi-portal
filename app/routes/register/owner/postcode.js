@@ -1,26 +1,38 @@
-const { getOwner, setOwnerPostcode } = require('../../../owner')
+const Joi = require('joi')
+const { routes, views } = require('../../../constants/owner')
+const { getAddressPostcode, setAddressPostcode } = require('../../../session/owner')
+const ViewModel = require('../../../models/register/owner/postcode')
 
 module.exports = [
   {
     method: 'GET',
-    path: '/register/owner/postcode',
+    path: routes.postcode.get,
     handler: (request, h) => {
-      const owner = getOwner(request.yar)
+      const postcode = getAddressPostcode(request)
 
-      const postcode = owner.address?.postcode
-
-      return h.view('register/owner/postcode', {
-        postcode
-      })
+      return h.view(views.postcode, new ViewModel(postcode))
     }
   },
   {
     method: 'POST',
-    path: '/register/owner/postcode',
-    handler: (request, h) => {
-      setOwnerPostcode(request.yar, request.payload)
+    path: routes.postcode.post,
+    options: {
+      validate: {
+        payload: Joi.object({
+          postcode: Joi.string().required()
+        }),
+        failAction: async (request, h, error) => {
+          const postcode = getAddressPostcode(request)
+          return h.view(views.postcode, new ViewModel(postcode, error)).code(400).takeover()
+        }
+      },
+      handler: (request, h) => {
+        const postcode = request.payload.postcode
 
-      return h.redirect('/register/owner/select-address')
+        setAddressPostcode(request, { postcode })
+
+        return h.redirect(routes.selectAddress.get)
+      }
     }
-  },
+  }
 ]

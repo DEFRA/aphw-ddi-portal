@@ -1,41 +1,53 @@
-const { getOwner, setOwnerAddress } = require('../../../owner')
+const Joi = require('joi')
+const { routes, views } = require('../../../constants/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
+const { getAddress, setAddress, getAddressPostcode } = require('../../../session/owner')
+const ViewModel = require('../../../models/register/owner/select-address')
 
 module.exports = [
   {
     method: 'GET',
-    path: '/register/owner/select-address',
+    path: routes.selectAddress.get,
     handler: async (request, h) => {
-      const owner = getOwner(request.yar)
+      const postcode = getAddressPostcode(request)
 
-      const lookup = await getPostcodeAddresses(owner.address.postcode)
-      
-      request.yar.set('addresses', lookup)
+      const addresses = await getPostcodeAddresses(postcode)
 
-      const addressResults = []
+      request.yar.set('addresses', addresses)
 
-      lookup.forEach((address, index) => {
-        addressResults.push({
-          value: index,
-          text: `${address.addressLine1}, ${address.addressTown}, ${address.addressPostcode}`
-        })
-      })
-
-      return h.view('register/owner/select-address', {
-        postcode: owner.address.postcode,
-        addressResults
-      })
+      return h.view(views.selectAddress, new ViewModel(postcode, addresses))
     }
   },
   {
     method: 'POST',
-    path: '/register/owner/select-address',
-    handler: (request, h) => {
-      const address = request.yar.get('addresses')[request.payload.address]
+    path: routes.selectAddress.post,
+    options: {
+      validate: {
+        payload: Joi.object({
+          address: Joi.number().min(0).required()
+        }),
+        failAction: async (request, h, error) => {
+          const postcode = getAddressPostcode(request)
+          const addresses = request.yar.get('addresses')
 
-      setOwnerAddress(request.yar, address)
+          return h.view(views.selectAddress, new ViewModel(postcode, addresses, error)).code(400).takeover()
+        }
+      },
+      handler: (request, h) => {
+        const selectedAddress = request.yar.get('addresses')[request.payload.address]
 
-      return h.redirect('/register/owner/address')
+        const address = {
+          addressLine1: selectedAddress.addressLine1,
+          addressLine2: selectedAddress.addressLine2,
+          town: selectedAddress.addressTown,
+          county: selectedAddress.addressCounty,
+          postcode: selectedAddress.addressPostcode
+        }
+
+        setAddress(request, address)
+
+        return h.redirect(routes.address.get)
+      }
     }
-  },
+  }
 ]

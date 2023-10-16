@@ -1,10 +1,26 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% extends '_layout.njk' %}
 
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
 
 {% block content %}
 
@@ -15,19 +31,12 @@
       <div class="govuk-form-group" id="postcode">
         <p class="govuk-label">Postcode</p>
         <p class="govuk-body">
-          <strong style="text-transform: uppercase;">{{ postcode }}</strong>
-          <a href="/register/owner/postcode" class="govuk-link">Change Postcode</a>
+          <strong style="text-transform: uppercase;">{{ model.postcode }}</strong>
+          <a href="{{ model.backLink }}" class="govuk-link">Change Postcode</a>
         </p>
       </div>
 
-      {{ govukSelect({
-        id: "addresses",
-        name: "address",
-        label: {
-          text: "Select an address"
-        },
-        items: addressResults
-      }) }}
+      {{ govukSelect(model.results)}}
 
       {{ govukButton({
         text: "Continue"
@@ -35,7 +44,7 @@
     </form>
 
     <p class="govuk-body">
-      or <a class ="govuk-link" href="/register/owner/address">manually enter your address</a>.
+      or <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
     </p>
   </div>
 </div>

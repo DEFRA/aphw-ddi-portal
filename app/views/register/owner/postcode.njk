@@ -1,4 +1,5 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -6,29 +7,35 @@
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">   
     {% call govukFieldset({
       legend: {
-        text: "What is the owner's postcode?",
+        text: "What is your postcode?",
         classes: "govuk-fieldset__legend--l",
         isPageHeading: true
       }
     }) %}
 
-      <form method="post" novalidate>
-        {{ govukInput({
-          label: {
-            text: "Postcode"
-          },
-          id: "postcode",
-          classes: "govuk-input--width-10",
-          name: "postcode",
-          value: postcode,
-          autocomplete: "postcode"
-        }) }}
+      <form method="POST" action="{{ model.formAction }}" novalidate>
+        {{ govukInput(model.postcode) }}
 
         {{ govukButton({
           text: "Continue"
