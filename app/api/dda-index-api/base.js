@@ -18,8 +18,6 @@ const post = async (endpoint, data) => {
     payload: data
   })
 
-  console.log(payload)
-
   return JSON.parse(payload)
 }
 

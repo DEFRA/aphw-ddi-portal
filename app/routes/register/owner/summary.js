@@ -2,7 +2,6 @@ const { routes, views } = require('../../../constants/owner')
 const { getOwner } = require('../../../session/owner')
 const ViewModel = require('../../../models/register/owner/summary')
 const schema = require('../../../schema/portal/owner')
-const createRegistrationNumber = require('../../../create-registration-number')
 const { addPerson } = require('../../../api/dda-index-api/person')
 
 module.exports = [
@@ -42,7 +41,17 @@ module.exports = [
             postcode: owner.address.postcode,
             county: owner.address.county,
             country: owner.address.country
-          }
+          },
+          contacts: [
+            {
+              contact: owner.email,
+              type: 'email'
+            },
+            {
+              contact: owner.phoneNumber,
+              type: 'phone'
+            }
+          ]
         }
 
         const reference = await addPerson(person)

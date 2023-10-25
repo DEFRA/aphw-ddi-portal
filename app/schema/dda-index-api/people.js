@@ -13,8 +13,12 @@ const schema = Joi.object({
         postcode: Joi.string().required(),
         county: Joi.string().required(),
         country: Joi.string().required()
-      })
-    }))
+      }),
+      contacts: Joi.array().items(Joi.object({
+        contact: Joi.string().required(),
+        type: Joi.string().required()
+      }).required())
+    }).required())
   }).required()
 
 module.exports = schema

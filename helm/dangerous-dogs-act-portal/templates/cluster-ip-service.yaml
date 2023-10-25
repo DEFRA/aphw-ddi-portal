@@ -1,3 +1,0 @@
-{{- include "ffc-helm-library.cluster-ip-service" (list . "dangerous-dogs-act-portal.cluster-ip-service") -}}
-{{- define "dangerous-dogs-act-portal.cluster-ip-service" -}}
-{{- end -}}

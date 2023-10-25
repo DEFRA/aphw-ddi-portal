@@ -70,7 +70,6 @@ function ViewModel (address, counties, countries, errors) {
   }
 
   if (errors) {
-    console.dir(errors, { depth: null })
     for (const error of errors.details) {
       const name = error.path[0]
 

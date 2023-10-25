@@ -1,0 +1,9 @@
+{{- include "ffc-helm-library.container-config-map" (list . "aphw-ddi-portal.config-map") -}}
+{{- define "aphw-ddi-portal.config-map" -}}
+data:
+  NODE_ENV: {{ quote .Values.environment }}
+  PORT: {{ quote .Values.container.port }}
+  APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
+  DDA_INDEX_API_BASE_URL: {{ quote .Values.container.ddaIndexApiBase }}
+  OS_PLACES_API_BASE_URL: {{ quote .Values.container.osPlacesBaseUrl }}
+{{- end -}}
