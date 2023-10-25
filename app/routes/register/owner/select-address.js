@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { getAddress, setAddress, getAddressPostcode } = require('../../../session/owner')
+const { getAddress, setAddress, getAddressPostcode } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/select-address')
 
 module.exports = [

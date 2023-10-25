@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/owner')
-const { getBirthDate, setBirthDate } = require('../../../session/owner')
+const { getBirthDate, setBirthDate } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/date-of-birth')
 const dobSchema = require('../../../schema/portal/owner/date-of-birth')
 

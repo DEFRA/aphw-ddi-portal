@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/owner')
-const { setName, getName } = require('../../../session/owner')
+const { setName, getName } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/name')
 const nameSchema = require('../../../schema/portal/owner/name')
 

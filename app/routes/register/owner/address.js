@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/owner')
-const { getAddress, setAddress } = require('../../../session/owner')
+const { getAddress, setAddress } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { getCounties, getCountries } = require('../../../api/dda-index-api')

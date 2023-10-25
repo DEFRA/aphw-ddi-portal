@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
-const { getPhoneNumber, setPhoneNumber } = require('../../../session/owner')
+const { getPhoneNumber, setPhoneNumber } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/phone-number.js')
 const phoneSchema = require('../../../schema/portal/owner/phone-number')
 

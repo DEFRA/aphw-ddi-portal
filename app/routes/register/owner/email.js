@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
-const { getEmail, setEmail } = require('../../../session/owner')
+const { getEmail, setEmail } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/email')
 const emailSchema = require('../../../schema/portal/owner/email')
 
