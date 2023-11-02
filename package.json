@@ -37,6 +37,8 @@
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
+    "@azure/identity": "2.0.5",
+    "@azure/msal-node": "1.14.6",
     "@hapi/catbox-memory": "5.0.1",
     "blipp": "4.0.2",
     "clean-webpack-plugin": "3.0.0",
