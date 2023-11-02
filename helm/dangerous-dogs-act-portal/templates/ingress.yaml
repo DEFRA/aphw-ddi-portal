@@ -1,3 +1,0 @@
-{{- include "ffc-helm-library.azure-ingress" (list . "aphw-ddi-portal.ingress") -}}
-{{- define "aphw-ddi-portal.ingress" -}}
-{{- end -}}
