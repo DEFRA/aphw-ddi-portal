@@ -1,8 +1,7 @@
-require('./insights').setup()
 const config = require('./config')
 const Hapi = require('@hapi/hapi')
 
-async function createServer () {
+const createServer = async () => {
   const server = Hapi.Server({
     port: config.port,
     routes: {

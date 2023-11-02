@@ -5,11 +5,10 @@ namespace: dangerous-dogs
 workstream: dangerous-dogs
 image: dangerous-dogs-act-portal
 
-labels:
-  component: service
+labels: {}
 
 appInsights:
-  connectionString:
+  key:
 
 containerConfigMap:
   name: dangerous-dogs-act-portal-config-map
@@ -42,3 +41,25 @@ readinessProbe:
   periodSeconds: 10
   failureThreshold: 3
   timeoutSeconds: 5
+
+aadPodIdentity: true
+
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID
+
+ingress:
+  class: nginx
+  endpoint: ffc-pay-request-editor
+  server: example.com
+
+service:
+  port: 80
+  type: ClusterIP
+
+azureAppRegistration:
+  enabled: true
+  clientId:
+  clientSecret:
+  tenantId:
+  redirectUrl: authenticate
