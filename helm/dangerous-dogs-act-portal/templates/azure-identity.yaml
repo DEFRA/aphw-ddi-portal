@@ -1,5 +1,5 @@
 {{- if .Values.aadPodIdentity }}
-{{- include "ffc-helm-library.azure-identity" (list . "dangerous-dogs-act-portal.azure-identity") -}}
+{{- include "ffc-helm-library.azure-identity" (list . "aphw-ddi-portal.azure-identity") -}}
 {{- end }}
-{{- define "dangerous-dogs-act-portal.azure-identity" -}}
+{{- define "aphw-ddi-portal.azure-identity" -}}
 {{- end -}}

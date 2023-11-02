@@ -1,9 +1,9 @@
 environment: production
 environmentCode:
-name: dangerous-dogs-act-portal
+name: aphw-ddi-portal
 namespace: dangerous-dogs
 workstream: dangerous-dogs
-image: dangerous-dogs-act-portal
+image: aphw-ddi-portal
 
 labels: {}
 
@@ -11,10 +11,10 @@ appInsights:
   key:
 
 containerConfigMap:
-  name: dangerous-dogs-act-portal-config-map
+  name: aphw-ddi-portal-config-map
 
 containerSecret:
-  name: dangerous-dogs-act-portal-container-secret
+  name: aphw-ddi-portal-container-secret
   type: Opaque
 
 deployment: {}
