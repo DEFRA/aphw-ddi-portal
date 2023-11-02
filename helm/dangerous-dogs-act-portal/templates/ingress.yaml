@@ -1,3 +1,0 @@
-{{- include "ffc-helm-library.azure-ingress" (list . "dangerous-dogs-act-portal.ingress") -}}
-{{- define "dangerous-dogs-act-portal.ingress" -}}
-{{- end -}}

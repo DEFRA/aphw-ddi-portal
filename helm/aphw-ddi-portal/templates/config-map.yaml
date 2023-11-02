@@ -1,5 +1,5 @@
-{{- include "ffc-helm-library.container-config-map" (list . "dangerous-dogs-act-portal.config-map") -}}
-{{- define "dangerous-dogs-act-portal.config-map" -}}
+{{- include "ffc-helm-library.container-config-map" (list . "aphw-ddi-portal.config-map") -}}
+{{- define "aphw-ddi-portal.config-map" -}}
 data:
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}

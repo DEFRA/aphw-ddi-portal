@@ -1,4 +1,4 @@
-# dangerous-dogs-act-portal
+# aphw-ddi-portal
 
 Web frontend to support registration of dangerous dog ownership.
 
