@@ -1,8 +1,8 @@
 environment: production
 environmentCode:
 name: aphw-ddi-portal
-namespace: dangerous-dogs
-workstream: dangerous-dogs
+namespace: aphw-ddi
+workstream: aphw-ddi
 image: aphw-ddi-portal
 
 labels: {}
