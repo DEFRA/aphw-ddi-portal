@@ -1,6 +1,10 @@
 {
   "name": "aphw-ddi-portal",
+<<<<<<< HEAD
   "version": "0.1.0",
+=======
+  "version": "0.2.0",
+>>>>>>> 3241ecd3794b2c1e65794accff108ef982634e5f
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
