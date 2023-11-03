@@ -1,0 +1,52 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Select an address</h1>
+    <form method="post" novalidate>
+      <div class="govuk-form-group" id="postcode">
+        <p class="govuk-label">Postcode</p>
+        <p class="govuk-body">
+          <strong style="text-transform: uppercase;">{{ model.postcode }}</strong>
+          <a href="{{ model.backLink }}" class="govuk-link">Change Postcode</a>
+        </p>
+      </div>
+
+      {{ govukSelect(model.results)}}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+
+    <p class="govuk-body">
+      or <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

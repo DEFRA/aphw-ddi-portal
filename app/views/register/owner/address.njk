@@ -1,94 +1,63 @@
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}{% endblock %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
 
 {% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: model.errors
+        }) }}
+      {% endif %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">   
-    {% call govukFieldset({
-      legend: {
-        text: "What is the address of the owner?",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: true
-      }
-    }) %}
+      {% call govukFieldset({
+        legend: {
+          text: "What is the owner's address?",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
 
-      <form method="post" novalidate>
-        {{ govukInput({
-          label: {
-            text: "Address line 1"
-          },
-          id: "address-line-1",
-          name: "addressLine1",
-          value: addressLine1,
-          autocomplete: "address-line1"
-        }) }}
-      
-        {{ govukInput({
-          label: {
-            text: "Address line 2 (optional)"
-          },
-          id: "address-line-2",
-          name: "addressLine2",
-          value: addressLine2,
-          autocomplete: "address-line2"
-        }) }}
+        <form method="POST" action="{{ model.formAction }}" novalidate>
+          {{ govukInput(model.addressLine1) }}
+        
+          {{ govukInput(model.addressLine2) }}
+       
+          {{ govukInput(model.town) }}
+        
+          {{ govukSelect(model.county) }}
+        
+          {{ govukInput(model.postcode) }}
 
-        {{ govukInput({
-          label: {
-            text: "Address line 3 (optional)"
-          },
-          id: "address-line-3",
-          name: "addressLine3",
-          value: addressLine3,
-          autocomplete: "address-line3"
-        }) }}
-      
-        {{ govukInput({
-          label: {
-            text: "Town or city"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-town",
-          name: "addressTown",
-          value: addressTown,
-          autocomplete: "address-level2"
-        }) }}
-      
-        {{ govukInput({
-          label: {
-            text: "County"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-county",
-          value: addressCounty,
-          name: "addressCounty"
-        }) }}
-      
-        {{ govukInput({
-          label: {
-            text: "Postcode"
-          },
-          classes: "govuk-input--width-10",
-          id: "address-postcode",
-          name: "addressPostcode",
-          value: addressPostcode,
-          autocomplete: "postal-code"
-        }) }}
+          {{ govukSelect(model.country) }}
 
-        {{ govukButton({
-          text: "Continue"
-        }) }}
-      </form>
-    
-    {% endcall %}
-    
+          {{ govukButton({
+            text: "Continue"
+          }) }}
+        </form>
+
+      {% endcall %}
   </div>
-</div>
-
 {% endblock %}

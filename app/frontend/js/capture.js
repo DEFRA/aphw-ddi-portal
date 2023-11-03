@@ -8,7 +8,7 @@ function doneCallback (solution) {
 
 const element = document.querySelector('#my-widget')
 const options = {
-  doneCallback: doneCallback,
+  doneCallback,
   sitekey: captureSitekey
 }
 const widget = new WidgetInstance(element, options)

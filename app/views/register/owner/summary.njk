@@ -1,49 +1,31 @@
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% extends '_layout.njk' %}
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Check your the owner's details before continuing</h1>
+    <h2 class="govuk-heading-m">Owner</h2>
 
-    <form method="post" novalidate>
+    <form method="post" action="{{ model.formAction }}">
       {{ govukSummaryList({
         rows: [
           {
             key: {
-              text: "First name"
+              text: "Name"
             },
             value: {
-              text: firstName
+              text: model.summary.owner.name
             },
             actions: {
               items: [
                 {
                   href: "/register/owner/name",
                   text: "Change",
-                  visuallyHiddenText: "first name"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "Last name"
-            },
-            value: {
-              text: lastName
-            },
-            actions: {
-              items: [
-                {
-                  href: "/register/owner/name",
-                  text: "Change",
-                  visuallyHiddenText: "last name"
+                  visuallyHiddenText: "name"
                 }
               ]
             }
@@ -53,7 +35,7 @@
               text: "Address"
             },
             value: {
-              html: address | join("<br>")
+              html: model.summary.owner.address | join("<br>")
             },
             actions: {
               items: [
@@ -67,17 +49,51 @@
           },
           {
             key: {
-              text: "Keeper"
+              text: "Date of birth"
             },
             value: {
-              text: isKeeper
+              text: model.summary.owner.dateOfBirth
             },
             actions: {
               items: [
                 {
-                  href: "/register/owner/is-keeper",
+                  href: "/register/owner/date-of-birth",
                   text: "Change",
-                  visuallyHiddenText: "is keeper"
+                  visuallyHiddenText: "Date of birth"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Telephone"
+            },
+            value: {
+              text: model.summary.owner.phone
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/phone-number",
+                  text: "Change",
+                  visuallyHiddenText: "Telephone number"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Email"
+            },
+            value: {
+              text: model.summary.owner.email
+            },
+            actions: {
+              items: [
+                {
+                  href: "/register/owner/email",
+                  text: "Change",
+                  visuallyHiddenText: "email"
                 }
               ]
             }
@@ -85,11 +101,12 @@
         ]
       }) }}
 
-      {{ govukButton({
-        text: "Continue"
-      }) }}
-    </form>
-  </div>
+      {% if not model.summary.error %}
+        {{ govukButton({
+            text: "Continue"
+          }) }}
+      {% endif %}
+    </form>    
 </div>
 
 {% endblock %}

@@ -6,6 +6,13 @@ const schema = Joi.object({
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   useRedis: Joi.boolean().default(false),
+  ddaIndexApi: {
+    baseUrl: Joi.string().required()
+  },
+  osPlacesApi: {
+    baseUrl: Joi.string().default('https://api.os.uk/search/places/v1'),
+    token: Joi.string().required()
+  },
   captureSiteKey: Joi.string(),
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
@@ -50,6 +57,13 @@ const config = {
       port: process.env.REDIS_PORT,
       tls: process.env.NODE_ENV === 'production' ? {} : undefined
     }
+  },
+  ddaIndexApi: {
+    baseUrl: process.env.DDA_INDEX_API_BASE_URL
+  },
+  osPlacesApi: {
+    baseUrl: process.env.OS_PLACES_API_BASE_URL,
+    token: process.env.OS_PLACES_API_KEY
   },
   cookie: {
     cookieNameCookiePolicy: 'dangerous_dog_act_portal_cookie_policy',
