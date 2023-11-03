@@ -31,6 +31,11 @@ container:
   osPlacesBaseUrl: os-places-api-base-url
   osPlacesApiKey: os-places-api-key
 
+ingress:
+  class: nginx
+  endpoint: aphw-ddi-register
+  server: value.replaced.from.app.config
+
 livenessProbe:
   path: /healthz
   port: 3000
