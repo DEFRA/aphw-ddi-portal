@@ -40,7 +40,7 @@ function ViewModel (address, counties, countries, errors) {
       value: address.county,
       items: counties.map(county => ({
         value: county,
-        text: county,
+        text: county
       })),
       autocomplete: 'addressCounty'
     },
@@ -62,7 +62,7 @@ function ViewModel (address, counties, countries, errors) {
       value: address.country,
       items: countries.map(country => ({
         value: country,
-        text: country,
+        text: country
       })),
       autocomplete: 'addressCountry'
     },
