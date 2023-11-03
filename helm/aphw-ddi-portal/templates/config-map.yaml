@@ -10,4 +10,5 @@ data:
   REDIRECT_URL: https://{{ .Values.ingress.endpoint }}.{{ .Values.ingress.server }}/{{ .Values.azureAppRegistration.redirectUrl }}
   {{- end }}
   AUTHENTICATION_ENABLED: {{ quote .Values.azureAppRegistration.enabled }}
+  COOKIE_PASSWORD: {{ quote .Values.container.cookiePassword }}
 {{- end -}}

@@ -10,7 +10,6 @@ console.log(`Running webpack in ${isDev ? 'development' : 'production'} mode`)
 module.exports = {
   entry: {
     core: './app/frontend/css/index.js',
-    capture: './app/frontend/js/capture.js',
     cookies: './app/frontend/js/cookies.js'
   },
   mode: isDev ? 'development' : 'production',
@@ -74,12 +73,6 @@ module.exports = {
       filename: '../views/cookies/_cookie-banner.njk',
       template: 'app/views/cookies/_cookie-banner.template.njk',
       chunks: ['cookies']
-    }),
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: '../views/register/owner/_capture-test.njk',
-      template: 'app/views/register/owner/_capture-test.template.njk',
-      chunks: ['capture']
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[fullhash].css'

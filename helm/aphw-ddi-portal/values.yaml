@@ -25,6 +25,7 @@ container:
   limitMemory: 100Mi
   limitCpu: 100m
   port: 3000
+  cookiePassword: cookiecookiecookiecookiecookiecookie
 
 livenessProbe:
   path: /healthz
