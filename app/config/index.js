@@ -13,6 +13,7 @@ const schema = Joi.object({
     baseUrl: Joi.string().default('https://api.os.uk/search/places/v1'),
     token: Joi.string().required()
   },
+  captureSiteKey: Joi.string(),
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
     options: {
@@ -48,6 +49,7 @@ const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   useRedis: process.env.NODE_ENV !== 'test',
+  captureSiteKey: process.env.CcaptureSiteKey,
   cache: {
     options: {
       host: process.env.REDIS_HOSTNAME,
