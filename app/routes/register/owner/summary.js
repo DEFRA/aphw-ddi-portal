@@ -1,33 +1,69 @@
-const { getOwner } = require('../../../owner')
+const { routes, views } = require('../../../constants/owner')
+const { getOwner } = require('../../../session/register/owner')
+const ViewModel = require('../../../models/register/owner/summary')
+const schema = require('../../../schema/portal/owner')
+const { addPerson } = require('../../../api/dda-index-api/person')
 const { admin } = require('../../../auth/permissions')
 
 module.exports = [
   {
     method: 'GET',
-    path: '/register/owner/summary',
+    path: routes.summary.get,
     options: {
       auth: { scope: [admin] },
-      handler: (request, h) => {
-        const owner = getOwner(request.yar)
+      handler: async (request, h) => {
+        const owner = getOwner(request)
 
-        const firstName = owner.firstName
-        const lastName = owner.lastName
-        const isKeeper = owner.isKeeper ? 'Yes' : 'No'
+        const { error } = schema.validate(owner, { abortEarly: false })
 
-        const address = []
+        return h.view(views.summary, new ViewModel(owner, error))
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: routes.summary.post,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const owner = getOwner(request)
 
-        Object.keys(owner.address).forEach(key => {
-          if (owner.address[key]) {
-            address.push(owner.address[key])
-          }
-        })
+        const { error } = schema.validate(owner, { abortEarly: false })
 
-        return h.view('register/owner/summary', {
-          firstName,
-          lastName,
-          address,
-          isKeeper
-        })
+        if (error) {
+          return h.view(views.summary, new ViewModel(owner, error)).code(400).takeover()
+        }
+
+        const person = {
+          title: owner.name.title,
+          first_name: owner.name.firstName,
+          last_name: owner.name.lastName,
+          address: {
+            address_line_1: owner.address.addressLine1,
+            address_line_2: owner.address.addressLine2,
+            postcode: owner.address.postcode,
+            county: owner.address.county,
+            country: owner.address.country
+          },
+          contacts: [
+            {
+              contact: owner.email,
+              type: 'email'
+            },
+            {
+              contact: owner.phoneNumber,
+              type: 'phone'
+            }
+          ]
+        }
+
+        const reference = await addPerson(person)
+
+        request.yar.reset()
+
+        request.yar.set('person-registration-number', reference)
+
+        return h.redirect(routes.confirmation.get)
       }
     }
   }

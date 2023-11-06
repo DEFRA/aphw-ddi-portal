@@ -5,10 +5,11 @@ namespace: aphw-ddi
 workstream: aphw-ddi
 image: aphw-ddi-portal
 
-labels: {}
+labels:
+  component: service
 
 appInsights:
-  key:
+  connectionString:
 
 containerConfigMap:
   name: aphw-ddi-portal-config-map
@@ -25,7 +26,10 @@ container:
   limitMemory: 100Mi
   limitCpu: 100m
   port: 3000
-  cookiePassword: cookiecookiecookiecookiecookiecookie
+  cookiePassword: who-likes-cookies-i-like-cookies-everybody-likes-cookies
+  ddaIndexApiBase: dda-index-api-base-url
+  osPlacesBaseUrl: os-places-api-base-url
+  osPlacesApiKey: os-places-api-key
 
 livenessProbe:
   path: /healthz
