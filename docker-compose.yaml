@@ -16,3 +16,13 @@ services:
       AZUREID_CLIENT_ID: ${AZUREID_CLIENT_ID}
       AZUREID_TENANT_ID: ${AZUREID_TENANT_ID}
       REDIRECT_URL: ${REDIRECT_URL}
+      AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME:-devstoreaccount1}
+      AZURE_STORAGE_USE_CONNECTION_STRING: "true"
+      AZURE_STORAGE_CREATE_CONTAINERS: "true"
+      AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING}
+
+  aphw-ddi-portal-azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+    command: "azurite-blob --skipApiVersionCheck --loose --blobHost 0.0.0.0"
+    labels:
+      com.docker.compose.pay.role: aphw-ddi-portal-azurite

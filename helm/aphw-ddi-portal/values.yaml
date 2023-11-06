@@ -30,6 +30,9 @@ container:
   ddaIndexApiBase: dda-index-api-base-url
   osPlacesBaseUrl: os-places-api-base-url
   osPlacesApiKey: os-places-api-key
+  azureStorageConnectionString: dummy
+  azureStorageUseConnectionString: false
+  azureStorageAccountName: dummy
 
 livenessProbe:
   path: /healthz

@@ -12,4 +12,5 @@ data:
   AUTHENTICATION_ENABLED: {{ quote .Values.azureAppRegistration.enabled }}
   DDA_INDEX_API_BASE_URL: {{ quote .Values.container.ddaIndexApiBase }}
   OS_PLACES_API_BASE_URL: {{ quote .Values.container.osPlacesBaseUrl }}
+  AZURE_STORAGE_USE_CONNECTION_STRING: {{ quote .Values.container.azureStorageUseConnectionString }}
 {{- end -}}

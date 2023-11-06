@@ -23,6 +23,7 @@
   "dependencies": {
     "@azure/identity": "2.0.5",
     "@azure/msal-node": "1.14.6",
+    "@azure/storage-blob": "12.13.0",
     "@hapi/catbox-redis": "6.0.2",
     "@hapi/cookie": "11.0.2",
     "@hapi/crumb": "8.0.1",
@@ -39,7 +40,8 @@
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
     "libphonenumber-js": "^1.10.47",
-    "nunjucks": "^3.2.4"
+    "nunjucks": "^3.2.4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "5.0.1",

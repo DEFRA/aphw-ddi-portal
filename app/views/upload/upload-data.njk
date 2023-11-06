@@ -1,0 +1,49 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% set pageHeading = "Upload a receipt" %}
+
+{% block content %}
+  <form method="post" novalidate="novalidate" enctype="multipart/form-data">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+              {{ pageHeading }}
+            </h1>
+            <div id="location-upload-hint">
+              <p>The file should be:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>a xls or xlsx</li>
+                <li>no larger than 50MB</li>
+              </ul>
+            </div>
+              {{ govukFileUpload({
+                id: "data",
+                name: "data",
+                errorMessage: err[0],
+                label: {
+                  text: "Choose file",
+                  classes: "govuk-visually-hidden"
+                }
+              }) }}
+              <p class="govuk-!-padding-top-3">
+                No file chosen
+              </p>
+              {{ govukButton({
+                text: "Upload",
+                attributes: {
+                  id: "continue",
+                  "data-testid": "continue"
+                }
+              }) }}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}
