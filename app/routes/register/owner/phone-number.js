@@ -3,21 +3,26 @@ const { routes, views } = require('../../../constants/owner')
 const { getPhoneNumber, setPhoneNumber } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/phone-number.js')
 const phoneSchema = require('../../../schema/portal/owner/phone-number')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [
   {
     method: 'GET',
     path: routes.phoneNumber.get,
-    handler: (request, h) => {
-      const phone = getPhoneNumber(request)
+    options: {
+      auth: { scope: [admin] },
+      handler: (request, h) => {
+        const phone = getPhoneNumber(request)
 
-      return h.view(views.phoneNumber, new ViewModel(phone))
+        return h.view(views.phoneNumber, new ViewModel(phone))
+      }
     }
   },
   {
     method: 'POST',
     path: routes.phoneNumber.post,
     options: {
+      auth: { scope: [admin] },
       validate: {
         payload: Joi.object({
           phoneNumber: phoneSchema

@@ -3,12 +3,14 @@ const { getOwner } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/summary')
 const schema = require('../../../schema/portal/owner')
 const { addPerson } = require('../../../api/dda-index-api/person')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [
   {
     method: 'GET',
     path: routes.summary.get,
     options: {
+      auth: { scope: [admin] },
       handler: async (request, h) => {
         const owner = getOwner(request)
 
@@ -22,6 +24,7 @@ module.exports = [
     method: 'POST',
     path: routes.summary.post,
     options: {
+      auth: { scope: [admin] },
       handler: async (request, h) => {
         const owner = getOwner(request)
 

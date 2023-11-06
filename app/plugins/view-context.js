@@ -1,5 +1,5 @@
 const { serviceName } = require('../config')
-const { captureSiteKey } = require('../config')
+const { mapAuth, getUser } = require('../auth')
 
 module.exports = {
   plugin: {
@@ -13,9 +13,10 @@ module.exports = {
 
           const serviceUrl = '/'
 
-          ctx.captureSiteKey = captureSiteKey
           ctx.serviceName = serviceName
           ctx.serviceUrl = serviceUrl
+          ctx.auth = mapAuth(request)
+          ctx.user = getUser(request)
 
           response.source.context = ctx
         }

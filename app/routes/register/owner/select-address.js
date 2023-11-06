@@ -3,25 +3,28 @@ const { routes, views } = require('../../../constants/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getAddressPostcode } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/select-address')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [
   {
     method: 'GET',
     path: routes.selectAddress.get,
-    handler: async (request, h) => {
-      const postcode = getAddressPostcode(request)
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const postcode = getAddressPostcode(request)
+        const addresses = await getPostcodeAddresses(postcode)
 
-      const addresses = await getPostcodeAddresses(postcode)
-
-      request.yar.set('addresses', addresses)
-
-      return h.view(views.selectAddress, new ViewModel(postcode, addresses))
+        request.yar.set('addresses', addresses)
+        return h.view(views.selectAddress, new ViewModel(postcode, addresses))
+      }
     }
   },
   {
     method: 'POST',
     path: routes.selectAddress.post,
     options: {
+      auth: { scope: [admin] },
       validate: {
         payload: Joi.object({
           address: Joi.number().min(0).required()

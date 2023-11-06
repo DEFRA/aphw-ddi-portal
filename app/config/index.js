@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const authConfig = require('./auth')
 
 // Define config schema
 const schema = Joi.object({
@@ -13,7 +14,6 @@ const schema = Joi.object({
     baseUrl: Joi.string().default('https://api.os.uk/search/places/v1'),
     token: Joi.string().required()
   },
-  captureSiteKey: Joi.string(),
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
     options: {
@@ -49,7 +49,6 @@ const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   useRedis: process.env.NODE_ENV !== 'test',
-  captureSiteKey: process.env.CcaptureSiteKey,
   cache: {
     options: {
       host: process.env.REDIS_HOSTNAME,
@@ -95,6 +94,8 @@ if (result.error) {
 
 // Use the joi validated value
 const value = result.value
+
+value.authConfig = authConfig
 
 value.isDev = value.env === 'development'
 value.isTest = value.env === 'test'

@@ -2,11 +2,13 @@ const { routes, views } = require('../../../constants/owner')
 const { setName, getName } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/name')
 const nameSchema = require('../../../schema/portal/owner/name')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [{
   method: 'GET',
   path: routes.name.get,
   options: {
+    auth: { scope: [admin] },
     handler: async (request, h) => {
       const name = getName(request)
       return h.view(views.name, new ViewModel(name))
@@ -17,6 +19,7 @@ module.exports = [{
   method: 'POST',
   path: routes.name.post,
   options: {
+    auth: { scope: [admin] },
     validate: {
       payload: nameSchema,
       failAction: async (request, h, error) => {

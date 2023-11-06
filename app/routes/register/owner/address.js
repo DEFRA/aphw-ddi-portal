@@ -3,11 +3,13 @@ const { getAddress, setAddress } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { getCounties, getCountries } = require('../../../api/dda-index-api')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [{
   method: 'GET',
   path: routes.address.get,
   options: {
+    auth: { scope: [admin] },
     handler: async (request, h) => {
       const counties = [''].concat(await getCounties())
       const countries = [''].concat(await getCountries())

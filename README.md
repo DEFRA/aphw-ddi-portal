@@ -1,6 +1,6 @@
 # aphw-ddi-portal
 
-Web frontend to support registration of dangerous dog ownership.
+Web frontend to support the dangerous dog index.
 
 ## Prerequisites
 
