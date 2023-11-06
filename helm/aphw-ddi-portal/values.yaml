@@ -31,11 +31,6 @@ container:
   osPlacesBaseUrl: os-places-api-base-url
   osPlacesApiKey: os-places-api-key
 
-ingress:
-  class: nginx
-  endpoint: aphw-ddi-register
-  server: value.replaced.from.app.config
-
 livenessProbe:
   path: /healthz
   port: 3000
@@ -51,3 +46,25 @@ readinessProbe:
   periodSeconds: 10
   failureThreshold: 3
   timeoutSeconds: 5
+
+aadPodIdentity: true
+
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID
+
+ingress:
+  class: nginx
+  endpoint: ffc-pay-request-editor
+  server: example.com
+
+service:
+  port: 80
+  type: ClusterIP
+
+azureAppRegistration:
+  enabled: true
+  clientId:
+  clientSecret:
+  tenantId:
+  redirectUrl: authenticate

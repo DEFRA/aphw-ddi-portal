@@ -3,11 +3,13 @@ const { routes, views } = require('../../../constants/owner')
 const { getEmail, setEmail } = require('../../../session/register/owner')
 const ViewModel = require('../../../models/register/owner/email')
 const emailSchema = require('../../../schema/portal/owner/email')
+const { admin } = require('../../../auth/permissions')
 
 module.exports = [{
   method: 'GET',
   path: routes.email.get,
   options: {
+    auth: { scope: [admin] },
     handler: async (request, h) => {
       const email = getEmail(request)
       return h.view(views.email, new ViewModel(email))
@@ -18,6 +20,7 @@ module.exports = [{
   method: 'POST',
   path: routes.email.post,
   options: {
+    auth: { scope: [admin] },
     validate: {
       payload: Joi.object({
         email: emailSchema

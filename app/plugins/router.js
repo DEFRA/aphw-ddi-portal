@@ -13,7 +13,10 @@ const routes = [].concat(
   require('../routes/healthy'),
   require('../routes/healthz'),
   require('../routes/view-registration'),
-  require('../routes/capture-test')
+  require('../routes/authenticate'),
+  require('../routes/login'),
+  require('../routes/logout'),
+  require('../routes/dev-auth')
 )
 
 module.exports = {
