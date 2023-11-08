@@ -1,5 +1,4 @@
-function ViewModel(errors) {
-  console.log(errors)
+function ViewModel (errors) {
   this.model = {
     id: 'registerUpload',
     name: 'register',
