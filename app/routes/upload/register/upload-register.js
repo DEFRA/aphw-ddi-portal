@@ -2,7 +2,6 @@ const { Readable } = require('stream')
 const uploadConstants = require('../../../constants/upload')
 const { uploadDataFile } = require('../../../storage')
 const Joi = require('joi')
-const { errorMonitor } = require('events')
 const ViewModel = require('../../../models/upload/register')
 
 module.exports = [{
