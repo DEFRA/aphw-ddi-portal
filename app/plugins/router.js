@@ -17,7 +17,7 @@ const routes = [].concat(
   require('../routes/login'),
   require('../routes/logout'),
   require('../routes/dev-auth'),
-  require('../routes/upload/upload-data')
+  require('../routes/upload/register/upload-register')
 )
 
 module.exports = {

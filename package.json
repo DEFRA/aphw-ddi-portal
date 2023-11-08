@@ -40,8 +40,7 @@
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
     "libphonenumber-js": "^1.10.47",
-    "nunjucks": "^3.2.4",
-    "xlsx": "^0.18.5"
+    "nunjucks": "^3.2.4"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "5.0.1",

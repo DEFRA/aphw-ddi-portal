@@ -4,7 +4,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
-{% set pageHeading = "Upload a receipt" %}
+{% set pageHeading = "Upload register" %}
 
 {% block content %}
   <form method="post" novalidate="novalidate" enctype="multipart/form-data">
@@ -16,21 +16,13 @@
               {{ pageHeading }}
             </h1>
             <div id="location-upload-hint">
-              <p>The file should be:</p>
+              <p>The file should:</p>
               <ul class="govuk-list govuk-list--bullet">
-                <li>a xls or xlsx</li>
-                <li>no larger than 50MB</li>
+                <li>Have an extension of .xls or .xlsx</li>
+                <li>Be no larger than 50 MB</li>
               </ul>
             </div>
-              {{ govukFileUpload({
-                id: "data",
-                name: "data",
-                errorMessage: err[0],
-                label: {
-                  text: "Choose file",
-                  classes: "govuk-visually-hidden"
-                }
-              }) }}
+              {{ govukFileUpload(model) }}
               <p class="govuk-!-padding-top-3">
                 No file chosen
               </p>
