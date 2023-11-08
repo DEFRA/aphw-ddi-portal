@@ -13,3 +13,16 @@ services:
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
+    environment:
+      AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://aphw-ddi-portal-azurite:10000/devstoreaccount1;}
+    depends_on:
+      - aphw-ddi-portal-azurite
+
+  aphw-ddi-portal-azurite:
+    volumes:
+      - azurite_data:/data
+    ports:
+      - "10000:10000"
+
+volumes:
+  azurite_data:
