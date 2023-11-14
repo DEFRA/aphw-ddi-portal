@@ -36,6 +36,7 @@
     "applicationinsights": "2.3.5",
     "date-fns": "^2.30.0",
     "ffc-messaging": "^2.8.0",
+    "form-data": "^4.0.0",
     "friendly-challenge": "^0.9.13",
     "govuk-frontend": "^4.7.0",
     "hapi-pino": "10.1.0",

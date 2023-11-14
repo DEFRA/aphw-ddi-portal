@@ -5,7 +5,7 @@ const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
 const { sendMessage } = require('../../../messaging/outbound')
 const { admin } = require('../../../auth/permissions')
-const getUser = require('../../../auth/get-user')
+const { getUser } = require('../../../auth')
 
 module.exports = [{
   method: 'GET',
@@ -45,7 +45,6 @@ module.exports = [{
         }).required().unknown(true)
       }).required().unknown(true),
       failAction: (request, h, err) => {
-        console.log(request.payload)
         return h.view(uploadConstants.views.register, new ViewModel(err)).takeover(400)
       }
     },
