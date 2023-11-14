@@ -20,6 +20,10 @@ services:
       AZURE_STORAGE_USE_CONNECTION_STRING: "true"
       AZURE_STORAGE_CREATE_CONTAINERS: "true"
       AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;}
+      MESSAGE_QUEUE_HOST: ${MESSAGE_QUEUE_HOST:-test}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-test}
+      MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-test}
+      REGISTER_IMPORT_REQUEST_QUEUE: ${REGISTER_IMPORT_REQUEST_QUEUE:-aphw-ddi-register-import-request}${MESSAGE_QUEUE_SUFFIX}
 
   aphw-ddi-portal-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0

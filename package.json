@@ -35,12 +35,14 @@
     "@hapi/yar": "10.1.1",
     "applicationinsights": "2.3.5",
     "date-fns": "^2.30.0",
+    "ffc-messaging": "^2.8.0",
     "friendly-challenge": "^0.9.13",
     "govuk-frontend": "^4.7.0",
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
     "libphonenumber-js": "^1.10.47",
-    "nunjucks": "^3.2.4"
+    "nunjucks": "^3.2.4",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "5.0.1",
