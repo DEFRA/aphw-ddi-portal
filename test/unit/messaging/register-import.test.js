@@ -16,7 +16,7 @@ describe('register import message sender', () => {
     expect(MessageSender.prototype.sendMessage).toHaveBeenCalledWith({
       body: {
         specVersion: '1.0',
-        type: 'REIGSTER_IMPORT',
+        type: 'REGISTER_IMPORT',
         source: 'aphw-ddi-portal',
         id: expect.any(String),
         time: expect.any(String),
