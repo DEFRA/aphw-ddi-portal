@@ -1,6 +1,6 @@
 const { Readable } = require('stream')
 const uploadConstants = require('../../../constants/upload')
-const { uploadDataFile } = require('../../../storage')
+const { uploadRegisterFile } = require('../../../register-import/register-blob')
 const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
 const { sendMessage } = require('../../../messaging/outbound')
@@ -56,7 +56,7 @@ module.exports = [{
       stream.push(fileBuffer)
       stream.push(null)
 
-      await uploadDataFile(stream, filename)
+      await uploadRegisterFile(filename, stream)
 
       await sendMessage({ filename, email: getUser(request).username })
 

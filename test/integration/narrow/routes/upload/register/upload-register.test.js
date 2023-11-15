@@ -6,8 +6,8 @@ describe('Upload register', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../../app/storage')
-  const { uploadDataFile } = require('../../../../../../app/storage')
+  jest.mock('../../../../../../app/register-import/register-blob')
+  const { uploadRegisterFile } = require('../../../../../../app/register-import/register-blob')
 
   jest.mock('../../../../../../app/messaging/outbound')
   const { sendMessage } = require('../../../../../../app/messaging/outbound')
@@ -59,7 +59,7 @@ describe('Upload register', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(uploadDataFile).toHaveBeenCalledWith(expect.any(Readable), 'ddi-register-2023-11-14T00:00:00.000Z')
+    expect(uploadRegisterFile).toHaveBeenCalledWith('ddi-register-2023-11-14T00:00:00.000Z', expect.any(Readable))
     expect(sendMessage).toHaveBeenCalledWith({
       filename: 'ddi-register-2023-11-14T00:00:00.000Z',
       email: 'test@example.com'
@@ -80,7 +80,7 @@ describe('Upload register', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(200)
-    expect(uploadDataFile).not.toHaveBeenCalled()
+    expect(uploadRegisterFile).not.toHaveBeenCalled()
     expect(sendMessage).not.toHaveBeenCalled()
   })
 
