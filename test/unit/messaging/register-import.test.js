@@ -22,7 +22,7 @@ describe('register import message sender', () => {
         time: expect.any(String),
         subject: 'RegisterImport',
         dataContentType: 'text/json',
-        data: data
+        data
       },
       type: 'REIGSTER_IMPORT',
       source: 'aphw-ddi-portal'
