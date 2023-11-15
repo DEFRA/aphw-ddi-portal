@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const authConfig = require('./auth')
 const blobConfig = require('./storage/blob')
+const tableConfig = require('./storage/table')
 
 // Define config schema
 const schema = Joi.object({
@@ -98,6 +99,7 @@ const value = result.value
 
 value.authConfig = authConfig
 value.blobConfig = blobConfig
+value.tableConfig = tableConfig
 
 value.isDev = value.env === 'development'
 value.isTest = value.env === 'test'
