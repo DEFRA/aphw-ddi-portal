@@ -3,16 +3,20 @@ const uploadConstants = require('../../../constants/upload')
 const { uploadDataFile } = require('../../../storage')
 const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
+const { sendMessage } = require('../../../messaging/outbound')
+const { admin } = require('../../../auth/permissions')
+const { getUser } = require('../../../auth')
 
 module.exports = [{
   method: 'GET',
   path: uploadConstants.routes.register.get,
   options: {
+    auth: { scope: [admin] },
     plugins: {
       crumb: false
     },
     handler: async (request, h) => {
-      return h.view(uploadConstants.views.register)
+      return h.view(uploadConstants.views.register, new ViewModel())
     }
   }
 },
@@ -20,6 +24,7 @@ module.exports = [{
   method: 'POST',
   path: uploadConstants.routes.register.post,
   options: {
+    auth: { scope: [admin] },
     plugins: {
       crumb: false
     },
@@ -44,7 +49,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const filename = `dd-register-${new Date().toISOString()}`
+      const filename = `ddi-register-${new Date().toISOString()}`
       const fileBuffer = request.payload.register._data
 
       const stream = new Readable()
@@ -52,6 +57,8 @@ module.exports = [{
       stream.push(null)
 
       await uploadDataFile(stream, filename)
+
+      await sendMessage({ filename, email: getUser(request).username })
 
       return h.redirect(uploadConstants.routes.register.get)
     }

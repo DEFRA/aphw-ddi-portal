@@ -9,7 +9,7 @@ services:
     container_name: aphw-ddi-portal-development
     ports:
       - "3002:3000"
-      - "9229:9229"
+      - "9230:9229"
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
@@ -22,7 +22,7 @@ services:
     volumes:
       - azurite_data:/data
     ports:
-      - "10000:10000"
+      - "10020:10000"
 
 volumes:
   azurite_data:
