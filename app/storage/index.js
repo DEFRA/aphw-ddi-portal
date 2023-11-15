@@ -3,7 +3,7 @@ const { getTableClient } = require('./table')
 const maxDate = new Date(8640000000000000)
 
 const addRegisterImport = async (filename, email) => {
-  const tableClient = getTableClient()
+  const tableClient = getTableClient();
 
   const createdOn = new Date()
   const invertedDate = `${maxDate - Date.now()}`
@@ -14,8 +14,8 @@ const addRegisterImport = async (filename, email) => {
     email,
     createdOn,
     updatedAt: createdOn,
-    status: 'uploaded'
-  })
+    status: 'uploaded',
+  });
 }
 
 module.exports = {
