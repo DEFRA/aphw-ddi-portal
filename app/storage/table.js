@@ -12,8 +12,6 @@ if (tableConfig.useConnectionString) {
   tableClient = new TableClient(`https://${tableConfig.account}.table.core.windows.net`, tableConfig.registerImportTable, new DefaultAzureCredential())
 }
 
-tableClient.createTable()
-
 module.exports = {
   tableClient
 }

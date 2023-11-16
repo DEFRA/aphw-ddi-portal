@@ -19,6 +19,8 @@ const createEntity = (filename, email, status) => ({
 })
 
 const addToTable = async (filename, email, status) => {
+  await tableClient.createTable()
+
   const entity = createEntity(filename, email, status)
 
   await tableClient.createEntity(entity)

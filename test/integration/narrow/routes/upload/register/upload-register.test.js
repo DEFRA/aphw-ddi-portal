@@ -9,6 +9,8 @@ describe('Upload register', () => {
   jest.mock('../../../../../../app/register-import/register-blob')
   const { uploadRegisterFile } = require('../../../../../../app/register-import/register-blob')
 
+  jest.mock('../../../../../../app/register-import/register-status')
+
   jest.mock('../../../../../../app/messaging/outbound')
   const { sendMessage } = require('../../../../../../app/messaging/outbound')
 

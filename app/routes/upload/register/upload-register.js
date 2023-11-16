@@ -57,11 +57,13 @@ module.exports = [{
       stream.push(fileBuffer)
       stream.push(null)
 
+      const email = getUser(request).username
+
       await uploadRegisterFile(filename, stream)
 
-      await setUploaded(filename, getUser(request).username)
+      await setUploaded(filename, email)
 
-      await sendMessage({ filename, email: getUser(request).username })
+      await sendMessage({ filename, email })
 
       return h.redirect(uploadConstants.routes.register.get)
     }
