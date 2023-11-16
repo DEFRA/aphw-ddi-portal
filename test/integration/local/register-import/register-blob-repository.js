@@ -1,5 +1,5 @@
-const { blobServiceClient } = require('../../../../app/storage/blob')
-const { uploadRegisterFile } = require('../../../../app/register-import/register-blob')
+const { blobServiceClient } = require('../../../../app/storage/get-blob-client')
+const { uploadRegisterFile } = require('../../../../app/storage/register-blob-repository')
 
 describe('register blob functions', () => {
   test('should create container on module import', async () => {

@@ -1,4 +1,4 @@
-const { blobServiceClient } = require('../storage/blob')
+const { blobServiceClient } = require('./get-blob-client')
 const { blobConfig } = require('../config')
 
 const uploadRegisterFile = async (filename, stream) => {

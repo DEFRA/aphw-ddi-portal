@@ -1,4 +1,4 @@
-const { tableClient } = require('../storage/table')
+const { tableClient } = require('./get-table-client')
 
 const maxDate = new Date(8640000000000000)
 
