@@ -62,7 +62,7 @@ module.exports = [{
       await uploadRegisterFile(filename, stream)
 
       await setUploaded(filename, email)
-
+      await setUploaded(filename, email)
       await sendMessage({ filename, email })
 
       return h.redirect(uploadConstants.routes.register.get)
