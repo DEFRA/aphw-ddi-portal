@@ -10,7 +10,7 @@ const createMessage = (data) => ({
     data
   },
   type: 'REGISTER_IMPORT',
-  source: 'aphw-ddi-portal',
+  source: 'aphw-ddi-portal'
 })
 
 module.exports = {
