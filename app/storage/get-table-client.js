@@ -9,7 +9,7 @@ if (tableConfig.useConnectionString) {
   tableClient = TableClient.fromConnectionString(tableConfig.connectionString, tableConfig.registerImportTable, { allowInsecureConnection: true })
 } else {
   console.log('Using DefaultAzureCredential for Table Client')
-  tableClient = new TableClient(`https://${tableConfig.account}.table.core.windows.net`, tableConfig.registerImportTable, new DefaultAzureCredential())
+  tableClient = new TableClient(`https://${tableConfig.storageAccount}.table.core.windows.net`, tableConfig.registerImportTable, new DefaultAzureCredential())
 }
 
 module.exports = {
