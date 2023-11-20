@@ -1,5 +1,6 @@
 const { odata } = require('@azure/data-tables')
 const { tableClient } = require('./get-table-client')
+const { UPLOADED } = require('../constants/import-status')
 
 const maxDate = new Date(8640000000000000)
 
@@ -43,7 +44,7 @@ const queryImportsByPartition = async (filename, additionalOptions) => {
   return results
 }
 
-const setUploaded = async (filename, email) => await addToTable(filename, email, 'uploaded')
+const setUploaded = async (filename, email) => await addToTable(filename, email, UPLOADED)
 
 const getLatestUpdate = async (filename) => {
   const results = await queryImportsByPartition(filename, { top: 1 })
