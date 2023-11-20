@@ -1,6 +1,7 @@
 const { Readable } = require('stream')
 const uploadConstants = require('../../../constants/upload')
-const { uploadDataFile } = require('../../../storage')
+const { uploadRegisterFile } = require('../../../storage/register-blob-repository')
+const { setUploaded } = require('../../../storage/register-status-repository')
 const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
 const { sendMessage } = require('../../../messaging/outbound')
@@ -56,9 +57,13 @@ module.exports = [{
       stream.push(fileBuffer)
       stream.push(null)
 
-      await uploadDataFile(stream, filename)
+      const email = getUser(request).username
 
-      await sendMessage({ filename, email: getUser(request).username })
+      await uploadRegisterFile(filename, stream)
+
+      await setUploaded(filename, email)
+
+      await sendMessage({ filename, email })
 
       return h.redirect(uploadConstants.routes.register.get)
     }

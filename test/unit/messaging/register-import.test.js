@@ -16,14 +16,14 @@ describe('register import message sender', () => {
     expect(MessageSender.prototype.sendMessage).toHaveBeenCalledWith({
       body: {
         specVersion: '1.0',
-        type: 'REGISTER_IMPORT',
-        source: 'aphw-ddi-portal',
         id: expect.any(String),
         time: expect.any(String),
         subject: 'RegisterImport',
         dataContentType: 'text/json',
-        data: data
-      }
+        data
+      },
+      type: 'REGISTER_IMPORT',
+      source: 'aphw-ddi-portal'
     })
     expect(MessageSender.prototype.closeConnection).toHaveBeenCalled()
   })
