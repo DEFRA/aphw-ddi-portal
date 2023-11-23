@@ -27,7 +27,7 @@ container:
   limitCpu: 100m
   port: 3000
   cookiePassword: who-likes-cookies-i-like-cookies-everybody-likes-cookies
-  ddaIndexApiBase: dda-index-api-base-url
+  ddiIndexApiBase: ddi-index-api-base-url
   osPlacesBaseUrl: os-places-api-base-url
   osPlacesApiKey: os-places-api-key
   azureStorageConnectionString: dummy

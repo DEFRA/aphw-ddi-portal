@@ -9,7 +9,7 @@ services:
     container_name: aphw-ddi-portal-development
     ports:
       - "3002:3000"
-      - "9230:9229"
+      - "9231:9229"
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
