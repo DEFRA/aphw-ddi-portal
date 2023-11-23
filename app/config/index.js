@@ -60,7 +60,7 @@ const config = {
     }
   },
   ddiIndexApi: {
-    baseUrl: process.env.DDA_INDEX_API_BASE_URL
+    baseUrl: process.env.DDI_API_BASE_URL
   },
   osPlacesApi: {
     baseUrl: process.env.OS_PLACES_API_BASE_URL,
