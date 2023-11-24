@@ -1,5 +1,5 @@
 const { post } = require('./base')
-const schema = require('../../schema/dda-index-api/people')
+const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
 

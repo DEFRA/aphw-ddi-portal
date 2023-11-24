@@ -9,7 +9,7 @@ const schema = Joi.object({
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   useRedis: Joi.boolean().default(false),
-  ddaIndexApi: {
+  ddiIndexApi: {
     baseUrl: Joi.string().required()
   },
   osPlacesApi: {
@@ -59,8 +59,8 @@ const config = {
       tls: process.env.NODE_ENV === 'production' ? {} : undefined
     }
   },
-  ddaIndexApi: {
-    baseUrl: process.env.DDA_INDEX_API_BASE_URL
+  ddiIndexApi: {
+    baseUrl: process.env.DDI_API_BASE_URL
   },
   osPlacesApi: {
     baseUrl: process.env.OS_PLACES_API_BASE_URL,

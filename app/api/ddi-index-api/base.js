@@ -1,7 +1,7 @@
 const config = require('../../config')
 const wreck = require('@hapi/wreck')
 
-const baseUrl = config.ddaIndexApi.baseUrl
+const baseUrl = config.ddiIndexApi.baseUrl
 
 const options = {
   json: true
