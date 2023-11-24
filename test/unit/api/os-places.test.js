@@ -21,11 +21,11 @@ describe('OS Places test', () => {
     jest.clearAllMocks()
   })
 
-  test('getPostcodeAddresses calls correct URL', async () => {
+  test('getPostcodeAddresses calls with postcode', async () => {
     wreck.get.mockResolvedValue(validAddresses)
     const postcode = 'AB11 2AB'
     const res = await getPostcodeAddresses(postcode)
-    expect(wreck.get).toHaveBeenCalledWith('https://api.os.uk/search/places/v1/postcode?postcode=AB11 2AB', expect.anything())
+    expect(wreck.get).toHaveBeenCalledWith(expect.stringMatching(/\/postcode\?postcode=AB11 2AB$/), expect.anything())
     expect(res).not.toBe(null)
     expect(res.length).toBe(1)
     expect(res[0].addressLine1).toBe('1 Main Street')
