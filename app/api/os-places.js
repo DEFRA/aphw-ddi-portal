@@ -15,9 +15,9 @@ const getPostcodeAddresses = async postcode => {
   const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}`, options)
 
   const foundAddresses = payload.results.map(result => {
-    const subBuilding = result.DPA.SUB_BUILDING_NAME ? `${result.DPA.SUB_BUILDING_NAME},` : ''
+    const subBuilding = result.DPA.SUB_BUILDING_NAME ? `${result.DPA.SUB_BUILDING_NAME}, ` : ''
     return {
-      addressLine1: `${subBuilding} ${result.DPA.BUILDING_NUMBER} ${result.DPA.THOROUGHFARE_NAME}`,
+      addressLine1: `${subBuilding}${result.DPA.BUILDING_NUMBER} ${result.DPA.THOROUGHFARE_NAME}`,
       addressTown: result.DPA.POST_TOWN,
       addressPostcode: postcode
     }
