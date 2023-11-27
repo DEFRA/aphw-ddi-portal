@@ -3,7 +3,7 @@ const { routes } = require('../../../constants/owner')
 function ViewModel (ownerDetails, errors) {
   this.model = {
     formAction: routes.ownerDetails.get,
-    backLink: routes.address.get,
+    backLink: routes.home.get,
     addressRoute: routes.address.get,
     firstName: {
       label: {

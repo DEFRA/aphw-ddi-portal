@@ -1,5 +1,6 @@
 const { admin } = require('../../../../app/auth/permissions')
 const FormData = require('form-data')
+const { routes } = require('../../../../app/constants/owner')
 
 describe('OwnerDetails test', () => {
   jest.mock('../../../../app/auth')
@@ -108,7 +109,7 @@ describe('OwnerDetails test', () => {
 
   test('POST /register/owner/owner-details with valid data forwards to next screen', async () => {
     // TODO - change this when next screen is implemented
-    const nextScreenUrl = '/register/owner/postcode'
+    const nextScreenUrl = routes.home.get
 
     const payload = {
       firstName: 'John',

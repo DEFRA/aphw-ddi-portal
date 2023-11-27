@@ -1,16 +1,11 @@
 const constants = {
   routes: {
+    home: {
+      get: '/'
+    },
     ownerDetails: {
       get: '/register/owner/owner-details',
       post: '/register/owner/owner-details'
-    },
-    name: {
-      get: '/register/owner/name',
-      post: '/register/owner/name'
-    },
-    postcode: {
-      get: '/register/owner/postcode',
-      post: '/register/owner/postcode'
     },
     selectAddress: {
       get: '/register/owner/select-address',
@@ -19,10 +14,6 @@ const constants = {
     address: {
       get: '/register/owner/address',
       post: '/register/owner/address'
-    },
-    dateOfBirth: {
-      get: '/register/owner/date-of-birth',
-      post: '/register/owner/date-of-birth'
     },
     phoneNumber: {
       get: '/register/owner/phone-number',
@@ -41,12 +32,10 @@ const constants = {
     }
   },
   views: {
-    name: 'register/owner/name',
+    home: '/',
     ownerDetails: 'register/owner/owner-details',
-    postcode: 'register/owner/postcode',
     selectAddress: 'register/owner/select-address',
     address: 'register/owner/address',
-    dateOfBirth: 'register/owner/date-of-birth',
     phoneNumber: 'register/owner/phone-number',
     email: 'register/owner/email',
     summary: 'register/owner/summary',

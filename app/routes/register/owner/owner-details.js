@@ -32,7 +32,7 @@ module.exports = [{
 
       setOwnerDetails(request, ownerDetails)
 
-      return h.redirect(routes.postcode.get)
+      return h.redirect(routes.home.get)
     }
   }
 }]
