@@ -6,7 +6,7 @@ const validate = (value, helper) => {
     locale: 'enGB'
   }
 
-  const dob = `${value.dobYear}-${value.dobMonth}-${value.dobDay}`
+  const dob = `${value.dobYear || ''}-${value.dobMonth || ''}-${value.dobDay || ''}`
 
   // Allow DOB to be optional
   if (dob !== '--') {
