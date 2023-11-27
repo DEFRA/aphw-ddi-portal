@@ -1,5 +1,9 @@
 const constants = {
   routes: {
+    ownerDetails: {
+      get: '/register/owner/owner-details',
+      post: '/register/owner/owner-details'
+    },
     name: {
       get: '/register/owner/name',
       post: '/register/owner/name'
@@ -38,6 +42,7 @@ const constants = {
   },
   views: {
     name: 'register/owner/name',
+    ownerDetails: 'register/owner/owner-details',
     postcode: 'register/owner/postcode',
     selectAddress: 'register/owner/select-address',
     address: 'register/owner/address',
@@ -50,6 +55,7 @@ const constants = {
   keys: {
     entry: 'owner',
     name: 'name',
+    ownerDetails: 'ownerDetails',
     dateOfBirth: 'dateOfBirth',
     phoneNumber: 'phoneNumber',
     address: 'address',

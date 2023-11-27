@@ -3,6 +3,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% extends '_layout.njk' %}
 
@@ -36,22 +38,32 @@
     <form method="POST" action="{{ model.formAction }}" novalidate>
       {% call govukFieldset({
         legend: {
-          text: "What is the name of the owner?",
+          text: "Create new record",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-        {{ govukInput(model.title) }}
+        <h2 class="govuk-heading-m">Owner details</h2>
 
         {{ govukInput(model.firstName) }}
 
         {{ govukInput(model.lastName) }}
       
+        {{ govukDateInput(model.dateOfBirth) }}
+
+        {{ govukInput(model.postcode) }}
+
+        {{ govukInput(model.houseNumber) }}
+
+        <p class="govuk-body">
+          <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
+        </p>
+
       {% endcall %}
 
       {{ govukButton({
-        text: "Continue"
+        text: "Find address"
       }) }}
     </div>
   </form>
