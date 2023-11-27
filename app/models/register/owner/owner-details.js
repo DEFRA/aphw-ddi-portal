@@ -37,19 +37,22 @@ function ViewModel (ownerDetails, errors) {
       },
       items: [
         {
-          name: 'day',
+          name: 'dobDay',
           classes: 'govuk-input--width-2',
-          value: ownerDetails?.day
+          value: ownerDetails?.dobDay,
+          label: 'Day'
         },
         {
-          name: 'month',
+          name: 'dobMonth',
           classes: 'govuk-input--width-2',
-          value: ownerDetails?.month
+          value: ownerDetails?.dobMonth,
+          label: 'Month'
         },
         {
-          name: 'year',
+          name: 'dobYear',
           classes: 'govuk-input--width-4',
-          value: ownerDetails?.year
+          value: ownerDetails?.dobYear,
+          label: 'Year'
         }
       ]
     },
@@ -91,7 +94,7 @@ function ViewModel (ownerDetails, errors) {
 
         this.model.errors.push({
           text: error.message,
-          href: `#${name || 'day'}`
+          href: `#${name || this.model.dateOfBirth.id}`
         })
       }
 

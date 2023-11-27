@@ -8,7 +8,7 @@ const validate = (value, helper) => {
 
   console.log('valid dob', value)
 
-  const dob = `${value.year}-${value.month}-${value.day}`
+  const dob = `${value.dobYear}-${value.dobMonth}-${value.dobDay}`
 
   console.log('dob', dob)
 
@@ -42,13 +42,13 @@ const schema = Joi.object({
   lastName: Joi.string().trim().required().messages({
     'string.empty': 'Owner\'s last name is required'
   }),
-  day: Joi.number().optional().allow('').messages({
+  dobDay: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a day'
   }),
-  month: Joi.number().optional().allow('').messages({
+  dobMonth: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a month'
   }),
-  year: Joi.number().optional().allow('').messages({
+  dobYear: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a year'
   }),
   postcode: Joi.string().trim().required().messages({
