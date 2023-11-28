@@ -14,11 +14,14 @@ const options = {
 const getPostcodeAddresses = async postcode => {
   const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}`, options)
 
-  const foundAddresses = payload.results.map(result => ({
-    addressLine1: `${result.DPA.BUILDING_NUMBER} ${result.DPA.THOROUGHFARE_NAME}`,
-    addressTown: result.DPA.POST_TOWN,
-    addressPostcode: postcode
-  }))
+  const foundAddresses = payload.results.map(result => {
+    const subBuilding = result.DPA.SUB_BUILDING_NAME ? `${result.DPA.SUB_BUILDING_NAME}, ` : ''
+    return {
+      addressLine1: `${subBuilding}${result.DPA.BUILDING_NUMBER} ${result.DPA.THOROUGHFARE_NAME}`,
+      addressTown: result.DPA.POST_TOWN,
+      addressPostcode: postcode
+    }
+  })
 
   return foundAddresses
 }

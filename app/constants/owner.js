@@ -1,59 +1,40 @@
 const constants = {
   routes: {
-    name: {
-      get: '/register/owner/name',
-      post: '/register/owner/name'
+    home: {
+      get: '/'
     },
-    postcode: {
-      get: '/register/owner/postcode',
-      post: '/register/owner/postcode'
+    ownerDetails: {
+      get: '/cdo/create/owner-details',
+      post: '/cdo/create/owner-details'
     },
     selectAddress: {
-      get: '/register/owner/select-address',
-      post: '/register/owner/select-address'
+      get: '/cdo/create/select-address',
+      post: '/cdo/create/select-address'
     },
     address: {
-      get: '/register/owner/address',
-      post: '/register/owner/address'
-    },
-    dateOfBirth: {
-      get: '/register/owner/date-of-birth',
-      post: '/register/owner/date-of-birth'
-    },
-    phoneNumber: {
-      get: '/register/owner/phone-number',
-      post: '/register/owner/phone-number'
-    },
-    email: {
-      get: '/register/owner/email',
-      post: '/register/owner/email'
+      get: '/cdo/create/address',
+      post: '/cdo/create/address'
     },
     summary: {
-      get: '/register/owner/summary',
-      post: '/register/owner/summary'
+      get: '/cdo/create/summary',
+      post: '/cdo/create/summary'
     },
     confirmation: {
-      get: '/register/owner/confirmation'
+      get: '/cdo/create/confirmation'
     }
   },
   views: {
-    name: 'register/owner/name',
-    postcode: 'register/owner/postcode',
-    selectAddress: 'register/owner/select-address',
-    address: 'register/owner/address',
-    dateOfBirth: 'register/owner/date-of-birth',
-    phoneNumber: 'register/owner/phone-number',
-    email: 'register/owner/email',
-    summary: 'register/owner/summary',
-    confirmation: 'register/owner/confirmation'
+    home: '/',
+    ownerDetails: 'cdo/create/owner-details',
+    selectAddress: 'cdo/create/select-address',
+    address: 'cdo/create/address',
+    summary: 'cdo/create/summary',
+    confirmation: 'cdo/create/confirmation'
   },
   keys: {
     entry: 'owner',
-    name: 'name',
-    dateOfBirth: 'dateOfBirth',
-    phoneNumber: 'phoneNumber',
-    address: 'address',
-    email: 'email'
+    ownerDetails: 'ownerDetails',
+    address: 'address'
   }
 }
 

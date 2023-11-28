@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/owner')
-const { getOwner } = require('../../../session/register/owner')
-const ViewModel = require('../../../models/register/owner/summary')
+const { getOwner } = require('../../../session/cdo/owner')
+const ViewModel = require('../../../models/cdo/create/summary')
 const schema = require('../../../schema/portal/owner')
 const { addPerson } = require('../../../api/ddi-index-api/person')
 const { admin } = require('../../../auth/permissions')

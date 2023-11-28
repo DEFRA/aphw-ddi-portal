@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/owner')
-const { getAddress, setAddress } = require('../../../session/register/owner')
-const ViewModel = require('../../../models/register/owner/address')
+const { getAddress, setAddress } = require('../../../session/cdo/owner')
+const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { getCounties, getCountries } = require('../../../api/ddi-index-api')
 const { admin } = require('../../../auth/permissions')
