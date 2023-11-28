@@ -57,7 +57,7 @@
         {{ govukInput(model.houseNumber) }}
 
         <p class="govuk-body">
-          <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
+          <a class ="govuk-link" href="{{ model.addressRoute }}">Enter address manually</a>.
         </p>
 
       {% endcall %}

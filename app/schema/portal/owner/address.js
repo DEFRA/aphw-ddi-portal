@@ -8,14 +8,11 @@ const schema = Joi.object({
   town: Joi.string().trim().required().messages({
     'string.empty': 'Enter the town or city'
   }),
-  county: Joi.string().trim().required().messages({
-    'string.empty': 'Select the county'
-  }),
   postcode: Joi.string().trim().required().messages({
     'string.empty': 'Enter the postcode'
   }),
   country: Joi.string().trim().required().messages({
-    'string.empty': 'Select the country'
+    '*': 'Select the country'
   })
 }).required()
 

@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { setAddress, getAddressPostcode } = require('../../../session/cdo/owner')
+const { setAddress, getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { admin } = require('../../../auth/permissions')
 
@@ -12,8 +12,9 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const postcode = getAddressPostcode(request)
-        const addresses = await getPostcodeAddresses(postcode)
+        const postcode = getOwnerDetails(request)?.postcode
+        const houseNumber = getOwnerDetails(request)?.houseNumber
+        const addresses = await getPostcodeAddresses(postcode ? postcode.toUpperCase() : '', houseNumber)
 
         request.yar.set('addresses', addresses)
         return h.view(views.selectAddress, new ViewModel(postcode, addresses))
@@ -30,7 +31,7 @@ module.exports = [
           address: Joi.number().min(0).required()
         }),
         failAction: async (request, h, error) => {
-          const postcode = getAddressPostcode(request)
+          const postcode = getOwnerDetails(request)?.postcode
           const addresses = request.yar.get('addresses')
 
           return h.view(views.selectAddress, new ViewModel(postcode, addresses, error)).code(400).takeover()
@@ -43,8 +44,8 @@ module.exports = [
           addressLine1: selectedAddress.addressLine1,
           addressLine2: selectedAddress.addressLine2,
           town: selectedAddress.addressTown,
-          county: selectedAddress.addressCounty,
-          postcode: selectedAddress.addressPostcode
+          postcode: selectedAddress.addressPostcode,
+          country: selectedAddress.addressCountry
         }
 
         setAddress(request, address)

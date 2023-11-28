@@ -50,7 +50,7 @@ const schema = Joi.object({
   postcode: Joi.string().trim().required().messages({
     'string.empty': 'Postcode is required'
   }),
-  houseNumber: Joi.string().trim().optional().valid('')
+  houseNumber: Joi.string().trim().optional().allow('')
 }).required().custom(validate)
 
 module.exports = schema

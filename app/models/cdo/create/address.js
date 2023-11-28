@@ -1,9 +1,9 @@
 const { routes } = require('../../../constants/owner')
 
-function ViewModel (address, counties, countries, errors) {
+function ViewModel (address, countries, errors) {
   this.model = {
     formAction: routes.address.get,
-    backLink: routes.postcode.get,
+    backLink: `${routes.ownerDetails.get}#postcode`,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',
@@ -31,19 +31,6 @@ function ViewModel (address, counties, countries, errors) {
       value: address.town,
       autocomplete: 'address-level2'
     },
-    county: {
-      id: 'county',
-      name: 'county',
-      label: {
-        text: 'County'
-      },
-      value: address.county,
-      items: counties.map(county => ({
-        value: county,
-        text: county
-      })),
-      autocomplete: 'addressCounty'
-    },
     postcode: {
       id: 'postcode',
       name: 'postcode',
@@ -51,7 +38,8 @@ function ViewModel (address, counties, countries, errors) {
         text: 'Postcode'
       },
       value: address.postcode,
-      autocomplete: 'postal-code'
+      autocomplete: 'postal-code',
+      classes: 'govuk-input--width-10'
     },
     country: {
       id: 'country',
@@ -61,10 +49,17 @@ function ViewModel (address, counties, countries, errors) {
       },
       value: address.country,
       items: countries.map(country => ({
-        value: country,
+        value: country.substr(0, 1),
         text: country
       })),
-      autocomplete: 'addressCountry'
+      autocomplete: 'addressCountry',
+      fieldset: {
+        legend: {
+          text: 'Country',
+          isPageHeading: false
+        }
+      },
+      classes: 'govuk-radios--inline'
     },
     errors: []
   }

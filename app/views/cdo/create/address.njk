@@ -6,6 +6,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block beforeContent %}
   <div class="govuk-grid-row">
@@ -47,11 +48,9 @@
        
           {{ govukInput(model.town) }}
         
-          {{ govukSelect(model.county) }}
-        
           {{ govukInput(model.postcode) }}
 
-          {{ govukSelect(model.country) }}
+          {{ govukRadios(model.country) }}
 
           {{ govukButton({
             text: "Continue"

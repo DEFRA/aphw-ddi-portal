@@ -1,4 +1,4 @@
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -36,7 +36,7 @@
         </p>
       </div>
 
-      {{ govukSelect(model.results)}}
+      {{ govukRadios(model.results)}}
 
       {{ govukButton({
         text: "Continue"
@@ -44,7 +44,7 @@
     </form>
 
     <p class="govuk-body">
-      or <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
+      or <a class ="govuk-link" href="{{ model.addressRoute }}">enter address manually</a>.
     </p>
   </div>
 </div>
