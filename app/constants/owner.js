@@ -4,51 +4,37 @@ const constants = {
       get: '/'
     },
     ownerDetails: {
-      get: '/register/owner/owner-details',
-      post: '/register/owner/owner-details'
+      get: '/cdo/create/owner-details',
+      post: '/cdo/create/owner-details'
     },
     selectAddress: {
-      get: '/register/owner/select-address',
-      post: '/register/owner/select-address'
+      get: '/cdo/create/select-address',
+      post: '/cdo/create/select-address'
     },
     address: {
-      get: '/register/owner/address',
-      post: '/register/owner/address'
-    },
-    phoneNumber: {
-      get: '/register/owner/phone-number',
-      post: '/register/owner/phone-number'
-    },
-    email: {
-      get: '/register/owner/email',
-      post: '/register/owner/email'
+      get: '/cdo/create/address',
+      post: '/cdo/create/address'
     },
     summary: {
-      get: '/register/owner/summary',
-      post: '/register/owner/summary'
+      get: '/cdo/create/summary',
+      post: '/cdo/create/summary'
     },
     confirmation: {
-      get: '/register/owner/confirmation'
+      get: '/cdo/create/confirmation'
     }
   },
   views: {
     home: '/',
-    ownerDetails: 'register/owner/owner-details',
-    selectAddress: 'register/owner/select-address',
-    address: 'register/owner/address',
-    phoneNumber: 'register/owner/phone-number',
-    email: 'register/owner/email',
-    summary: 'register/owner/summary',
-    confirmation: 'register/owner/confirmation'
+    ownerDetails: 'cdo/create/owner-details',
+    selectAddress: 'cdo/create/select-address',
+    address: 'cdo/create/address',
+    summary: 'cdo/create/summary',
+    confirmation: 'cdo/create/confirmation'
   },
   keys: {
     entry: 'owner',
-    name: 'name',
     ownerDetails: 'ownerDetails',
-    dateOfBirth: 'dateOfBirth',
-    phoneNumber: 'phoneNumber',
-    address: 'address',
-    email: 'email'
+    address: 'address'
   }
 }
 

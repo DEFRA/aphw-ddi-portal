@@ -22,10 +22,10 @@ describe('OwnerDetails test', () => {
     await server.initialize()
   })
 
-  test('GET /register/owner/owner-details route returns 200', async () => {
+  test('GET /cdo/create/owner-details route returns 200', async () => {
     const options = {
       method: 'GET',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       auth
     }
 
@@ -33,14 +33,14 @@ describe('OwnerDetails test', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('POST /register/owner/owner-details route returns 302 if not auth', async () => {
+  test('POST /cdo/create/owner-details route returns 302 if not auth', async () => {
     const fd = new FormData()
     fd.append('firstName', 'John')
     fd.append('lastName', 'Smith')
 
     const options = {
       method: 'POST',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       headers: fd.getHeaders(),
       payload: fd.getBuffer()
     }
@@ -49,7 +49,7 @@ describe('OwnerDetails test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /register/owner/owner-details with invalid data returns error', async () => {
+  test('POST /cdo/create/owner-details with invalid data returns error', async () => {
     const payload = {
       firstName: 'John',
       postcode: 'AB1 1TT'
@@ -57,7 +57,7 @@ describe('OwnerDetails test', () => {
 
     const options = {
       method: 'POST',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       auth,
       payload
     }
@@ -66,7 +66,7 @@ describe('OwnerDetails test', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  test('POST /register/owner/owner-details with invalid date entry returns error 1', async () => {
+  test('POST /cdo/create/owner-details with invalid date entry returns error 1', async () => {
     const payload = {
       firstName: 'John',
       postcode: 'AB1 1TT',
@@ -75,7 +75,7 @@ describe('OwnerDetails test', () => {
 
     const options = {
       method: 'POST',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       auth,
       payload
     }
@@ -85,7 +85,7 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('Date of birth must include a day')).toBeGreaterThan(-1)
   })
 
-  test('POST /register/owner/owner-details with invalid date entry returns error 2', async () => {
+  test('POST /cdo/create/owner-details with invalid date entry returns error 2', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -97,7 +97,7 @@ describe('OwnerDetails test', () => {
 
     const options = {
       method: 'POST',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       auth,
       payload
     }
@@ -107,7 +107,7 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('date of birth must be a real date.')).toBeGreaterThan(-1)
   })
 
-  test('POST /register/owner/owner-details with valid data forwards to next screen', async () => {
+  test('POST /cdo/create/owner-details with valid data forwards to next screen', async () => {
     // TODO - change this when next screen is implemented
     const nextScreenUrl = routes.home.get
 
@@ -119,7 +119,7 @@ describe('OwnerDetails test', () => {
 
     const options = {
       method: 'POST',
-      url: '/register/owner/owner-details',
+      url: '/cdo/create/owner-details',
       auth,
       payload
     }
