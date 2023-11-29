@@ -52,8 +52,7 @@ describe('SelectAddress test', () => {
   })
 
   test('POST /cdo/create/select-address with valid data returns 302', async () => {
-    // TODO - amend this when next screen implemented
-    const nextScreenUrl = routes.home.get
+    const nextScreenUrl = routes.enforcementDetails.get
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', addressTown: 'town', addressPostcode: 'AB1 1TT', addressCountry: 'E' }])
     const payload = {
       address: 0

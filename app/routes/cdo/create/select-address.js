@@ -51,7 +51,7 @@ module.exports = [
 
         setAddress(request, address)
 
-        return h.redirect(routes.home.get)
+        return h.redirect(routes.enforcementDetails.get)
       }
     }
   }

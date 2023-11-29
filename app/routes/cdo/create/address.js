@@ -37,7 +37,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       setAddress(request, request.payload)
-      return h.redirect(routes.dateOfBirth.get)
+      return h.redirect(routes.enforcementDetails.get)
     }
   }
 }]
