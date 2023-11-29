@@ -8,7 +8,8 @@ function ViewModel (postcode, addresses = [], error) {
 
   this.model = {
     formAction: routes.address.get,
-    backLink: `${routes.ownerDetails.get}#postcode`,
+    backLink: routes.ownerDetails.get,
+    changePostcodeLink: `${routes.ownerDetails.get}#postcode`,
     addressRoute: routes.address.get,
     postcode,
     results: {

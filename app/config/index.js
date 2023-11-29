@@ -5,7 +5,7 @@ const tableConfig = require('./storage/table')
 
 // Define config schema
 const schema = Joi.object({
-  serviceName: Joi.string().default('Manage the dog index for the dangerous dog act'),
+  serviceName: Joi.string().default('Dangerous Dogs Index'),
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   useRedis: Joi.boolean().default(false),

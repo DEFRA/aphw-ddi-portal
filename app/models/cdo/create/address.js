@@ -1,26 +1,29 @@
 const { routes } = require('../../../constants/owner')
+const { forms } = require('../../../constants/forms')
 
 function ViewModel (address, countries, errors) {
   this.model = {
     formAction: routes.address.get,
-    backLink: `${routes.ownerDetails.get}#postcode`,
+    backLink: routes.ownerDetails.get,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',
       label: {
-        text: 'Address Line 1'
+        text: 'Address line 1'
       },
       value: address.addressLine1,
-      autocomplete: 'address-line1'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     addressLine2: {
       id: 'addressLine2',
       name: 'addressLine2',
       label: {
-        text: 'Address Line 2 (optional)'
+        text: 'Address line 2 (optional)'
       },
       value: address.addressLine2,
-      autocomplete: 'address-line1'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     town: {
       id: 'town',
@@ -29,7 +32,8 @@ function ViewModel (address, countries, errors) {
         text: 'Town or city'
       },
       value: address.town,
-      autocomplete: 'address-level2'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     postcode: {
       id: 'postcode',
@@ -38,8 +42,9 @@ function ViewModel (address, countries, errors) {
         text: 'Postcode'
       },
       value: address.postcode,
-      autocomplete: 'postal-code',
-      classes: 'govuk-input--width-10'
+      classes: 'govuk-input--width-10',
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '8' }
     },
     country: {
       id: 'country',
@@ -48,18 +53,8 @@ function ViewModel (address, countries, errors) {
         text: 'Country'
       },
       value: address.country,
-      items: countries.map(country => ({
-        value: country.substr(0, 1),
-        text: country
-      })),
-      autocomplete: 'addressCountry',
-      fieldset: {
-        legend: {
-          text: 'Country',
-          isPageHeading: false
-        }
-      },
-      classes: 'govuk-radios--inline'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '30' }
     },
     errors: []
   }

@@ -32,7 +32,8 @@ module.exports = [{
 
       setOwnerDetails(request, ownerDetails)
 
-      return h.redirect(routes.selectAddress.get)
+      const redirectUrl = ownerDetails.triggeredButton === 'primary' ? routes.selectAddress.get : routes.address.get
+      return h.redirect(redirectUrl)
     }
   }
 }]
