@@ -1,0 +1,63 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <form method="POST" action="{{ model.formAction }}" novalidate>
+      {% call govukFieldset({
+        legend: {
+          text: "Enter court and police details",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+        {{ govukSelect(model.court) }}
+
+        {{ govukSelect(model.policeForce) }}
+      
+        {{ govukInput(model.legislationOfficer) }}
+
+      {% endcall %}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </div>
+  </form>
+</div>
+
+{% endblock %}

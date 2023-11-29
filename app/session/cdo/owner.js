@@ -74,6 +74,14 @@ const setOwnerDetails = (request, value) => {
   set(request, keys.entry, keys.ownerDetails, value)
 }
 
+const getEnforcementDetails = (request) => {
+  return get(request, keys.entry, keys.enforcementDetails)
+}
+
+const setEnforcementDetails = (request, value) => {
+  set(request, keys.entry, keys.enforcementDetails, value)
+}
+
 module.exports = {
   getOwner,
   setOwner,
@@ -90,5 +98,7 @@ module.exports = {
   getPhoneNumber,
   setPhoneNumber,
   getOwnerDetails,
-  setOwnerDetails
+  setOwnerDetails,
+  getEnforcementDetails,
+  setEnforcementDetails
 }
