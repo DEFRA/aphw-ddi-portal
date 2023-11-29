@@ -51,7 +51,7 @@ const buildAddressResult = (result) => {
     addressTown: result.DPA.POST_TOWN,
     addressPostcode: result.DPA.POSTCODE,
     addressCountry: result.DPA.COUNTRY_CODE,
-    sorting: `${result.DPA.BUILDING_NUMBER} ${leftPad(result.DPA.SUB_BUILDING_NAME)}`
+    sorting: `${leftPad(result.DPA.BUILDING_NUMBER)} ${leftPad(result.DPA.SUB_BUILDING_NAME)}`
   }
 }
 
