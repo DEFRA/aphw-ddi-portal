@@ -5,7 +5,6 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block beforeContent %}
   <div class="govuk-grid-row">
@@ -34,24 +33,20 @@
 
       {% call govukFieldset({
         legend: {
-          text: "What is the owner's address?",
+          text: "Enter address",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-        <form method="POST" action="{{ model.formAction }}" novalidate>
+        <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
           {{ govukInput(model.addressLine1) }}
         
           {{ govukInput(model.addressLine2) }}
        
           {{ govukInput(model.town) }}
         
-          {{ govukSelect(model.county) }}
-        
           {{ govukInput(model.postcode) }}
-
-          {{ govukSelect(model.country) }}
 
           {{ govukButton({
             text: "Continue"

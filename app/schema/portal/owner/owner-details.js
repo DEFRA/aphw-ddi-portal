@@ -32,11 +32,13 @@ const validate = (value, helper) => {
 }
 
 const schema = Joi.object({
-  firstName: Joi.string().trim().required().messages({
-    'string.empty': 'Owner\'s first name is required'
+  firstName: Joi.string().trim().required().max(30).messages({
+    'string.empty': 'First name is required',
+    'string.max': 'First name must be no more than {#limit} characters'
   }),
-  lastName: Joi.string().trim().required().messages({
-    'string.empty': 'Owner\'s last name is required'
+  lastName: Joi.string().trim().required().max(24).messages({
+    'string.empty': 'Last name is required',
+    'string.max': 'Last name must be no more than {#limit} characters'
   }),
   dobDay: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a day'
@@ -47,10 +49,18 @@ const schema = Joi.object({
   dobYear: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a year'
   }),
-  postcode: Joi.string().trim().required().messages({
-    'string.empty': 'Postcode is required'
+  postcode: Joi.string().trim().max(8).when('triggeredButton', {
+    is: Joi.exist(),
+    then: Joi.required().messages({
+      'string.empty': 'Postcode is required',
+      'string.max': 'Postcode must be no more than {#limit} characters'
+    }),
+    otherwise: Joi.optional().allow('')
   }),
-  houseNumber: Joi.string().trim().optional().valid('')
+  houseNumber: Joi.string().trim().max(10).optional().allow('').messages({
+    'string.max': 'Property name or number must be no more than {#limit} characters'
+  }),
+  triggeredButton: Joi.string().trim().optional().allow('')
 }).required().custom(validate)
 
 module.exports = schema

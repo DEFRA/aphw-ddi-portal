@@ -1,4 +1,3 @@
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
@@ -35,7 +34,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate>
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "Create new record",
@@ -56,14 +55,17 @@
 
         {{ govukInput(model.houseNumber) }}
 
-        <p class="govuk-body">
-          <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
-        </p>
-
       {% endcall %}
 
       {{ govukButton({
-        text: "Find address"
+        text: "Find address",
+        value: "primary",
+        name: "triggeredButton"
+      }) }}
+      &nbsp;&nbsp;
+      {{ govukButton({
+        text: "Enter address manually",
+        classes: "govuk-button--secondary"
       }) }}
     </div>
   </form>
