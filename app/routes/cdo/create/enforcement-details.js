@@ -11,12 +11,9 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      console.log('here1')
       const enforcementDetails = getEnforcementDetails(request)
       const courts = await getCourts()
-      console.log('here3', courts)
       const policeForces = await getPoliceForces()
-      console.log('here4', policeForces)
       return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, policeForces))
     }
   }
@@ -30,7 +27,7 @@ module.exports = [{
       payload: enforcementDetailsSchema,
       failAction: async (request, h, error) => {
         const enforcementDetails = { ...getEnforcementDetails(request), ...request.payload }
-        const courts = [{ name: 'Choose court' }].concat(await getCourts())
+        const courts = await getCourts()
         const policeForces = await getPoliceForces()
         return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, policeForces, error)).code(400).takeover()
       }

@@ -2,8 +2,6 @@ const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (enforcementDetails, courts, policeForces, errors) {
-  console.log('courts', courts)
-  console.log('policeForces', policeForces)
   this.model = {
     formAction: routes.enforcementDetails.get,
     backLink: routes.selectAddress.get,
@@ -15,7 +13,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       id: 'court',
       name: 'court',
       value: enforcementDetails?.court,
-      items: [{ name: 'Choose court' }].concat(courts.map(court => ({
+      items: [{ text: 'Choose court' }].concat(courts.map(court => ({
         value: court.id,
         text: court.name
       }))),

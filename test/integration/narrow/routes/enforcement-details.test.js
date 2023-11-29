@@ -22,8 +22,8 @@ describe('EnforcementDetails test', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    getCourts.mockResolvedValue({ courts: [{ id: 1, name: 'Test court' }] })
-    getPoliceForces.mockResolvedValue({ policeForces: [{ id: 1, name: 'Test force' }] })
+    getCourts.mockResolvedValue([{ id: 1, name: 'Test court' }])
+    getPoliceForces.mockResolvedValue([{ id: 1, name: 'Test force' }])
     server = await createServer()
     await server.initialize()
   })
