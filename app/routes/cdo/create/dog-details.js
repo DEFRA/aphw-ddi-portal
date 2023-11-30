@@ -38,6 +38,8 @@ const removeDateComponents = (payload, prefix) => {
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
 
+  payload.cdoExpiry = addMonths(new Date(payload.cdoIssued), 2)
+
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
       'number.base': 'CDO issue date must include a day'
@@ -96,8 +98,6 @@ module.exports = [
       },
       handler: async (request, h) => {
         const dog = request.payload
-
-        dog.cdoExpiry = addMonths(new Date(dog.cdoIssued), 2)
 
         removeDateComponents(dog, 'cdoIssued')
 
