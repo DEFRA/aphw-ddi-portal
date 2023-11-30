@@ -1,26 +1,29 @@
 const { routes } = require('../../../constants/owner')
+const { forms } = require('../../../constants/forms')
 
-function ViewModel (address, counties, countries, errors) {
+function ViewModel (address, countries, errors) {
   this.model = {
     formAction: routes.address.get,
-    backLink: routes.postcode.get,
+    backLink: routes.ownerDetails.get,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',
       label: {
-        text: 'Address Line 1'
+        text: 'Address line 1'
       },
       value: address.addressLine1,
-      autocomplete: 'address-line1'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     addressLine2: {
       id: 'addressLine2',
       name: 'addressLine2',
       label: {
-        text: 'Address Line 2 (optional)'
+        text: 'Address line 2 (optional)'
       },
       value: address.addressLine2,
-      autocomplete: 'address-line1'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     town: {
       id: 'town',
@@ -29,20 +32,8 @@ function ViewModel (address, counties, countries, errors) {
         text: 'Town or city'
       },
       value: address.town,
-      autocomplete: 'address-level2'
-    },
-    county: {
-      id: 'county',
-      name: 'county',
-      label: {
-        text: 'County'
-      },
-      value: address.county,
-      items: counties.map(county => ({
-        value: county,
-        text: county
-      })),
-      autocomplete: 'addressCounty'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '50' }
     },
     postcode: {
       id: 'postcode',
@@ -51,7 +42,9 @@ function ViewModel (address, counties, countries, errors) {
         text: 'Postcode'
       },
       value: address.postcode,
-      autocomplete: 'postal-code'
+      classes: 'govuk-input--width-10',
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '8' }
     },
     country: {
       id: 'country',
@@ -60,11 +53,8 @@ function ViewModel (address, counties, countries, errors) {
         text: 'Country'
       },
       value: address.country,
-      items: countries.map(country => ({
-        value: country,
-        text: country
-      })),
-      autocomplete: 'addressCountry'
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '30' }
     },
     errors: []
   }

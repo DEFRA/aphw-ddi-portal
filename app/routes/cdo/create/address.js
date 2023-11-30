@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/owner')
 const { getAddress, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
-const { getCounties, getCountries } = require('../../../api/ddi-index-api')
+const { getCountries } = require('../../../api/ddi-index-api')
 const { admin } = require('../../../auth/permissions')
 
 module.exports = [{
@@ -11,11 +11,11 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      const counties = [''].concat(await getCounties())
-      const countries = [''].concat(await getCountries())
+      const countries = await getCountries()
 
       const address = getAddress(request)
-      return h.view(views.address, new ViewModel(address, counties, countries))
+
+      return h.view(views.address, new ViewModel(address, countries))
     }
   }
 },
@@ -29,16 +29,15 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
-        const counties = [''].concat(await getCounties())
-        const countries = [''].concat(await getCountries())
+        const countries = await getCountries()
 
         const address = { ...getAddress(request), ...request.payload }
-        return h.view(views.address, new ViewModel(address, counties, countries, error)).code(400).takeover()
+        return h.view(views.address, new ViewModel(address, countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
       setAddress(request, request.payload)
-      return h.redirect(routes.dateOfBirth.get)
+      return h.redirect(routes.enforcementDetails.get)
     }
   }
 }]

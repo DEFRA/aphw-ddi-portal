@@ -1,4 +1,4 @@
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -24,29 +24,77 @@
 
 {% block content %}
 
+{% if (model.results.items.length === 0) %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Select an address</h1>
-    <form method="post" novalidate>
+    <h1 class="govuk-heading-l">Confirm address</h1>
+    <form method="post" novalidate autocomplete="off">
       <div class="govuk-form-group" id="postcode">
         <p class="govuk-label">Postcode</p>
         <p class="govuk-body">
           <strong style="text-transform: uppercase;">{{ model.postcode }}</strong>
-          <a href="{{ model.backLink }}" class="govuk-link">Change Postcode</a>
+          <a href="{{ model.changePostcodeLink }}" class="govuk-link">Change Postcode</a>
+        </p>
+      </div>
+      <p>
+      No addresses were found.
+      </p>
+    </form>
+  </div>
+</div>
+
+{% elif (model.results.items.length === 1) %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Confirm address</h1>
+    <form method="post" novalidate autocomplete="off">
+      <p>
+      {% for addr in model.results.items[0].text.split(',') %}
+      {{ addr}}<br>
+      {% endfor %}
+      </p>
+
+      <input type="hidden" name="address" value="0" />
+
+      <p class="govuk-body">
+        <a class ="govuk-link" href="{{ model.changePostcodeLink }}">Change address</a>
+      </p>
+
+      {{ govukButton({
+        text: "Confirm address"
+      }) }}
+    </form>
+  </div>
+</div>
+
+{% else %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Select an address</h1>
+    <form method="post" novalidate autocomplete="off">
+      <div class="govuk-form-group" id="postcode">
+        <p class="govuk-label">Postcode</p>
+        <p class="govuk-body">
+          <strong style="text-transform: uppercase;">{{ model.postcode }}</strong>
+          <a href="{{ model.changePostcodeLink }}" class="govuk-link">Change Postcode</a>
         </p>
       </div>
 
-      {{ govukSelect(model.results)}}
+      {{ govukRadios(model.results)}}
 
       {{ govukButton({
-        text: "Continue"
+        text: "Select address"
       }) }}
     </form>
 
     <p class="govuk-body">
-      or <a class ="govuk-link" {{ model.addressRoute }}>manually enter your address</a>.
+      or <a class ="govuk-link" href="{{ model.addressRoute }}">enter address manually</a>.
     </p>
   </div>
 </div>
+
+{% endif %}
 
 {% endblock %}

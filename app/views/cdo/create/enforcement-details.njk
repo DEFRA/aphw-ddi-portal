@@ -1,9 +1,11 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% extends '_layout.njk' %}
 
@@ -14,7 +16,7 @@
     <div class="govuk-grid-column-one-half">
       {{ govukBackLink({
         text: "Back",
-        href: "/",
+        href: model.backLink,
         attributes: {
           id: "back"
         }
@@ -34,38 +36,25 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+    <form method="POST" action="{{ model.formAction }}" novalidate>
       {% call govukFieldset({
         legend: {
-          text: "Create new record",
+          text: "Enter court and police details",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-        <h2 class="govuk-heading-m">Owner details</h2>
+        {{ govukSelect(model.court) }}
 
-        {{ govukInput(model.firstName) }}
-
-        {{ govukInput(model.lastName) }}
+        {{ govukSelect(model.policeForce) }}
       
-        {{ govukDateInput(model.dateOfBirth) }}
-
-        {{ govukInput(model.postcode) }}
-
-        {{ govukInput(model.houseNumber) }}
+        {{ govukInput(model.legislationOfficer) }}
 
       {% endcall %}
 
       {{ govukButton({
-        text: "Find address",
-        value: "primary",
-        name: "triggeredButton"
-      }) }}
-      &nbsp;&nbsp;
-      {{ govukButton({
-        text: "Enter address manually",
-        classes: "govuk-button--secondary"
+        text: "Continue"
       }) }}
     </div>
   </form>

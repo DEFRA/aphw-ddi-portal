@@ -1,4 +1,5 @@
 const { routes } = require('../../../constants/owner')
+const { forms } = require('../../../constants/forms')
 
 function ViewModel (ownerDetails, errors) {
   this.model = {
@@ -12,7 +13,9 @@ function ViewModel (ownerDetails, errors) {
       id: 'firstName',
       name: 'firstName',
       classes: 'govuk-input--width-20',
-      value: ownerDetails?.firstName
+      value: ownerDetails?.firstName,
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '30' }
     },
     lastName: {
       label: {
@@ -21,7 +24,9 @@ function ViewModel (ownerDetails, errors) {
       id: 'lastName',
       name: 'lastName',
       classes: 'govuk-input--width-20',
-      value: ownerDetails?.lastName
+      value: ownerDetails?.lastName,
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '24' }
     },
     dateOfBirth: {
       id: 'owner-date-of-birth',
@@ -40,19 +45,25 @@ function ViewModel (ownerDetails, errors) {
           name: 'dobDay',
           classes: 'govuk-input--width-2',
           value: ownerDetails?.dobDay,
-          label: 'Day'
+          label: 'Day',
+          autocomplete: forms.preventAutocomplete,
+          attributes: { maxlength: '2' }
         },
         {
           name: 'dobMonth',
           classes: 'govuk-input--width-2',
           value: ownerDetails?.dobMonth,
-          label: 'Month'
+          label: 'Month',
+          autocomplete: forms.preventAutocomplete,
+          attributes: { maxlength: '2' }
         },
         {
           name: 'dobYear',
           classes: 'govuk-input--width-4',
           value: ownerDetails?.dobYear,
-          label: 'Year'
+          label: 'Year',
+          autocomplete: forms.preventAutocomplete,
+          attributes: { maxlength: '4' }
         }
       ]
     },
@@ -63,8 +74,9 @@ function ViewModel (ownerDetails, errors) {
       id: 'postcode',
       name: 'postcode',
       classes: 'govuk-input--width-10',
-      autocomplete: 'postcode',
-      value: ownerDetails?.postcode
+      value: ownerDetails?.postcode,
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '8' }
     },
     houseNumber: {
       label: {
@@ -75,9 +87,10 @@ function ViewModel (ownerDetails, errors) {
       },
       id: 'houseNumber',
       name: 'houseNumber',
-      classes: 'govuk-input--width-10',
-      autocomplete: 'houseNumber',
-      value: ownerDetails?.houseNumber
+      classes: 'govuk-input--width-5',
+      value: ownerDetails?.houseNumber,
+      autocomplete: forms.preventAutocomplete,
+      attributes: { maxlength: '10' }
     },
     errors: []
   }

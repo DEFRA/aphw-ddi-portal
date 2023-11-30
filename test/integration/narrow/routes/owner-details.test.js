@@ -107,9 +107,30 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('date of birth must be a real date.')).toBeGreaterThan(-1)
   })
 
-  test('POST /cdo/create/owner-details with valid data forwards to next screen', async () => {
-    // TODO - change this when next screen is implemented
-    const nextScreenUrl = routes.home.get
+  test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup', async () => {
+    const nextScreenUrl = routes.selectAddress.get
+
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 1TT',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/create/owner-details with valid data forwards to next screen if manual address entry', async () => {
+    const nextScreenUrl = routes.address.get
 
     const payload = {
       firstName: 'John',
