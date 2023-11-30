@@ -1,7 +1,7 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { routes, keys } = require('../../../constants/dog')
 
-function ViewModel(dogDetails, breedTypes, errors) {
+function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
     formAction: routes.details.post,
     backLink: ownerRoutes.confirmation.get,
@@ -26,7 +26,7 @@ function ViewModel(dogDetails, breedTypes, errors) {
       label: {
         text: 'Dog name (optional)'
       },
-      value: dogDetails[keys.name],
+      value: dogDetails[keys.name]
     },
     cdoIssued: {
       id: 'cdoIssued',
@@ -35,52 +35,25 @@ function ViewModel(dogDetails, breedTypes, errors) {
         legend: {
           text: 'CDO Issue Date',
           classes: 'govuk-!-font-weight-bold'
-        },
+        }
       },
       items: [
         {
           name: 'day',
           classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoIssued}-day`],
+          value: dogDetails[`${keys.cdoIssued}-day`]
         },
         {
           name: 'month',
           classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoIssued}-month`],
+          value: dogDetails[`${keys.cdoIssued}-month`]
         },
         {
           name: 'year',
           classes: 'govuk-input--width-4',
           value: dogDetails[`${keys.cdoIssued}-year`]
         }
-      ],
-    },
-    cdoExpiry: {
-      id: 'cdoExpiry',
-      namePrefix: 'cdoExpiry',
-      fieldset: {
-        legend: {
-          text: 'CDO Expiry Date',
-          classes: 'govuk-!-font-weight-bold'
-        },
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoExpiry}-day`],
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoExpiry}-month`],
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4',
-          value: dogDetails[`${keys.cdoExpiry}-year`]
-        }
-      ],
+      ]
     },
     errors: []
   }
@@ -91,6 +64,10 @@ function ViewModel(dogDetails, breedTypes, errors) {
       const prop = this.model[name] || this.model[name.split('-')[0]].items.find(item => item.name === name.split('-')[1])
 
       if (prop !== undefined) {
+        if (name.includes('day') || name.includes('month') || name.includes('year')) {
+          prop.classes += ' govuk-input--error'
+        }
+
         prop.errorMessage = {
           text: error.message
         }

@@ -9,10 +9,6 @@ const schema = Joi.object({
   cdoIssued: Joi.date().iso().required().messages({
     'string.empty': 'CDO issue date is required',
     'date.format': 'CDO issue date must be a valid date'
-  }),
-  cdoExpiry: Joi.date().iso().required().messages({
-    'string.empty': 'CDO expiry date is required',
-    'date.format': 'CDO expiry date must be a valid date'
   })
 }).required()
 

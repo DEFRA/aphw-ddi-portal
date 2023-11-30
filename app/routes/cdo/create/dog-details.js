@@ -3,6 +3,7 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
 const { getBreeds } = require('../../../api/ddi-index-api')
+const { addMonths } = require('date-fns')
 const Joi = require('joi')
 const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
 
@@ -22,7 +23,7 @@ const addDateComponents = (payload, key) => {
   }
 
   const date = new Date(iso)
-  
+
   payload[`${key}-year`] = date.getFullYear()
   payload[`${key}-month`] = date.getMonth() + 1
   payload[`${key}-day`] = date.getDate()
@@ -36,7 +37,6 @@ const removeDateComponents = (payload, prefix) => {
 
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
-  payload.cdoExpiry = dateComponentsToString(payload, 'cdoExpiry')
 
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
@@ -47,15 +47,6 @@ const validatePayload = (payload) => {
     }),
     'cdoIssued-year': Joi.number().required().messages({
       'number.base': 'CDO issue date must include a year'
-    }),
-    'cdoExpiry-day': Joi.number().required().messages({
-      'number.base': 'CDO expiry date must include a day'
-    }),
-    'cdoExpiry-month': Joi.number().required().messages({
-      'number.base': 'CDO expiry date must include a month'
-    }),
-    'cdoExpiry-year': Joi.number().required().messages({
-      'number.base': 'CDO expiry date must include a year'
     })
   }).concat(dogDetailsSchema)
 
@@ -98,7 +89,7 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          dog = request.payload
+          const dog = request.payload
           const { breeds } = await getBreeds()
           return h.view(views.details, new ViewModel(dog, breeds, error)).code(400).takeover()
         }
@@ -106,8 +97,9 @@ module.exports = [
       handler: async (request, h) => {
         const dog = request.payload
 
+        dog.cdoExpiry = addMonths(new Date(dog.cdoIssued), 2)
+
         removeDateComponents(dog, 'cdoIssued')
-        removeDateComponents(dog, 'cdoExpiry')
 
         setDog(request, dog)
 
