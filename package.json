@@ -34,6 +34,7 @@
     "@hapi/vision": "6.1.0",
     "@hapi/wreck": "^18.0.1",
     "@hapi/yar": "10.1.1",
+    "accessible-autocomplete": "^2.0.4",
     "applicationinsights": "2.3.5",
     "date-fns": "^2.30.0",
     "ffc-messaging": "^2.8.0",

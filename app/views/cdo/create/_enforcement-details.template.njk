@@ -60,4 +60,19 @@
   </form>
 </div>
 
+<!--
+<% htmlWebpackPlugin.files.js.forEach(file => { %>
+  <script src="<%= file.replace('../dist/', 'static/') %>"></script>
+<% }) %>
+-->
+
+<!-- Can't seem to get this to work properly with Webpack, so leave this line in as a temp workaround -->
+<script type="text/javascript" src="https://alphagov.github.io/accessible-autocomplete/dist/accessible-autocomplete.min.js"></script>
+
+<script type="text/javascript">
+accessibleAutocomplete.enhanceSelectElement({
+  selectElement: document.querySelector('#court')
+})
+</script>
+
 {% endblock %}
