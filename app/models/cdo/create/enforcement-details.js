@@ -37,7 +37,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
     },
     legislationOfficer: {
       label: {
-        text: 'Dog legislation office (optional)'
+        text: 'Dog legislation officer (optional)'
       },
       id: 'legislationOfficer',
       name: 'legislationOfficer',
