@@ -15,6 +15,10 @@ const constants = {
       get: '/cdo/create/address',
       post: '/cdo/create/address'
     },
+    enforcementDetails: {
+      get: '/cdo/create/enforcement-details',
+      post: '/cdo/create/enforcement-details'
+    },
     summary: {
       get: '/cdo/create/summary',
       post: '/cdo/create/summary'
@@ -28,13 +32,15 @@ const constants = {
     ownerDetails: 'cdo/create/owner-details',
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
+    enforcementDetails: 'cdo/create/enforcement-details',
     summary: 'cdo/create/summary',
     confirmation: 'cdo/create/confirmation'
   },
   keys: {
     entry: 'owner',
     ownerDetails: 'ownerDetails',
-    address: 'address'
+    address: 'address',
+    enforcementDetails: 'enforcementDetails'
   }
 }
 
