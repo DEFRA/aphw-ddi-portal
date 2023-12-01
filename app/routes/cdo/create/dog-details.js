@@ -76,10 +76,6 @@ module.exports = [
           addDateComponents(dog, keys.cdoIssued)
         }
 
-        if (dog[keys.cdoExpiry] !== undefined) {
-          addDateComponents(dog, keys.cdoExpiry)
-        }
-
         return h.view(views.details, new ViewModel(dog, breeds))
       }
     }
