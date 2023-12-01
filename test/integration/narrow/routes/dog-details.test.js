@@ -1,5 +1,6 @@
 const { admin } = require('../../../../app/auth/permissions')
 const querystring = require('querystring')
+const { UTCDate } = require('@date-fns/utc')
 
 describe('Add dog details', () => {
   jest.mock('../../../../app/api/ddi-index-api')
@@ -85,8 +86,8 @@ describe('Add dog details', () => {
     expect(setDog).toHaveBeenCalledWith(expect.anything(), {
       breed: 'Breed 1',
       name: 'Bruce',
-      cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
-      cdoExpiry: new Date('2020-12-10T00:00:00.000Z')
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+      cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
     })
     expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
   })

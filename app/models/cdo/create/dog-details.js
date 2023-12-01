@@ -24,7 +24,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
       name: 'name',
       classes: 'govuk-!-width-one-half',
       label: {
-        text: 'Dog name'
+        text: 'Dog name (optional)'
       },
       value: dogDetails[keys.name]
     },

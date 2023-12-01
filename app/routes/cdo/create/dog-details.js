@@ -4,6 +4,7 @@ const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
 const { getBreeds } = require('../../../api/ddi-index-api')
 const { addMonths } = require('date-fns')
+const { UTCDate } = require('@date-fns/utc')
 const Joi = require('joi')
 const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
 
@@ -22,7 +23,7 @@ const addDateComponents = (payload, key) => {
     return iso
   }
 
-  const date = new Date(iso)
+  const date = new UTCDate(iso)
 
   payload[`${key}-year`] = date.getFullYear()
   payload[`${key}-month`] = date.getMonth() + 1
@@ -38,7 +39,7 @@ const removeDateComponents = (payload, prefix) => {
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
 
-  payload.cdoExpiry = addMonths(new Date(payload.cdoIssued), 2)
+  payload.cdoExpiry = addMonths(new UTCDate(payload.cdoIssued), 2)
 
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
@@ -100,6 +101,8 @@ module.exports = [
         const dog = request.payload
 
         removeDateComponents(dog, 'cdoIssued')
+
+        console.log(dog)
 
         setDog(request, dog)
 
