@@ -38,7 +38,11 @@ describe('Add dog details', () => {
   })
 
   test('GET /cdo/create/dog-details route returns 200', async () => {
-    getDog.mockReturnValue({})
+    getDog.mockReturnValue({
+      breed: 'Breed 1',
+      name: 'Bruce',
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z')
+    })
 
     const options = {
       method: 'GET',
@@ -47,6 +51,7 @@ describe('Add dog details', () => {
     }
 
     const response = await server.inject(options)
+
     expect(response.statusCode).toBe(200)
   })
 

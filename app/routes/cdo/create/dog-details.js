@@ -98,8 +98,6 @@ module.exports = [
 
         removeDateComponents(dog, 'cdoIssued')
 
-        console.log(dog)
-
         setDog(request, dog)
 
         return h.redirect(routes.confirm.get)

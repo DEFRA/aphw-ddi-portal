@@ -1,37 +1,42 @@
 const { getDog, setDog } = require('../../../app/session/dog')
 
 describe('dog session storage', () => {
+  const mockRequest = {
+    yar: {
+      get: jest.fn(),
+      set: jest.fn()
+    }
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   test('getDog returns dog from session', () => {
-    const dog = {
+    mockRequest.yar.get.mockReturnValue({
       name: 'Fido',
-      breed: 'Labrador'
-    }
+      breed: 'Breed 1'
+    })
 
-    const request = {
-      yar: {
-        get: jest.fn().mockReturnValue(dog)
-      }
-    }
+    const dog = getDog(mockRequest)
 
-    const result = getDog(request)
-
-    expect(result).toEqual(dog)
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('dog')
+    expect(dog).toEqual({
+      name: 'Fido',
+      breed: 'Breed 1'
+    })
   })
 
   test('setDog sets dog in session', () => {
     const dog = {
       name: 'Fido',
-      breed: 'Labrador'
+      breed: 'Breed 1'
     }
 
-    const request = {
-      yar: {
-        set: jest.fn()
-      }
-    }
+    setDog(mockRequest, dog)
 
-    setDog(request, dog)
-
-    expect(request.yar.set).toHaveBeenCalledWith('dog', dog)
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dog', dog)
   })
 })
