@@ -13,7 +13,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       id: 'court',
       name: 'court',
       value: enforcementDetails?.court,
-      items: [{ text: 'Choose court' }].concat(courts.map(court => ({
+      items: [{ text: '', value: null }].concat(courts.map(court => ({
         value: court.id,
         text: court.name
       }))),

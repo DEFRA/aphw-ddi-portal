@@ -62,7 +62,7 @@
 
 <!--
 <% htmlWebpackPlugin.files.js.forEach(file => { %>
-  <script src="<%= file.replace('../dist/', 'static/') %>"></script>
+  <script src="<%= '/static' + file.substring(file.indexOf('/js/')) %>"></script>
 <% }) %>
 -->
 
@@ -71,9 +71,17 @@
 
 <script type="text/javascript">
 accessibleAutocomplete.enhanceSelectElement({
-  defaultValue: 'Choose court',
+  placeholder: 'Start typing to choose court',
   selectElement: document.querySelector('#court')
 })
+const el = document.querySelector('#court')
+el.addEventListener('blur', (event) => {
+if (event.srcElement.value === '') {
+  // Reset selection
+  document.querySelector('#court-select').value = ''
+}
+})
+
 </script>
 
 {% endblock %}
