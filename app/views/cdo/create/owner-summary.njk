@@ -1,0 +1,88 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Confirm details</h2>
+
+    <form method="post" action="{{ model.formAction }}">
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: model.summary.owner.name
+            }
+          },
+          {
+            key: {
+              text: "Date of birth"
+            },
+            value: {
+              text: model.summary.owner.dateOfBirth
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: model.summary.owner.address | join("<br>")
+            }
+          }
+        ]
+      }) }}
+
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details">Change owner details</a>                
+      </p>
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Court"
+            },
+            value: {
+              text: model.summary.court.name
+            }
+          },
+          {
+            key: {
+              text: "Ploice force"
+            },
+            value: {
+              text: model.summary.policeForce
+            }
+          },
+          {
+            key: {
+              text: "Dog legislation officer"
+            },
+            value: {
+              html: model.summary.dogLegislationOfficer
+            }
+          }
+        ]
+      }) }}
+
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/enforcement-details">Change court and police details</a>                
+      </p>
+
+      {% if not model.summary.error %}
+        {{ govukButton({
+            text: "Confirm details"
+          }) }}
+      {% endif %}
+    </form>    
+</div>
+
+{% endblock %}
