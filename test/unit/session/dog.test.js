@@ -1,4 +1,4 @@
-const { getDog, setDog } = require('../../../app/session/dog')
+const { getDog, setDog } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -13,15 +13,15 @@ describe('dog session storage', () => {
   })
 
   test('getDog returns dog from session', () => {
-    mockRequest.yar.get.mockReturnValue({
+    mockRequest.yar.get.mockReturnValue([{
       name: 'Fido',
       breed: 'Breed 1'
-    })
+    }])
 
     const dog = getDog(mockRequest)
 
     expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
-    expect(mockRequest.yar.get).toHaveBeenCalledWith('dog')
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('dogs')
     expect(dog).toEqual({
       name: 'Fido',
       breed: 'Breed 1'
@@ -37,6 +37,6 @@ describe('dog session storage', () => {
     setDog(mockRequest, dog)
 
     expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('dog', dog)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [dog])
   })
 })

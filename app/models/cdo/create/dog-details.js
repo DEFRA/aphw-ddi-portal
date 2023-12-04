@@ -61,7 +61,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
   if (errors) {
     for (const error of errors.details) {
       const name = error.path[0]
-      const prop = this.model[name] || this.model[name.split('-')[0]].items.find(item => item.name === name.split('-')[1])
+      const prop = this.model[name] || this.model[name.split('-')[0]]?.items?.find(item => item.name === name.split('-')[1])
 
       if (prop !== undefined) {
         if (name.includes('day') || name.includes('month') || name.includes('year')) {

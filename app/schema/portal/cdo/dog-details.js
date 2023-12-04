@@ -6,9 +6,7 @@ const schema = Joi.object({
     'string.empty': 'Breed type is required',
     'any.required': 'Breed type is required'
   }),
-  name: Joi.string().optional().trim().messages({
-    'string.base': 'Dog name must be a string'
-  }),
+  name: Joi.string().trim().allow('').allow(null).optional(),
   cdoIssued: Joi.date().iso().required().messages({
     'string.empty': 'CDO issue date is required',
     'date.format': 'CDO issue date must be a valid date'

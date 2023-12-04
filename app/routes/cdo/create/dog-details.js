@@ -43,13 +43,19 @@ const validatePayload = (payload) => {
 
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
-      'number.base': 'CDO issue date must include a day'
+      'any.required': 'CDO issue date must include a valid day',
+      'number.empty': 'CDO issue date must include a valid day',
+      'number.base': 'CDO issue date must include a valid day'
     }),
     'cdoIssued-month': Joi.number().required().messages({
-      'number.base': 'CDO issue date must include a month'
+      'any.required': 'CDO issue date must include a valid month',
+      'number.empty': 'CDO issue date must include a valid month',
+      'number.base': 'CDO issue date must include a valid month'
     }),
     'cdoIssued-year': Joi.number().required().messages({
-      'number.base': 'CDO issue date must include a year'
+      'any.required': 'CDO issue date must include a valid year',
+      'number.empty': 'CDO issue date must include a valid year',
+      'number.base': 'CDO issue date must include a valid year'
     })
   }).concat(dogDetailsSchema)
 
@@ -70,6 +76,7 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const dog = getDog(request)
+
         const { breeds } = await getBreeds()
 
         if (dog[keys.cdoIssued] !== undefined) {

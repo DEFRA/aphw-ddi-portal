@@ -8,7 +8,7 @@
     "build": "webpack",
     "build:watch": "webpack --watch",
     "pretest": "npm run test:lint",
-    "test": "jest --runInBand --silent=\"false\"",
+    "test": "jest --runInBand",
     "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
     "test:watch:all": "npm-run-all --parallel test:watch build:watch",
     "test:lint": "standard",
@@ -43,6 +43,7 @@
     "govuk-frontend": "^4.7.0",
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
+    "jsdom": "^23.0.1",
     "libphonenumber-js": "^1.10.47",
     "nunjucks": "^3.2.4",
     "uuid": "^9.0.1"
