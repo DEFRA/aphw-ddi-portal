@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -25,6 +25,7 @@
     "@azure/identity": "2.0.5",
     "@azure/msal-node": "1.14.6",
     "@azure/storage-blob": "12.13.0",
+    "@date-fns/utc": "^1.1.0",
     "@hapi/catbox-redis": "6.0.2",
     "@hapi/cookie": "11.0.2",
     "@hapi/crumb": "8.0.1",
@@ -42,6 +43,7 @@
     "govuk-frontend": "^4.7.0",
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
+    "jsdom": "^23.0.1",
     "libphonenumber-js": "^1.10.47",
     "nunjucks": "^3.2.4",
     "uuid": "^9.0.1"
