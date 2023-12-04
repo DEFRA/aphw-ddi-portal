@@ -22,12 +22,23 @@
 {% endblock %}
 
 {% block header %}
-  {{ govukHeader({
-    homepageUrl: "/",
-    containerClasses: "govuk-width-container",
-    serviceName: serviceName,
-    serviceUrl: "/"
-  }) }}
+<header class="defra-internal-header" role="banner">
+    <div class="govuk-width-container">
+      <div class="defra-logo">
+          <a href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs" title="Go to the Defra homepage" class="defra-logo__link">
+            <span class="c-defra-logo__title govuk-visually-hidden">Department for Environment Food &amp; Rural Affairs</span>
+          </a>
+          <a href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs" title="Go to the Defra homepage"
+           class="defra-logo-name__link">Department <br>for Environment<br>Food &amp; Rural Affairs</a>
+      </div>
+
+      <div class="defra-internal-service-name">
+          <a href="/" title="Go to the homepage" class="defra-internal-service-name__link">
+            {{ serviceName }}
+          </a>
+      </div>
+    </div>
+  </header>
 {% endblock %}
 
 {% block bodyStart %}
