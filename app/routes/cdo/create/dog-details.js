@@ -1,4 +1,4 @@
-const { routes, views, keys } = require('../../../constants/dog')
+const { routes, views, keys } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')

@@ -1,4 +1,4 @@
-const { keys } = require('../../constants/dog')
+const { keys } = require('../../constants/cdo/dog')
 
 const calcDogIndex = (entry) => entry.length - 1
 
@@ -19,6 +19,10 @@ const get = (request, entryKey) => {
   return entryValue[dog]
 }
 
+const getDogs = (request) => {
+  return request.yar?.get(keys.entry) || [{}]
+}
+
 const getDog = (request) => {
   return get(request, keys.entry)
 }
@@ -37,6 +41,7 @@ const addAnotherDog = (request) => {
 
 module.exports = {
   getDog,
+  getDogs,
   setDog,
   addAnotherDog
 }

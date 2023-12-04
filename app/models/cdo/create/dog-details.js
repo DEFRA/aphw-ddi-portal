@@ -1,5 +1,5 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
-const { routes, keys } = require('../../../constants/dog')
+const { routes, keys } = require('../../../constants/cdo/dog')
 
 function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
