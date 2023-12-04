@@ -28,7 +28,7 @@
 
       {% for dog in model.dogs %}
         {% if model.dogs | length > 1 %}
-          <h2 class="govuk-heading-m">{{ dog.heading }}</h2>
+          <h2 class="govuk-heading-m">Dog {{ dog.id }}</h2>
         {% endif %}
 
         <dl class="govuk-summary-list govuk-!-margin-bottom-4">
