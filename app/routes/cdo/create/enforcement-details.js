@@ -37,7 +37,7 @@ module.exports = [{
 
       setEnforcementDetails(request, enforcementDetails)
 
-      return h.redirect(routes.home.get)
+      return h.redirect(routes.ownerSummary.get)
     }
   }
 }]
