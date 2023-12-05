@@ -19,9 +19,9 @@ const constants = {
       get: '/cdo/create/enforcement-details',
       post: '/cdo/create/enforcement-details'
     },
-    summary: {
-      get: '/cdo/create/summary',
-      post: '/cdo/create/summary'
+    ownerSummary: {
+      get: '/cdo/create/owner-summary',
+      post: '/cdo/create/owner-summary'
     },
     confirmation: {
       get: '/cdo/create/confirmation'
@@ -33,7 +33,7 @@ const constants = {
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
     enforcementDetails: 'cdo/create/enforcement-details',
-    summary: 'cdo/create/summary',
+    ownerSummary: 'cdo/create/owner-summary',
     confirmation: 'cdo/create/confirmation'
   },
   keys: {
