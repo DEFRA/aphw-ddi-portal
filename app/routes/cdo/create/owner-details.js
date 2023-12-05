@@ -3,6 +3,7 @@ const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner
 const ViewModel = require('../../../models/cdo/create/owner-details')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
+const { UTCDate } = require('@date-fns/utc')
 
 module.exports = [{
   method: 'GET',
@@ -30,6 +31,7 @@ module.exports = [{
     handler: async (request, h) => {
       const ownerDetails = request.payload
 
+      setDateIfSupplied(ownerDetails)
       setOwnerDetails(request, ownerDetails)
 
       const redirectUrl = ownerDetails.triggeredButton === 'primary' ? routes.selectAddress.get : routes.address.get
@@ -37,3 +39,10 @@ module.exports = [{
     }
   }
 }]
+
+const setDateIfSupplied = ownerDetails => {
+  if (!ownerDetails?.dobDay || !ownerDetails?.dobMonth | !ownerDetails?.dobYear) {
+    return
+  }
+  ownerDetails.dateOfBirth = new UTCDate(`${ownerDetails.dobYear}-${ownerDetails.dobMonth}-${ownerDetails.dobDay}`)
+}
