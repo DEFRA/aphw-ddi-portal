@@ -1,7 +1,7 @@
 const { routes, keys } = require('../../../constants/cdo/dog')
 const { formatToGds } = require('../../../lib/date-helpers')
 
-function ViewModel(dogs) {  
+function ViewModel (dogs) {
   this.model = {
     formAction: routes.confirm.post,
     backLink: routes.details.get,

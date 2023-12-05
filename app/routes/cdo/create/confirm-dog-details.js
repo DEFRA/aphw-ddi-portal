@@ -3,7 +3,6 @@ const { routes: cdoRoutes } = require('../../../constants/cdo')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
 const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
-const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
 
 module.exports = [
   {
@@ -24,7 +23,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        if (request.payload['addAnotherDog'] != null) {
+        if (request.payload.addAnotherDog != null) {
           addAnotherDog(request)
 
           return h.redirect(routes.details.get)

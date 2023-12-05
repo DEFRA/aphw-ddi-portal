@@ -1,38 +1,53 @@
 const { keys } = require('../../constants/cdo/dog')
 
-const calcDogIndex = (entry) => entry.length - 1
+const getDogIndex = (entry, index) => {
+  if (index === undefined) {
+    return entry.length - 1
+  }
 
-const set = (request, entryKey, value) => {
-  const entryValue = request.yar?.get(entryKey) || [{}]
-
-  const dog = calcDogIndex(entryValue)
-
-  entryValue[dog] = value
-  request.yar.set(entryKey, entryValue)
+  return index - 1
 }
 
-const get = (request, entryKey) => {
-  const entryValue = request.yar?.get(entryKey) ?? [{}]
+const get = (request) => {
+  return request.yar?.get(keys.entry) || [{}]
+}
 
-  const dog = calcDogIndex(entryValue)
+const getDogs = (request) => {
+  return get(request)
+}
+
+const getDog = (request) => {
+  const entryValue = get(request)
+
+  const dog = getDogIndex(entryValue, request.params?.dogId)
 
   return entryValue[dog]
 }
 
-const getDogs = (request) => {
-  return request.yar?.get(keys.entry) || [{}]
-}
-
-const getDog = (request) => {
-  return get(request, keys.entry)
-}
-
 const setDog = (request, value) => {
-  set(request, keys.entry, value)
+  const dogs = get(request)
+
+  const index = getDogIndex(dogs, value.dogId)
+
+  const dogValue = dogs[index]
+
+  if (dogValue === undefined) {
+    const error = new Error(`Dog ${index} does not exist`)
+
+    error.type = 'DOG_NOT_FOUND'
+
+    throw error
+  }
+
+  delete value.id
+
+  dogs[index] = value
+
+  request.yar.set(keys.entry, dogs)
 }
 
 const addAnotherDog = (request) => {
-  const entryValue = request.yar?.get(keys.entry) || []
+  const entryValue = get(request)
 
   entryValue.push({})
 

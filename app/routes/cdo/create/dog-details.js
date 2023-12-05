@@ -56,7 +56,8 @@ const validatePayload = (payload) => {
       'any.required': 'CDO issue date must include a valid year',
       'number.empty': 'CDO issue date must include a valid year',
       'number.base': 'CDO issue date must include a valid year'
-    })
+    }),
+    dogId: Joi.number().optional()
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
@@ -71,11 +72,15 @@ const validatePayload = (payload) => {
 module.exports = [
   {
     method: 'GET',
-    path: routes.details.get,
+    path: `${routes.details.get}/{dogId?}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const dog = getDog(request)
+        const dog = { id: request.params.dogId, ...getDog(request) }
+
+        if (dog === undefined) {
+          return h.response().code(404).takeover()
+        }
 
         const { breeds } = await getBreeds()
 
@@ -105,7 +110,15 @@ module.exports = [
 
         removeDateComponents(dog, 'cdoIssued')
 
-        setDog(request, dog)
+        try {
+          setDog(request, dog)
+        } catch (error) {
+          if (error.type === 'DOG_NOT_FOUND') {
+            return h.response().code(400).takeover()
+          }
+
+          throw error
+        }
 
         return h.redirect(routes.confirm.get)
       }

@@ -5,6 +5,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
     formAction: routes.details.post,
     backLink: ownerRoutes.confirmation.get,
+    id: dogDetails.id,
     breed: {
       id: 'breed',
       name: 'breed',
