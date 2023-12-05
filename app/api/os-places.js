@@ -71,6 +71,21 @@ const leftPad = propName => {
   return propNumber ? propNumber.toString().padStart(4, '0') : '0000'
 }
 
+const getPostcodeLongLat = async (postcode) => {
+  try {
+    const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}&output_srs=WGS84`, options)
+
+    // Only grab first result, even if many
+    return payload.results && payload.results.length > 0
+      ? { lng: payload.results[0].DPA.LNG, lat: payload.results[0].DPA.LAT }
+      : null
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 module.exports = {
-  getPostcodeAddresses
+  getPostcodeAddresses,
+  getPostcodeLongLat
 }

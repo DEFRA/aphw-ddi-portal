@@ -1,28 +1,11 @@
 const Boom = require('@hapi/boom')
-const { getPostcodeLongLat, getPoliceForce, matchPoliceForceByName } = require('../../../app/api/police-area')
+const { getPoliceForce, matchPoliceForceByName } = require('../../../app/api/police-area')
 
 const { getPoliceForces } = require('../../../app/api/ddi-index-api/police-forces')
 jest.mock('../../../app/api/ddi-index-api/police-forces')
 
 const wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
-
-const validAddresses = {
-  payload: {
-    results: [
-      {
-        DPA: {
-          BUILDING_NUMBER: 1,
-          THOROUGHFARE_NAME: 'MAIN STREET',
-          POST_TOWN: 'TESTINGTON',
-          POSTCODE: 'AB11 2AB',
-          LAT: 123,
-          LNG: 456
-        }
-      }
-    ]
-  }
-}
 
 const policeForces = [
   { id: 1, name: 'North Yorkshire Constabulary' },
@@ -34,25 +17,6 @@ const policeForces = [
 describe('PoliceArea test', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-  })
-
-  test('getPostcodeLongLat calls with postcode', async () => {
-    wreck.get.mockResolvedValue(validAddresses)
-    const postcode = 'AB11 2AB'
-    const res = await getPostcodeLongLat(postcode)
-    expect(wreck.get).toHaveBeenCalledWith(expect.stringMatching(/\/postcode\?postcode=AB11 2AB&output_srs=WGS84$/), expect.anything())
-    expect(res).not.toBe(null)
-    expect(res.lat).toBe(123)
-    expect(res.lng).toBe(456)
-  })
-
-  test('getPostcodeLongLat returns null if error thrown', async () => {
-    wreck.get.mockImplementation(() => {
-      throw new Error('Postcode not found')
-    })
-    const postcode = 'AB11 2AB'
-    const res = await getPostcodeLongLat(postcode)
-    expect(res).toBe(null)
   })
 
   test('getPoliceForce calls with coords', async () => {
