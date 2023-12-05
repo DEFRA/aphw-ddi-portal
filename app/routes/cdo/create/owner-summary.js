@@ -12,7 +12,6 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
-      console.log('route ownerDetails', ownerDetails)
       const address = getAddress(request)
       const enforcementDetails = getEnforcementDetails(request)
       const courts = await getCourts()
