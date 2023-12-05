@@ -2,6 +2,7 @@ $govuk-assets-path: "~govuk-frontend/govuk/assets/";
 $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sass-api-reference/#global-styles
 @import "~govuk-frontend/govuk/all";
 @import "./app-task-list";
+@import "defra-settings";
 
 .nojs-hidden {
     display: none;
@@ -85,4 +86,108 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     &:hover {
       background-color: #143c7c;
     }
+  }
+
+//defra header
+.defra-internal-header {
+    padding: 20px 0;
+    border-bottom: 8px solid $defra-brand-colour;
+
+  }
+
+  @media (min-width: 48.0625em) {
+    .defra-internal-header {
+      display: table;
+      width: 100%;
+      min-height: 35px;
+    }
+  }
+  
+  .defra-internal-header .defra-logo {
+    min-width: 275px;
+    margin-bottom: 15px;
+  }
+  
+  @media (min-width: 48.0625em) {
+    .defra-internal-header .defra-logo {
+      display: table-cell;
+      width: 33.33%;
+      margin-bottom: 0;
+    }
+  }
+  
+  @media (min-width: 48.0625em) {
+    .defra-internal-service-name {
+      display: table-cell;
+      vertical-align: middle;
+      padding-left: 2em;
+    }
+  }
+  
+  .defra-internal-service-name__link {
+    text-decoration: none;
+    font-size: 21px;
+    font-weight: 400;
+  }
+  
+  .defra-internal-service-name__link:link, 
+  .defra-internal-service-name__link:visited {
+    color: $govuk-text-colour
+  }
+  
+  @media (min-width: 48.0625em) {
+    .defra-internal-service-name__link {
+      font-size: 24px;
+    }
+  }
+  
+  .defra-logo {
+    border-left: 2px solid $defra-brand-colour;
+    padding-left: 8px;
+  }
+
+  .defra-logo__link {
+    display: table;
+  }
+  
+  .defra-logo__link::before {
+    content: '';
+    display: table-cell;
+    background: url("../images/defra-crest.png") no-repeat;
+    background-size: 100% 100%;
+    width: 33px;
+    height: 28px;
+  }
+  
+  .defra-logo__link:link, 
+  .defra-logo__link:visited {
+    text-decoration: none;
+    font-size: 20px;
+    color: $govuk-text-colour;
+  }
+  
+  .defra-logo__img {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+
+  .defra-logo-name__link {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .defra-logo-name__link:link, 
+  .defra-logo-name__link:visited {
+    color: $govuk-text-colour
+  }
+
+  .defra-logo-name__link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: max(3px);
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
+    -webkit-text-decoration-skip: none;
+    text-decoration-skip: none
   }
