@@ -45,8 +45,10 @@ const getPostcodeAddresses = async (postcode, houseNumber) => {
 
 const buildAddressResult = (result) => {
   const subBuilding = result.DPA.SUB_BUILDING_NAME ? `${result.DPA.SUB_BUILDING_NAME}, ` : ''
+  const buildingName = result.DPA.BUILDING_NAME ? `${result.DPA.BUILDING_NAME}, ` : ''
+  const buildingNumber = result.DPA.BUILDING_NUMBER ? `${result.DPA.BUILDING_NUMBER} ` : ''
   return {
-    addressLine1: `${subBuilding}${result.DPA.BUILDING_NUMBER} ${result.DPA.THOROUGHFARE_NAME}`,
+    addressLine1: `${subBuilding}${buildingName}${buildingNumber}${result.DPA.THOROUGHFARE_NAME}`,
     addressLine2: result.DPA.DEPENDENT_LOCALITY,
     addressTown: result.DPA.POST_TOWN,
     addressPostcode: result.DPA.POSTCODE,
@@ -69,6 +71,21 @@ const leftPad = propName => {
   return propNumber ? propNumber.toString().padStart(4, '0') : '0000'
 }
 
+const getPostcodeLongLat = async (postcode) => {
+  try {
+    const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}&output_srs=WGS84`, options)
+
+    // Only grab first result, even if many
+    return payload.results && payload.results.length > 0
+      ? { lng: payload.results[0].DPA.LNG, lat: payload.results[0].DPA.LAT }
+      : null
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 module.exports = {
-  getPostcodeAddresses
+  getPostcodeAddresses,
+  getPostcodeLongLat
 }
