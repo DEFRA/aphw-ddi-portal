@@ -30,6 +30,7 @@ container:
   ddiApiBaseUrl: ddi-index-api-base-url
   osPlacesBaseUrl: os-places-api-base-url
   osPlacesApiKey: os-places-api-key
+  policeApiBaseUrl: police-api-base-url
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: dummy
