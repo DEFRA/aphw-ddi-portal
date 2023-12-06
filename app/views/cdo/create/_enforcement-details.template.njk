@@ -60,4 +60,28 @@
   </form>
 </div>
 
+<!--
+<% htmlWebpackPlugin.files.js.forEach(file => { %>
+  <script src="<%= '/static' + file.substring(file.indexOf('/js/')) %>"></script>
+<% }) %>
+-->
+
+<!-- Can't seem to get this to work properly with Webpack, so leave this line in as a temp workaround -->
+<script type="text/javascript" src="https://alphagov.github.io/accessible-autocomplete/dist/accessible-autocomplete.min.js"></script>
+
+<script type="text/javascript">
+accessibleAutocomplete.enhanceSelectElement({
+  placeholder: 'Start typing to choose court',
+  selectElement: document.querySelector('#court')
+})
+const el = document.querySelector('#court')
+el.addEventListener('blur', (event) => {
+if (event.srcElement.value === '') {
+  // Reset selection
+  document.querySelector('#court-select').value = ''
+}
+})
+
+</script>
+
 {% endblock %}
