@@ -7,34 +7,7 @@ const { addMonths } = require('date-fns')
 const { UTCDate } = require('@date-fns/utc')
 const Joi = require('joi')
 const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
-
-const dateComponentsToString = (payload, prefix) => {
-  const year = payload[prefix + '-year']
-  const month = payload[prefix + '-month']
-  const day = payload[prefix + '-day']
-
-  return `${year}-${month}-${day}`
-}
-
-const addDateComponents = (payload, key) => {
-  const iso = payload[key]
-
-  if (iso === undefined) {
-    return iso
-  }
-
-  const date = new UTCDate(iso)
-
-  payload[`${key}-year`] = date.getFullYear()
-  payload[`${key}-month`] = date.getMonth() + 1
-  payload[`${key}-day`] = date.getDate()
-}
-
-const removeDateComponents = (payload, prefix) => {
-  delete payload[prefix + '-year']
-  delete payload[prefix + '-month']
-  delete payload[prefix + '-day']
-}
+const { dateComponentsToString, addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
 
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
