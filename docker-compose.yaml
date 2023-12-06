@@ -11,6 +11,7 @@ services:
       DDI_API_BASE_URL: ${DDI_API_BASE_URL:-test}
       OS_PLACES_API_KEY: ${OS_PLACES_API_KEY:-test}
       OS_PLACES_API_BASE_URL: ${OS_PLACES_API_BASE_URL:-test}
+      POLICE_API_BASE_URL: ${POLICE_API_BASE_URL:-test}
       COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
       AZUREID_CLIENT_SECRET: ${AZUREID_CLIENT_SECRET}
       AZUREID_CLIENT_ID: ${AZUREID_CLIENT_ID}

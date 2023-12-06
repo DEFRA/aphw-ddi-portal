@@ -72,8 +72,7 @@ describe('EnforcementDetails test', () => {
   })
 
   test('POST /cdo/create/enforcement-details with valid data forwards to next screen', async () => {
-    // TODO - change this when next screen is implemented
-    const nextScreenUrl = routes.home.get
+    const nextScreenUrl = routes.ownerSummary.get
 
     const payload = {
       court: '1',
