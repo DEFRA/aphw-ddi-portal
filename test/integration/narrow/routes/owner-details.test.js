@@ -104,7 +104,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('date of birth must be a real date.')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup', async () => {
