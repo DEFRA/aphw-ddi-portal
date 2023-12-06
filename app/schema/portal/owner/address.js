@@ -1,20 +1,23 @@
 const Joi = require('joi')
 
+const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
+
 const schema = Joi.object({
   addressLine1: Joi.string().trim().required().max(50).messages({
-    'string.empty': 'Address line 1 is required',
-    'string.max': 'Address line 1 must be no more than {#limit} characters'
+    'string.empty': 'Enter the first line of the address',
+    'string.max': 'The first line of the address must be no more than {#limit} characters'
   }),
   addressLine2: Joi.string().trim().allow(null).allow('').max(50).optional().messages({
-    'string.max': 'Address line 2 must be no more than {#limit} characters'
+    'string.max': 'The second line of the address must be no more than {#limit} characters'
   }),
   town: Joi.string().trim().required().max(50).messages({
-    'string.empty': 'Town or city is required',
-    'string.max': 'Town or city must be no more than {#limit} characters'
+    'string.empty': 'Enter the town or city',
+    'string.max': 'The town or city must be no more than {#limit} characters'
   }),
-  postcode: Joi.string().trim().required().max(8).messages({
-    'string.empty': 'Postcode is required',
-    'string.max': 'Postcode must be no more than {#limit} characters'
+  postcode: Joi.string().trim().required().max(8).regex(postcodeRegex).messages({
+    'string.empty': 'Enter a postcode',
+    'string.max': 'Postcode must be no more than {#limit} characters',
+    'string.pattern.base': 'Enter a real postcode'
   })
 }).required()
 
