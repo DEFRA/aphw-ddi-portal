@@ -2,12 +2,12 @@ const Joi = require('joi')
 
 const schema = Joi.object({
   court: Joi.string().required().messages({
-    'string.empty': 'Court is required'
+    'string.empty': 'Select a court'
   }),
   policeForce: Joi.string().required().messages({
-    'string.empty': 'Police force is required'
+    'string.empty': 'Select a police force'
   }),
-  legislationOfficer: Joi.string().trim().allow('').optional().max(50).messages({
+  legislationOfficer: Joi.string().trim().allow('').optional().max(64).messages({
     'string.max': 'Dog legislation officer must be no more than {#limit} characters'
   })
 }).required()

@@ -44,7 +44,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       classes: 'govuk-input--width-20',
       value: enforcementDetails?.legislationOfficer,
       autocomplete: forms.preventAutocomplete,
-      attributes: { maxlength: '50' }
+      attributes: { maxlength: '64' }
     },
     errors: []
   }
