@@ -1,19 +1,19 @@
-const { admin } = require('../../../../app/auth/permissions')
+const { admin } = require('../../../../../../app/auth/permissions')
 const querystring = require('querystring')
 const { UTCDate } = require('@date-fns/utc')
 const { JSDOM } = require('jsdom')
 
 describe('Add dog details', () => {
-  jest.mock('../../../../app/api/ddi-index-api')
-  const { getBreeds } = require('../../../../app/api/ddi-index-api')
+  jest.mock('../../../../../../app/api/ddi-index-api')
+  const { getBreeds } = require('../../../../../../app/api/ddi-index-api')
 
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../app/session/cdo/dog')
-  const { getDog, setDog } = require('../../../../app/session/cdo/dog')
+  jest.mock('../../../../../../app/session/cdo/dog')
+  const { getDog, setDog } = require('../../../../../../app/session/cdo/dog')
 
-  const createServer = require('../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
