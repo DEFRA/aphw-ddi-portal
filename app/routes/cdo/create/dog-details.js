@@ -1,4 +1,4 @@
-const { routes, views, keys } = require('../../../constants/dog')
+const { routes, views, keys } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
@@ -7,34 +7,7 @@ const { addMonths } = require('date-fns')
 const { UTCDate } = require('@date-fns/utc')
 const Joi = require('joi')
 const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
-
-const dateComponentsToString = (payload, prefix) => {
-  const year = payload[prefix + '-year']
-  const month = payload[prefix + '-month']
-  const day = payload[prefix + '-day']
-
-  return `${year}-${month}-${day}`
-}
-
-const addDateComponents = (payload, key) => {
-  const iso = payload[key]
-
-  if (iso === undefined) {
-    return iso
-  }
-
-  const date = new UTCDate(iso)
-
-  payload[`${key}-year`] = date.getFullYear()
-  payload[`${key}-month`] = date.getMonth() + 1
-  payload[`${key}-day`] = date.getDate()
-}
-
-const removeDateComponents = (payload, prefix) => {
-  delete payload[prefix + '-year']
-  delete payload[prefix + '-month']
-  delete payload[prefix + '-day']
-}
+const { dateComponentsToString, addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
 
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
@@ -56,7 +29,8 @@ const validatePayload = (payload) => {
       'any.required': 'CDO issue date must include a valid year',
       'number.empty': 'CDO issue date must include a valid year',
       'number.base': 'CDO issue date must include a valid year'
-    })
+    }),
+    dogId: Joi.number().optional()
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
@@ -71,11 +45,17 @@ const validatePayload = (payload) => {
 module.exports = [
   {
     method: 'GET',
-    path: routes.details.get,
+    path: `${routes.details.get}/{dogId?}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const dog = getDog(request)
+
+        if (dog === undefined) {
+          return h.response().code(404).takeover()
+        }
+
+        dog.id = request.params.dogId
 
         const { breeds } = await getBreeds()
 
@@ -105,7 +85,15 @@ module.exports = [
 
         removeDateComponents(dog, 'cdoIssued')
 
-        setDog(request, dog)
+        try {
+          setDog(request, dog)
+        } catch (error) {
+          if (error.type === 'DOG_NOT_FOUND') {
+            return h.response().code(400).takeover()
+          }
+
+          throw error
+        }
 
         return h.redirect(routes.confirm.get)
       }

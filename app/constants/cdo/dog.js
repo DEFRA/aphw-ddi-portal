@@ -5,11 +5,13 @@ const constants = {
       post: '/cdo/create/dog-details'
     },
     confirm: {
-      get: '/cdo/create/confirm-dog-details'
+      get: '/cdo/create/confirm-dog-details',
+      post: '/cdo/create/confirm-dog-details'
     }
   },
   views: {
-    details: 'cdo/create/dog-details'
+    details: 'cdo/create/dog-details',
+    confirm: 'cdo/create/confirm-dog-details'
   },
   keys: {
     entry: 'dogs',
