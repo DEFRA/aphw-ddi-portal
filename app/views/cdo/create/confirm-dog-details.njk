@@ -1,0 +1,77 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="POST" action="{{ model.formAction }}" novalidate>
+      <h1 class="govuk-heading-l">Confirm dog details</h1>
+
+      {% for dog in model.dogs %}
+        <div class="govuk-summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h2 class="govuk-summary-card__title">Dog {{ dog.id }}</h2>
+            <ul class="govuk-summary-card__actions">
+              <li class="govuk-summary-card__action">
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="{{ model.backLink }}/{{ dog.id }}"> Change details <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+              </li>
+            </ul>
+          </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Dog breed</dt>
+                <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Dog name</dt>
+                <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">CDO issue date</dt>
+                <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">CDO expiry date</dt>
+                <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Confirm details"
+        }) }}
+
+        {{ govukButton({
+          text: "Add another dog for this owner",
+          classes: "govuk-button--secondary",
+          name: "addAnotherDog"
+        }) }}
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
