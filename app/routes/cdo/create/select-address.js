@@ -1,10 +1,11 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { setAddress, getOwnerDetails } = require('../../../session/cdo/owner')
+const { setAddress, getOwnerDetails, setEnforcementDetails, getEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { admin } = require('../../../auth/permissions')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
+const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
 
 module.exports = [
   {
@@ -38,7 +39,7 @@ module.exports = [
           return h.view(views.selectAddress, new ViewModel(postcode, addresses, error)).code(400).takeover()
         }
       },
-      handler: (request, h) => {
+      handler: async (request, h) => {
         const selectedAddress = getFromSession(request, 'addresses')[request.payload.address]
 
         const address = {
@@ -50,6 +51,14 @@ module.exports = [
         }
 
         setAddress(request, address)
+
+        const enforcementDetails = getEnforcementDetails(request) || {}
+        const policeForce = await lookupPoliceForceByPostcode(address.postcode)
+
+        if (policeForce) {
+          enforcementDetails.policeForce = policeForce.id
+          setEnforcementDetails(request, enforcementDetails)
+        }
 
         return h.redirect(routes.enforcementDetails.get)
       }

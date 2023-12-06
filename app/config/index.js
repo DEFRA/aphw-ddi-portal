@@ -16,6 +16,9 @@ const schema = Joi.object({
     baseUrl: Joi.string().default('https://api.os.uk/search/places/v1'),
     token: Joi.string().required()
   },
+  policeApi: {
+    baseUrl: Joi.string().default('https://data.police.uk/api')
+  },
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
     options: {
@@ -65,6 +68,9 @@ const config = {
   osPlacesApi: {
     baseUrl: process.env.OS_PLACES_API_BASE_URL,
     token: process.env.OS_PLACES_API_KEY
+  },
+  policeApi: {
+    baseUrl: process.env.POLICE_API_BASE_URL
   },
   cookie: {
     cookieNameCookiePolicy: 'dangerous_dog_act_portal_cookie_policy',
