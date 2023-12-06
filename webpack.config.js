@@ -10,7 +10,8 @@ console.log(`Running webpack in ${isDev ? 'development' : 'production'} mode`)
 module.exports = {
   entry: {
     core: './app/frontend/css/index.js',
-    cookies: './app/frontend/js/cookies.js'
+    cookies: './app/frontend/js/cookies.js',
+    accessibleAutocomplete: './app/frontend/js/accessible-autocomplete.js'
   },
   mode: isDev ? 'development' : 'production',
   module: {
@@ -73,6 +74,12 @@ module.exports = {
       filename: '../views/cookies/_cookie-banner.njk',
       template: 'app/views/cookies/_cookie-banner.template.njk',
       chunks: ['cookies']
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: '../views/cdo/create/_enforcement-details.njk',
+      template: 'app/views/cdo/create/_enforcement-details.template.njk',
+      chunks: ['accessibleAutocomplete']
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[fullhash].css'

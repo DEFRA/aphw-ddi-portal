@@ -15,3 +15,4 @@ dist
 # Generated views
 _layout.njk
 _cookie-banner.njk
+_enforcement-details.njk

@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -35,6 +35,7 @@
     "@hapi/vision": "6.1.0",
     "@hapi/wreck": "^18.0.1",
     "@hapi/yar": "10.1.1",
+    "accessible-autocomplete": "^2.0.4",
     "applicationinsights": "2.3.5",
     "date-fns": "^2.30.0",
     "ffc-messaging": "^2.8.0",
