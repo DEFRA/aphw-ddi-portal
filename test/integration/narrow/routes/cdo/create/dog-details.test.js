@@ -206,6 +206,33 @@ describe('Add dog details', () => {
     expect(messages).toContain('CDO issue date must be a valid date')
   })
 
+  test('POST /cdo/create/dog-details route with future date should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '9999'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('CDO issue date must not be in the future')
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()
