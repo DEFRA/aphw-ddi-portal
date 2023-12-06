@@ -76,11 +76,13 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const dog = { id: request.params.dogId, ...getDog(request) }
+        const dog = getDog(request)
 
         if (dog === undefined) {
           return h.response().code(404).takeover()
         }
+
+        dog.id = request.params.dogId
 
         const { breeds } = await getBreeds()
 
