@@ -63,6 +63,20 @@ describe('Add dog details', () => {
     expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
   })
 
+  test('GET /cdo/create/dog-details route returns 404 if no dog in session', async () => {
+    getDog.mockReturnValue(undefined)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/dog-details',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
+  })
+
   test('GET /cdo/create/owner-details route returns 302 if not auth', async () => {
     const options = {
       method: 'GET',
@@ -103,6 +117,40 @@ describe('Add dog details', () => {
       cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
     })
     expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
+  })
+
+  test('POST /cdo/create/dog-details route with invalid dog id returns 400', async () => {
+    const payload = {
+      breed: 'Breed 1',
+      name: 'Bruce',
+      'cdoIssued-day': '10',
+      'cdoIssued-month': '10',
+      'cdoIssued-year': '2020',
+      dogId: 2
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      payload: querystring.stringify(payload)
+    }
+
+    setDog.mockImplementation(() => {
+      const error = new Error('Dog not found')
+
+      error.type = 'DOG_NOT_FOUND'
+
+      throw error
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).toHaveBeenCalledTimes(1)
   })
 
   test('POST /cdo/create/dog-details route with invalid payload should show errors', async () => {
@@ -156,6 +204,33 @@ describe('Add dog details', () => {
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
     expect(messages).toContain('CDO issue date must be a valid date')
+  })
+
+  test('POST /cdo/create/dog-details route with future date should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '9999'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('CDO issue date must not be in the future')
   })
 
   afterEach(async () => {

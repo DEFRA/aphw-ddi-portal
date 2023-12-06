@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/owner')
-const { routes: dogRoutes } = require('../../../constants/dog')
+const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getOwnerDetails, getEnforcementDetails, getAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/owner-summary')
 const { admin } = require('../../../auth/permissions')

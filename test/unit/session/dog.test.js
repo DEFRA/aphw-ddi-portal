@@ -28,7 +28,35 @@ describe('dog session storage', () => {
     })
   })
 
+  test('getDog with id returns dog from session', () => {
+    const requestWithParams = {
+      ...mockRequest,
+      params: {
+        dogId: 2
+      }
+    }
+
+    requestWithParams.yar.get.mockReturnValue([{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Buster',
+      breed: 'Breed 2'
+    }])
+
+    const dog = getDog(requestWithParams)
+
+    expect(requestWithParams.yar.get).toHaveBeenCalledTimes(1)
+    expect(requestWithParams.yar.get).toHaveBeenCalledWith('dogs')
+    expect(dog).toEqual({
+      name: 'Buster',
+      breed: 'Breed 2'
+    })
+  })
+
   test('setDog sets dog in session', () => {
+    mockRequest.yar.get.mockReturnValue(undefined)
+
     const dog = {
       name: 'Fido',
       breed: 'Breed 1'
@@ -37,6 +65,36 @@ describe('dog session storage', () => {
     setDog(mockRequest, dog)
 
     expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
-    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [dog])
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }])
+  })
+
+  test('setDog with id updates dog in session', () => {
+    mockRequest.yar.get.mockReturnValue([{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Buster',
+      breed: 'Breed 2'
+    }])
+
+    const dog = {
+      id: 2,
+      name: 'Alice',
+      breed: 'Breed 2'
+    }
+
+    setDog(mockRequest, dog)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Alice',
+      breed: 'Breed 2'
+    }])
   })
 })
