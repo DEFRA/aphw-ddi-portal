@@ -90,7 +90,7 @@ function ViewModel (ownerDetails, errors) {
       classes: 'govuk-input--width-5',
       value: ownerDetails?.houseNumber,
       autocomplete: forms.preventAutocomplete,
-      attributes: { maxlength: '10' }
+      attributes: { maxlength: '50' }
     },
     errors: []
   }
