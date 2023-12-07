@@ -1,16 +1,16 @@
-const { admin } = require('../../../../app/auth/permissions')
+const { admin } = require('../../../../../../app/auth/permissions')
 const FormData = require('form-data')
-const { routes } = require('../../../../app/constants/owner')
+const { routes } = require('../../../../../../app/constants/owner')
 
 describe('EnforcementDetails test', () => {
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
-  const { getCourts } = require('../../../../app/api/ddi-index-api/courts')
-  jest.mock('../../../../app/api/ddi-index-api/courts')
-  const { getPoliceForces } = require('../../../../app/api/ddi-index-api/police-forces')
-  jest.mock('../../../../app/api/ddi-index-api/police-forces')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
+  const { getCourts } = require('../../../../../../app/api/ddi-index-api/courts')
+  jest.mock('../../../../../../app/api/ddi-index-api/courts')
+  const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
+  jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
 
-  const createServer = require('../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }

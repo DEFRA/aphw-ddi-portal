@@ -1,7 +1,7 @@
 const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 
-function ViewModel (address, countries, errors) {
+function ViewModel (address, errors) {
   this.model = {
     formAction: routes.address.get,
     backLink: routes.ownerDetails.get,

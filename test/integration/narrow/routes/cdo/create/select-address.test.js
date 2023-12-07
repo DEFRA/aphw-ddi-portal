@@ -1,14 +1,14 @@
-const { admin } = require('../../../../app/auth/permissions')
+const { admin } = require('../../../../../../app/auth/permissions')
 const FormData = require('form-data')
-const { routes } = require('../../../../app/constants/owner')
-const { getFromSession } = require('../../../../app/session/session-wrapper')
-jest.mock('../../../../app/session/session-wrapper')
+const { routes } = require('../../../../../../app/constants/owner')
+const { getFromSession } = require('../../../../../../app/session/session-wrapper')
+jest.mock('../../../../../../app/session/session-wrapper')
 
 describe('SelectAddress test', () => {
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  const createServer = require('../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }

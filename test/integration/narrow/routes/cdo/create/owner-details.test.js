@@ -1,12 +1,12 @@
-const { admin } = require('../../../../app/auth/permissions')
+const { admin } = require('../../../../../../app/auth/permissions')
 const FormData = require('form-data')
-const { routes } = require('../../../../app/constants/owner')
+const { routes } = require('../../../../../../app/constants/owner')
 
 describe('OwnerDetails test', () => {
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  const createServer = require('../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
@@ -148,6 +148,48 @@ describe('OwnerDetails test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/create/owner-details validates date field if supplied - future date not allowed', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 1TT',
+      dobDay: '24',
+      dobMonth: '8',
+      dobYear: '2030'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+  })
+
+  test('POST /cdo/create/owner-details validates date field if supplied - age must be 16 or over', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 1TT',
+      dobDay: '24',
+      dobMonth: '8',
+      dobYear: '2022'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
   })
 
   afterEach(async () => {
