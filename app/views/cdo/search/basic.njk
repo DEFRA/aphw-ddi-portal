@@ -1,0 +1,63 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Search</h2>
+
+    <form method="post" action="{{ model.formAction }}">
+
+      {{ govukInput(model.searchTerms) }}
+
+      {{ govukRadios(model.searchType) }}
+
+      {{ govukButton({
+        text: "Search",
+        value: "primary"
+      }) }}
+
+    </form>    
+
+    {% if model.results.length > 0 %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header">Date of birth</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      {% for result in model.results %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ result.name }}</th>
+          <td class="govuk-table__cell">{{ result.dateOfBirth }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>No results found</p>
+    {% endif %}
+{% endblock %}
