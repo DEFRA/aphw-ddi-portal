@@ -1,22 +1,22 @@
-const { admin } = require('../../../../app/auth/permissions')
+const { admin } = require('../../../../../../app/auth/permissions')
 const FormData = require('form-data')
 const { UTCDate } = require('@date-fns/utc')
 const { JSDOM } = require('jsdom')
 
 describe('OwnerSummary test', () => {
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../app/session/cdo/owner')
-  const { getOwnerDetails, getEnforcementDetails, getAddress } = require('../../../../app/session/cdo/owner')
+  jest.mock('../../../../../../app/session/cdo/owner')
+  const { getOwnerDetails, getEnforcementDetails, getAddress } = require('../../../../../../app/session/cdo/owner')
 
-  jest.mock('../../../../app/api/ddi-index-api/courts')
-  const { getCourts } = require('../../../../app/api/ddi-index-api/courts')
+  jest.mock('../../../../../../app/api/ddi-index-api/courts')
+  const { getCourts } = require('../../../../../../app/api/ddi-index-api/courts')
 
-  jest.mock('../../../../app/api/ddi-index-api/police-forces')
-  const { getPoliceForces } = require('../../../../app/api/ddi-index-api/police-forces')
+  jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
+  const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
 
-  const createServer = require('../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
