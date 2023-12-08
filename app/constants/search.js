@@ -9,6 +9,7 @@ const constants = {
     searchBasic: 'cdo/search/basic'
   },
   keys: {
+    entry: 'basicSearch',
     searchTerms: 'searchTerms',
     searchResults: 'searchResults'
   }

@@ -11,19 +11,19 @@ const get = (request, entryKey, key) => {
 }
 
 const getSearchCriteria = (request) => {
-  return get(request, keys.searchTerms) || {}
+  return get(request, keys.entry, keys.searchTerms) || {}
 }
 
 const setSearchCriteria = (request, value) => {
-  set(request, keys.searchTerms, value)
+  set(request, keys.entry, keys.searchTerms, value)
 }
 
 const getSearchResults = (request) => {
-  return get(request, keys.searchResults) || {}
+  return get(request, keys.entry, keys.searchResults) || {}
 }
 
 const setSearchResults = (request, value) => {
-  set(request, keys.searchResults, value)
+  set(request, keys.entry, keys.searchResults, value)
 }
 
 module.exports = {

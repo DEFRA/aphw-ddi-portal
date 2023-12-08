@@ -2,27 +2,24 @@ const { routes: searchRoutes } = require('../../../constants/search')
 const { routes: otherRoutes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 
-function ViewModel (searchCriteria, results, errors) {
+function ViewModel (searchCriteria, resultList, errors) {
   this.model = {
     formAction: searchRoutes.searchBasic.get,
     backLink: otherRoutes.home.get,
     searchTerms: {
-      label: {
-        text: 'Search terms'
+      hint: {
+        text: 'Enter one or more search terms separated by spaces'
       },
       id: 'searchTerms',
       name: 'searchTerms',
       classes: 'govuk-input--width-20',
-      value: searchCriteria?.terms,
+      value: searchCriteria?.searchTerms,
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '100' }
     },
     searchType: {
-      label: {
-        text: 'Type'
-      },
-      id: 'searchOptions',
-      name: 'searchOptions',
+      id: 'searchType',
+      name: 'searchType',
       classes: 'govuk-radios--small govuk-radios--inline',
       value: searchCriteria?.searchType,
       items: [
@@ -37,7 +34,7 @@ function ViewModel (searchCriteria, results, errors) {
       ]
     },
     results: {
-      items: results || []
+      items: resultList || []
     },
     errors: []
   }
