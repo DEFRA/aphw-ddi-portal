@@ -1,24 +1,33 @@
 const Joi = require('joi')
 const { UTCDate } = require('@date-fns/utc')
-const { isMatch, isValid, isFuture, addMonths } = require('date-fns')
+const { isMatch, isValid, isFuture, addMonths, parse } = require('date-fns')
 const { dateComponentsToString } = require('../../../lib/date-helpers')
 
+const validDateFormats = [
+  'yyyy-MM-dd',
+  'yyyy-M-d'
+]
+
+const parseCdoIssueDate = (value) => {
+  for (const fmt of validDateFormats) {
+    const date = parse(value, fmt, new UTCDate())
+
+    if (isValid(date)) {
+      return date
+    }
+  }
+
+  return null
+}
+
 const validateDate = (value, helpers) => {
-  const format = isMatch(value, 'yyyy-MM-dd') ||
-    isMatch(value, 'yyyy-M-d', { locale: 'enGB' }) ||
-    null
+  const date = parseCdoIssueDate(value)
 
-  if (!format) {
-    return helpers.message('CDO issue date must be a valid date')
+  if (date) {
+    return date
   }
 
-  const date = new Date(value)
-
-  if (!isValid(date)) {
-    return helpers.message('CDO issue date must be a valid date')
-  }
-
-  return date
+  return helpers.message('CDO issue date must be a valid date')
 }
 
 const validateIssueDate = (value, helpers) => {
@@ -45,7 +54,7 @@ const dogDetailsSchema = Joi.object({
 const validatePayload = (payload) => {
   payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
 
-  payload.cdoExpiry = addMonths(new UTCDate(payload.cdoIssued), 2)
+  payload.cdoExpiry = addMonths(parseCdoIssueDate(payload.cdoIssued), 2)
 
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
@@ -58,10 +67,11 @@ const validatePayload = (payload) => {
       'number.empty': 'CDO issue date must include a valid month',
       'number.base': 'CDO issue date must include a valid month'
     }),
-    'cdoIssued-year': Joi.number().required().messages({
+    'cdoIssued-year': Joi.number().min(2020).required().messages({
       'any.required': 'CDO issue date must include a valid year',
       'number.empty': 'CDO issue date must include a valid year',
-      'number.base': 'CDO issue date must include a valid year'
+      'number.base': 'CDO issue date must include a valid year',
+      'number.min': 'CDO issue year must be 2020 or later'
     }),
     dogId: Joi.number().optional()
   }).concat(dogDetailsSchema)
