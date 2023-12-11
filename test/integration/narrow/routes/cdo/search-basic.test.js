@@ -1,7 +1,11 @@
 const { admin } = require('../../../../../app/auth/permissions')
 const FormData = require('form-data')
 const { routes } = require('../../../../../app/constants/search')
-
+const { setInSession } = require('../../../../../app/session/session-wrapper')
+jest.mock('../../../../../app/session/session-wrapper')
+const { doSearch } = require('../../../../../app/api/ddi-index-api/search')
+jest.mock('../../../../../app/api/ddi-index-api/search'
+)
 describe('SearchBasic test', () => {
   jest.mock('../../../../../app/auth')
   const mockAuth = require('../../../../../app/auth')
@@ -15,6 +19,8 @@ describe('SearchBasic test', () => {
     userId: '1',
     username: 'test@example.com'
   }
+
+  setInSession.mockReturnValue()
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -50,6 +56,8 @@ describe('SearchBasic test', () => {
   test('POST /cdo/search/basic with valid data returns 302', async () => {
     const nextScreenUrl = routes.searchBasic.get
     const payload = { searchTerms: 'term1', searchType: 'owner' }
+
+    doSearch.mockResolvedValue([])
 
     const options = {
       method: 'POST',
