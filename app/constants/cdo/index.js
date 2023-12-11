@@ -5,7 +5,10 @@ const constants = {
     }
   },
   views: {
-    details: 'cdo/create/record-created'
+    created: 'cdo/create/record-created'
+  },
+  keys: {
+    createdCdo: 'createdCdo'
   }
 }
 

@@ -1,0 +1,78 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: "Record created"
+      }) }}
+
+      {% for dog in model.dogs %}
+        <h2 class="govuk-heading-m">Dog {{ dog.indexNumber }}</h2>
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Breed type</dt>
+            <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
+          </div>
+          {% if dog.name | length  %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Dog name</dt>
+              <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
+            </div>
+          {% endif %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CDO issue date</dt>
+            <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CDO expiry date</dt>
+            <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
+          </div>
+        </dl>
+      {% endfor %}
+
+      <h2 class="govuk-heading-m">Owner and enforcement details</h2>
+
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Name</dt>
+          <dd class="govuk-summary-list__value">{{ model.owner.name }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date of birth</dt>
+          <dd class="govuk-summary-list__value">{{ model.owner.birthDate }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">
+            {% for line in model.owner.address %}
+              {{ line }}{% if not loop.last %}<br>{% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Court</dt>
+          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Police force</dt>
+          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.policeForce }}</dd>
+        </div>
+        {% if model.enforcementDetails.legislationOfficer | length  %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Dog legislation officer</dt>
+            <dd class="govuk-summary-list__value">{{ model.enforcementDetails.legislationOfficer }}</dd>
+          </div>
+        {% endif %}
+      </dl>
+
+      <p class="govuk-body">
+        <a href="/" class="govuk-link">Dangerous Dogs Index home</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}
