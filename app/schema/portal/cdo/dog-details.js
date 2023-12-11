@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { UTCDate } = require('@date-fns/utc')
-const { isMatch, isValid, isFuture, addMonths, parse } = require('date-fns')
+const { isValid, isFuture, addMonths, parse } = require('date-fns')
 const { dateComponentsToString } = require('../../../lib/date-helpers')
 
 const validDateFormats = [
@@ -59,7 +59,7 @@ const validatePayload = (payload) => {
       '*': 'CDO issue date must include a valid day'
     }),
     'cdoIssued-month': Joi.number().required().messages({
-      '*': 'CDO issue date must include a valid month',
+      '*': 'CDO issue date must include a valid month'
     }),
     'cdoIssued-year': Joi.number().min(2020).required().messages({
       '*': 'CDO issue date must include a valid year',
