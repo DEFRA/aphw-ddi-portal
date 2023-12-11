@@ -1,11 +1,11 @@
 const { keys } = require('../../constants/cdo/dog')
 
-const getDogIndex = (entry, index) => {
-  if (index === undefined) {
+const getDogIndex = (entry, dogId) => {
+  if (dogId === undefined) {
     return entry.length - 1
   }
 
-  return index - 1
+  return +dogId - 1
 }
 
 const get = (request) => {
