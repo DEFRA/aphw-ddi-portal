@@ -29,7 +29,7 @@ describe('Dog details validation', () => {
       'cdoIssued-day': '30',
       'cdoIssued-month': '02',
       'cdoIssued-year': '2020'
-    }  
+    }
 
     expect(() => validatePayload(payload)).toThrow()
   })
