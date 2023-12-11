@@ -37,7 +37,6 @@ module.exports = [{
 
       const results = await doSearch(searchCriteria)
 
-      console.log('results', results)
       setSearchResults(request, results)
 
       return h.redirect(routes.searchBasic.get)

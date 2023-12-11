@@ -25,11 +25,11 @@ function ViewModel (searchCriteria, resultList, errors) {
       items: [
         {
           value: 'dog',
-          text: 'Dog'
+          text: 'Dog record'
         },
         {
           value: 'owner',
-          text: 'Owner'
+          text: 'Owner record'
         }
       ]
     },

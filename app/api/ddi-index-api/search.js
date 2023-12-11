@@ -8,7 +8,6 @@ const options = {
 
 const doSearch = async (criteria) => {
   const payload = await get(`${searchEndpoint}/${criteria.searchType}/${criteria.searchTerms}`, options)
-  console.log('payload', payload)
   return payload.results
 }
 

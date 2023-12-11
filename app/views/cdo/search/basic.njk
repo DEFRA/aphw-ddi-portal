@@ -45,18 +45,74 @@
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header" colspan="3">
-          {{ "1 result" if model.results.items.length == 1 else model.results.items.length + " results" }}</th>
+          {% if model.searchType.value == "dog" %}
+          {{ "1 dog record" if model.results.items.length == 1 else model.results.items.length + " dog records" }}
+          {% else %}
+          {{ "1 owner record" if model.results.items.length == 1 else model.results.items.length + " owner records" }}
+          {% endif %}
+          </th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
       </tbody>
     </table>
       {% for result in model.results.items %}
+        {% if model.searchType.value == "dog" %}
+    <div class="govuk-summary-card">
+      <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-2 govuk-!-padding-bottom-1">
+        <h2 class="govuk-summary-card__title defra-summary-header"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="">
+            <a class="govuk-link govuk-link--no-visited-state" href="/cdo/dog/{{ result.dogId }}">
+                    ED{{ result.dogIndex }}
+            </a>
+        </h2>
+        <ul class="govuk-summary-card__actions govuk-!-font-weight-regular">
+          <strong class="govuk-tag">Exempt</strong>
+        </ul>
+      </div>
+      <div class="govuk-summary-card__content govuk-!-padding-top-1 govuk-!-padding-bottom-0">
+        <table class="govuk-table govuk-!-margin-bottom-3">
+          <caption class="govuk-table__caption govuk-!-font-weight-regular govuk-!-font-size-16">
+          </caption>
+          <thead class="govuk-table__head govuk-!-font-size-16">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">
+                    Dog name
+              </th>
+              <th scope="col" class="govuk-table__header govuk-!-width-one-third">
+                    Owner name
+              </th>
+              <th scope="col" class="govuk-table__header">
+                    Microchip number
+              </th>
+            </tr>
+          </thead>
+ 
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+                  {{ result.dogName }}
+              </td>
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/person/{{ result.personId }}">
+                      {{ result.firstName }} {{ result.lastName }}
+                </a>
+              </td>
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+                      {{ result.microchipNumber }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
     <div class="govuk-summary-card">
       <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-2 govuk-!-padding-bottom-1">
         <h2 class="govuk-summary-card__title defra-search-header"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="">
-            {{ result.firstName }} {{ result.lastName }}
-        </a></h2>
+            <a class="govuk-link govuk-link--no-visited-state" href="/cdo/person/{{ result.personId }}">
+                    {{ result.firstName }} {{ result.lastName }}
+            </a>
+        </h2>
         <ul class="govuk-summary-card__actions govuk-!-font-weight-regular">
           <li class="defra-search-header govuk-!-font-size-16">
                 {{ result.address }}
@@ -73,32 +129,35 @@
                     Dog record
               </th>
               <th scope="col" class="govuk-table__header govuk-!-width-one-third">
-                    Microchip number
+                    Dog name
               </th>
               <th scope="col" class="govuk-table__header">
-                    Dog name
+                    Microchip number
               </th>
             </tr>
           </thead>
  
           <tbody class="govuk-table__body">
+          {% for dog in result.dogs %}
             <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/dog/{{ result.dogIndex }}">
-                        ED{{ result.dogIndex }}
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/dog/{{ dog.dogId }}">
+                        ED{{ dog.dogIndex }}
                 </a>
               </td>
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                      {{ result.microchipNumber }}
+                      {{ dog.dogName }}
               </td>
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                      {{ result.dogName }}
+                      {{ dog.microchipNumber }}
               </td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
     </div>
+    {% endif %}
     {% endfor %}
     {% else %}
       <p>No results found</p>
