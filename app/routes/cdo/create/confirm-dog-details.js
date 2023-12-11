@@ -3,6 +3,10 @@ const { routes: cdoRoutes } = require('../../../constants/cdo')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
 const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
+const { cdo } = require('../../../api/ddi-index-api')
+const { buildCdoCreatePayload } = require('../../../lib/payload-builders')
+const { getOwnerDetails, getAddress, getEnforcementDetails } = require('../../../session/cdo/owner')
+const { setCreatedCdo } = require('../../../session/cdo')
 
 module.exports = [
   {
@@ -28,6 +32,19 @@ module.exports = [
 
           return h.redirect(routes.details.get)
         }
+
+        const owner = getOwnerDetails(request)
+        const address = getAddress(request)
+        const enforcementDetails = getEnforcementDetails(request)
+        const dogs = getDogs(request)
+
+        const cdoPayload = buildCdoCreatePayload(owner, address, enforcementDetails, dogs)
+
+        const createdCdo = await cdo.createCdo(cdoPayload)
+
+        request.yar.reset()
+
+        setCreatedCdo(request, createdCdo)
 
         return h.redirect(cdoRoutes.created.get)
       }
