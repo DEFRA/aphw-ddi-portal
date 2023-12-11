@@ -13,7 +13,7 @@ const validate = (value, helper) => {
     const today = startOfDay(new Date())
     const parsedDob = parse(dob, 'yyyy-MM-dd', new Date(), options)
 
-    if (!isValid(parsedDob)) {
+    if (!isValid(parsedDob) || `${value.dobYear}`.length !== 4) {
       return helper.message('Enter a real date')
     }
 
