@@ -40,13 +40,11 @@ const validateIssueDate = (value, helpers) => {
 
 const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
-    'string.base': 'Breed type is required',
-    'string.empty': 'Breed type is required',
-    'any.required': 'Breed type is required'
+    '*': 'Breed type is required'
   }),
   name: Joi.string().trim().allow('').allow(null).optional(),
   cdoIssued: Joi.string().required().messages({
-    'string.empty': 'CDO issue date is required'
+    '*': 'CDO issue date is required'
   }).custom(validateDate).custom(validateIssueDate),
   cdoExpiry: Joi.date().iso().required()
 }).required()
@@ -58,19 +56,13 @@ const validatePayload = (payload) => {
 
   const schema = Joi.object({
     'cdoIssued-day': Joi.number().required().messages({
-      'any.required': 'CDO issue date must include a valid day',
-      'number.empty': 'CDO issue date must include a valid day',
-      'number.base': 'CDO issue date must include a valid day'
+      '*': 'CDO issue date must include a valid day'
     }),
     'cdoIssued-month': Joi.number().required().messages({
-      'any.required': 'CDO issue date must include a valid month',
-      'number.empty': 'CDO issue date must include a valid month',
-      'number.base': 'CDO issue date must include a valid month'
+      '*': 'CDO issue date must include a valid month',
     }),
     'cdoIssued-year': Joi.number().min(2020).required().messages({
-      'any.required': 'CDO issue date must include a valid year',
-      'number.empty': 'CDO issue date must include a valid year',
-      'number.base': 'CDO issue date must include a valid year',
+      '*': 'CDO issue date must include a valid year',
       'number.min': 'CDO issue year must be 2020 or later'
     }),
     dogId: Joi.number().optional()
