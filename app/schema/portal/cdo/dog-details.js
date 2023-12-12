@@ -21,6 +21,10 @@ const parseCdoIssueDate = (value) => {
 }
 
 const validateDate = (value, helpers) => {
+  if (value === '--') {
+    return helpers.message('CDO issue date is required')
+  }
+
   const date = parseCdoIssueDate(value)
 
   if (date) {
@@ -31,7 +35,7 @@ const validateDate = (value, helpers) => {
 }
 
 const validateIssueDate = (value, helpers) => {
-  if (isFuture(value)) {
+  if (typeof value === 'object' && isFuture(value)) {
     return helpers.message('CDO issue date must not be in the future')
   }
 
@@ -44,7 +48,8 @@ const dogDetailsSchema = Joi.object({
   }),
   name: Joi.string().trim().allow('').allow(null).optional(),
   cdoIssued: Joi.string().required().messages({
-    '*': 'CDO issue date is required'
+    'string.base': 'CDO issue date is required',
+    'string.empty': 'CDO issue date is required'
   }).custom(validateDate).custom(validateIssueDate),
   cdoExpiry: Joi.date().iso().required()
 }).required()
