@@ -107,6 +107,28 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
   })
 
+  test('POST /cdo/create/owner-details with invalid date entry returns error 3 (not 4 digit year)', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 1TT',
+      dobDay: '32',
+      dobMonth: '12',
+      dobYear: '200'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
+  })
+
   test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup', async () => {
     const nextScreenUrl = routes.selectAddress.get
 
