@@ -1,0 +1,63 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="{{ model.formAction }}" method="post">
+        <h1 class="govuk-heading-l">Delete dog details</h1>
+
+        <p class="govuk-body">Confirm you want to delete these dog details.</p>
+
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Breed type</dt>
+            <dd class="govuk-summary-list__value">{{ model.dog.breed }}</dd>
+          </div>
+          {% if model.dog.name | length  %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Dog name</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.name }}</dd>
+            </div>
+          {% endif %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CDO issue date</dt>
+            <dd class="govuk-summary-list__value">{{ model.dog.cdoIssued }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">CDO expiry date</dt>
+            <dd class="govuk-summary-list__value">{{ model.dog.cdoExpiry }}</dd>
+          </div>
+        </dl>
+
+        <input type="hidden" name="dogId" value="{{ model.dog.id }}">
+          
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Confirm details"
+          }) }}
+
+        <a class="govuk-link" href="{{ model.backLink }}">Cancel</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}
