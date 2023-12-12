@@ -1,0 +1,71 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Search</h2>
+
+    <form method="get" action="{{ model.formAction }}">
+
+      {{ govukInput(model.searchTerms) }}
+
+      {{ govukRadios(model.searchType) }}
+
+      {{ govukButton({
+        text: "Search",
+        value: "primary"
+      }) }}
+
+    </form>    
+
+    {% if model.results.items.length > 0 %}
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" colspan="3">
+          {% if model.searchType.value == "dog" %}
+          {{ "1 dog record" if model.results.items.length == 1 else model.results.items.length + " dog records" }}
+          {% else %}
+          {{ "1 owner record" if model.results.items.length == 1 else model.results.items.length + " owner records" }}
+          {% endif %}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      </tbody>
+    </table>
+
+      {% for result in model.results.items %}
+        {% if model.searchType.value == "dog" %}
+          {% include "./cdo/search/dog-results.njk" %}
+        {% else %}
+          {% include "./cdo/search/owner-results.njk" %}
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <p>No results found</p>
+    {% endif %}
+{% endblock %}
