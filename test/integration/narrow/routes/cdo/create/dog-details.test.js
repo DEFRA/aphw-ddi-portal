@@ -176,7 +176,7 @@ describe('Add dog details', () => {
     expect(messages).toContain('CDO issue date must include a valid day')
     expect(messages).toContain('CDO issue date must include a valid month')
     expect(messages).toContain('CDO issue date must include a valid year')
-    expect(messages).toContain('CDO issue date must be a valid date')
+    expect(messages).toContain('CDO issue date must be a real date')
   })
 
   test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
@@ -203,7 +203,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('CDO issue date must be a valid date')
+    expect(messages).toContain('CDO issue date must be a real date')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
