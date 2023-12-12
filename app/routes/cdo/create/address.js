@@ -1,8 +1,9 @@
 const { routes, views } = require('../../../constants/owner')
-const { getAddress, setAddress } = require('../../../session/cdo/owner')
+const { getAddress, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { admin } = require('../../../auth/permissions')
+const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
 
 module.exports = [{
   method: 'GET',
@@ -32,6 +33,15 @@ module.exports = [{
     },
     handler: async (request, h) => {
       setAddress(request, request.payload)
+
+      const enforcementDetails = getEnforcementDetails(request) || {}
+      const policeForce = await lookupPoliceForceByPostcode(request.payload?.postcode)
+
+      if (policeForce) {
+        enforcementDetails.policeForce = policeForce.id
+        setEnforcementDetails(request, enforcementDetails)
+      }
+
       return h.redirect(routes.enforcementDetails.get)
     }
   }
