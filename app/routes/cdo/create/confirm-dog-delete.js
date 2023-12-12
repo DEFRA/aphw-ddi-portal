@@ -12,8 +12,8 @@ module.exports = [
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
-        if (dogs <= 1) {
-          return h.redirect(routes.details.get)
+        if (dogs.length <= 1) {
+          return h.redirect(routes.confirm.get)
         }
 
         const dog = getDog(request)
@@ -32,7 +32,7 @@ module.exports = [
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
-        if (dogs <= 1) {
+        if (dogs.length <= 1) {
           return h.response().code(400).takeover()
         }
 
