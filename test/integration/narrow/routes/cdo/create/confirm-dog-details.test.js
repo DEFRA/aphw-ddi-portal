@@ -71,9 +71,11 @@ describe('Add dog details', () => {
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
 
-    const actions = summaryList.querySelectorAll('.govuk-summary-list__actions a')
+    const summaryCard = document.querySelector('.govuk-summary-card')
+
+    const actions = summaryCard.querySelectorAll('.govuk-summary-card__action a')
     expect(actions.length).toBe(1)
-    expect(actions[0].attributes.href).toBe('/cdo/create/dog-details/1')
+    expect(actions[0].attributes.href.textContent).toBe('/cdo/create/dog-details/1')
   })
 
   test('GET /cdo/create/confirm-dog-details route renders multple dogs', async () => {
@@ -102,8 +104,13 @@ describe('Add dog details', () => {
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-summary-list').length).toBe(2)
 
+    const summaryCard = document.querySelectorAll('.govuk-summary-card')
     const summaryList = document.querySelectorAll('.govuk-summary-list')
 
+    console.log(response.payload)
+
+    expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[0].attributes.href.textContent).toBe('/cdo/create/dog-details/1')
+    expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[1].attributes.href.textContent).toBe('/cdo/create/confirm-dog-delete/1')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 1')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog name')
@@ -112,9 +119,9 @@ describe('Add dog details', () => {
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[0].attributes.href).toBe('/cdo/create/dog-details/1')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[1].attributes.href).toBe('/cdo/create/confirm-dog-delete/1')
 
+    expect(summaryCard[1].querySelectorAll('.govuk-summary-card__actions a')[0].attributes.href.textContent).toBe('/cdo/create/dog-details/2')
+    expect(summaryCard[1].querySelectorAll('.govuk-summary-card__actions a')[1].attributes.href.textContent).toBe('/cdo/create/confirm-dog-delete/2')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 2')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog name')
@@ -123,8 +130,6 @@ describe('Add dog details', () => {
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[0].attributes.href).toBe('/cdo/create/dog-details/2')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[1].attributes.href).toBe('/cdo/create/confirm-dog-delete/2')
   })
 
   test('GET /cdo/create/owner-details route returns 302 if not auth', async () => {
