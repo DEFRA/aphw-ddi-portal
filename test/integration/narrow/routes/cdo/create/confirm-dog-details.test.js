@@ -70,6 +70,10 @@ describe('Add dog details', () => {
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
+
+    const actions = summaryList.querySelectorAll('.govuk-summary-list__actions a')
+    expect(actions.length).toBe(1)
+    expect(actions[0].attributes.href).toBe('/cdo/create/dog-details/1')
   })
 
   test('GET /cdo/create/confirm-dog-details route renders multple dogs', async () => {
@@ -108,6 +112,8 @@ describe('Add dog details', () => {
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[0].attributes.href).toBe('/cdo/create/dog-details/1')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[1].attributes.href).toBe('/cdo/create/confirm-dog-delete/1')
 
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 2')
@@ -117,6 +123,8 @@ describe('Add dog details', () => {
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('CDO expiry date')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('10 December 2020')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[0].attributes.href).toBe('/cdo/create/dog-details/2')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__actions a')[1].attributes.href).toBe('/cdo/create/confirm-dog-delete/2')
   })
 
   test('GET /cdo/create/owner-details route returns 302 if not auth', async () => {
