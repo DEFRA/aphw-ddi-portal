@@ -3,44 +3,8 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
 const { getBreeds } = require('../../../api/ddi-index-api')
-const { addMonths } = require('date-fns')
-const { UTCDate } = require('@date-fns/utc')
-const Joi = require('joi')
-const dogDetailsSchema = require('../../../schema/portal/cdo/dog-details')
-const { dateComponentsToString, addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
-
-const validatePayload = (payload) => {
-  payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
-
-  payload.cdoExpiry = addMonths(new UTCDate(payload.cdoIssued), 2)
-
-  const schema = Joi.object({
-    'cdoIssued-day': Joi.number().required().messages({
-      'any.required': 'CDO issue date must include a valid day',
-      'number.empty': 'CDO issue date must include a valid day',
-      'number.base': 'CDO issue date must include a valid day'
-    }),
-    'cdoIssued-month': Joi.number().required().messages({
-      'any.required': 'CDO issue date must include a valid month',
-      'number.empty': 'CDO issue date must include a valid month',
-      'number.base': 'CDO issue date must include a valid month'
-    }),
-    'cdoIssued-year': Joi.number().required().messages({
-      'any.required': 'CDO issue date must include a valid year',
-      'number.empty': 'CDO issue date must include a valid year',
-      'number.base': 'CDO issue date must include a valid year'
-    }),
-    dogId: Joi.number().optional()
-  }).concat(dogDetailsSchema)
-
-  const { value, error } = schema.validate(payload, { abortEarly: false })
-
-  if (error) {
-    throw error
-  }
-
-  return value
-}
+const { validatePayload } = require('../../../schema/portal/cdo/dog-details')
+const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
 
 module.exports = [
   {
