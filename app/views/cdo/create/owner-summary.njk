@@ -35,7 +35,9 @@
           Address
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ model.summary.owner.address | join("<br>") | safe }}
+        {% for addrLine in model.summary.owner.address %}
+          {{ addrLine }}<br>
+        {% endfor %}
         </dd>
       </div>
     </dl>
