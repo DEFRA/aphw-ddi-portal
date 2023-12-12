@@ -9,7 +9,7 @@ describe('Dog details validation', () => {
       breed: 'Breed 1',
       'cdoIssued-day': '01',
       'cdoIssued-month': '01',
-      'cdoIssued-year': '2019'
+      'cdoIssued-year': '2020'
     }
 
     const value = validatePayload(payload)
@@ -17,8 +17,8 @@ describe('Dog details validation', () => {
     expect(value).toMatchObject({
       name: 'Fido',
       breed: 'Breed 1',
-      cdoIssued: new UTCDate('2019-01-01'),
-      cdoExpiry: new UTCDate('2019-03-01')
+      cdoIssued: new UTCDate('2020-01-01'),
+      cdoExpiry: new UTCDate('2020-03-01')
     })
   })
 
@@ -29,6 +29,18 @@ describe('Dog details validation', () => {
       'cdoIssued-day': '30',
       'cdoIssued-month': '02',
       'cdoIssued-year': '2020'
+    }
+
+    expect(() => validatePayload(payload)).toThrow()
+  })
+
+  test('should fail validation with year before 2020', () => {
+    const payload = {
+      name: 'Fido',
+      breed: 'Breed 1',
+      'cdoIssued-day': '01',
+      'cdoIssued-month': '01',
+      'cdoIssued-year': '2019'
     }
 
     expect(() => validatePayload(payload)).toThrow()
