@@ -107,8 +107,6 @@ describe('Add dog details', () => {
     const summaryCard = document.querySelectorAll('.govuk-summary-card')
     const summaryList = document.querySelectorAll('.govuk-summary-list')
 
-    console.log(response.payload)
-
     expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[0].attributes.href.textContent).toBe('/cdo/create/dog-details/1')
     expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[1].attributes.href.textContent).toBe('/cdo/create/confirm-dog-delete/1')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')

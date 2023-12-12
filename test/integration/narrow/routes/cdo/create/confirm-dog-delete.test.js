@@ -90,7 +90,7 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/confirm-dog-delete')
+    expect(response.headers.location).toBe('/cdo/create/confirm-dog-details')
   })
 
   test('GET /cdo/create/confirm-dog-delete redirects to confirm page if no dogs', async () => {
@@ -105,7 +105,7 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/confirm-dog-delete')
+    expect(response.headers.location).toBe('/cdo/create/confirm-dog-details')
   })
 
   test('POST /cdo/create/confirm-dog-delete deletes dog and redirects to confirm page', async () => {
@@ -133,7 +133,7 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/confirm-dog-delete')
+    expect(response.headers.location).toBe('/cdo/create/confirm-dog-details')
     expect(deleteDog).toHaveBeenCalledWith(expect.objectContaining({
       payload: {
         dogId: '1'
