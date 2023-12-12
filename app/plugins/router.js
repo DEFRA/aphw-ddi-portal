@@ -9,11 +9,8 @@ const routes = [].concat(
   require('../routes/cdo/create/confirmation'),
   require('../routes/cdo/create/dog-details'),
   require('../routes/cdo/create/confirm-dog-details'),
-<<<<<<< HEAD
   require('../routes/cdo/search/basic'),
-=======
   require('../routes/cdo/create/confirm-dog-delete'),
->>>>>>> 3d8af45 (Add delete dog route)
   require('../routes/cdo/create/record-created'),
   require('../routes/healthy'),
   require('../routes/healthz'),
