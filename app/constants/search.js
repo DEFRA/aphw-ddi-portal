@@ -1,8 +1,7 @@
 const constants = {
   routes: {
     searchBasic: {
-      get: '/cdo/search/basic',
-      post: '/cdo/search/basic'
+      get: '/cdo/search/basic'
     }
   },
   views: {

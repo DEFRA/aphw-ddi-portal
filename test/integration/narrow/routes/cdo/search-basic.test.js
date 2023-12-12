@@ -1,6 +1,5 @@
 const { admin } = require('../../../../../app/auth/permissions')
 const FormData = require('form-data')
-const { routes } = require('../../../../../app/constants/search')
 const { setInSession } = require('../../../../../app/session/session-wrapper')
 jest.mock('../../../../../app/session/session-wrapper')
 const { doSearch } = require('../../../../../app/api/ddi-index-api/search')
@@ -39,11 +38,11 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('POST /cdo/search/basic route returns 302 if not auth', async () => {
+  test('GET /cdo/search/basic route returns 302 if not auth', async () => {
     const fd = new FormData()
 
     const options = {
-      method: 'POST',
+      method: 'GET',
       url: '/cdo/search/basic',
       headers: fd.getHeaders(),
       payload: fd.getBuffer()
@@ -53,33 +52,24 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /cdo/search/basic with valid data returns 302', async () => {
-    const nextScreenUrl = routes.searchBasic.get
-    const payload = { searchTerms: 'term1', searchType: 'owner' }
-
+  test('GET /cdo/search/basic with valid data returns 200', async () => {
     doSearch.mockResolvedValue([])
 
     const options = {
-      method: 'POST',
-      url: '/cdo/search/basic',
-      auth,
-      payload
+      method: 'GET',
+      url: '/cdo/search/basic?searchTerms=term1&searchType=dog',
+      auth
     }
 
     const response = await server.inject(options)
-    expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe(nextScreenUrl)
+    expect(response.statusCode).toBe(200)
   })
 
-  test('POST /cdo/create/select-address with invalid data returns error', async () => {
-    const payload = {
-    }
-
+  test('GET /cdo/create/select-address with invalid data returns error', async () => {
     const options = {
-      method: 'POST',
-      url: '/cdo/search/basic',
-      auth,
-      payload
+      method: 'GET',
+      url: '/cdo/search/basic?searchTerms=',
+      auth
     }
 
     const response = await server.inject(options)
