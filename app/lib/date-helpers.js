@@ -9,6 +9,14 @@ const dateComponentsToString = (payload, prefix) => {
   return `${year}-${month}-${day}`
 }
 
+const getDateComponents = (payload, prefix) => {
+  const year = payload[prefix + '-year']
+  const month = payload[prefix + '-month']
+  const day = payload[prefix + '-day']
+
+  return { year, month, day }
+}
+
 const addDateComponents = (payload, key) => {
   const iso = payload[key]
 
@@ -39,6 +47,7 @@ const formatToGds = date => {
 
 module.exports = {
   dateComponentsToString,
+  getDateComponents,
   addDateComponents,
   removeDateComponents,
   formatToGds

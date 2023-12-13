@@ -62,11 +62,21 @@ function ViewModel (dogDetails, breedTypes, errors) {
   if (errors) {
     for (const error of errors.details) {
       const name = error.path[0]
-      const prop = this.model[name] || this.model[name.split('-')[0]]?.items?.find(item => item.name === name.split('-')[1])
+      const prop = this.model[name]
 
       if (prop !== undefined) {
-        if (name.includes('day') || name.includes('month') || name.includes('year')) {
-          prop.classes += ' govuk-input--error'
+        if (name === 'cdoIssued') {
+          const itemName = error.path[1] || error.context.path?.[1] || undefined
+
+          if (itemName) {
+            const item = prop.items.find(item => item.name === itemName)
+
+            item.classes += ' govuk-input--error'
+          } else {
+            for (const item of prop.items) {
+              item.classes += ' govuk-input--error'
+            }
+          }
         }
 
         prop.errorMessage = {

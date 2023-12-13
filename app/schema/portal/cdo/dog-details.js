@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const { UTCDate } = require('@date-fns/utc')
 const { isValid, isFuture, addMonths, parse } = require('date-fns')
-const { dateComponentsToString } = require('../../../lib/date-helpers')
+const { getDateComponents } = require('../../../lib/date-helpers')
 
 const validDateFormats = [
   'yyyy-MM-dd',
@@ -20,23 +20,43 @@ const parseCdoIssueDate = (value) => {
   return null
 }
 
+const calculateExpiryDate = (value) => {
+  const dateString = `${value.year}-${value.month}-${value.day}`
+
+  return addMonths(parseCdoIssueDate(dateString), 2)
+}
+
 const validateDate = (value, helpers) => {
-  if (value === '--') {
+  if (!value.day && !value.month && !value.year) {
     return helpers.message('Enter a CDO issue date')
   }
 
-  const date = parseCdoIssueDate(value)
+  if (!value.day) {
+    return helpers.message('CDO issue date must include a day', { path: ['cdoIssued', 'day'] })
+  }
+
+  if (!value.month) {
+    return helpers.message('CDO issue date must include a month', { path: ['cdoIssued', 'month'] })
+  }
+
+  if (!value.year) {
+    return helpers.message('CDO issue date must include a year', { path: ['cdoIssued', 'year'] })
+  }
+
+  const dateString = `${value.year}-${value.month}-${value.day}`
+
+  const date = parseCdoIssueDate(dateString)
 
   if (date) {
     return date
   }
 
-  return helpers.message('CDO issue date must be a real date')
+  return helpers.message('Enter a real date')
 }
 
 const validateIssueDate = (value, helpers) => {
   if (typeof value === 'object' && isFuture(value)) {
-    return helpers.message('CDO issue date must not be in the future')
+    return helpers.message('Enter a date that is in the past', { path: ['cdoIssued', 'year'] })
   }
 
   return value
@@ -46,30 +66,27 @@ const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
     '*': 'Breed type is required'
   }),
-  name: Joi.string().trim().allow('').allow(null).optional(),
-  cdoIssued: Joi.string().required().messages({
-    'string.base': 'Enter a CDO issue date',
-    'string.empty': 'Enter a CDO issue date'
+  name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
+    'string.max': 'Dog name must be {#limit} characters or fewer'
+  }),
+  cdoIssued: Joi.object({
+    year: Joi.number().allow(null).allow('').min(2020).messages({
+      'number.min': 'The CDO issue year must be 2020 or later'
+    }),
+    month: Joi.number().allow(null).allow(''),
+    day: Joi.number().allow(null).allow('')
   }).custom(validateDate).custom(validateIssueDate),
   cdoExpiry: Joi.date().iso().required()
 }).required()
 
 const validatePayload = (payload) => {
-  payload.cdoIssued = dateComponentsToString(payload, 'cdoIssued')
-
-  payload.cdoExpiry = addMonths(parseCdoIssueDate(payload.cdoIssued), 2)
+  payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
+  payload.cdoExpiry = calculateExpiryDate(payload.cdoIssued)
 
   const schema = Joi.object({
-    'cdoIssued-day': Joi.number().required().messages({
-      '*': 'CDO issue date must include a valid day'
-    }),
-    'cdoIssued-month': Joi.number().required().messages({
-      '*': 'CDO issue date must include a valid month'
-    }),
-    'cdoIssued-year': Joi.number().min(2020).required().messages({
-      '*': 'CDO issue date must include a valid year',
-      'number.min': 'CDO issue year must be 2020 or later'
-    }),
+    'cdoIssued-year': Joi.number().allow(null).allow(''),
+    'cdoIssued-month': Joi.number().allow(null).allow(''),
+    'cdoIssued-day': Joi.number().allow(null).allow(''),
     dogId: Joi.number().optional()
   }).concat(dogDetailsSchema)
 
