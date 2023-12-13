@@ -1,4 +1,4 @@
-const { getDog, setDog } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -94,6 +94,53 @@ describe('dog session storage', () => {
       breed: 'Breed 1'
     }, {
       name: 'Alice',
+      breed: 'Breed 2'
+    }])
+  })
+
+  test('getDogs returns dogs from session', () => {
+    mockRequest.yar.get.mockReturnValue([{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Buster',
+      breed: 'Breed 2'
+    }])
+
+    const dogs = getDogs(mockRequest)
+
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('dogs')
+    expect(dogs).toEqual([{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Buster',
+      breed: 'Breed 2'
+    }])
+  })
+
+  test('deleteDog deletes dog from session', () => {
+    const requestWithPayload = {
+      ...mockRequest,
+      payload: {
+        dogId: 1
+      }
+    }
+
+    requestWithPayload.yar.get.mockReturnValue([{
+      name: 'Fido',
+      breed: 'Breed 1'
+    }, {
+      name: 'Buster',
+      breed: 'Breed 2'
+    }])
+
+    deleteDog(requestWithPayload, 1)
+
+    expect(requestWithPayload.yar.set).toHaveBeenCalledTimes(1)
+    expect(requestWithPayload.yar.set).toHaveBeenCalledWith('dogs', [{
+      name: 'Buster',
       breed: 'Breed 2'
     }])
   })

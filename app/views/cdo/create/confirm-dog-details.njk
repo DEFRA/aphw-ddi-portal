@@ -34,6 +34,11 @@
               <li class="govuk-summary-card__action">
                 <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="{{ model.backLink }}/{{ dog.id }}"> Change details <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
               </li>
+              {% if model.dogs | length > 1 %}
+              <li class="govuk-summary-card__action">
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="{{ model.deleteLink }}/{{ dog.id }}"> Delete <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+              </li>
+              {% endif %}
             </ul>
           </div>
           <div class="govuk-summary-card__content">
