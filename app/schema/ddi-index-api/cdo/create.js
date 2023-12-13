@@ -4,7 +4,7 @@ const schema = Joi.object({
   owner: Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    dateOfBirth: Joi.string().required(),
+    dateOfBirth: Joi.string().optional(),
     address: Joi.object({
       addressLine1: Joi.string().required(),
       addressLine2: Joi.string().optional().allow('').allow(null),
