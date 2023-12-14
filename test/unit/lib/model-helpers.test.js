@@ -60,7 +60,7 @@ describe('ModelHelpers', () => {
 
   test('extractLatestInsurance handles no insurances', () => {
     const insurances = extractLatestInsurance(null)
-    expect(insurances).toEqual([])
+    expect(insurances).toEqual({})
   })
 
   test('extractLatestInsurance returns latest insurance', () => {
