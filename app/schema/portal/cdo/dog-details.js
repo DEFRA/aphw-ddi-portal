@@ -66,7 +66,7 @@ const dogDetailsSchema = Joi.object({
     '*': 'Breed type is required'
   }),
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
-    'string.max': 'Dog name must be {#limit} characters or fewer'
+    'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   cdoIssued: Joi.object({
     year: Joi.number().allow(null).allow('').min(2020).messages({
