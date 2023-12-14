@@ -1,0 +1,80 @@
+      <!-- dog -->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h2 class="govuk-summary-card__title defra-summary-header">Dog details</h2>
+          <div class="govuk-summary-card__actions">
+            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state"
+            href="/cdo/edit/dog/{{ model.dog.indexNumber }}">Edit details<span class="govuk-visually-hidden"> for dog</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list govuk-!-font-size-16">
+
+            <div class="govuk-summary-list__row govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Name</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.name }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Breed type</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.breed }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Colour</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.colour }}</dd>
+            </div>
+
+            {% if model.dog.sex %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Sex</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.sex }}</dd>
+            </div>
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Date of birth</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.dateOfBirth }}</dd>
+            </div>
+
+            {% if model.dog.dateOfDeath %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Date of death</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.dateOfDeath }}</dd>
+            </div>
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Tattoo</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.tattoo }}</dd>
+            </div>
+
+            {% if model.dog.microchipNumbers and model.dog.microchipNumbers.length > 0%}
+            {% for microchipNumber in model.dog.microchipNumbers %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip number {% if not loop.first %}{{ loop.index }}{% endif %}</dt>
+              <dd class="govuk-summary-list__value">{{ microchipNumber }}</dd>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
+            {% if model.dog.dateExported %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Date exported</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.dateExported }}</dd>
+            </div>
+            {% endif %}
+
+            {% if model.dog.dateStolen %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Date stolen</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.dateStolen }}</dd>
+            </div>
+            {% endif %}
+
+          </dl>
+        </div>
+      </div>
