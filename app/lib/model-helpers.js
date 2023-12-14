@@ -3,9 +3,7 @@ const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
     return ''
   }
-  console.log('here2', contacts.filter(x => x.contact.contact_type_i === 2).sort(propertyComparatorDesc('contact', 'id')))
   const email = contacts.filter(x => x.contact.contact_type_i === 2).sort(propertyComparatorDesc('contact', 'id')).map(y => y.contact.contact)
-  console.log('here3', email)
   return email.length > 0 ? email[0] : null
 }
 
