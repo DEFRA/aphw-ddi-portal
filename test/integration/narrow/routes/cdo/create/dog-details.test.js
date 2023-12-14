@@ -411,7 +411,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Dog name must be 32 characters or fewer')
+    expect(messages).toContain('Dog name must be no more than 32 characters')
   })
 
   afterEach(async () => {
