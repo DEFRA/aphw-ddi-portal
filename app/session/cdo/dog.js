@@ -54,9 +54,20 @@ const addAnotherDog = (request) => {
   request.yar.set(keys.entry, entryValue)
 }
 
+const deleteDog = (request) => {
+  const entry = get(request)
+
+  const index = getDogIndex(entry, request.payload?.dogId)
+
+  entry.splice(index, 1)
+
+  request.yar.set(keys.entry, entry)
+}
+
 module.exports = {
   getDog,
   getDogs,
   setDog,
-  addAnotherDog
+  addAnotherDog,
+  deleteDog
 }

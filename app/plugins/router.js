@@ -10,6 +10,7 @@ const routes = [].concat(
   require('../routes/cdo/create/dog-details'),
   require('../routes/cdo/create/confirm-dog-details'),
   require('../routes/cdo/search/basic'),
+  require('../routes/cdo/create/confirm-dog-delete'),
   require('../routes/cdo/create/record-created'),
   require('../routes/cdo/view/dog-details'),
   require('../routes/healthy'),
