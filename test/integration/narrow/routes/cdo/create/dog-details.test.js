@@ -168,15 +168,12 @@ describe('Add dog details', () => {
     expect(response.statusCode).toBe(400)
     expect(setDog).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
-    expect(document.querySelectorAll('.govuk-error-summary li').length).toBe(5)
+    expect(document.querySelectorAll('.govuk-error-summary li').length).toBe(2)
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
     expect(messages).toContain('Breed type is required')
-    expect(messages).toContain('CDO issue date must include a valid day')
-    expect(messages).toContain('CDO issue date must include a valid month')
-    expect(messages).toContain('CDO issue date must include a valid year')
-    expect(messages).toContain('CDO issue date must be a real date')
+    expect(messages).toContain('Enter a CDO issue date')
   })
 
   test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
@@ -203,7 +200,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('CDO issue date must be a real date')
+    expect(messages).toContain('Enter a real date')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
@@ -230,7 +227,191 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('CDO issue date must not be in the future')
+    expect(messages).toContain('Enter a date that is in the past')
+  })
+
+  test('POST /cdo/create/dog-details missing day should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-year': '2021'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('A CDO issue date must include a day and month')
+  })
+
+  test('POST /cdo/create/dog-details missing day should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '2021'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('A CDO issue date must include a day')
+  })
+
+  test('POST /cdo/create/dog-details missing month should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-year': '2021'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('A CDO issue date must include a month')
+  })
+
+  test('POST /cdo/create/dog-details missing year should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('A CDO issue date must include a year')
+  })
+
+  test('POST /cdo/create/dog-details route with year less than 2020 should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '2019'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('The CDO issue year must be 2020 or later')
+  })
+
+  test('POST /cdo/create/dog-details route with future date should display error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'Bruce',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '9999'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('Enter a date that is in the past')
+  })
+
+  test('POST /cdo/create/dog-details route with too long dog name should return 400', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      payload: {
+        breed: 'Breed 1',
+        name: 'BruceBruceBruceBruceBruceBruceBru',
+        'cdoIssued-day': '01',
+        'cdoIssued-month': '01',
+        'cdoIssued-year': '2023'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(setDog).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+
+    expect(messages).toContain('Dog name must be no more than 32 characters')
   })
 
   afterEach(async () => {
