@@ -37,6 +37,20 @@ const removeDateComponents = (payload, prefix) => {
   delete payload[prefix + '-day']
 }
 
+const addDateErrors = (error, prop) => {
+  const components = error.path[1] ? [error.path[1]] : error.context.path[1]
+
+  for (const component of components) {
+    const item = prop.items.find(item => item.name === component)
+
+    if (item) {
+      item.classes += ' govuk-input--error'
+    }
+  }
+
+  return `${error.path[0]}-${components[0]}`
+}
+
 const formatToGds = date => {
   if (date === null || date === undefined) {
     return date
@@ -50,5 +64,6 @@ module.exports = {
   getDateComponents,
   addDateComponents,
   removeDateComponents,
+  addDateErrors,
   formatToGds
 }

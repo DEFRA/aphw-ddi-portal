@@ -1,5 +1,6 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { routes, keys } = require('../../../constants/cdo/dog')
+const { addDateErrors } = require('../../../lib/date-helpers')
 
 function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
@@ -30,6 +31,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
       value: dogDetails[keys.name]
     },
     cdoIssued: {
+      type: 'date',
       id: 'cdoIssued',
       namePrefix: 'cdoIssued',
       fieldset: {
@@ -61,32 +63,16 @@ function ViewModel (dogDetails, breedTypes, errors) {
 
   if (errors) {
     for (const error of errors.details) {
-      const name = error.path[0]
+      let name = error.path[0]
       const prop = this.model[name]
 
-      if (prop !== undefined) {
-        if (name === 'cdoIssued') {
-          const itemName = error.path[1] || error.context.path?.[1] || undefined
-
-          if (itemName) {
-            const item = prop.items.find(item => item.name === itemName)
-
-            item.classes += ' govuk-input--error'
-          } else {
-            for (const item of prop.items) {
-              item.classes += ' govuk-input--error'
-            }
-          }
+      if (prop) {
+        if (prop.type === 'date') {
+          name = addDateErrors(error, prop)
         }
 
-        prop.errorMessage = {
-          text: error.message
-        }
-
-        this.model.errors.push({
-          text: error.message,
-          href: `#${name}`
-        })
+        prop.errorMessage = { text: error.message }
+        this.model.errors.push({ text: error.message, href: `#${name}` })
       }
     }
   }
