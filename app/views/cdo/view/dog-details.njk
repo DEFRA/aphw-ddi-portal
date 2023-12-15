@@ -1,0 +1,48 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: "/",
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+        Dog {{ model.dog.indexNumber }}
+      </h1>
+      <strong class="govuk-tag govuk-!-margin-bottom-6">
+        {{ model.dog.status }}
+      </strong>
+    </div>
+    <div class="govuk-grid-column-one-half">
+      <!-- dog -->
+      {% include "./cdo/view/dog-panel.njk" %}
+
+      <!-- owner -->
+      {% include "./cdo/view/owner-panel.njk" %}
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <!-- Exemption -->
+      {% include "./cdo/view/exemption-panel.njk" %}
+    </div>
+  </div>
+
+{% endblock %}

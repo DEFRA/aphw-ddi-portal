@@ -1,0 +1,81 @@
+      <!-- Exemption -->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h2 class="govuk-summary-card__title defra-summary-header">Exemption details</h2>
+          <div class="govuk-summary-card__actions">
+            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/edit/exemption/{{ model.dog.indexNumber }}">
+            Edit details<span class="govuk-visually-hidden"> for exemption</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list govuk-!-font-size-16">
+
+            {% if model.exemption.certificateIssued %}
+            <div class="govuk-summary-list__row govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Certificate issued</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
+            </div>
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">CDO issued</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.cdoIssued }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">CDO expiry</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.cdoExpiry }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Court</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.court }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Police force</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.policeForce }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Dog legislation officer</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.dogLegislationOfficer }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Application fee paid</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.applicationFeePaid }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Insurance company</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.insuranceCompany }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Insurance renewal date</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.insuranceRenewalDate }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Neutering confirmed</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringConfirmed }}</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip number verified</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.microchipConfirmed }}</dd>
+            </div>
+
+            {% if model.exemption.joinedInterimScheme %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.joinedInterimScheme }}</dd>
+            </div>
+            {% endif %}
+
+          </dl>
+        </div>
+      </div>
