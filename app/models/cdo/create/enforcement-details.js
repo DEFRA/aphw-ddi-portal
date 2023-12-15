@@ -29,10 +29,10 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       id: 'policeForce',
       name: 'policeForce',
       value: enforcementDetails?.policeForce,
-      items: policeForces.map(force => ({
+      items: [{ text: 'Select a police force' }].concat(policeForces.map(force => ({
         value: force.id,
         text: force.name
-      })),
+      }))),
       autocomplete: forms.preventAutocomplete
     },
     legislationOfficer: {
