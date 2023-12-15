@@ -28,7 +28,8 @@ function ViewModel (dogDetails, breedTypes, errors) {
       label: {
         text: 'Dog name (optional)'
       },
-      value: dogDetails[keys.name]
+      value: dogDetails[keys.name],
+      attributes: { maxlength: '32' }
     },
     cdoIssued: {
       type: 'date',
@@ -44,17 +45,20 @@ function ViewModel (dogDetails, breedTypes, errors) {
         {
           name: 'day',
           classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoIssued}-day`]
+          value: dogDetails[`${keys.cdoIssued}-day`],
+          attributes: { maxlength: '2' }
         },
         {
           name: 'month',
           classes: 'govuk-input--width-2',
-          value: dogDetails[`${keys.cdoIssued}-month`]
+          value: dogDetails[`${keys.cdoIssued}-month`],
+          attributes: { maxlength: '2' }
         },
         {
           name: 'year',
           classes: 'govuk-input--width-4',
-          value: dogDetails[`${keys.cdoIssued}-year`]
+          value: dogDetails[`${keys.cdoIssued}-year`],
+          attributes: { maxlength: '4' }
         }
       ]
     },
