@@ -1,0 +1,59 @@
+      <!-- owner -->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h2 class="govuk-summary-card__title defra-summary-header">Owner details</h2>
+          <div class="govuk-summary-card__actions">
+            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state"
+            href="/cdo/edit/person/{{ model.person.id }}">Edit details<span class="govuk-visually-hidden"> for owner</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list govuk-!-font-size-16">
+
+            <div class="govuk-summary-list__row govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Name</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.firstName }} {{ model.person.lastName }}</dd>
+            </div>
+
+            {% if model.person.dateOfBirth %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Date of birth</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.dateOfBirth }}</dd>
+            </div>
+            {% endif %}
+
+            {% if model.person.addressLines and model.person.addressLines.length > 0 %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Address</dt>
+              <dd class="govuk-summary-list__value">
+              {% for line in model.person.addressLines %}
+              {{ line }}<br>
+              {% endfor %}
+              </dd>
+            </div>
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Email</dt>
+              <dd class="govuk-summary-list__value"><a href="mailto:{{ model.person.email }}?subject=Dangerous Dog {{ model.dog.indexNumber }}">{{ model.person.email }}</a></dd>
+            </div>
+
+            {% if model.person.telephoneNumbers %}
+            {% for telephone in model.person.telephoneNumbers%}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Telephone number {{ loop.index }}</dt>
+              <dd class="govuk-summary-list__value">{{ telephone }}</dd>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Country</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.country }}</dd>
+            </div>
+
+          </dl>
+        </div>
+      </div>

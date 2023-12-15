@@ -1,6 +1,6 @@
 describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
-  const { post } = require('../../../../app/api/ddi-index-api/base')
+  const { get, post } = require('../../../../app/api/ddi-index-api/base')
 
   const { cdo } = require('../../../../app/api/ddi-index-api')
 
@@ -8,6 +8,13 @@ describe('CDO API endpoints', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  test('getCdo should do GET to API', async () => {
+    get.mockResolvedValue({ cdo: {} })
+    await cdo.getCdo('ED123')
+
+    expect(get).toHaveBeenCalledTimes(1)
   })
 
   test('createCdo with valid payload should post to API', async () => {
