@@ -1,12 +1,12 @@
 const { admin } = require('../../../../../../app/auth/permissions')
 const { JSDOM } = require('jsdom')
 
-describe('View dog details', () => {
+describe('View owner details', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../../app/api/ddi-index-api/cdo')
-  const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
+  jest.mock('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -25,33 +25,25 @@ describe('View dog details', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/view/dog-details route returns 200', async () => {
-    getCdo.mockResolvedValue({
+  test('GET /cdo/view/owner-details route returns 200', async () => {
+    getPersonAndDogs.mockResolvedValue({
       id: 1,
-      name: 'Bruno',
+      firstName: 'Boris',
+      lastName: 'MacClean',
       status: { status: 'TEST' },
-      dog_breed: { breed: 'breed1' },
-      registered_person: [{
-        person: {
-          firstName: 'John Smith',
-          addresses: [{
-            address: {
-            }
-          }]
-        }
-      }],
-      insurance: [{
-        id: 3,
-        policy_number: 'POL12345',
-        company: {
-          company_name: 'Dogs Trust'
-        }
-      }]
+      address: {
+        addressLine1: '1 Test Street'
+      },
+      contacts: [],
+      dogs: [
+        { name: 'Bruno' },
+        { name: 'Fido' }
+      ]
     })
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/view/owner-details/P-123',
       auth
     }
 
@@ -60,15 +52,15 @@ describe('View dog details', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('dd').length).toBe(19)
+    expect(document.querySelectorAll('dd').length).toBe(3)
   })
 
-  test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {
-    getCdo.mockResolvedValue(undefined)
+  test('GET /cdo/view/owner-details route returns 404 if no data found', async () => {
+    getPersonAndDogs.mockResolvedValue(undefined)
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/view/owner-details/P-123',
       auth
     }
 

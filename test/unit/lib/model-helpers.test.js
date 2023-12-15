@@ -8,11 +8,11 @@ describe('ModelHelpers', () => {
 
   test('extractEmail returns most recent email', () => {
     const contacts = [
-      { contact: { id: 1, contact: 'not ane mail', contact_type_i: 1 } },
-      { contact: { id: 2, contact: 'email1@here.com', contact_type_i: 2 } },
-      { contact: { id: 3, contact: 'email2@here.com', contact_type_i: 2 } },
-      { contact: { id: 4, contact: 'email3@here.com', contact_type_i: 2 } },
-      { contact: { id: 5, contact: 'not an email', contact_type_i: 1 } }
+      { contact: { id: 1, contact: 'not ane mail', contact_type_id: 1 } },
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2 } },
+      { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2 } },
+      { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2 } },
+      { contact: { id: 5, contact: 'not an email', contact_type_id: 1 } }
     ]
 
     const email = extractEmail(contacts)
@@ -22,7 +22,7 @@ describe('ModelHelpers', () => {
 
   test('extractEmail returns only email', () => {
     const contacts = [
-      { contact: { id: 2, contact: 'email1@here.com', contact_type_i: 2 } }
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2 } }
     ]
 
     const email = extractEmail(contacts)
@@ -32,12 +32,12 @@ describe('ModelHelpers', () => {
 
   test('extractTelephoneNumbers returns all phone numbers in order of id', () => {
     const contacts = [
-      { contact: { id: 1, contact: 'phone1', contact_type_i: 1 } },
-      { contact: { id: 2, contact: 'email1@here.com', contact_type_i: 2 } },
-      { contact: { id: 3, contact: 'email2@here.com', contact_type_i: 2 } },
-      { contact: { id: 4, contact: 'email3@here.com', contact_type_i: 2 } },
-      { contact: { id: 6, contact: 'phone3', contact_type_i: 1 } },
-      { contact: { id: 5, contact: 'phone2', contact_type_i: 1 } }
+      { contact: { id: 1, contact: 'phone1', contact_type_id: 1 } },
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2 } },
+      { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2 } },
+      { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2 } },
+      { contact: { id: 6, contact: 'phone3', contact_type_id: 1 } },
+      { contact: { id: 5, contact: 'phone2', contact_type_id: 1 } }
     ]
 
     const phoneNumbers = extractTelephoneNumbers(contacts)
