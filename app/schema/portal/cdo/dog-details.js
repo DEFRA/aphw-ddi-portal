@@ -37,6 +37,10 @@ const validateIssueDate = (value, helpers) => {
     }
   }
 
+  if (parseInt(year) < 2020) {
+    return helpers.message('The CDO issue year must be 2020 or later', { path: ['cdoIssued', ['year']] })
+  }
+
   if (invalidComponents.length === 0) {
     const dateString = `${year}-${month}-${day}`
     const date = parseCdoIssueDate(dateString)
@@ -69,11 +73,9 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   cdoIssued: Joi.object({
-    year: Joi.number().allow(null).allow('').min(2020).messages({
-      'number.min': 'The CDO issue year must be 2020 or later'
-    }),
-    month: Joi.number().allow(null).allow(''),
-    day: Joi.number().allow(null).allow('')
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
   }).custom(validateIssueDate),
   cdoExpiry: Joi.date().iso().required()
 }).required()
