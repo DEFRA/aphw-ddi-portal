@@ -4,6 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% extends '_layout.njk' %}
 
@@ -41,7 +42,7 @@
 
       {{ govukInput(model.person.lastName) }}
       
-      {{ govukDateInput(model.person.dateOfBirth) }}
+      {{ govukDateInput(model.person.birthDate) }}
 
       {{ govukInput(model.person.addressLine1) }}
 
@@ -53,17 +54,19 @@
 
       {{ govukInput(model.person.email) }}
 
-      {{ govukInput(model.person.primaryPhone) }}
+      {{ govukInput(model.person.primaryTelephone) }}
 
-      {{ govukInput(model.person.secondaryPhone) }}
+      {{ govukInput(model.person.secondaryTelephone) }}
 
       {{ govukSelect(model.person.country) }}
 
-      {{ govukButton({
-        text: "Save details"
-      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save details"
+        }) }}
 
-      <a class="govuk-link" href="{{ model.backLink }}">Cancel</a>
+        <a class="govuk-link" href="{{ model.backLink }}">Cancel</a>
+      </div>
     </div>
   </form>
 </div>

@@ -1,13 +1,16 @@
 const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
+const { addDateErrors } = require('../../../lib/date-helpers')
 
-function ViewModel (person) {
+function ViewModel (person, countries, errors) {
   this.model = {
     backLink: '/',
+    formAction: routes.updateDetails.post,
     person: {
       firstName: {
         label: {
-          text: 'First name'
+          text: 'First name',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'firstName',
         name: 'firstName',
@@ -18,7 +21,8 @@ function ViewModel (person) {
       },
       lastName: {
         label: {
-          text: 'Last name'
+          text: 'Last name',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'lastName',
         name: 'lastName',
@@ -27,37 +31,33 @@ function ViewModel (person) {
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '24' }
       },
-      dateOfBirth: {
-        id: 'owner-date-of-birth',
+      birthDate: {
+        type: 'date',
+        id: 'birthDate',
+        namePrefix: 'birthDate',
         fieldset: {
           legend: {
-            isPageHeading: false,
-            classes: 'govuk-input--width-20'
+            text: 'Date of birth',
+            classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
         items: [
           {
-            name: 'dob-day',
+            name: 'day',
             classes: 'govuk-input--width-2',
-            value: person['dob-day'],
-            label: 'Day',
-            autocomplete: forms.preventAutocomplete,
+            value: person['birthDate-day'],
             attributes: { maxlength: '2' }
           },
           {
-            name: 'dob-month',
+            name: 'month',
             classes: 'govuk-input--width-2',
-            value: person['dob-month'],
-            label: 'Month',
-            autocomplete: forms.preventAutocomplete,
+            value: person['birthDate-month'],
             attributes: { maxlength: '2' }
           },
           {
-            name: 'dob-year',
+            name: 'year',
             classes: 'govuk-input--width-4',
-            value: person['dob-year'],
-            label: 'Year',
-            autocomplete: forms.preventAutocomplete,
+            value: person['birthDate-year'],
             attributes: { maxlength: '4' }
           }
         ]
@@ -66,9 +66,10 @@ function ViewModel (person) {
         id: 'addressLine1',
         name: 'addressLine1',
         label: {
-          text: 'Address line 1'
+          text: 'Address line 1',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.address.addressLine1,
+        value: person.addressLine1 ?? person.address.addressLine1,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -76,9 +77,10 @@ function ViewModel (person) {
         id: 'addressLine2',
         name: 'addressLine2',
         label: {
-          text: 'Address line 2 (optional)'
+          text: 'Address line 2 (optional)',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.address.addressLine2,
+        value: person.addressLine2 ?? person.address.addressLine2,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -86,9 +88,10 @@ function ViewModel (person) {
         id: 'town',
         name: 'town',
         label: {
-          text: 'Town or city'
+          text: 'Town or city',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.address.town,
+        value: person.town ?? person.address.town,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -96,9 +99,10 @@ function ViewModel (person) {
         id: 'postcode',
         name: 'postcode',
         label: {
-          text: 'Postcode'
+          text: 'Postcode',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.address.postcode,
+        value: person.postcode ?? person.address.postcode,
         classes: 'govuk-input--width-10',
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
@@ -107,88 +111,78 @@ function ViewModel (person) {
         id: 'country',
         name: 'country',
         label: {
-          text: 'Country'
+          text: 'Country',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.address.country,
+        value: person.country ?? person.address.country,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '30' }
       },
-      postcode: {
-        label: {
-          text: 'Postcode'
-        },
-        id: 'postcode',
-        name: 'postcode',
-        classes: 'govuk-input--width-10',
-        value: person.address.postcode,
-        autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
-      },
       email: {
         label: {
-          text: 'Email'
+          text: 'Email',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'email',
         name: 'email',
         classes: 'govuk-input--width-10',
-        value: person.contacts.email,
-        autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
-      },
-      email: {
-        label: {
-          text: 'Email'
-        },
-        id: 'email',
-        name: 'email',
-        classes: 'govuk-input--width-10',
-        value: person.contacts.email,
-        autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
-      },
-      email: {
-        label: {
-          text: 'Email'
-        },
-        id: 'email',
-        name: 'email',
-        classes: 'govuk-input--width-10',
-        value: person.contacts.email,
+        value: person.email ?? person.contacts.emails[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
       },
       primaryTelephone: {
         label: {
-          text: 'Telephone number 1'
+          text: 'Telephone number 1',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'primaryTelephone',
         name: 'primaryTelephone',
         classes: 'govuk-input--width-10',
-        value: person.contacts.primaryTelephone,
+        value: person.primaryTelephone ?? person.contacts.primaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
       },
       secondaryTelephone: {
         label: {
-          text: 'Telephone number 2'
+          text: 'Telephone number 2',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'secondaryTelephone',
         name: 'secondaryTelephone',
         classes: 'govuk-input--width-10',
-        value: person.contacts.secondaryTelephone,
+        value: person.secondaryTelephone ?? person.contacts.primaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
       },
       country: {
         label: {
-          text: 'Telephone number 2'
+          text: 'Country',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        id: 'secondaryTelephone',
-        name: 'secondaryTelephone',
-        classes: 'govuk-input--width-10',
-        value: person.address.country,
-        autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
+        id: 'country',
+        name: 'country',
+        value: person.country ?? person.address.country,
+        items: countries.map(country => ({
+          value: country,
+          text: country
+        })),
+      }
+    },
+    errors: []
+  }
+
+  if (errors) {
+    for (const error of errors.details) {
+      let name = error.path[0]
+      const prop = this.model.person[name]
+
+      if (prop) {
+        if (prop.type === 'date') {
+          name = addDateErrors(error, prop)
+        }
+
+        prop.errorMessage = { text: error.message }
+        this.model.errors.push({ text: error.message, href: `#${name}` })
       }
     }
   }
