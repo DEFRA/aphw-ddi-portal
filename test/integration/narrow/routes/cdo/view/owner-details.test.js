@@ -32,7 +32,9 @@ describe('View owner details', () => {
       lastName: 'MacClean',
       status: { status: 'TEST' },
       address: {
-        addressLine1: '1 Test Street'
+        addressLine1: '1 Test Street',
+        addressLine2: 'Testarea',
+        town: 'Testington'
       },
       contacts: [],
       dogs: [
@@ -52,7 +54,12 @@ describe('View owner details', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('dd').length).toBe(3)
+    const cards = document.querySelectorAll('.govuk-summary-card')
+    expect(cards.length).toBe(3)
+    expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Boris MacClean')
+    expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim().indexOf('1 Test Street')).toBeGreaterThan(-1)
+    expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim().indexOf('Testarea')).toBeGreaterThan(-1)
+    expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim().indexOf('Testington')).toBeGreaterThan(-1)
   })
 
   test('GET /cdo/view/owner-details route returns 404 if no data found', async () => {

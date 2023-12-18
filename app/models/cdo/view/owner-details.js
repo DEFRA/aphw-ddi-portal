@@ -10,7 +10,7 @@ function ViewModel (personAndDogs) {
       firstName: personAndDogs.firstName,
       lastName: personAndDogs.lastName,
       dateOfBirth: formatToGds(personAndDogs.birthDate),
-      addressLines: [].concat(personAndDogs.address.address_line_1, personAndDogs.address.address_line_2, personAndDogs.address.town, personAndDogs.address.postcode).filter(el => el != null),
+      addressLines: [].concat(personAndDogs.address.addressLine1, personAndDogs.address.addressLine2, personAndDogs.address.town, personAndDogs.address.postcode).filter(el => el != null),
       country: personAndDogs?.address?.country,
       email: extractEmail(personAndDogs?.contacts),
       telephoneNumbers: extractTelephoneNumbers(personAndDogs?.contacts)

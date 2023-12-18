@@ -3,7 +3,7 @@ jest.setTimeout(30000)
 // Uncomment the following lines if you need to run a single test with :
 // npm run test <path>/<test-file>.test.js
 //
-//You may also need Azurite running, depending on the test
+// You may also need Azurite running, depending on the test
 
 process.env.COOKIE_PASSWORD = 'cookiepasswordcookiepasswordcookiepassword'
 process.env.AZURE_STORAGE_ACCOUNT_NAME = 'devstoreaccount1'
