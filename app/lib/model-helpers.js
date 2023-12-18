@@ -3,7 +3,7 @@ const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
     return ''
   }
-  const email = contacts.filter(x => x.contact.contact_type_id === 2).sort(propertyComparatorDesc('contact', 'id')).map(y => y.contact.contact)
+  const email = contacts.filter(x => x.contact.contact_type.contact_type === 'Email').sort(propertyComparatorDesc('contact', 'id')).map(y => y.contact.contact)
   return email.length > 0 ? email[0] : null
 }
 
@@ -11,7 +11,7 @@ const extractTelephoneNumbers = (contacts) => {
   if (!contacts || contacts.length === 0) {
     return []
   }
-  return contacts.filter(x => x.contact.contact_type_id === 1).sort(propertyComparatorAsc('contact', 'id')).map(y => y.contact.contact)
+  return contacts.filter(x => x.contact.contact_type.contact_type === 'Phone').sort(propertyComparatorAsc('contact', 'id')).map(y => y.contact.contact)
 }
 
 const extractLatestAddress = (addresses) => {
