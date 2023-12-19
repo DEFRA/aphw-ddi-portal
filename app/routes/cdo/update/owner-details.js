@@ -53,7 +53,7 @@ module.exports = [
 
         await updatePerson(payload)
 
-        return h.redirect(`/cdo/view/owner-details/${person.personReference}`)
+        return h.redirect(`${routes.ownerDetails.get}/${person.personReference}`)
       }
     }
   }
