@@ -16,11 +16,13 @@ module.exports = [
       handler: async (request, h) => {
         const person = await getPersonByReference(request.params.personReference)
 
-        if (person === undefined) {
+        console.log(person)
+
+        if (person == null) {
           return h.response().code(404).takeover()
         }
 
-        person['dateOfBirth'] = person['birthDate']
+        person.dateOfBirth = person.birthDate
 
         addDateComponents(person, 'dateOfBirth')
 
@@ -51,7 +53,7 @@ module.exports = [
 
         await updatePerson(payload)
 
-        return h.redirect('/')
+        return h.redirect(`/cdo/view/owner-details/${person.personReference}`)
       }
     }
   }

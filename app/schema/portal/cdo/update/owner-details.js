@@ -52,7 +52,7 @@ const validatedateOfBirth = (value, helpers) => {
     return null
   }
 
-  const errorMessage = `An owner birth date must include a ${invalidComponents.join(' and ')}`
+  const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
 
   return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
 }
@@ -100,7 +100,7 @@ const ownerDetailsSchema = Joi.object({
 const dateOfBirthSchema = Joi.object({
   'dateOfBirth-year': Joi.number().allow(null).allow(''),
   'dateOfBirth-month': Joi.number().allow(null).allow(''),
-  'dateOfBirth-day': Joi.number().allow(null).allow(''),
+  'dateOfBirth-day': Joi.number().allow(null).allow('')
 })
 
 const validatePayload = (payload) => {

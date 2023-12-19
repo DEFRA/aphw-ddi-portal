@@ -70,7 +70,7 @@ function ViewModel (person, countries, errors) {
           text: 'Address line 1',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.addressLine1 ?? person.address.addressLine1,
+        value: person.addressLine1 ?? person.address?.addressLine1,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -81,7 +81,7 @@ function ViewModel (person, countries, errors) {
           text: 'Address line 2 (optional)',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.addressLine2 ?? person.address.addressLine2,
+        value: person.addressLine2 ?? person.address?.addressLine2,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -92,7 +92,7 @@ function ViewModel (person, countries, errors) {
           text: 'Town or city',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.town ?? person.address.town,
+        value: person.town ?? person.address?.town,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -103,21 +103,10 @@ function ViewModel (person, countries, errors) {
           text: 'Postcode',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
-        value: person.postcode ?? person.address.postcode,
+        value: person.postcode ?? person.address?.postcode,
         classes: 'govuk-input--width-10',
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
-      },
-      country: {
-        id: 'country',
-        name: 'country',
-        label: {
-          text: 'Country',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        },
-        value: person.country ?? person.address.country,
-        autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '30' }
       },
       email: {
         label: {
@@ -127,7 +116,7 @@ function ViewModel (person, countries, errors) {
         id: 'email',
         name: 'email',
         classes: 'govuk-input--width-10',
-        value: person.email ?? person.contacts.emails[0],
+        value: person.email ?? person.contacts?.emails[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '33' }
       },
@@ -139,7 +128,7 @@ function ViewModel (person, countries, errors) {
         id: 'primaryTelephone',
         name: 'primaryTelephone',
         classes: 'govuk-input--width-10',
-        value: person.primaryTelephone ?? person.contacts.primaryTelephones[0],
+        value: person.primaryTelephone ?? person.contacts?.primaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '13' }
       },
@@ -151,7 +140,7 @@ function ViewModel (person, countries, errors) {
         id: 'secondaryTelephone',
         name: 'secondaryTelephone',
         classes: 'govuk-input--width-10',
-        value: person.secondaryTelephone ?? person.contacts.secondaryTelephones[0],
+        value: person.secondaryTelephone ?? person.contacts?.secondaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '13' }
       },
@@ -162,11 +151,11 @@ function ViewModel (person, countries, errors) {
         },
         id: 'country',
         name: 'country',
-        value: person.country ?? person.address.country,
+        value: person.country ?? person.address?.country,
         items: countries.map(country => ({
           value: country,
           text: country
-        })),
+        }))
       }
     },
     errors: []
