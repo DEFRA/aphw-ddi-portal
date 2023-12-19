@@ -25,6 +25,10 @@ const constants = {
     },
     confirmation: {
       get: '/cdo/create/confirmation'
+    },
+    viewOwnerDetails: {
+      get: '/cdo/view/owner-details',
+      post: '/cdo/view/owner-details'
     }
   },
   views: {
@@ -34,7 +38,8 @@ const constants = {
     address: 'cdo/create/address',
     enforcementDetails: 'cdo/create/_enforcement-details',
     ownerSummary: 'cdo/create/owner-summary',
-    confirmation: 'cdo/create/confirmation'
+    confirmation: 'cdo/create/confirmation',
+    viewOwnerDetails: 'cdo/view/owner-details'
   },
   keys: {
     entry: 'owner',

@@ -1,7 +1,11 @@
-const { post } = require('./base')
+const { get, post } = require('./base')
 const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
+
+const options = {
+  json: true
+}
 
 const addPerson = async person => {
   const data = {
@@ -21,6 +25,12 @@ const addPerson = async person => {
   return payload.references[0]
 }
 
+const getPersonAndDogs = async (personReference) => {
+  const payload = await get(`${personEndpoint}/${personReference}?includeDogs=true`, options)
+  return payload
+}
+
 module.exports = {
-  addPerson
+  addPerson,
+  getPersonAndDogs
 }
