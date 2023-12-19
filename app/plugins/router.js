@@ -14,6 +14,7 @@ const routes = [].concat(
   require('../routes/cdo/create/record-created'),
   require('../routes/cdo/view/dog-details'),
   require('../routes/cdo/update/owner-details'),
+  require('../routes/cdo/view/owner-details'),
   require('../routes/healthy'),
   require('../routes/healthz'),
   require('../routes/cookies'),
