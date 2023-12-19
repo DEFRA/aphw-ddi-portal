@@ -42,7 +42,7 @@
 
       {{ govukInput(model.person.lastName) }}
       
-      {{ govukDateInput(model.person.birthDate) }}
+      {{ govukDateInput(model.person.dateOfBirth) }}
 
       {{ govukInput(model.person.addressLine1) }}
 
@@ -59,6 +59,8 @@
       {{ govukInput(model.person.secondaryTelephone) }}
 
       {{ govukSelect(model.person.country) }}
+
+      <input type="hidden" name="personReference" value="{{ model.person.personReference }}" />
 
       <div class="govuk-button-group">
         {{ govukButton({

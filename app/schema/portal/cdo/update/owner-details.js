@@ -4,7 +4,17 @@ const { parseDate, getDateComponents } = require('../../../../lib/date-helpers')
 
 const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
 
-const validateBirthDate = (value, helpers) => {
+const { isValidPhoneNumber } = require('libphonenumber-js')
+
+const validatePhoneNumber = (value, helpers) => {
+  if (!isValidPhoneNumber(value, 'GB')) {
+    return helpers.message('Enter a real telephone number')
+  }
+
+  return value
+}
+
+const validatedateOfBirth = (value, helpers) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -39,7 +49,7 @@ const validateBirthDate = (value, helpers) => {
   }
 
   if (invalidComponents.length === 3) {
-    return helpers.message('Enter an owner birth date', { path: ['birthDate', ['day', 'month', 'year']] })
+    return null
   }
 
   const errorMessage = `An owner birth date must include a ${invalidComponents.join(' and ')}`
@@ -48,6 +58,7 @@ const validateBirthDate = (value, helpers) => {
 }
 
 const ownerDetailsSchema = Joi.object({
+  personReference: Joi.string().required(),
   firstName: Joi.string().trim().required().max(30).messages({
     'string.empty': 'Enter a first name',
     'string.max': 'First name must be no more than {#limit} characters'
@@ -72,27 +83,30 @@ const ownerDetailsSchema = Joi.object({
     'string.max': 'Postcode must be no more than {#limit} characters',
     'string.pattern.base': 'Enter a real postcode'
   }),
-  birthDate: Joi.object({
+  dateOfBirth: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateBirthDate),
-  email: Joi.string().trim().optional().allow(null).allow(''),
-  primaryTelephone: Joi.string().trim().optional().allow(null).allow(''),
-  secondaryTelephone: Joi.string().trim().optional().allow(null).allow(''),
+  }).custom(validatedateOfBirth),
+  email: Joi.string().trim().max(254).optional().allow(null).allow('').messages({
+    'string.max': 'Email must be no more than {#limit} characters',
+    'string.email': 'Enter a real email address'
+  }),
+  primaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
+  secondaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
   country: Joi.string().trim().optional().allow(null).allow('')
 }).required()
 
-const birthDateSchema = Joi.object({
-  'birthDate-year': Joi.number().allow(null).allow(''),
-  'birthDate-month': Joi.number().allow(null).allow(''),
-  'birthDate-day': Joi.number().allow(null).allow(''),
+const dateOfBirthSchema = Joi.object({
+  'dateOfBirth-year': Joi.number().allow(null).allow(''),
+  'dateOfBirth-month': Joi.number().allow(null).allow(''),
+  'dateOfBirth-day': Joi.number().allow(null).allow(''),
 })
 
 const validatePayload = (payload) => {
-  payload.birthDate = getDateComponents(payload, 'birthDate')
+  payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')
 
-  const schema = ownerDetailsSchema.concat(birthDateSchema)
+  const schema = ownerDetailsSchema.concat(dateOfBirthSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
 

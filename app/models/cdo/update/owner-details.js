@@ -7,6 +7,7 @@ function ViewModel (person, countries, errors) {
     backLink: '/',
     formAction: routes.updateDetails.post,
     person: {
+      personReference: person.personReference,
       firstName: {
         label: {
           text: 'First name',
@@ -31,10 +32,10 @@ function ViewModel (person, countries, errors) {
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '24' }
       },
-      birthDate: {
+      dateOfBirth: {
         type: 'date',
-        id: 'birthDate',
-        namePrefix: 'birthDate',
+        id: 'dateOfBirth',
+        namePrefix: 'dateOfBirth',
         fieldset: {
           legend: {
             text: 'Date of birth',
@@ -45,19 +46,19 @@ function ViewModel (person, countries, errors) {
           {
             name: 'day',
             classes: 'govuk-input--width-2',
-            value: person['birthDate-day'],
+            value: person['dateOfBirth-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
             classes: 'govuk-input--width-2',
-            value: person['birthDate-month'],
+            value: person['dateOfBirth-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
             classes: 'govuk-input--width-4',
-            value: person['birthDate-year'],
+            value: person['dateOfBirth-year'],
             attributes: { maxlength: '4' }
           }
         ]
@@ -128,7 +129,7 @@ function ViewModel (person, countries, errors) {
         classes: 'govuk-input--width-10',
         value: person.email ?? person.contacts.emails[0],
         autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
+        attributes: { maxlength: '33' }
       },
       primaryTelephone: {
         label: {
@@ -140,7 +141,7 @@ function ViewModel (person, countries, errors) {
         classes: 'govuk-input--width-10',
         value: person.primaryTelephone ?? person.contacts.primaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
+        attributes: { maxlength: '13' }
       },
       secondaryTelephone: {
         label: {
@@ -150,9 +151,9 @@ function ViewModel (person, countries, errors) {
         id: 'secondaryTelephone',
         name: 'secondaryTelephone',
         classes: 'govuk-input--width-10',
-        value: person.secondaryTelephone ?? person.contacts.primaryTelephones[0],
+        value: person.secondaryTelephone ?? person.contacts.secondaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '8' }
+        attributes: { maxlength: '13' }
       },
       country: {
         label: {
