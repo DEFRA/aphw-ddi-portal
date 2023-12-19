@@ -14,7 +14,7 @@ const validatePhoneNumber = (value, helpers) => {
   return value
 }
 
-const validatedateOfBirth = (value, helpers) => {
+const validateDateOfBirth = (value, helpers) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -87,7 +87,7 @@ const ownerDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validatedateOfBirth),
+  }).custom(validateDateOfBirth),
   email: Joi.string().trim().max(254).optional().allow(null).allow('').messages({
     'string.max': 'Email must be no more than {#limit} characters',
     'string.email': 'Enter a real email address'
