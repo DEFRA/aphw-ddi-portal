@@ -1,5 +1,5 @@
-const { addPerson } = require('../../../../app/api/ddi-index-api/person')
-const { post } = require('../../../../app/api/ddi-index-api/base')
+const { addPerson, getPersonAndDogs } = require('../../../../app/api/ddi-index-api/person')
+const { get, post } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
 const validPerson = {
@@ -28,5 +28,11 @@ describe('Person test', () => {
     post.mockResolvedValue({ references: [456] })
     await expect(addPerson(invalidPerson)).rejects.toThrow()
     expect(post).not.toHaveBeenCalled()
+  })
+
+  test('getPersonAndDogs calls endpoint', async () => {
+    get.mockResolvedValue({ payload: {} })
+    await getPersonAndDogs('P-123')
+    expect(get).toHaveBeenCalledWith('person/P-123?includeDogs=true', expect.anything())
   })
 })

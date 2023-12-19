@@ -27,7 +27,7 @@ const config = {
     password: process.env.COOKIE_PASSWORD,
     ttl: process.env.COOKIE_TTL
   },
-  redirectUrl: process.env.REDIRECT_URL.length > 0 ? process.env.REDIRECT_URL : 'http://localhost:3002/authenticate'
+  redirectUrl: process.env.REDIRECT_URL?.length > 0 ? process.env.REDIRECT_URL : 'http://localhost:3002/authenticate'
 }
 
 // Validate config
