@@ -16,6 +16,7 @@ module.exports = [{
       const dog = await getDogDetails(indexNumber)
       const { breeds } = await getBreeds()
 
+      console.log('get dog', dog)
       if (dog[keys.dateOfBirth] !== undefined) {
         addDateComponents(dog, keys.dateOfBirth)
       }
@@ -55,6 +56,8 @@ module.exports = [{
       removeDateComponents(dog, keys.dateOfDeath)
       removeDateComponents(dog, keys.dateExported)
       removeDateComponents(dog, keys.dateStolen)
+
+      console.log('handler dog', dog)
 
       await updateDogDetails(dog)
 

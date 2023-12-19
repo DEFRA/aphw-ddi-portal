@@ -19,6 +19,7 @@ const updateDogDetails = async (dog) => {
     throw error
   }
 
+  console.log('put dog', dog)
   return await put(dogEndpoint, dog)
 }
 

@@ -54,9 +54,10 @@ function ViewModel (dogDetails, breedTypes, errors) {
       },
       value: dogDetails.sex,
       items: [
-        { text: '' },
+        { text: 'Choose sex' },
         { text: 'Male', value: 'Male' },
-        { text: 'Female', value: 'Female' }
+        { text: 'Female', value: 'Female' },
+        { text: 'Unknown', value: 'Unknown' }
       ]
     },
     dateOfBirth: {
