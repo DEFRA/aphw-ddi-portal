@@ -63,6 +63,20 @@ describe('View dog details', () => {
     expect(document.querySelectorAll('dd').length).toBe(19)
   })
 
+  test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {
+    getCdo.mockResolvedValue(undefined)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/dog-details/ED123',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()

@@ -12,7 +12,11 @@ module.exports = [{
     handler: async (request, h) => {
       const searchCriteria = request.query
 
-      if (searchCriteria.searchTerms === undefined && searchCriteria.searchType === undefined) {
+      if (searchCriteria.searchType === undefined) {
+        searchCriteria.searchType = 'dog'
+      }
+
+      if (searchCriteria.searchTerms === undefined) {
         return h.view(views.searchBasic, new ViewModel(searchCriteria, []))
       }
 
