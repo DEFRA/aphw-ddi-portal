@@ -21,7 +21,16 @@ const post = async (endpoint, data) => {
   return JSON.parse(payload)
 }
 
+const put = async (endpoint, data) => {
+  const { payload } = await wreck.put(`${baseUrl}/${endpoint}`, {
+    payload: data
+  })
+
+  return JSON.parse(payload)
+}
+
 module.exports = {
   get,
-  post
+  post,
+  put
 }
