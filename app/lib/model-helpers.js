@@ -1,4 +1,3 @@
-
 const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
     return ''

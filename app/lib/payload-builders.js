@@ -23,6 +23,24 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
   }))
 })
 
+const buildPersonUpdatePayload = (person) => ({
+  personReference: person.personReference,
+  firstName: person.firstName,
+  lastName: person.lastName,
+  dateOfBirth: person.dateOfBirth,
+  address: {
+    addressLine1: person.addressLine1,
+    addressLine2: person.addressLine2,
+    town: person.town,
+    postcode: person.postcode,
+    country: person.country
+  },
+  email: person.email,
+  primaryTelephone: person.primaryTelephone,
+  secondaryTelephone: person.secondaryTelephone
+})
+
 module.exports = {
-  buildCdoCreatePayload
+  buildCdoCreatePayload,
+  buildPersonUpdatePayload
 }

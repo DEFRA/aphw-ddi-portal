@@ -1,0 +1,76 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <h2 class="govuk-heading-m">Owner details</h2>
+
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      {{ govukInput(model.person.firstName) }}
+
+      {{ govukInput(model.person.lastName) }}
+      
+      {{ govukDateInput(model.person.dateOfBirth) }}
+
+      {{ govukInput(model.person.addressLine1) }}
+
+      {{ govukInput(model.person.addressLine2) }}
+
+      {{ govukInput(model.person.town) }}
+
+      {{ govukInput(model.person.postcode) }}
+
+      {{ govukInput(model.person.email) }}
+
+      {{ govukInput(model.person.primaryTelephone) }}
+
+      {{ govukInput(model.person.secondaryTelephone) }}
+
+      {{ govukSelect(model.person.country) }}
+
+      <input type="hidden" name="personReference" value="{{ model.person.personReference }}" />
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save details"
+        }) }}
+
+        <a class="govuk-link" href="{{ model.backLink }}">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
