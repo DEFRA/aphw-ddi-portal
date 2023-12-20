@@ -16,8 +16,6 @@ module.exports = [
       handler: async (request, h) => {
         const person = await getPersonByReference(request.params.personReference)
 
-        console.log(person)
-
         if (person == null) {
           return h.response().code(404).takeover()
         }
@@ -42,7 +40,7 @@ module.exports = [
         failAction: async (request, h, error) => {
           const person = request.payload
           const countries = await getCountries()
-          console.log(error)
+
           return h.view(views.updateDetails, new ViewModel(person, countries, error)).code(400).takeover()
         }
       },
