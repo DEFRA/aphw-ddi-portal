@@ -34,7 +34,7 @@ describe('Update owner details', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/update/owner-details/P-1234-5678 route returns 200', async () => {
+  test('GET /cdo/edit/owner-details/P-1234-5678 route returns 200', async () => {
     getPersonByReference.mockResolvedValue({
       firstName: 'John',
       lastName: 'Smith',
@@ -62,7 +62,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/update/owner-details/P-1234-5678',
+      url: '/cdo/edit/owner-details/P-1234-5678',
       auth
     }
 
@@ -71,12 +71,12 @@ describe('Update owner details', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('GET /cdo/update/owner-details/P-1234-5678 route returns 404 when person not found', async () => {
+  test('GET /cdo/edit/owner-details/P-1234-5678 route returns 404 when person not found', async () => {
     getPersonByReference.mockResolvedValue(null)
 
     const options = {
       method: 'GET',
-      url: '/cdo/update/owner-details/P-1234-5678',
+      url: '/cdo/edit/owner-details/P-1234-5678',
       auth
     }
 
@@ -85,7 +85,7 @@ describe('Update owner details', () => {
     expect(response.statusCode).toBe(404)
   })
 
-  test('POST /cdo/update/owner-details route returns 302', async () => {
+  test('POST /cdo/edit/owner-details route returns 302', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -103,7 +103,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }
@@ -114,10 +114,10 @@ describe('Update owner details', () => {
     expect(updatePerson).toHaveBeenCalledTimes(1)
   })
 
-  test('POST /cdo/update/owner-details route returns 400 when payload is invalid', async () => {
+  test('POST /cdo/edit/owner-details route returns 400 when payload is invalid', async () => {
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload: {}
     }
@@ -131,7 +131,7 @@ describe('Update owner details', () => {
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
   })
 
-  test('POST /cdo/update/owner-details with invalid phone number returns 400', async () => {
+  test('POST /cdo/edit/owner-details with invalid phone number returns 400', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -148,7 +148,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }
@@ -166,7 +166,7 @@ describe('Update owner details', () => {
     expect(messages).toContain('Enter a real telephone number')
   })
 
-  test('POST /cdo/update/owner-details with invalid dob returns 400', async () => {
+  test('POST /cdo/edit/owner-details with invalid dob returns 400', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -184,7 +184,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }
@@ -202,7 +202,7 @@ describe('Update owner details', () => {
     expect(messages).toContain('Enter a real date')
   })
 
-  test('POST /cdo/update/owner-details with future dob returns 400', async () => {
+  test('POST /cdo/edit/owner-details with future dob returns 400', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -220,7 +220,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }
@@ -238,7 +238,7 @@ describe('Update owner details', () => {
     expect(messages).toContain('Enter a date of birth that is in the past')
   })
 
-  test('POST /cdo/update/owner-details with missing year returns 400', async () => {
+  test('POST /cdo/edit/owner-details with missing year returns 400', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -256,7 +256,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }
@@ -273,7 +273,7 @@ describe('Update owner details', () => {
     expect(messages).toContain('An owner date of birth must include a year')
   })
 
-  test('POST /cdo/update/owner-details with missing month and year returns 400', async () => {
+  test('POST /cdo/edit/owner-details with missing month and year returns 400', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -291,7 +291,7 @@ describe('Update owner details', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/update/owner-details',
+      url: '/cdo/edit/owner-details',
       auth,
       payload
     }

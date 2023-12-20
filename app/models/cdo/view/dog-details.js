@@ -28,6 +28,7 @@ function ViewModel (cdo) {
     },
     person: {
       id: person.id,
+      personReference: person.personReference,
       firstName: person.firstName,
       lastName: person.lastName,
       dateOfBirth: formatToGds(person.dateOfBirth),

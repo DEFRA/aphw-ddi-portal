@@ -7,6 +7,7 @@ function ViewModel (personAndDogs) {
     backLink: ownerRoutes.home.get,
     person: {
       id: personAndDogs.id,
+      personReference: personAndDogs.personReference,
       firstName: personAndDogs.firstName,
       lastName: personAndDogs.lastName,
       dateOfBirth: formatToGds(personAndDogs.birthDate),
