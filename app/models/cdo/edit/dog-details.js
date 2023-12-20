@@ -7,7 +7,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
     formAction: routes.editDogDetails.post,
     backLink: ownerRoutes.home.get,
     dogId: dogDetails.id,
-    indexNumber: dogDetails.index_number,
+    indexNumber: dogDetails.indexNumber,
     name: {
       id: 'name',
       name: 'name',
@@ -56,8 +56,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
       items: [
         { text: 'Choose sex' },
         { text: 'Male', value: 'Male' },
-        { text: 'Female', value: 'Female' },
-        { text: 'Unknown', value: 'Unknown' }
+        { text: 'Female', value: 'Female' }
       ]
     },
     dateOfBirth: {

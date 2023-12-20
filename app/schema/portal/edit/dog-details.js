@@ -22,11 +22,12 @@ const parseDate = (value) => {
 }
 
 const validateDate = (value, helpers) => {
+  const elementPath = helpers.state.path[0]
+
   if (`${value.year}-${value.month}-${value.day}` === 'undefined-undefined-undefined' || `${value.year}-${value.month}-${value.day}` === '--') {
     return null
   }
 
-  const elementPath = helpers.state.path[0]
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -76,39 +77,38 @@ const dogDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
+  }).custom(validateDate),
   dateOfDeath: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
+  }).custom(validateDate).optional(),
   tattoo: Joi.string().trim().max(8).allow('').allow(null).optional().messages({
     'string.max': 'Tattoo must be no more than {#limit} characters'
   }),
-  microchipNumber: Joi.string().trim().max(8).allow('').allow(null).optional().messages({
+  microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number must be no more than {#limit} characters'
   }),
-  microchipNumber2: Joi.string().trim().max(8).allow('').allow(null).optional().messages({
+  microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number 2 must be no more than {#limit} characters'
   }),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
+  }).custom(validateDate).optional(),
   dateStolen: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate)
+  }).custom(validateDate).optional()
 }).required()
 
 const validatePayload = (payload) => {
-  console.log('payload', payload)
-  payload.dateOfBirth = getDateComponents(payload, keys.dateOfBirth)
-  payload.dateOfDeath = getDateComponents(payload, keys.dateOfDeath)
-  payload.dateExported = getDateComponents(payload, keys.dateExported)
-  payload.dateStolen = getDateComponents(payload, keys.dateStolen)
+  payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')
+  payload.dateOfDeath = getDateComponents(payload, 'dateOfDeath')
+  payload.dateExported = getDateComponents(payload, 'dateExported')
+  payload.dateStolen = getDateComponents(payload, 'dateStolen')
 
   const schema = Joi.object({
     'dateOfBirth-year': Joi.number().allow(null).allow(''),
@@ -122,13 +122,11 @@ const validatePayload = (payload) => {
     'dateExported-day': Joi.number().allow(null).allow(''),
     'dateStolen-year': Joi.number().allow(null).allow(''),
     'dateStolen-month': Joi.number().allow(null).allow(''),
-    'dateStolen-day': Joi.number().allow(null).allow(''),
-    dogId: Joi.number().optional()
+    'dateStolen-day': Joi.number().allow(null).allow('')
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
 
-  console.log('validated', error)
   if (error) {
     throw error
   }

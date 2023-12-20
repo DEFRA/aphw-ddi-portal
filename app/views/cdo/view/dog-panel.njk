@@ -12,20 +12,26 @@
         <div class="govuk-summary-card__content">
           <dl class="govuk-summary-list govuk-!-font-size-16">
 
+            {% if model.dog.name %}
             <div class="govuk-summary-list__row govuk-!-width-one-third">
               <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.name }}</dd>
             </div>
+            {% endif %}
 
+            {% if model.dog.breed %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Breed type</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.breed }}</dd>
             </div>
+            {% endif %}
 
+            {% if model.dog.colour %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Colour</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.colour }}</dd>
             </div>
+            {% endif %}
 
             {% if model.dog.sex %}
             <div class="govuk-summary-list__row">
@@ -34,10 +40,12 @@
             </div>
             {% endif %}
 
+            {% if model.dog.dateOfBirth %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Date of birth</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.dateOfBirth }}</dd>
             </div>
+            {% endif %}
 
             {% if model.dog.dateOfDeath %}
             <div class="govuk-summary-list__row">
@@ -46,20 +54,26 @@
             </div>
             {% endif %}
 
+            {% if model.dog.tattoo %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Tattoo</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.tattoo }}</dd>
             </div>
-
-            {% if model.dog.microchipNumbers and model.dog.microchipNumbers.length > 0%}
-            {% for microchipNumber in model.dog.microchipNumbers %}
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Microchip number {% if not loop.first %}{{ loop.index }}{% endif %}</dt>
-              <dd class="govuk-summary-list__value">{{ microchipNumber }}</dd>
-            </div>
-            {% endfor %}
             {% endif %}
 
+            {% if model.dog.microchipNumber %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip number</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.microchipNumber }}</dd>
+            </div>
+            {% endif %}
+
+            {% if model.dog.microchipNumber2 %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip number 2</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.microchipNumber2 }}</dd>
+            </div>
+            {% endif %}
 
             {% if model.dog.dateExported %}
             <div class="govuk-summary-list__row">

@@ -3,7 +3,7 @@ const ViewModel = require('../../../models/cdo/edit/dog-details')
 const { validatePayload } = require('../../../schema/portal/edit/dog-details')
 const { getDogDetails, updateDogDetails } = require('../../../api/ddi-index-api/dog')
 const { getBreeds } = require('../../../api/ddi-index-api/dog-breeds')
-const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
+const { addDateComponents } = require('../../../lib/date-helpers')
 const { admin } = require('../../../auth/permissions')
 
 module.exports = [{
@@ -16,17 +16,16 @@ module.exports = [{
       const dog = await getDogDetails(indexNumber)
       const { breeds } = await getBreeds()
 
-      console.log('get dog', dog)
-      if (dog[keys.dateOfBirth] !== undefined) {
+      if (dog[keys.dateOfBirth]) {
         addDateComponents(dog, keys.dateOfBirth)
       }
-      if (dog[keys.dateOfDeath] !== undefined) {
+      if (dog[keys.dateOfDeath]) {
         addDateComponents(dog, keys.dateOfDeath)
       }
-      if (dog[keys.dateExported] !== undefined) {
+      if (dog[keys.dateExported]) {
         addDateComponents(dog, keys.dateExported)
       }
-      if (dog[keys.dateStolen] !== undefined) {
+      if (dog[keys.dateStolen]) {
         addDateComponents(dog, keys.dateStolen)
       }
 
@@ -51,13 +50,6 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const dog = request.payload
-
-      removeDateComponents(dog, keys.dateOfBirth)
-      removeDateComponents(dog, keys.dateOfDeath)
-      removeDateComponents(dog, keys.dateExported)
-      removeDateComponents(dog, keys.dateStolen)
-
-      console.log('handler dog', dog)
 
       await updateDogDetails(dog)
 
