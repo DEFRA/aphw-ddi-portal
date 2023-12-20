@@ -5,6 +5,7 @@ const { getCourts } = require('./courts')
 const { getPoliceForces } = require('./police-forces')
 const cdo = require('./cdo')
 const people = require('./person')
+const dog = require('./dog')
 
 module.exports = {
   getCounties,
@@ -13,5 +14,6 @@ module.exports = {
   getCourts,
   getPoliceForces,
   cdo,
-  people
+  people,
+  dog
 }

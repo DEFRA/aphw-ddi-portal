@@ -27,7 +27,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
         text: 'Breed type',
         classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
-      value: dogDetails.breed || dogDetails.dog_breed.breed,
+      value: dogDetails.breed || dogDetails.dog_breed?.breed,
       items: breedTypes.map(type => ({
         text: type.breed,
         value: type.breed

@@ -14,6 +14,11 @@ module.exports = [{
     handler: async (request, h) => {
       const indexNumber = request.params.indexNumber
       const dog = await getDogDetails(indexNumber)
+
+      if (dog == null) {
+        return h.response().code(404).takeover()
+      }
+
       const { breeds } = await getBreeds()
 
       if (dog[keys.dateOfBirth]) {
