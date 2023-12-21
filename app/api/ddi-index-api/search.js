@@ -7,7 +7,8 @@ const options = {
 }
 
 const doSearch = async (criteria) => {
-  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${criteria.searchTerms}`, options)
+  const strippedTerms = criteria?.searchTerms?.replace(/[`~!@#$%^&*_|=?;:'",.<>{}[\]]/gi, '')
+  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${encodeURIComponent(strippedTerms)}`, options)
   return payload.results
 }
 
