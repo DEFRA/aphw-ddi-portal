@@ -35,7 +35,11 @@ function ViewModel (cdo) {
       addressLines: formatAddressAsArray(latestAddress),
       country: latestAddress.country,
       email: extractEmail(contacts),
-      telephoneNumbers: extractTelephoneNumbers(contacts)
+      telephoneNumbers: extractTelephoneNumbers(contacts),
+      navlink: {
+        url: ownerRoutes.viewOwnerDetails.get,
+        text: 'Owner record'
+      }
     },
     exemption: {
       certificateIssued: formatToGds(cdo.exemption?.certificateIssued),
