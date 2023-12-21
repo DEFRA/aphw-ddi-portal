@@ -4,7 +4,7 @@
           <h2 class="govuk-summary-card__title defra-summary-header">Owner details</h2>
           <div class="govuk-summary-card__actions">
             <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state"
-            href="/cdo/edit/person/{{ model.person.id }}">Edit details<span class="govuk-visually-hidden"> for owner</span>
+            href="/cdo/edit/owner-details/{{ model.person.personReference }}">Edit details<span class="govuk-visually-hidden"> for owner</span>
             </a>
           </div>
         </div>
@@ -35,10 +35,12 @@
             </div>
             {% endif %}
 
+            {% if model.person.email %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Email</dt>
               <dd class="govuk-summary-list__value"><a href="mailto:{{ model.person.email }}?subject=Dangerous Dog {{ model.dog.indexNumber }}">{{ model.person.email }}</a></dd>
             </div>
+            {% endif %}
 
             {% if model.person.telephoneNumbers %}
             {% for telephone in model.person.telephoneNumbers%}
@@ -49,10 +51,12 @@
             {% endfor %}
             {% endif %}
 
+            {% if model.person.country %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Country</dt>
               <dd class="govuk-summary-list__value">{{ model.person.country }}</dd>
             </div>
+            {% endif %}
 
           </dl>
         </div>

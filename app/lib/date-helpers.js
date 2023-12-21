@@ -37,8 +37,8 @@ const getDateComponents = (payload, prefix) => {
 const addDateComponents = (payload, key) => {
   const iso = payload[key]
 
-  if (iso === undefined) {
-    return iso
+  if (!iso) {
+    return
   }
 
   const date = new UTCDate(iso)
