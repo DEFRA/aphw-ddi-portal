@@ -45,10 +45,13 @@ const getPostcodeAddresses = async (postcode, houseNumber) => {
 
 const buildAddressResult = (result) => {
   const subBuilding = result.DPA.SUB_BUILDING_NAME ? `${result.DPA.SUB_BUILDING_NAME}, ` : ''
-  const buildingName = result.DPA.BUILDING_NAME ? `${result.DPA.BUILDING_NAME}, ` : ''
   const buildingNumber = result.DPA.BUILDING_NUMBER ? `${result.DPA.BUILDING_NUMBER} ` : ''
+  const buildingName = result.DPA.BUILDING_NAME ? `${result.DPA.BUILDING_NAME}, ` : ''
+  const thoroughfareName = result.DPA.THOROUGHFARE_NAME ? `${result.DPA.THOROUGHFARE_NAME}` : ''
+  const organisationName = result.DPA.ORGANISATION_NAME ? `${result.DPA.ORGANISATION_NAME}` : ''
+  const line1 = `${subBuilding}${buildingNumber}${buildingName}${thoroughfareName}`.trim().replace(/(^,)|(,$)/g, '')
   return {
-    addressLine1: `${subBuilding}${buildingName}${buildingNumber}${result.DPA.THOROUGHFARE_NAME}`,
+    addressLine1: line1 === '' ? organisationName : line1,
     addressLine2: result.DPA.DEPENDENT_LOCALITY,
     addressTown: result.DPA.POST_TOWN,
     addressPostcode: result.DPA.POSTCODE,
