@@ -14,7 +14,11 @@ function ViewModel (personAndDogs) {
       addressLines: [].concat(personAndDogs.address.addressLine1, personAndDogs.address.addressLine2, personAndDogs.address.town, personAndDogs.address.postcode).filter(el => el != null),
       country: personAndDogs?.address?.country,
       email: extractEmail(personAndDogs?.contacts),
-      telephoneNumbers: extractTelephoneNumbers(personAndDogs?.contacts)
+      telephoneNumbers: extractTelephoneNumbers(personAndDogs?.contacts),
+      navlink: {
+        url: ownerRoutes.editDetails.get,
+        text: 'Edit details'
+      }
     },
     dogs: personAndDogs.dogs
   }
