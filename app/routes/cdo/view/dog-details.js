@@ -15,7 +15,6 @@ module.exports = [
         if (cdo === undefined) {
           return h.response().code(404).takeover()
         }
-
         return h.view(views.viewDogDetails, new ViewModel(cdo))
       }
     }

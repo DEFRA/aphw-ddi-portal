@@ -24,7 +24,7 @@
                     Dog name
               </th>
               <th scope="col" class="govuk-table__header">
-                    Microchip number
+                    Status
               </th>
             </tr>
           </thead>
@@ -41,7 +41,7 @@
                       {{ dog.dogName }}
               </td>
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                      {{ dog.microchipNumber }}
+                <strong class="govuk-tag">{{ dog.dogStatus }}</strong>
               </td>
             </tr>
             {% endfor %}

@@ -1,16 +1,16 @@
 const { routes, views } = require('../../../constants/owner')
 const { admin } = require('../../../auth/permissions.js')
-const ViewModel = require('../../../models/cdo/update/owner-details')
+const ViewModel = require('../../../models/cdo/edit/owner-details')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
-const { validatePayload } = require('../../../schema/portal/cdo/update/owner-details')
+const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
 
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.updateDetails.get}/{personReference}`,
+    path: `${routes.editDetails.get}/{personReference}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -26,13 +26,13 @@ module.exports = [
 
         const countries = await getCountries()
 
-        return h.view(views.updateDetails, new ViewModel(person, countries))
+        return h.view(views.editDetails, new ViewModel(person, countries))
       }
     }
   },
   {
     method: 'POST',
-    path: `${routes.updateDetails.post}`,
+    path: `${routes.editDetails.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -41,7 +41,7 @@ module.exports = [
           const person = request.payload
           const countries = await getCountries()
 
-          return h.view(views.updateDetails, new ViewModel(person, countries, error)).code(400).takeover()
+          return h.view(views.editDetails, new ViewModel(person, countries, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {
@@ -51,7 +51,7 @@ module.exports = [
 
         await updatePerson(payload)
 
-        return h.redirect(`${routes.ownerDetails.get}/${person.personReference}`)
+        return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}`)
       }
     }
   }

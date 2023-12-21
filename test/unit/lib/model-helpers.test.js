@@ -54,8 +54,8 @@ describe('ModelHelpers', () => {
   })
 
   test('extractLatestAddress handles no addresses', () => {
-    const phoneNumbers = extractLatestAddress(null)
-    expect(phoneNumbers).toEqual([])
+    const address = extractLatestAddress(null)
+    expect(address).toEqual({})
   })
 
   test('extractLatestInsurance handles no insurances', () => {

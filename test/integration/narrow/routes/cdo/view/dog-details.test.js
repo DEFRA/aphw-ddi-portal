@@ -27,19 +27,22 @@ describe('View dog details', () => {
 
   test('GET /cdo/view/dog-details route returns 200', async () => {
     getCdo.mockResolvedValue({
-      id: 1,
-      name: 'Bruno',
-      status: { status: 'TEST' },
-      dog_breed: { breed: 'breed1' },
-      registered_person: [{
-        person: {
-          firstName: 'John Smith',
-          addresses: [{
-            address: {
-            }
-          }]
-        }
-      }],
+      dog: {
+        id: 1,
+        name: 'Bruno',
+        status: { status: 'TEST' },
+        dog_breed: { breed: 'breed1' }
+      },
+      person: {
+        firstName: 'John Smith',
+        addresses: [{
+          address: {
+          }
+        }],
+        person_contacts: []
+      },
+      exemption: {
+      },
       insurance: [{
         id: 3,
         policy_number: 'POL12345',
@@ -60,7 +63,7 @@ describe('View dog details', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('dd').length).toBe(19)
+    expect(document.querySelectorAll('dd').length).toBe(3)
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {

@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { startOfDay, isFuture, differenceInYears } = require('date-fns')
-const { parseDate, getDateComponents } = require('../../../../lib/date-helpers')
+const { parseDate, getDateComponents } = require('../../../lib/date-helpers')
 
 const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
 

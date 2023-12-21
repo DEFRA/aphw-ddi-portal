@@ -15,10 +15,20 @@ const extractTelephoneNumbers = (contacts) => {
 
 const extractLatestAddress = (addresses) => {
   if (addresses == null || addresses.length === 0) {
-    return []
+    return {}
   }
   const latestAddress = addresses.sort(propertyComparatorDesc('address', 'id'))[0].address
-  return [].concat(latestAddress.address_line_1, latestAddress.address_line_2, latestAddress.town, latestAddress.postcode).filter(el => el != null)
+  return {
+    addressLine1: latestAddress.address_line_1,
+    addressLine2: latestAddress.address_line_2,
+    town: latestAddress.town,
+    postcode: latestAddress.postcode,
+    country: latestAddress.country?.country
+  }
+}
+
+const formatAddressAsArray = address => {
+  return [].concat(address.addressLine1, address.addressLine2, address.town, address.postcode).filter(el => el != null)
 }
 
 const extractLatestInsurance = (insurances) => {
@@ -43,6 +53,7 @@ const propertyComparatorAsc = (propertyName, childPropertyName) => {
 module.exports = {
   extractEmail,
   extractLatestAddress,
+  formatAddressAsArray,
   extractLatestInsurance,
   extractTelephoneNumbers
 }
