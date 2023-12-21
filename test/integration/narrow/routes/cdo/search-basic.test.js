@@ -76,6 +76,17 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(400)
   })
 
+  test('GET /cdo/create/select-address with invalid data returns error - invalid chars', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/search/basic?searchTerms=**abc&&',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()
