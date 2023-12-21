@@ -5,7 +5,7 @@ const { addDateErrors } = require('../../../lib/date-helpers')
 function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
     formAction: routes.details.post,
-    backLink: ownerRoutes.confirmation.get,
+    backLink: ownerRoutes.ownerSummary.get,
     dogId: dogDetails.id,
     breed: {
       id: 'breed',
