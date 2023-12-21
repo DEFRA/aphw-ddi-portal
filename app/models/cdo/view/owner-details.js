@@ -18,6 +18,7 @@ function ViewModel (personAndDogs) {
     },
     dogs: personAndDogs.dogs
   }
+  console.log('model', this.model)
 }
 
 module.exports = ViewModel
