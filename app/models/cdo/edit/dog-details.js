@@ -39,7 +39,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
       classes: 'govuk-!-width-one-half govuk-!-font-size-16',
       label: {
         text: 'Colour',
-        classes: 'govuk-!-font-weight-bold'
+        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
       value: dogDetails.colour,
       attributes: { maxlength: '50' }
