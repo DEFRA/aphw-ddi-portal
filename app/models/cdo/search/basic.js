@@ -12,7 +12,9 @@ function ViewModel (searchCriteria, resultList, errors) {
       },
       id: 'searchTerms',
       name: 'searchTerms',
-      classes: 'govuk-input--width-20',
+      formGroup: {
+        classes: 'govuk-!-margin-bottom-2'
+      },
       value: searchCriteria?.searchTerms,
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '100' }
@@ -21,6 +23,9 @@ function ViewModel (searchCriteria, resultList, errors) {
       id: 'searchType',
       name: 'searchType',
       classes: 'govuk-radios--small govuk-radios--inline',
+      formGroup: {
+        classes: 'govuk-!-margin-bottom-2'
+      },
       value: searchCriteria?.searchType,
       items: [
         {
