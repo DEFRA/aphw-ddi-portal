@@ -1,6 +1,6 @@
-$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+$govuk-assets-path: "~govuk-frontend/dist/govuk/assets/";
 $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sass-api-reference/#global-styles
-@import "~govuk-frontend/govuk/all";
+@import "~govuk-frontend/dist/govuk/all";
 
 .nojs-hidden {
     display: none;
