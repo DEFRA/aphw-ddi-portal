@@ -12,6 +12,7 @@ const getDogDetails = async (indexNumber) => {
 }
 
 const updateDogDetails = async (dog) => {
+  dog.dogId = dog.id
   return await put(dogEndpoint, dog)
 }
 
