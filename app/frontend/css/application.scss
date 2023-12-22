@@ -1,6 +1,6 @@
-$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+$govuk-assets-path: "~govuk-frontend/dist/govuk/assets/";
 $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sass-api-reference/#global-styles
-@import "~govuk-frontend/govuk/all";
+@import "~govuk-frontend/dist/govuk/all";
 @import "./app-task-list";
 @import "defra-settings";
 
@@ -190,4 +190,8 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     text-decoration-skip-ink: none;
     -webkit-text-decoration-skip: none;
     text-decoration-skip: none
+  }
+
+  .govuk-tag {
+    font-weight: 800!important
   }

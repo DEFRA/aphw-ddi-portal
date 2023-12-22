@@ -41,7 +41,7 @@
     "ffc-messaging": "^2.8.0",
     "form-data": "^4.0.0",
     "friendly-challenge": "^0.9.13",
-    "govuk-frontend": "^4.7.0",
+    "govuk-frontend": "^5.0.0",
     "hapi-pino": "10.1.0",
     "joi": "^17.10.2",
     "jsdom": "^23.0.1",

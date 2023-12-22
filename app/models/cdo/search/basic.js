@@ -25,11 +25,17 @@ function ViewModel (searchCriteria, resultList, errors) {
       items: [
         {
           value: 'dog',
-          text: 'Dog record'
+          text: 'Dog record',
+          label: {
+            classes: 'govuk-!-font-size-16'
+          }
         },
         {
           value: 'owner',
-          text: 'Owner record'
+          text: 'Owner record',
+          label: {
+            classes: 'govuk-!-font-size-16'
+          }
         }
       ]
     },
