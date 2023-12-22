@@ -12,7 +12,7 @@ module.exports = {
   entry: {
     core: './app/frontend/css/index.js',
     cookies: './app/frontend/js/cookies.js',
-    accessibleAutocomplete: './app/frontend/js/accessible-autocomplete.js'
+    accessibleAutocomplete: './app/frontend/accessible-autocomplete/index.js'
   },
   mode: isDev ? 'development' : 'production',
   module: {
@@ -68,19 +68,13 @@ module.exports = {
       inject: false,
       filename: '../views/_layout.njk',
       template: 'app/views/_layout.template.njk',
-      chunks: ['core']
+      chunks: ['core', 'accessibleAutocomplete']
     }),
     new HtmlWebpackPlugin({
       inject: false,
       filename: '../views/cookies/_cookie-banner.njk',
       template: 'app/views/cookies/_cookie-banner.template.njk',
       chunks: ['cookies']
-    }),
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: '../views/cdo/create/_enforcement-details.njk',
-      template: 'app/views/cdo/create/_enforcement-details.template.njk',
-      chunks: ['accessibleAutocomplete']
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[fullhash].css'
