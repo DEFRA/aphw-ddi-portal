@@ -2,7 +2,7 @@ const config = require('../config')
 
 module.exports = [{
   method: 'GET',
-  path: '/assets/{path*}',
+  path: '/static/assets/{path*}',
   options: {
     auth: false,
     handler: {

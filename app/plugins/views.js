@@ -32,7 +32,7 @@ module.exports = {
     relativeTo: __dirname,
     context: {
       appVersion: version,
-      assetPath: '/assets',
+      assetPath: '/static',
       pageTitle: serviceName
     }
   }
