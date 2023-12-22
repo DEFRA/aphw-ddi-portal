@@ -25,13 +25,18 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">Search</h2>
-
     <form method="get" action="{{ model.formAction }}">
 
-      {{ govukInput(model.searchTerms) }}
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">Dog records - Search</legend>
 
-      {{ govukRadios(model.searchType) }}
+          <h2 class="govuk-heading-m">Search</h2>
+
+          {{ govukInput(model.searchTerms) }}
+
+          {{ govukRadios(model.searchType) }}
+
+      </fieldset>
 
       {{ govukButton({
         text: "Search",
