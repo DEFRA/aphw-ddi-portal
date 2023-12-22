@@ -40,7 +40,26 @@ const buildPersonUpdatePayload = (person) => ({
   secondaryTelephone: person.secondaryTelephone
 })
 
+const buildExemptionDetailsUpdatePayload = (exemptionDetails) => ({
+  indexNumber: exemptionDetails.indexNumber,
+  cdoIssued: exemptionDetails.cdoIssued,
+  cdoExpiry: exemptionDetails.cdoExpiry,
+  court: exemptionDetails.court,
+  policeForce: exemptionDetails.policeForce,
+  legislationOfficer: exemptionDetails.legislationOfficer ?? undefined,
+  insurance: {
+    company: exemptionDetails.insuranceCompany,
+    renewalDate: exemptionDetails.insuranceRenewal
+  },
+  certificateIssued: exemptionDetails.certificateIssued ?? undefined,
+  applicationFeePaid: exemptionDetails.applicationFeePaid ?? undefined,
+  neuteringConfirmation: exemptionDetails.neuteringConfirmation ?? undefined,
+  microchipVerification: exemptionDetails.microchipVerification ?? undefined,
+  joinedExemptionScheme: exemptionDetails.joinedExemptionScheme ?? undefined
+})
+
 module.exports = {
   buildCdoCreatePayload,
-  buildPersonUpdatePayload
+  buildPersonUpdatePayload,
+  buildExemptionDetailsUpdatePayload
 }

@@ -3,7 +3,7 @@
         <div class="govuk-summary-card__title-wrapper">
           <h2 class="govuk-summary-card__title defra-summary-header">Exemption details</h2>
           <div class="govuk-summary-card__actions">
-            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/edit/exemption/{{ model.dog.indexNumber }}">
+            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/edit/exemption-details/{{ model.dog.indexNumber }}">
             Edit details<span class="govuk-visually-hidden"> for exemption</span>
             </a>
           </div>
@@ -75,24 +75,24 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.neuteringConfirmed %}
+            {% if model.exemption.neuteringConfirmation %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Neutering confirmed</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringConfirmed }}</dd>
+              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringConfirmation }}</dd>
             </div>
             {% endif %}
 
-            {% if model.exemption.microchipConfirmed %}
+            {% if model.exemption.microchipConfirmation %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Microchip number verified</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.microchipConfirmed }}</dd>
+              <dd class="govuk-summary-list__value">{{ model.exemption.microchipConfirmation }}</dd>
             </div>
             {% endif %}
 
-            {% if model.exemption.joinedInterimScheme %}
+            {% if model.exemption.joinedExemptionScheme %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.joinedInterimScheme }}</dd>
+              <dd class="govuk-summary-list__value">{{ model.exemption.joinedExemptionScheme }}</dd>
             </div>
             {% endif %}
 
