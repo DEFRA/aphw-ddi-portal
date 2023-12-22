@@ -26,6 +26,10 @@ const validateDateOfBirth = (value, helpers) => {
   }
 
   if (invalidComponents.length === 0) {
+    if (year.length !== 4) {
+      return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
     const dateString = `${year}-${month}-${day}`
     const date = parseDate(dateString)
 

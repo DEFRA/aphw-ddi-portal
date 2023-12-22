@@ -6,7 +6,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
     formAction: routes.editDogDetails.post,
     backLink: ownerRoutes.home.get,
-    dogId: dogDetails.id,
+    id: dogDetails.id,
     indexNumber: dogDetails.indexNumber,
     name: {
       id: 'name',

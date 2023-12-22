@@ -38,6 +38,10 @@ const validateDate = (value, helpers) => {
   }
 
   if (invalidComponents.length === 0) {
+    if (year.length !== 4) {
+      return helpers.message('Enter a 4-digit year', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
     const dateString = `${year}-${month}-${day}`
     const date = parseDate(dateString)
 
@@ -58,7 +62,7 @@ const validateDate = (value, helpers) => {
 }
 
 const dogDetailsSchema = Joi.object({
-  dogId: Joi.number().required(),
+  id: Joi.number().required(),
   indexNumber: Joi.string().required(),
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
     'string.max': 'Dog name must be no more than {#limit} characters'

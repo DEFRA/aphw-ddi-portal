@@ -70,7 +70,7 @@ describe('Update dog details', () => {
   test('POST /cdo/edit/dog-details route returns 302', async () => {
     updateDogDetails.mockResolvedValue()
     const payload = {
-      dogId: 1,
+      id: 1,
       indexNumber: 'ED123',
       name: 'Bruno',
       breed: 'breed1'
@@ -168,6 +168,37 @@ describe('Update dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
     expect(messages).toContain('A date must include a month and year')
+  })
+
+  test('POST /cdo/edit/dog-details with short year returns 400', async () => {
+    updateDogDetails.mockResolvedValue()
+    const payload = {
+      dogId: 1,
+      indexNumber: 'ED123',
+      name: 'Bruno',
+      breed: 'breed1',
+      'dateOfBirth-day': '1',
+      'dateOfBirth-month': '2',
+      'dateOfBirth-year': '26'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/dog-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = (new JSDOM(response.payload)).window
+
+    expect(response.statusCode).toBe(400)
+    expect(updateDogDetails).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+    expect(messages).toContain('Enter a 4-digit year')
   })
 
   afterEach(async () => {
