@@ -32,16 +32,16 @@
           <tbody class="govuk-table__body">
           {% for dog in result.dogs %}
             <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+              <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
                 <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ dog.dogIndex }}">
                         {{ dog.dogIndex }}
                 </a>
               </td>
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+              <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
                       {{ dog.dogName }}
               </td>
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                <strong class="govuk-tag">{{ dog.dogStatus }}</strong>
+              <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
+                <strong class="govuk-tag govuk-!-font-size-16">{{ dog.dogStatus }}</strong>
               </td>
             </tr>
             {% endfor %}

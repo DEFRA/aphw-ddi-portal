@@ -1,6 +1,7 @@
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
@@ -83,6 +84,12 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[fullhash].css'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{
+        from: 'app/frontend/images',
+        to: 'images' // Copies all files from above dest to dist/images
+      }]
     })
   ]
 }

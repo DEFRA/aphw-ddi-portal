@@ -2,13 +2,13 @@ const config = require('../config')
 
 module.exports = [{
   method: 'GET',
-  path: '/assets/{path*}',
+  path: '/static/assets/{path*}',
   options: {
     auth: false,
     handler: {
       directory: {
         path: [
-          'node_modules/govuk-frontend/govuk/assets'
+          'node_modules/govuk-frontend/dist/govuk/assets'
         ]
       }
     },
@@ -19,13 +19,13 @@ module.exports = [{
   }
 }, {
   method: 'GET',
-  path: '/govuk-frontend/govuk/{path*}',
+  path: '/govuk-frontend/dist/govuk/{path*}',
   options: {
     auth: false,
     handler: {
       directory: {
         path: [
-          'node_modules/govuk-frontend/govuk'
+          'node_modules/govuk-frontend/dist/govuk'
         ]
       }
     },
@@ -43,7 +43,7 @@ module.exports = [{
       directory: {
         path: [
           'app/dist',
-          'node_modules/govuk-frontend/govuk/assets'
+          'node_modules/govuk-frontend/dist/govuk/assets'
         ]
       }
     },

@@ -1,5 +1,5 @@
-$govuk-assets-path: "~govuk-frontend/govuk/assets/";
-@import "~govuk-frontend/govuk/all";
+$govuk-assets-path: "~govuk-frontend/dist/govuk/assets/";
+@import "~govuk-frontend/dist/govuk/all";
 
 .govuk-cards__item {
   box-sizing: border-box;
