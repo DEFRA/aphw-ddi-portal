@@ -4,7 +4,7 @@ const { addDateErrors } = require('../../../lib/date-helpers')
 
 function ViewModel (person, countries, errors) {
   this.model = {
-    backLink: `${routes.ownerDetails.get}/${person.personReference}`,
+    backLink: `${routes.viewOwnerDetails.get}/${person.personReference}`,
     formAction: routes.editDetails.post,
     person: {
       personReference: person.personReference,
