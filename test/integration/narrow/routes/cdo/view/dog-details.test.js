@@ -42,14 +42,10 @@ describe('View dog details', () => {
         person_contacts: []
       },
       exemption: {
-      },
-      insurance: [{
-        id: 3,
-        policy_number: 'POL12345',
-        company: {
-          company_name: 'Dogs Trust'
-        }
-      }]
+        insurance: [{
+          company: 'Dogs Trust'
+        }]
+      }
     })
 
     const options = {
