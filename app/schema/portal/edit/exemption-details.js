@@ -20,7 +20,7 @@ const parseDate = (value) => {
   return null
 }
 
-const validateDate = (value, helpers) => {
+const validateDate = (value, helpers, required) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -53,6 +53,10 @@ const validateDate = (value, helpers) => {
   }
 
   if (invalidComponents.length === 3) {
+    if (required) {
+      return helpers.error('any.required', { path: [elementPath, ['day']] })
+    }
+
     return null
   }
 
@@ -73,12 +77,16 @@ const exemptionDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).required().custom(validateDate),
+  }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
+    'any.required': 'Enter a CDO issued date'
+  }),
   cdoExpiry: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).required().custom(validateDate),
+  }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
+    'any.required': 'Enter a CDO expiry date'
+  }),
   court: Joi.string().required().messages({
     'string.empty': 'Select a court'
   }),
