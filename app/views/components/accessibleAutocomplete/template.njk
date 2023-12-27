@@ -1,0 +1,18 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect(params) }}
+
+<script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    placeholder: 'Start typing to choose court',
+    selectElement: document.querySelector('#{{ params.id }}')
+  })
+
+  const el = document.querySelector('#{{ params.id }}')
+
+  el.addEventListener('blur', (event) => {
+    if (event.srcElement.value === '') {
+      document.querySelector('#{{ params.id }}-select').value = ''
+    }
+  })
+</script>

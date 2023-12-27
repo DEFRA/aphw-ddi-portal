@@ -1,11 +1,11 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
-const { extractEmail, extractLatestAddress, extractLatestInsurance, extractTelephoneNumbers, formatAddressAsArray } = require('../../../lib/model-helpers')
+const { extractEmail, extractLatestAddress, extractTelephoneNumbers, formatAddressAsArray } = require('../../../lib/model-helpers')
 
 function ViewModel (cdo) {
   const person = cdo.person
   const contacts = person.person_contacts
-  const insurance = extractLatestInsurance(cdo.insurance)
+  const insurance = cdo.exemption.insurance[0]
   const latestAddress = extractLatestAddress(person.addresses)
 
   this.model = {
@@ -42,19 +42,19 @@ function ViewModel (cdo) {
       }
     },
     exemption: {
-      certificateIssued: formatToGds(cdo.exemption?.certificateIssued),
-      cdoIssued: formatToGds(cdo.exemption?.cdoIssued),
+      certificateIssued: formatToGds(cdo.exemption.certificateIssued),
+      cdoIssued: formatToGds(cdo.exemption.cdoIssued),
       cdoExpiry: formatToGds(cdo.exemption.cdoExpiry),
       court: cdo.exemption?.court,
-      policeForce: cdo.exemption?.policeForce,
-      dogLegislationOfficer: cdo.exemption?.legislationOfficer,
-      applicationFeePaid: formatToGds(cdo.exemption?.applicationFeePaid),
-      insuranceCompany: insurance.company?.company_name,
-      policyNumber: insurance.policy_number,
-      insuranceRenewalDate: formatToGds(insurance.expiryDate),
-      neuteringConfirmed: formatToGds(cdo.exemption?.neuteringConfirmed),
-      microchipConfirmed: formatToGds(cdo.registration?.microchipConfirmed),
-      joinedInterimScheme: formatToGds(cdo.exemption?.joinedInterimScheme)
+      policeForce: cdo.exemption.policeForce,
+      dogLegislationOfficer: cdo.exemption.legislationOfficer,
+      applicationFeePaid: formatToGds(cdo.exemption.applicationFeePaid),
+      insuranceCompany: insurance?.company,
+      policyNumber: insurance?.policy_number,
+      insuranceRenewalDate: formatToGds(insurance?.insuranceRenewal),
+      neuteringConfirmation: formatToGds(cdo.exemption.neuteringConfirmation),
+      microchipConfirmation: formatToGds(cdo.exemption.microchipConfirmation),
+      joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme)
     }
   }
 }

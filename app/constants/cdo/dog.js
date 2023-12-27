@@ -16,6 +16,10 @@ const constants = {
       get: '/cdo/edit/dog-details',
       post: '/cdo/edit/dog-details'
     },
+    editExemptionDetails: {
+      get: '/cdo/edit/exemption-details',
+      post: '/cdo/edit/exemption-details'
+    },
     delete: {
       get: '/cdo/create/confirm-dog-delete',
       post: '/cdo/create/confirm-dog-delete'
@@ -24,6 +28,7 @@ const constants = {
   views: {
     editDogDetails: 'cdo/edit/dog-details',
     viewDogDetails: 'cdo/view/dog-details',
+    editExemptionDetails: 'cdo/edit/exemption-details',
     details: 'cdo/create/dog-details',
     confirm: 'cdo/create/confirm-dog-details',
     delete: 'cdo/create/confirm-dog-delete'

@@ -37,7 +37,7 @@ const constants = {
     ownerDetails: 'cdo/create/owner-details',
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
-    enforcementDetails: 'cdo/create/_enforcement-details',
+    enforcementDetails: 'cdo/create/enforcement-details',
     ownerSummary: 'cdo/create/owner-summary',
     editDetails: 'cdo/edit/owner-details',
     viewOwnerDetails: 'cdo/view/owner-details'
