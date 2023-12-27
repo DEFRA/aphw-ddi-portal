@@ -196,7 +196,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         id: 'insuranceCompany',
         name: 'insuranceCompany',
         value: exemption.insuranceCompany,
-        items: [{ text: 'Select a insurance company' }].concat(companies.map(company => ({
+        items: [{ text: '' }].concat(companies.map(company => ({
           value: company.name,
           text: company.name
         }))),
