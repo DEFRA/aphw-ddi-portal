@@ -18,7 +18,7 @@
             <dt class="govuk-summary-list__key">Breed type</dt>
             <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
           </div>
-          {% if dog.name | length  %}
+          {% if dog.name %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Dog name</dt>
               <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
@@ -42,10 +42,12 @@
           <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">{{ model.owner.name }}</dd>
         </div>
+        {% if model.owner.birthDate %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date of birth</dt>
           <dd class="govuk-summary-list__value">{{ model.owner.birthDate }}</dd>
         </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
           <dd class="govuk-summary-list__value">
@@ -62,7 +64,7 @@
           <dt class="govuk-summary-list__key">Police force</dt>
           <dd class="govuk-summary-list__value">{{ model.enforcementDetails.policeForce }}</dd>
         </div>
-        {% if model.enforcementDetails.legislationOfficer | length  %}
+        {% if model.enforcementDetails.legislationOfficer  %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Dog legislation officer</dt>
             <dd class="govuk-summary-list__value">{{ model.enforcementDetails.legislationOfficer }}</dd>
