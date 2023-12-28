@@ -37,7 +37,7 @@
     {% endif %}
 
     <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
-      <span class="govuk-caption-l">{{ model.exemption.indexNumber }}</span>
+      <span class="govuk-caption-l">Dog {{ model.exemption.indexNumber }}</span>
       {% call govukFieldset({
         legend: {
           text: "Edit exemption details",

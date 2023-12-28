@@ -15,7 +15,7 @@ function ViewModel (person, countries, errors) {
         },
         id: 'firstName',
         name: 'firstName',
-        classes: 'govuk-input--width-20',
+        classes: 'govuk-input--width-20 govuk-!-font-size-16',
         value: person.firstName,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '30' }
@@ -27,7 +27,7 @@ function ViewModel (person, countries, errors) {
         },
         id: 'lastName',
         name: 'lastName',
-        classes: 'govuk-input--width-20',
+        classes: 'govuk-input--width-20 govuk-!-font-size-16',
         value: person.lastName,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '24' }
@@ -45,19 +45,19 @@ function ViewModel (person, countries, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: person['dateOfBirth-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: person['dateOfBirth-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: person['dateOfBirth-year'],
             attributes: { maxlength: '4' }
           }
@@ -70,6 +70,7 @@ function ViewModel (person, countries, errors) {
           text: 'Address line 1',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
+        classes: 'govuk-!-font-size-16',
         value: person.addressLine1 ?? person.address?.addressLine1,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
@@ -82,6 +83,7 @@ function ViewModel (person, countries, errors) {
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         value: person.addressLine2 ?? person.address?.addressLine2,
+        classes: 'govuk-!-font-size-16',
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '50' }
       },
@@ -94,6 +96,7 @@ function ViewModel (person, countries, errors) {
         },
         value: person.town ?? person.address?.town,
         autocomplete: forms.preventAutocomplete,
+        classes: 'govuk-!-width-two-thirds govuk-!-font-size-16',
         attributes: { maxlength: '50' }
       },
       postcode: {
@@ -104,7 +107,7 @@ function ViewModel (person, countries, errors) {
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         value: person.postcode ?? person.address?.postcode,
-        classes: 'govuk-input--width-10',
+        classes: 'govuk-input--width-10 govuk-!-font-size-16',
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '8' }
       },
@@ -115,7 +118,7 @@ function ViewModel (person, countries, errors) {
         },
         id: 'email',
         name: 'email',
-        classes: 'govuk-input--width-10',
+        classes: 'govuk-!-font-size-16',
         value: person.email ?? person.contacts?.emails[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '33' }
@@ -127,7 +130,7 @@ function ViewModel (person, countries, errors) {
         },
         id: 'primaryTelephone',
         name: 'primaryTelephone',
-        classes: 'govuk-input--width-10',
+        classes: 'govuk-input--width-10 govuk-!-font-size-16',
         value: person.primaryTelephone ?? person.contacts?.primaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '13' }
@@ -139,7 +142,7 @@ function ViewModel (person, countries, errors) {
         },
         id: 'secondaryTelephone',
         name: 'secondaryTelephone',
-        classes: 'govuk-input--width-10',
+        classes: 'govuk-input--width-10 govuk-!-font-size-16',
         value: person.secondaryTelephone ?? person.contacts?.secondaryTelephones[0],
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '13' }
@@ -155,7 +158,8 @@ function ViewModel (person, countries, errors) {
         items: countries.map(country => ({
           value: country,
           text: country
-        }))
+        })),
+        classes: 'govuk-!-font-size-16'
       }
     },
     errors: []
