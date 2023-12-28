@@ -163,7 +163,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'applicationFeePaid',
         fieldset: {
           legend: {
-            text: 'Application fee paid',
+            text: 'Application fee paid (optional)',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -190,7 +190,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
       },
       insuranceCompany: {
         label: {
-          text: 'Insurance company',
+          text: 'Insurance company (optional)',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'insuranceCompany',
@@ -208,7 +208,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'insuranceRenewal',
         fieldset: {
           legend: {
-            text: 'Insurance renewal date',
+            text: 'Insurance renewal date (optional)',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -239,7 +239,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'neuteringConfirmation',
         fieldset: {
           legend: {
-            text: 'Neutering confirmed',
+            text: 'Neutering confirmed (optional)',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -270,7 +270,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'microchipVerification',
         fieldset: {
           legend: {
-            text: 'Microchip verified',
+            text: ' Microchip number verified (optional)',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -301,7 +301,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'joinedExemptionScheme',
         fieldset: {
           legend: {
-            text: 'Joined interim exemption scheme',
+            text: 'Joined interim exemption scheme (optional)',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
