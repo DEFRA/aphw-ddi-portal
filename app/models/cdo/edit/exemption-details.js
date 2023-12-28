@@ -125,7 +125,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         id: 'court',
         name: 'court',
         value: exemption.court,
-        items: [{ text: '', value: null }].concat(courts.map(court => ({
+        items: [{ text: 'Select a court', value: '' }].concat(courts.map(court => ({
           value: court.name,
           text: court.name
         }))),
@@ -139,7 +139,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         id: 'policeForce',
         name: 'policeForce',
         value: exemption.policeForce,
-        items: [{ text: 'Select a police force' }].concat(policeForces.map(force => ({
+        items: [{ text: 'Select a police force', value: '' }].concat(policeForces.map(force => ({
           value: force.name,
           text: force.name
         }))),
