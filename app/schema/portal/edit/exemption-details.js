@@ -90,7 +90,9 @@ const exemptionDetailsSchema = Joi.object({
   court: Joi.string().required().messages({
     'string.empty': 'Select a court'
   }),
-  policeForce: Joi.string().required(),
+  policeForce: Joi.string().required().messages({
+    'string.empty': 'Select a police force'
+  }),
   legislationOfficer: Joi.string().trim().allow('').optional().max(64).messages({
     'string.max': 'Dog legislation officer must be no more than {#limit} characters'
   }),
