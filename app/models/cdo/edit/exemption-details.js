@@ -147,7 +147,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
       },
       legislationOfficer: {
         label: {
-          text: 'Dog legislation officer (optional)',
+          text: 'Dog legislation officer',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'legislationOfficer',
@@ -163,7 +163,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'applicationFeePaid',
         fieldset: {
           legend: {
-            text: 'Application fee paid (optional)',
+            text: 'Application fee paid',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -190,7 +190,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
       },
       insuranceCompany: {
         label: {
-          text: 'Insurance company (optional)',
+          text: 'Insurance company',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'insuranceCompany',
@@ -208,7 +208,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'insuranceRenewal',
         fieldset: {
           legend: {
-            text: 'Insurance renewal date (optional)',
+            text: 'Insurance renewal date',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -239,7 +239,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'neuteringConfirmation',
         fieldset: {
           legend: {
-            text: 'Neutering confirmed (optional)',
+            text: 'Neutering confirmed',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -270,7 +270,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'microchipVerification',
         fieldset: {
           legend: {
-            text: ' Microchip number verified (optional)',
+            text: ' Microchip number verified',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
@@ -301,7 +301,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'joinedExemptionScheme',
         fieldset: {
           legend: {
-            text: 'Joined interim exemption scheme (optional)',
+            text: 'Joined interim exemption scheme',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
