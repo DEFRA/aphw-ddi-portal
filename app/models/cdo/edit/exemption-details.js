@@ -22,7 +22,8 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
             text: 'Imported Dog'
           }
         ],
-        autocomplete: forms.preventAutocomplete
+        autocomplete: forms.preventAutocomplete,
+        classes: 'govuk-!-font-size-16'
       },
       certificateIssued: {
         type: 'date',
@@ -37,19 +38,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['certificateIssued-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['certificateIssued-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['certificateIssued-year'],
             attributes: { maxlength: '4' }
           }
@@ -84,7 +85,8 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
             value: exemption['cdoIssued-year'],
             attributes: { maxlength: '4' }
           }
-        ]
+        ],
+        classes: 'govuk-!-font-size-16'
       },
       cdoExpiry: {
         type: 'date',
@@ -99,19 +101,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['cdoExpiry-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['cdoExpiry-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['cdoExpiry-year'],
             attributes: { maxlength: '4' }
           }
@@ -125,11 +127,13 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         id: 'court',
         name: 'court',
         value: exemption.court,
+        placeholder: 'Start typing to choose court',
         items: [{ text: 'Select a court', value: '' }].concat(courts.map(court => ({
           value: court.name,
           text: court.name
         }))),
-        autocomplete: forms.preventAutocomplete
+        autocomplete: forms.preventAutocomplete,
+        classes: 'govuk-!-font-size-16'
       },
       policeForce: {
         label: {
@@ -143,7 +147,8 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
           value: force.name,
           text: force.name
         }))),
-        autocomplete: forms.preventAutocomplete
+        autocomplete: forms.preventAutocomplete,
+        classes: 'govuk-!-font-size-16'
       },
       legislationOfficer: {
         label: {
@@ -152,7 +157,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         },
         id: 'legislationOfficer',
         name: 'legislationOfficer',
-        classes: 'govuk-input--width-20',
+        classes: 'govuk-input--width-20 govuk-!-font-size-16',
         value: exemption.legislationOfficer,
         autocomplete: forms.preventAutocomplete,
         attributes: { maxlength: '64' }
@@ -170,19 +175,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['applicationFeePaid-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['applicationFeePaid-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['applicationFeePaid-year'],
             attributes: { maxlength: '4' }
           }
@@ -200,7 +205,8 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
           value: company.name,
           text: company.name
         }))),
-        autocomplete: forms.preventAutocomplete
+        autocomplete: forms.preventAutocomplete,
+        classes: 'govuk-!-font-size-16'
       },
       insuranceRenewal: {
         type: 'date',
@@ -215,19 +221,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['insuranceRenewal-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['insuranceRenewal-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['insuranceRenewal-year'],
             attributes: { maxlength: '4' }
           }
@@ -246,19 +252,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['neuteringConfirmation-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['neuteringConfirmation-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['neuteringConfirmation-year'],
             attributes: { maxlength: '4' }
           }
@@ -277,19 +283,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['microchipVerification-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['microchipVerification-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['microchipVerification-year'],
             attributes: { maxlength: '4' }
           }
@@ -308,19 +314,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['joinedExemptionScheme-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['joinedExemptionScheme-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['joinedExemptionScheme-year'],
             attributes: { maxlength: '4' }
           }

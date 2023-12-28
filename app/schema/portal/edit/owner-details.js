@@ -92,7 +92,7 @@ const ownerDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).custom(validateDateOfBirth),
-  email: Joi.string().trim().max(254).optional().allow(null).allow('').messages({
+  email: Joi.string().email({ tlds: { allow: false } }).trim().max(254).optional().allow(null).allow('').messages({
     'string.max': 'Email must be no more than {#limit} characters',
     'string.email': 'Enter a real email address'
   }),
