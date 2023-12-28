@@ -36,9 +36,16 @@
       }) }}
     {% endif %}
 
-    <h2 class="govuk-heading-m">Edit exemption details</h2>
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      <span class="govuk-caption-l">{{ model.exemption.indexNumber }}</span>
+      {% call govukFieldset({
+        legend: {
+          text: "Edit exemption details",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">  
       {{ govukSelect(model.exemption.status) }}
 
       {{ govukDateInput(model.exemption.certificateIssued) }}
@@ -75,6 +82,8 @@
         <a class="govuk-link" href="{{ model.backLink }}">Cancel</a>
       </div>
     </div>
+
+    {% endcall %}
   </form>
 </div>
 
