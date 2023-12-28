@@ -344,6 +344,41 @@ describe('Update owner details', () => {
     expect(messages).toContain('An owner date of birth must include a month and year')
   })
 
+  test('POST /cdo/edit/owner-details with invalid email returns 400', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      'dateOfBirth-day': '1',
+      'dateOfBirth-month': '',
+      'dateOfBirth-year': '',
+      personReference: 'P-1234-5678',
+      addressLine1: '1 The Street',
+      addressLine2: 'The Town',
+      town: 'The City',
+      postcode: 'AB12 3CD',
+      country: 'England',
+      email: 'invalid'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = (new JSDOM(response.payload)).window
+
+    expect(response.statusCode).toBe(400)
+    expect(updatePerson).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+    expect(messages).toContain('Enter a real email address')
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()
