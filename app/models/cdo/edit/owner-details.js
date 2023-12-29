@@ -113,7 +113,7 @@ function ViewModel (person, countries, errors) {
       },
       email: {
         label: {
-          text: 'Email',
+          text: 'Email address',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'email',

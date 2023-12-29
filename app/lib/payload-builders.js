@@ -47,19 +47,19 @@ const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
     cdoExpiry: exemptionDetails.cdoExpiry,
     court: exemptionDetails.court,
     policeForce: exemptionDetails.policeForce,
-    legislationOfficer: exemptionDetails.legislationOfficer ?? undefined,
+    legislationOfficer: exemptionDetails.legislationOfficer,
     insurance: {
       company: exemptionDetails.insuranceCompany,
       renewalDate: exemptionDetails.insuranceRenewal
     },
-    certificateIssued: exemptionDetails.certificateIssued ?? undefined,
-    applicationFeePaid: exemptionDetails.applicationFeePaid ?? undefined,
-    neuteringConfirmation: exemptionDetails.neuteringConfirmation ?? undefined,
-    microchipVerification: exemptionDetails.microchipVerification ?? undefined,
-    joinedExemptionScheme: exemptionDetails.joinedExemptionScheme ?? undefined
+    certificateIssued: exemptionDetails.certificateIssued,
+    applicationFeePaid: exemptionDetails.applicationFeePaid,
+    neuteringConfirmation: exemptionDetails.neuteringConfirmation,
+    microchipVerification: exemptionDetails.microchipVerification,
+    joinedExemptionScheme: exemptionDetails.joinedExemptionScheme
   }
 
-  if (!payload.insurance.company || !payload.insurance.renewalDate) {
+  if (!payload.insurance.company && !payload.insurance.renewalDate) {
     delete payload.insurance
   }
 
