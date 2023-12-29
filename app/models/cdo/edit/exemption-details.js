@@ -341,8 +341,6 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
       let name = error.path[0] ?? error.context.path[0]
       const prop = this.model.exemption[name]
 
-      console.log(name)
-
       if (prop) {
         if (prop.type === 'date') {
           name = addDateErrors(error, prop)

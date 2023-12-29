@@ -65,6 +65,21 @@ const validateDate = (value, helpers, required) => {
   return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
 }
 
+const validateInsurance = (value, helpers) => {
+  const companyPresent = value.insuranceCompany
+  const renewalPresent = value.insuranceRenewal
+
+  if (companyPresent && !renewalPresent) {
+    return helpers.message('Enter an insurance renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
+  }
+
+  if (!companyPresent && renewalPresent) {
+    return helpers.message('Select an insurance company', { path: ['insuranceCompany'] })
+  }
+
+  return value
+}
+
 const exemptionDetailsSchema = Joi.object({
   indexNumber: Joi.string().required(),
   status: Joi.string().required(),
@@ -116,30 +131,13 @@ const exemptionDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).optional().custom(validateDate),
-  insuranceCompany: Joi.string().trim().allow('').optional().messages({
-    'any.required': 'Select an insurance company'
-  }),
+  insuranceCompany: Joi.string().trim().allow(''),
   insuranceRenewal: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate).messages({
-    'any.required': 'Enter an insurance renewal date'
-  })
-}).required().custom((value, helpers) => {
-  const companyPresent = value.insuranceCompany
-  const renewalPresent = value.insuranceRenewal
-
-  if (companyPresent && !renewalPresent) {
-    return helpers.message('Enter an insurance renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
-  }
-
-  if (!companyPresent && renewalPresent) {
-    return helpers.message('Select an insurance company', { path: ['insuranceCompany'] })
-  }
-
-  return value
-})
+  }).optional().custom(validateDate)
+}).required().custom(validateInsurance)
 
 const validatePayload = (payload) => {
   payload.certificateIssued = getDateComponents(payload, 'certificateIssued')
