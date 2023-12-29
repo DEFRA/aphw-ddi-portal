@@ -39,6 +39,9 @@ module.exports = [
         addDateComponents(exemption, 'microchipVerification')
         addDateComponents(exemption, 'joinedExemptionScheme')
         addDateComponents(exemption, 'insuranceRenewal')
+        addDateComponents(exemption, 'microchipDeadline')
+        addDateComponents(exemption, 'typedByDlo')
+        addDateComponents(exemption, 'withdrawn')
 
         return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies))
       }
@@ -59,6 +62,8 @@ module.exports = [
           const exemption = request.payload
 
           const viewModel = new ViewModel(exemption, courts, policeForces, companies, error)
+
+          console.error(error)
 
           return h.view(views.editExemptionDetails, viewModel).code(400).takeover()
         }

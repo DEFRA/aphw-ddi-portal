@@ -8,6 +8,25 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
     formAction: routes.editExemptionDetails.post,
     exemption: {
       indexNumber: exemption.indexNumber,
+      exemptionOrder: {
+        label: {
+          text: 'Order',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        },
+        name: 'exemptionOrder',
+        id: 'exemptionOrder',
+        value: exemption.exemptionOrder,
+        items: [
+          {
+            value: '2015',
+            text: '2015'
+          },
+          {
+            value: '2023',
+            text: '2023'
+          }
+        ]
+      },
       status: {
         label: {
           text: 'Status',
@@ -69,19 +88,19 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         items: [
           {
             name: 'day',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['cdoIssued-day'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'month',
-            classes: 'govuk-input--width-2',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
             value: exemption['cdoIssued-month'],
             attributes: { maxlength: '2' }
           },
           {
             name: 'year',
-            classes: 'govuk-input--width-4',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['cdoIssued-year'],
             attributes: { maxlength: '4' }
           }
@@ -328,6 +347,99 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
             name: 'year',
             classes: 'govuk-input--width-4 govuk-!-font-size-16',
             value: exemption['joinedExemptionScheme-year'],
+            attributes: { maxlength: '4' }
+          }
+        ]
+      },
+      microchipDeadline: {
+        type: 'date',
+        id: 'microchipDeadline',
+        namePrefix: 'microchipDeadline',
+        fieldset: {
+          legend: {
+            text: 'Microchip deadline',
+            classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+          }
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['microchipDeadline-day'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['microchipDeadline-month'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
+            value: exemption['microchipDeadline-year'],
+            attributes: { maxlength: '4' }
+          }
+        ]
+      },
+      typedByDlo: {
+        type: 'date',
+        id: 'typedByDlo',
+        namePrefix: 'typedByDlo',
+        fieldset: {
+          legend: {
+            text: 'Typed by DLO',
+            classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+          }
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['typedByDlo-day'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['typedByDlo-month'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
+            value: exemption['typedByDlo-year'],
+            attributes: { maxlength: '4' }
+          }
+        ]
+      },
+      withdrawn: {
+        type: 'date',
+        id: 'withdrawn',
+        namePrefix: 'withdrawn',
+        fieldset: {
+          legend: {
+            text: 'Withdrawn',
+            classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+          }
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['withdrawn-day'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['withdrawn-month'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
+            value: exemption['withdrawn-year'],
             attributes: { maxlength: '4' }
           }
         ]

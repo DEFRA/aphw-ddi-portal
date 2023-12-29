@@ -72,6 +72,15 @@
 
       {{ govukDateInput(model.exemption.joinedExemptionScheme) }}
 
+      {% if model.exemption.exemptionOrder.value == 2023 %}
+      <h2 class="govuk-heading-m">2023 Order Specific</h2>
+      
+      {{ govukSelect(model.exemption.exemptionOrder) }}
+      {{ govukDateInput(model.exemption.microchipDeadline) }}
+      {{ govukDateInput(model.exemption.typedByDlo) }}
+      {{ govukDateInput(model.exemption.withdrawn) }}
+      {% endif %}
+
       <input type="hidden" name="indexNumber" value="{{ model.exemption.indexNumber }}" />
 
       <div class="govuk-button-group">
