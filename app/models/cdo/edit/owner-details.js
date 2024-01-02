@@ -120,7 +120,8 @@ function ViewModel (person, countries, errors) {
         name: 'email',
         classes: 'govuk-!-font-size-16',
         value: person.email ?? person.contacts?.emails[0],
-        autocomplete: forms.preventAutocomplete
+        autocomplete: forms.preventAutocomplete,
+        attributes: { maxlength: '255' }
       },
       primaryTelephone: {
         label: {
