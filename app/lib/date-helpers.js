@@ -65,7 +65,9 @@ const addDateErrors = (error, prop) => {
     }
   }
 
-  return `${error.path[0]}-${components[0]}`
+  const name = error.path[0] ?? error.context.path[0]
+
+  return `${name}-${components[0]}`
 }
 
 const formatToGds = date => {

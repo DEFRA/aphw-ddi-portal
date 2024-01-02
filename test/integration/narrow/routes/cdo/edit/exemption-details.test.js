@@ -114,9 +114,9 @@ describe('Update dog details', () => {
       policeForce: 'policeForce1',
       legislationOfficer: 'Legislation Officer',
       insuranceCompany: 'company1',
-      insuranceRenewal: '2020-01-01',
-      certificateIssued: '2020-01-01',
-      applicationFeePaid: '2020-01-01'
+      'insuranceRenewal-day': '31',
+      'insuranceRenewal-month': '12',
+      'insuranceRenewal-year': '2020'
     }
 
     const options = {

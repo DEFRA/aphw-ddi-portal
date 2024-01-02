@@ -113,7 +113,7 @@ function ViewModel (person, countries, errors) {
       },
       email: {
         label: {
-          text: 'Email',
+          text: 'Email address',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         },
         id: 'email',
@@ -121,7 +121,7 @@ function ViewModel (person, countries, errors) {
         classes: 'govuk-!-font-size-16',
         value: person.email ?? person.contacts?.emails[0],
         autocomplete: forms.preventAutocomplete,
-        attributes: { maxlength: '33' }
+        attributes: { maxlength: '255' }
       },
       primaryTelephone: {
         label: {

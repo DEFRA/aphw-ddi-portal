@@ -338,7 +338,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
 
   if (errors) {
     for (const error of errors.details) {
-      let name = error.path[0]
+      let name = error.path[0] ?? error.context.path[0]
       const prop = this.model.exemption[name]
 
       if (prop) {
