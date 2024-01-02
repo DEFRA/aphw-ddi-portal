@@ -42,6 +42,7 @@ describe('View dog details', () => {
         person_contacts: []
       },
       exemption: {
+        exemptionOrder: 2015,
         insurance: [{
           company: 'Dogs Trust'
         }]
@@ -59,7 +60,7 @@ describe('View dog details', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('dd').length).toBe(3)
+    expect(document.querySelectorAll('dd').length).toBe(4)
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {

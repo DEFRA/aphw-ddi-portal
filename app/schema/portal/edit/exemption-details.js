@@ -151,9 +151,9 @@ const exemptionDetailsSchema = Joi.object({
   withdrawn: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow(''),
-  }).optional().custom(validateDate),
-}).required()
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom(validateDate)
+}).custom(validateInsurance).required()
 
 const validatePayload = (payload) => {
   payload.certificateIssued = getDateComponents(payload, 'certificateIssued')

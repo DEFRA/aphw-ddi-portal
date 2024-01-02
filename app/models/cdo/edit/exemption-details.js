@@ -419,7 +419,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'withdrawn',
         fieldset: {
           legend: {
-            text: 'Withdrawn',
+            text: 'Withdrawn from index',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
