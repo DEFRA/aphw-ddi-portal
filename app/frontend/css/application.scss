@@ -195,3 +195,19 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
   .govuk-tag {
     font-weight: 800!important
   }
+
+  .defra-summary-header {
+    display: flex;
+    align-items: flex-end;
+  }
+  
+  .defra-tag--grey {
+    color: #ffffff;
+    background: #505a5f;
+  }
+  
+  .defra-align-right {
+    position: absolute;
+    float: right;
+  }
+  
