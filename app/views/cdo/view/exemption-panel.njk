@@ -12,6 +12,13 @@
         <div class="govuk-summary-card__content">
           <dl class="govuk-summary-list govuk-!-font-size-16">
 
+            {% if model.dog.status %}
+            <div class="govuk-summary-list__row govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Status</dt>
+              <dd class="govuk-summary-list__value">{{ model.dog.status }}</dd>
+            </div>
+            {% endif %}
+
             {% if model.exemption.certificateIssued %}
             <div class="govuk-summary-list__row govuk-!-width-one-third">
               <dt class="govuk-summary-list__key">Certificate issued</dt>
@@ -82,10 +89,10 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.microchipConfirmation %}
+            {% if model.exemption.microchipVerification %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Microchip number verified</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.microchipConfirmation }}</dd>
+              <dd class="govuk-summary-list__value">{{ model.exemption.microchipVerification }}</dd>
             </div>
             {% endif %}
 

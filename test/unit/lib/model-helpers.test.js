@@ -1,4 +1,4 @@
-const { extractEmail, extractTelephoneNumbers, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
+const { extractEmail, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
 
 describe('ModelHelpers', () => {
   test('extractEmail handles no emails', () => {
@@ -30,27 +30,47 @@ describe('ModelHelpers', () => {
     expect(email).toBe('email1@here.com')
   })
 
-  test('extractTelephoneNumbers returns all phone numbers in order of id', () => {
+  test('extractLatestPrimaryTelephoneNumber returns latest primary phone number', () => {
     const contacts = [
       { contact: { id: 1, contact: 'phone1', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
       { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
       { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
       { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
       { contact: { id: 6, contact: 'phone3', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
-      { contact: { id: 5, contact: 'phone2', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } }
+      { contact: { id: 5, contact: 'phone2', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
+      { contact: { id: 5, contact: 'phone4', contact_type_id: 3, contact_type: { contact_type: 'SecondaryPhone' } } }
     ]
 
-    const phoneNumbers = extractTelephoneNumbers(contacts)
+    const phoneNumber = extractLatestPrimaryTelephoneNumber(contacts)
 
-    expect(phoneNumbers.length).toBe(3)
-    expect(phoneNumbers[0]).toBe('phone1')
-    expect(phoneNumbers[1]).toBe('phone2')
-    expect(phoneNumbers[2]).toBe('phone3')
+    expect(phoneNumber).toBe('phone3')
   })
 
-  test('extractTelephoneNumbers handles no contacts', () => {
-    const phoneNumbers = extractTelephoneNumbers(null)
-    expect(phoneNumbers).toEqual([])
+  test('extractLatestPrimaryTelephoneNumber handles no contacts', () => {
+    const phoneNumber = extractLatestPrimaryTelephoneNumber(null)
+    expect(phoneNumber).toBe(null)
+  })
+
+  test('extractLatestSecondaryTelephoneNumber returns latest secondary phone number', () => {
+    const contacts = [
+      { contact: { id: 1, contact: 'phone1', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 6, contact: 'phone3', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
+      { contact: { id: 20, contact: 'phone4', contact_type_id: 3, contact_type: { contact_type: 'SecondaryPhone' } } },
+      { contact: { id: 7, contact: 'phone5', contact_type_id: 3, contact_type: { contact_type: 'SecondaryPhone' } } },
+      { contact: { id: 8, contact: 'phone6', contact_type_id: 3, contact_type: { contact_type: 'SecondaryPhone' } } }
+    ]
+
+    const phoneNumber = extractLatestSecondaryTelephoneNumber(contacts)
+
+    expect(phoneNumber).toBe('phone4')
+  })
+
+  test('extractLatestSecondaryTelephoneNumber handles no contacts', () => {
+    const phoneNumber = extractLatestSecondaryTelephoneNumber(null)
+    expect(phoneNumber).toBe(null)
   })
 
   test('extractLatestAddress handles no addresses', () => {

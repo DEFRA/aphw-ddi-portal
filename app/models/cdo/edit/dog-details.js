@@ -54,7 +54,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
       },
       value: dogDetails.sex,
       items: [
-        { text: 'Choose sex' },
+        { text: 'Choose sex', value: null },
         { text: 'Male', value: 'Male' },
         { text: 'Female', value: 'Female' }
       ]

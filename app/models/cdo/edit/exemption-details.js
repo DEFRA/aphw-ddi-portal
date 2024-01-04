@@ -276,7 +276,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'microchipVerification',
         fieldset: {
           legend: {
-            text: ' Microchip number verified',
+            text: 'Microchip number verified',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },

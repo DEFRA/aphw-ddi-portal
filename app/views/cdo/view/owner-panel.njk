@@ -42,13 +42,18 @@
             </div>
             {% endif %}
 
-            {% if model.person.telephoneNumbers %}
-            {% for telephone in model.person.telephoneNumbers%}
+            {% if model.person.telephoneNumber1 %}
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Telephone number {{ loop.index }}</dt>
-              <dd class="govuk-summary-list__value">{{ telephone }}</dd>
+              <dt class="govuk-summary-list__key">Telephone number 1</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber1 }}</dd>
             </div>
-            {% endfor %}
+            {% endif %}
+
+            {% if model.person.telephoneNumber2 %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Telephone number 2</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber2 }}</dd>
+            </div>
             {% endif %}
 
             {% if model.person.country %}

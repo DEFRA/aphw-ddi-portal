@@ -7,7 +7,7 @@ const options = {
 }
 
 const doSearch = async (criteria) => {
-  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${encodeURIComponent(criteria.searchTerms)}`, options)
+  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${encodeURIComponent(criteria.searchTerms.trim())}`, options)
   return payload.results
 }
 
