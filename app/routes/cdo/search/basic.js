@@ -17,17 +17,17 @@ module.exports = [{
       }
 
       if (searchCriteria.searchTerms === undefined) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, []))
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], request))
       }
 
       const errors = searchSchema.validate(searchCriteria, { abortEarly: false })
       if (errors.error) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], errors.error)).code(400).takeover()
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], request, errors.error)).code(400).takeover()
       }
 
       const results = await doSearch(searchCriteria)
 
-      return h.view(views.searchBasic, new ViewModel(searchCriteria, results))
+      return h.view(views.searchBasic, new ViewModel(searchCriteria, results, request))
     }
   }
 }]

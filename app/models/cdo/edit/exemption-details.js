@@ -1,10 +1,10 @@
 const { routes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (exemption, courts, policeForces, companies, errors) {
+function ViewModel (exemption, courts, policeForces, companies, request, errors) {
   this.model = {
-    backLink: `${routes.viewDogDetails.get}/${exemption.indexNumber}`,
     formAction: routes.editExemptionDetails.post,
     exemption: {
       indexNumber: exemption.indexNumber,
@@ -335,6 +335,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
     },
     errors: []
   }
+  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

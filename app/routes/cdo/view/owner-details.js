@@ -16,7 +16,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        return h.view(views.viewOwnerDetails, new ViewModel(personAndDogs))
+        return h.view(views.viewOwnerDetails, new ViewModel(personAndDogs, request))
       }
     }
   }

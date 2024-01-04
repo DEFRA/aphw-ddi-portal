@@ -26,7 +26,7 @@ module.exports = [
 
         const countries = await getCountries()
 
-        return h.view(views.editDetails, new ViewModel(person, countries))
+        return h.view(views.editDetails, new ViewModel(person, countries, request))
       }
     }
   },
@@ -41,7 +41,7 @@ module.exports = [
           const person = request.payload
           const countries = await getCountries()
 
-          return h.view(views.editDetails, new ViewModel(person, countries, error)).code(400).takeover()
+          return h.view(views.editDetails, new ViewModel(person, countries, request, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {
