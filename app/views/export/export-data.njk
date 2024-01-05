@@ -1,0 +1,29 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% set pageHeading = "Export data" %}
+
+{% block content %}
+  <form method="post" novalidate="novalidate">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+              {{ pageHeading }}
+            </h1>
+
+            <p>Export all data as a CSV file</p>
+            
+              {{ govukButton({
+                text: "Export"
+              }) }}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}
