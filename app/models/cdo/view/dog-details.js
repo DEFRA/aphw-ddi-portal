@@ -54,8 +54,14 @@ function ViewModel (cdo) {
       policyNumber: insurance?.policy_number,
       insuranceRenewalDate: formatToGds(insurance?.insuranceRenewal),
       neuteringConfirmation: formatToGds(cdo.exemption.neuteringConfirmation),
-      microchipVerification: formatToGds(cdo.exemption.microchipVerification),
-      joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme)
+      microchipConfirmation: formatToGds(cdo.exemption.microchipConfirmation),
+      joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme),
+      exemptionOrder: cdo.exemption.exemptionOrder,
+      microchipDeadline: formatToGds(cdo.exemption.microchipDeadline),
+      neuteringDeadline: formatToGds(cdo.exemption.neuteringDeadline),
+      typedByDlo: cdo.exemption.typedByDlo,
+      withdrawn: formatToGds(cdo.exemption.withdrawn),
+      microchipVerification: formatToGds(cdo.exemption.microchipVerification)
     }
   }
 }

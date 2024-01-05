@@ -40,6 +40,25 @@
             </div>
             {% endif %}
 
+            <div class="govuk-summary-list__row govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Order</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.exemptionOrder }}</dd>
+            </div>
+
+            {% if model.exemption.microchipDeadline %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip deadline</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.microchipDeadline }}</dd>
+            </div>
+            {% endif %}
+
+            {% if model.exemption.neuteringDeadline %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Neutering deadline</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringDeadline }}</dd>
+            </div>
+            {% endif %}
+
             {% if model.exemption.court %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Court</dt>
@@ -103,6 +122,19 @@
             </div>
             {% endif %}
 
+            {% if model.exemption.typedByDlo %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Typed by DLO</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.typedByDlo }}</dd>
+            </div>
+            {% endif %}
+
+            {% if model.exemption.withdrawn %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Withdrawn from index</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.withdrawn }}</dd>
+            </div>
+            {% endif %}
           </dl>
         </div>
       </div>
