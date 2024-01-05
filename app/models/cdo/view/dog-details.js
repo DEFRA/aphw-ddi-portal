@@ -61,8 +61,7 @@ function ViewModel (cdo) {
       neuteringDeadline: formatToGds(cdo.exemption.neuteringDeadline),
       typedByDlo: cdo.exemption.typedByDlo,
       withdrawn: formatToGds(cdo.exemption.withdrawn),
-      microchipVerification: formatToGds(cdo.exemption.microchipVerification),
-      joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme)
+      microchipVerification: formatToGds(cdo.exemption.microchipVerification)
     }
   }
 }
