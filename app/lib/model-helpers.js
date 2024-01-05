@@ -6,11 +6,24 @@ const extractEmail = (contacts) => {
   return email.length > 0 ? email[0] : null
 }
 
-const extractTelephoneNumbers = (contacts) => {
-  if (!contacts || contacts.length === 0) {
-    return []
+const extractLatestPrimaryTelephoneNumber = (contacts) => {
+  if (contacts && contacts.length > 0) {
+    const primaryPhones = contacts.filter(x => x.contact.contact_type.contact_type === 'Phone').sort(propertyComparatorDesc('contact', 'id')).map(y => y.contact.contact)
+    if (primaryPhones.length > 0) {
+      return primaryPhones[0]
+    }
   }
-  return contacts.filter(x => x.contact.contact_type.contact_type === 'Phone').sort(propertyComparatorAsc('contact', 'id')).map(y => y.contact.contact)
+  return null
+}
+
+const extractLatestSecondaryTelephoneNumber = (contacts) => {
+  if (contacts && contacts.length > 0) {
+    const secondaryPhones = contacts.filter(x => x.contact.contact_type.contact_type === 'SecondaryPhone').sort(propertyComparatorDesc('contact', 'id')).map(y => y.contact.contact)
+    if (secondaryPhones.length > 0) {
+      return secondaryPhones[0]
+    }
+  }
+  return null
 }
 
 const extractLatestAddress = (addresses) => {
@@ -28,7 +41,7 @@ const extractLatestAddress = (addresses) => {
 }
 
 const formatAddressAsArray = address => {
-  return [].concat(address.addressLine1, address.addressLine2, address.town, address.postcode).filter(el => el != null)
+  return [].concat(address.addressLine1, address.addressLine2, address.town, address.postcode).filter(el => el != null && el !== '')
 }
 
 const extractLatestInsurance = (insurances) => {
@@ -44,16 +57,11 @@ const propertyComparatorDesc = (propertyName, childPropertyName) => {
   }
 }
 
-const propertyComparatorAsc = (propertyName, childPropertyName) => {
-  return function (a, b) {
-    return childPropertyName ? a[propertyName][childPropertyName] - b[propertyName][childPropertyName] : a[propertyName] - b[propertyName]
-  }
-}
-
 module.exports = {
   extractEmail,
   extractLatestAddress,
   formatAddressAsArray,
   extractLatestInsurance,
-  extractTelephoneNumbers
+  extractLatestPrimaryTelephoneNumber,
+  extractLatestSecondaryTelephoneNumber
 }

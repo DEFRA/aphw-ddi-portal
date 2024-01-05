@@ -1,6 +1,6 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
-const { extractEmail, extractLatestAddress, extractTelephoneNumbers, formatAddressAsArray } = require('../../../lib/model-helpers')
+const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
 
 function ViewModel (cdo) {
   const person = cdo.person
@@ -35,7 +35,8 @@ function ViewModel (cdo) {
       addressLines: formatAddressAsArray(latestAddress),
       country: latestAddress.country,
       email: extractEmail(contacts),
-      telephoneNumbers: extractTelephoneNumbers(contacts),
+      telephoneNumber1: extractLatestPrimaryTelephoneNumber(contacts),
+      telephoneNumber2: extractLatestSecondaryTelephoneNumber(contacts),
       navlink: {
         url: ownerRoutes.viewOwnerDetails.get,
         text: 'Owner record'
@@ -59,7 +60,9 @@ function ViewModel (cdo) {
       microchipDeadline: formatToGds(cdo.exemption.microchipDeadline),
       neuteringDeadline: formatToGds(cdo.exemption.neuteringDeadline),
       typedByDlo: cdo.exemption.typedByDlo,
-      withdrawn: formatToGds(cdo.exemption.withdrawn)
+      withdrawn: formatToGds(cdo.exemption.withdrawn),
+      microchipVerification: formatToGds(cdo.exemption.microchipVerification),
+      joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme)
     }
   }
 }
