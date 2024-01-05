@@ -1,10 +1,10 @@
 const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (person, countries, errors) {
+function ViewModel (person, countries, request, errors) {
   this.model = {
-    backLink: `${routes.viewOwnerDetails.get}/${person.personReference}`,
     formAction: routes.editDetails.post,
     person: {
       personReference: person.personReference,
@@ -164,6 +164,7 @@ function ViewModel (person, countries, errors) {
     },
     errors: []
   }
+  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

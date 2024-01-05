@@ -1,7 +1,7 @@
     <div class="govuk-summary-card">
       <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-2 govuk-!-padding-bottom-1">
         <h2 class="govuk-summary-card__title defra-summary-header"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="">
-            <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="/cdo/view/owner-details/{{ result.personReference }}">
+            <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
                     {{ result.firstName }} {{ result.lastName }}
             </a>
         </h2>
@@ -33,7 +33,7 @@
           {% for dog in result.dogs %}
             <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
               <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
-                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ dog.dogIndex }}">
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ dog.dogIndex }}{{ model.srcHashParam }}">
                         {{ dog.dogIndex }}
                 </a>
               </td>

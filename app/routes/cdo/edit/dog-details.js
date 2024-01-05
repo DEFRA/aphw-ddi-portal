@@ -34,7 +34,7 @@ module.exports = [{
         addDateComponents(dog, keys.dateStolen)
       }
 
-      return h.view(views.editDogDetails, new ViewModel(dog, breeds))
+      return h.view(views.editDogDetails, new ViewModel(dog, breeds, request))
     }
   }
 },
@@ -50,7 +50,7 @@ module.exports = [{
 
         const dog = request.payload
 
-        return h.view(views.editDogDetails, new ViewModel(dog, breeds, error)).code(400).takeover()
+        return h.view(views.editDogDetails, new ViewModel(dog, breeds, request, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

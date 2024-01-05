@@ -40,7 +40,7 @@ module.exports = [
         addDateComponents(exemption, 'joinedExemptionScheme')
         addDateComponents(exemption, 'insuranceRenewal')
 
-        return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies))
+        return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies, request))
       }
     }
   },
@@ -58,7 +58,7 @@ module.exports = [
 
           const exemption = request.payload
 
-          const viewModel = new ViewModel(exemption, courts, policeForces, companies, error)
+          const viewModel = new ViewModel(exemption, courts, policeForces, companies, request, error)
 
           return h.view(views.editExemptionDetails, viewModel).code(400).takeover()
         }

@@ -3,6 +3,8 @@ const { getDateComponents } = require('../../../lib/date-helpers')
 const { UTCDate } = require('@date-fns/utc')
 const { isValid, isFuture, parse } = require('date-fns')
 
+const validMicrochip = /^[a-zA-Z0-9\s]+$/
+
 const validDateFormats = [
   'yyyy-MM-dd',
   'yyyy-M-d'
@@ -89,11 +91,13 @@ const dogDetailsSchema = Joi.object({
   tattoo: Joi.string().trim().max(8).allow('').allow(null).optional().messages({
     'string.max': 'Tattoo must be no more than {#limit} characters'
   }),
-  microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip number must be no more than {#limit} characters'
+  microchipNumber: Joi.string().trim().max(15).regex(validMicrochip).allow('').allow(null).optional().messages({
+    'string.max': 'Microchip number must be no more than {#limit} characters',
+    'string.pattern.base': 'Microchip number can only contain letters and numbers'
   }),
-  microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip number 2 must be no more than {#limit} characters'
+  microchipNumber2: Joi.string().trim().max(15).regex(validMicrochip).allow('').allow(null).optional().messages({
+    'string.max': 'Microchip number 2 must be no more than {#limit} characters',
+    'string.pattern.base': 'Microchip number 2 can only contain letters and numbers'
   }),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),
