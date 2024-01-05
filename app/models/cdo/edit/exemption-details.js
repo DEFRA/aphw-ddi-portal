@@ -361,6 +361,9 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
+        hint: {
+          text: 'The dog must be microchipped by this date.'
+        },
         items: [
           {
             name: 'day',
@@ -388,7 +391,7 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
         namePrefix: 'typedByDlo',
         fieldset: {
           legend: {
-            text: 'Typed by DLO',
+            text: 'Examined by dog legislation officer',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
