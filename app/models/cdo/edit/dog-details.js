@@ -1,10 +1,11 @@
 const { routes, keys } = require('../../../constants/cdo/dog')
 const { addDateErrors } = require('../../../lib/date-helpers')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (dogDetails, breedTypes, request, errors) {
+function ViewModel (dogDetails, breedTypes, backNav, errors) {
   this.model = {
     formAction: routes.editDogDetails.post,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     id: dogDetails.id,
     indexNumber: dogDetails.indexNumber,
     name: {
@@ -218,7 +219,6 @@ function ViewModel (dogDetails, breedTypes, request, errors) {
     },
     errors: []
   }
-  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

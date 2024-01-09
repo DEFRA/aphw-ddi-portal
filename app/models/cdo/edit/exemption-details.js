@@ -1,11 +1,12 @@
 const { routes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (exemption, courts, policeForces, companies, request, errors) {
+function ViewModel (exemption, courts, policeForces, companies, backNav, errors) {
   this.model = {
     formAction: routes.editExemptionDetails.post,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     exemption: {
       indexNumber: exemption.indexNumber,
       status: {
@@ -335,7 +336,6 @@ function ViewModel (exemption, courts, policeForces, companies, request, errors)
     },
     errors: []
   }
-  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

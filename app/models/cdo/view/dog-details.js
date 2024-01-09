@@ -1,15 +1,16 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (cdo, request) {
+function ViewModel (cdo, backNav) {
   const person = cdo.person
   const contacts = person.person_contacts
   const insurance = cdo.exemption.insurance[0]
   const latestAddress = extractLatestAddress(person.addresses)
 
   this.model = {
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     dog: {
       id: cdo.dog.id,
       indexNumber: cdo.dog.indexNumber,
@@ -58,7 +59,6 @@ function ViewModel (cdo, request) {
       joinedExemptionScheme: formatToGds(cdo.exemption.joinedExemptionScheme)
     }
   }
-  addBackNavigation(this.model, request)
 }
 
 module.exports = ViewModel

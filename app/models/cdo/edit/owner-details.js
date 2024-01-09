@@ -1,11 +1,12 @@
 const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (person, countries, request, errors) {
+function ViewModel (person, countries, backNav, errors) {
   this.model = {
     formAction: routes.editDetails.post,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     person: {
       personReference: person.personReference,
       firstName: {
@@ -164,7 +165,6 @@ function ViewModel (person, countries, request, errors) {
     },
     errors: []
   }
-  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

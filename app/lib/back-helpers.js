@@ -13,11 +13,13 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const addBackNavigation = (model, request) => {
+const addBackNavigation = (request) => {
   const currentHashParam = generateCurrentHashParam(request)
   const backLinkUrl = getPreviousUrl(request)
-  model.backLink = backLinkUrl
-  model.srcHashParam = currentHashParam
+  return {
+    backLink: backLinkUrl,
+    srcHashParam: currentHashParam
+  }
 }
 
 module.exports = {

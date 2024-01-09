@@ -3,6 +3,7 @@ const ViewModel = require('../../../models/cdo/search/basic')
 const searchSchema = require('../../../schema/portal/search/basic')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { admin } = require('../../../auth/permissions')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -16,18 +17,20 @@ module.exports = [{
         searchCriteria.searchType = 'dog'
       }
 
+      const backNav = addBackNavigation(request)
+
       if (searchCriteria.searchTerms === undefined) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], request))
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav))
       }
 
       const errors = searchSchema.validate(searchCriteria, { abortEarly: false })
       if (errors.error) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], request, errors.error)).code(400).takeover()
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav, errors.error)).code(400).takeover()
       }
 
       const results = await doSearch(searchCriteria)
 
-      return h.view(views.searchBasic, new ViewModel(searchCriteria, results, request))
+      return h.view(views.searchBasic, new ViewModel(searchCriteria, results, backNav))
     }
   }
 }]

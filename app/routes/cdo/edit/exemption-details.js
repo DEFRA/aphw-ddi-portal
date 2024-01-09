@@ -7,6 +7,7 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/exemption-details')
 const { updateExemption } = require('../../../api/ddi-index-api/exemption')
 const { buildExemptionDetailsUpdatePayload } = require('../../../lib/payload-builders')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -40,7 +41,9 @@ module.exports = [
         addDateComponents(exemption, 'joinedExemptionScheme')
         addDateComponents(exemption, 'insuranceRenewal')
 
-        return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies, request))
+        const backNav = addBackNavigation(request)
+
+        return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies, backNav))
       }
     }
   },
@@ -58,7 +61,9 @@ module.exports = [
 
           const exemption = request.payload
 
-          const viewModel = new ViewModel(exemption, courts, policeForces, companies, request, error)
+          const backNav = addBackNavigation(request)
+
+          const viewModel = new ViewModel(exemption, courts, policeForces, companies, backNav, error)
 
           return h.view(views.editExemptionDetails, viewModel).code(400).takeover()
         }

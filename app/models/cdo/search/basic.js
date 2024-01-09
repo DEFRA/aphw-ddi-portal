@@ -1,10 +1,11 @@
 const { routes: searchRoutes } = require('../../../constants/search')
 const { forms } = require('../../../constants/forms')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (searchCriteria, resultList, request, errors) {
+function ViewModel (searchCriteria, resultList, backNav, errors) {
   this.model = {
     formAction: searchRoutes.searchBasic.get,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     searchTerms: {
       hint: {
         text: 'Enter one or more search terms separated by spaces'
@@ -48,8 +49,6 @@ function ViewModel (searchCriteria, resultList, request, errors) {
     },
     errors: []
   }
-
-  addBackNavigation(this.model, request)
 
   if (errors) {
     for (const error of errors.details) {

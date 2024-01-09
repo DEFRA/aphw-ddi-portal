@@ -1,10 +1,11 @@
 const { routes: ownerRoutes } = require('../../../constants/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { extractEmail, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
-const { addBackNavigation } = require('../../../lib/back-helpers')
 
-function ViewModel (personAndDogs, request) {
+function ViewModel (personAndDogs, backNav) {
   this.model = {
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     person: {
       id: personAndDogs.id,
       personReference: personAndDogs.personReference,
@@ -23,7 +24,6 @@ function ViewModel (personAndDogs, request) {
     },
     dogs: personAndDogs.dogs
   }
-  addBackNavigation(this.model, request)
 }
 
 module.exports = ViewModel
