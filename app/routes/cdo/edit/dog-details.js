@@ -5,6 +5,7 @@ const { getDogDetails, updateDogDetails } = require('../../../api/ddi-index-api/
 const { getBreeds } = require('../../../api/ddi-index-api/dog-breeds')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { admin } = require('../../../auth/permissions')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -34,7 +35,9 @@ module.exports = [{
         addDateComponents(dog, keys.dateStolen)
       }
 
-      return h.view(views.editDogDetails, new ViewModel(dog, breeds))
+      const backNav = addBackNavigation(request)
+
+      return h.view(views.editDogDetails, new ViewModel(dog, breeds, backNav))
     }
   }
 },
@@ -50,7 +53,9 @@ module.exports = [{
 
         const dog = request.payload
 
-        return h.view(views.editDogDetails, new ViewModel(dog, breeds, error)).code(400).takeover()
+        const backNav = addBackNavigation(request)
+
+        return h.view(views.editDogDetails, new ViewModel(dog, breeds, backNav, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

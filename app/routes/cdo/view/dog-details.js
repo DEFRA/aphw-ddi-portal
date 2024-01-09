@@ -2,6 +2,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/dog-details')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -16,7 +17,9 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        return h.view(views.viewDogDetails, new ViewModel(cdo))
+        const backNav = addBackNavigation(request)
+
+        return h.view(views.viewDogDetails, new ViewModel(cdo, backNav))
       }
     }
   }

@@ -2,10 +2,11 @@ const { routes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
 
-function ViewModel (person, countries, errors) {
+function ViewModel (person, countries, backNav, errors) {
   this.model = {
-    backLink: `${routes.viewOwnerDetails.get}/${person.personReference}`,
     formAction: routes.editDetails.post,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     person: {
       personReference: person.personReference,
       firstName: {
