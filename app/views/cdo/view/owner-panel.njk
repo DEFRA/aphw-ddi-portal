@@ -38,7 +38,7 @@
             {% if model.person.email %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Email</dt>
-              <dd class="govuk-summary-list__value"><a href="mailto:{{ model.person.email }}?subject=Dangerous Dog {{ model.dog.indexNumber }}">{{ model.person.email }}</a></dd>
+              <dd class="govuk-summary-list__value">{{ model.person.email }}</dd>
             </div>
             {% endif %}
 
