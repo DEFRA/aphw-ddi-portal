@@ -6,6 +6,7 @@ const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -26,7 +27,9 @@ module.exports = [
 
         const countries = await getCountries()
 
-        return h.view(views.editDetails, new ViewModel(person, countries))
+        const backNav = addBackNavigation(request)
+
+        return h.view(views.editDetails, new ViewModel(person, countries, backNav))
       }
     }
   },
@@ -41,7 +44,9 @@ module.exports = [
           const person = request.payload
           const countries = await getCountries()
 
-          return h.view(views.editDetails, new ViewModel(person, countries, error)).code(400).takeover()
+          const backNav = addBackNavigation(request)
+
+          return h.view(views.editDetails, new ViewModel(person, countries, backNav, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {

@@ -3,6 +3,8 @@ const { getDateComponents } = require('../../../lib/date-helpers')
 const { UTCDate } = require('@date-fns/utc')
 const { isValid, isFuture, parse } = require('date-fns')
 
+const validNewMicrochip = /^[0-9\s]+$/
+
 const validDateFormats = [
   'yyyy-MM-dd',
   'yyyy-M-d'
@@ -61,6 +63,19 @@ const validateDate = (value, helpers) => {
   return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
 }
 
+const validateMicrochip = (value, helpers) => {
+  const elemName = helpers.state.path[0]
+  // Compare new value against original to determine if already pre-populated in the DB
+  // (old microchip numbers from legacy data can contain letters so don't validate against new rules)
+  if (value === helpers.state.ancestors[0][`orig-${elemName}`]) {
+    return value
+  }
+  if (!value.match(validNewMicrochip)) {
+    return helpers.message('Microchip numbers can only contains numbers', { path: [elemName] })
+  }
+  return value
+}
+
 const dogDetailsSchema = Joi.object({
   id: Joi.number().required(),
   indexNumber: Joi.string().required(),
@@ -91,10 +106,10 @@ const dogDetailsSchema = Joi.object({
   }),
   microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number must be no more than {#limit} characters'
-  }),
+  }).custom(validateMicrochip),
   microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number 2 must be no more than {#limit} characters'
-  }),
+  }).custom(validateMicrochip),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
@@ -125,7 +140,9 @@ const validatePayload = (payload) => {
     'dateExported-day': Joi.number().allow(null).allow(''),
     'dateStolen-year': Joi.number().allow(null).allow(''),
     'dateStolen-month': Joi.number().allow(null).allow(''),
-    'dateStolen-day': Joi.number().allow(null).allow('')
+    'dateStolen-day': Joi.number().allow(null).allow(''),
+    'orig-microchipNumber': Joi.string().allow(null).allow(''),
+    'orig-microchipNumber2': Joi.string().allow(null).allow('')
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
