@@ -40,6 +40,9 @@ module.exports = [
         addDateComponents(exemption, 'microchipVerification')
         addDateComponents(exemption, 'joinedExemptionScheme')
         addDateComponents(exemption, 'insuranceRenewal')
+        addDateComponents(exemption, 'microchipDeadline')
+        addDateComponents(exemption, 'typedByDlo')
+        addDateComponents(exemption, 'withdrawn')
 
         const backNav = addBackNavigation(request)
 

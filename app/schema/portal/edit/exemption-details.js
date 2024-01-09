@@ -102,8 +102,12 @@ const exemptionDetailsSchema = Joi.object({
   }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
     'any.required': 'Enter a CDO expiry date'
   }),
-  court: Joi.string().required().messages({
-    'string.empty': 'Select a court'
+  court: Joi.string().when('exemptionOrder', {
+    is: 2023,
+    then: Joi.optional().allow(null).allow(''),
+    otherwise: Joi.required().messages({
+      'string.empty': 'Select a court'
+    })
   }),
   policeForce: Joi.string().required().messages({
     'string.empty': 'Select a police force'
@@ -136,8 +140,24 @@ const exemptionDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
+  }).optional().custom(validateDate),
+  exemptionOrder: Joi.number().required(),
+  microchipDeadline: Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom(validateDate),
+  typedByDlo: Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom(validateDate),
+  withdrawn: Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
   }).optional().custom(validateDate)
-}).required().custom(validateInsurance)
+}).custom(validateInsurance).required()
 
 const validatePayload = (payload) => {
   payload.certificateIssued = getDateComponents(payload, 'certificateIssued')
@@ -148,6 +168,9 @@ const validatePayload = (payload) => {
   payload.microchipVerification = getDateComponents(payload, 'microchipVerification')
   payload.joinedExemptionScheme = getDateComponents(payload, 'joinedExemptionScheme')
   payload.insuranceRenewal = getDateComponents(payload, 'insuranceRenewal')
+  payload.microchipDeadline = getDateComponents(payload, 'microchipDeadline')
+  payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
+  payload.withdrawn = getDateComponents(payload, 'withdrawn')
 
   const schema = Joi.object({
     'certificateIssued-year': Joi.number().allow(null).allow(''),
@@ -173,7 +196,16 @@ const validatePayload = (payload) => {
     'joinedExemptionScheme-day': Joi.number().allow(null).allow(''),
     'insuranceRenewal-year': Joi.number().allow(null).allow(''),
     'insuranceRenewal-month': Joi.number().allow(null).allow(''),
-    'insuranceRenewal-day': Joi.number().allow(null).allow('')
+    'insuranceRenewal-day': Joi.number().allow(null).allow(''),
+    'microchipDeadline-year': Joi.number().allow(null).allow(''),
+    'microchipDeadline-month': Joi.number().allow(null).allow(''),
+    'microchipDeadline-day': Joi.number().allow(null).allow(''),
+    'typedByDlo-year': Joi.number().allow(null).allow(''),
+    'typedByDlo-month': Joi.number().allow(null).allow(''),
+    'typedByDlo-day': Joi.number().allow(null).allow(''),
+    'withdrawn-year': Joi.number().allow(null).allow(''),
+    'withdrawn-month': Joi.number().allow(null).allow(''),
+    'withdrawn-day': Joi.number().allow(null).allow('')
   }).concat(exemptionDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
