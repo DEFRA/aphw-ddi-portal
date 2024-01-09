@@ -20,6 +20,5 @@ const exemption = Joi.object({
 })
 
 module.exports = {
-  exemption,
-  validatePayload
+  exemption
 }
