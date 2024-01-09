@@ -392,7 +392,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         namePrefix: 'typedByDlo',
         fieldset: {
           legend: {
-            text: 'Examined by dog legislation officer',
+            text: 'Examined by DLO',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },

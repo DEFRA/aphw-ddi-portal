@@ -68,8 +68,6 @@ module.exports = [
 
           const viewModel = new ViewModel(exemption, courts, policeForces, companies, backNav, error)
 
-          console.error(error)
-
           return h.view(views.editExemptionDetails, viewModel).code(400).takeover()
         }
       },

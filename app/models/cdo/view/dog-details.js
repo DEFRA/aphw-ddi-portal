@@ -60,7 +60,7 @@ function ViewModel (cdo, backNav) {
       exemptionOrder: cdo.exemption.exemptionOrder,
       microchipDeadline: formatToGds(cdo.exemption.microchipDeadline),
       neuteringDeadline: formatToGds(cdo.exemption.neuteringDeadline),
-      typedByDlo: cdo.exemption.typedByDlo,
+      typedByDlo: formatToGds(cdo.exemption.typedByDlo),
       withdrawn: formatToGds(cdo.exemption.withdrawn),
       microchipVerification: formatToGds(cdo.exemption.microchipVerification)
     }
