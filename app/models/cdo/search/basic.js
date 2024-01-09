@@ -1,11 +1,11 @@
 const { routes: searchRoutes } = require('../../../constants/search')
-const { routes: otherRoutes } = require('../../../constants/owner')
 const { forms } = require('../../../constants/forms')
 
-function ViewModel (searchCriteria, resultList, errors) {
+function ViewModel (searchCriteria, resultList, backNav, errors) {
   this.model = {
     formAction: searchRoutes.searchBasic.get,
-    backLink: otherRoutes.home.get,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     searchTerms: {
       hint: {
         text: 'Enter one or more search terms separated by spaces'

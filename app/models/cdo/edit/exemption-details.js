@@ -2,10 +2,11 @@ const { routes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
 const { addDateErrors } = require('../../../lib/date-helpers')
 
-function ViewModel (exemption, courts, policeForces, companies, errors) {
+function ViewModel (exemption, courts, policeForces, companies, backNav, errors) {
   this.model = {
-    backLink: `${routes.viewDogDetails.get}/${exemption.indexNumber}`,
     formAction: routes.editExemptionDetails.post,
+    backLink: backNav.backLink,
+    srcHashParam: backNav.srcHashParam,
     exemption: {
       indexNumber: exemption.indexNumber,
       exemptionOrder: {
