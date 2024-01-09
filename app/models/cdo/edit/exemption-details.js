@@ -426,6 +426,9 @@ function ViewModel (exemption, courts, policeForces, companies, errors) {
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },
+        hint: {
+          text: 'An owner can ask for their dog be withdrawn from the index. DLOs can ask for a dog to be withdrawn if they do not consider it to be an XL Bully.'
+        },
         items: [
           {
             name: 'day',

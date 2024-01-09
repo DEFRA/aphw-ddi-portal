@@ -54,7 +54,9 @@
 
       {{ govukDateInput(model.exemption.cdoExpiry) }}
 
+      {% if model.exemption.exemptionOrder.value != 2023 %}
       {{ accessibleAutocomplete(model.exemption.court) }}
+      {% endif %}
 
       {{ govukSelect(model.exemption.policeForce) }}
 
@@ -76,11 +78,12 @@
       <h2 class="govuk-heading-m">Dangerous dogs exemption 2023 order</h2>
       <p class="govuk-hint">The information in this section is specific to dogs registered under the 2023 order.</p>
       
-      {{ govukSelect(model.exemption.exemptionOrder) }}
       {{ govukDateInput(model.exemption.microchipDeadline) }}
       {{ govukDateInput(model.exemption.typedByDlo) }}
       {{ govukDateInput(model.exemption.withdrawn) }}
       {% endif %}
+
+      <input type="hidden" name="exemptionOrder" value="{{ model.exemption.exemptionOrder.value }}" />
 
       <input type="hidden" name="indexNumber" value="{{ model.exemption.indexNumber }}" />
 

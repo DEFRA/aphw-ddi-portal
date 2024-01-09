@@ -102,8 +102,12 @@ const exemptionDetailsSchema = Joi.object({
   }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
     'any.required': 'Enter a CDO expiry date'
   }),
-  court: Joi.string().required().messages({
-    'string.empty': 'Select a court'
+  court: Joi.string().when('exemptionOrder', {
+    is: 2023,
+    then: Joi.optional().allow(null).allow(''),
+    otherwise: Joi.required().messages({
+      'string.empty': 'Select a court'
+    })
   }),
   policeForce: Joi.string().required().messages({
     'string.empty': 'Select a police force'
@@ -137,7 +141,7 @@ const exemptionDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).optional().custom(validateDate),
-  exemptionOrder: Joi.string().optional(),
+  exemptionOrder: Joi.number().required(),
   microchipDeadline: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),

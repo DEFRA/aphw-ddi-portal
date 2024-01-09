@@ -103,6 +103,7 @@ describe('Update dog details', () => {
   test('POST /cdo/edit/exemption-details route updates exemption', async () => {
     const payload = {
       indexNumber: 'ED1234',
+      exemptionOrder: 2015,
       status: 'DOG_IMPORTED',
       'cdoIssued-day': '31',
       'cdoIssued-month': '12',
@@ -153,6 +154,7 @@ describe('Update dog details', () => {
     const payload = {
       indexNumber: 'ED1234',
       status: 'DOG_IMPORTED',
+      exemptionOrder: 2015,
       'cdoIssued-day': '31',
       'cdoIssued-month': '12',
       'cdoIssued-year': '9999',
@@ -182,6 +184,7 @@ describe('Update dog details', () => {
   test('POST /cdo/edit/exemption-details route displays error if short year', async () => {
     const payload = {
       indexNumber: 'ED1234',
+      exemptionOrder: 2015,
       status: 'DOG_IMPORTED',
       'cdoIssued-day': '31',
       'cdoIssued-month': '12',
@@ -212,6 +215,7 @@ describe('Update dog details', () => {
   test('POST /cdo/edit/exemption-details route displays error if invalid date', async () => {
     const payload = {
       indexNumber: 'ED1234',
+      exemptionOrder: 2015,
       status: 'DOG_IMPORTED',
       'cdoIssued-day': '40',
       'cdoIssued-month': '12',
