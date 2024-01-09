@@ -6,6 +6,7 @@ describe('Exemption details validation', () => {
   test('should pass validation when payload valid', () => {
     const payload = {
       indexNumber: 'ED123',
+      exemptionOrder: '2015',
       cdoIssued: new UTCDate('2020-02-01'),
       cdoExpiry: new UTCDate('2020-05-01'),
       court: 'Some court',
@@ -16,6 +17,7 @@ describe('Exemption details validation', () => {
 
     expect(value).toMatchObject({
       indexNumber: 'ED123',
+      exemptionOrder: '2015',
       cdoIssued: new UTCDate('2020-02-01'),
       cdoExpiry: new UTCDate('2020-05-01'),
       court: 'Some court',
@@ -26,13 +28,16 @@ describe('Exemption details validation', () => {
   test('should fail validation with invalid payload', () => {
     const payload = {
       indexNumber: 'ED123',
+      exemptionOrder: '2015',
       cdoIssued: new UTCDate('2020-02-01'),
       cdoExpiry: new UTCDate('2020-05-01'),
       court: 'Some court'
     }
 
     const { error } = exemption.validate(payload, { abortEarly: false })
-    expect(error).not.toBe(null)
-    expect(error.details[0].message).toBe('"policeForce" is required')
+    expect(error).not.toBeNull()
+
+    const messages = error.details.map((detail) => detail.message)
+    expect(messages).toContain('"policeForce" is required')
   })
 })
