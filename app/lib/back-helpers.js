@@ -8,6 +8,19 @@ const generateCurrentHashParam = (request) => {
   return `?src=${urlHashRef}`
 }
 
+const extractBackNavParam = (request) => {
+  const refererUrl = request?.headers?.referer
+  if (refererUrl && refererUrl.indexOf('?src=')) {
+    const origSrc = refererUrl.substring(refererUrl.indexOf('?src=') + 5)
+    const prevUrl = getFromSession(request, `back-url-${origSrc}`)
+    if (prevUrl && prevUrl.indexOf('?src=')) {
+      const preSrc = prevUrl.substring(prevUrl.indexOf('?src='))
+      return preSrc
+    }
+  }
+  return ''
+}
+
 const getPreviousUrl = (request) => {
   const url = getFromSession(request, `back-url-${request?.query?.src}`)
   return url ?? '/'
@@ -23,5 +36,6 @@ const addBackNavigation = (request) => {
 }
 
 module.exports = {
-  addBackNavigation
+  addBackNavigation,
+  extractBackNavParam
 }
