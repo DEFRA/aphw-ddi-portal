@@ -64,10 +64,13 @@ const validateDate = (value, helpers) => {
 }
 
 const validateMicrochip = (value, helpers) => {
-  const elemName = helpers.state.path[0]
+  let elemName = helpers.state.path[0]
+  if (elemName?.length > 1) {
+    elemName = elemName.substring(0, 1).toUpperCase() + elemName.substring(1)
+  }
   // Compare new value against original to determine if already pre-populated in the DB
   // (old microchip numbers from legacy data can contain letters so don't validate against new rules)
-  if (value === helpers.state.ancestors[0][`orig-${elemName}`]) {
+  if (value === helpers.state.ancestors[0][`orig${elemName}`]) {
     return value
   }
   if (!value.match(validNewMicrochip)) {
@@ -141,8 +144,8 @@ const validatePayload = (payload) => {
     'dateStolen-year': Joi.number().allow(null).allow(''),
     'dateStolen-month': Joi.number().allow(null).allow(''),
     'dateStolen-day': Joi.number().allow(null).allow(''),
-    'orig-microchipNumber': Joi.string().allow(null).allow(''),
-    'orig-microchipNumber2': Joi.string().allow(null).allow('')
+    origMicrochipNumber: Joi.string().allow(null).allow(''),
+    origMicrochipNumber2: Joi.string().allow(null).allow('')
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
