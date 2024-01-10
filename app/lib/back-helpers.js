@@ -14,8 +14,7 @@ const extractBackNavParam = (request) => {
     const origSrc = refererUrl.substring(refererUrl.indexOf('?src=') + 5)
     const prevUrl = getFromSession(request, `back-url-${origSrc}`)
     if (prevUrl && prevUrl.indexOf('?src=')) {
-      const preSrc = prevUrl.substring(prevUrl.indexOf('?src='))
-      return preSrc
+      return prevUrl.substring(prevUrl.indexOf('?src='))
     }
   }
   return ''
