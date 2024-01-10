@@ -155,6 +155,8 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
       value: dogDetails.microchipNumber2,
       attributes: { maxlength: '15' }
     },
+    origMicrochipNumber: dogDetails.origMicrochipNumber ?? dogDetails.microchipNumber,
+    origMicrochipNumber2: dogDetails.origMicrochipNumber2 ?? dogDetails.microchipNumber2,
     dateExported: {
       type: 'date',
       id: 'dateExported',
