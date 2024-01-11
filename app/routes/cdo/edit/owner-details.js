@@ -6,7 +6,7 @@ const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
-const { addBackNavigation, extractBackNavParam } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -44,7 +44,7 @@ module.exports = [
           const person = request.payload
           const countries = await getCountries()
 
-          const backNav = addBackNavigation(request)
+          const backNav = addBackNavigationForErrorCondition(request)
 
           return h.view(views.editDetails, new ViewModel(person, countries, backNav, error)).code(400).takeover()
         }
