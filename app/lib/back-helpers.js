@@ -8,14 +8,23 @@ const generateCurrentHashParam = (request) => {
   return `?src=${urlHashRef}`
 }
 
-const extractBackNavParam = (request) => {
-  const refererUrl = request?.headers?.referer
-  if (refererUrl && refererUrl.indexOf('?src=')) {
-    const origSrc = refererUrl.substring(refererUrl.indexOf('?src=') + 5)
-    const prevUrl = getFromSession(request, `back-url-${origSrc}`)
-    if (prevUrl && prevUrl.indexOf('?src=')) {
-      return prevUrl.substring(prevUrl.indexOf('?src='))
-    }
+const extractSrcParamFromUrl = (url, removPrefix) => {
+  if (url && url.indexOf('?src=') > -1) {
+    const origSrc = url.substring(url.indexOf('?src='))
+    return removPrefix ? origSrc.substring(origSrc.indexOf('?src=') + 5) : origSrc.substring(origSrc.indexOf('?src='))
+  }
+  return ''
+}
+
+const extractSrcParamFromReferer = (request, removPrefix) => {
+  return extractSrcParamFromUrl(request?.headers?.referer, removPrefix)
+}
+
+const extractBackNavParam = (request, removPrefix) => {
+  const origSrc = extractSrcParamFromReferer(request, true)
+  const prevUrl = getFromSession(request, `back-url-${origSrc}`)
+  if (prevUrl && prevUrl.indexOf('?src=')) {
+    return removPrefix ? prevUrl.substring(prevUrl.indexOf('?src=') + 5) : prevUrl.substring(prevUrl.indexOf('?src='))
   }
   return ''
 }
@@ -34,7 +43,25 @@ const addBackNavigation = (request) => {
   }
 }
 
+const addBackNavigationForErrorCondition = (request) => {
+  const srcParam = extractSrcParamFromReferer(request, true)
+  let backLinkUrl
+  if (srcParam === '') {
+    backLinkUrl = getFromSession(request, 'last-referer') ?? '/'
+  } else {
+    backLinkUrl = getFromSession(request, `back-url-${srcParam}`) ?? '/'
+    if (backLinkUrl !== '/') {
+      setInSession(request, 'last-referer', backLinkUrl)
+    }
+  }
+  return {
+    backLink: backLinkUrl,
+    srcHashParam: extractSrcParamFromUrl(backLinkUrl)
+  }
+}
+
 module.exports = {
   addBackNavigation,
-  extractBackNavParam
+  extractBackNavParam,
+  addBackNavigationForErrorCondition
 }
