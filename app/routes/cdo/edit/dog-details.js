@@ -5,7 +5,7 @@ const { getDogDetails, updateDogDetails } = require('../../../api/ddi-index-api/
 const { getBreeds } = require('../../../api/ddi-index-api/dog-breeds')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { admin } = require('../../../auth/permissions')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -53,7 +53,7 @@ module.exports = [{
 
         const dog = request.payload
 
-        const backNav = addBackNavigation(request)
+        const backNav = addBackNavigationForErrorCondition(request)
 
         return h.view(views.editDogDetails, new ViewModel(dog, breeds, backNav, error)).code(400).takeover()
       }
@@ -63,7 +63,7 @@ module.exports = [{
 
       await updateDogDetails(dog)
 
-      return h.redirect(`${routes.viewDogDetails.get}/${dog.indexNumber}`)
+      return h.redirect(`${routes.viewDogDetails.get}/${dog.indexNumber}${extractBackNavParam(request)}`)
     }
   }
 }]

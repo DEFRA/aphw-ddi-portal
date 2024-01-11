@@ -6,7 +6,7 @@ const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -56,7 +56,7 @@ module.exports = [
 
         await updatePerson(payload)
 
-        return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}`)
+        return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
       }
     }
   }

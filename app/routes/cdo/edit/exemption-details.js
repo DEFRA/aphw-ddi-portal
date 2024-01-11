@@ -7,7 +7,7 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/exemption-details')
 const { updateExemption } = require('../../../api/ddi-index-api/exemption')
 const { buildExemptionDetailsUpdatePayload } = require('../../../lib/payload-builders')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -76,7 +76,7 @@ module.exports = [
 
         await updateExemption(payload)
 
-        return h.redirect(`${routes.viewDogDetails.get}/${payload.indexNumber}`)
+        return h.redirect(`${routes.viewDogDetails.get}/${payload.indexNumber}${extractBackNavParam(request)}`)
       }
     }
   }
