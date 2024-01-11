@@ -7,7 +7,7 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/exemption-details')
 const { updateExemption } = require('../../../api/ddi-index-api/exemption')
 const { buildExemptionDetailsUpdatePayload } = require('../../../lib/payload-builders')
-const { addBackNavigation, extractBackNavParam } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -64,7 +64,7 @@ module.exports = [
 
           const exemption = request.payload
 
-          const backNav = addBackNavigation(request)
+          const backNav = addBackNavigationForErrorCondition(request)
 
           const viewModel = new ViewModel(exemption, courts, policeForces, companies, backNav, error)
 
