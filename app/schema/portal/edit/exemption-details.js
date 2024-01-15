@@ -92,15 +92,23 @@ const exemptionDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
-    'any.required': 'Enter a CDO issued date'
+  }).when('exemptionOrder', {
+    is: 2023,
+    then: Joi.optional(),
+    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
+      'any.required': 'Enter a CDO issued date'
+    })
   }),
   cdoExpiry: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom((value, helper) => validateDate(value, helper, true)).required().messages({
-    'any.required': 'Enter a CDO expiry date'
+  }).when('exemptionOrder', {
+    is: 2023,
+    then: Joi.optional(),
+    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
+      'any.required': 'Enter a CDO expiry date'
+    })
   }),
   court: Joi.string().when('exemptionOrder', {
     is: 2023,
@@ -161,8 +169,6 @@ const exemptionDetailsSchema = Joi.object({
 
 const validatePayload = (payload) => {
   payload.certificateIssued = getDateComponents(payload, 'certificateIssued')
-  payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
-  payload.cdoExpiry = getDateComponents(payload, 'cdoExpiry')
   payload.applicationFeePaid = getDateComponents(payload, 'applicationFeePaid')
   payload.neuteringConfirmation = getDateComponents(payload, 'neuteringConfirmation')
   payload.microchipVerification = getDateComponents(payload, 'microchipVerification')
@@ -171,6 +177,11 @@ const validatePayload = (payload) => {
   payload.microchipDeadline = getDateComponents(payload, 'microchipDeadline')
   payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
   payload.withdrawn = getDateComponents(payload, 'withdrawn')
+
+  if (payload.exemptionOrder !== 2023 && payload.exemptionOrder !== '2023') {
+    payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
+    payload.cdoExpiry = getDateComponents(payload, 'cdoExpiry')
+  }
 
   const schema = Joi.object({
     'certificateIssued-year': Joi.number().allow(null).allow(''),

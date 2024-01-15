@@ -50,11 +50,11 @@
 
       {{ govukDateInput(model.exemption.certificateIssued) }}
 
+      {% if model.exemption.exemptionOrder.value != 2023 %}
       {{ govukDateInput(model.exemption.cdoIssued) }}
 
       {{ govukDateInput(model.exemption.cdoExpiry) }}
-
-      {% if model.exemption.exemptionOrder.value != 2023 %}
+      
       {{ accessibleAutocomplete(model.exemption.court) }}
       {% endif %}
 
