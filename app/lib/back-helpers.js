@@ -22,7 +22,7 @@ const extractSrcParamFromReferer = (request, removPrefix) => {
 
 const extractBackNavParam = (request, removPrefix) => {
   const origSrc = extractSrcParamFromReferer(request, true)
-  const prevUrl = getFromSession(request, `back-url-${origSrc}`)
+  const prevUrl = origSrc !== '' ? getFromSession(request, `back-url-${origSrc}`) : getFromSession(request, 'last-referer')
   if (prevUrl && prevUrl.indexOf('?src=')) {
     return removPrefix ? prevUrl.substring(prevUrl.indexOf('?src=') + 5) : prevUrl.substring(prevUrl.indexOf('?src='))
   }
@@ -54,6 +54,7 @@ const addBackNavigationForErrorCondition = (request) => {
       setInSession(request, 'last-referer', backLinkUrl)
     }
   }
+
   return {
     backLink: backLinkUrl,
     srcHashParam: extractSrcParamFromUrl(backLinkUrl)
