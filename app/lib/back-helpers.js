@@ -54,7 +54,7 @@ const addBackNavigationForErrorCondition = (request) => {
       setInSession(request, 'last-referer', backLinkUrl)
     }
   }
-  console.log('addBackNavError url', backLinkUrl)
+
   return {
     backLink: backLinkUrl,
     srcHashParam: extractSrcParamFromUrl(backLinkUrl)
