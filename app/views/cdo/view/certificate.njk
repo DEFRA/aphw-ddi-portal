@@ -1,0 +1,48 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="{{ model.formAction }}" method="POST" novalidate>
+        <h1 class="govuk-heading-l">Generate a certificate of exemption for Dog {{ model.indexNumber }}</h1>
+
+        <ol class="govuk-list govuk-list--number">
+          <li>Select the generate certificate button.</li>
+          <li>Save the certificate to SharePoint.</li>
+          <li>Email the certificate to the dog owner.</li>
+        </ol>
+
+        <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}">
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Generate certificate"
+          }) }}
+
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
