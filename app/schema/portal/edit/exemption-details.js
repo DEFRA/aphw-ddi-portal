@@ -178,7 +178,7 @@ const validatePayload = (payload) => {
   payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
   payload.withdrawn = getDateComponents(payload, 'withdrawn')
 
-  if (payload.exemptionOrder !== 2023 && payload.exemptionOrder !== '2023') {   
+  if (payload.exemptionOrder !== 2023 && payload.exemptionOrder !== '2023') {
     payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
     payload.cdoExpiry = getDateComponents(payload, 'cdoExpiry')
   }
