@@ -20,6 +20,13 @@ const constants = {
       get: '/cdo/edit/exemption-details',
       post: '/cdo/edit/exemption-details'
     },
+    changeStatus: {
+      get: '/cdo/edit/change-status',
+      post: '/cdo/edit/change-status'
+    },
+    changeStatusConfirmation: {
+      get: '/cdo/edit/change-status-confirmation'
+    },
     delete: {
       get: '/cdo/create/confirm-dog-delete',
       post: '/cdo/create/confirm-dog-delete'
@@ -33,6 +40,8 @@ const constants = {
     editDogDetails: 'cdo/edit/dog-details',
     viewDogDetails: 'cdo/view/dog-details',
     editExemptionDetails: 'cdo/edit/exemption-details',
+    changeStatus: 'cdo/edit/change-status',
+    changeStatusConfirmation: 'cdo/edit/change-status-confirmation',
     details: 'cdo/create/dog-details',
     confirm: 'cdo/create/confirm-dog-details',
     delete: 'cdo/create/confirm-dog-delete',

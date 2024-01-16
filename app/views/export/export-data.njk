@@ -1,14 +1,38 @@
-{% extends '_layout.njk' %}
-
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set pageHeading = "Export data" %}
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: "/",
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
 
 {% block content %}
   <form method="post" novalidate="novalidate">
-    {% block formContent %}
+      {% call govukFieldset({
+        legend: {
+          text: "Export data",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+      {% endcall %}
       <div class="govuk-body">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
@@ -24,6 +48,5 @@
           </div>
         </div>
       </div>
-    {% endblock %}
   </form>
 {% endblock %}

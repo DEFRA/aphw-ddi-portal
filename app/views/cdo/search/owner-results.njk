@@ -1,3 +1,5 @@
+{% from "components/statusTag/macro.njk" import statusTag %}
+
     <div class="govuk-summary-card">
       <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-2 govuk-!-padding-bottom-1">
         <h2 class="govuk-summary-card__title defra-summary-header"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="">
@@ -41,7 +43,7 @@
                       {{ dog.dogName }}
               </td>
               <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
-                <strong class="govuk-tag govuk-!-font-size-16">{{ dog.dogStatus }}</strong>
+                {{ statusTag(dog.dogStatus, 'govuk-!-font-size-16')}}
               </td>
             </tr>
             {% endfor %}

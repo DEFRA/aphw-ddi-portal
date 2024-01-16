@@ -1,3 +1,5 @@
+{% from "components/statusTag/macro.njk" import statusTag %}
+
 <!-- dog list -->
 {% for dog in model.dogs %}
   <div class="govuk-summary-card">
@@ -6,7 +8,7 @@
         <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ dog.indexNumber }}{{ model.srcHashParam }}">{{ dog.indexNumber }}</a>
       </h2>
       <ul class="govuk-summary-card__actions govuk-!-font-weight-regular">
-        <strong class="govuk-tag">{{ dog.status }}</strong>
+        {{ statusTag(dog.status) }}
       </ul>
     </div>
 
