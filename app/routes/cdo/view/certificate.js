@@ -4,6 +4,8 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/certificate')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
+const { generateCertificate } = require('../../../api/ddi-index-api/certificate')
+const { downloadCertificate } = require('../../../storage/repos/certificate')
 
 module.exports = [
   {
@@ -38,15 +40,11 @@ module.exports = [
       },
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.payload.indexNumber)
+        const { certificateId } = await generateCertificate(request.payload.indexNumber)
 
-        if (cdo === undefined) {
-          return h.response().code(400).takeover()
-        }
+        const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
 
-        const backNav = addBackNavigation(request)
-
-        return h.view(views.certificate, new ViewModel(cdo, backNav))
+        return h.response(cert).type('application/pdf')
       }
     }
   }
