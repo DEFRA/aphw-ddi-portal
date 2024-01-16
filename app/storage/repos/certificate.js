@@ -1,10 +1,10 @@
 const { blobServiceClient } = require('../get-blob-client')
-const storageConfig = require('../../config/storage/blob')
+const { blobConfig } = require('../../config')
 
 const downloadCertificate = async (indexNumber, certificateId) => {
   const filename = `${indexNumber}/${certificateId}.pdf`
 
-  const containerClient = blobServiceClient.getContainerClient(storageConfig.certificateContainer)
+  const containerClient = blobServiceClient.getContainerClient(blobConfig.certificateContainer)
   const blobClient = containerClient.getBlobClient(filename)
 
   const exists = await blobClient.exists()
