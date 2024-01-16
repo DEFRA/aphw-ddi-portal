@@ -3,8 +3,24 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set pageHeading = "Upload register" %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: "/",
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
 
 {% block content %}
   <form method="post" novalidate="novalidate" enctype="multipart/form-data">

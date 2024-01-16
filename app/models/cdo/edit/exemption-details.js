@@ -28,23 +28,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
           }
         ]
       },
-      status: {
-        label: {
-          text: 'Status',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        },
-        id: 'status',
-        name: 'status',
-        value: exemption.status,
-        items: [
-          {
-            value: 'Imported Dog',
-            text: 'Imported Dog'
-          }
-        ],
-        autocomplete: forms.preventAutocomplete,
-        classes: 'govuk-!-font-size-16'
-      },
+      status: exemption.status,
       certificateIssued: {
         type: 'date',
         id: 'certificateIssued',
