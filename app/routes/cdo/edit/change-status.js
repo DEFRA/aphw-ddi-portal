@@ -20,6 +20,7 @@ module.exports = [
         }
 
         const backNav = addBackNavigation(request)
+        backNav.srcHashParam = extractSrcParamFromUrl(request?.headers?.referer, true)
 
         return h.view(views.changeStatus, new ViewModel(cdo.dog, backNav))
       }
@@ -58,9 +59,7 @@ module.exports = [
 
         await updateStatus(payload)
 
-        const backUrl = payload.backUrl
-
-        return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}${extractSrcParamFromUrl(backUrl)}`)
+        return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}?src=${payload.srcHashParam}`)
       }
     }
   }
