@@ -46,7 +46,13 @@
         }
       }) %}
 
-      {{ govukSelect(model.exemption.status) }}
+      <p class="govuk-body govuk-!-font-size-16 govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-1">
+        Status
+      </p>
+      <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-2">
+            <li class="govuk-summary-list__actions-list-item govuk-body govuk-!-font-size-16">{{ model.exemption.status }}</li>
+            <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.exemption.indexNumber }}{{ model.srcHashParam }}">Change status</a></li>
+          </ul>
 
       {{ govukDateInput(model.exemption.certificateIssued) }}
 

@@ -1,0 +1,17 @@
+{% if status == 'Interim exempt' %}
+  <strong class="govuk-tag govuk-tag--green {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Pre-exempt' %}
+  <strong class="govuk-tag govuk-tag--blue  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Failed' %}
+  <strong class="govuk-tag govuk-tag--purple  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Exempt' %}
+  <strong class="govuk-tag govuk-tag--turquoise  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'In breach' %}
+  <strong class="govuk-tag govuk-tag--red  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Withdrawn' %}
+  <strong class="govuk-tag govuk-tag--pink  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Inactive' %}
+  <strong class="govuk-tag govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% else %}
+  <strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">Invalid status: {{ status }}</strong>
+{% endif %}

@@ -64,5 +64,6 @@ const addBackNavigationForErrorCondition = (request) => {
 module.exports = {
   addBackNavigation,
   extractBackNavParam,
-  addBackNavigationForErrorCondition
+  addBackNavigationForErrorCondition,
+  extractSrcParamFromUrl
 }

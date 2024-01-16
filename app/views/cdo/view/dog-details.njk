@@ -1,5 +1,6 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
 
 {% extends '_layout.njk' %}
 
@@ -27,9 +28,7 @@
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
         Dog {{ model.dog.indexNumber }}
       </h1>
-      <strong class="govuk-tag govuk-!-margin-bottom-6">
-        {{ model.dog.status }}
-      </strong>
+      {{ statusTag(model.dog.status, 'govuk-!-margin-bottom-6') }}
     </div>
     <div class="govuk-grid-column-one-half">
       <!-- dog -->

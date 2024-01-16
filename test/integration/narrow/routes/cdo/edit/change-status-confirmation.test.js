@@ -1,7 +1,6 @@
 const { admin } = require('../../../../../../app/auth/permissions')
-const { JSDOM } = require('jsdom')
 
-describe('View dog details', () => {
+describe('Change status confirmation', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -25,52 +24,31 @@ describe('View dog details', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/view/dog-details route returns 200', async () => {
+  test('GET /cdo/edit/change-status-confirmation route returns 200', async () => {
     getCdo.mockResolvedValue({
       dog: {
-        id: 1,
-        name: 'Bruno',
-        status: { status: 'TEST' },
-        dog_breed: { breed: 'breed1' }
-      },
-      person: {
-        firstName: 'John Smith',
-        addresses: [{
-          address: {
-          }
-        }],
-        person_contacts: []
-      },
-      exemption: {
-        exemptionOrder: 2015,
-        insurance: [{
-          company: 'Dogs Trust'
-        }]
+        status: 'Exempt',
+        indexNumber: 'ED12345'
       }
     })
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/edit/change-status-confirmation/ED12345',
       auth
     }
 
     const response = await server.inject(options)
 
-    const { document } = new JSDOM(response.payload).window
-
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[4].textContent.trim()).toBe('Dogs Trust')
   })
 
-  test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {
-    getCdo.mockResolvedValue(undefined)
+  test('GET /cdo/edit/change-status-confirmation route returns 404 when dog not found', async () => {
+    getCdo.mockResolvedValue(null)
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/edit/change-status-confirmation/ED12345',
       auth
     }
 
