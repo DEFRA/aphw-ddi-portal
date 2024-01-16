@@ -1,4 +1,4 @@
-const { routes } = require("../../../constants/cdo/dog")
+const { routes } = require('../../../constants/cdo/dog')
 
 function ViewModel (indexNumber, backNav) {
   this.model = {
