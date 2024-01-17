@@ -1,5 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions.js')
+const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/change-status')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { updateStatus } = require('../../../api/ddi-index-api/dog')
@@ -57,7 +58,7 @@ module.exports = [
       handler: async (request, h) => {
         const payload = request.payload
 
-        await updateStatus(payload)
+        await updateStatus(payload, getUser(request))
 
         return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}?src=${payload.srcHashParam}`)
       }

@@ -1,4 +1,5 @@
 const { routes, views, keys } = require('../../../constants/cdo/dog')
+const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/dog-details')
 const { validatePayload } = require('../../../schema/portal/edit/dog-details')
 const { getDogDetails, updateDogDetails } = require('../../../api/ddi-index-api/dog')
@@ -61,7 +62,7 @@ module.exports = [{
     handler: async (request, h) => {
       const dog = request.payload
 
-      await updateDogDetails(dog)
+      await updateDogDetails(dog, getUser(request))
 
       return h.redirect(`${routes.viewDogDetails.get}/${dog.indexNumber}${extractBackNavParam(request)}`)
     }

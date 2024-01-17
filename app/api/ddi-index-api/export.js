@@ -6,8 +6,8 @@ const options = {
   json: true
 }
 
-const exportData = async () => {
-  const payload = await get(exportEndpoint, options)
+const exportData = async (user) => {
+  const payload = await get(exportEndpoint, options, user)
 
   return payload.csv
 }
