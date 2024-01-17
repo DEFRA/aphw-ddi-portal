@@ -23,7 +23,7 @@ const extractSrcParamFromReferer = (request, removPrefix) => {
 const extractBackNavParam = (request, removPrefix) => {
   const origSrc = extractSrcParamFromReferer(request, true)
   const prevUrl = origSrc !== '' ? getFromSession(request, `back-url-${origSrc}`) : getFromSession(request, 'last-referer')
-  if (prevUrl && prevUrl.indexOf('?src=')) {
+  if (prevUrl && prevUrl.indexOf('?src=') > -1) {
     return removPrefix ? prevUrl.substring(prevUrl.indexOf('?src=') + 5) : prevUrl.substring(prevUrl.indexOf('?src='))
   }
   return ''
