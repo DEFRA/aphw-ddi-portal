@@ -14,4 +14,10 @@ data:
   OS_PLACES_API_BASE_URL: {{ quote .Values.container.osPlacesBaseUrl }}
   POLICE_API_BASE_URL: {{ quote .Values.container.policeApiBaseUrl }}
   AZURE_STORAGE_USE_CONNECTION_STRING: {{ quote .Values.container.azureStorageUseConnectionString }}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  {{- if and (.Values.environmentCode) (not .Values.pr) }}
+  EVENT_TOPIC_ADDRESS: {{ .Values.container.eventsTopicAddress }}-{{ .Values.environmentCode }}
+  {{ else }}
+  EVENT_TOPIC_ADDRESS: {{ quote .Values.container.eventsTopicAddress }}
+  {{- end }}
 {{- end -}}
