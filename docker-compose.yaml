@@ -25,6 +25,7 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-test}
       MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-test}
       REGISTER_IMPORT_REQUEST_QUEUE: ${REGISTER_IMPORT_REQUEST_QUEUE:-aphw-ddi-register-import-request}${MESSAGE_QUEUE_SUFFIX}
+      EVENT_TOPIC_ADDRESS: ${EVENT_TOPIC_ADDRESS:-aphw-ddi-events}${MESSAGE_QUEUE_SUFFIX}
 
   aphw-ddi-portal-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0
