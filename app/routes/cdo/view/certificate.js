@@ -4,8 +4,8 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/certificate')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
-const { generateCertificate } = require('../../../api/ddi-index-api/certificate')
 const { downloadCertificate } = require('../../../storage/repos/certificate')
+const { sendMessage } = require('../../../messaging/outbound/certificate-request')
 
 module.exports = [
   {
@@ -40,11 +40,25 @@ module.exports = [
       },
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const { certificateId } = await generateCertificate(request.payload.indexNumber)
+        const cdo = await getCdo(request.payload.indexNumber)
 
-        const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
+        if (cdo === undefined) {
+          return h.response().code(404).takeover()
+        }
 
-        return h.response(cert).type('application/pdf')
+        const certificateId = await sendMessage(cdo)
+
+        try {
+          const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
+
+          return h.response(cert).type('application/pdf')
+        } catch (err) {
+          if (err.type === 'CertificateNotFound') {
+            return h.response().code(404).takeover()
+          }
+
+          throw err
+        }
       }
     }
   }

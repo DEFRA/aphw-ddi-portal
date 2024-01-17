@@ -1,14 +1,13 @@
 const { admin } = require('../../../../../../app/auth/permissions')
 
-describe('View dog details', () => {
+describe('View certificate', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
-  jest.mock('../../../../../../app/api/ddi-index-api/certificate')
-  const { generateCertificate } = require('../../../../../../app/api/ddi-index-api/certificate')
+  jest.mock('../../../../../../app/messaging/outbound/certificate-request')
 
   jest.mock('../../../../../../app/storage/repos/certificate')
   const { downloadCertificate } = require('../../../../../../app/storage/repos/certificate')
@@ -59,7 +58,7 @@ describe('View dog details', () => {
   })
 
   test('POST /cdo/view/certificate route returns 200', async () => {
-    generateCertificate.mockResolvedValue({ certificateId: '123' })
+    getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
     downloadCertificate.mockResolvedValue('certificate')
 
     const options = {
@@ -75,6 +74,24 @@ describe('View dog details', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.headers['content-type']).toBe('application/pdf')
+  })
+
+  test('POST /cdo/view/certificate route returns 404 when certificate not found', async () => {
+    getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
+    downloadCertificate.mockRejectedValue({ type: 'CertificateNotFound' })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/view/certificate',
+      auth,
+      payload: {
+        indexNumber: 'ED123'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
   })
 
   afterEach(async () => {

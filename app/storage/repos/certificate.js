@@ -7,10 +7,25 @@ const downloadCertificate = async (indexNumber, certificateId) => {
   const containerClient = blobServiceClient.getContainerClient(blobConfig.certificateContainer)
   const blobClient = containerClient.getBlobClient(filename)
 
-  const exists = await blobClient.exists()
+  let exists
+  let attempts = 0
+
+  do {
+    exists = await blobClient.exists()
+
+    if (!exists) {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+
+    attempts++
+  } while (!exists && attempts < 20)
 
   if (!exists) {
-    throw new Error(`Certificate '${filename}' does not exist`)
+    const error = new Error(`Certificate '${filename}' does not exist`)
+
+    error.type = 'CertificateNotFound'
+
+    throw error
   }
 
   return blobClient.downloadToBuffer()

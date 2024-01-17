@@ -1,7 +1,7 @@
 jest.mock('ffc-messaging')
 const { MessageSender } = require('ffc-messaging')
 
-const { sendMessage } = require('../../../app/messaging/outbound')
+const { sendMessage } = require('../../../app/messaging/outbound/register-import')
 
 describe('register import message sender', () => {
   test('should send message', async () => {
