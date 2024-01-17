@@ -34,6 +34,9 @@ container:
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: dummy
+  messageQueueHost: host
+  messageQueuePassword: password
+  messageQueueUser: user
   certificateRequestQueue: aphw-ddi-certificate-request
 
 livenessProbe:
