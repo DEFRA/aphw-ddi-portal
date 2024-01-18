@@ -1,4 +1,5 @@
-const { admin } = require('../../../../../../app/auth/permissions')
+const { auth, user } = require('../../../../../mocks/auth')
+
 const { JSDOM } = require('jsdom')
 
 describe('Update owner details', () => {
@@ -13,13 +14,6 @@ describe('Update owner details', () => {
 
   const createServer = require('../../../../../../app/server')
   let server
-
-  const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
-
-  const user = {
-    userId: '1',
-    username: 'test@example.com'
-  }
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -90,6 +84,9 @@ describe('Update owner details', () => {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: '1980-01-01',
+      'dateOfBirth-day': '01',
+      'dateOfBirth-month': '01',
+      'dateOfBirth-year': '1980',
       personReference: 'P-1234-5678',
       addressLine1: '1 The Street',
       addressLine2: 'The Town',
@@ -97,8 +94,8 @@ describe('Update owner details', () => {
       postcode: 'AB12 3CD',
       country: 'England',
       email: 'test@example.com',
-      primaryTelephone: '01234 567890',
-      secondaryTelephone: '01234 567890'
+      primaryTelephone: '01235678901',
+      secondaryTelephone: '01235678902'
     }
 
     const options = {
