@@ -14,31 +14,31 @@ describe('Base API', () => {
 
   test('get should call GET', async () => {
     await get('endpoint1')
-    expect(wreck.get).toHaveBeenCalledWith('http://localhost/api/endpoint1', { json: true })
+    expect(wreck.get).toHaveBeenCalledWith('test/endpoint1', { json: true })
   })
 
   test('get should call GET with username in header', async () => {
     await get('endpoint1', user)
-    expect(wreck.get).toHaveBeenCalledWith('http://localhost/api/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com' } })
+    expect(wreck.get).toHaveBeenCalledWith('test/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com' } })
   })
 
   test('post should call POST', async () => {
     await post('endpoint2', { val: 123 })
-    expect(wreck.post).toHaveBeenCalledWith('http://localhost/api/endpoint2', { payload: { val: 123 } })
+    expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 } })
   })
 
   test('post should call POST with username in header', async () => {
     await post('endpoint2', { val: 123 }, user)
-    expect(wreck.post).toHaveBeenCalledWith('http://localhost/api/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
+    expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
   })
 
   test('put should call PUT', async () => {
     await put('endpoint3', { val: 456 })
-    expect(wreck.put).toHaveBeenCalledWith('http://localhost/api/endpoint3', { payload: { val: 456 } })
+    expect(wreck.put).toHaveBeenCalledWith('test/endpoint3', { payload: { val: 456 } })
   })
 
   test('put should call PUT with username in header', async () => {
     await put('endpoint3', { val: 456 }, user)
-    expect(wreck.put).toHaveBeenCalledWith('http://localhost/api/endpoint3', { payload: { val: 456 }, headers: { 'ddi-username': 'test@example.com' } })
+    expect(wreck.put).toHaveBeenCalledWith('test/endpoint3', { payload: { val: 456 }, headers: { 'ddi-username': 'test@example.com' } })
   })
 })
