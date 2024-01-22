@@ -434,6 +434,37 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
             attributes: { maxlength: '4' }
           }
         ]
+      },
+      removedFromCdoProcess: {
+        type: 'date',
+        id: 'removedFromCdoProcess',
+        namePrefix: 'removedFromCdoProcess',
+        fieldset: {
+          legend: {
+            text: 'Removed from CDO process',
+            classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+          }
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['removedFromCdoProcess-day'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2 govuk-!-font-size-16',
+            value: exemption['removedFromCdoProcess-month'],
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4 govuk-!-font-size-16',
+            value: exemption['removedFromCdoProcess-year'],
+            attributes: { maxlength: '4' }
+          }
+        ]
       }
     },
     errors: []

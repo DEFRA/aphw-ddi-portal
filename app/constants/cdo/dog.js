@@ -56,7 +56,8 @@ const constants = {
     dateOfBirth: 'dateOfBirth',
     dateOfDeath: 'dateOfDeath',
     dateExported: 'dateExported',
-    dateStolen: 'dateStolen'
+    dateStolen: 'dateStolen',
+    dateUntraceable: 'dateUntraceable'
   }
 }
 

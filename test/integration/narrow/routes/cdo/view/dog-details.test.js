@@ -1,4 +1,4 @@
-const { admin } = require('../../../../../../app/auth/permissions')
+const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('View dog details', () => {
@@ -10,13 +10,6 @@ describe('View dog details', () => {
 
   const createServer = require('../../../../../../app/server')
   let server
-
-  const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
-
-  const user = {
-    userId: '1',
-    username: 'test@example.com'
-  }
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -62,7 +55,7 @@ describe('View dog details', () => {
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
     expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[4].textContent.trim()).toBe('Dogs Trust')
+    expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {

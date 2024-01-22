@@ -11,12 +11,12 @@ const getDogDetails = async (indexNumber) => {
   return payload.dog
 }
 
-const updateDogDetails = async (dog) => {
+const updateDogDetails = async (dog, username) => {
   dog.dogId = dog.id
-  return await put(dogEndpoint, dog)
+  return await put(dogEndpoint, dog, username)
 }
 
-const updateStatus = async (payload) => {
+const updateStatus = async (payload, user) => {
   if (!payload?.indexNumber || !payload?.newStatus) {
     throw new Error('Invalid payload')
   }
@@ -25,7 +25,7 @@ const updateStatus = async (payload) => {
   dog.dogId = dog.id
   dog.status = payload.newStatus
 
-  return await put(dogEndpoint, dog)
+  return await put(dogEndpoint, dog, user)
 }
 
 module.exports = {

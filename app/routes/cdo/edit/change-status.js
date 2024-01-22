@@ -1,5 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions.js')
+const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/change-status')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { updateStatus } = require('../../../api/ddi-index-api/dog')
@@ -20,6 +21,7 @@ module.exports = [
         }
 
         const backNav = addBackNavigation(request)
+        backNav.srcHashParam = extractSrcParamFromUrl(request?.headers?.referer, true)
 
         return h.view(views.changeStatus, new ViewModel(cdo.dog, backNav))
       }
@@ -56,11 +58,9 @@ module.exports = [
       handler: async (request, h) => {
         const payload = request.payload
 
-        await updateStatus(payload)
+        await updateStatus(payload, getUser(request))
 
-        const backUrl = payload.backUrl
-
-        return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}${extractSrcParamFromUrl(backUrl)}`)
+        return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}?src=${payload.srcHashParam}`)
       }
     }
   }

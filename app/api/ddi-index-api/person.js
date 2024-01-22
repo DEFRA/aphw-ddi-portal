@@ -36,8 +36,8 @@ const getPersonByReference = async (reference) => {
   return res
 }
 
-const updatePerson = async (data) => {
-  const res = await put(`${personEndpoint}`, data)
+const updatePerson = async (data, user) => {
+  const res = await put(`${personEndpoint}`, data, user)
 
   return res
 }
