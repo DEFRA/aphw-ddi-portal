@@ -138,6 +138,13 @@
               <dd class="govuk-summary-list__value">{{ model.exemption.withdrawn }}</dd>
             </div>
             {% endif %}
+
+            {% if model.exemption.removedFromCdoProcess %}
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+              <dt class="govuk-summary-list__key">Removed from CDO process</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.removedFromCdoProcess }}</dd>
+            </div>
+            {% endif %}
           </dl>
         </div>
       </div>

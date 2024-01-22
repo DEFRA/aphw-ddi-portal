@@ -25,7 +25,8 @@ function ViewModel (cdo, backNav) {
       microchipNumber: cdo.dog.microchipNumber,
       microchipNumber2: cdo.dog.microchipNumber2,
       dateExported: formatToGds(cdo.dog.dateExported),
-      dateStolen: formatToGds(cdo.dog.dateStolen)
+      dateStolen: formatToGds(cdo.dog.dateStolen),
+      dateUntraceable: formatToGds(cdo.dog.dateUntraceable)
     },
     person: {
       id: person.id,
@@ -62,7 +63,8 @@ function ViewModel (cdo, backNav) {
       neuteringDeadline: formatToGds(cdo.exemption.neuteringDeadline),
       typedByDlo: formatToGds(cdo.exemption.typedByDlo),
       withdrawn: formatToGds(cdo.exemption.withdrawn),
-      microchipVerification: formatToGds(cdo.exemption.microchipVerification)
+      microchipVerification: formatToGds(cdo.exemption.microchipVerification),
+      removedFromCdoProcess: formatToGds(cdo.exemption.removedFromCdoProcess)
     }
   }
 }

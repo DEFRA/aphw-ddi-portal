@@ -122,6 +122,11 @@ const dogDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
+  }).custom(validateDate).optional(),
+  dateUntraceable: Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
   }).custom(validateDate).optional()
 }).required()
 
@@ -130,6 +135,7 @@ const validatePayload = (payload) => {
   payload.dateOfDeath = getDateComponents(payload, 'dateOfDeath')
   payload.dateExported = getDateComponents(payload, 'dateExported')
   payload.dateStolen = getDateComponents(payload, 'dateStolen')
+  payload.dateUntraceable = getDateComponents(payload, 'dateUntraceable')
 
   const schema = Joi.object({
     'dateOfBirth-year': Joi.number().allow(null).allow(''),
@@ -144,6 +150,9 @@ const validatePayload = (payload) => {
     'dateStolen-year': Joi.number().allow(null).allow(''),
     'dateStolen-month': Joi.number().allow(null).allow(''),
     'dateStolen-day': Joi.number().allow(null).allow(''),
+    'dateUntraceable-year': Joi.number().allow(null).allow(''),
+    'dateUntraceable-month': Joi.number().allow(null).allow(''),
+    'dateUntraceable-day': Joi.number().allow(null).allow(''),
     origMicrochipNumber: Joi.string().allow(null).allow(''),
     origMicrochipNumber2: Joi.string().allow(null).allow('')
   }).concat(dogDetailsSchema)
