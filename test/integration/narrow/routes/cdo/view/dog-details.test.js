@@ -55,7 +55,7 @@ describe('View dog details', () => {
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
     expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[4].textContent.trim()).toBe('Dogs Trust')
+    expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {

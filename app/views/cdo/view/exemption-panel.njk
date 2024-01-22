@@ -43,10 +43,12 @@
             </div>
             {% endif %}
 
+            {% if model.exemption.exemptionOrder != '2015' %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Order</dt>
               <dd class="govuk-summary-list__value">{{ model.exemption.exemptionOrder }}</dd>
             </div>
+            {% endif %}
 
             {% if model.exemption.microchipDeadline %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -127,7 +129,7 @@
 
             {% if model.exemption.typedByDlo %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-              <dt class="govuk-summary-list__key">Typed by DLO</dt>
+              <dt class="govuk-summary-list__key">Examined by dog legislation officer</dt>
               <dd class="govuk-summary-list__value">{{ model.exemption.typedByDlo }}</dd>
             </div>
             {% endif %}
