@@ -34,9 +34,7 @@ container:
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: dummy
-  messageQueueHost: host
-  messageQueuePassword: password
-  messageQueueUser: user
+  messageQueueHost: namespace.servicebus.windows.net
   certificateRequestQueue: aphw-ddi-certificate-request
 
 livenessProbe:
