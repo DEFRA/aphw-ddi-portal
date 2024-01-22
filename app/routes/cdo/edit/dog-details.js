@@ -34,6 +34,9 @@ module.exports = [{
       if (dog[keys.dateStolen]) {
         addDateComponents(dog, keys.dateStolen)
       }
+      if (dog[keys.dateUntraceable]) {
+        addDateComponents(dog, keys.dateUntraceable)
+      }
 
       const backNav = addBackNavigation(request)
 

@@ -80,6 +80,8 @@
 
       {{ govukDateInput(model.exemption.joinedExemptionScheme) }}
 
+      {{ govukDateInput(model.exemption.removedFromCdoProcess) }}
+
       {% if model.exemption.exemptionOrder.value == 2023 %}
       <h2 class="govuk-heading-m">Dangerous dogs exemption 2023 order</h2>
       <p class="govuk-hint">The information in this section is specific to dogs registered under the 2023 order.</p>
