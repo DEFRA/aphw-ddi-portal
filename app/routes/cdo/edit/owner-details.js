@@ -1,5 +1,6 @@
 const { routes, views } = require('../../../constants/owner')
 const { admin } = require('../../../auth/permissions.js')
+const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/owner-details')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { getCountries } = require('../../../api/ddi-index-api')
@@ -54,7 +55,7 @@ module.exports = [
 
         const payload = buildPersonUpdatePayload(person)
 
-        await updatePerson(payload)
+        await updatePerson(payload, getUser(request))
 
         return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
       }

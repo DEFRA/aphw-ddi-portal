@@ -1,4 +1,4 @@
-const { admin } = require('../../../../../app/auth/permissions')
+const { auth, user } = require('../../../../mocks/auth')
 const FormData = require('form-data')
 const { setInSession } = require('../../../../../app/session/session-wrapper')
 jest.mock('../../../../../app/session/session-wrapper')
@@ -11,13 +11,6 @@ describe('SearchBasic test', () => {
 
   const createServer = require('../../../../../app/server')
   let server
-
-  const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
-
-  const user = {
-    userId: '1',
-    username: 'test@example.com'
-  }
 
   setInSession.mockReturnValue()
 

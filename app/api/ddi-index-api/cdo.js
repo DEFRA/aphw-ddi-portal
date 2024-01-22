@@ -12,14 +12,14 @@ const getCdo = async (indexNumber) => {
   return payload.cdo
 }
 
-const createCdo = async (cdo) => {
+const createCdo = async (cdo, user) => {
   const { value, error } = createCdoSchema.validate(cdo)
 
   if (error) {
     throw error
   }
 
-  const res = await post(cdoEndpoint, value)
+  const res = await post(cdoEndpoint, value, user)
 
   return res
 }

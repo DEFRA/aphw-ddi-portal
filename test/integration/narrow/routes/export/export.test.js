@@ -1,4 +1,4 @@
-const { admin } = require('../../../../../app/auth/permissions')
+const { auth, user } = require('../../../../mocks/auth')
 
 describe('Export test', () => {
   const createServer = require('../../../../../app/server')
@@ -9,13 +9,6 @@ describe('Export test', () => {
 
   jest.mock('../../../../../app/auth')
   const mockAuth = require('../../../../../app/auth')
-
-  const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
-
-  const user = {
-    userId: '1',
-    username: 'test@example.com'
-  }
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)

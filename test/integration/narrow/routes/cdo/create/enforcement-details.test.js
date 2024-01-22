@@ -1,4 +1,4 @@
-const { admin } = require('../../../../../../app/auth/permissions')
+const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { routes } = require('../../../../../../app/constants/owner')
 
@@ -12,13 +12,6 @@ describe('EnforcementDetails test', () => {
 
   const createServer = require('../../../../../../app/server')
   let server
-
-  const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
-
-  const user = {
-    userId: '1',
-    username: 'test@example.com'
-  }
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)

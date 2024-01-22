@@ -60,7 +60,8 @@ const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
     exemptionOrder: exemptionDetails.exemptionOrder ?? undefined,
     microchipDeadline: exemptionDetails.microchipDeadline ?? undefined,
     typedByDlo: exemptionDetails.typedByDlo ?? undefined,
-    withdrawn: exemptionDetails.withdrawn ?? undefined
+    withdrawn: exemptionDetails.withdrawn ?? undefined,
+    removedFromCdoProcess: exemptionDetails.removedFromCdoProcess ?? undefined
   }
 
   if (!payload.insurance.company && !payload.insurance.renewalDate) {

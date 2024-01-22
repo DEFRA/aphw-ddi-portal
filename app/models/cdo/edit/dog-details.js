@@ -219,6 +219,37 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
         }
       ]
     },
+    dateUntraceable: {
+      type: 'date',
+      id: 'dateUntraceable',
+      namePrefix: 'dateUntraceable',
+      fieldset: {
+        legend: {
+          text: 'Date untraceable',
+          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        }
+      },
+      items: [
+        {
+          name: 'day',
+          classes: 'govuk-input--width-2 govuk-!-font-size-16',
+          value: dogDetails[`${keys.dateUntraceable}-day`],
+          attributes: { maxlength: '2' }
+        },
+        {
+          name: 'month',
+          classes: 'govuk-input--width-2 govuk-!-font-size-16',
+          value: dogDetails[`${keys.dateUntraceable}-month`],
+          attributes: { maxlength: '2' }
+        },
+        {
+          name: 'year',
+          classes: 'govuk-input--width-4 govuk-!-font-size-16',
+          value: dogDetails[`${keys.dateUntraceable}-year`],
+          attributes: { maxlength: '4' }
+        }
+      ]
+    },
     errors: []
   }
 
