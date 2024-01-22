@@ -1,5 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions.js')
+const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/exemption-details')
 const { getCourts, getPoliceForces, getCompanies } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
@@ -77,7 +78,7 @@ module.exports = [
       handler: async (request, h) => {
         const payload = buildExemptionDetailsUpdatePayload(request.payload)
 
-        await updateExemption(payload)
+        await updateExemption(payload, getUser(request))
 
         return h.redirect(`${routes.viewDogDetails.get}/${payload.indexNumber}${extractBackNavParam(request)}`)
       }

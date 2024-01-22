@@ -1,3 +1,4 @@
+const { user } = require('../../../mocks/auth')
 const { updateStatus, getDogDetails, updateDogDetails } = require('../../../../app/api/ddi-index-api/dog')
 const { get, post, put } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
@@ -22,10 +23,10 @@ describe('Dog test', () => {
   test('updateStatus calls post with valid payload', async () => {
     put.mockResolvedValue(123)
     get.mockResolvedValue(validDog)
-    const res = await updateStatus(validUpdateStatusPayload)
+    const res = await updateStatus(validUpdateStatusPayload, user)
     expect(res).not.toBe(null)
     expect(res).toBe(123)
-    expect(put).toHaveBeenCalledWith('dog', { name: 'Bruno', id: 123, dogId: 123, status: 'Exempt' })
+    expect(put).toHaveBeenCalledWith('dog', { name: 'Bruno', id: 123, dogId: 123, status: 'Exempt' }, user)
   })
 
   test('updateStatus doesnt call put with invalid payload', async () => {
@@ -42,7 +43,7 @@ describe('Dog test', () => {
 
   test('updateDogDetails calls endpoint', async () => {
     put.mockResolvedValue(123)
-    await updateDogDetails({ id: 123 })
-    expect(put).toHaveBeenCalledWith('dog', { id: 123, dogId: 123 })
+    await updateDogDetails({ id: 123 }, user)
+    expect(put).toHaveBeenCalledWith('dog', { id: 123, dogId: 123 }, user)
   })
 })

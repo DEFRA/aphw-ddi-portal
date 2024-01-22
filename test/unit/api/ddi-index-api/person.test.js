@@ -1,5 +1,6 @@
-const { addPerson, getPersonAndDogs } = require('../../../../app/api/ddi-index-api/person')
-const { get, post } = require('../../../../app/api/ddi-index-api/base')
+const { user } = require('../../../mocks/auth')
+const { addPerson, getPersonAndDogs, getPersonByReference, updatePerson } = require('../../../../app/api/ddi-index-api/person')
+const { get, post, put } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
 const validPerson = {
@@ -34,5 +35,17 @@ describe('Person test', () => {
     get.mockResolvedValue({ payload: {} })
     await getPersonAndDogs('P-123')
     expect(get).toHaveBeenCalledWith('person/P-123?includeDogs=true', expect.anything())
+  })
+
+  test('getPersonByReference calls endpoint', async () => {
+    get.mockResolvedValue({ payload: {} })
+    await getPersonByReference('P-123')
+    expect(get).toHaveBeenCalledWith('person/P-123')
+  })
+
+  test('updatePerson calls endpoint', async () => {
+    put.mockResolvedValue({ payload: {} })
+    await updatePerson({ personReference: 'P-123' }, user)
+    expect(put).toHaveBeenCalledWith('person', { personReference: 'P-123' }, expect.anything())
   })
 })
