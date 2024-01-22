@@ -1,5 +1,5 @@
-const { blobServiceClient } = require('./get-blob-client')
-const { blobConfig } = require('../config')
+const { blobServiceClient } = require('../get-blob-client')
+const { blobConfig } = require('../../config')
 
 const uploadRegisterFile = async (filename, stream) => {
   const container = blobServiceClient.getContainerClient(blobConfig.registerContainer)

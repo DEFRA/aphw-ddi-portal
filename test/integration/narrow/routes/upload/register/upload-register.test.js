@@ -6,13 +6,13 @@ describe('Upload register', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../../app/storage/register-blob-repository')
-  const { uploadRegisterFile } = require('../../../../../../app/storage/register-blob-repository')
+  jest.mock('../../../../../../app/storage/repos/register-blob')
+  const { uploadRegisterFile } = require('../../../../../../app/storage/repos/register-blob')
 
-  jest.mock('../../../../../../app/storage/register-status-repository')
+  jest.mock('../../../../../../app/storage/repos/register-status')
 
-  jest.mock('../../../../../../app/messaging/outbound')
-  const { sendMessage } = require('../../../../../../app/messaging/outbound')
+  jest.mock('../../../../../../app/messaging/outbound/register-import')
+  const { sendMessage } = require('../../../../../../app/messaging/outbound/register-import')
 
   const createServer = require('../../../../../../app/server')
   let server

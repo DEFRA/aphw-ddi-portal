@@ -1,6 +1,6 @@
 const { Readable } = require('stream')
-const { blobServiceClient } = require('../../../../app/storage/get-blob-client')
-const { uploadRegisterFile } = require('../../../../app/storage/register-blob-repository')
+const { blobServiceClient } = require('../../../../../app/storage/get-blob-client')
+const { uploadRegisterFile } = require('../../../../../app/storage/repos/register-blob')
 
 describe('register blob functions', () => {
   beforeAll(async () => {

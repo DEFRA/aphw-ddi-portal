@@ -1,10 +1,10 @@
 const { Readable } = require('stream')
 const uploadConstants = require('../../../constants/upload')
-const { uploadRegisterFile } = require('../../../storage/register-blob-repository')
-const { setUploaded } = require('../../../storage/register-status-repository')
+const { uploadRegisterFile } = require('../../../storage/repos/register-blob')
+const { setUploaded } = require('../../../storage/repos/register-status')
 const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
-const { sendMessage } = require('../../../messaging/outbound')
+const { sendMessage } = require('../../../messaging/outbound/register-import')
 const { admin } = require('../../../auth/permissions')
 const { getUser } = require('../../../auth')
 

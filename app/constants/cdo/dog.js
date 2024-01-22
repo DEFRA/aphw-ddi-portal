@@ -30,6 +30,10 @@ const constants = {
     delete: {
       get: '/cdo/create/confirm-dog-delete',
       post: '/cdo/create/confirm-dog-delete'
+    },
+    certificate: {
+      get: '/cdo/view/certificate',
+      post: '/cdo/view/certificate'
     }
   },
   views: {
@@ -40,7 +44,8 @@ const constants = {
     changeStatusConfirmation: 'cdo/edit/change-status-confirmation',
     details: 'cdo/create/dog-details',
     confirm: 'cdo/create/confirm-dog-details',
-    delete: 'cdo/create/confirm-dog-delete'
+    delete: 'cdo/create/confirm-dog-delete',
+    certificate: 'cdo/view/certificate'
   },
   keys: {
     entry: 'dogs',

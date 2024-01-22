@@ -1,6 +1,6 @@
 const { odata } = require('@azure/data-tables')
-const { tableClient } = require('./get-table-client')
-const { UPLOADED } = require('../constants/import-status')
+const { tableClient } = require('../get-table-client')
+const { UPLOADED } = require('../../constants/import-status')
 
 const maxDate = new Date(8640000000000000)
 

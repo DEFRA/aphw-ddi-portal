@@ -1,5 +1,5 @@
-const { tableClient } = require('../../../../app/storage/get-table-client')
-const { getLatestUpdate, getAllUpdates, setUploaded } = require('../../../../app/storage/register-status-repository')
+const { tableClient } = require('../../../../../app/storage/get-table-client')
+const { getLatestUpdate, getAllUpdates, setUploaded } = require('../../../../../app/storage/repos/register-status')
 
 describe('register status table repository', () => {
   beforeAll(async () => {

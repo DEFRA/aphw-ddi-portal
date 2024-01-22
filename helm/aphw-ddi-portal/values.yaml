@@ -34,6 +34,8 @@ container:
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: dummy
+  messageQueueHost: namespace.servicebus.windows.net
+  certificateRequestQueue: aphw-ddi-certificate-request
 
 livenessProbe:
   path: /healthz
