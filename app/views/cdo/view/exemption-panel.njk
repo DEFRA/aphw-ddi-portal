@@ -27,7 +27,7 @@
               <dt class="govuk-summary-list__key">Certificate issued</dt>
               <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
               <dd class="govuk-summary-list__actions defra-text-align-left">
-                <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}">Generate certificate</a>
+                <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
               </dd>
             </div>
             {% endif %}
