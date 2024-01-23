@@ -11,7 +11,7 @@ data:
   REDIRECT_URL: https://{{ .Values.ingress.endpoint }}.{{ .Values.ingress.server }}/{{ .Values.azureAppRegistration.redirectUrl }}
   {{- end }}
   {{- if and (.Values.environmentCode) (not .Values.pr) }}
-  CERTIFICATE_REQUEST_QUEUE: {{ quote .Values.container.certificateRequestQueue }}-{{ .Values.environmentCode }}
+  CERTIFICATE_REQUEST_QUEUE: {{ .Values.container.certificateRequestQueue }}-{{ .Values.environmentCode }}
   {{ else }}
   CERTIFICATE_REQUEST_QUEUE: {{ quote .Values.container.certificateRequestQueue }}
   {{- end }}
