@@ -3,6 +3,7 @@
 data:
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
   APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
   {{- if .Values.pr }}
   REDIRECT_URL: https://{{ .Values.ingress.endpoint }}-{{ .Values.pr }}.{{ .Values.ingress.server }}/{{ .Values.azureAppRegistration.redirectUrl }}
