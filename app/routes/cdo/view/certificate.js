@@ -40,19 +40,26 @@ module.exports = [
       },
       auth: { scope: [admin] },
       handler: async (request, h) => {
+        console.log('Gen cert for index number', request.payload?.indexNumber)
+
         const cdo = await getCdo(request.payload.indexNumber)
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()
         }
 
+        console.log('Gen cert send message')
+
         const certificateId = await sendMessage(cdo)
+
+        console.log('Gen cert certId from message', certificateId)
 
         try {
           const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
 
           return h.response(cert).type('application/pdf')
         } catch (err) {
+          console.log(`Error generating certificate: ${err} ${err.stack}`)
           if (err.type === 'CertificateNotFound') {
             return h.response().code(404).takeover()
           }
