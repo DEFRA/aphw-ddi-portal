@@ -51,7 +51,7 @@ const validateDate = (value, helpers) => {
       return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
-    if ((elementPath === 'dateOfDeath' || elementPath === 'dateOfBirth') && isFuture(date)) {
+    if ((elementPath === 'dateOfDeath' || elementPath === 'dateOfBirth' || elementPath === 'dateStolen') && isFuture(date)) {
       return helpers.message('Enter a date that is in the past', { path: [elementPath, ['day', 'month', 'year']] })
     }
 

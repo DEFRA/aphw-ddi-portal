@@ -31,16 +31,17 @@
  
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
                   {{ result.dogName }}
               </td>
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
                 <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
                       {{ result.firstName }} {{ result.lastName }}
                 </a>
               </td>
-              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">
-                      {{ result.microchipNumber }}
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
+                      {{ result.microchipNumber }}<br/>
+                      {{ result.microchipNumber2 }}
               </td>
             </tr>
           </tbody>
