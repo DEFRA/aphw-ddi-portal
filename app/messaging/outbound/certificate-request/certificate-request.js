@@ -10,7 +10,7 @@ const createMessage = (data) => ({
       address: {
         line1: data.person.addresses[0].address.address_line_1,
         line2: data.person.addresses[0].address.address_line_2,
-        line3: data.person.addresses[0].address.address_line_3,
+        line3: data.person.addresses[0].address.town,
         postcode: data.person.addresses[0].address.postcode
       }
     },
