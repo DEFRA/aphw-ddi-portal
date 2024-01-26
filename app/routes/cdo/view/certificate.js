@@ -51,7 +51,7 @@ module.exports = [
         try {
           const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
 
-          const downloadFilename = cdo.exemption.exemptionOrder === '2023'
+          const downloadFilename = cdo.exemption?.exemptionOrder === '2023'
             ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
 
