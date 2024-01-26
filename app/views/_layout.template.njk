@@ -1,7 +1,5 @@
 {% extends "govuk/template.njk" %}
 
-{% from "govuk/components/phase-banner/macro.njk"  import govukPhaseBanner %}
-
 {% block head %}
   <!--[if !IE 8]><!-->
   <% htmlWebpackPlugin.files.css.forEach(file => { %>
@@ -56,14 +54,8 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ govukPhaseBanner({
-    tag: {
-      text: "BETA"
-    },
-    html: 'This is a new service – <a class="govuk-link" href="#">give feedback</a> to help us to improve it.'
-  }) }}
   {% if auth.isAuthenticated %}
-    <a href="/logout" class="govuk-body govuk-link">Sign out</a>    
+    <a href="/logout" class="govuk-body govuk-link defra-align-right-simple">Sign out</a>    
   {% endif %}
 {% endblock %}
 
@@ -71,19 +63,6 @@
   {{ govukFooter({
       meta: {
         items: [
-          {
-            href: "#",
-            text: "Policies"
-          },{
-            href: "/cookies",
-            text: "Cookies"
-          },{
-            href: "#",
-            text: "Contact us"
-          },{
-            href: "#",
-            text: "Accessibility statement"
-          }
         ]
       }
     })

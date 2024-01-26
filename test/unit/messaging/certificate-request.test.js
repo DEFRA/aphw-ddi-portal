@@ -22,7 +22,7 @@ describe('certificate request message sender', () => {
             address: {
               address_line_1: '12 Test Street',
               address_line_2: '',
-              address_line_3: 'Test City',
+              town: 'Test City',
               postcode: 'TST 1AA'
             }
           }

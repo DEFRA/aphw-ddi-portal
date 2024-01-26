@@ -57,7 +57,11 @@ module.exports = [
         try {
           const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
 
-          return h.response(cert).type('application/pdf')
+          const downloadFilename = cdo.exemption?.exemptionOrder === '2023'
+            ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
+            : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
+
+          return h.response(cert).type('application/pdf').header('Content-Disposition', `attachment; filename="${downloadFilename}"`)
         } catch (err) {
           console.log(`Error generating certificate: ${err} ${err.stack}`)
           if (err.type === 'CertificateNotFound') {
