@@ -61,7 +61,7 @@ module.exports = [
             ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
 
-          return h.response(cert).type('application/pdf').header('Content-Disposition', `attachment; filename="${downloadFilename}"`)
+          return h.response(cert).type('application/pdf').header('Content-Disposition', `filename="${downloadFilename}"`)
         } catch (err) {
           console.log(`Error generating certificate: ${err} ${err.stack}`)
           if (err.type === 'CertificateNotFound') {
