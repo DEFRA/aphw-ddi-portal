@@ -55,7 +55,9 @@
 
 {% block beforeContent %}
   {% if auth.isAuthenticated %}
-    <a href="/logout" class="govuk-body govuk-link defra-align-right-simple">Sign out</a>    
+    <a href="/logout" class="govuk-body govuk-link defra-align-right-simple">Sign out</a> 
+    <br/>
+    <p>{{ auth.credentials }}</p>   
   {% endif %}
 {% endblock %}
 
