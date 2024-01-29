@@ -35,7 +35,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         namePrefix: 'certificateIssued',
         fieldset: {
           legend: {
-            text: 'Certificate issued',
+            text: 'First certificate issued',
             classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
           }
         },

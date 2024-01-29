@@ -23,8 +23,8 @@ deployment: {}
 container:
   requestMemory: 100Mi
   requestCpu: 100m
-  limitMemory: 100Mi
-  limitCpu: 100m
+  limitMemory: 500Mi
+  limitCpu: 200m
   port: 3000
   cookiePassword: who-likes-cookies-i-like-cookies-everybody-likes-cookies
   ddiApiBaseUrl: ddi-index-api-base-url
