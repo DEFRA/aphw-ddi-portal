@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/owner')
+const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getOwnerDetails, setEnforcementDetails, getEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
@@ -60,7 +61,7 @@ module.exports = [
           setEnforcementDetails(request, enforcementDetails)
         }
 
-        return h.redirect(routes.enforcementDetails.get)
+        return h.redirect(dogRoutes.details.get)
       }
     }
   }

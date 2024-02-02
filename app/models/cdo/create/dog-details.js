@@ -31,14 +31,25 @@ function ViewModel (dogDetails, breedTypes, errors) {
       value: dogDetails[keys.name],
       attributes: { maxlength: '32' }
     },
+    applicationType: {
+      id: 'applicationType',
+      name: 'applicationType',
+      fieldset: {
+        legend: {
+          text: 'Application type'
+        }
+      },
+      value: dogDetails[keys.applicationType],
+      items: []
+    },
     cdoIssued: {
       type: 'date',
       id: 'cdoIssued',
       namePrefix: 'cdoIssued',
       fieldset: {
         legend: {
-          text: 'CDO Issue Date',
-          classes: 'govuk-!-font-weight-bold'
+          text: 'New CDO Issue Date',
+          classes: 'govuk-fieldset__legend--s'
         }
       },
       items: [
@@ -58,6 +69,37 @@ function ViewModel (dogDetails, breedTypes, errors) {
           name: 'year',
           classes: 'govuk-input--width-4',
           value: dogDetails[`${keys.cdoIssued}-year`],
+          attributes: { maxlength: '4' }
+        }
+      ]
+    },
+    interimExemption: {
+      type: 'date',
+      id: 'interimExemption',
+      namePrefix: 'interimExemption',
+      fieldset: {
+        legend: {
+          text: 'Date joined scheme',
+          classes: 'govuk-fieldset__legend--s'
+        }
+      },
+      items: [
+        {
+          name: 'day',
+          classes: 'govuk-input--width-2',
+          value: dogDetails[`${keys.interimExemption}-day`],
+          attributes: { maxlength: '2' }
+        },
+        {
+          name: 'month',
+          classes: 'govuk-input--width-2',
+          value: dogDetails[`${keys.interimExemption}-month`],
+          attributes: { maxlength: '2' }
+        },
+        {
+          name: 'year',
+          classes: 'govuk-input--width-4',
+          value: dogDetails[`${keys.interimExemption}-year`],
           attributes: { maxlength: '4' }
         }
       ]
