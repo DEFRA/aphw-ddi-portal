@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { UTCDate } = require('@date-fns/utc')
-const { isValid, isFuture, addMonths, parse } = require('date-fns')
+const { isValid, isFuture, addMonths, parse, isWithinInterval, sub } = require('date-fns')
 const { getDateComponents } = require('../../../lib/date-helpers')
 
 const validDateFormats = [
@@ -8,7 +8,7 @@ const validDateFormats = [
   'yyyy-M-d'
 ]
 
-const parseCdoIssueDate = (value) => {
+const parseFormDate = (value) => {
   for (const fmt of validDateFormats) {
     const date = parse(value, fmt, new UTCDate())
 
@@ -23,10 +23,18 @@ const parseCdoIssueDate = (value) => {
 const calculateExpiryDate = (value) => {
   const dateString = `${value.year}-${value.month}-${value.day}`
 
-  return addMonths(parseCdoIssueDate(dateString), 2)
+  if (dateString === '--') {
+    return null
+  }
+
+  return addMonths(parseFormDate(dateString), 2)
 }
 
 const validateIssueDate = (value, helpers) => {
+  if (helpers.state.ancestors[0].applicationType !== 'cdo') {
+    return null
+  }
+
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -43,7 +51,7 @@ const validateIssueDate = (value, helpers) => {
 
   if (invalidComponents.length === 0) {
     const dateString = `${year}-${month}-${day}`
-    const date = parseCdoIssueDate(dateString)
+    const date = parseFormDate(dateString)
 
     if (!date) {
       return helpers.message('Enter a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
@@ -66,6 +74,10 @@ const validateIssueDate = (value, helpers) => {
 }
 
 const validateInterimExemptionDate = (value, helpers) => {
+  if (helpers.state.ancestors[0].applicationType !== 'interim-exemption') {
+    return null
+  }
+
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -76,13 +88,9 @@ const validateInterimExemptionDate = (value, helpers) => {
     }
   }
 
-  if (parseInt(year) < 2020) {
-    return helpers.message('The interimExemption issue year must be 2020 or later', { path: ['interimExemption', ['year']] })
-  }
-
   if (invalidComponents.length === 0) {
     const dateString = `${year}-${month}-${day}`
-    const date = parseCdoIssueDate(dateString)
+    const date = parseFormDate(dateString)
 
     if (!date) {
       return helpers.message('Enter a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
@@ -92,14 +100,19 @@ const validateInterimExemptionDate = (value, helpers) => {
       return helpers.message('Enter a date that is in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
+    const now = new Date()
+    if (!isWithinInterval(date, { start: sub(now, { years: 1 }), end: now })) {
+      return helpers.message('Date joined scheme year must be within the last 12 months', { path: ['interimExemption', ['year']] })
+    }
+
     return date
   }
 
   if (invalidComponents.length === 3) {
-    return helpers.message('Enter a interimExemption issue date', { path: ['interimExemption', ['day', 'month', 'year']] })
+    return helpers.message('Enter a Date joined scheme', { path: ['interimExemption', ['day', 'month', 'year']] })
   }
 
-  const errorMessage = `A interimExemption issue date must include a ${invalidComponents.join(' and ')}`
+  const errorMessage = `Date joined scheme must include a ${invalidComponents.join(' and ')}`
 
   return helpers.message(errorMessage, { path: ['interimExemption', invalidComponents] })
 }
@@ -124,19 +137,23 @@ const dogDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).custom(validateInterimExemptionDate),
-  cdoExpiry: Joi.date().iso().required()
+  cdoExpiry: Joi.date().iso().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {
   payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
   payload.interimExemption = getDateComponents(payload, 'cdoIssued')
   payload.cdoExpiry = calculateExpiryDate(payload.cdoIssued)
+  payload.interimExemption = getDateComponents(payload, 'interimExemption')
 
   const schema = Joi.object({
     'cdoIssued-year': Joi.number().allow(null).allow(''),
     'cdoIssued-month': Joi.number().allow(null).allow(''),
     'cdoIssued-day': Joi.number().allow(null).allow(''),
-    dogId: Joi.number().optional()
+    dogId: Joi.number().optional(),
+    'interimExemption-year': Joi.number().allow(null).allow(''),
+    'interimExemption-month': Joi.number().allow(null).allow(''),
+    'interimExemption-day': Joi.number().allow(null).allow('')
   }).concat(dogDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })

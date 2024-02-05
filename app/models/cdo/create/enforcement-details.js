@@ -1,4 +1,4 @@
-const { routes } = require('../../../constants/owner')
+const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (enforcementDetails, courts, policeForces, errors) {
@@ -9,6 +9,9 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
     court: {
       label: {
         text: 'Court'
+      },
+      hint: {
+        text: 'Only required for new CDOs'
       },
       id: 'court',
       name: 'court',

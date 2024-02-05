@@ -23,8 +23,16 @@ module.exports = [
 
         const { breeds } = await getBreeds()
 
+        if (!dog[keys.interimExemption]) {
+          dog[keys.interimExemption] = new Date()
+        }
+
         if (dog[keys.cdoIssued] !== undefined) {
           addDateComponents(dog, keys.cdoIssued)
+        }
+
+        if (dog[keys.interimExemption] !== undefined) {
+          addDateComponents(dog, keys.interimExemption)
         }
 
         return h.view(views.details, new ViewModel(dog, breeds))
@@ -41,6 +49,7 @@ module.exports = [
         failAction: async (request, h, error) => {
           const dog = request.payload
           const { breeds } = await getBreeds()
+
           return h.view(views.details, new ViewModel(dog, breeds, error)).code(400).takeover()
         }
       },
@@ -48,6 +57,7 @@ module.exports = [
         const dog = request.payload
 
         removeDateComponents(dog, 'cdoIssued')
+        removeDateComponents(dog, 'interimExemption')
 
         try {
           setDog(request, dog)

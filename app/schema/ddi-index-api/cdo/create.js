@@ -13,15 +13,17 @@ const schema = Joi.object({
     }).required()
   }).required(),
   enforcementDetails: Joi.object({
-    court: Joi.string().required(),
+    court: Joi.string().optional().allow('').allow(null),
     policeForce: Joi.string().required(),
     legislationOfficer: Joi.string().allow(null).allow('').optional()
   }).required(),
   dogs: Joi.array().items(Joi.object({
     breed: Joi.string().required(),
     name: Joi.string().optional().allow('').allow(null),
-    cdoIssued: Joi.date().iso().required(),
-    cdoExpiry: Joi.date().iso().required()
+    applicationType: Joi.string().required(),
+    cdoIssued: Joi.when('applicationType', { is: 'cdo', then: Joi.date().iso().required(), otherwise: Joi.optional() }),
+    cdoExpiry: Joi.when('applicationType', { is: 'cdo', then: Joi.date().iso().required(), otherwise: Joi.optional() }),
+    interimExemption: Joi.when('applicationType', { is: 'interim-exemption', then: Joi.date().iso().required(), otherwise: Joi.optional() })
   })).min(1).required()
 })
 

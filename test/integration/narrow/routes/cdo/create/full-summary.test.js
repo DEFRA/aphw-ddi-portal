@@ -3,7 +3,7 @@ const FormData = require('form-data')
 const { UTCDate } = require('@date-fns/utc')
 const { JSDOM } = require('jsdom')
 
-describe('OwnerSummary test', () => {
+describe('FullSummary test', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -25,10 +25,10 @@ describe('OwnerSummary test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/owner-summary route returns 200 with valid data', async () => {
+  test('GET /cdo/create/full-summary route returns 200 with valid data', async () => {
     const options = {
       method: 'GET',
-      url: '/cdo/create/owner-summary',
+      url: '/cdo/create/full-summary',
       auth
     }
 
@@ -69,10 +69,10 @@ describe('OwnerSummary test', () => {
     expect(tableRows[5].innerHTML.indexOf('DLO1')).toBeGreaterThan(-1)
   })
 
-  test('GET /cdo/create/owner-summary route returns 200 with missing data', async () => {
+  test('GET /cdo/create/full-summary route returns 200 with missing data', async () => {
     const options = {
       method: 'GET',
-      url: '/cdo/create/owner-summary',
+      url: '/cdo/create/full-summary',
       auth
     }
 
@@ -96,12 +96,12 @@ describe('OwnerSummary test', () => {
     expect(tableRows[5].innerHTML.indexOf('DLO1')).toBe(-1)
   })
 
-  test('POST /cdo/create/owner-summary route returns 302 if not auth', async () => {
+  test('POST /cdo/create/full-summary route returns 302 if not auth', async () => {
     const fd = new FormData()
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/owner-summary',
+      url: '/cdo/create/full-summary',
       headers: fd.getHeaders(),
       payload: fd.getBuffer()
     }

@@ -14,11 +14,13 @@ function ViewModel (cdo) {
     },
     enforcementDetails,
     dogs: dogs.map(dog => ({
+      status: dog.status,
       indexNumber: dog.indexNumber,
       name: dog.name,
       breed: dog.breed,
       cdoIssued: formatToGds(dog.cdoIssued),
-      cdoExpiry: formatToGds(dog.cdoExpiry)
+      cdoExpiry: formatToGds(dog.cdoExpiry),
+      interimExemption: formatToGds(dog.interimExemption)
     }))
   }
 }

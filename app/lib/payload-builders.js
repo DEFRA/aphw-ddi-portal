@@ -11,15 +11,17 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
     }
   },
   enforcementDetails: {
-    court: enforcementDetails.court,
+    court: enforcementDetails.court !== '' ? enforcementDetails.court : null,
     policeForce: enforcementDetails.policeForce,
     legislationOfficer: enforcementDetails.legislationOfficer
   },
   dogs: dogs.map(d => ({
     breed: d.breed,
     name: d.name,
+    applicationType: d.applicationType,
     cdoIssued: d.cdoIssued,
-    cdoExpiry: d.cdoExpiry
+    cdoExpiry: d.cdoExpiry,
+    interimExemption: d.interimExemption
   }))
 })
 

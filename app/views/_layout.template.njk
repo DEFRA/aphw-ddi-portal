@@ -8,7 +8,7 @@
   <!--<![endif]-->
 
   <% htmlWebpackPlugin.files.js.forEach(file => { %>
-    <script type="module" src="<%= '/static' + file.substring(file.indexOf('/js/')) %>"></script>
+    <script <% if (file.indexOf('/js/core.') > -1) { %>type="module"<% } %> src="<%= '/static' + file.substring(file.indexOf('/js/')) %>"></script>
   <% }) %>
 
   {# For Internet Explorer 8, you need to compile specific stylesheet #}

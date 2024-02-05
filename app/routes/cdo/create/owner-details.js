@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/owner-details')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')

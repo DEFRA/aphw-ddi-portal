@@ -32,7 +32,7 @@
 {{ govukDateInput(model.interimExemption) }}
 {% endset -%}
 
-{% set model = { applicationType: { items:
+{% set model = model|setRadioItems('applicationType',
   [
     {
       value: 'cdo',
@@ -48,7 +48,7 @@
         html: interimExemptionHtml
       }
     }
-  ] } }
+  ] )
 %}
 
 {% block content %}

@@ -1,6 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
-const { routes } = require('../../../../../../app/constants/owner')
+const { routes } = require('../../../../../../app/constants/cdo/owner')
 const { getFromSession } = require('../../../../../../app/session/session-wrapper')
 jest.mock('../../../../../../app/session/session-wrapper')
 

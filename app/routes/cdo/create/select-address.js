@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { routes, views } = require('../../../constants/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getOwnerDetails, setEnforcementDetails, getEnforcementDetails } = require('../../../session/cdo/owner')
