@@ -1,3 +1,5 @@
+const { isEmptyDate } = require('../lib/date-helpers')
+
 const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
   owner: {
     firstName: owner.firstName,
@@ -45,8 +47,8 @@ const buildPersonUpdatePayload = (person) => ({
 const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
   const payload = {
     indexNumber: exemptionDetails.indexNumber,
-    cdoIssued: exemptionDetails.cdoIssued,
-    cdoExpiry: exemptionDetails.cdoExpiry,
+    cdoIssued: isEmptyDate(exemptionDetails.cdoIssued) ? null : exemptionDetails.cdoIssued,
+    cdoExpiry: isEmptyDate(exemptionDetails.cdoExpiry) ? null : exemptionDetails.cdoExpiry,
     court: exemptionDetails.court,
     policeForce: exemptionDetails.policeForce,
     legislationOfficer: exemptionDetails.legislationOfficer,

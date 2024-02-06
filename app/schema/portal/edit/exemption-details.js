@@ -95,7 +95,11 @@ const exemptionDetailsSchema = Joi.object({
   }).when('exemptionOrder', {
     is: 2023,
     then: Joi.optional(),
-    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
+    otherwise: Joi.when('status', {
+      is: 'Interim exempt',
+      then: Joi.optional().allow(null).allow(''),
+      otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true))
+    }).messages({
       'any.required': 'Enter a CDO issued date'
     })
   }),
@@ -106,14 +110,22 @@ const exemptionDetailsSchema = Joi.object({
   }).when('exemptionOrder', {
     is: 2023,
     then: Joi.optional(),
-    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
+    otherwise: Joi.when('status', {
+      is: 'Interim exempt',
+      then: Joi.optional().allow(null).allow(''),
+      otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true))
+    }).messages({
       'any.required': 'Enter a CDO expiry date'
     })
   }),
   court: Joi.string().when('exemptionOrder', {
     is: 2023,
     then: Joi.optional().allow(null).allow(''),
-    otherwise: Joi.required().messages({
+    otherwise: Joi.when('status', {
+      is: 'Interim exempt',
+      then: Joi.optional().allow(null).allow(''),
+      otherwise: Joi.required()
+    }).messages({
       'string.empty': 'Select a court'
     })
   }),
