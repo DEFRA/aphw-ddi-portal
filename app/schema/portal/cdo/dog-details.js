@@ -23,7 +23,7 @@ const parseFormDate = (value) => {
 const calculateExpiryDate = (value) => {
   const dateString = `${value.year}-${value.month}-${value.day}`
 
-  if (dateString === '--') {
+  if (dateString === '--' || dateString === 'undefined-undefined-undefined') {
     return null
   }
 

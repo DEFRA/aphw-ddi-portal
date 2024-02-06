@@ -21,7 +21,6 @@ const createCdo = async (cdo, user) => {
 
   const res = await post(cdoEndpoint, value, user)
 
-  console.log('created cdo', res)
   return res
 }
 

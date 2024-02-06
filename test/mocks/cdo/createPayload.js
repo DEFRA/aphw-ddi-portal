@@ -18,12 +18,14 @@ const valid = {
     {
       breed: 'Pit Bull Terrier',
       name: 'Buster',
+      applicationType: 'cdo',
       cdoIssued: '2023-10-10',
       cdoExpiry: '2023-12-10'
     },
     {
       breed: 'XL Bully',
       name: 'Alice',
+      applicationType: 'cdo',
       cdoIssued: '2023-10-10',
       cdoExpiry: '2023-12-10'
     }
@@ -48,12 +50,14 @@ const invalid = {
     {
       breed: 'Pit Bull Terrier',
       name: 'Buster',
+      applicationType: 'cdo',
       cdoIssued: '2023-10-10',
       cdoExpiry: '2023-12-10'
     },
     {
       breed: 'XL Bully',
       name: 'Alice',
+      applicationType: 'cdo',
       cdoIssued: '2023-10-10'
     }
   ]

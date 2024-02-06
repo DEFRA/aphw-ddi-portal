@@ -6,21 +6,8 @@ describe('Add dog details', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../../app/session/cdo/owner')
-  const { getOwnerDetails, getAddress, getEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
-
   jest.mock('../../../../../../app/session/cdo/dog')
   const { getDogs, addAnotherDog } = require('../../../../../../app/session/cdo/dog')
-
-  jest.mock('../../../../../../app/session/cdo')
-  const { setCreatedCdo } = require('../../../../../../app/session/cdo')
-
-  jest.mock('../../../../../../app/api/ddi-index-api', () => ({
-    cdo: {
-      createCdo: jest.fn()
-    }
-  }))
-  const { cdo } = require('../../../../../../app/api/ddi-index-api')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -134,39 +121,6 @@ describe('Add dog details', () => {
   })
 
   test('POST /cdo/create/confirm-dog-details route with valid payload returns 302', async () => {
-    cdo.createCdo.mockReturnValue({
-      owner: {
-        firstName: 'Test',
-        lastName: 'User'
-      },
-      enforcementDetails: {
-        court: 'Test Court',
-        policeForce: 'Test Force'
-      },
-      dogs: [{
-        breed: 'Breed 1',
-        name: 'Bruce',
-        cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
-        cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
-      }]
-    })
-
-    getOwnerDetails.mockReturnValue({
-      firstName: 'Test',
-      lastName: 'User'
-    })
-
-    getAddress.mockReturnValue({
-      addressLine1: '1 Test Street',
-      addressLine2: 'Test Town',
-      postcode: 'TE1 1ST'
-    })
-
-    getEnforcementDetails.mockReturnValue({
-      court: '1',
-      policeForce: '1'
-    })
-
     const options = {
       method: 'POST',
       url: '/cdo/create/confirm-dog-details',
@@ -177,58 +131,7 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/record-created')
-    expect(cdo.createCdo).toHaveBeenCalledTimes(1)
-    expect(setCreatedCdo).toHaveBeenCalledTimes(1)
-    expect(setCreatedCdo).toHaveBeenCalledWith(expect.anything(), {
-      owner: {
-        firstName: 'Test',
-        lastName: 'User'
-      },
-      enforcementDetails: {
-        court: 'Test Court',
-        policeForce: 'Test Force'
-      },
-      dogs: [{
-        breed: 'Breed 1',
-        name: 'Bruce',
-        cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
-        cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
-      }]
-    })
-  })
-
-  test('POST /cdo/create/confirm-dog-details route returns 500 if API call fails', async () => {
-    cdo.createCdo.mockImplementation(() => {
-      throw new Error('Test error')
-    })
-
-    getOwnerDetails.mockReturnValue({
-      firstName: 'Test',
-      lastName: 'User'
-    })
-
-    getAddress.mockReturnValue({
-      addressLine1: '1 Test Street',
-      addressLine2: 'Test Town',
-      postcode: 'TE1 1ST'
-    })
-
-    getEnforcementDetails.mockReturnValue({
-      court: '1',
-      policeForce: '1'
-    })
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/confirm-dog-details',
-      auth,
-      payload: {}
-    }
-
-    const response = await server.inject(options)
-
-    expect(response.statusCode).toBe(500)
+    expect(response.headers.location).toBe('/cdo/create/enforcement-details')
   })
 
   test('POST /cdo/create/confirm-dog-details route with add another dog returns 302', async () => {
