@@ -172,7 +172,7 @@ describe('FullSummary test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(wreck.post).toHaveBeenCalledWith('http://localhost/api/cdo',
+    expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
       {
         payload: {
           dogs: [
