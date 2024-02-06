@@ -2,6 +2,8 @@ const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { UTCDate } = require('@date-fns/utc')
 const { JSDOM } = require('jsdom')
+const wreck = require('@hapi/wreck')
+jest.mock('@hapi/wreck')
 
 describe('FullSummary test', () => {
   jest.mock('../../../../../../app/auth')
@@ -127,6 +129,80 @@ describe('FullSummary test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
+  })
+
+  test('POST /cdo/create/full-summary route creates CDO', async () => {
+    getDogs.mockReturnValue(
+      [
+        {
+          name: 'Bruce',
+          breed: 'Breed 1',
+          applicationType: 'cdo',
+          cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+          cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
+        }
+      ]
+    )
+
+    getOwnerDetails.mockReturnValue({
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: '2000-03-17T00:00:00.000Z'
+    })
+    getAddress.mockReturnValue({
+      addressLine1: '1 Test Street',
+      addressLine2: 'Testarea',
+      town: 'Testington',
+      postcode: 'TS1 1TS'
+    })
+    getEnforcementDetails.mockReturnValue({
+      court: 'court2',
+      policeForce: 'police-force-5',
+      legislationOfficer: 'DLO1'
+    })
+
+    wreck.post.mockResolvedValue({ payload: '{"resultCode": 200}' })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/full-summary',
+      auth,
+      payload: {}
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(wreck.post).toHaveBeenCalledWith('http://localhost/api/cdo',
+      {
+        payload: {
+          dogs: [
+            {
+              applicationType: 'cdo',
+              breed: 'Breed 1',
+              cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
+              cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
+              interimExemption: undefined,
+              name: 'Bruce'
+            }
+          ],
+          enforcementDetails: {
+            court: 'court2',
+            legislationOfficer: 'DLO1',
+            policeForce: 'police-force-5'
+          },
+          owner: {
+            address: {
+              addressLine1: '1 Test Street',
+              addressLine2: 'Testarea',
+              postcode: 'TS1 1TS',
+              town: 'Testington'
+            },
+            dateOfBirth: '2000-03-17T00:00:00.000Z',
+            firstName: 'John',
+            lastName: 'Smith'
+          }
+        }
+      })
   })
 
   afterEach(async () => {
