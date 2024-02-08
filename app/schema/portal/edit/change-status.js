@@ -5,7 +5,7 @@ const changeStatusSchema = Joi.object({
   newStatus: Joi.string().trim().required().messages({
     '*': 'Select a status'
   }),
-  srcHashParam: Joi.string().optional()
+  srcHashParam: Joi.string().optional().allow('').allow(null)
 }).required()
 
 const validatePayload = (payload) => {

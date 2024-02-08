@@ -1,4 +1,4 @@
-const { keys } = require('../../constants/owner')
+const { keys } = require('../../constants/cdo/owner')
 
 const set = (request, entryKey, key, value) => {
   const entryValue = request.yar?.get(entryKey) || {}

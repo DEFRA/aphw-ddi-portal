@@ -46,11 +46,11 @@
         }
       }) %}
 
-        {{ accessibleAutocomplete(model.court) }}
-
         {{ govukSelect(model.policeForce) }}
       
         {{ govukInput(model.legislationOfficer) }}
+
+        {{ accessibleAutocomplete(model.court) }}
 
       {% endcall %}
 

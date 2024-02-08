@@ -1,3 +1,3 @@
 const { v4: uuidv4 } = require('uuid')
 
-module.exports = { homeAccountId: uuidv4(), name: 'Developer' }
+module.exports = { homeAccountId: uuidv4(), name: 'Developer', username: 'dev@test.com' }

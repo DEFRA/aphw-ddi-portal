@@ -1,6 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
-const { routes } = require('../../../../../../app/constants/owner')
+const { routes } = require('../../../../../../app/constants/cdo/owner')
 
 describe('EnforcementDetails test', () => {
   jest.mock('../../../../../../app/auth')
@@ -65,7 +65,7 @@ describe('EnforcementDetails test', () => {
   })
 
   test('POST /cdo/create/enforcement-details with valid data forwards to next screen', async () => {
-    const nextScreenUrl = routes.ownerSummary.get
+    const nextScreenUrl = routes.fullSummary.get
 
     const payload = {
       court: '1',

@@ -1,6 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
-const { routes } = require('../../../../../../app/constants/owner')
+const { routes } = require('../../../../../../app/constants/cdo/dog')
 const { getFromSession } = require('../../../../../../app/session/session-wrapper')
 jest.mock('../../../../../../app/session/session-wrapper')
 
@@ -45,7 +45,7 @@ describe('SelectAddress test', () => {
   })
 
   test('POST /cdo/create/select-address with valid data returns 302', async () => {
-    const nextScreenUrl = routes.enforcementDetails.get
+    const nextScreenUrl = routes.details.get
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', addressTown: 'town', addressPostcode: 'AB1 1TT', addressCountry: 'E' }])
     const payload = {
       address: 0

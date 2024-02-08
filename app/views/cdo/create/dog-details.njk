@@ -2,7 +2,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
@@ -25,6 +24,33 @@
   </div>
 {% endblock %}
 
+{% set cdoIssuedHtml %}
+{{ govukDateInput(model.cdoIssued) }}
+{% endset -%}
+
+{% set interimExemptionHtml %}
+{{ govukDateInput(model.interimExemption) }}
+{% endset -%}
+
+{% set model = model|setRadioItems('applicationType',
+  [
+    {
+      value: 'cdo',
+      text: 'New CDO',
+      conditional: {
+        html: cdoIssuedHtml
+      }
+    },
+    {
+      value: 'interim-exemption',
+      text: 'Interim exemption scheme',
+      conditional: {
+        html: interimExemptionHtml
+      }
+    }
+  ] )
+%}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -36,30 +62,23 @@
     {% endif %}
 
     <form method="POST" action="{{ model.formAction }}" novalidate>
-      {% call govukFieldset({
-        legend: {
-          text: "Add dog details",
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: true
-        }
-      }) %}
+      <h1 class="govuk-heading-l">Add dog details</h1>
 
         {{ govukRadios(model.breed) }}
 
         {{ govukInput(model.name) }}
 
-        {{ govukDateInput(model.cdoIssued) }}
+        {{ govukRadios(model.applicationType) }}
 
         {% if model.dogId is defined %}
           <input type="hidden" name="dogId" value="{{ model.dogId }}">
         {% endif %}
-      {% endcall %}
 
-      {{ govukButton({
-        text: "Add dog details"
-      }) }}
-    </div>
-  </form>
+        {{ govukButton({
+          text: "Add dog details"
+        }) }}
+    </form>
+  </div>
 </div>
 
 {% endblock %}

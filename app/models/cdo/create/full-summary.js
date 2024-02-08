@@ -1,6 +1,8 @@
-const { routes } = require('../../../constants/owner')
+const { routes } = require('../../../constants/cdo/owner')
 const { UTCDate } = require('@date-fns/utc')
 const { format } = require('date-fns')
+const { keys } = require('../../../constants/cdo/dog')
+const { formatToGds } = require('../../../lib/date-helpers')
 
 const formatDate = (dob) => {
   if (dob == null || dob === '') {
@@ -45,9 +47,9 @@ const formatAddress = addr => {
   return addrParts
 }
 
-function ViewModel (owner, address, enforcement, courts, policeForces, error) {
+function ViewModel (owner, address, enforcement, courts, policeForces, dogs, error) {
   this.model = {
-    formAction: routes.ownerSummary.post,
+    formAction: routes.fullSummary.post,
     summary: {
       owner: {
         name: formatName(owner),
@@ -57,6 +59,14 @@ function ViewModel (owner, address, enforcement, courts, policeForces, error) {
       court: (courts.find(x => x.id === parseInt(enforcement?.court)) || { name: '' }).name,
       policeForce: (policeForces.find(x => x.id === parseInt(enforcement?.policeForce)) || { name: '' }).name,
       dogLegislationOfficer: enforcement?.legislationOfficer,
+      dogs: dogs.map((dog, index) => ({
+        id: index + 1,
+        name: dog[keys.name],
+        breed: dog[keys.breed],
+        cdoIssued: formatToGds(dog[keys.cdoIssued]),
+        cdoExpiry: formatToGds(dog[keys.cdoExpiry]),
+        interimExemption: formatToGds(dog[keys.interimExemption])
+      })),
       error
     }
   }

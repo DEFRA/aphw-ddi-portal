@@ -66,6 +66,8 @@ const constants = {
     entry: 'dogs',
     breed: 'breed',
     name: 'name',
+    applicationType: 'applicationType',
+    interimExemption: 'interimExemption',
     cdoIssued: 'cdoIssued',
     cdoExpiry: 'cdoExpiry',
     dateOfBirth: 'dateOfBirth',
