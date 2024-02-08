@@ -1,0 +1,61 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">{{ model.activityTitle }}</h1>
+        </legend>
+
+        {{ govukRadios(model.activity) }}
+
+        {{ govukDateInput(model.activityDate) }}
+
+      <input type="hidden" name="activityType" value="{{ model.activityType }}" />
+      <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
+      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </div>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}

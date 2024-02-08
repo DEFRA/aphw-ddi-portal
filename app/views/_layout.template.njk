@@ -53,12 +53,6 @@
   {{ pageTitle }}
 {% endblock %}
 
-{% block beforeContent %}
-  {% if auth.isAuthenticated %}
-    <a href="/logout" class="govuk-body govuk-link defra-align-right-simple">Sign out</a>    
-  {% endif %}
-{% endblock %}
-
 {% block footer %}
   {{ govukFooter({
       meta: {
