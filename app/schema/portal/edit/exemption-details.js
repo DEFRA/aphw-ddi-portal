@@ -1,24 +1,6 @@
 const Joi = require('joi')
-const { getDateComponents } = require('../../../lib/date-helpers')
-const { UTCDate } = require('@date-fns/utc')
-const { isValid, isFuture, parse } = require('date-fns')
-
-const validDateFormats = [
-  'yyyy-MM-dd',
-  'yyyy-M-d'
-]
-
-const parseDate = (value) => {
-  for (const fmt of validDateFormats) {
-    const date = parse(value, fmt, new UTCDate())
-
-    if (isValid(date)) {
-      return date
-    }
-  }
-
-  return null
-}
+const { getDateComponents, parseDate } = require('../../../lib/date-helpers')
+const { isFuture } = require('date-fns')
 
 const validateDate = (value, helpers, required) => {
   const { day, month, year } = value

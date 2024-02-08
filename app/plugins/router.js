@@ -21,6 +21,7 @@ const routes = [].concat(
   require('../routes/cdo/edit/change-status-confirmation'),
   require('../routes/cdo/edit/add-activity'),
   require('../routes/cdo/edit/select-activity'),
+  require('../routes/cdo/edit/activity-confirmation'),
   require('../routes/healthy'),
   require('../routes/healthz'),
   require('../routes/cookies'),

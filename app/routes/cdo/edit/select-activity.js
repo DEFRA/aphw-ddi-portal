@@ -5,6 +5,8 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/select-activity')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { getActivities } = require('../../../api/ddi-index-api/activities')
+const { addDateComponents } = require('../../../lib/date-helpers')
+const { setActivityDetails } = require('../../../session/cdo/activity')
 
 module.exports = [
   {
@@ -28,8 +30,11 @@ module.exports = [
         const model = {
           activityType,
           activityList,
-          indexNumber: cdo.dog.indexNumber
+          indexNumber: cdo.dog.indexNumber,
+          activityDate: new Date()
         }
+
+        addDateComponents(model, 'activityDate')
 
         return h.view(views.selectActivity, new ViewModel(model, backNav))
       }
@@ -57,9 +62,8 @@ module.exports = [
           const activityList = await getActivities(activityType)
 
           const model = {
-            activityType,
-            activityList,
-            indexNumber: cdo.dog.indexNumber
+            ...payload,
+            activityList
           }
 
           const viewModel = new ViewModel(model, backNav, error)
@@ -70,9 +74,11 @@ module.exports = [
       handler: async (request, h) => {
         const payload = request.payload
 
+        setActivityDetails(request, payload)
+
         // send event
 
-        return h.redirect(`${routes.selectActivityConfirmation.get}/${payload.indexNumber}/${payload.activityCode}${payload.srcHashParam}`)
+        return h.redirect(routes.activityConfirmation.get)
       }
     }
   }

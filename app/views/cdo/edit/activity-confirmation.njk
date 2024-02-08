@@ -1,0 +1,28 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+      <h1 class="govuk-panel__title">{{ model.message }}</h1>
+      <div class="govuk-panel__body">Dog {{ model.indexNumber }}</div>
+    </div>
+  </div>
+</div>
+
+<p class="govuk-body">
+  <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ model.indexNumber }}{{ model.srcHashParam }}">Go to the dog record for Dog {{ model.indexNumber }}</a>
+</p>
+
+{% endblock %}

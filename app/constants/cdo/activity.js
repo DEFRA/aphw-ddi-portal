@@ -19,8 +19,10 @@ const constants = {
     selectActivityConfirmation: 'cdo/edit/select-activity-confirmation'
   },
   keys: {
+    entry: 'activity',
     activity: 'activity',
-    activityDate: 'activityDate'
+    activityDate: 'activityDate',
+    activityDetails: 'activityDetails'
   }
 }
 

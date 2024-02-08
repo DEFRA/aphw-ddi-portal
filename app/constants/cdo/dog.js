@@ -43,9 +43,8 @@ const constants = {
       get: '/cdo/edit/select-activity',
       post: '/cdo/edit/select-activity'
     },
-    selectActivityConfirmation: {
-      get: '/cdo/edit/select-activity-confirmation',
-      post: '/cdo/edit/select-activity-confirmation'
+    activityConfirmation: {
+      get: '/cdo/edit/activity-confirmation'
     }
   },
   views: {
@@ -60,7 +59,7 @@ const constants = {
     certificate: 'cdo/view/certificate',
     addActivity: 'cdo/edit/add-activity',
     selectActivity: 'cdo/edit/select-activity',
-    selectActivityConfirmation: 'cdo/edit/select-activity-confirmation'
+    activityConfirmation: 'cdo/edit/activity-confirmation'
   },
   keys: {
     entry: 'dogs',
