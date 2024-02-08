@@ -80,10 +80,11 @@ describe('Add dog details', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /cdo/create/dog-details route with valid payload returns 302', async () => {
+  test('POST /cdo/create/dog-details route with valid CDO payload returns 302', async () => {
     const payload = {
       breed: 'Breed 1',
       name: 'Bruce',
+      applicationType: 'cdo',
       'cdoIssued-day': '10',
       'cdoIssued-month': '10',
       'cdoIssued-year': '2020'
@@ -106,8 +107,47 @@ describe('Add dog details', () => {
     expect(setDog).toHaveBeenCalledWith(expect.anything(), {
       breed: 'Breed 1',
       name: 'Bruce',
+      applicationType: 'cdo',
+      interimExemption: null,
       cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
       cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
+    })
+    expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
+  })
+
+  test('POST /cdo/create/dog-details route with valid interim scheme payload returns 302', async () => {
+    const today = new Date(new Date().toDateString())
+
+    const payload = {
+      breed: 'Breed 1',
+      name: 'Bruce',
+      applicationType: 'interim-exemption',
+      'interimExemption-day': today.getDate(),
+      'interimExemption-month': today.getMonth() + 1,
+      'interimExemption-year': today.getFullYear()
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      payload: querystring.stringify(payload)
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setDog).toHaveBeenCalledTimes(1)
+    expect(setDog).toHaveBeenCalledWith(expect.anything(), {
+      breed: 'Breed 1',
+      name: 'Bruce',
+      applicationType: 'interim-exemption',
+      interimExemption: today,
+      cdoIssued: null,
+      cdoExpiry: null
     })
     expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
   })
@@ -116,6 +156,7 @@ describe('Add dog details', () => {
     const payload = {
       breed: 'Breed 1',
       name: 'Bruce',
+      applicationType: 'cdo',
       'cdoIssued-day': '10',
       'cdoIssued-month': '10',
       'cdoIssued-year': '2020',
@@ -166,7 +207,7 @@ describe('Add dog details', () => {
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
     expect(messages).toContain('Breed type is required')
-    expect(messages).toContain('Enter a CDO issue date')
+    expect(messages).toContain('Application type is required')
   })
 
   test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
@@ -177,6 +218,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '40',
         'cdoIssued-month': '10',
         'cdoIssued-year': '2021'
@@ -204,6 +246,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-month': '01',
         'cdoIssued-year': '9999'
@@ -231,6 +274,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-year': '2021'
       }
     }
@@ -256,6 +300,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-month': '01',
         'cdoIssued-year': '2021'
       }
@@ -282,6 +327,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-year': '2021'
       }
@@ -308,6 +354,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-month': '01'
       }
@@ -334,6 +381,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-month': '01',
         'cdoIssued-year': '2019'
@@ -361,6 +409,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'Bruce',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-month': '01',
         'cdoIssued-year': '9999'
@@ -388,6 +437,7 @@ describe('Add dog details', () => {
       payload: {
         breed: 'Breed 1',
         name: 'BruceBruceBruceBruceBruceBruceBru',
+        applicationType: 'cdo',
         'cdoIssued-day': '01',
         'cdoIssued-month': '01',
         'cdoIssued-year': '2023'

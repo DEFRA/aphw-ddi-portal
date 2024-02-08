@@ -80,40 +80,44 @@ const validateInsurance = (value, helpers) => {
   return value
 }
 
+const optionalDate = Joi.object({
+  year: Joi.string().allow(null).allow(''),
+  month: Joi.string().allow(null).allow(''),
+  day: Joi.string().allow(null).allow('')
+}).optional().custom(validateDate)
+
+const optionalDateWhenInterimOr2023 = (errorText) => {
+  return Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).when('exemptionOrder', {
+    is: 2023,
+    then: Joi.optional(),
+    otherwise: Joi.when('status', {
+      is: 'Interim exempt',
+      then: Joi.optional().allow(null).allow('').custom((value, helper) => validateDate(value, helper, false)),
+      otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true))
+    }).messages({
+      'any.required': errorText
+    })
+  })
+}
+
 const exemptionDetailsSchema = Joi.object({
   indexNumber: Joi.string().required(),
   status: Joi.string().required(),
-  certificateIssued: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  cdoIssued: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).when('exemptionOrder', {
-    is: 2023,
-    then: Joi.optional(),
-    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
-      'any.required': 'Enter a CDO issued date'
-    })
-  }),
-  cdoExpiry: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).when('exemptionOrder', {
-    is: 2023,
-    then: Joi.optional(),
-    otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true)).messages({
-      'any.required': 'Enter a CDO expiry date'
-    })
-  }),
+  certificateIssued: optionalDate,
+  cdoIssued: optionalDateWhenInterimOr2023('Enter a CDO issued date'),
+  cdoExpiry: optionalDateWhenInterimOr2023('Enter a CDO expiry date'),
   court: Joi.string().when('exemptionOrder', {
     is: 2023,
     then: Joi.optional().allow(null).allow(''),
-    otherwise: Joi.required().messages({
+    otherwise: Joi.when('status', {
+      is: 'Interim exempt',
+      then: Joi.optional().allow(null).allow(''),
+      otherwise: Joi.required()
+    }).messages({
       'string.empty': 'Select a court'
     })
   }),
@@ -123,53 +127,17 @@ const exemptionDetailsSchema = Joi.object({
   legislationOfficer: Joi.string().trim().allow('').optional().max(64).messages({
     'string.max': 'Dog legislation officer must be no more than {#limit} characters'
   }),
-  applicationFeePaid: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  neuteringConfirmation: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  microchipVerification: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  joinedExemptionScheme: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
+  applicationFeePaid: optionalDate,
+  neuteringConfirmation: optionalDate,
+  microchipVerification: optionalDate,
+  joinedExemptionScheme: optionalDate,
   insuranceCompany: Joi.string().trim().allow(''),
-  insuranceRenewal: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
+  insuranceRenewal: optionalDate,
   exemptionOrder: Joi.number().required(),
-  microchipDeadline: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  typedByDlo: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  withdrawn: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate),
-  removedFromCdoProcess: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom(validateDate)
+  microchipDeadline: optionalDate,
+  typedByDlo: optionalDate,
+  withdrawn: optionalDate,
+  removedFromCdoProcess: optionalDate
 }).custom(validateInsurance).required()
 
 const validatePayload = (payload) => {

@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/enforcement-details')
 const enforcementDetailsSchema = require('../../../schema/portal/owner/enforcement-details')
@@ -37,7 +37,7 @@ module.exports = [{
 
       setEnforcementDetails(request, enforcementDetails)
 
-      return h.redirect(routes.ownerSummary.get)
+      return h.redirect(routes.fullSummary.get)
     }
   }
 }]

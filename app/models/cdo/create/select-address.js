@@ -1,4 +1,4 @@
-const { routes } = require('../../../constants/owner')
+const { routes } = require('../../../constants/cdo/owner')
 
 function ViewModel (postcode, addresses = [], error) {
   const items = addresses.map((address, index) => ({

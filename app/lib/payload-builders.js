@@ -1,3 +1,5 @@
+const { isEmptyDate } = require('../lib/date-helpers')
+
 const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
   owner: {
     firstName: owner.firstName,
@@ -11,15 +13,17 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
     }
   },
   enforcementDetails: {
-    court: enforcementDetails.court,
+    court: enforcementDetails.court !== '' ? enforcementDetails.court : null,
     policeForce: enforcementDetails.policeForce,
     legislationOfficer: enforcementDetails.legislationOfficer
   },
   dogs: dogs.map(d => ({
     breed: d.breed,
     name: d.name,
+    applicationType: d.applicationType,
     cdoIssued: d.cdoIssued,
-    cdoExpiry: d.cdoExpiry
+    cdoExpiry: d.cdoExpiry,
+    interimExemption: d.interimExemption
   }))
 })
 
@@ -43,8 +47,8 @@ const buildPersonUpdatePayload = (person) => ({
 const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
   const payload = {
     indexNumber: exemptionDetails.indexNumber,
-    cdoIssued: exemptionDetails.cdoIssued,
-    cdoExpiry: exemptionDetails.cdoExpiry,
+    cdoIssued: isEmptyDate(exemptionDetails.cdoIssued) ? null : exemptionDetails.cdoIssued,
+    cdoExpiry: isEmptyDate(exemptionDetails.cdoExpiry) ? null : exemptionDetails.cdoExpiry,
     court: exemptionDetails.court,
     policeForce: exemptionDetails.policeForce,
     legislationOfficer: exemptionDetails.legislationOfficer,

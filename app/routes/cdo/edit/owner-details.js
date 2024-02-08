@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { admin } = require('../../../auth/permissions.js')
 const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/owner-details')

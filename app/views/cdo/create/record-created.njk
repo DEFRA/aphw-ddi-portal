@@ -1,4 +1,5 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "components/statusTag/macro.njk" import statusTag %}
 
 {% extends '_layout.njk' %}
 
@@ -12,7 +13,8 @@
       }) }}
 
       {% for dog in model.dogs %}
-        <h2 class="govuk-heading-m">Dog {{ dog.indexNumber }}</h2>
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Dog {{ dog.indexNumber }}</h2>
+        {{ statusTag(dog.status, 'govuk-!-font-size-16') }}
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Breed type</dt>
@@ -24,6 +26,7 @@
               <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
             </div>
           {% endif %}
+          {% if dog.cdoIssued %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">CDO issue date</dt>
             <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
@@ -32,6 +35,12 @@
             <dt class="govuk-summary-list__key">CDO expiry date</dt>
             <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
           </div>
+          {% else %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
+            <dd class="govuk-summary-list__value">{{ dog.interimExemption }}</dd>
+          </div>
+          {% endif %}
         </dl>
       {% endfor %}
 
@@ -56,10 +65,12 @@
             {% endfor %}
           </dd>
         </div>
+        {% if model.enforcementDetails.court %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Court</dt>
           <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
         </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Police force</dt>
           <dd class="govuk-summary-list__value">{{ model.enforcementDetails.policeForce }}</dd>

@@ -51,6 +51,7 @@
                 <dt class="govuk-summary-list__key">Dog name</dt>
                 <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
               </div>
+              {% if dog.cdoIssued %}
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">CDO issue date</dt>
                 <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
@@ -59,6 +60,12 @@
                 <dt class="govuk-summary-list__key">CDO expiry date</dt>
                 <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
               </div>
+              {% else %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
+                <dd class="govuk-summary-list__value">{{ dog.interimExemption }}</dd>
+              </div>
+              {% endif %}
             </dl>
           </div>
         </div>

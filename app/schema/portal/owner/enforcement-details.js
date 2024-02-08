@@ -1,9 +1,7 @@
 const Joi = require('joi')
 
 const schema = Joi.object({
-  court: Joi.string().required().messages({
-    'string.empty': 'Select a court'
-  }),
+  court: Joi.string().optional().allow('').allow(null),
   policeForce: Joi.string().required().messages({
     'string.empty': 'Select a police force'
   }),

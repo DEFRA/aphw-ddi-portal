@@ -1,4 +1,4 @@
-const { routes } = require('../../../constants/owner')
+const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (ownerDetails, errors) {

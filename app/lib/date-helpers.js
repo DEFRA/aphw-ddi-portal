@@ -78,6 +78,10 @@ const formatToGds = date => {
   return format(new Date(date), 'dd MMMM yyyy')
 }
 
+const isEmptyDate = date => {
+  return date?.year === '' && date?.month === '' && date?.day === ''
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -85,5 +89,6 @@ module.exports = {
   addDateComponents,
   removeDateComponents,
   addDateErrors,
-  formatToGds
+  formatToGds,
+  isEmptyDate
 }
