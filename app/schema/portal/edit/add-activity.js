@@ -1,11 +1,12 @@
 const Joi = require('joi')
 
 const addActivitySchema = Joi.object({
-  indexNumber: Joi.string().required(),
+  pk: Joi.string().required(),
+  source: Joi.string().required(),
   activityType: Joi.string().trim().required().messages({
     '*': 'Select an activity type'
   }),
-  srcHashParam: Joi.string().optional().allow('').allow(null)
+  srcHashParam: Joi.string().optional()
 }).required()
 
 const validatePayload = (payload) => {

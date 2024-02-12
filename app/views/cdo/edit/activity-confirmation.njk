@@ -16,13 +16,13 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
       <h1 class="govuk-panel__title">{{ model.message }}</h1>
-      <div class="govuk-panel__body">Dog {{ model.indexNumber }}</div>
+      <div class="govuk-panel__body">{{ model.sourceDescription }}</div>
     </div>
   </div>
 </div>
 
 <p class="govuk-body">
-  <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ model.indexNumber }}{{ model.srcHashParam }}">Go to the dog record for Dog {{ model.indexNumber }}</a>
+  <a class="govuk-link govuk-link--no-visited-state" href="{{ model.returnLink }}">Go to the {{ model.source }} record for {{ model.sourceDescription }}</a>
 </p>
 
 {% endblock %}

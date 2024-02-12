@@ -1,8 +1,9 @@
-function ViewModel (model, backNav) {
+function ViewModel (model) {
   this.model = {
-    indexNumber: model.indexNumber,
     message: model.message,
-    activityType: model.activityType
+    returnLink: model.returnLink,
+    sourceDescription: model.sourceDescription,
+    source: model.source
   }
 }
 

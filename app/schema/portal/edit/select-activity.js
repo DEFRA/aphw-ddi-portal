@@ -48,7 +48,9 @@ const validateDate = (value, helpers, required) => {
 }
 
 const selectActivitySchema = Joi.object({
-  indexNumber: Joi.string().required(),
+  pk: Joi.string().required(),
+  source: Joi.string().required(),
+  srcHashParam: Joi.string().optional(),
   activityType: Joi.string().required(),
   activity: Joi.string().trim().required().messages({
     '*': 'Select an activity'
@@ -60,8 +62,7 @@ const selectActivitySchema = Joi.object({
   }).optional().custom((value, helper) => validateDate(value, helper, true))
     .messages({
       'any.required': 'Enter a date'
-    }),
-  srcHashParam: Joi.string().optional().allow('').allow(null)
+    })
 }).required()
 
 const validatePayload = (payload) => {

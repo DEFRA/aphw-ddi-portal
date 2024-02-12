@@ -5,8 +5,10 @@ function ViewModel (model, backNav, errors) {
   this.model = {
     formAction: routes.selectActivity.post,
     backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
-    indexNumber: model.indexNumber,
+    editLink: model.editLink,
+    pk: model.pk,
+    srcHashParam: model.srcHashParam,
+    source: model.source,
     activityType: model.activityType,
     activityTitle: determineActivityTitle(model.activityType),
     activityDateTitle: determineActivityDateTitle(model.activityType),
@@ -16,8 +18,8 @@ function ViewModel (model, backNav, errors) {
       classes: 'govuk-!-font-size-16',
       value: model[keys.activity],
       items: model.activityList.map(a => ({
-        text: a.text,
-        value: a.value
+        text: a.label,
+        value: a.id
       }))
     },
     activityDate: {

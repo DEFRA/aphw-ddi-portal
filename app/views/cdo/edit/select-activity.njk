@@ -42,10 +42,29 @@
 
         {{ govukRadios(model.activity) }}
 
+        {% if model.activityType == 'received' %}
+        <details class="govuk-details govuk-!-margin-bottom-7">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              Received something not listed?
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="{{ model.editLink }}">Update the details on the dog record</a> if we’ve received:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>an insurance certificate</li>
+              <li>a change of address form</li>
+              <li>evidence of the death of a dog</li>
+            </ul>
+          </div>
+        </details>
+        {% endif %}
+
         {{ govukDateInput(model.activityDate) }}
 
       <input type="hidden" name="activityType" value="{{ model.activityType }}" />
-      <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
+      <input type="hidden" name="pk" value="{{ model.pk }}" />
+      <input type="hidden" name="source" value="{{ model.source }}" />
       <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
 
       <div class="govuk-button-group">

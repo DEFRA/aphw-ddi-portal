@@ -44,7 +44,8 @@
 
       {{ govukRadios(model.activityType) }}
 
-      <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
+      <input type="hidden" name="pk" value="{{ model.pk }}" />
+      <input type="hidden" name="source" value="{{ model.source }}" />
       <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
 
       <div class="govuk-button-group">

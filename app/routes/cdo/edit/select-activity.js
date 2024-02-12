@@ -3,40 +3,58 @@ const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/select-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/select-activity')
-const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { getActivities } = require('../../../api/ddi-index-api/activities')
 const { addDateComponents } = require('../../../lib/date-helpers')
-const { setActivityDetails } = require('../../../session/cdo/activity')
+const { setActivityDetails, getActivityDetails } = require('../../../session/cdo/activity')
+const { recordActivity } = require('../../../api/ddi-index-api/activities')
+const getUser = require('../../../auth/get-user')
+
+const backNav = details => ({
+  backLink: `/cdo/edit/add-activity/${details.pk}/${details.source}`
+})
+
+const getSourceEntity = async (details) => {
+  return details.source === 'dog'
+    ? await getCdo(details.pk)
+    : null
+}
+
+const getEditLink = details => {
+  return details.source === 'dog'
+    ? `${routes.editDogDetails.get}/${details.pk}?src=${details.srcHashParam}`
+    : 'NOT YET DEFINED'
+}
 
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.selectActivity.get}/{indexNumber}/{activityType}`,
+    path: `${routes.selectActivity.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const activityType = request.params.activityType
+        const activityDetails = getActivityDetails(request)
 
-        const cdo = await getCdo(request.params.indexNumber)
+        const entity = await getSourceEntity(activityDetails)
 
-        if (cdo == null || !activityType) {
+        if (entity == null || !activityDetails?.activityType) {
           return h.response().code(404).takeover()
         }
 
-        const backNav = addBackNavigation(request)
-
-        const activityList = await getActivities(activityType)
+        const activityList = await getActivities(activityDetails.activityType, activityDetails.source)
 
         const model = {
-          activityType,
+          activityType: activityDetails?.activityType,
           activityList,
-          indexNumber: cdo.dog.indexNumber,
-          activityDate: new Date()
+          pk: activityDetails.pk,
+          source: activityDetails.source,
+          activityDate: new Date(),
+          editLink: getEditLink(activityDetails),
+          srcHashParam: activityDetails.srcHashParam
         }
 
         addDateComponents(model, 'activityDate')
 
-        return h.view(views.selectActivity, new ViewModel(model, backNav))
+        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails)))
       }
     }
   },
@@ -52,21 +70,16 @@ module.exports = [
 
           const activityType = payload.activityType
 
-          const cdo = await getCdo(payload.indexNumber)
-          if (cdo == null || !activityType) {
+          const entity = await getSourceEntity(payload)
+          if (entity == null || !activityType) {
             return h.response().code(404).takeover()
           }
 
-          const backNav = addBackNavigationForErrorCondition(request)
+          const activityList = await getActivities(activityType, payload.source)
 
-          const activityList = await getActivities(activityType)
+          const model = { ...getActivityDetails(request), ...request.payload, activityList }
 
-          const model = {
-            ...payload,
-            activityList
-          }
-
-          const viewModel = new ViewModel(model, backNav, error)
+          const viewModel = new ViewModel(model, backNav(payload), error)
 
           return h.view(views.selectActivity, viewModel).code(400).takeover()
         }
@@ -76,7 +89,8 @@ module.exports = [
 
         setActivityDetails(request, payload)
 
-        // send event
+        // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)
+        await recordActivity(payload, getUser(request))
 
         return h.redirect(routes.activityConfirmation.get)
       }

@@ -3,24 +3,38 @@ const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/add-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/add-activity')
-const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
+const { getMainReturnPoint } = require('../../../lib/back-helpers')
+const { getActivityDetails, setActivityDetails } = require('../../../session/cdo/activity')
+
+const getBackNav = (request) => ({
+  backLink: getMainReturnPoint(request)
+})
+
+const getSourceEntity = async (pk, source) => {
+  return source === 'dog'
+    ? await getCdo(pk)
+    : null
+}
 
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.addActivity.get}/{indexNumber}`,
+    path: `${routes.addActivity.get}/{pk}/{source}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.params.indexNumber)
+        const entity = await getSourceEntity(request.params.pk, request.params.source)
 
-        if (cdo == null) {
+        if (entity == null) {
           return h.response().code(404).takeover()
         }
 
-        const backNav = addBackNavigation(request)
+        const activityDetails = getActivityDetails(request) || {}
+        activityDetails.pk = request.params.pk
+        activityDetails.source = request.params.source
+        activityDetails.srcHashParam = request.query?.src
 
-        return h.view(views.addActivity, new ViewModel(cdo.dog, backNav))
+        return h.view(views.addActivity, new ViewModel(activityDetails, getBackNav(request)))
       }
     }
   },
@@ -34,16 +48,15 @@ module.exports = [
         failAction: async (request, h, error) => {
           const payload = request.payload
 
-          const cdo = await getCdo(payload.indexNumber)
-          if (cdo == null) {
+          const entity = await getSourceEntity(payload.pk, payload.source)
+
+          if (entity == null) {
             return h.response().code(404).takeover()
           }
 
-          const backNav = addBackNavigationForErrorCondition(request)
+          const model = { ...getActivityDetails(request), ...request.payload }
 
-          const model = { indexNumber: payload.indexNumber }
-
-          const viewModel = new ViewModel(model, backNav, error)
+          const viewModel = new ViewModel(model, getBackNav(request), error)
 
           return h.view(views.addActivity, viewModel).code(400).takeover()
         }
@@ -51,7 +64,9 @@ module.exports = [
       handler: async (request, h) => {
         const payload = request.payload
 
-        return h.redirect(`${routes.selectActivity.get}/${payload.indexNumber}/${payload.activityType}${payload.srcHashParam}`)
+        setActivityDetails(request, payload)
+
+        return h.redirect(`${routes.selectActivity.get}`)
       }
     }
   }

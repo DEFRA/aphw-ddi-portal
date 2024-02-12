@@ -4,13 +4,14 @@ function ViewModel (activity, backNav, errors) {
   this.model = {
     formAction: routes.addActivity.post,
     backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
-    indexNumber: activity.indexNumber,
+    srcHashParam: activity.srcHashParam,
+    pk: activity.pk,
+    source: activity.source,
     activityType: {
       id: 'activityType',
       name: 'activityType',
       classes: 'govuk-!-font-size-16',
-      value: activity.type,
+      value: activity.activityType,
       items: [
         {
           text: 'We\'ve sent something',
