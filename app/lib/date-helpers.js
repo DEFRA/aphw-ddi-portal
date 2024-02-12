@@ -83,7 +83,7 @@ const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
 
-const validateDate = (value, helpers, required, preventFutureDates) => {
+const validateDate = (value, helpers, required = false, preventFutureDates = false) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -101,11 +101,11 @@ const validateDate = (value, helpers, required, preventFutureDates) => {
     const date = parseDate(dateString)
 
     if (year.length !== 4) {
-      return helpers.message('Enter 4-digit year', { path: [elementPath, ['year']] })
+      return helpers.message('Enter a 4-digit year', { path: [elementPath, ['year']] })
     }
 
     if (preventFutureDates && isFuture(date)) {
-      return helpers.message('Enter a date that is not in the future', { path: [elementPath, ['day', 'month', 'year']] })
+      return helpers.message('Enter a date that is today or in the past', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     if (!date) {

@@ -1,49 +1,8 @@
 const Joi = require('joi')
-const { getDateComponents, parseDate } = require('../../../lib/date-helpers')
-const { isFuture } = require('date-fns')
+const { getDateComponents } = require('../../../lib/date-helpers')
+const { validateDate } = require('../../../lib/date-helpers')
 
 const validNewMicrochip = /^[0-9\s]+$/
-
-const validateDate = (value, helpers) => {
-  const elementPath = helpers.state.path[0]
-
-  if (`${value.year}-${value.month}-${value.day}` === 'undefined-undefined-undefined' || `${value.year}-${value.month}-${value.day}` === '--') {
-    return null
-  }
-
-  const { day, month, year } = value
-  const dateComponents = { day, month, year }
-  const invalidComponents = []
-
-  for (const key in dateComponents) {
-    if (!dateComponents[key]) {
-      invalidComponents.push(key)
-    }
-  }
-
-  if (invalidComponents.length === 0) {
-    if (year.length !== 4) {
-      return helpers.message('Enter a 4-digit year', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    const dateString = `${year}-${month}-${day}`
-    const date = parseDate(dateString)
-
-    if (!date) {
-      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    if ((elementPath === 'dateOfDeath' || elementPath === 'dateOfBirth' || elementPath === 'dateStolen') && isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    return date
-  }
-
-  const errorMessage = `A date must include a ${invalidComponents.join(' and ')}`
-
-  return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
-}
 
 const validateMicrochip = (value, helpers) => {
   let elemName = helpers.state.path[0]
@@ -80,12 +39,12 @@ const dogDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDate),
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
   dateOfDeath: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDate).optional(),
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
   tattoo: Joi.string().trim().max(8).allow('').allow(null).optional().messages({
     'string.max': 'Tattoo must be no more than {#limit} characters'
   }),
@@ -99,17 +58,17 @@ const dogDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDate).optional(),
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
   dateStolen: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDate).optional(),
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
   dateUntraceable: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDate).optional()
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional()
 }).required()
 
 const validatePayload = (payload) => {
