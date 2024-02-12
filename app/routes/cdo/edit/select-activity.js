@@ -78,6 +78,7 @@ module.exports = [
           const activityList = await getActivities(activityType, payload.source)
 
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
+          model.editLink = getEditLink(model)
 
           const viewModel = new ViewModel(model, backNav(payload), error)
 

@@ -30,9 +30,9 @@ module.exports = [
         }
 
         const activityDetails = getActivityDetails(request) || {}
-        activityDetails.pk = request.params.pk
-        activityDetails.source = request.params.source
-        activityDetails.srcHashParam = request.query?.src
+        activityDetails.pk = activityDetails.pk ?? request.params.pk
+        activityDetails.source = activityDetails.source ?? request.params.source
+        activityDetails.srcHashParam = activityDetails.srcHashParam ?? request.query?.src
 
         return h.view(views.addActivity, new ViewModel(activityDetails, getBackNav(request)))
       }
