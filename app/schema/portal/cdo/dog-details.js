@@ -40,7 +40,7 @@ const validateIssueDate = (value, helpers) => {
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Enter a date that is today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     return date
@@ -79,7 +79,7 @@ const validateInterimExemptionDate = (value, helpers) => {
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Enter a date that is today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     const now = new Date()
