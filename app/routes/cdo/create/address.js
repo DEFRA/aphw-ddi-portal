@@ -1,4 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
+const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getAddress, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
@@ -42,7 +43,7 @@ module.exports = [{
         setEnforcementDetails(request, enforcementDetails)
       }
 
-      return h.redirect(routes.enforcementDetails.get)
+      return h.redirect(dogRoutes.details.get)
     }
   }
 }]
