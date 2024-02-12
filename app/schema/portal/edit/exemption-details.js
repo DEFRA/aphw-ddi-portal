@@ -1,69 +1,5 @@
 const Joi = require('joi')
-const { getDateComponents } = require('../../../lib/date-helpers')
-const { UTCDate } = require('@date-fns/utc')
-const { isValid, isFuture, parse } = require('date-fns')
-
-const validDateFormats = [
-  'yyyy-MM-dd',
-  'yyyy-M-d'
-]
-
-const parseDate = (value) => {
-  for (const fmt of validDateFormats) {
-    const date = parse(value, fmt, new UTCDate())
-
-    if (isValid(date)) {
-      return date
-    }
-  }
-
-  return null
-}
-
-const validateDate = (value, helpers, required) => {
-  const { day, month, year } = value
-  const dateComponents = { day, month, year }
-  const invalidComponents = []
-
-  const elementPath = helpers.state.path[0]
-
-  for (const key in dateComponents) {
-    if (!dateComponents[key]) {
-      invalidComponents.push(key)
-    }
-  }
-
-  if (invalidComponents.length === 0) {
-    const dateString = `${year}-${month}-${day}`
-    const date = parseDate(dateString)
-
-    if (year.length !== 4) {
-      return helpers.message('Enter 4-digit year', { path: [elementPath, ['year']] })
-    }
-
-    if (elementPath === 'cdoIssued' && isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
-    }
-
-    if (!date) {
-      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    return date
-  }
-
-  if (invalidComponents.length === 3) {
-    if (required) {
-      return helpers.error('any.required', { path: [elementPath, ['day']] })
-    }
-
-    return null
-  }
-
-  const errorMessage = `A date must include a ${invalidComponents.join(' and ')}`
-
-  return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
-}
+const { getDateComponents, validateDate } = require('../../../lib/date-helpers')
 
 const validateInsurance = (value, helpers) => {
   const companyPresent = value.insuranceCompany
@@ -80,13 +16,15 @@ const validateInsurance = (value, helpers) => {
   return value
 }
 
-const optionalDate = Joi.object({
-  year: Joi.string().allow(null).allow(''),
-  month: Joi.string().allow(null).allow(''),
-  day: Joi.string().allow(null).allow('')
-}).optional().custom(validateDate)
+const optionalDate = (preventFutureDates) => {
+  return Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom((value, helper) => validateDate(value, helper, false, preventFutureDates))
+}
 
-const optionalDateWhenInterimOr2023 = (errorText) => {
+const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
@@ -96,8 +34,8 @@ const optionalDateWhenInterimOr2023 = (errorText) => {
     then: Joi.optional(),
     otherwise: Joi.when('status', {
       is: 'Interim exempt',
-      then: Joi.optional().allow(null).allow('').custom((value, helper) => validateDate(value, helper, false)),
-      otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true))
+      then: Joi.optional().allow(null).allow('').custom((value, helper) => validateDate(value, helper, false, preventFutureDates)),
+      otherwise: Joi.required().custom((value, helper) => validateDate(value, helper, true, preventFutureDates))
     }).messages({
       'any.required': errorText
     })
@@ -107,9 +45,9 @@ const optionalDateWhenInterimOr2023 = (errorText) => {
 const exemptionDetailsSchema = Joi.object({
   indexNumber: Joi.string().required(),
   status: Joi.string().required(),
-  certificateIssued: optionalDate,
-  cdoIssued: optionalDateWhenInterimOr2023('Enter a CDO issued date'),
-  cdoExpiry: optionalDateWhenInterimOr2023('Enter a CDO expiry date'),
+  certificateIssued: optionalDate(true),
+  cdoIssued: optionalDateWhenInterimOr2023('Enter a CDO issued date', true),
+  cdoExpiry: optionalDateWhenInterimOr2023('Enter a CDO expiry date', false),
   court: Joi.string().when('exemptionOrder', {
     is: 2023,
     then: Joi.optional().allow(null).allow(''),
@@ -127,17 +65,17 @@ const exemptionDetailsSchema = Joi.object({
   legislationOfficer: Joi.string().trim().allow('').optional().max(64).messages({
     'string.max': 'Dog legislation officer must be no more than {#limit} characters'
   }),
-  applicationFeePaid: optionalDate,
-  neuteringConfirmation: optionalDate,
-  microchipVerification: optionalDate,
-  joinedExemptionScheme: optionalDate,
+  applicationFeePaid: optionalDate(true),
+  neuteringConfirmation: optionalDate(true),
+  microchipVerification: optionalDate(true),
+  joinedExemptionScheme: optionalDate(true),
   insuranceCompany: Joi.string().trim().allow(''),
-  insuranceRenewal: optionalDate,
+  insuranceRenewal: optionalDate(false),
   exemptionOrder: Joi.number().required(),
-  microchipDeadline: optionalDate,
-  typedByDlo: optionalDate,
-  withdrawn: optionalDate,
-  removedFromCdoProcess: optionalDate
+  microchipDeadline: optionalDate(false),
+  typedByDlo: optionalDate(true),
+  withdrawn: optionalDate(true),
+  removedFromCdoProcess: optionalDate(true)
 }).custom(validateInsurance).required()
 
 const validatePayload = (payload) => {

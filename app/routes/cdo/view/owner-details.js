@@ -17,7 +17,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const backNav = addBackNavigation(request)
+        const backNav = addBackNavigation(request, true)
 
         return h.view(views.viewOwnerDetails, new ViewModel(personAndDogs, backNav))
       }

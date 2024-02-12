@@ -263,7 +263,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a date that is in the past')
+    expect(messages).toContain('Enter a date that is today or in the past')
   })
 
   test('POST /cdo/create/dog-details missing day should display error', async () => {
@@ -426,7 +426,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a date that is in the past')
+    expect(messages).toContain('Enter a date that is today or in the past')
   })
 
   test('POST /cdo/create/dog-details route with too long dog name should return 400', async () => {

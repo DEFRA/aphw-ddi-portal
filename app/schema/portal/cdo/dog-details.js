@@ -1,24 +1,6 @@
 const Joi = require('joi')
-const { UTCDate } = require('@date-fns/utc')
-const { isValid, isFuture, addMonths, parse, isWithinInterval, sub } = require('date-fns')
-const { getDateComponents } = require('../../../lib/date-helpers')
-
-const validDateFormats = [
-  'yyyy-MM-dd',
-  'yyyy-M-d'
-]
-
-const parseFormDate = (value) => {
-  for (const fmt of validDateFormats) {
-    const date = parse(value, fmt, new UTCDate())
-
-    if (isValid(date)) {
-      return date
-    }
-  }
-
-  return null
-}
+const { isFuture, addMonths, isWithinInterval, sub } = require('date-fns')
+const { getDateComponents, parseDate } = require('../../../lib/date-helpers')
 
 const calculateExpiryDate = (value) => {
   const dateString = `${value.year}-${value.month}-${value.day}`
@@ -27,7 +9,7 @@ const calculateExpiryDate = (value) => {
     return null
   }
 
-  return addMonths(parseFormDate(dateString), 2)
+  return addMonths(parseDate(dateString), 2)
 }
 
 const validateIssueDate = (value, helpers) => {
@@ -51,14 +33,14 @@ const validateIssueDate = (value, helpers) => {
 
   if (invalidComponents.length === 0) {
     const dateString = `${year}-${month}-${day}`
-    const date = parseFormDate(dateString)
+    const date = parseDate(dateString)
 
     if (!date) {
       return helpers.message('Enter a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Enter a date that is today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     return date
@@ -90,14 +72,14 @@ const validateInterimExemptionDate = (value, helpers) => {
 
   if (invalidComponents.length === 0) {
     const dateString = `${year}-${month}-${day}`
-    const date = parseFormDate(dateString)
+    const date = parseDate(dateString)
 
     if (!date) {
       return helpers.message('Enter a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Enter a date that is today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     const now = new Date()
