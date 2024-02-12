@@ -1,51 +1,6 @@
 const Joi = require('joi')
-const { isFuture } = require('date-fns')
-const { parseDate, getDateComponents } = require('../../../lib/date-helpers')
-
-const validateDate = (value, helpers, required) => {
-  const { day, month, year } = value
-  const dateComponents = { day, month, year }
-  const invalidComponents = []
-
-  const elementPath = helpers.state.path[0]
-
-  for (const key in dateComponents) {
-    if (!dateComponents[key]) {
-      invalidComponents.push(key)
-    }
-  }
-
-  if (invalidComponents.length === 0) {
-    const dateString = `${year}-${month}-${day}`
-    const date = parseDate(dateString)
-
-    if (year.length !== 4) {
-      return helpers.message('Enter 4-digit year', { path: [elementPath, ['year']] })
-    }
-
-    if (elementPath === 'activityDate' && isFuture(date)) {
-      return helpers.message('Enter a date that is not in the future', { path: ['activityDate', ['day', 'month', 'year']] })
-    }
-
-    if (!date) {
-      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    return date
-  }
-
-  if (invalidComponents.length === 3) {
-    if (required) {
-      return helpers.error('any.required', { path: [elementPath, ['day']] })
-    }
-
-    return null
-  }
-
-  const errorMessage = `A date must include a ${invalidComponents.join(' and ')}`
-
-  return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
-}
+const { getDateComponents } = require('../../../lib/date-helpers')
+const { validateDate } = require('../../../lib/date-helpers')
 
 const selectActivitySchema = Joi.object({
   pk: Joi.string().required(),
@@ -59,7 +14,7 @@ const selectActivitySchema = Joi.object({
     year: Joi.string().allow(null).allow('').optional(),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom((value, helper) => validateDate(value, helper, true))
+  }).optional().custom((value, helper) => validateDate(value, helper, true, true))
     .messages({
       'any.required': 'Enter a date'
     })

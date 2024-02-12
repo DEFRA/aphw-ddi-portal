@@ -1,5 +1,6 @@
 const { parse, isValid, format } = require('date-fns')
 const { UTCDate } = require('@date-fns/utc')
+const { isFuture } = require('date-fns')
 
 const validDateFormats = [
   'yyyy-MM-dd',
@@ -82,6 +83,51 @@ const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
 
+const validateDate = (value, helpers, required, preventFutureDates) => {
+  const { day, month, year } = value
+  const dateComponents = { day, month, year }
+  const invalidComponents = []
+
+  const elementPath = helpers.state.path[0]
+
+  for (const key in dateComponents) {
+    if (!dateComponents[key]) {
+      invalidComponents.push(key)
+    }
+  }
+
+  if (invalidComponents.length === 0) {
+    const dateString = `${year}-${month}-${day}`
+    const date = parseDate(dateString)
+
+    if (year.length !== 4) {
+      return helpers.message('Enter 4-digit year', { path: [elementPath, ['year']] })
+    }
+
+    if (preventFutureDates && isFuture(date)) {
+      return helpers.message('Enter a date that is not in the future', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
+    if (!date) {
+      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
+    return date
+  }
+
+  if (invalidComponents.length === 3) {
+    if (required) {
+      return helpers.error('any.required', { path: [elementPath, ['day']] })
+    }
+
+    return null
+  }
+
+  const errorMessage = `A date must include a ${invalidComponents.join(' and ')}`
+
+  return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -90,5 +136,6 @@ module.exports = {
   removeDateComponents,
   addDateErrors,
   formatToGds,
-  isEmptyDate
+  isEmptyDate,
+  validateDate
 }
