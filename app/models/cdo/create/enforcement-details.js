@@ -9,7 +9,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
     addressRoute: routes.address.get,
     court: {
       label: {
-        text: 'Court'
+        text: 'Court (optional)'
       },
       hint: {
         text: 'Only required for new CDOs'
@@ -33,6 +33,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       },
       id: 'policeForce',
       name: 'policeForce',
+      classes: 'govuk-!-width-two-thirds',
       value: enforcementDetails?.policeForce,
       items: [{ text: 'Select a police force', value: null }].concat(policeForces.map(force => ({
         value: force.id,
@@ -46,7 +47,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
       },
       id: 'legislationOfficer',
       name: 'legislationOfficer',
-      classes: 'govuk-input--width-20',
+      classes: 'govuk-!-width-two-thirds',
       value: enforcementDetails?.legislationOfficer,
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '64' }
