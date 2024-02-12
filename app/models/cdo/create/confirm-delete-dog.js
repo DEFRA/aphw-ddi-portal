@@ -10,7 +10,8 @@ function ViewModel (dog) {
       name: dog[keys.name],
       breed: dog[keys.breed],
       cdoIssued: formatToGds(dog[keys.cdoIssued]),
-      cdoExpiry: formatToGds(dog[keys.cdoExpiry])
+      cdoExpiry: formatToGds(dog[keys.cdoExpiry]),
+      interimExemption: formatToGds(dog[keys.interimExemption])
     }
   }
 }

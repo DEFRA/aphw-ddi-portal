@@ -50,6 +50,7 @@ const formatAddress = addr => {
 function ViewModel (owner, address, enforcement, courts, policeForces, dogs, error) {
   this.model = {
     formAction: routes.fullSummary.post,
+    backLink: routes.enforcementDetails.get,
     summary: {
       owner: {
         name: formatName(owner),
