@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.75.2",
+  "version": "0.75.3",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -9,6 +9,7 @@
     "build:watch": "webpack --watch",
     "pretest": "npm run test:lint",
     "test": "jest --runInBand",
+    "test:parallel": "jest",
     "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
     "test:watch:all": "npm-run-all --parallel test:watch build:watch",
     "test:lint": "standard",
