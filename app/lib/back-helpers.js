@@ -34,9 +34,19 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const addBackNavigation = (request) => {
+const getMainReturnPoint = (request) => {
+  const url = getFromSession(request, 'main-return-point')
+  return url ?? '/'
+}
+
+const addBackNavigation = (request, markAsMainReturnPoint) => {
+  if (markAsMainReturnPoint) {
+    setInSession(request, 'main-return-point', request.url.href)
+  }
+
   const currentHashParam = generateCurrentHashParam(request)
   const backLinkUrl = getPreviousUrl(request)
+
   return {
     backLink: backLinkUrl,
     srcHashParam: currentHashParam
@@ -65,5 +75,6 @@ module.exports = {
   addBackNavigation,
   extractBackNavParam,
   addBackNavigationForErrorCondition,
-  extractSrcParamFromUrl
+  extractSrcParamFromUrl,
+  getMainReturnPoint
 }

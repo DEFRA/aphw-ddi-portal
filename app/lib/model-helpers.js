@@ -57,11 +57,20 @@ const propertyComparatorDesc = (propertyName, childPropertyName) => {
   }
 }
 
+const removePropertiesIfExist = (payload, propertyNames) => {
+  propertyNames.forEach(x => {
+    if (payload[x]) {
+      delete payload[x]
+    }
+  })
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
   formatAddressAsArray,
   extractLatestInsurance,
   extractLatestPrimaryTelephoneNumber,
-  extractLatestSecondaryTelephoneNumber
+  extractLatestSecondaryTelephoneNumber,
+  removePropertiesIfExist
 }

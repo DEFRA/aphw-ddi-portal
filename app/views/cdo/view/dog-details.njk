@@ -1,6 +1,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% extends '_layout.njk' %}
 
@@ -24,12 +25,26 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-half">
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
         Dog {{ model.dog.indexNumber }}
       </h1>
       {{ statusTag(model.dog.status, 'govuk-!-margin-bottom-6') }}
     </div>
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-button-group defra-align-right-simple">
+        <a href="/cdo/edit/add-activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Add activity
+        </a>
+        <!--
+        <a href="/cdo/view/activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          View activity
+        </a>
+        -->
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <!-- dog -->
       {% include "./cdo/view/dog-panel.njk" %}

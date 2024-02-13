@@ -1,12 +1,8 @@
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "components/accessibleAutocomplete/macro.njk" import accessibleAutocomplete %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% extends '_layout.njk' %}
 
@@ -37,27 +33,29 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate>
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
-          text: "Enter police and court details",
+          text: "What is the activity?",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-        {{ govukSelect(model.policeForce) }}
-      
-        {{ govukInput(model.legislationOfficer) }}
+      {{ govukRadios(model.activityType) }}
 
-        {{ accessibleAutocomplete(model.court) }}
+      <input type="hidden" name="pk" value="{{ model.pk }}" />
+      <input type="hidden" name="source" value="{{ model.source }}" />
+      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
 
-      {% endcall %}
-
-      {{ govukButton({
-        text: "Continue"
-      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </div>
     </div>
+
+    {% endcall %}
   </form>
 </div>
 

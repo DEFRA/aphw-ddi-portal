@@ -34,6 +34,17 @@ const constants = {
     certificate: {
       get: '/cdo/view/certificate',
       post: '/cdo/view/certificate'
+    },
+    addActivity: {
+      get: '/cdo/edit/add-activity',
+      post: '/cdo/edit/add-activity'
+    },
+    selectActivity: {
+      get: '/cdo/edit/select-activity',
+      post: '/cdo/edit/select-activity'
+    },
+    activityConfirmation: {
+      get: '/cdo/edit/activity-confirmation'
     }
   },
   views: {
@@ -45,7 +56,10 @@ const constants = {
     details: 'cdo/create/dog-details',
     confirm: 'cdo/create/confirm-dog-details',
     delete: 'cdo/create/confirm-dog-delete',
-    certificate: 'cdo/view/certificate'
+    certificate: 'cdo/view/certificate',
+    addActivity: 'cdo/edit/add-activity',
+    selectActivity: 'cdo/edit/select-activity',
+    activityConfirmation: 'cdo/edit/activity-confirmation'
   },
   keys: {
     entry: 'dogs',
