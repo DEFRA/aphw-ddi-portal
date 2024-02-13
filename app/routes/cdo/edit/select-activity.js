@@ -8,6 +8,7 @@ const { addDateComponents } = require('../../../lib/date-helpers')
 const { setActivityDetails, getActivityDetails } = require('../../../session/cdo/activity')
 const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
+const { removePropertiesIfExist } = require('../../../lib/model-helpers.js')
 
 const backNav = details => ({
   backLink: `/cdo/edit/add-activity/${details.pk}/${details.source}`
@@ -89,6 +90,14 @@ module.exports = [
         const payload = request.payload
 
         setActivityDetails(request, payload)
+
+        removePropertiesIfExist(payload,
+          [
+            'activityDate-day',
+            'activityDate-month',
+            'activityDate-year',
+            'srcHashParam'
+          ])
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)
         await recordActivity(payload, getUser(request))
