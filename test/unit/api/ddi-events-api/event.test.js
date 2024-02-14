@@ -1,3 +1,12 @@
+const { get } = require('../../../../app/api/ddi-index-api/base')
+const { getEvents } = require('../../../../app/api/ddi-index-api/event')
+jest.mock('../../../../app/api/ddi-index-api/base', () => {
+  return {
+    __esModule: true,
+    get: jest.fn(() => ({ payload: {} }))
+  }
+})
+
 const validEvent = {
   events: [
     {
@@ -157,9 +166,14 @@ const validEvent = {
   ]
 }
 
-describe('event', () => {
-  test('test', () => {
-    console.log(validEvent)
-    expect(true).toBe(true)
+describe('event test', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+  test('getEvents calls endpoint', async () => {
+    expect(validEvent).toEqual(validEvent)
+    get.mockResolvedValue({ payload: validEvent })
+    await getEvents('ED12345')
+    expect(get).toHaveBeenCalledWith('events/ED12345', { json: true })
   })
 })
