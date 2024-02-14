@@ -3,7 +3,7 @@ const wreck = require('@hapi/wreck')
 
 const baseUrl = config.ddiEventsApi.baseUrl
 
-const get = async (endpoint, user) => {
+const get = async (endpoint) => {
   const options = { json: true }
 
   const { payload } = await wreck.get(`${baseUrl}/${endpoint}`, options)
