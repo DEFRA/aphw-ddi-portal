@@ -1,8 +1,14 @@
-/* istanbul ignore file */
-const { get: indexGet } = require('../ddi-index-api/base')
+const config = require('../../config')
+const wreck = require('@hapi/wreck')
+
+const baseUrl = config.ddiEventsApi.baseUrl
 
 const get = async (endpoint, user) => {
-  return indexGet(endpoint, user)
+  const options = { json: true }
+
+  const { payload } = await wreck.get(`${baseUrl}/${endpoint}`, options)
+
+  return payload
 }
 
 module.exports = {
