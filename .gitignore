@@ -4,6 +4,7 @@
 .npm/
 .standard-v12-cache/
 .vscode
+.idea
 app/static/stylesheets/*.css*
 lcov.info
 node_modules
@@ -16,3 +17,4 @@ dist
 _layout.njk
 _cookie-banner.njk
 _enforcement-details.njk
+

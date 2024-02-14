@@ -1,7 +1,8 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
-describe('View dog details', () => {
+describe('Check actitivities', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -18,10 +19,11 @@ describe('View dog details', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/view/dog-details route returns 200', async () => {
+  test('GET /cdo/view/activity route returns a 200', async () => {
     getCdo.mockResolvedValue({
       dog: {
-        id: 1,
+        id: 300000,
+        indexNumber: 'ED300000',
         name: 'Bruno',
         status: { status: 'TEST' },
         dog_breed: { breed: 'breed1' }
@@ -44,7 +46,7 @@ describe('View dog details', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/view/activity/ED123/dog',
       auth
     }
 
@@ -53,19 +55,16 @@ describe('View dog details', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
-    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add activity')
-    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('View all activity')
+    expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED300000')
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
   })
 
-  test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {
+  test('GET /cdo/view/activity route returns 404 if no dog data found', async () => {
     getCdo.mockResolvedValue(undefined)
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/view/activity/ED123/dog',
       auth
     }
 
@@ -74,8 +73,18 @@ describe('View dog details', () => {
     expect(response.statusCode).toBe(404)
   })
 
-  afterEach(async () => {
-    jest.clearAllMocks()
-    await server.stop()
+  test('GET /cdo/view/activity route returns 404 if source is not dog', async () => {
+    getCdo.mockResolvedValue(undefined)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/activity/ED123/not-a-dog',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
   })
+
 })
