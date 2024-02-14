@@ -1,4 +1,4 @@
-const { get } = require('./base')
+const { get } = require('../ddi-events-api/base')
 
 const options = {
   json: true

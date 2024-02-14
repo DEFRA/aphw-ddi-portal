@@ -1,6 +1,6 @@
-const { get } = require('../../../../app/api/ddi-index-api/base')
-const { getEvents } = require('../../../../app/api/ddi-index-api/event')
-jest.mock('../../../../app/api/ddi-index-api/base', () => {
+const { get } = require('../../../../app/api/ddi-events-api/base')
+const { getEvents } = require('../../../../app/api/ddi-events-api/event')
+jest.mock('../../../../app/api/ddi-events-api/base', () => {
   return {
     __esModule: true,
     get: jest.fn(() => ({ payload: {} }))
