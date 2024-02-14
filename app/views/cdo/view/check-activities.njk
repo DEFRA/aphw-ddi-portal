@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  <div class="govuk-grid-row">
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       {{ govukBackLink({
         text: "Back",
@@ -24,11 +24,31 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <span class="govuk-caption-l">Dog {{ model.dog.indexNumber }}</span>
-        <h1 class="govuk-heading-l">Check activity</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <span class="govuk-caption-l">Dog {{ model.dog.indexNumber }}</span>
+            <h1 class="govuk-heading-l">Check activity</h1>
+        </div>
     </div>
-  </div>
-
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">All activity</caption>
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date</th>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-half">Activity</th>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Team member</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <!-- Activity List -->
+            {% for eventRow in model.events %}
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ eventRow.date }}</td>
+                <td class="govuk-table__cell">{{ eventRow.activityLabel }}</td>
+                <td class="govuk-table__cell">{{ eventRow.teamMember }}</td>
+            </tr>
+            {% endfor %}
+            <!-- / Activity List -->
+        </tbody>
+    </table>
 {% endblock %}
