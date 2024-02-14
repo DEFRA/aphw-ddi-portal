@@ -7,7 +7,7 @@ const { formatToGds } = require('../../../lib/date-helpers')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
 const getSourceDescription = details => {
-  return details.source === 'dog' ? `Dog ${details.pk}` : 'NOT YET DEFINED'
+  return details.source === 'dog' ? `Dog ${details.pk}` : details.name
 }
 
 const getAlternativeReturnLink = details => {

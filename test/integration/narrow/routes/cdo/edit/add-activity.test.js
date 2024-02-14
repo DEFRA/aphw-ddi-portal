@@ -7,6 +7,9 @@ describe('Add activity', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/activities')
+  const { getActivities } = require('../../../../../../app/api/ddi-index-api/activities')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -25,6 +28,8 @@ describe('Add activity', () => {
       }
     })
 
+    getActivities.mockResolvedValue([{ id: 1, name: 'act 1' }])
+
     const options = {
       method: 'GET',
       url: '/cdo/edit/add-activity/ED12345/dog',
@@ -34,6 +39,27 @@ describe('Add activity', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/edit/add-activity route forwards 302', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        status: 'Exempt',
+        indexNumber: 'ED12345'
+      }
+    })
+
+    getActivities.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/add-activity/ED12345/dog',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
   })
 
   test('GET /cdo/edit/add-activity route returns 404 when dog not found', async () => {

@@ -23,11 +23,25 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-half">
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
         {{ model.person.firstName }} {{ model.person.lastName }}
       </h1>
     </div>
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-button-group defra-align-right-simple">
+        <a href="/cdo/edit/add-activity/{{ model.person.personReference }}/owner{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Add an activity
+        </a>
+        <!--
+        <a href="/cdo/view/activity/{{ model.person.personReference }}/owner{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Check activity
+        </a>
+        -->
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <!-- owner -->
       {% include "./cdo/view/owner-panel.njk" %}

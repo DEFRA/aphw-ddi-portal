@@ -65,6 +65,10 @@ const removePropertiesIfExist = (payload, propertyNames) => {
   })
 }
 
+const deepClone = obj => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -72,5 +76,6 @@ module.exports = {
   extractLatestInsurance,
   extractLatestPrimaryTelephoneNumber,
   extractLatestSecondaryTelephoneNumber,
-  removePropertiesIfExist
+  removePropertiesIfExist,
+  deepClone
 }

@@ -17,7 +17,8 @@ const selectActivitySchema = Joi.object({
   }).optional().custom((value, helper) => validateDate(value, helper, true, true))
     .messages({
       'any.required': 'Enter a date'
-    })
+    }),
+  name: Joi.string().optional()
 }).required()
 
 const validatePayload = (payload) => {

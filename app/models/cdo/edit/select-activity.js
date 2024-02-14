@@ -9,6 +9,7 @@ function ViewModel (model, backNav, errors) {
     pk: model.pk,
     srcHashParam: model.srcHashParam,
     source: model.source,
+    name: model.name,
     activityType: model.activityType,
     activityTitle: determineActivityTitle(model.activityType),
     activityDateTitle: determineActivityDateTitle(model.activityType),
