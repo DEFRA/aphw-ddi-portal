@@ -1,6 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
 describe('Check actitivities', () => {
   jest.mock('../../../../../../app/auth')
@@ -86,5 +85,4 @@ describe('Check actitivities', () => {
 
     expect(response.statusCode).toBe(404)
   })
-
 })

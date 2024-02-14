@@ -17,7 +17,7 @@ const constants = {
       post: '/cdo/edit/dog-details'
     },
     viewDogActivities: {
-      get: '/cdo/view/activity',
+      get: '/cdo/view/activity'
     },
     editExemptionDetails: {
       get: '/cdo/edit/exemption-details',

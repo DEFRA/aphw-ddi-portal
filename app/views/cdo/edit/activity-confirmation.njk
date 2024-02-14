@@ -13,16 +13,29 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
-      <h1 class="govuk-panel__title">{{ model.message }}</h1>
-      <div class="govuk-panel__body">{{ model.sourceDescription }}</div>
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+            <h1 class="govuk-panel__title">{{ model.message }}</h1>
+            <div class="govuk-panel__body">{{ model.sourceDescription }}</div>
+        </div>
     </div>
-  </div>
 </div>
 
-<p class="govuk-body">
-  <a class="govuk-link govuk-link--no-visited-state" href="{{ model.returnLink }}">Go to the {{ model.source }} record for {{ model.sourceDescription }}</a>
-</p>
+<div class="govuk-body">
+    <ul class="govuk-list">
+        <li>
+            <a
+              class="govuk-link govuk-link--no-visited-state"
+              href="{{ model.activityLink }}"
+            >Check activity for {{ model.sourceDescription }}</a>
+        </li>
+        <li>
+            <a
+              class="govuk-link govuk-link--no-visited-state"
+              href="{{ model.returnLink }}"
+            >Go to the {{ model.source }} record for {{ model.sourceDescription }}</a>
+        </li>
+    </ul>
+</div>
 
 {% endblock %}
