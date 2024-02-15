@@ -217,6 +217,7 @@ describe('Check actitivities', () => {
 
     const { document } = new JSDOM(response.payload).window
 
+    expect(getEvents).toBeCalledWith(['ED123'])
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED300000')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')

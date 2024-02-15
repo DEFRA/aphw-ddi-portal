@@ -19,7 +19,7 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const cdo = await getSourceEntity(request.params.pk, request.params.source)
-        const allEvents = await getEvents(request.params.pk)
+        const allEvents = await getEvents([request.params.pk])
 
         if (cdo === null || cdo === undefined) {
           return h.response().code(404).takeover()
