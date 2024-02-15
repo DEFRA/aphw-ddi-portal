@@ -169,7 +169,7 @@ describe('Check Activity Mappers', () => {
           activityType: 'received',
           activityLabel: 'New activity type'
         }
-      })).toBe('NOT YET DEFINED')
+      })).toBe('New activity type received')
     })
     test('should return NOT YET DEFINED given activity type is invalid', () => {
       expect(getActivityLabelFromEvent({
@@ -178,7 +178,7 @@ describe('Check Activity Mappers', () => {
           activityType: 'unknown',
           activityLabel: 'Judicial review'
         }
-      })).toBe('NOT YET DEFINED')
+      })).toBe('Judicial review unknown')
     })
     test('should return NOT YET DEFINED given activity is undefined', () => {
       expect(getActivityLabelFromEvent({

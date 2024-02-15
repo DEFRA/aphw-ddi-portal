@@ -18,7 +18,15 @@ const getActivityLabelFromEvent = (event) => {
     return 'NOT YET DEFINED'
   }
   const activityLabel = activityMapper[event.activity?.activityType]?.[event.activity.activityLabel]
-  return activityLabel || 'NOT YET DEFINED'
+
+  if (activityLabel) {
+    return activityLabel
+  }
+
+  if (event.activity?.activityType) {
+    return `${event.activity?.activityLabel} ${event.activity?.activityType}`
+  }
+  return 'NOT YET DEFINED'
 }
 
 const mapActivityDtoToCheckActivityRow = (activity) => {
