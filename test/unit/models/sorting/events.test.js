@@ -76,6 +76,29 @@ describe('Event sorting', () => {
       const mappedResults = [activityJudicial, createCdo].sort(sortEventsDescCompareFn)
       expect(mappedResults).toEqual([createCdo, activityJudicial])
     })
+
+    test('should sort two activities correctly given Date is same', () => {
+      const firstItem = {
+        activity: {
+          activityDate: '2024-02-14T00:00:00.000Z'
+        },
+        subject: 'DDI Activity Police correspondence',
+        timestamp: '2024-02-14T16:13:41.937Z',
+        type: 'uk.gov.defra.ddi.event.activity'
+      }
+      const secondItem = {
+        activity: {
+          activityDate: '2024-02-14T00:00:00.000Z'
+        },
+        subject: 'DDI Activity Police correspondence',
+        timestamp: '2024-02-14T16:12:41.937Z',
+        type: 'uk.gov.defra.ddi.event.activity'
+      }
+      expect(sortEventsDescCompareFn(firstItem, secondItem) < 0).toBe(true)
+      expect(sortEventsDescCompareFn(secondItem, firstItem) > 0).toBe(true)
+      const mappedResults = [secondItem, firstItem].sort(sortEventsDescCompareFn)
+      expect(mappedResults).toEqual([firstItem, secondItem])
+    })
   })
 
   describe('sortEventsDesc', () => {
