@@ -4,6 +4,7 @@ const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getEvents } = require('../../../api/ddi-events-api/event')
 const { addBackNavigation } = require('../../../lib/back-helpers')
+const { sortEventsDesc } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
   return source === 'dog'
@@ -25,11 +26,12 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const activities = allEvents.events.filter(event => event.type === 'uk.gov.defra.ddi.event.activity')
+        const filtedActivities = allEvents.events.filter(event => event.type === 'uk.gov.defra.ddi.event.activity')
+        const sortedActivities = sortEventsDesc(filtedActivities)
 
         const backNav = addBackNavigation(request, true)
 
-        return h.view(views.viewDogActivities, new ViewModel(cdo, activities, backNav))
+        return h.view(views.viewDogActivities, new ViewModel(cdo, sortedActivities, backNav))
       }
     }
   }

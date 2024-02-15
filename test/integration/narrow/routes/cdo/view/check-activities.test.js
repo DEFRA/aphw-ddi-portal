@@ -25,11 +25,11 @@ describe('Check actitivities', () => {
     events: [
       {
         activity: {
-          activity: '4',
+          activity: '5',
           activityType: 'received',
           pk: 'ED300000',
           source: 'dog',
-          activityDate: '2024-02-14T00:00:00.000Z',
+          activityDate: '2024-02-10T00:00:00.000Z',
           activityLabel: 'Police correspondence'
         },
         operation: 'activity',
@@ -37,10 +37,59 @@ describe('Check actitivities', () => {
           username: 'Developer',
           displayname: 'Developer'
         },
-        timestamp: '2024-02-14T15:12:41.937Z',
+        timestamp: '2024-02-15T15:12:41.937Z',
         type: 'uk.gov.defra.ddi.event.activity',
         rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
         subject: 'DDI Activity Police correspondence'
+      },
+      {
+        actioningUser: {
+          username: 'dev@test.com',
+          displayname: 'Developer'
+        },
+        operation: 'updated person',
+        changes: {
+          added: [],
+          removed: [],
+          edited: [
+            [
+              'address/addressLine1',
+              '93 SILVERDALE AVENUE',
+              '91 SILVERDALE AVENUE'
+            ],
+            [
+              'contacts/email',
+              '',
+              'me@here.com'
+            ]
+          ]
+        },
+        timestamp: '2024-02-14T08:23:22.301Z',
+        type: 'uk.gov.defra.ddi.event.update',
+        rowKey: '82a0507b-f2e5-4ba7-8e41-14a7ef60b972|1707899002301',
+        subject: 'DDI Update person'
+      },
+      {
+        actioningUser: {
+          username: 'dev@test.com',
+          displayname: 'Developer'
+        },
+        operation: 'updated dog',
+        changes: {
+          added: [],
+          removed: [],
+          edited: [
+            [
+              'colour',
+              'Brown',
+              'Brown and white'
+            ]
+          ]
+        },
+        timestamp: '2024-02-14T08:22:52.441Z',
+        type: 'uk.gov.defra.ddi.event.update',
+        rowKey: 'c48e420a-0eb6-457d-bffa-f53c788330fc|1707898972441',
+        subject: 'DDI Update dog'
       },
       {
         actioningUser: {
@@ -130,53 +179,23 @@ describe('Check actitivities', () => {
         subject: 'DDI Create cdo'
       },
       {
+        activity: {
+          activity: '4',
+          activityType: 'received',
+          pk: 'ED300000',
+          source: 'dog',
+          activityDate: '2024-02-14T00:00:00.000Z',
+          activityLabel: 'Police correspondence'
+        },
+        operation: 'activity',
         actioningUser: {
-          username: 'dev@test.com',
+          username: 'Developer',
           displayname: 'Developer'
         },
-        operation: 'updated person',
-        changes: {
-          added: [],
-          removed: [],
-          edited: [
-            [
-              'address/addressLine1',
-              '93 SILVERDALE AVENUE',
-              '91 SILVERDALE AVENUE'
-            ],
-            [
-              'contacts/email',
-              '',
-              'me@here.com'
-            ]
-          ]
-        },
-        timestamp: '2024-02-14T08:23:22.301Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: '82a0507b-f2e5-4ba7-8e41-14a7ef60b972|1707899002301',
-        subject: 'DDI Update person'
-      },
-      {
-        actioningUser: {
-          username: 'dev@test.com',
-          displayname: 'Developer'
-        },
-        operation: 'updated dog',
-        changes: {
-          added: [],
-          removed: [],
-          edited: [
-            [
-              'colour',
-              'Brown',
-              'Brown and white'
-            ]
-          ]
-        },
-        timestamp: '2024-02-14T08:22:52.441Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: 'c48e420a-0eb6-457d-bffa-f53c788330fc|1707898972441',
-        subject: 'DDI Update dog'
+        timestamp: '2024-02-14T15:12:41.937Z',
+        type: 'uk.gov.defra.ddi.event.activity',
+        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
+        subject: 'DDI Activity Police correspondence'
       }
     ]
   }
@@ -228,7 +247,7 @@ describe('Check actitivities', () => {
     expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(1)
+    expect(rows.length).toBe(2)
     expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('14 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Developer')
