@@ -11,6 +11,11 @@ const getDogDetails = async (indexNumber) => {
   return payload.dog
 }
 
+const getDogOwner = async (indexNumber) => {
+  const payload = await get(`dog-owner/${indexNumber}`, options)
+  return payload.owner
+}
+
 const updateDogDetails = async (dog, username) => {
   dog.dogId = dog.id
   return await put(dogEndpoint, dog, username)
@@ -31,5 +36,6 @@ const updateStatus = async (payload, user) => {
 module.exports = {
   updateDogDetails,
   updateStatus,
-  getDogDetails
+  getDogDetails,
+  getDogOwner
 }

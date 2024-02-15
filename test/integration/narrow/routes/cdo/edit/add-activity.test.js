@@ -132,7 +132,8 @@ describe('Add activity', () => {
     const payload = {
       pk: 'ED12345',
       source: 'dog',
-      activityType: 'sent'
+      activityType: 'sent',
+      titleReference: 'Dog ED12345'
     }
 
     const options = {

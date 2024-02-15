@@ -6,10 +6,6 @@ const { getActivityById } = require('../../../api/ddi-index-api/activities')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
-const getSourceDescription = details => {
-  return details.source === 'dog' ? `Dog ${details.pk}` : details.name
-}
-
 const getAlternativeReturnLink = details => {
   return details.source === 'dog' ? `${routes.viewDogDetails.get}/${details.indexNumber}` : 'NOT YET DEFINED'
 }
@@ -32,7 +28,7 @@ module.exports = [
         const model = {
           message: `${activity.label} ${details.activityType} on ${formatToGds(details.activityDate)}`,
           returnLink: getMainReturnPoint(request) !== '/' ? getMainReturnPoint(request) : getAlternativeReturnLink(details),
-          sourceDescription: getSourceDescription(details),
+          sourceDescription: details.titleReference,
           source: details.source
         }
 

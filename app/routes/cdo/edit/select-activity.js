@@ -12,10 +12,15 @@ const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
 const { removePropertiesIfExist } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
+const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
-const backNav = details => ({
-  backLink: `/cdo/edit/add-activity/${details.pk}/${details.source}`
-})
+const backNav = (details, request) => {
+  return {
+    backLink: details.skippedFirstPage === 'true'
+      ? getMainReturnPoint(request)
+      : `/cdo/edit/add-activity/${details.pk}/${details.source}`
+  }
+}
 
 const getSourceEntity = async (details) => {
   return details.source === 'dog'
@@ -54,12 +59,12 @@ module.exports = [
           activityDate: new Date(),
           editLink: getEditLink(activityDetails),
           srcHashParam: activityDetails.srcHashParam,
-          name: `${entity?.firstName} ${entity?.lastName}`
+          titleReference: activityDetails.titleReference
         }
 
         addDateComponents(model, 'activityDate')
 
-        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails)))
+        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails, request)))
       }
     }
   },
@@ -85,7 +90,7 @@ module.exports = [
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
           model.editLink = getEditLink(model)
 
-          const viewModel = new ViewModel(model, backNav(payload), error)
+          const viewModel = new ViewModel(model, backNav(payload, request), error)
 
           return h.view(views.selectActivity, viewModel).code(400).takeover()
         }
@@ -103,7 +108,7 @@ module.exports = [
             'activityDate-month',
             'activityDate-year',
             'srcHashParam',
-            'name'
+            'titleReference'
           ])
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)

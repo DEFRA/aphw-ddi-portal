@@ -104,7 +104,8 @@ describe('Select activity', () => {
       activity: '2',
       'activityDate-year': '2023',
       'activityDate-month': '12',
-      'activityDate-day': '20'
+      'activityDate-day': '20',
+      titleReference: 'Dog ED12345'
     }
 
     const options = {

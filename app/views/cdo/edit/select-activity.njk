@@ -35,6 +35,7 @@
     {% endif %}
 
     <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      <span class="govuk-caption-l">{{ model.titleReference }}</span>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">{{ model.activityTitle }}</h1>
@@ -56,6 +57,9 @@
               <li>a change of address form</li>
               <li>evidence of the death of a dog</li>
             </ul>
+            <p class="govuk-body">
+              The update will show in the activity list.
+            </p>
           </div>
         </details>
         {% endif %}
@@ -66,7 +70,7 @@
       <input type="hidden" name="pk" value="{{ model.pk }}" />
       <input type="hidden" name="source" value="{{ model.source }}" />
       <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
-      <input type="hidden" name="name" value="{{ model.name }}" />
+      <input type="hidden" name="titleReference" value="{{ model.titleReference }}" />
 
       <div class="govuk-button-group">
         {{ govukButton({

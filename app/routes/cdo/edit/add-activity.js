@@ -19,6 +19,12 @@ const getSourceEntity = async (pk, source) => {
     : await getPersonByReference(pk)
 }
 
+const getTitleReference = (source, entity) => {
+  return source === 'dog'
+    ? `Dog ${entity.dog.indexNumber}`
+    : `${entity.firstName} ${entity.lastName}`
+}
+
 const handleForwardSkipIfNeeded = async (request, details, h) => {
   const numSentActivities = (await getActivities(keys.sent, details.source)).length
   const numReceivedActivities = (await getActivities(keys.received, details.source)).length
@@ -27,6 +33,7 @@ const handleForwardSkipIfNeeded = async (request, details, h) => {
     return h.view(views.addActivity, new ViewModel(details, getBackNav(request)))
   } else {
     details.activityType = numSentActivities > 0 ? keys.sent : keys.received
+    details.skippedFirstPage = 'true'
     setActivityDetails(request, details)
     return h.redirect(`${routes.selectActivity.get}`)
   }
@@ -46,11 +53,12 @@ module.exports = [
         }
 
         const activityDetails = getActivityDetails(request) || {}
-        activityDetails.pk = activityDetails.pk ?? request.params.pk
-        activityDetails.source = activityDetails.source ?? request.params.source
-        activityDetails.srcHashParam = activityDetails.srcHashParam ?? request.query?.src
+        activityDetails.pk = request.params.pk
+        activityDetails.source = request.params.source
+        activityDetails.srcHashParam = request.query?.src
+        activityDetails.titleReference = getTitleReference(activityDetails.source, entity)
 
-        return handleForwardSkipIfNeeded(request, activityDetails, h)
+        return await handleForwardSkipIfNeeded(request, activityDetails, h)
       }
     }
   },

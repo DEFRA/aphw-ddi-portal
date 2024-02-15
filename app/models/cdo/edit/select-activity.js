@@ -8,6 +8,7 @@ function ViewModel (model, backNav, errors) {
     editLink: model.editLink,
     pk: model.pk,
     srcHashParam: model.srcHashParam,
+    titleReference: model.titleReference,
     source: model.source,
     name: model.name,
     activityType: model.activityType,
