@@ -1,5 +1,5 @@
 const { user } = require('../../../mocks/auth')
-const { updateStatus, getDogDetails, updateDogDetails } = require('../../../../app/api/ddi-index-api/dog')
+const { updateStatus, getDogDetails, updateDogDetails, getDogOwner } = require('../../../../app/api/ddi-index-api/dog')
 const { get, post, put } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
@@ -39,6 +39,12 @@ describe('Dog test', () => {
     get.mockResolvedValue({ payload: {} })
     await getDogDetails('ED12345')
     expect(get).toHaveBeenCalledWith('dog/ED12345', expect.anything())
+  })
+
+  test('getDogDOwner calls endpoint', async () => {
+    get.mockResolvedValue({ payload: {} })
+    await getDogOwner('ED12345')
+    expect(get).toHaveBeenCalledWith('dog-owner/ED12345', expect.anything())
   })
 
   test('updateDogDetails calls endpoint', async () => {
