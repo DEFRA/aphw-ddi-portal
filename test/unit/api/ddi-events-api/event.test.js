@@ -8,7 +8,12 @@ describe('event test', () => {
   })
   test('getEvents calls endpoint', async () => {
     get.mockResolvedValue({ payload: {} })
-    await getEvents('ED12345')
-    expect(get).toHaveBeenCalledWith('events/ED12345', { json: true })
+    await getEvents(['ED12345'])
+    expect(get).toHaveBeenCalledWith('events/?pks=ED12345', { json: true })
+  })
+  test('getEvents calls endpoint with multiple indexes', async () => {
+    get.mockResolvedValue({ payload: {} })
+    await getEvents(['ED12345', 'ED23456'])
+    expect(get).toHaveBeenCalledWith('events/?pks=ED12345,ED23456', { json: true })
   })
 })
