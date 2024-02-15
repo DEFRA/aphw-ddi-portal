@@ -1,7 +1,7 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
-describe('Check actitivities', () => {
+describe('Check activities', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -253,6 +253,45 @@ describe('Check actitivities', () => {
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Developer')
   })
 
+  test('GET /cdo/view/activity route returns a 200 and message given no activities exist', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        id: 300000,
+        indexNumber: 'ED300000',
+        name: 'Bruno',
+        status: { status: 'TEST' },
+        dog_breed: { breed: 'breed1' }
+      },
+      person: {
+        firstName: 'John Smith',
+        addresses: [{
+          address: {
+          }
+        }],
+        person_contacts: []
+      },
+      exemption: {
+        exemptionOrder: 2015,
+        insurance: [{
+          company: 'Dogs Trust'
+        }]
+      }
+    })
+    getEvents.mockResolvedValue({ events: [] })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/activity/ED123/dog',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(document.querySelectorAll('.govuk-table').length).toBe(0)
+    expect(document.querySelector('main').textContent.trim()).toContain('No activities have been added to this record')
+  })
   test('GET /cdo/view/activity route returns 404 if no dog data found', async () => {
     getCdo.mockResolvedValue(undefined)
 
