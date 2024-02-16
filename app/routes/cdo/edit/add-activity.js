@@ -1,10 +1,13 @@
 const { routes, views } = require('../../../constants/cdo/dog')
+const { keys } = require('../../../constants/cdo/activity.js')
 const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/add-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/add-activity')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { getActivityDetails, setActivityDetails } = require('../../../session/cdo/activity')
+const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
+const { getActivities } = require('../../../api/ddi-index-api/activities')
 
 const getBackNav = (request) => ({
   backLink: getMainReturnPoint(request)
@@ -13,7 +16,28 @@ const getBackNav = (request) => ({
 const getSourceEntity = async (pk, source) => {
   return source === 'dog'
     ? await getCdo(pk)
-    : null
+    : await getPersonByReference(pk)
+}
+
+const getTitleReference = (source, entity) => {
+  return source === 'dog'
+    ? `Dog ${entity.dog.indexNumber}`
+    : `${entity.firstName} ${entity.lastName}`
+}
+
+const handleForwardSkipIfNeeded = async (request, details, h) => {
+  const numSentActivities = (await getActivities(keys.sent, details.source)).length
+  const numReceivedActivities = (await getActivities(keys.received, details.source)).length
+
+  if (numSentActivities > 0 && numReceivedActivities > 0) {
+    return h.view(views.addActivity, new ViewModel(details, getBackNav(request)))
+  } else {
+    details.activityType = numSentActivities > 0 ? keys.sent : keys.received
+    details.skippedFirstPage = 'true'
+    setActivityDetails(request, details)
+
+    return h.redirect(`${routes.selectActivity.get}`)
+  }
 }
 
 module.exports = [
@@ -30,11 +54,12 @@ module.exports = [
         }
 
         const activityDetails = getActivityDetails(request) || {}
-        activityDetails.pk = activityDetails.pk ?? request.params.pk
-        activityDetails.source = activityDetails.source ?? request.params.source
-        activityDetails.srcHashParam = activityDetails.srcHashParam ?? request.query?.src
+        activityDetails.pk = request.params.pk
+        activityDetails.source = request.params.source
+        activityDetails.srcHashParam = request.query?.src
+        activityDetails.titleReference = getTitleReference(activityDetails.source, entity)
 
-        return h.view(views.addActivity, new ViewModel(activityDetails, getBackNav(request)))
+        return await handleForwardSkipIfNeeded(request, activityDetails, h)
       }
     }
   },

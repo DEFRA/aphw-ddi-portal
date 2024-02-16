@@ -7,6 +7,7 @@ function ViewModel (activity, backNav, errors) {
     srcHashParam: activity.srcHashParam,
     pk: activity.pk,
     source: activity.source,
+    titleReference: activity.titleReference,
     activityType: {
       id: 'activityType',
       name: 'activityType',

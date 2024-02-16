@@ -17,7 +17,9 @@ const selectActivitySchema = Joi.object({
   }).optional().custom((value, helper) => validateDate(value, helper, true, true))
     .messages({
       'any.required': 'Enter a date'
-    })
+    }),
+  titleReference: Joi.string().required(),
+  skippedFirstPage: Joi.string().allow('').allow(null).optional()
 }).required()
 
 const validatePayload = (payload) => {

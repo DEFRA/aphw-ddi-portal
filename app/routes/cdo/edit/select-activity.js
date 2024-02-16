@@ -1,4 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
+const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/select-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
@@ -8,22 +9,28 @@ const { addDateComponents } = require('../../../lib/date-helpers')
 const { setActivityDetails, getActivityDetails } = require('../../../session/cdo/activity')
 const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
-const { removePropertiesIfExist } = require('../../../lib/model-helpers.js')
+const { deepClone } = require('../../../lib/model-helpers.js')
+const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
+const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
-const backNav = details => ({
-  backLink: `/cdo/edit/add-activity/${details.pk}/${details.source}`
-})
+const backNav = (details, request) => {
+  return {
+    backLink: details.skippedFirstPage === 'true'
+      ? getMainReturnPoint(request)
+      : `/cdo/edit/add-activity/${details.pk}/${details.source}`
+  }
+}
 
 const getSourceEntity = async (details) => {
   return details.source === 'dog'
     ? await getCdo(details.pk)
-    : null
+    : await getPersonByReference(details.pk)
 }
 
 const getEditLink = details => {
   return details.source === 'dog'
     ? `${routes.editDogDetails.get}/${details.pk}?src=${details.srcHashParam}`
-    : 'NOT YET DEFINED'
+    : `${ownerRoutes.viewOwnerDetails.get}/${details.pk}?src=${details.srcHashParam}`
 }
 
 module.exports = [
@@ -50,12 +57,14 @@ module.exports = [
           source: activityDetails.source,
           activityDate: new Date(),
           editLink: getEditLink(activityDetails),
-          srcHashParam: activityDetails.srcHashParam
+          srcHashParam: activityDetails.srcHashParam,
+          titleReference: activityDetails.titleReference,
+          skippedFirstPage: activityDetails.skippedFirstPage
         }
 
         addDateComponents(model, 'activityDate')
 
-        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails)))
+        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails, request)))
       }
     }
   },
@@ -81,7 +90,7 @@ module.exports = [
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
           model.editLink = getEditLink(model)
 
-          const viewModel = new ViewModel(model, backNav(payload), error)
+          const viewModel = new ViewModel(model, backNav(payload, request), error)
 
           return h.view(views.selectActivity, viewModel).code(400).takeover()
         }
@@ -91,16 +100,18 @@ module.exports = [
 
         setActivityDetails(request, payload)
 
-        removePropertiesIfExist(payload,
-          [
-            'activityDate-day',
-            'activityDate-month',
-            'activityDate-year',
-            'srcHashParam'
-          ])
+        const activityPayload = deepClone(payload)
+
+        const activityModel = {
+          activity: activityPayload.activity,
+          activityType: activityPayload.activityType,
+          pk: activityPayload.pk,
+          source: activityPayload.source,
+          activityDate: activityPayload.activityDate
+        }
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)
-        await recordActivity(payload, getUser(request))
+        await recordActivity(activityModel, getUser(request))
 
         return h.redirect(routes.activityConfirmation.get)
       }

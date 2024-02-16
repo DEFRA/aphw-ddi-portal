@@ -34,6 +34,7 @@
     {% endif %}
 
     <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      <span class="govuk-caption-l">{{ model.titleReference }}</span>
       {% call govukFieldset({
         legend: {
           text: "What is the activity?",
@@ -47,6 +48,7 @@
       <input type="hidden" name="pk" value="{{ model.pk }}" />
       <input type="hidden" name="source" value="{{ model.source }}" />
       <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
+      <input type="hidden" name="titleReference" value="{{ model.titleReference }}" />
 
       <div class="govuk-button-group">
         {{ govukButton({

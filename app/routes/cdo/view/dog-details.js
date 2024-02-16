@@ -3,6 +3,7 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/dog-details')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
+const { setActivityDetails } = require('../../../session/cdo/activity')
 
 module.exports = [
   {
@@ -16,6 +17,8 @@ module.exports = [
         if (cdo === undefined) {
           return h.response().code(404).takeover()
         }
+
+        setActivityDetails(request, null)
 
         const backNav = addBackNavigation(request, true)
 

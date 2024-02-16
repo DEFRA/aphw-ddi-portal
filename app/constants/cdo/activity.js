@@ -22,7 +22,9 @@ const constants = {
     entry: 'activity',
     activity: 'activity',
     activityDate: 'activityDate',
-    activityDetails: 'activityDetails'
+    activityDetails: 'activityDetails',
+    sent: 'sent',
+    received: 'received'
   }
 }
 
