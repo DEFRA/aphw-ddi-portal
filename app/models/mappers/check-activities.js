@@ -1,4 +1,5 @@
 const { formatToGds } = require('../../lib/date-helpers')
+const { cleanUserDisplayName } = require('../../lib/model-helpers')
 
 const getActivityLabelFromEvent = (event) => {
   if (event.type !== 'uk.gov.defra.ddi.event.activity') {
@@ -17,7 +18,7 @@ const mapActivityDtoToCheckActivityRow = (event) => {
   return {
     activityLabel: getActivityLabelFromEvent(event),
     date: formatToGds(date),
-    teamMember: event.actioningUser.displayname
+    teamMember: cleanUserDisplayName(event.actioningUser.displayname)
   }
 }
 
