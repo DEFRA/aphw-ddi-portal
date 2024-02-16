@@ -59,7 +59,8 @@ module.exports = [
           activityDate: new Date(),
           editLink: getEditLink(activityDetails),
           srcHashParam: activityDetails.srcHashParam,
-          titleReference: activityDetails.titleReference
+          titleReference: activityDetails.titleReference,
+          skippedFirstPage: activityDetails.skippedFirstPage
         }
 
         addDateComponents(model, 'activityDate')
@@ -108,7 +109,8 @@ module.exports = [
             'activityDate-month',
             'activityDate-year',
             'srcHashParam',
-            'titleReference'
+            'titleReference',
+            'skippedFirstPage'
           ])
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)

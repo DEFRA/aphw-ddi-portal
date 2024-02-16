@@ -9,6 +9,7 @@ function ViewModel (model, backNav, errors) {
     pk: model.pk,
     srcHashParam: model.srcHashParam,
     titleReference: model.titleReference,
+    skippedFirstPage: model.skippedFirstPage,
     source: model.source,
     name: model.name,
     activityType: model.activityType,
