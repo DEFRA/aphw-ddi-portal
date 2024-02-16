@@ -11,11 +11,13 @@ const getActivityLabelFromEvent = (event) => {
   return 'NOT YET DEFINED'
 }
 
-const mapActivityDtoToCheckActivityRow = (activity) => {
+const mapActivityDtoToCheckActivityRow = (event) => {
+  const date = event.activity?.activityDate || event.timestamp
+
   return {
-    activityLabel: getActivityLabelFromEvent(activity),
-    date: formatToGds(activity.timestamp),
-    teamMember: activity.actioningUser.displayname
+    activityLabel: getActivityLabelFromEvent(event),
+    date: formatToGds(date),
+    teamMember: event.actioningUser.displayname
   }
 }
 
