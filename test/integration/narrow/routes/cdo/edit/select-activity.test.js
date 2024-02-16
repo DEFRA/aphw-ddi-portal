@@ -59,6 +59,34 @@ describe('Select activity', () => {
     expect(response.statusCode).toBe(200)
   })
 
+  test('GET /cdo/edit/select-activity route returns 200 using owner', async () => {
+    getActivityDetails.mockReturnValue({
+      pk: 'P-123',
+      source: 'owner',
+      activityType: 'sent'
+    })
+
+    getPersonByReference.mockResolvedValue({
+      firstName: 'John',
+      lastName: 'Smith'
+    })
+
+    getActivities.mockResolvedValue([
+      { text: 'act1', value: 1 },
+      { text: 'act2', value: 2 }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-activity',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
   test('GET /cdo/edit/select-activity route returns 404 when dog not found', async () => {
     getActivityDetails.mockReturnValue({
       pk: 'ED12345',
