@@ -3,7 +3,7 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getEvents } = require('../../../api/ddi-events-api/event')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
@@ -34,7 +34,9 @@ module.exports = [
         const filtedActivities = allEvents.events.filter(event => event.type === 'uk.gov.defra.ddi.event.activity')
         const sortedActivities = sortEventsDesc(filtedActivities)
 
-        const backNav = addBackNavigation(request, true)
+        const backNav = {
+          backLink: getMainReturnPoint(request)
+        }
 
         return h.view(views.viewDogActivities, new ViewModel(sourceEntity, sortedActivities, backNav))
       }
