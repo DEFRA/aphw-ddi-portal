@@ -12,6 +12,9 @@ const schema = Joi.object({
   ddiIndexApi: {
     baseUrl: Joi.string().required()
   },
+  ddiEventsApi: {
+    baseUrl: Joi.string().required()
+  },
   osPlacesApi: {
     baseUrl: Joi.string().default('https://api.os.uk/search/places/v1'),
     token: Joi.string().required()
@@ -64,6 +67,9 @@ const config = {
   },
   ddiIndexApi: {
     baseUrl: process.env.DDI_API_BASE_URL
+  },
+  ddiEventsApi: {
+    baseUrl: process.env.DDI_EVENTS_BASE_URL
   },
   osPlacesApi: {
     baseUrl: process.env.OS_PLACES_API_BASE_URL,

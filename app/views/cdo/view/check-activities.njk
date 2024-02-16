@@ -1,0 +1,74 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <span class="govuk-caption-l">Dog {{ model.pk }}</span>
+            <h1 class="govuk-heading-l">Check activity</h1>
+        </div>
+    </div>
+    <div class="govuk-body">
+        {% if model.events | length > 0 %}
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-visually-hidden">All activity</caption>
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date</th>
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-half">Activity</th>
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Team member</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <!-- Activity List -->
+                {% for eventRow in model.events %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">{{ eventRow.date }}</td>
+                    <td class="govuk-table__cell">{{ eventRow.activityLabel }}</td>
+                    <td class="govuk-table__cell">{{ eventRow.teamMember }}</td>
+                </tr>
+                {% endfor %}
+                <!-- / Activity List -->
+                </tbody>
+            </table>
+        {% else %}
+        <div data-testid="activity-info">
+            <p class="govuk-body">
+                Future activity on the record will display here.
+            </p>
+            <p class="govuk-body">
+                The activities will include when we send or receive documents such as:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>change of address forms</li>
+                <li>police correspondence</li>
+                <li>witness statements</li>
+                <li>judicial review notices</li>
+            </ul>
+        </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
