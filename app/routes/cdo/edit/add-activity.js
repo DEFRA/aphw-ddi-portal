@@ -35,6 +35,7 @@ const handleForwardSkipIfNeeded = async (request, details, h) => {
     details.activityType = numSentActivities > 0 ? keys.sent : keys.received
     details.skippedFirstPage = 'true'
     setActivityDetails(request, details)
+
     return h.redirect(`${routes.selectActivity.get}`)
   }
 }
