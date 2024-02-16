@@ -143,7 +143,10 @@ describe('Select activity', () => {
     getActivityById.mockReturnValue({
       targetPk: 'owner',
       source: 'dog',
-      activityType: 'sent'
+      activityType: 'sent',
+      activity_event: {
+        target_primary_key: 'owner'
+      }
     })
 
     getDogOwner.mockResolvedValue({ personReference: 'P-456' })
@@ -186,7 +189,10 @@ describe('Select activity', () => {
     getActivityById.mockReturnValue({
       targetPk: 'owner',
       source: 'owner',
-      activityType: 'sent'
+      activityType: 'sent',
+      activity_event: {
+        target_primary_key: 'owner'
+      }
     })
 
     getDogOwner.mockResolvedValue({ personReference: 'P-456' })
