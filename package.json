@@ -10,7 +10,7 @@
     "pretest": "npm run test:lint",
     "test": "jest --runInBand",
     "test:parallel": "jest",
-    "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
+    "test:watch": "jest --coverage=false --watchAll",
     "test:watch:all": "npm-run-all --parallel test:watch build:watch",
     "test:lint": "standard",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",

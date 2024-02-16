@@ -1,4 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
+const { JSDOM } = require('jsdom')
 
 describe('Confirm activity', () => {
   jest.mock('../../../../../../app/auth')
@@ -40,8 +41,12 @@ describe('Confirm activity', () => {
     }
 
     const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
+    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].textContent).toBe('Check activity for Dog ED12345')
+    expect(document.querySelectorAll('.govuk-list .govuk-link')[1].textContent).toBe('Go to the dog record for Dog ED12345')
+    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].getAttribute('href')).toBe('/cdo/view/activity/ED12345/dog')
   })
 
   afterEach(async () => {

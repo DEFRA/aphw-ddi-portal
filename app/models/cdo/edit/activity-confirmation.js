@@ -3,7 +3,8 @@ function ViewModel (model) {
     message: model.message,
     returnLink: model.returnLink,
     sourceDescription: model.sourceDescription,
-    source: model.source
+    source: model.source,
+    activityLink: model.activityLink
   }
 }
 

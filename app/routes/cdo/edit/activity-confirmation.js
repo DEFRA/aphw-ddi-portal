@@ -10,6 +10,10 @@ const getAlternativeReturnLink = details => {
   return details.source === 'dog' ? `${routes.viewDogDetails.get}/${details.indexNumber}` : 'NOT YET DEFINED'
 }
 
+const getActivityLink = details => {
+  return details.source === 'dog' ? `${routes.viewActivities.get}/${details.pk}/dog` : 'NOT YET DEFINED'
+}
+
 module.exports = [
   {
     method: 'GET',
@@ -29,7 +33,8 @@ module.exports = [
           message: `${activity.label} ${details.activityType} on ${formatToGds(details.activityDate)}`,
           returnLink: getMainReturnPoint(request) !== '/' ? getMainReturnPoint(request) : getAlternativeReturnLink(details),
           sourceDescription: details.titleReference,
-          source: details.source
+          source: details.source,
+          activityLink: getActivityLink(details)
         }
 
         setActivityDetails(request, null)
