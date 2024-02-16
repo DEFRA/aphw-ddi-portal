@@ -15,7 +15,7 @@ const getSourceEntity = async (pk, source) => {
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.viewDogActivities.get}/{pk}/{source}`,
+    path: `${routes.viewActivities.get}/{pk}/{source}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -26,12 +26,17 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
+        const sourceEntity = {
+          pk: request.params.pk,
+          source: request.params.source
+        }
+
         const filtedActivities = allEvents.events.filter(event => event.type === 'uk.gov.defra.ddi.event.activity')
         const sortedActivities = sortEventsDesc(filtedActivities)
 
         const backNav = addBackNavigation(request, true)
 
-        return h.view(views.viewDogActivities, new ViewModel(cdo, sortedActivities, backNav))
+        return h.view(views.viewDogActivities, new ViewModel(sourceEntity, sortedActivities, backNav))
       }
     }
   }

@@ -15,7 +15,7 @@ const getAlternativeReturnLink = details => {
 }
 
 const getActivityLink = details => {
-  return details.source === 'dog' ? `${routes.viewDogActivities.get}/${details.pk}/dog` : 'NOT YET DEFINED'
+  return details.source === 'dog' ? `${routes.viewActivities.get}/${details.pk}/dog` : 'NOT YET DEFINED'
 }
 
 module.exports = [

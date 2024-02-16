@@ -1,20 +1,8 @@
-const getUnixDate = (dateString) => {
-  return new Date(dateString).getTime()
-}
-
 const sortEventsDescCompareFn = (a, b) => {
-  const primarySortValueA = a.activity?.activityDate ? a.activity.activityDate : a.timestamp
-  const primarySortValueB = b.activity?.activityDate ? b.activity.activityDate : b.timestamp
-  const primarySortA = getUnixDate(primarySortValueA)
-  const primarySortB = getUnixDate(primarySortValueB)
-  const secondarySortA = getUnixDate(a.timestamp)
-  const secondarySortB = getUnixDate(b.timestamp)
+  const sortValueA = a.activity?.activityDate ? a.activity.activityDate : a.timestamp
+  const sortValueB = b.activity?.activityDate ? b.activity.activityDate : b.timestamp
 
-  if (primarySortA !== primarySortB) {
-    return primarySortB - primarySortA
-  }
-
-  return secondarySortB - secondarySortA
+  return `${sortValueB}${b.timestamp}`.localeCompare(`${sortValueA}${a.timestamp}`)
 }
 
 const sortEventsDesc = (events) => {

@@ -6,9 +6,8 @@ function ViewModel (cdo, activities, backNav) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
-    dog: {
-      indexNumber: cdo.dog.indexNumber
-    },
+    pk: cdo.pk,
+    source: cdo.source,
     events: mappedActivities
   }
 }

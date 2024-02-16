@@ -21,6 +21,11 @@ describe('Check activities', () => {
     await server.initialize()
   })
 
+  afterEach(async () => {
+    await server.stop()
+    jest.clearAllMocks()
+  })
+
   const validEvent = {
     events: [
       {
@@ -205,7 +210,7 @@ describe('Check activities', () => {
     getCdo.mockResolvedValue({
       dog: {
         id: 300000,
-        indexNumber: 'ED300000',
+        indexNumber: 'ED123',
         name: 'Bruno',
         status: { status: 'TEST' },
         dog_breed: { breed: 'breed1' }
@@ -238,7 +243,7 @@ describe('Check activities', () => {
 
     expect(getEvents).toBeCalledWith(['ED123'])
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED300000')
+    expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED123')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
     expect(document.querySelectorAll('caption.govuk-visually-hidden')[0].textContent.trim()).toBe('All activity')
