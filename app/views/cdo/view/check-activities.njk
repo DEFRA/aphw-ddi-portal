@@ -54,7 +54,20 @@
                 </tbody>
             </table>
         {% else %}
-        <p data-testid="no-activities">No activities have been added to this record</p>
+        <div data-testid="activity-info">
+            <p class="govuk-body">
+                Future activity on the record will display here.
+            </p>
+            <p class="govuk-body">
+                The activities will include when we send or receive documents such as:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>change of address forms</li>
+                <li>police correspondence</li>
+                <li>witness statements</li>
+                <li>judicial review notices</li>
+            </ul>
+        </div>
         {% endif %}
 
     </div>

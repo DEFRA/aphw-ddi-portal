@@ -290,7 +290,13 @@ describe('Check activities', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(document.querySelectorAll('.govuk-table').length).toBe(0)
-    expect(document.querySelector('main').textContent.trim()).toContain('No activities have been added to this record')
+    const activityBlock = document.querySelector('div[data-testid="activity-info"]')
+    expect(activityBlock.textContent.trim()).toContain('Future activity on the record will display here.')
+    expect(activityBlock.textContent.trim()).toContain('The activities will include when we send or receive documents such as:')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[0].textContent.trim()).toBe('change of address forms')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[1].textContent.trim()).toBe('police correspondence')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[2].textContent.trim()).toBe('witness statements')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[3].textContent.trim()).toBe('judicial review notices')
   })
   test('GET /cdo/view/activity route returns 404 if no dog data found', async () => {
     getCdo.mockResolvedValue(undefined)
