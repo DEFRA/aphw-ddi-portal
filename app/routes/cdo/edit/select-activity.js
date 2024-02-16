@@ -107,8 +107,7 @@ module.exports = [
           activityType: activityPayload.activityType,
           pk: activityPayload.pk,
           source: activityPayload.source,
-          activityDate: activityPayload.activityDate,
-          targetPk: activityPayload.targetPk
+          activityDate: activityPayload.activityDate
         }
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)

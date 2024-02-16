@@ -20,10 +20,8 @@ const recordActivity = async (activity, user) => {
   const activityEntity = await getActivityById(activity.activity)
   activity.targetPk = activityEntity.activity_event?.target_primary_key
 
-  if (activity.targetPk !== activity.source) {
-    activity.pk = activity.targetPk === 'dog'
-      ? activity.pk // UNKNOWN SCENARIO
-      : (await getDogOwner(activity.pk)).personReference
+  if (activity.targetPk !== activity.source && activity.targetPk === 'owner') {
+    activity.pk = (await getDogOwner(activity.pk)).personReference
   }
 
   return await post(activityEndpoint, activity, user)

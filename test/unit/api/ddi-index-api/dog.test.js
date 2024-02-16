@@ -41,7 +41,7 @@ describe('Dog test', () => {
     expect(get).toHaveBeenCalledWith('dog/ED12345', expect.anything())
   })
 
-  test('getDogDOwner calls endpoint', async () => {
+  test('getDogOwner calls endpoint', async () => {
     get.mockResolvedValue({ payload: {} })
     await getDogOwner('ED12345')
     expect(get).toHaveBeenCalledWith('dog-owner/ED12345', expect.anything())
