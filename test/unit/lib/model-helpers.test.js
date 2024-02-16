@@ -1,4 +1,4 @@
-const { removePropertiesIfExist, extractEmail, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
+const { extractEmail, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
 
 describe('ModelHelpers', () => {
   test('extractEmail handles no emails', () => {
