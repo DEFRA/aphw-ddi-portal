@@ -57,14 +57,6 @@ const propertyComparatorDesc = (propertyName, childPropertyName) => {
   }
 }
 
-const removePropertiesIfExist = (payload, propertyNames) => {
-  propertyNames.forEach(x => {
-    if (payload[x]) {
-      delete payload[x]
-    }
-  })
-}
-
 const deepClone = obj => {
   return JSON.parse(JSON.stringify(obj))
 }
@@ -76,6 +68,5 @@ module.exports = {
   extractLatestInsurance,
   extractLatestPrimaryTelephoneNumber,
   extractLatestSecondaryTelephoneNumber,
-  removePropertiesIfExist,
   deepClone
 }

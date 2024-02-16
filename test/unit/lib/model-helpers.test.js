@@ -94,42 +94,4 @@ describe('ModelHelpers', () => {
 
     expect(insurance.policy_number).toBe('CURRENT')
   })
-
-  test('removeProperties removes properties that exist', () => {
-    const model = {
-      prop1: 'val1',
-      prop2: 'val2',
-      prop3: 'val3',
-      prop4: 'val4',
-      prop5: 'val5'
-    }
-
-    removePropertiesIfExist(model, ['prop2', 'prop4'])
-
-    expect(model).toEqual({
-      prop1: 'val1',
-      prop3: 'val3',
-      prop5: 'val5'
-    })
-  })
-
-  test('removeProperties handles properties that do not exist', () => {
-    const model = {
-      prop1: 'val1',
-      prop2: 'val2',
-      prop3: 'val3',
-      prop4: 'val4',
-      prop5: 'val5'
-    }
-
-    removePropertiesIfExist(model, ['prop0', 'prop6'])
-
-    expect(model).toEqual({
-      prop1: 'val1',
-      prop2: 'val2',
-      prop3: 'val3',
-      prop4: 'val4',
-      prop5: 'val5'
-    })
-  })
 })

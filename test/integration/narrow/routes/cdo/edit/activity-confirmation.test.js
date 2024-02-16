@@ -27,7 +27,8 @@ describe('Confirm activity', () => {
       source: 'dog',
       activityType: 'sent',
       activity: 2,
-      activityDate: new Date()
+      activityDate: new Date(),
+      titleReference: 'Dog ED12345'
     })
 
     getActivityById.mockResolvedValue({

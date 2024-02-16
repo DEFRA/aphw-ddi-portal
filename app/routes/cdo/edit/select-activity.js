@@ -10,7 +10,6 @@ const { setActivityDetails, getActivityDetails } = require('../../../session/cdo
 const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
-const { removePropertiesIfExist } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
@@ -103,18 +102,17 @@ module.exports = [
 
         const activityPayload = deepClone(payload)
 
-        removePropertiesIfExist(activityPayload,
-          [
-            'activityDate-day',
-            'activityDate-month',
-            'activityDate-year',
-            'srcHashParam',
-            'titleReference',
-            'skippedFirstPage'
-          ])
+        const activityModel = {
+          activity: activityPayload.activity,
+          activityType: activityPayload.activityType,
+          pk: activityPayload.pk,
+          source: activityPayload.source,
+          activityDate: activityPayload.activityDate,
+          targetPk: activityPayload.targetPk
+        }
 
         // send event to API for forwarding to service bus (since may need to perform an atomic DB operation as part of process)
-        await recordActivity(activityPayload, getUser(request))
+        await recordActivity(activityModel, getUser(request))
 
         return h.redirect(routes.activityConfirmation.get)
       }
