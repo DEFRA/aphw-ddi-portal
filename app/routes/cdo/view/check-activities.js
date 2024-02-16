@@ -3,7 +3,7 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getEvents } = require('../../../api/ddi-events-api/event')
-const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
+const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
