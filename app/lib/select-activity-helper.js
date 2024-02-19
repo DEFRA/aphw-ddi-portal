@@ -1,4 +1,4 @@
-const { getMainReturnPoint } = require('../../../lib/back-helpers')
+const { getMainReturnPoint } = require('./back-helpers')
 
 const backNav = (details, request) => {
   const srcParam = details.srcHashParam ? '?src=' + details.srcHashParam : ''

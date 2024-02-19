@@ -11,7 +11,7 @@ const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
-const { backNav } = require('./select-activity-helper')
+const { backNav } = require('../../../lib/select-activity-helper')
 
 const getSourceEntity = async (details) => {
   return details.source === 'dog'
@@ -108,6 +108,5 @@ module.exports = [
         return h.redirect(routes.activityConfirmation.get)
       }
     }
-  },
-  backNav
+  }
 ]

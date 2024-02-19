@@ -1,4 +1,4 @@
-const { backNav } = require('../../../../../../app/routes/cdo/edit/select-activity-helper')
+const { backNav } = require('../../../../../../app/lib/select-activity-helper')
 
 jest.mock('../../../../../../app/lib/back-helpers')
 const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
