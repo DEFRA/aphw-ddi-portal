@@ -194,7 +194,7 @@ describe('Check Activity Mappers', () => {
           activityType: 'received',
           pk: 'ED300000',
           source: 'dog',
-          activityDate: '2024-02-13T00:00:00.000Z',
+          activityDate: '2024-02-12T00:00:00.000Z',
           activityLabel: 'Police correspondence'
         },
         operation: 'activity',
@@ -208,11 +208,31 @@ describe('Check Activity Mappers', () => {
         subject: 'DDI Activity Police correspondence'
       }
       const expectedActivityRow = {
-        date: '13 February 2024',
+        date: '12 February 2024',
         activityLabel: 'Police correspondence received',
         teamMember: 'Developer'
       }
       expect(mapActivityDtoToCheckActivityRow(activity)).toEqual(expectedActivityRow)
+    })
+
+    test('should map a received event that is not an activity', () => {
+      const event = {
+        timestamp: '2024-02-14T08:24:22.487Z',
+        type: 'uk.gov.defra.ddi.event.create',
+        subject: 'DDI Create cdo',
+        operation: 'activity',
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'Developer'
+        },
+        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937'
+      }
+      const expectedActivityRow = {
+        date: '14 February 2024',
+        activityLabel: 'NOT YET DEFINED',
+        teamMember: 'Developer'
+      }
+      expect(mapActivityDtoToCheckActivityRow(event)).toEqual(expectedActivityRow)
     })
   })
 })
