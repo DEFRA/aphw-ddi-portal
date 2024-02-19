@@ -1,4 +1,4 @@
-const { mapActivityDtoToCheckActivityRow, getActivityLabelFromEvent } = require('../../../../app/models/mappers/check-activities')
+const { mapAuditedChangeEventToCheckActivityRows, getActivityLabelFromAuditFieldRecord, mapActivityDtoToCheckActivityRow, filterSameDate, getActivityLabelFromEvent } = require('../../../../app/models/mappers/check-activities')
 describe('Check Activity Mappers', () => {
   describe('getActivityLabelFromEvent', () => {
     const activities = [
@@ -233,6 +233,293 @@ describe('Check Activity Mappers', () => {
         teamMember: 'Developer'
       }
       expect(mapActivityDtoToCheckActivityRow(event)).toEqual(expectedActivityRow)
+    })
+  })
+  describe('filterSameDate', () => {
+    test('should return true given numbers are different', () => {
+      const auditFieldRecord = [
+        'court_id',
+        1,
+        2
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(true)
+    })
+    test('should return false given numbers are the same', () => {
+      const auditFieldRecord = [
+        'court_id',
+        1,
+        1
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(false)
+    })
+    test('should return true given strings are different', () => {
+      const auditFieldRecord = [
+        'legislation_officer',
+        'test',
+        'test2'
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(true)
+    })
+    test('should return false given strings are the same', () => {
+      const auditFieldRecord = [
+        'legislation_officer',
+        'test',
+        'test'
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(false)
+    })
+
+    test('should return true given dates are different', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        '2024-01-15',
+        '2024-01-16T00:00:00.000Z'
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(true)
+    })
+
+    test('should return false given dates are the same', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        '2024-01-15',
+        '2024-01-15T00:00:00.000Z'
+      ]
+      expect(filterSameDate(auditFieldRecord)).toBe(false)
+    })
+  })
+  describe('getActivityLabelFromAuditFieldRecord', () => {
+    const tests = [
+      ['CDO issue date updated', 'cdo_issued', 'updated'],
+      ['CDO expiry date updated', 'cdo_expiry', 'updated'],
+      ['First certificate date updated', 'certificate_issued', 'updated'],
+      ['Application fee paid date updated', 'application_fee_paid', 'updated'],
+      ['Neutering confirmed updated', 'neutering_confirmation', 'updated'],
+      ['Microchip number verified updated', 'microchip_verification', 'updated'],
+      ['Joined interim exemption scheme updated', 'joined_exemption_scheme', 'updated'],
+      ['Removed from CDO process updated', 'removed_from_cdo_process', 'updated'],
+      ['Court updated', 'court_id', 'updated'],
+      ['Dog legislation officer updated', 'legislation_officer', 'updated'],
+      ['Police force updated', 'police_force_id', 'updated'],
+      ['N/A', 'neutering_deadline', 'updated']
+    ]
+    test.each(tests)('should return %s given event is %s', (expected, label, eventType) => {
+      expect(getActivityLabelFromAuditFieldRecord(eventType)([
+        label,
+        '2024-01-15',
+        '2024-01-16T00:00:00.000Z'
+      ])).toBe(expected)
+    })
+  })
+  describe('mapAuditedChangeEventToCheckActivityRows', () => {
+    test('should handle updated exemptions given nothing has changed', () => {
+      const updatedExemptionEvent = {
+        actioningUser: {
+          username: 'dev@test.com',
+          displayname: 'Developer, Robert'
+        },
+        operation: 'updated exemption',
+        changes: {
+          added: [],
+          removed: [
+            [
+              'index_number',
+              'ED300000'
+            ]
+          ],
+          edited: [
+            [
+              'cdo_issued',
+              '2024-01-16',
+              '2024-01-16T00:00:00.000Z'
+            ],
+            [
+              'cdo_expiry',
+              '2024-02-18',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'certificate_issued',
+              '2024-02-19',
+              '2024-02-19T00:00:00.000Z'
+            ],
+            [
+              'application_fee_paid',
+              '2024-02-18',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'neutering_confirmation',
+              '2024-02-18',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'microchip_verification',
+              '2024-02-18',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'joined_exemption_scheme',
+              '2024-01-01',
+              '2024-01-01T00:00:00.000Z'
+            ],
+            [
+              'removed_from_cdo_process',
+              '2024-02-18',
+              '2024-02-18T00:00:00.000Z'
+            ]
+          ]
+        },
+        timestamp: '2024-02-19T10:33:38.323Z',
+        type: 'uk.gov.defra.ddi.event.update',
+        rowKey: 'd0bcd845-66f1-4355-921b-f08be37e2c75|1708338818323',
+        subject: 'DDI Update exemption'
+      }
+
+      expect(mapAuditedChangeEventToCheckActivityRows(updatedExemptionEvent)).toEqual([])
+    })
+
+    test('should handle updated exemptions', () => {
+      const updatedExemption = {
+        actioningUser: {
+          username: 'dev@test.com',
+          displayname: 'Developer, Robert'
+        },
+        operation: 'updated exemption',
+        changes: {
+          added: [],
+          removed: [
+            [
+              'index_number',
+              'ED300000'
+            ]
+          ],
+          edited: [
+            [
+              'cdo_issued',
+              '2024-01-15',
+              '2024-01-16T00:00:00.000Z'
+            ],
+            [
+              'cdo_expiry',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'certificate_issued',
+              '2024-02-18',
+              '2024-02-19T00:00:00.000Z'
+            ],
+            [
+              'application_fee_paid',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'neutering_confirmation',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'microchip_verification',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'joined_exemption_scheme',
+              '2024-01-31',
+              '2024-01-01T00:00:00.000Z'
+            ],
+            [
+              'removed_from_cdo_process',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'court_id',
+              171,
+              159
+            ],
+            [
+              'legislation_officer',
+              'test',
+              'test2'
+            ],
+            [
+              'police_force_id',
+              46,
+              45
+            ]
+          ]
+        },
+        timestamp: '2024-02-19T10:16:53.894Z',
+        type: 'uk.gov.defra.ddi.event.update',
+        rowKey: 'ff2a5e13-1530-427f-806a-d85b729d7504|1708337813894',
+        subject: 'DDI Update exemption'
+      }
+
+      /**
+       *
+       * @type {ActivityRow[]}
+       */
+      const expectedActivityRows = [
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'CDO issue date updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'CDO expiry date updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'First certificate date updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Application fee paid date updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Neutering confirmed updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Microchip number verified updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Joined interim exemption scheme updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Removed from CDO process updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Court updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Dog legislation officer updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Police force updated'
+        }
+      ]
+
+      expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual(expectedActivityRows)
     })
   })
 })
