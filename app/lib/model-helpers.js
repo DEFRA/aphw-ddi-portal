@@ -61,6 +61,15 @@ const deepClone = obj => {
   return JSON.parse(JSON.stringify(obj))
 }
 
+const cleanUserDisplayName = (displayName) => {
+  if (displayName.includes(',')) {
+    const [lastName, firstName] = displayName.split(',')
+
+    return `${firstName.trim()} ${lastName.trim()}`
+  }
+  return displayName
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -68,5 +77,6 @@ module.exports = {
   extractLatestInsurance,
   extractLatestPrimaryTelephoneNumber,
   extractLatestSecondaryTelephoneNumber,
-  deepClone
+  deepClone,
+  cleanUserDisplayName
 }
