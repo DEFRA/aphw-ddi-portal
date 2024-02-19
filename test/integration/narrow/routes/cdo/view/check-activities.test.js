@@ -1,6 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-const { cleanUserDisplayName } = require('../../../../../../app/lib/model-helpers')
 
 describe('Check activities', () => {
   jest.mock('../../../../../../app/auth')
