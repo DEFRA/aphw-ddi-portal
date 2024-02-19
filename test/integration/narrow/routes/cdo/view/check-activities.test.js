@@ -34,7 +34,7 @@ describe('Check activities', () => {
           activityType: 'received',
           pk: 'ED300000',
           source: 'dog',
-          activityDate: '2024-02-10T00:00:00.000Z',
+          activityDate: '2024-02-15T00:00:00.000Z',
           activityLabel: 'Police correspondence'
         },
         operation: 'activity',
@@ -42,7 +42,7 @@ describe('Check activities', () => {
           username: 'Developer',
           displayname: 'Developer'
         },
-        timestamp: '2024-02-15T15:12:41.937Z',
+        timestamp: '2024-02-15T16:12:41.937Z',
         type: 'uk.gov.defra.ddi.event.activity',
         rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
         subject: 'DDI Activity Police correspondence'
@@ -252,8 +252,8 @@ describe('Check activities', () => {
     expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(2)
-    expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('14 February 2024')
+    expect(rows.length).toBe(5)
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('15 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Developer')
   })

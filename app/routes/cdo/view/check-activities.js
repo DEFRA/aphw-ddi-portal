@@ -31,8 +31,7 @@ module.exports = [
           source: request.params.source
         }
 
-        const filtedActivities = allEvents.events.filter(event => event.type === 'uk.gov.defra.ddi.event.activity')
-        const sortedActivities = sortEventsDesc(filtedActivities)
+        const sortedActivities = sortEventsDesc(allEvents.events)
 
         const backNav = {
           backLink: getMainReturnPoint(request)
