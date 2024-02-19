@@ -14,10 +14,11 @@ const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
 const backNav = (details, request) => {
+  const srcParam = details.srcHashParam ? '?src=' + details.srcHashParam : ''
   return {
     backLink: details.skippedFirstPage === 'true'
       ? getMainReturnPoint(request)
-      : `/cdo/edit/add-activity/${details.pk}/${details.source}${details.srcHashParam ? '?src=' + details.srcHashParam : ''}`
+      : `/cdo/edit/add-activity/${details.pk}/${details.source}${srcParam}`
   }
 }
 
