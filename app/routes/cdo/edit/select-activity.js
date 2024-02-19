@@ -17,7 +17,7 @@ const backNav = (details, request) => {
   return {
     backLink: details.skippedFirstPage === 'true'
       ? getMainReturnPoint(request)
-      : `/cdo/edit/add-activity/${details.pk}/${details.source}`
+      : `/cdo/edit/add-activity/${details.pk}/${details.source}${details.srcHashParam ? '?src=' + details.srcHashParam : ''}`
   }
 }
 
