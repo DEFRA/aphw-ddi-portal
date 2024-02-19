@@ -11,16 +11,7 @@ const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
-const { getMainReturnPoint } = require('../../../lib/back-helpers')
-
-const backNav = (details, request) => {
-  const srcParam = details.srcHashParam ? '?src=' + details.srcHashParam : ''
-  return {
-    backLink: details.skippedFirstPage === 'true'
-      ? getMainReturnPoint(request)
-      : `/cdo/edit/add-activity/${details.pk}/${details.source}${srcParam}`
-  }
-}
+const { backNav } = require('./select-activity-helper')
 
 const getSourceEntity = async (details) => {
   return details.source === 'dog'
@@ -117,5 +108,6 @@ module.exports = [
         return h.redirect(routes.activityConfirmation.get)
       }
     }
-  }
+  },
+  backNav
 ]
