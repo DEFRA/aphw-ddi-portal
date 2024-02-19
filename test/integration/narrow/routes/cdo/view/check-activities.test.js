@@ -8,8 +8,14 @@ describe('Check activities', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/dog')
+  const { getDogOwner } = require('../../../../../../app/api/ddi-index-api/dog')
+
   jest.mock('../../../../../../app/api/ddi-events-api/event')
   const { getEvents } = require('../../../../../../app/api/ddi-events-api/event')
+
+  jest.mock('../../../../../../app/lib/model-helpers')
+  const { cleanUserDisplayName } = require('../../../../../../app/lib/model-helpers')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -205,6 +211,7 @@ describe('Check activities', () => {
     ]
   }
   getEvents.mockResolvedValue(validEvent)
+  getDogOwner.mockResolvedValue({ personReference: 'P-456' })
 
   test('GET /cdo/view/activity route returns a 200 and valid content', async () => {
     getCdo.mockResolvedValue({
@@ -230,6 +237,7 @@ describe('Check activities', () => {
         }]
       }
     })
+    cleanUserDisplayName.mockReturnValue('Mr Developer')
 
     const options = {
       method: 'GET',
@@ -241,7 +249,8 @@ describe('Check activities', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getEvents).toBeCalledWith(['ED123'])
+    expect(getEvents).toBeCalledWith(['ED123', 'P-456'])
+    expect(cleanUserDisplayName).toBeCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED123')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
@@ -255,7 +264,7 @@ describe('Check activities', () => {
     expect(rows.length).toBe(2)
     expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('14 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
-    expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Developer')
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
   })
 
   test('GET /cdo/view/activity route returns a 200 and message given no activities exist', async () => {

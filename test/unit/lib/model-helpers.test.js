@@ -1,4 +1,4 @@
-const { extractEmail, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
+const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
 
 describe('ModelHelpers', () => {
   test('extractEmail handles no emails', () => {
@@ -93,5 +93,22 @@ describe('ModelHelpers', () => {
     const insurance = extractLatestInsurance(insurances)
 
     expect(insurance.policy_number).toBe('CURRENT')
+  })
+
+  describe('cleanUserDisplayName', () => {
+    test('should clean up displayName given contains comma and no spaces', () => {
+      expect(cleanUserDisplayName('Surname,Firstname')).toBe('Firstname Surname')
+    })
+    test('should clean up displayName given contains comma', () => {
+      expect(cleanUserDisplayName('Surname, Firstname')).toBe('Firstname Surname')
+    })
+
+    test('should clean up displayName given contains comma and spaces', () => {
+      expect(cleanUserDisplayName(' Surname , Firstname ')).toBe('Firstname Surname')
+    })
+
+    test('should not clean up displayName given no comma', () => {
+      expect(cleanUserDisplayName('Firstname Surname')).toBe('Firstname Surname')
+    })
   })
 })

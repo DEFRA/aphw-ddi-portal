@@ -1,4 +1,5 @@
 const { formatToGds } = require('../../lib/date-helpers')
+const { cleanUserDisplayName } = require('../../lib/model-helpers')
 
 const getActivityLabelFromEvent = (event) => {
   if (event.type !== 'uk.gov.defra.ddi.event.activity') {
@@ -11,11 +12,13 @@ const getActivityLabelFromEvent = (event) => {
   return 'NOT YET DEFINED'
 }
 
-const mapActivityDtoToCheckActivityRow = (activity) => {
+const mapActivityDtoToCheckActivityRow = (event) => {
+  const date = event.activity?.activityDate || event.timestamp
+
   return {
-    activityLabel: getActivityLabelFromEvent(activity),
-    date: formatToGds(activity.timestamp),
-    teamMember: activity.actioningUser.displayname
+    activityLabel: getActivityLabelFromEvent(event),
+    date: formatToGds(date),
+    teamMember: cleanUserDisplayName(event.actioningUser.displayname)
   }
 }
 
