@@ -128,33 +128,36 @@ const filterSameDate = (auditFieldRecord) => {
   return true
 }
 
-const addedEvents = ['exported_date', 'stolen_date', 'death_date', 'untraceable_date']
+const addedEvents = ['date_exported', 'date_stolen', 'dog_date_of_death', 'date_untraceable']
 
 const activityLabels = {
   cdo_issued: 'CDO issue date',
   cdo_expiry: 'CDO expiry date',
   certificate_issued: 'First certificate date',
   application_fee_paid: 'Application fee paid date',
+  insurance_company: 'Insurance company',
+  insurance_renewal_date: 'Insurance renewal date',
   neutering_confirmation: 'Neutering confirmed',
   microchip_verification: 'Microchip number verified',
   joined_exemption_scheme: 'Joined interim exemption scheme',
   removed_from_cdo_process: 'Removed from CDO process',
-  court_id: 'Court',
+  court: 'Court',
   legislation_officer: 'Dog legislation officer',
-  police_force_id: 'Police force',
+  police_force: 'Police force',
   microchip_deadline: 'Microchip deadline',
-  name: 'Dog name',
-  dog_breed_id: 'Breed type',
+  withdrawn: 'Withdrawn from index',
+  dog_name: 'Dog name',
+  breed_type: 'Breed type',
   colour: 'Dog colour',
   sex: 'Sex',
-  birth_date: 'Dog date of birth',
-  death_date: 'Dog date of death',
+  dog_date_of_birth: 'Dog date of birth',
+  dog_date_of_death: 'Dog date of death',
   tattoo: 'Tattoo',
   microchip1: 'Microchip number 1',
   microchip2: 'Microchip number 2',
-  exported_date: 'Date exported',
-  stolen_date: 'Date stolen',
-  untraceable_date: 'Date untraceable',
+  date_exported: 'Date exported',
+  date_stolen: 'Date stolen',
+  date_untraceable: 'Date untraceable',
   typed_by_dlo: 'Examined by dog legislation officer',
   exemption_order: 'Order type'
 }

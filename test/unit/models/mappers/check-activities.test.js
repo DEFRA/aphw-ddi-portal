@@ -306,23 +306,26 @@ describe('Check Activity Mappers', () => {
       ['Microchip number verified updated', 'microchip_verification', 'updated'],
       ['Joined interim exemption scheme updated', 'joined_exemption_scheme', 'updated'],
       ['Removed from CDO process updated', 'removed_from_cdo_process', 'updated'],
-      ['Court updated', 'court_id', 'updated'],
+      ['Court updated', 'court', 'updated'],
+      ['Insurance company updated', 'insurance_company', 'updated'],
+      ['Insurance renewal date updated', 'insurance_renewal_date', 'updated'],
       ['Dog legislation officer updated', 'legislation_officer', 'updated'],
-      ['Police force updated', 'police_force_id', 'updated'],
+      ['Police force updated', 'police_force', 'updated'],
       ['N/A', 'neutering_deadline', 'updated'],
       ['Microchip deadline updated', 'microchip_deadline', 'updated'],
-      ['Dog name updated', 'name', 'updated'],
-      ['Breed type updated', 'dog_breed_id', 'updated'],
+      ['Withdrawn from index updated', 'withdrawn', 'updated'],
+      ['Dog name updated', 'dog_name', 'updated'],
+      ['Breed type updated', 'breed_type', 'updated'],
       ['Dog colour updated', 'colour', 'updated'],
       ['Sex updated', 'sex', 'updated'],
-      ['Dog date of birth updated', 'birth_date', 'updated'],
-      ['Dog date of death added', 'death_date', 'added'],
+      ['Dog date of birth updated', 'dog_date_of_birth', 'updated'],
+      ['Dog date of death added', 'dog_date_of_death', 'added'],
       ['Tattoo updated', 'tattoo', 'updated'],
       ['Microchip number 1 updated', 'microchip1', 'updated'],
       ['Microchip number 2 updated', 'microchip2', 'updated'],
-      ['Date exported added', 'exported_date', 'added'],
-      ['Date stolen added', 'stolen_date', 'added'],
-      ['Date untraceable added', 'untraceable_date', 'added'],
+      ['Date exported added', 'date_exported', 'added'],
+      ['Date stolen added', 'date_stolen', 'added'],
+      ['Date untraceable added', 'date_untraceable', 'added'],
       ['Examined by dog legislation officer updated', 'typed_by_dlo', 'updated'],
       ['Order type updated', 'exemption_order', 'updated']
     ]
@@ -461,7 +464,7 @@ describe('Check Activity Mappers', () => {
               '2024-02-18T00:00:00.000Z'
             ],
             [
-              'court_id',
+              'court',
               171,
               159
             ],
@@ -471,27 +474,27 @@ describe('Check Activity Mappers', () => {
               'test2'
             ],
             [
-              'police_force_id',
+              'police_force',
               46,
               45
             ],
             [
-              'exported_date',
+              'date_exported',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
             ],
             [
-              'stolen_date',
+              'date_stolen',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
             ],
             [
-              'death_date',
+              'dog_date_of_death',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
             ],
             [
-              'untraceable_date',
+              'date_untraceable',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
             ]
