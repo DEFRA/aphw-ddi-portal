@@ -309,7 +309,22 @@ describe('Check Activity Mappers', () => {
       ['Court updated', 'court_id', 'updated'],
       ['Dog legislation officer updated', 'legislation_officer', 'updated'],
       ['Police force updated', 'police_force_id', 'updated'],
-      ['N/A', 'neutering_deadline', 'updated']
+      ['N/A', 'neutering_deadline', 'updated'],
+      ['Microchip deadline updated', 'microchip_deadline', 'updated'],
+      ['Dog name updated', 'name', 'updated'],
+      ['Breed type updated', 'dog_breed_id', 'updated'],
+      ['Dog colour updated', 'colour', 'updated'],
+      ['Sex updated', 'sex', 'updated'],
+      ['Dog date of birth updated', 'birth_date', 'updated'],
+      ['Dog date of death added', 'death_date', 'added'],
+      ['Tattoo updated', 'tattoo', 'updated'],
+      ['Microchip number 1 updated', 'microchip1', 'updated'],
+      ['Microchip number 2 updated', 'microchip2', 'updated'],
+      ['Date exported added', 'exported_date', 'added'],
+      ['Date stolen added', 'stolen_date', 'added'],
+      ['Date untraceable added', 'untraceable_date', 'added'],
+      ['Examined by dog legislation officer updated', 'typed_by_dlo', 'updated'],
+      ['Order type updated', 'exemption_order', 'updated']
     ]
     test.each(tests)('should return %s given event is %s', (expected, label, eventType) => {
       expect(getActivityLabelFromAuditFieldRecord(eventType)([
@@ -459,6 +474,26 @@ describe('Check Activity Mappers', () => {
               'police_force_id',
               46,
               45
+            ],
+            [
+              'exported_date',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'stolen_date',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'death_date',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
+              'untraceable_date',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
             ]
           ]
         }
@@ -523,6 +558,26 @@ describe('Check Activity Mappers', () => {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
           activityLabel: 'Police force updated'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Date exported added'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Date stolen added'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Dog date of death added'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Date untraceable added'
         }
       ]
 

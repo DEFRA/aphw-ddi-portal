@@ -128,6 +128,8 @@ const filterSameDate = (auditFieldRecord) => {
   return true
 }
 
+const addedEvents = ['exported_date', 'stolen_date', 'death_date', 'untraceable_date']
+
 const activityLabels = {
   cdo_issued: 'CDO issue date',
   cdo_expiry: 'CDO expiry date',
@@ -139,7 +141,22 @@ const activityLabels = {
   removed_from_cdo_process: 'Removed from CDO process',
   court_id: 'Court',
   legislation_officer: 'Dog legislation officer',
-  police_force_id: 'Police force'
+  police_force_id: 'Police force',
+  microchip_deadline: 'Microchip deadline',
+  name: 'Dog name',
+  dog_breed_id: 'Breed type',
+  colour: 'Dog colour',
+  sex: 'Sex',
+  birth_date: 'Dog date of birth',
+  death_date: 'Dog date of death',
+  tattoo: 'Tattoo',
+  microchip1: 'Microchip number 1',
+  microchip2: 'Microchip number 2',
+  exported_date: 'Date exported',
+  stolen_date: 'Date stolen',
+  untraceable_date: 'Date untraceable',
+  typed_by_dlo: 'Examined by dog legislation officer',
+  exemption_order: 'Order type'
 }
 /**
  * @typedef GetActivityLabelFromAuditFieldRecordFn
@@ -173,7 +190,7 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
   const activityRows = []
 
   return auditedFieldRecords.reduce((activityRows, changeRecord) => {
-    const changeType = 'updated'
+    const changeType = addedEvents.includes(changeRecord[0]) ? 'added' : 'updated'
     const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
     if (filterSameDate(changeRecord) && activityLabel !== 'N/A') {
