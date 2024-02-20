@@ -9,6 +9,9 @@ describe('Check activities', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/dog')
+  const { getDogOwner } = require('../../../../../../app/api/ddi-index-api/dog')
+
   jest.mock('../../../../../../app/api/ddi-events-api/event')
   const { getEvents } = require('../../../../../../app/api/ddi-events-api/event')
 
@@ -113,6 +116,7 @@ describe('Check activities', () => {
     ]
   }
   getEvents.mockResolvedValue(validEvent)
+  getDogOwner.mockResolvedValue({ personReference: 'P-456' })
 
   test('GET /cdo/view/activity route returns a 200 and valid content', async () => {
     getCdo.mockResolvedValue({
@@ -150,7 +154,7 @@ describe('Check activities', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getEvents).toBeCalledWith(['ED123'])
+    expect(getEvents).toBeCalledWith(['ED123', 'P-456'])
     expect(cleanUserDisplayName).toBeCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED123')

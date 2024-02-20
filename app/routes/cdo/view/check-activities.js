@@ -2,6 +2,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
+const { getDogOwner } = require('../../../api/ddi-index-api/dog')
 const { getEvents } = require('../../../api/ddi-events-api/event')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc } = require('../../../models/sorting/event')
@@ -19,15 +20,17 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const cdo = await getSourceEntity(request.params.pk, request.params.source)
-        const allEvents = await getEvents([request.params.pk])
+        const pk = request.params.pk
+        const cdo = await getSourceEntity(pk, request.params.source)
+        const { personReference } = await getDogOwner(pk)
+        const allEvents = await getEvents([pk, personReference])
 
         if (cdo === null || cdo === undefined) {
           return h.response().code(404).takeover()
         }
 
         const sourceEntity = {
-          pk: request.params.pk,
+          pk,
           source: request.params.source
         }
 
