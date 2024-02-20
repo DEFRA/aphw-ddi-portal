@@ -67,17 +67,96 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  */
 
 /**
+ * @typedef DogBreed
+ * @property {string} breed
+ */
+/**
+ * @typedef CdoStatus
+ * @property {number} id
+ * @property {string} status
+ * @property {string} status_type
+ */
+/**
+ * @typedef CdoRegistration
+ * @typedef {number} id
+ * @typedef {number} dog_id
+ * @typedef {number} status_id
+ * @typedef {number} police_force_id
+ * @typedef {null|number} court_id
+ * @typedef {number} exemption_order_id
+ * @typedef {string} created_on
+ * @typedef {string} cdo_issued
+ * @typedef {string} cdo_expiry
+ * @typedef {null|string} time_limit
+ * @typedef {null|string} certificate_issued
+ * @typedef {string} legislation_officer - "",
+ * @typedef {null|string} application_fee_paid
+ * @typedef {null|string} neutering_confirmation
+ * @typedef {null|string} microchip_verification
+ * @typedef {null|string} joined_exemption_scheme
+ * @typedef {null|string} withdrawn
+ * @typedef {null|string} typed_by_dlo
+ * @typedef {null|string} microchip_deadline
+ * @typedef {null|string} neutering_deadline
+ * @typedef {null|string} removed_from_cdo_process
+ * @typedef {{ "name": string }} police_force
+ * @typedef {{ name: null|string }} court
+ */
+/**
+ * @typedef OwnerAddress
+ * @property {number} id
+ * @property {string} address_line_1
+ * @property {string|null} address_line_2
+ * @property {string} town
+ * @property {string} postcode
+ * @property {null} county
+ * @property {number} country_id
+ * @property {{ country: string }} country
+ */
+/**
+ * @typedef OwnerCreatedEvent
+ * @property {number} id
+ * @property {string} first_name
+ * @property {string} last_name
+ * @property {string|null} birth_date
+ * @property {string} person_reference
+ * @property {OwnerAddress} address
+ */
+/**
+ * @typedef CreatedDogEvent
+ * @property {number|null} id
+ * @property {string} dog_reference
+ * @property {string} index_number
+ * @property {number} dog_breed_id
+ * @property {number} status_id
+ * @property {string} name
+ * @property {string|null} birth_date
+ * @property {string|null} death_date
+ * @property {string|null} tattoo
+ * @property {string|null} colour
+ * @property {string|null} sex
+ * @property {string|null} exported_date
+ * @property {string|null} stolen_date
+ * @property {string|null} untraceable_date
+ * @property {DogBreed} dog_breed
+ * @property {CdoStatus} status
+ * @property {CdoRegistration} registration
+ */
+
+/**
  * @typedef CreatedEventBase
  * @property {'uk.gov.defra.ddi.event.create'} type
- * @property {Object} created
+ * @property {{ dogs: CreatedDogEvent[], owner: OwnerCreatedEvent }} created
  *
  * @typedef {CreatedEventBase & EventBase} CreatedEvent
  */
+
 /**
  * @typedef {ChangeEvent|ActivityEvent|CreatedEvent} DDIEvent
  */
+
 /**
- * @param {ActivityEvent} event
+ * @param {DDIEvent} event
  * @returns {string}
  */
 const getActivityLabelFromEvent = (event) => {
@@ -193,6 +272,15 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
 }
 
 /**
+ *
+ * @param {CreatedDogEvent} createdDogEvent
+ * @returns {string}
+ */
+const getActivityLabelFromCreatedDog = (createdDogEvent) => {
+  return `Dog record created (${createdDogEvent.status.status})`
+}
+
+/**
  * @param {ChangeEvent} event
  * @returns {ActivityRow[]}
  */
@@ -234,6 +322,21 @@ const mapActivityDtoToCheckActivityRow = (event) => {
 }
 
 /**
+ * @param {CreatedEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapCreatedEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return event.created.dogs.map(createdDogEvent => {
+    return {
+      activityLabel: getActivityLabelFromCreatedDog(createdDogEvent),
+      ...dateAndTeamMemberData
+    }
+  })
+}
+
+/**
  * @param {DDIEvent[]} events
  * @returns {ActivityRow[]}
  */
@@ -256,6 +359,10 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapAuditedChangeEventToCheckActivityRows(event))
     }
 
+    if (event.type === 'uk.gov.defra.ddi.event.create') {
+      addedRows.push(...mapCreatedEventToCheckActivityRows(event))
+    }
+
     return [...activityRows, ...addedRows]
   }, activityRowsAccumulator)
 }
@@ -266,5 +373,7 @@ module.exports = {
   getActivityLabelFromEvent,
   mapAuditedChangeEventToCheckActivityRows,
   getActivityLabelFromAuditFieldRecord,
-  flatMapActivityDtoToCheckActivityRow
+  flatMapActivityDtoToCheckActivityRow,
+  getActivityLabelFromCreatedDog,
+  mapCreatedEventToCheckActivityRows
 }

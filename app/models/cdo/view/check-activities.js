@@ -1,6 +1,7 @@
 const { flatMapActivityDtoToCheckActivityRow } = require('../../mappers/check-activities')
 
 function ViewModel (cdo, activities, backNav) {
+  console.log('~~~~~~ Chris Debug ~~~~~~ ', 'Activities', JSON.stringify(activities))
   const mappedActivities = flatMapActivityDtoToCheckActivityRow(activities)
 
   this.model = {

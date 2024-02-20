@@ -4,9 +4,11 @@ const {
   getActivityLabelFromAuditFieldRecord,
   mapActivityDtoToCheckActivityRow,
   filterSameDate,
-  getActivityLabelFromEvent
+  getActivityLabelFromEvent,
+  getActivityLabelFromCreatedDog,
+  mapCreatedEventToCheckActivityRows
 } = require('../../../../app/models/mappers/check-activities')
-const { auditedEventBuilder } = require('../../../mocks/activity')
+const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
 describe('Check Activity Mappers', () => {
   describe('getActivityLabelFromEvent', () => {
@@ -83,93 +85,7 @@ describe('Check Activity Mappers', () => {
       expect(getActivityLabelFromEvent(event)).toBe(expected)
     })
     test('should fail safely if event is not an activity', () => {
-      expect(getActivityLabelFromEvent({
-        actioningUser: {
-          username: 'dev@test.com',
-          displayname: 'Developer'
-        },
-        operation: 'created cdo',
-        created: {
-          owner: {
-            id: 3,
-            first_name: 'John',
-            last_name: 'Jeffries',
-            birth_date: null,
-            person_reference: 'P-57DC-2761',
-            address: {
-              id: 5,
-              address_line_1: 'FLAT 3, 3 THE LAUREATE, CHARLES STREET',
-              address_line_2: null,
-              town: 'BRISTOL',
-              postcode: 'BS1 3DG',
-              county: null,
-              country_id: 1,
-              country: {
-                country: 'England'
-              }
-            }
-          },
-          dogs: [
-            {
-              id: 300002,
-              dog_reference: 'a36ba664-9716-4b85-85cd-2b7cfe628cbb',
-              index_number: 'ED300002',
-              dog_breed_id: 2,
-              status_id: 5,
-              name: 'Jake',
-              birth_date: null,
-              death_date: null,
-              tattoo: null,
-              colour: null,
-              sex: null,
-              exported_date: null,
-              stolen_date: null,
-              untraceable_date: null,
-              dog_breed: {
-                breed: 'Pit Bull Terrier'
-              },
-              status: {
-                id: 5,
-                status: 'Pre-exempt',
-                status_type: 'STANDARD'
-              },
-              registration: {
-                id: 3,
-                dog_id: 300002,
-                status_id: 1,
-                police_force_id: 1,
-                court_id: 31,
-                exemption_order_id: 1,
-                created_on: '2024-02-14T08:24:22.440Z',
-                cdo_issued: '2024-02-14',
-                cdo_expiry: '2024-04-14',
-                time_limit: null,
-                certificate_issued: null,
-                legislation_officer: '',
-                application_fee_paid: null,
-                neutering_confirmation: null,
-                microchip_verification: null,
-                joined_exemption_scheme: null,
-                withdrawn: null,
-                typed_by_dlo: null,
-                microchip_deadline: null,
-                neutering_deadline: null,
-                removed_from_cdo_process: null,
-                police_force: {
-                  name: 'Avon and Somerset Constabulary'
-                },
-                court: {
-                  name: 'Bristol Magistrates\' Court'
-                }
-              }
-            }
-          ]
-        },
-        timestamp: '2024-02-14T08:24:22.487Z',
-        type: 'uk.gov.defra.ddi.event.create',
-        rowKey: 'df2ffe61-9024-43f0-a05f-74022a73847e|1707899062487',
-        subject: 'DDI Create cdo'
-      })).toBe('NOT YET DEFINED')
+      expect(getActivityLabelFromEvent(createdEventBuilder())).toBe('NOT YET DEFINED')
     })
     test('should return NOT YET DEFINED given activity is not defined', () => {
       expect(getActivityLabelFromEvent({
@@ -195,6 +111,7 @@ describe('Check Activity Mappers', () => {
       })).toBe('NOT YET DEFINED')
     })
   })
+
   describe('mapActivityDtoToCheckActivityRow', () => {
     test('should map a received activity', () => {
       const activity = {
@@ -244,6 +161,7 @@ describe('Check Activity Mappers', () => {
       expect(mapActivityDtoToCheckActivityRow(event)).toEqual(expectedActivityRow)
     })
   })
+
   describe('filterSameDate', () => {
     test('should return true given numbers are different', () => {
       const auditFieldRecord = [
@@ -296,6 +214,7 @@ describe('Check Activity Mappers', () => {
       expect(filterSameDate(auditFieldRecord)).toBe(false)
     })
   })
+
   describe('getActivityLabelFromAuditFieldRecord', () => {
     const tests = [
       ['CDO issue date updated', 'cdo_issued', 'updated'],
@@ -349,6 +268,7 @@ describe('Check Activity Mappers', () => {
       ])).toBe(expected)
     })
   })
+
   describe('mapAuditedChangeEventToCheckActivityRows', () => {
     test('should handle updated exemptions given nothing has changed', () => {
       const updatedExemptionEvent = auditedEventBuilder({
@@ -605,6 +525,97 @@ describe('Check Activity Mappers', () => {
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual(expectedActivityRows)
     })
   })
+
+  describe('getActivityLabelFromCreateDog', () => {
+    test('should map a created Dog to an activity row', () => {
+      /**
+       * @type {CreatedDogEvent}
+       */
+      const createdDog = createdDogEventBuilder({
+        status: {
+          id: 5,
+          status: 'Pre-exempt',
+          status_type: 'STANDARD'
+        }
+      })
+      expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created (Pre-exempt)')
+    })
+  })
+
+  describe('mapCreatedEventToCheckActivityRows', () => {
+    test('should map a created event with one dog to a single row array of dog created rows', () => {
+      const createdEvent = createdEventBuilder({
+        created: {
+          owner: createdOwnerEventBuilder(),
+          dogs: [
+            createdDogEventBuilder({
+              status: {
+                id: 5,
+                status: 'Interim Exempt',
+                status_type: 'STANDARD'
+              }
+            })
+          ]
+        },
+        timestamp: '2024-02-14T08:24:22.487Z',
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'Developer'
+        }
+      })
+      const expectedRows = [
+        {
+          date: '14 February 2024',
+          activityLabel: 'Dog record created (Interim Exempt)',
+          teamMember: 'Developer'
+        }
+      ]
+      expect(mapCreatedEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
+    })
+
+    test('should map a created event with two dogs to a two row array of dog created rows ', () => {
+      const createdEvent = createdEventBuilder({
+        created: {
+          owner: createdOwnerEventBuilder(),
+          dogs: [
+            createdDogEventBuilder({
+              status: {
+                id: 5,
+                status: 'Interim Exempt',
+                status_type: 'STANDARD'
+              }
+            }),
+            createdDogEventBuilder({
+              status: {
+                id: 5,
+                status: 'Pre-exempt',
+                status_type: 'STANDARD'
+              }
+            })
+          ]
+        },
+        timestamp: '2024-02-14T08:24:22.487Z',
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'Developer'
+        }
+      })
+      const expectedRows = [
+        {
+          date: '14 February 2024',
+          activityLabel: 'Dog record created (Interim Exempt)',
+          teamMember: 'Developer'
+        },
+        {
+          date: '14 February 2024',
+          activityLabel: 'Dog record created (Pre-exempt)',
+          teamMember: 'Developer'
+        }
+      ]
+      expect(mapCreatedEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
+    })
+  })
+
   describe('flatMapActivityDtoToCheckActivityRow', () => {
     test('should filter and flat map a selection of different events', () => {
       /**
@@ -657,6 +668,25 @@ describe('Check Activity Mappers', () => {
               ]
             ]
           }
+        }),
+        createdEventBuilder({
+          timestamp: '2024-02-18T15:12:41.937Z',
+          actioningUser: {
+            username: 'Developer',
+            displayname: 'Developer, Robert'
+          },
+          created: {
+            owner: createdOwnerEventBuilder(),
+            dogs: [
+              createdDogEventBuilder({
+                status: {
+                  status: 'Pre-exempt',
+                  status_type: '',
+                  id: 0
+                }
+              })
+            ]
+          }
         })
       ]
 
@@ -682,6 +712,11 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           activityLabel: 'First certificate date updated',
+          teamMember: 'Robert Developer'
+        },
+        {
+          date: '18 February 2024',
+          activityLabel: 'Dog record created (Pre-exempt)',
           teamMember: 'Robert Developer'
         }
       ]

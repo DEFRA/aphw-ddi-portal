@@ -166,7 +166,7 @@ describe('Check activities', () => {
     expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(7)
+    expect(rows.length).toBe(8)
     expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('15 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
