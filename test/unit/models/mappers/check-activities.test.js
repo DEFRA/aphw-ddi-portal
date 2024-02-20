@@ -6,30 +6,8 @@ const {
   filterSameDate,
   getActivityLabelFromEvent
 } = require('../../../../app/models/mappers/check-activities')
+const { auditedEventBuilder } = require('../../../mocks/activity')
 
-/**
- * @param {Partial<ChangeEvent>} partialExemption
- * @returns {ChangeEvent}
- */
-const exemptionUpdatedEventBuilder = (partialExemption) => {
-  return {
-    actioningUser: {
-      username: 'dev@test.com',
-      displayname: 'Developer, Robert'
-    },
-    operation: 'updated exemption',
-    changes: {
-      added: [],
-      removed: [],
-      edited: []
-    },
-    timestamp: '2024-02-19T10:16:53.894Z',
-    type: 'uk.gov.defra.ddi.event.update',
-    rowKey: 'ff2a5e13-1530-427f-806a-d85b729d7504|1708337813894',
-    subject: 'DDI Update exemption',
-    ...partialExemption
-  }
-}
 describe('Check Activity Mappers', () => {
   describe('getActivityLabelFromEvent', () => {
     const activities = [
@@ -343,7 +321,7 @@ describe('Check Activity Mappers', () => {
   })
   describe('mapAuditedChangeEventToCheckActivityRows', () => {
     test('should handle updated exemptions given nothing has changed', () => {
-      const updatedExemptionEvent = exemptionUpdatedEventBuilder({
+      const updatedExemptionEvent = auditedEventBuilder({
         changes: {
           added: [],
           removed: [
@@ -400,7 +378,7 @@ describe('Check Activity Mappers', () => {
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemptionEvent)).toEqual([])
     })
     test('should filter out N/A results', () => {
-      const updatedExemption = exemptionUpdatedEventBuilder({
+      const updatedExemption = auditedEventBuilder({
         changes: {
           added: [],
           removed: [],
@@ -417,7 +395,7 @@ describe('Check Activity Mappers', () => {
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual([])
     })
     test('should handle updated exemptions', () => {
-      const updatedExemption = exemptionUpdatedEventBuilder({
+      const updatedExemption = auditedEventBuilder({
         changes: {
           added: [],
           removed: [
@@ -576,7 +554,7 @@ describe('Check Activity Mappers', () => {
           rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
           subject: 'DDI Activity Police correspondence'
         },
-        exemptionUpdatedEventBuilder({
+        auditedEventBuilder({
           changes: {
             added: [],
             removed: [],

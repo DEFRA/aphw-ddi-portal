@@ -63,11 +63,18 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  * @property {Activity} activity
  * @property {'uk.gov.defra.ddi.event.activity'} type
  *
- * @typedef {ActivityEventBase & ChangeEventBase} ActivityEvent
+ * @typedef {ActivityEventBase & EventBase} ActivityEvent
  */
 
 /**
- * @typedef {ChangeEvent|ActivityEvent} DDIEvent
+ * @typedef CreatedEventBase
+ * @property {'uk.gov.defra.ddi.event.create'} type
+ * @property {Object} created
+ *
+ * @typedef {CreatedEventBase & EventBase} CreatedEvent
+ */
+/**
+ * @typedef {ChangeEvent|ActivityEvent|CreatedEvent} DDIEvent
  */
 /**
  * @param {ActivityEvent} event
