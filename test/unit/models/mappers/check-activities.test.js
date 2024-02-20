@@ -338,7 +338,8 @@ describe('Check Activity Mappers', () => {
       ['Country updated', 'address/country', 'updated'],
       ['Email address updated', 'contacts/email', 'updated'],
       ['Telephone 1 updated', 'contacts/primaryTelephone', 'updated'],
-      ['Telephone 2 updated', 'contacts/secondaryTelephone', 'updated']
+      ['Telephone 2 updated', 'contacts/secondaryTelephone', 'updated'],
+      ['Status set to In-breach', 'status', 'In-breach']
     ]
     test.each(tests)('should return %s given event is %s', (expected, label, eventType) => {
       expect(getActivityLabelFromAuditFieldRecord(eventType)([
@@ -508,7 +509,8 @@ describe('Check Activity Mappers', () => {
               'date_untraceable',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
-            ]
+            ],
+            ['status', 'Inactive', 'Pre-exempt']
           ]
         }
       })
@@ -592,6 +594,11 @@ describe('Check Activity Mappers', () => {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
           activityLabel: 'Date untraceable added'
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Status set to Pre-exempt'
         }
       ]
 

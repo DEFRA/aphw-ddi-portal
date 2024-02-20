@@ -170,7 +170,8 @@ const activityLabels = {
   'address/country': 'Country',
   'contacts/email': 'Email address',
   'contacts/primaryTelephone': 'Telephone 1',
-  'contacts/secondaryTelephone': 'Telephone 2'
+  'contacts/secondaryTelephone': 'Telephone 2',
+  status: 'Status set to'
 }
 /**
  * @typedef GetActivityLabelFromAuditFieldRecordFn
@@ -204,7 +205,12 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
   const activityRows = []
 
   return auditedFieldRecords.reduce((activityRows, changeRecord) => {
-    const changeType = addedEvents.includes(changeRecord[0]) ? 'added' : 'updated'
+    let changeType = addedEvents.includes(changeRecord[0]) ? 'added' : 'updated'
+
+    if (changeRecord[0] === 'status') {
+      const [,, statusName] = changeRecord
+      changeType = statusName
+    }
     const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
     if (filterSameDate(changeRecord) && activityLabel !== 'N/A') {
