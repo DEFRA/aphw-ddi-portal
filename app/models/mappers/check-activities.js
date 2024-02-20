@@ -21,27 +21,57 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  * @typedef {[AuditKey, number, number]} IdChangedAudit
  */
 /**
+ * @typedef {[string, string]} RemovedAudit
+ */
+/**
  * @typedef {DateChangedAudit|IdChangedAudit} AuditFieldRecord
  */
 /**
  * @typedef Changes
  * @property {AuditFieldRecord[]} added
- * @property {AuditFieldRecord[]} removed
+ * @property {RemovedAudit[]} removed
  * @property {AuditFieldRecord[]} edited
  */
 /**
- * @typedef ChangeEvent
+ * @typedef EventBase
  * @property {User} actioningUser
- * @property {Changes} changes
  * @property {string} operation
  * @property {DateString} timestamp
  * @property {string} type
  * @property {string} rowKey
  * @property {string} subject
  */
+/**
+ * @typedef Activity
+ * @property {string} activity
+ * @property {string} activityType
+ * @property {string} pk
+ * @property {string} source
+ * @property {string} activityDate
+ * @property {string} activityLabel
+ */
 
 /**
- * @typedef {ChangeEvent} Event
+ * @typedef ChangeEventBase
+ * @property {Changes} changes
+ * @property {'uk.gov.defra.ddi.event.update'} type
+ *
+ * @typedef {EventBase & ChangeEventBase} ChangeEvent
+ */
+/**
+ * @typedef ActivityEventBase
+ * @property {Activity} activity
+ * @property {'uk.gov.defra.ddi.event.activity'} type
+ *
+ * @typedef {ActivityEventBase & ChangeEventBase} ActivityEvent
+ */
+
+/**
+ * @typedef {ChangeEvent|ActivityEvent} DDIEvent
+ */
+/**
+ * @param {ActivityEvent} event
+ * @returns {string}
  */
 const getActivityLabelFromEvent = (event) => {
   if (event.type !== 'uk.gov.defra.ddi.event.activity') {
@@ -61,7 +91,7 @@ const getActivityLabelFromEvent = (event) => {
  */
 
 /**
- * @param {Event} event
+ * @param {DDIEvent} event
  * @returns {Omit<ActivityRow, 'activityLabel'>}
  */
 const getDateAndTeamMemberFromEvent = (event) => {
@@ -129,17 +159,29 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
  */
 const mapAuditedChangeEventToCheckActivityRows = (event) => {
   const activityRowInfo = getDateAndTeamMemberFromEvent(event)
+  const auditedFieldRecords = event.changes.edited
+  /**
+   * @type {ActivityRow[]}
+   */
+  const activityRows = []
 
-  return event.changes.edited.filter(filterSameDate).map(change => {
+  return auditedFieldRecords.reduce((activityRows, changeRecord) => {
     const changeType = 'updated'
+    const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
-    return {
-      ...activityRowInfo,
-      activityLabel: getActivityLabelFromAuditFieldRecord(changeType)(change)
+    if (filterSameDate(changeRecord) && activityLabel !== 'N/A') {
+      const activityRow = { ...activityRowInfo, activityLabel }
+      return [...activityRows, activityRow]
     }
-  })
+
+    return [...activityRows]
+  }, activityRows)
 }
 
+/**
+ * @param {DDIEvent} event
+ * @returns {ActivityRow}
+ */
 const mapActivityDtoToCheckActivityRow = (event) => {
   return {
     activityLabel: getActivityLabelFromEvent(event),
@@ -147,10 +189,38 @@ const mapActivityDtoToCheckActivityRow = (event) => {
   }
 }
 
+/**
+ * @param {DDIEvent[]} events
+ * @returns {ActivityRow[]}
+ */
+const flatMapActivityDtoToCheckActivityRow = (events) => {
+  /**
+   * @type {ActivityRow[]}
+   */
+  const activityRowsAccumulator = []
+  return events.reduce((activityRows, event) => {
+    /**
+     * @type {ActivityRow[]}
+     */
+    const addedRows = []
+
+    if (event.type === 'uk.gov.defra.ddi.event.activity') {
+      addedRows.push(mapActivityDtoToCheckActivityRow(event))
+    }
+
+    if (event.type === 'uk.gov.defra.ddi.event.update') {
+      addedRows.push(...mapAuditedChangeEventToCheckActivityRows(event))
+    }
+
+    return [...activityRows, ...addedRows]
+  }, activityRowsAccumulator)
+}
+
 module.exports = {
   filterSameDate,
   mapActivityDtoToCheckActivityRow,
   getActivityLabelFromEvent,
   mapAuditedChangeEventToCheckActivityRows,
-  getActivityLabelFromAuditFieldRecord
+  getActivityLabelFromAuditFieldRecord,
+  flatMapActivityDtoToCheckActivityRow
 }

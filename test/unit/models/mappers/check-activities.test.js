@@ -1,4 +1,35 @@
-const { mapAuditedChangeEventToCheckActivityRows, getActivityLabelFromAuditFieldRecord, mapActivityDtoToCheckActivityRow, filterSameDate, getActivityLabelFromEvent } = require('../../../../app/models/mappers/check-activities')
+const {
+  mapAuditedChangeEventToCheckActivityRows,
+  flatMapActivityDtoToCheckActivityRow,
+  getActivityLabelFromAuditFieldRecord,
+  mapActivityDtoToCheckActivityRow,
+  filterSameDate,
+  getActivityLabelFromEvent
+} = require('../../../../app/models/mappers/check-activities')
+
+/**
+ * @param {Partial<ChangeEvent>} partialExemption
+ * @returns {ChangeEvent}
+ */
+const exemptionUpdatedEventBuilder = (partialExemption) => {
+  return {
+    actioningUser: {
+      username: 'dev@test.com',
+      displayname: 'Developer, Robert'
+    },
+    operation: 'updated exemption',
+    changes: {
+      added: [],
+      removed: [],
+      edited: []
+    },
+    timestamp: '2024-02-19T10:16:53.894Z',
+    type: 'uk.gov.defra.ddi.event.update',
+    rowKey: 'ff2a5e13-1530-427f-806a-d85b729d7504|1708337813894',
+    subject: 'DDI Update exemption',
+    ...partialExemption
+  }
+}
 describe('Check Activity Mappers', () => {
   describe('getActivityLabelFromEvent', () => {
     const activities = [
@@ -312,12 +343,7 @@ describe('Check Activity Mappers', () => {
   })
   describe('mapAuditedChangeEventToCheckActivityRows', () => {
     test('should handle updated exemptions given nothing has changed', () => {
-      const updatedExemptionEvent = {
-        actioningUser: {
-          username: 'dev@test.com',
-          displayname: 'Developer, Robert'
-        },
-        operation: 'updated exemption',
+      const updatedExemptionEvent = exemptionUpdatedEventBuilder({
         changes: {
           added: [],
           removed: [
@@ -368,23 +394,30 @@ describe('Check Activity Mappers', () => {
               '2024-02-18T00:00:00.000Z'
             ]
           ]
-        },
-        timestamp: '2024-02-19T10:33:38.323Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: 'd0bcd845-66f1-4355-921b-f08be37e2c75|1708338818323',
-        subject: 'DDI Update exemption'
-      }
+        }
+      })
 
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemptionEvent)).toEqual([])
     })
+    test('should filter out N/A results', () => {
+      const updatedExemption = exemptionUpdatedEventBuilder({
+        changes: {
+          added: [],
+          removed: [],
+          edited: [
+            [
+              'unknown_type',
+              46,
+              45
+            ]
+          ]
+        }
+      })
 
+      expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual([])
+    })
     test('should handle updated exemptions', () => {
-      const updatedExemption = {
-        actioningUser: {
-          username: 'dev@test.com',
-          displayname: 'Developer, Robert'
-        },
-        operation: 'updated exemption',
+      const updatedExemption = exemptionUpdatedEventBuilder({
         changes: {
           added: [],
           removed: [
@@ -450,12 +483,8 @@ describe('Check Activity Mappers', () => {
               45
             ]
           ]
-        },
-        timestamp: '2024-02-19T10:16:53.894Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: 'ff2a5e13-1530-427f-806a-d85b729d7504|1708337813894',
-        subject: 'DDI Update exemption'
-      }
+        }
+      })
 
       /**
        *
@@ -520,6 +549,90 @@ describe('Check Activity Mappers', () => {
       ]
 
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual(expectedActivityRows)
+    })
+  })
+  describe('flatMapActivityDtoToCheckActivityRow', () => {
+    test('should filter and flat map a selection of different events', () => {
+      /**
+       * @type {DDIEvent[]}
+       */
+      const items = [
+        {
+          activity: {
+            activity: '4',
+            activityType: 'received',
+            pk: 'ED300000',
+            source: 'dog',
+            activityDate: '2024-02-12T00:00:00.000Z',
+            activityLabel: 'Police correspondence'
+          },
+          operation: 'activity',
+          actioningUser: {
+            username: 'Developer',
+            displayname: 'Developer'
+          },
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.activity',
+          rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
+          subject: 'DDI Activity Police correspondence'
+        },
+        exemptionUpdatedEventBuilder({
+          changes: {
+            added: [],
+            removed: [],
+            edited: [
+              [
+                'cdo_issued',
+                '2024-01-15',
+                '2024-01-16T00:00:00.000Z'
+              ],
+              [
+                'application_fee_paid',
+                '2024-02-18',
+                '2024-02-18T00:00:00.000Z'
+              ],
+              [
+                'cdo_expiry',
+                '2024-02-17',
+                '2024-02-18T00:00:00.000Z'
+              ],
+              [
+                'certificate_issued',
+                '2024-02-18',
+                '2024-02-19T00:00:00.000Z'
+              ]
+            ]
+          }
+        })
+      ]
+
+      /**
+       * @type {ActivityRow[]}
+       */
+      const expectedActivityRows = [
+        {
+          date: '12 February 2024',
+          activityLabel: 'Police correspondence received',
+          teamMember: 'Developer'
+        },
+        {
+          date: '19 February 2024',
+          activityLabel: 'CDO issue date updated',
+          teamMember: 'Robert Developer'
+        },
+        {
+          date: '19 February 2024',
+          activityLabel: 'CDO expiry date updated',
+          teamMember: 'Robert Developer'
+        },
+        {
+          date: '19 February 2024',
+          activityLabel: 'First certificate date updated',
+          teamMember: 'Robert Developer'
+        }
+      ]
+
+      expect(flatMapActivityDtoToCheckActivityRow(items)).toEqual(expectedActivityRows)
     })
   })
 })
