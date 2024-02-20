@@ -327,7 +327,18 @@ describe('Check Activity Mappers', () => {
       ['Date stolen added', 'date_stolen', 'added'],
       ['Date untraceable added', 'date_untraceable', 'added'],
       ['Examined by dog legislation officer updated', 'typed_by_dlo', 'updated'],
-      ['Order type updated', 'exemption_order', 'updated']
+      ['Order type updated', 'exemption_order', 'updated'],
+      ['First name updated', 'firstName', 'updated'],
+      ['Last name updated', 'lastName', 'updated'],
+      ['Owner date of birth updated', 'birthDate', 'updated'],
+      ['Address line 1 updated', 'address/addressLine1', 'updated'],
+      ['Address line 2 updated', 'address/addressLine2', 'updated'],
+      ['Town or city updated', 'address/town', 'updated'],
+      ['Postcode updated', 'address/postcode', 'updated'],
+      ['Country updated', 'address/country', 'updated'],
+      ['Email address updated', 'contacts/email', 'updated'],
+      ['Telephone 1 updated', 'contacts/primaryTelephone', 'updated'],
+      ['Telephone 2 updated', 'contacts/secondaryTelephone', 'updated']
     ]
     test.each(tests)('should return %s given event is %s', (expected, label, eventType) => {
       expect(getActivityLabelFromAuditFieldRecord(eventType)([

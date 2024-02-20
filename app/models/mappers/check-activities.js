@@ -159,7 +159,18 @@ const activityLabels = {
   date_stolen: 'Date stolen',
   date_untraceable: 'Date untraceable',
   typed_by_dlo: 'Examined by dog legislation officer',
-  exemption_order: 'Order type'
+  exemption_order: 'Order type',
+  firstName: 'First name',
+  lastName: 'Last name',
+  birthDate: 'Owner date of birth',
+  'address/addressLine1': 'Address line 1',
+  'address/addressLine2': 'Address line 2',
+  'address/town': 'Town or city',
+  'address/postcode': 'Postcode',
+  'address/country': 'Country',
+  'contacts/email': 'Email address',
+  'contacts/primaryTelephone': 'Telephone 1',
+  'contacts/secondaryTelephone': 'Telephone 2'
 }
 /**
  * @typedef GetActivityLabelFromAuditFieldRecordFn
