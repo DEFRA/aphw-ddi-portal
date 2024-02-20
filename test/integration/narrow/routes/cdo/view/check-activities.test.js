@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { manualActivityEventBuilder, auditedEventBuilder, createdEventBuilder } = require('../../../../../mocks/activity')
 
 describe('Check activities', () => {
   jest.mock('../../../../../../app/auth')
@@ -34,26 +35,27 @@ describe('Check activities', () => {
 
   const validEvent = {
     events: [
-      {
-        activity: {
-          activity: '5',
-          activityType: 'received',
-          pk: 'ED300000',
-          source: 'dog',
-          activityDate: '2024-02-10T00:00:00.000Z',
-          activityLabel: 'Police correspondence'
+      manualActivityEventBuilder({
+        timestamp: '2024-02-15T16:12:41.937Z'
+      }),
+      auditedEventBuilder({
+        changes: {
+          edited: [
+            [
+              'cdo_issued',
+              '2024-01-15',
+              '2024-01-16T00:00:00.000Z'
+            ],
+            [
+              'cdo_expiry',
+              '2024-02-10',
+              '2024-02-13T00:00:00.000Z'
+            ]
+          ]
         },
-        operation: 'activity',
-        actioningUser: {
-          username: 'Developer',
-          displayname: 'Developer'
-        },
-        timestamp: '2024-02-15T15:12:41.937Z',
-        type: 'uk.gov.defra.ddi.event.activity',
-        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
-        subject: 'DDI Activity Police correspondence'
-      },
-      {
+        timestamp: '2024-02-14T12:23:22.301Z'
+      }),
+      auditedEventBuilder({
         actioningUser: {
           username: 'dev@test.com',
           displayname: 'Developer'
@@ -76,11 +78,9 @@ describe('Check activities', () => {
           ]
         },
         timestamp: '2024-02-14T08:23:22.301Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: '82a0507b-f2e5-4ba7-8e41-14a7ef60b972|1707899002301',
         subject: 'DDI Update person'
-      },
-      {
+      }),
+      auditedEventBuilder({
         actioningUser: {
           username: 'dev@test.com',
           displayname: 'Developer'
@@ -98,98 +98,10 @@ describe('Check activities', () => {
           ]
         },
         timestamp: '2024-02-14T08:22:52.441Z',
-        type: 'uk.gov.defra.ddi.event.update',
-        rowKey: 'c48e420a-0eb6-457d-bffa-f53c788330fc|1707898972441',
         subject: 'DDI Update dog'
-      },
-      {
-        actioningUser: {
-          username: 'dev@test.com',
-          displayname: 'Developer'
-        },
-        operation: 'created cdo',
-        created: {
-          owner: {
-            id: 3,
-            first_name: 'John',
-            last_name: 'Jeffries',
-            birth_date: null,
-            person_reference: 'P-57DC-2761',
-            address: {
-              id: 5,
-              address_line_1: 'FLAT 3, 3 THE LAUREATE, CHARLES STREET',
-              address_line_2: null,
-              town: 'BRISTOL',
-              postcode: 'BS1 3DG',
-              county: null,
-              country_id: 1,
-              country: {
-                country: 'England'
-              }
-            }
-          },
-          dogs: [
-            {
-              id: 300002,
-              dog_reference: 'a36ba664-9716-4b85-85cd-2b7cfe628cbb',
-              index_number: 'ED300002',
-              dog_breed_id: 2,
-              status_id: 5,
-              name: 'Jake',
-              birth_date: null,
-              death_date: null,
-              tattoo: null,
-              colour: null,
-              sex: null,
-              exported_date: null,
-              stolen_date: null,
-              untraceable_date: null,
-              dog_breed: {
-                breed: 'Pit Bull Terrier'
-              },
-              status: {
-                id: 5,
-                status: 'Pre-exempt',
-                status_type: 'STANDARD'
-              },
-              registration: {
-                id: 3,
-                dog_id: 300002,
-                status_id: 1,
-                police_force_id: 1,
-                court_id: 31,
-                exemption_order_id: 1,
-                created_on: '2024-02-14T08:24:22.440Z',
-                cdo_issued: '2024-02-14',
-                cdo_expiry: '2024-04-14',
-                time_limit: null,
-                certificate_issued: null,
-                legislation_officer: '',
-                application_fee_paid: null,
-                neutering_confirmation: null,
-                microchip_verification: null,
-                joined_exemption_scheme: null,
-                withdrawn: null,
-                typed_by_dlo: null,
-                microchip_deadline: null,
-                neutering_deadline: null,
-                removed_from_cdo_process: null,
-                police_force: {
-                  name: 'Avon and Somerset Constabulary'
-                },
-                court: {
-                  name: 'Bristol Magistrates\' Court'
-                }
-              }
-            }
-          ]
-        },
-        timestamp: '2024-02-14T08:24:22.487Z',
-        type: 'uk.gov.defra.ddi.event.create',
-        rowKey: 'df2ffe61-9024-43f0-a05f-74022a73847e|1707899062487',
-        subject: 'DDI Create cdo'
-      },
-      {
+      }),
+      createdEventBuilder(),
+      manualActivityEventBuilder({
         activity: {
           activity: '4',
           activityType: 'received',
@@ -198,16 +110,9 @@ describe('Check activities', () => {
           activityDate: '2024-02-14T00:00:00.000Z',
           activityLabel: 'Police correspondence'
         },
-        operation: 'activity',
-        actioningUser: {
-          username: 'Developer',
-          displayname: 'Developer'
-        },
         timestamp: '2024-02-14T15:12:41.937Z',
-        type: 'uk.gov.defra.ddi.event.activity',
-        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
         subject: 'DDI Activity Police correspondence'
-      }
+      })
     ]
   }
   getEvents.mockResolvedValue(validEvent)
@@ -261,10 +166,12 @@ describe('Check activities', () => {
     expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(2)
-    expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('14 February 2024')
+    expect(rows.length).toBe(8)
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('15 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
+    expect(rows[1].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO issue date updated')
+    expect(rows[2].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO expiry date updated')
   })
 
   test('GET /cdo/view/activity route returns a 200 and message given no activities exist', async () => {
