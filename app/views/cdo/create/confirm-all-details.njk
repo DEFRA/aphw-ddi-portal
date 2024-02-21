@@ -23,10 +23,8 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <form method="POST" action="{{ model.formAction }}" novalidate>
-      <h1 class="govuk-heading-l">Confirm all details</h1>
-
-    <form method="post" action="{{ model.formAction }}">
+    <form method="POST" action="{{ model.formAction }}" onsubmit="confirmSubmit.disabled = true; return true;" novalidate>
+      <h1 class="govuk-heading-l">Confirm all details1</h1>
 
       <div class="govuk-summary-card">
         <div class="govuk-summary-card__title-wrapper"><h2 class="govuk-summary-card__title">Owner details</h2></div>
@@ -141,7 +139,8 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Confirm details"
+          text: "Confirm details",
+          name: "confirmSubmit" 
         }) }}
       </div>
     </div>
@@ -149,3 +148,4 @@
 </div>
 
 {% endblock %}
+
