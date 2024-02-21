@@ -139,7 +139,7 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  * @property {string|null} stolen_date
  * @property {string|null} untraceable_date
  * @property {DogBreed} dog_breed
- * @property {CdoStatus} status
+ * @property {CdoStatus} [status]
  * @property {CdoRegistration} registration
  */
 
@@ -153,6 +153,14 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
 
 /**
  * @typedef {ChangeEvent|ActivityEvent|CreatedEvent} DDIEvent
+ */
+
+/**
+ * @typedef LegacyDDIEventBase
+ * @property {never} actioningUser
+ * @property {string} username
+ *
+ * @typedef {DDIEvent & LegacyDDIEvent} LegacyDDIEvent
  */
 
 /**
@@ -177,7 +185,7 @@ const getActivityLabelFromEvent = (event) => {
  */
 
 /**
- * @param {DDIEvent} event
+ * @param {DDIEvent|LegacyDDIEvent} event
  * @returns {Omit<ActivityRow, 'activityLabel'>}
  */
 const getDateAndTeamMemberFromEvent = (event) => {
@@ -272,12 +280,12 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
 }
 
 /**
- *
  * @param {CreatedDogEvent} createdDogEvent
  * @returns {string}
  */
 const getActivityLabelFromCreatedDog = (createdDogEvent) => {
-  return `Dog record created (${createdDogEvent.status.status})`
+  const status = createdDogEvent.status?.status ? ` (${createdDogEvent.status.status})` : ''
+  return `Dog record created${status}`
 }
 
 /**

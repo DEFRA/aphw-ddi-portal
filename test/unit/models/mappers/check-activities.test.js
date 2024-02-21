@@ -540,6 +540,15 @@ describe('Check Activity Mappers', () => {
       })
       expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created (Pre-exempt)')
     })
+    test('should map a created Dog to an activity row given dog is using legacy event format', () => {
+      /**
+       * @type {CreatedDogEvent}
+       */
+      const createdDog = createdDogEventBuilder({
+        status: undefined
+      })
+      expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created')
+    })
   })
 
   describe('mapCreatedEventToCheckActivityRows', () => {
