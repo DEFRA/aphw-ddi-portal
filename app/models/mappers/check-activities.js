@@ -2,160 +2,6 @@ const { formatToGds } = require('../../lib/date-helpers')
 const { cleanUserDisplayName } = require('../../lib/model-helpers')
 
 /**
- * @typedef User
- * @property {string} username
- * @property {string} displayname
- */
-
-/**
- * @typedef {string} AuditKey
- */
-/**
- * @typedef {string} DateString
- */
-
-/**
- * @typedef {[AuditKey, DateString, DateString]} DateChangedAudit
- */
-/**
- * @typedef {[AuditKey, number, number]} IdChangedAudit
- */
-/**
- * @typedef {[string, string]} RemovedAudit
- */
-/**
- * @typedef {DateChangedAudit|IdChangedAudit} AuditFieldRecord
- */
-/**
- * @typedef Changes
- * @property {AuditFieldRecord[]} added
- * @property {RemovedAudit[]} removed
- * @property {AuditFieldRecord[]} edited
- */
-/**
- * @typedef EventBase
- * @property {User} actioningUser
- * @property {string} operation
- * @property {DateString} timestamp
- * @property {string} type
- * @property {string} rowKey
- * @property {string} subject
- */
-/**
- * @typedef Activity
- * @property {string} activity
- * @property {string} activityType
- * @property {string} pk
- * @property {string} source
- * @property {string} activityDate
- * @property {string} activityLabel
- */
-
-/**
- * @typedef ChangeEventBase
- * @property {Changes} changes
- * @property {'uk.gov.defra.ddi.event.update'} type
- *
- * @typedef {EventBase & ChangeEventBase} ChangeEvent
- */
-/**
- * @typedef ActivityEventBase
- * @property {Activity} activity
- * @property {'uk.gov.defra.ddi.event.activity'} type
- *
- * @typedef {ActivityEventBase & EventBase} ActivityEvent
- */
-
-/**
- * @typedef DogBreed
- * @property {string} breed
- */
-/**
- * @typedef CdoStatus
- * @property {number} id
- * @property {string} status
- * @property {string} status_type
- */
-/**
- * @typedef CdoRegistration
- * @typedef {number} id
- * @typedef {number} dog_id
- * @typedef {number} status_id
- * @typedef {number} police_force_id
- * @typedef {null|number} court_id
- * @typedef {number} exemption_order_id
- * @typedef {string} created_on
- * @typedef {string} cdo_issued
- * @typedef {string} cdo_expiry
- * @typedef {null|string} time_limit
- * @typedef {null|string} certificate_issued
- * @typedef {string} legislation_officer - "",
- * @typedef {null|string} application_fee_paid
- * @typedef {null|string} neutering_confirmation
- * @typedef {null|string} microchip_verification
- * @typedef {null|string} joined_exemption_scheme
- * @typedef {null|string} withdrawn
- * @typedef {null|string} typed_by_dlo
- * @typedef {null|string} microchip_deadline
- * @typedef {null|string} neutering_deadline
- * @typedef {null|string} removed_from_cdo_process
- * @typedef {{ "name": string }} police_force
- * @typedef {{ name: null|string }} court
- */
-/**
- * @typedef OwnerAddress
- * @property {number} id
- * @property {string} address_line_1
- * @property {string|null} address_line_2
- * @property {string} town
- * @property {string} postcode
- * @property {null} county
- * @property {number} country_id
- * @property {{ country: string }} country
- */
-/**
- * @typedef OwnerCreatedEvent
- * @property {number} id
- * @property {string} first_name
- * @property {string} last_name
- * @property {string|null} birth_date
- * @property {string} person_reference
- * @property {OwnerAddress} address
- */
-/**
- * @typedef CreatedDogEvent
- * @property {number|null} id
- * @property {string} dog_reference
- * @property {string} index_number
- * @property {number} dog_breed_id
- * @property {number} status_id
- * @property {string} name
- * @property {string|null} birth_date
- * @property {string|null} death_date
- * @property {string|null} tattoo
- * @property {string|null} colour
- * @property {string|null} sex
- * @property {string|null} exported_date
- * @property {string|null} stolen_date
- * @property {string|null} untraceable_date
- * @property {DogBreed} dog_breed
- * @property {CdoStatus} status
- * @property {CdoRegistration} registration
- */
-
-/**
- * @typedef CreatedEventBase
- * @property {'uk.gov.defra.ddi.event.create'} type
- * @property {{ dogs: CreatedDogEvent[], owner: OwnerCreatedEvent }} created
- *
- * @typedef {CreatedEventBase & EventBase} CreatedEvent
- */
-
-/**
- * @typedef {ChangeEvent|ActivityEvent|CreatedEvent} DDIEvent
- */
-
-/**
  * @param {DDIEvent} event
  * @returns {string}
  */
@@ -169,12 +15,6 @@ const getActivityLabelFromEvent = (event) => {
   }
   return 'NOT YET DEFINED'
 }
-/**
- * @typedef ActivityRow
- * @property {string} activityLabel
- * @property {string} date
- * @property {string} teamMember
- */
 
 /**
  * @param {DDIEvent} event
@@ -252,11 +92,6 @@ const activityLabels = {
   'contacts/secondaryTelephone': 'Telephone 2',
   status: 'Status set to'
 }
-/**
- * @typedef GetActivityLabelFromAuditFieldRecordFn
- * @param {AuditFieldRecord} auditFieldRecord
- * @returns {string}
- */
 
 /**
  * @param {string} eventType
