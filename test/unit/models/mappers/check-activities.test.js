@@ -3,7 +3,7 @@ const {
   flatMapActivityDtoToCheckActivityRow,
   getActivityLabelFromAuditFieldRecord,
   mapActivityDtoToCheckActivityRow,
-  filterSameDate,
+  filterNonUpdatedFields,
   getActivityLabelFromEvent,
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows
@@ -162,14 +162,14 @@ describe('Check Activity Mappers', () => {
     })
   })
 
-  describe('filterSameDate', () => {
+  describe('filterNonUpdatedFields', () => {
     test('should return true given numbers are different', () => {
       const auditFieldRecord = [
         'court_id',
         1,
         2
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(true)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(true)
     })
     test('should return false given numbers are the same', () => {
       const auditFieldRecord = [
@@ -177,7 +177,7 @@ describe('Check Activity Mappers', () => {
         1,
         1
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(false)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
     })
     test('should return true given strings are different', () => {
       const auditFieldRecord = [
@@ -185,7 +185,7 @@ describe('Check Activity Mappers', () => {
         'test',
         'test2'
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(true)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(true)
     })
     test('should return false given strings are the same', () => {
       const auditFieldRecord = [
@@ -193,7 +193,7 @@ describe('Check Activity Mappers', () => {
         'test',
         'test'
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(false)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
     })
 
     test('should return true given dates are different', () => {
@@ -202,7 +202,16 @@ describe('Check Activity Mappers', () => {
         '2024-01-15',
         '2024-01-16T00:00:00.000Z'
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(true)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(true)
+    })
+
+    test('should return false given two nulls', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        null,
+        null
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
     })
 
     test('should return false given dates are the same', () => {
@@ -211,7 +220,40 @@ describe('Check Activity Mappers', () => {
         '2024-01-15',
         '2024-01-15T00:00:00.000Z'
       ]
-      expect(filterSameDate(auditFieldRecord)).toBe(false)
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
+    })
+
+    test('should return false given values are null, empty string', () => {
+      const auditFieldRecord = [
+        'field_record',
+        null,
+        ''
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are empty string, null', () => {
+      const auditFieldRecord = [
+        'field_record',
+        '',
+        null
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are undefined, null', () => {
+      const auditFieldRecord = [
+        'field_record',
+        undefined,
+        null
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are empty string, undefined', () => {
+      const auditFieldRecord = [
+        'field_record',
+        '',
+        undefined
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
     })
   })
 
@@ -539,6 +581,15 @@ describe('Check Activity Mappers', () => {
         }
       })
       expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created (Pre-exempt)')
+    })
+    test('should map a created Dog to an activity row given dog is using legacy event format', () => {
+      /**
+       * @type {CreatedDogEvent}
+       */
+      const createdDog = createdDogEventBuilder({
+        status: undefined
+      })
+      expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created')
     })
   })
 
