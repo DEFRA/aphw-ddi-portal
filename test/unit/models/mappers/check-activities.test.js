@@ -205,6 +205,15 @@ describe('Check Activity Mappers', () => {
       expect(filterNonUpdatedFields(auditFieldRecord)).toBe(true)
     })
 
+    test('should return false given two nulls', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        null,
+        null
+      ]
+      expect(filterNonUpdatedFields(auditFieldRecord)).toBe(false)
+    })
+
     test('should return false given dates are the same', () => {
       const auditFieldRecord = [
         'cdo_issued',
