@@ -151,9 +151,7 @@ const createdEventBuilder = (partialCreatedEvent = {}) => {
     operation: 'created cdo',
     created: {
       owner: createdOwnerEventBuilder(),
-      dogs: [
-        createdDogEventBuilder()
-      ]
+      dog: createdDogEventBuilder()
     },
     timestamp: '2024-02-14T08:24:22.487Z',
     type: 'uk.gov.defra.ddi.event.create',

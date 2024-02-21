@@ -598,15 +598,13 @@ describe('Check Activity Mappers', () => {
       const createdEvent = createdEventBuilder({
         created: {
           owner: createdOwnerEventBuilder(),
-          dogs: [
-            createdDogEventBuilder({
-              status: {
-                id: 5,
-                status: 'Interim Exempt',
-                status_type: 'STANDARD'
-              }
-            })
-          ]
+          dog: createdDogEventBuilder({
+            status: {
+              id: 5,
+              status: 'Interim Exempt',
+              status_type: 'STANDARD'
+            }
+          })
         },
         timestamp: '2024-02-14T08:24:22.487Z',
         actioningUser: {
@@ -623,8 +621,7 @@ describe('Check Activity Mappers', () => {
       ]
       expect(mapCreatedEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
     })
-
-    test('should map a created event with two dogs to a two row array of dog created rows ', () => {
+    test('should map a legacy created event with a dog array to a single row array of dog created rows', () => {
       const createdEvent = createdEventBuilder({
         created: {
           owner: createdOwnerEventBuilder(),
@@ -655,11 +652,6 @@ describe('Check Activity Mappers', () => {
         {
           date: '14 February 2024',
           activityLabel: 'Dog record created (Interim Exempt)',
-          teamMember: 'Developer'
-        },
-        {
-          date: '14 February 2024',
-          activityLabel: 'Dog record created (Pre-exempt)',
           teamMember: 'Developer'
         }
       ]
@@ -728,15 +720,13 @@ describe('Check Activity Mappers', () => {
           },
           created: {
             owner: createdOwnerEventBuilder(),
-            dogs: [
-              createdDogEventBuilder({
-                status: {
-                  status: 'Pre-exempt',
-                  status_type: '',
-                  id: 0
-                }
-              })
-            ]
+            dog: createdDogEventBuilder({
+              status: {
+                status: 'Pre-exempt',
+                status_type: '',
+                id: 0
+              }
+            })
           }
         })
       ]
