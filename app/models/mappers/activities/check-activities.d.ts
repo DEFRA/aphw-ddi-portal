@@ -16,6 +16,7 @@ export interface EventBase {
   type: string
   rowKey: string
   subject: string
+  actioningUser: User
 }
 
 export interface Activity {
@@ -38,7 +39,7 @@ export interface ChangeEvent extends EventBase {
   type: 'uk.gov.defra.ddi.event.update'
 }
 
-export interface ActivityEvent {
+export interface ActivityEvent extends EventBase {
   activity: Activity
   type: 'uk.gov.defra.ddi.event.activity'
 }
