@@ -15,16 +15,15 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  */
 
 /**
- * @typedef {[AuditKey, DateString, DateString]} DateChangedAudit
- */
-/**
- * @typedef {[AuditKey, number, number]} IdChangedAudit
+ * @typedef {[AuditKey, DateString|null, DateString|null]} DateChangedAudit
+ * @typedef {[AuditKey, number|null, number|null]} IdChangedAudit
+ * @typedef {[AuditKey, string|null, string|null]} StringChangedAudit
  */
 /**
  * @typedef {[string, string]} RemovedAudit
  */
 /**
- * @typedef {DateChangedAudit|IdChangedAudit} AuditFieldRecord
+ * @typedef {DateChangedAudit|IdChangedAudit|StringChangedAudit} AuditFieldRecord
  */
 /**
  * @typedef Changes
@@ -198,16 +197,29 @@ const getDateAndTeamMemberFromEvent = (event) => {
 }
 
 /**
+ * @param {string|undefined|number|null} item
+ * @returns {string|number|null}
+ */
+const turnUndefinedOrEmptyToNull = (item) => {
+  if (item === undefined || item === '') {
+    return null
+  }
+  return item
+}
+
+/**
  * @param {AuditFieldRecord} auditFieldRecord
  * @returns {boolean}
  */
-const filterSameDate = (auditFieldRecord) => {
+const filterNonUpdatedFields = (auditFieldRecord) => {
   const [, before, after] = auditFieldRecord
 
-  if (before === after) {
+  // null, empty string and undefined should be the same
+  if (turnUndefinedOrEmptyToNull(before) === turnUndefinedOrEmptyToNull(after)) {
     return false
   }
 
+  // Date same
   if (typeof before === 'string' && !isNaN(new Date(before).getTime())) {
     return new Date(before).getTime() !== new Date(after).getTime()
   }
@@ -309,7 +321,7 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
     }
     const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
-    if (filterSameDate(changeRecord) && activityLabel !== 'N/A') {
+    if (filterNonUpdatedFields(changeRecord) && activityLabel !== 'N/A') {
       const activityRow = { ...activityRowInfo, activityLabel }
       return [...activityRows, activityRow]
     }
@@ -376,7 +388,7 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
 }
 
 module.exports = {
-  filterSameDate,
+  filterNonUpdatedFields,
   mapActivityDtoToCheckActivityRow,
   getActivityLabelFromEvent,
   mapAuditedChangeEventToCheckActivityRows,
