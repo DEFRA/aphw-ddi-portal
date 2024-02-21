@@ -141,11 +141,16 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  * @property {CdoStatus} [status]
  * @property {CdoRegistration} registration
  */
-
+/**
+ * @typedef CdoCreation
+ * @property {CreatedDogEvent} [dog]
+ * @property {CreatedDogEvent[]} [dogs]
+ * @property {OwnerCreatedEvent} owner
+ */
 /**
  * @typedef CreatedEventBase
  * @property {'uk.gov.defra.ddi.event.create'} type
- * @property {{ dogs: CreatedDogEvent[], owner: OwnerCreatedEvent }} created
+ * @property {CdoCreation} created
  *
  * @typedef {CreatedEventBase & EventBase} CreatedEvent
  */
@@ -348,12 +353,10 @@ const mapActivityDtoToCheckActivityRow = (event) => {
 const mapCreatedEventToCheckActivityRows = (event) => {
   const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
 
-  return event.created.dogs.map(createdDogEvent => {
-    return {
-      activityLabel: getActivityLabelFromCreatedDog(createdDogEvent),
-      ...dateAndTeamMemberData
-    }
-  })
+  return [{
+    activityLabel: getActivityLabelFromCreatedDog(event.created.dog || event.created.dogs[0]),
+    ...dateAndTeamMemberData
+  }]
 }
 
 /**
