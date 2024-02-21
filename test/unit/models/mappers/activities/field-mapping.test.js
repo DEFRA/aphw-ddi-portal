@@ -1,4 +1,9 @@
-const { getActivityLabelFromEvent, getActivityLabelFromCreatedDog, getActivityLabelFromAuditFieldRecord } = require('../../../../../app/models/mappers/activities/label-mapping')
+const {
+  getActivityLabelFromEvent,
+  getActivityLabelFromCreatedDog,
+  getActivityLabelFromAuditFieldRecord,
+  fieldHasBeenUpdated
+} = require('../../../../../app/models/mappers/activities/field-mapping')
 const { createdEventBuilder, createdDogEventBuilder } = require('../../../../mocks/activity')
 describe('label-mapping', () => {
   describe('getActivityLabelFromEvent', () => {
@@ -178,6 +183,101 @@ describe('label-mapping', () => {
         status: undefined
       })
       expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created')
+    })
+  })
+
+  describe('fieldHasBeenUpdated', () => {
+    test('should return true given numbers are different', () => {
+      const auditFieldRecord = [
+        'court_id',
+        1,
+        2
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(true)
+    })
+    test('should return false given numbers are the same', () => {
+      const auditFieldRecord = [
+        'court_id',
+        1,
+        1
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+    test('should return true given strings are different', () => {
+      const auditFieldRecord = [
+        'legislation_officer',
+        'test',
+        'test2'
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(true)
+    })
+    test('should return false given strings are the same', () => {
+      const auditFieldRecord = [
+        'legislation_officer',
+        'test',
+        'test'
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+
+    test('should return true given dates are different', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        '2024-01-15',
+        '2024-01-16T00:00:00.000Z'
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(true)
+    })
+
+    test('should return false given two nulls', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        null,
+        null
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+
+    test('should return false given dates are the same', () => {
+      const auditFieldRecord = [
+        'cdo_issued',
+        '2024-01-15',
+        '2024-01-15T00:00:00.000Z'
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+
+    test('should return false given values are null, empty string', () => {
+      const auditFieldRecord = [
+        'field_record',
+        null,
+        ''
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are empty string, null', () => {
+      const auditFieldRecord = [
+        'field_record',
+        '',
+        null
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are undefined, null', () => {
+      const auditFieldRecord = [
+        'field_record',
+        undefined,
+        null
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
+    })
+    test('should return false given values are empty string, undefined', () => {
+      const auditFieldRecord = [
+        'field_record',
+        '',
+        undefined
+      ]
+      expect(fieldHasBeenUpdated(auditFieldRecord)).toBe(false)
     })
   })
 })
