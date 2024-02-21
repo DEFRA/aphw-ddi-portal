@@ -29,7 +29,8 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
  * @returns {string}
  */
 const getActivityLabelFromCreatedDog = (createdDogEvent) => {
-  return `Dog record created (${createdDogEvent.status.status})`
+  const status = createdDogEvent.status?.status ? ` (${createdDogEvent.status.status})` : ''
+  return `Dog record created${status}`
 }
 
 module.exports = {

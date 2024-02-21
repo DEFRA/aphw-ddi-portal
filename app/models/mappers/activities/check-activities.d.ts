@@ -5,10 +5,11 @@ export interface User {
 
 export type AuditKey = string
 export type DateString = string
-export type DateChangedAudit = [AuditKey, DateString, DateString]
-export type IdChangedAudit = [AuditKey, number, number]
+export type DateChangedAudit = [AuditKey, DateString|null, DateString|null]
+export type IdChangedAudit = [AuditKey, number|null, number|null]
+export type StringChangedAudit = [AuditKey, string|null, string|null]
 export type RemovedAudit = [string, string]
-export type AuditFieldRecord = DateChangedAudit | IdChangedAudit
+export type AuditFieldRecord = DateChangedAudit | IdChangedAudit | StringChangedAudit
 
 export interface EventBase {
   operation: string
@@ -116,7 +117,7 @@ export interface CreatedDogEvent {
   stolen_date: string | null
   untraceable_date: string | null
   dog_breed: DogBreed
-  status: CdoStatus
+  status?: CdoStatus
   registration: CdoRegistration
 }
 
