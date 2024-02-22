@@ -10,6 +10,6 @@ describe('Regular Jobs test', () => {
   test('getRegularJobs calls endpoint', async () => {
     get.mockResolvedValue({ payload: {} })
     await getRegularJobs()
-    expect(get).toHaveBeenCalledWith('regular-jobs', jest.anything())
+    expect(get).toHaveBeenCalledWith('regular-jobs', expect.anything())
   })
 })
