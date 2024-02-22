@@ -1,0 +1,41 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Regular jobs</h1>
+        </div>
+    </div>
+    <div class="govuk-body">
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">All activity</caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Id</th>
+            <th scope="col" class="govuk-table__header">Start time</th>
+            <th scope="col" class="govuk-table__header">End time</th>
+            <th scope="col" class="govuk-table__header">Result</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% for jobRow in model.jobs %}
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ jobRow.id }}</td>
+            <td class="govuk-table__cell">{{ jobRow.start_time }}</td>
+            <td class="govuk-table__cell">{{ jobRow.end_time }}</td>
+            <td class="govuk-table__cell">{{ jobRow.result }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+{% endblock %}
