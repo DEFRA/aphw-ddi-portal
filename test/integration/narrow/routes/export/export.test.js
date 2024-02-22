@@ -50,6 +50,17 @@ describe('Export test', () => {
     expect(response.statusCode).toBe(200)
   })
 
+  test('GET /trigger-overnight route returns 200', async () => {
+    const options = {
+      method: 'GET',
+      url: '/trigger-overnight',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+  })
+
   afterEach(async () => {
     await server.stop()
   })

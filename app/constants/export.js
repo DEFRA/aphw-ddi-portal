@@ -3,6 +3,9 @@ const exportData = {
     export: {
       get: '/export',
       post: '/export'
+    },
+    triggerOvernight: {
+      get: '/trigger-overnight'
     }
   },
   views: {

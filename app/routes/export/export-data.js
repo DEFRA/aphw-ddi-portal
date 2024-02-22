@@ -2,7 +2,7 @@ const { format } = require('date-fns')
 const exportConstants = require('../../constants/export')
 const { admin } = require('../../auth/permissions')
 const getUser = require('../../auth/get-user')
-const { exportData } = require('../../api/ddi-index-api/export')
+const { exportData, triggerOvernight } = require('../../api/ddi-index-api/export')
 
 module.exports = [{
   method: 'GET',
@@ -14,6 +14,20 @@ module.exports = [{
     },
     handler: async (request, h) => {
       return h.view(exportConstants.views.export)
+    }
+  }
+},
+{
+  method: 'GET',
+  path: exportConstants.routes.triggerOvernight.get,
+  options: {
+    auth: { scope: [admin] },
+    plugins: {
+      crumb: false
+    },
+    handler: async (request, h) => {
+      await triggerOvernight()
+      return h.response('ok').code(200)
     }
   }
 },
