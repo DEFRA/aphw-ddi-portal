@@ -89,6 +89,12 @@ process.env.OS_PLACES_API_KEY = 'some-api-key'
 process.env.POLICE_API_BASE_URL = 'http://localhost/police'
 ```
 
+
+## Pact Broker
+
+To test pact locally you will need to download the pact-broker cli: https://github.com/pact-foundation/pact-ruby-standalone/releases
+There are two scripts, one to start up the Pact Broker, the other to publish the pact contracts.
+
 ## CI pipeline
 
 This service uses the [FFC CI pipeline](https://github.com/DEFRA/ffc-jenkins-pipeline-library)

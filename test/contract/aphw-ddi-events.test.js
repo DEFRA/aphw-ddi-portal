@@ -22,7 +22,7 @@ describe('Event service contract test', () => {
       }),
       timestamp: iso8601DateTimeWithMillis('2024-02-13T15:12:41.937Z'),
       type: term({
-        matcher: 'uk.gov.defra.ddi.event.activity|uk.gov.defra.ddi.event.create|uk.gov.defra.ddi.event.update',
+        matcher: 'uk.gov.defra.ddi.event.activity|uk.gov.defra.ddi.event.create|uk.gov.defra.ddi.event.update|uk.gov.defra.ddi.event.export',
         generate: 'uk.gov.defra.ddi.event.activity'
       }),
       rowKey: string('0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937'),
@@ -31,6 +31,7 @@ describe('Event service contract test', () => {
 
     const SAMPLE_ACTIVITY = {
       ...ANY_EVENT,
+      type: 'uk.gov.defra.ddi.event.activity',
       operation: 'activity',
       activity: like({
         activity: '4',
@@ -45,6 +46,7 @@ describe('Event service contract test', () => {
 
     const SAMPLE_UPDATED = {
       ...ANY_EVENT,
+      type: 'uk.gov.defra.ddi.event.update',
       operation: string('updated dog'),
       changes: {
         edited: eachLike([
@@ -89,6 +91,7 @@ describe('Event service contract test', () => {
     }
     const SAMPLE_CREATED = {
       ...ANY_EVENT,
+      type: 'uk.gov.defra.ddi.event.create',
       operation: string('created cdo'),
       created: {
         owner: like({
@@ -112,12 +115,18 @@ describe('Event service contract test', () => {
 
     const SAMPLE_CREATED_WITH_DOG = {
       ...SAMPLE_CREATED,
-      dog: CREATED_DOG
+      created: {
+        ...SAMPLE_CREATED.created,
+        dog: CREATED_DOG
+      }
     }
 
     const SAMPLE_CREATED_WITH_DOGS = {
       ...SAMPLE_CREATED,
-      dog: eachLike(CREATED_DOG, { min: 1 })
+      created: {
+        ...SAMPLE_CREATED.created,
+        dogs: eachLike(CREATED_DOG, { min: 1 })
+      }
     }
 
     test('GET /events with activity', async () => {
