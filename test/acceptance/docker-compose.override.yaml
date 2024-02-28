@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  wdio-cucumber:
+    environment:
+      MAX_INSTANCES: 1
+      CHROME_ARGS: "--headless --ignore-certificate-errors --verbose"
+    volumes:
+      - ./features:/home/node/features
+      - ./pageobjects:/home/node/pageobjects
+      - ./scratch:/home/node/scratch
+      - ./steps:/home/node/steps
+      - ./support:/home/node/support
+      - ./babel.config.js:/home/node/babel.config.js
+      - ./wdio.conf.js:/home/node/wdio.conf.js
+      - ./package.json:/home/node/package.json
+      - ../../test-output/html-reports:/home/node/html-reports
+    ports:
+      - "9228:9229"
