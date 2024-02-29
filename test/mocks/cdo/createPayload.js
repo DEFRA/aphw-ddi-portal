@@ -32,6 +32,35 @@ const valid = {
   ]
 }
 
+const validWithCountry = {
+  owner: {
+    firstName: 'Homer',
+    lastName: 'Simpson',
+    dateOfBirth: '1998-05-10',
+    address: {
+      addressLine1: '1 Anywhere St',
+      addressLine2: 'Anywhere Estate',
+      town: 'Pontypridd',
+      postcode: 'CF15 7SU',
+      country: 'Wales'
+    }
+  },
+  enforcementDetails: {
+    court: '1',
+    policeForce: '1',
+    legislationOfficer: 'Sidney Lewis'
+  },
+  dogs: [
+    {
+      breed: 'XL Bully',
+      name: 'Rex',
+      applicationType: 'cdo',
+      cdoIssued: '2023-10-10',
+      cdoExpiry: '2023-12-10'
+    }
+  ]
+}
+
 const invalid = {
   owner: {
     dateOfBirth: '1998-05-10',
@@ -65,5 +94,6 @@ const invalid = {
 
 module.exports = {
   valid,
+  validWithCountry,
   invalid
 }
