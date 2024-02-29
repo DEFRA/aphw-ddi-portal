@@ -135,7 +135,7 @@ describe('Event service contract test', () => {
         uponReceiving: 'get all events for primary key',
         withRequest: {
           method: 'GET',
-          path: '/events/',
+          path: '/events',
           query: {
             pks: 'ED300000'
           }
@@ -161,7 +161,7 @@ describe('Event service contract test', () => {
         uponReceiving: 'get all events for primary key',
         withRequest: {
           method: 'GET',
-          path: '/events/',
+          path: '/events',
           query: {
             pks: 'ED300000'
           }
@@ -187,7 +187,7 @@ describe('Event service contract test', () => {
         uponReceiving: 'get all events for primary key',
         withRequest: {
           method: 'GET',
-          path: '/events/',
+          path: '/events',
           query: {
             pks: 'ED300000,P-B218-7D57'
           }
@@ -213,7 +213,7 @@ describe('Event service contract test', () => {
         uponReceiving: 'get all events for primary key',
         withRequest: {
           method: 'GET',
-          path: '/events/',
+          path: '/events',
           query: {
             pks: 'ED300000,P-B218-7D57'
           }
