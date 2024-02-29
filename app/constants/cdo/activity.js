@@ -25,6 +25,10 @@ const constants = {
     activityDetails: 'activityDetails',
     sent: 'sent',
     received: 'received'
+  },
+  sources: {
+    dog: 'dog',
+    owner: 'owner'
   }
 }
 
