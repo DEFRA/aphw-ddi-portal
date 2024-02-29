@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+pact-broker publish test-output/aphw-ddi-portal-aphw-ddi-*.json --consumer-app-version=0.81.2 --tag=dev --broker-base-url=http://localhost:9292

@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.81.1",
+  "version": "0.81.2",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -52,10 +52,11 @@
   },
   "devDependencies": {
     "@hapi/catbox-memory": "5.0.1",
+    "@pact-foundation/pact": "9.11.1",
     "blipp": "4.0.2",
     "clean-webpack-plugin": "3.0.0",
-    "css-loader": "5.2.6",
     "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "5.2.6",
     "html-webpack-plugin": "5.3.1",
     "jest": "27.5.1",
     "jest-junit": "13.0.0",
