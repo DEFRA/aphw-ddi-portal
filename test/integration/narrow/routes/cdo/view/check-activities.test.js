@@ -337,9 +337,11 @@ describe('Check activities', () => {
 
     expect(document.querySelectorAll('.govuk-table').length).toBe(0)
     const activityBlock = document.querySelector('div[data-testid="activity-info"]')
-    expect(activityBlock.textContent.trim()).toContain('Future activity on the record will display here.')
-    expect(activityBlock.textContent.trim()).toContain('The activities will include when we send or receive documents such as:')
-    expect(activityBlock.querySelectorAll('.govuk-list li')[0].textContent.trim()).toBe('change of address forms')
+    expect(activityBlock.textContent.trim()).toContain('Future owner activity on the record will display here.')
+    expect(activityBlock.textContent.trim()).toContain('The activities will include:')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[0].textContent.trim()).toBe('changes of address')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[1].textContent.trim()).toBe('changes of email address and telephone numbers')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[2].textContent.trim()).toBe('changes of owner')
   })
   test('GET /cdo/view/activity/xxx/owner route returns 404 if no owner data found', async () => {
     getPersonByReference.mockResolvedValue(undefined)
