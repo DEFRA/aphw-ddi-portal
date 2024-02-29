@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
-const { keys } = require('../../../constants/cdo/activity')
+const { sources: activitySources } = require('../../../constants/cdo/activity')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
@@ -10,9 +10,9 @@ const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
-  if (source === keys.dog) {
+  if (source === activitySources.dog) {
     return await getCdo(pk)
-  } else if (source === keys.owner) {
+  } else if (source === activitySources.owner) {
     return await getPersonByReference(pk)
   }
 
@@ -20,7 +20,7 @@ const getSourceEntity = async (pk, source) => {
 }
 
 const getEventPkList = async (pk, source) => {
-  if (source === keys.dog) {
+  if (source === activitySources.dog) {
     const { personReference } = await getDogOwner(pk)
     return [pk, personReference]
   }
@@ -49,7 +49,7 @@ module.exports = [
         const sourceEntity = {
           pk,
           source: request.params.source,
-          title: source === keys.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`
+          title: source === activitySources.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`
         }
 
         const sortedActivities = sortEventsDesc(allEvents.events)

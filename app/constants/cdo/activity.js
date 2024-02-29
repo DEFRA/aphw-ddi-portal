@@ -24,7 +24,9 @@ const constants = {
     activityDate: 'activityDate',
     activityDetails: 'activityDetails',
     sent: 'sent',
-    received: 'received',
+    received: 'received'
+  },
+  sources: {
     dog: 'dog',
     owner: 'owner'
   }
