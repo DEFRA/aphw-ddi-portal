@@ -1,29 +1,88 @@
-const { term, eachLike, like, string, iso8601Date } = require('@pact-foundation/pact/dsl/matchers')
-const { anyIntegerString } = require('./custom')
+const { term, string, iso8601Date, eachLike } = require('@pact-foundation/pact/dsl/matchers')
 
-const validCdoMatcher = {
+const validCdoRequest = {
+  owner: {
+    firstName: 'Shaun',
+    lastName: 'Fitzsimons',
+    dateOfBirth: '1998-05-10',
+    address: {
+      addressLine1: '14 Fake Street',
+      town: 'City of London',
+      postcode: 'E1 7AA'
+    }
+  },
+  enforcementDetails: {
+    legislationOfficer: 'Sidney Lewis',
+    policeForce: '1',
+    court: '1'
+  },
+  dogs: [{
+    breed: 'Pit Bull Terrier',
+    name: 'Jackie',
+    applicationType: 'cdo',
+    cdoIssued: '2023-10-10T00:00:00.000Z',
+    cdoExpiry: '2023-12-10T00:00:00.000Z'
+  }]
+}
+
+const validCdoResponseMatcher = {
   owner: {
     firstName: string('Shaun'),
     lastName: string('Fitzsimons'),
-    address: like({
-      addressLine1: '14 Fake Street',
+    dateOfBirth: iso8601Date('1998-05-10'),
+    address: {
+      addressLine1: string('14 Fake Street'),
+      addressLine2: string(''),
       town: string('City of London'),
-      postcode: string('E1 7AA')
-    })
+      postcode: string('E1 7AA'),
+      country: term({ generate: 'England', matcher: 'England|Scotland|Wales' })
+    }
   },
   enforcementDetails: {
-    legislationOfficer: string('Joe Bloggs'),
-    policeForce: anyIntegerString('1'),
-    court: anyIntegerString('1')
+    policeForce: string('Avon and Somerset Constabulary'),
+    court: string('Aberystwyth Justice Centre'),
+    legislationOfficer: string('Sidney Lewis')
   },
   dogs: eachLike({
+    indexNumber: string('ED300041'),
+    name: string('Jackie'),
+    status: string('Pre-exempt'),
     breed: string('Pit Bull Terrier'),
-    name: string(''),
-    applicationType: term({ generate: 'cdo', matcher: 'cdo|Interim Exemption' })
+    cdoIssued: iso8601Date('2023-10-10'),
+    cdoExpiry: iso8601Date('2023-12-10')
   })
 }
 
-const validCdoMatcherWithCountry = {
+const validCdoRequestWithCountry = {
+  owner: {
+    firstName: 'Homer',
+    lastName: 'Simpson',
+    dateOfBirth: '1998-05-10',
+    address: {
+      addressLine1: '1 Anywhere St',
+      addressLine2: 'Anywhere Estate',
+      town: 'Pontypridd',
+      postcode: 'CF15 7SU',
+      country: 'Wales'
+    }
+  },
+  enforcementDetails: {
+    court: '1',
+    policeForce: '1',
+    legislationOfficer: 'Sidney Lewis'
+  },
+  dogs: [
+    {
+      breed: 'XL Bully',
+      name: 'Rex',
+      applicationType: 'cdo',
+      cdoIssued: '2023-10-10T00:00:00.000Z',
+      cdoExpiry: '2023-12-10T00:00:00.000Z'
+    }
+  ]
+}
+
+const validCdoResponseWithCountryMatcher = {
   owner: {
     firstName: string('Homer'),
     lastName: string('Simpson'),
@@ -37,22 +96,23 @@ const validCdoMatcherWithCountry = {
     }
   },
   enforcementDetails: {
-    court: anyIntegerString('1'),
-    policeForce: anyIntegerString('1'),
+    policeForce: string('Avon and Somerset Constabulary'),
+    court: string('Aberystwyth Justice Centre'),
     legislationOfficer: string('Sidney Lewis')
   },
-  dogs: [
-    {
-      breed: string('XL Bully'),
-      name: string('Rex'),
-      applicationType: term({ generate: 'cdo', matcher: 'cdo|Interim Exemption' }),
-      cdoIssued: iso8601Date('2023-10-10'),
-      cdoExpiry: iso8601Date('2023-12-10')
-    }
-  ]
+  dogs: eachLike({
+    indexNumber: string('ED300041'),
+    name: string('Rex'),
+    status: string('Interim exempt'),
+    breed: string('XL Bully'),
+    cdoIssued: iso8601Date('2023-10-10'),
+    cdoExpiry: iso8601Date('2023-12-10')
+  })
 }
 
 module.exports = {
-  validCdoMatcher,
-  validCdoMatcherWithCountry
+  validCdoRequest,
+  validCdoRequestWithCountry,
+  validCdoResponseMatcher,
+  validCdoResponseWithCountryMatcher
 }
