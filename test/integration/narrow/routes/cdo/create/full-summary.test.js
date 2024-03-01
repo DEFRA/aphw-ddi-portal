@@ -155,7 +155,8 @@ describe('FullSummary test', () => {
       addressLine1: '1 Test Street',
       addressLine2: 'Testarea',
       town: 'Testington',
-      postcode: 'TS1 1TS'
+      postcode: 'TS1 1TS',
+      country: 'Wales'
     })
     getEnforcementDetails.mockReturnValue({
       court: 'court2',
@@ -197,7 +198,8 @@ describe('FullSummary test', () => {
               addressLine1: '1 Test Street',
               addressLine2: 'Testarea',
               postcode: 'TS1 1TS',
-              town: 'Testington'
+              town: 'Testington',
+              country: 'Wales'
             },
             dateOfBirth: '2000-03-17T00:00:00.000Z',
             firstName: 'John',

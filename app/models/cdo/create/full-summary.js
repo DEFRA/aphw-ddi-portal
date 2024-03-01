@@ -47,7 +47,7 @@ const formatAddress = addr => {
   return addrParts
 }
 
-const getCountry = address => address.country
+const getCountry = address => address?.country || ''
 
 function ViewModel (owner, address, enforcement, courts, policeForces, dogs, error) {
   this.model = {
