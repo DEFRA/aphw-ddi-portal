@@ -47,6 +47,8 @@ const formatAddress = addr => {
   return addrParts
 }
 
+const getCountry = address => address.country
+
 function ViewModel (owner, address, enforcement, courts, policeForces, dogs, error) {
   this.model = {
     formAction: routes.fullSummary.post,
@@ -55,7 +57,8 @@ function ViewModel (owner, address, enforcement, courts, policeForces, dogs, err
       owner: {
         name: formatName(owner),
         dateOfBirth: formatDate(owner?.dateOfBirth),
-        address: formatAddress(address)
+        address: formatAddress(address),
+        country: getCountry(address)
       },
       court: (courts.find(x => x.id === parseInt(enforcement?.court)) || { name: '' }).name,
       policeForce: (policeForces.find(x => x.id === parseInt(enforcement?.policeForce)) || { name: '' }).name,
