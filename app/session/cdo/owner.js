@@ -34,6 +34,19 @@ const setBirthDate = (request, value) => {
   set(request, keys.entry, keys.dateOfBirth, value)
 }
 
+/**
+ * @typedef Address
+ * @property {string} addressLine1
+ * @property {string} addressLine2
+ * @property {string} town
+ * @property {string} postcode
+ * @property {string} country
+ */
+
+/**
+ * @param request
+ * @returns {Address}
+ */
 const getAddress = (request) => {
   return get(request, keys.entry, keys.address) || {}
 }

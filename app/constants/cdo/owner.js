@@ -11,6 +11,10 @@ const constants = {
       get: '/cdo/create/select-address',
       post: '/cdo/create/select-address'
     },
+    country: {
+      get: '/cdo/create/country',
+      post: '/cdo/create/country'
+    },
     address: {
       get: '/cdo/create/address',
       post: '/cdo/create/address'
@@ -37,6 +41,7 @@ const constants = {
     ownerDetails: 'cdo/create/owner-details',
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
+    country: 'cdo/create/country',
     enforcementDetails: 'cdo/create/enforcement-details',
     fullSummary: 'cdo/create/confirm-all-details',
     editDetails: 'cdo/edit/owner-details',

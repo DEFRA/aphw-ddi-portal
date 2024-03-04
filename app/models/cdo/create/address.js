@@ -1,7 +1,14 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
+const { mapToCountrySelector } = require('../../mappers/countries')
 
-function ViewModel (address, errors) {
+/**
+ * @param {Address} address
+ * @param {string[]} countries
+ * @param {Joi.ValidationError} [validationError]
+ * @constructor
+ */
+function ViewModel (address, countries, validationError) {
   this.model = {
     formAction: routes.address.get,
     backLink: routes.ownerDetails.get,
@@ -46,21 +53,12 @@ function ViewModel (address, errors) {
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '8' }
     },
-    country: {
-      id: 'country',
-      name: 'country',
-      label: {
-        text: 'Country'
-      },
-      value: address.country,
-      autocomplete: forms.preventAutocomplete,
-      attributes: { maxlength: '30' }
-    },
+    country: mapToCountrySelector(countries, validationError, address.country),
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
+  if (validationError) {
+    for (const error of validationError.details) {
       const name = error.path[0]
 
       const prop = this.model[name]

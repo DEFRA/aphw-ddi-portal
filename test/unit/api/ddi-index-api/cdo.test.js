@@ -4,7 +4,7 @@ describe('CDO API endpoints', () => {
 
   const { cdo } = require('../../../../app/api/ddi-index-api')
 
-  const { valid, invalid } = require('../../../mocks/cdo/createPayload')
+  const { valid, invalid, validWithCountry } = require('../../../mocks/cdo/createPayload')
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -19,6 +19,12 @@ describe('CDO API endpoints', () => {
 
   test('createCdo with valid payload should post to API', async () => {
     await cdo.createCdo(valid)
+
+    expect(post).toHaveBeenCalledTimes(1)
+  })
+
+  test('createCdo with valid payload including country should post to API', async () => {
+    await cdo.createCdo(validWithCountry)
 
     expect(post).toHaveBeenCalledTimes(1)
   })
