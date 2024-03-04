@@ -44,6 +44,23 @@ const buildPersonUpdatePayload = (person) => ({
   secondaryTelephone: person.secondaryTelephone
 })
 
+const buildPersonAddressUpdatePayload = (person) => ({
+  personReference: person.personReference,
+  firstName: person.firstName,
+  lastName: person.lastName,
+  dateOfBirth: person.birthDate,
+  address: {
+    addressLine1: person.address.addressLine1,
+    addressLine2: person.address.addressLine2,
+    town: person.address.town,
+    postcode: person.address.postcode,
+    country: person.address.country
+  },
+  email: person.contacts?.emails[0],
+  primaryTelephone: person.contacts?.primaryTelephones[0],
+  secondaryTelephone: person.contacts?.secondaryTelephones[0]
+})
+
 const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
   const payload = {
     indexNumber: exemptionDetails.indexNumber,
@@ -78,5 +95,6 @@ const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
 module.exports = {
   buildCdoCreatePayload,
   buildPersonUpdatePayload,
-  buildExemptionDetailsUpdatePayload
+  buildExemptionDetailsUpdatePayload,
+  buildPersonAddressUpdatePayload
 }

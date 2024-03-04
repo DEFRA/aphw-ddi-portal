@@ -48,8 +48,11 @@
         
           {{ govukInput(model.postcode) }}
 
+          <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
+          <input type="hidden" name="personReference" value="{{ model.personReference }}" />
+
           {{ govukButton({
-            text: "Continue"
+            text: model.buttonText
           }) }}
         </form>
 

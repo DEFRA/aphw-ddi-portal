@@ -1,10 +1,12 @@
-const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 
-function ViewModel (address, errors) {
+function ViewModel (address, form, backNav, errors) {
   this.model = {
-    formAction: routes.address.get,
-    backLink: routes.ownerDetails.get,
+    formAction: form.formAction,
+    backLink: backNav?.backLink,
+    buttonText: form.source === 'edit' ? 'Save address' : 'Continue',
+    srcHashParam: backNav?.srcHashParam,
+    personReference: form?.personReference,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',

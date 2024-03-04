@@ -82,6 +82,14 @@ const setEnforcementDetails = (request, value) => {
   set(request, keys.entry, keys.enforcementDetails, value)
 }
 
+const getPostcodeLookupDetails = (request) => {
+  return get(request, keys.entry, keys.postcodeLookup)
+}
+
+const setPostcodeLookupDetails = (request, value) => {
+  set(request, keys.entry, keys.postcodeLookup, value)
+}
+
 module.exports = {
   getOwner,
   setOwner,
@@ -100,5 +108,7 @@ module.exports = {
   getOwnerDetails,
   setOwnerDetails,
   getEnforcementDetails,
-  setEnforcementDetails
+  setEnforcementDetails,
+  getPostcodeLookupDetails,
+  setPostcodeLookupDetails
 }

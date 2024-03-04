@@ -6,6 +6,9 @@ const addressSchema = require('../../../schema/portal/owner/address')
 const { admin } = require('../../../auth/permissions')
 const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
 
+const form = { formAction: routes.address.post }
+const backNav = { backLink: routes.ownerDetails.get }
+
 module.exports = [{
   method: 'GET',
   path: routes.address.get,
@@ -14,7 +17,7 @@ module.exports = [{
     handler: async (request, h) => {
       const address = getAddress(request)
 
-      return h.view(views.address, new ViewModel(address))
+      return h.view(views.address, new ViewModel(address, form, backNav))
     }
   }
 },
@@ -28,8 +31,11 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
+        console.log('Validation error in address:', error)
+
         const address = { ...getAddress(request), ...request.payload }
-        return h.view(views.address, new ViewModel(address, error)).code(400).takeover()
+
+        return h.view(views.address, new ViewModel(address, form, backNav, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
