@@ -1,6 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
-const { routes: ownerRoutes } = require('../../../../../../app/constants/cdo/owner')
+const { routes } = require('../../../../../../app/constants/cdo/dog')
 
 describe('Address test', () => {
   jest.mock('../../../../../../app/auth')
@@ -57,7 +57,7 @@ describe('Address test', () => {
     expect(response.statusCode).toBe(400)
   })
   test('POST /cdo/create/address with valid data forwards to next screen', async () => {
-    const nextScreenUrl = ownerRoutes.country.get
+    const nextScreenUrl = routes.details.get
 
     const payload = {
       addressLine1: '1 Testing Street',
