@@ -19,8 +19,8 @@ const mapToCountrySelector = (countries) => {
   const items = [{ text: 'Choose country', value: '', selected: true }].concat(countriesConcat)
 
   return {
-    id: 'countries',
-    name: 'countries',
+    id: 'country',
+    name: 'country',
     value: '',
     items,
     autocomplete: forms.preventAutocomplete

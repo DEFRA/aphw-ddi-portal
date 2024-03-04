@@ -1,4 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
+const querystring = require('querystring')
 const { JSDOM } = require('jsdom')
 
 describe('Manually select country', () => {
@@ -51,12 +52,12 @@ describe('Manually select country', () => {
     // expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
   })
 
-  // test('GET /cdo/create/dog-details route returns 404 if no dog in session', async () => {
+  // test('GET /cdo/create/country route returns 404 if no dog in session', async () => {
   //   getDog.mockReturnValue(undefined)
   //
   //   const options = {
   //     method: 'GET',
-  //     url: '/cdo/create/dog-details',
+  //     url: '/cdo/create/country',
   //     auth
   //   }
   //
@@ -68,14 +69,14 @@ describe('Manually select country', () => {
   // test('GET /cdo/create/owner-details route returns 302 if not auth', async () => {
   //   const options = {
   //     method: 'GET',
-  //     url: '/cdo/create/dog-details'
+  //     url: '/cdo/create/country'
   //   }
   //
   //   const response = await server.inject(options)
   //   expect(response.statusCode).toBe(302)
   // })
 
-  // test('POST /cdo/create/dog-details route with valid CDO payload returns 302', async () => {
+  // test('POST /cdo/create/country route with valid CDO payload returns 302', async () => {
   //   const payload = {
   //     breed: 'Breed 1',
   //     name: 'Bruce',
@@ -87,7 +88,7 @@ describe('Manually select country', () => {
   //
   //   const options = {
   //     method: 'POST',
-  //     url: '/cdo/create/dog-details',
+  //     url: '/cdo/create/country',
   //     auth,
   //     headers: {
   //       'content-type': 'application/x-www-form-urlencoded'
@@ -110,7 +111,7 @@ describe('Manually select country', () => {
   //   expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
   // })
   //
-  // test('POST /cdo/create/dog-details route with valid interim scheme payload returns 302', async () => {
+  // test('POST /cdo/create/country route with valid interim scheme payload returns 302', async () => {
   //   const today = new Date(new Date().toDateString())
   //
   //   const payload = {
@@ -124,7 +125,7 @@ describe('Manually select country', () => {
   //
   //   const options = {
   //     method: 'POST',
-  //     url: '/cdo/create/dog-details',
+  //     url: '/cdo/create/country',
   //     auth,
   //     headers: {
   //       'content-type': 'application/x-www-form-urlencoded'
@@ -147,45 +148,34 @@ describe('Manually select country', () => {
   //   expect(response.headers.location).toContain('/cdo/create/confirm-dog-details')
   // })
   //
-  // test('POST /cdo/create/dog-details route with invalid dog id returns 400', async () => {
-  //   const payload = {
-  //     breed: 'Breed 1',
-  //     name: 'Bruce',
-  //     applicationType: 'cdo',
-  //     'cdoIssued-day': '10',
-  //     'cdoIssued-month': '10',
-  //     'cdoIssued-year': '2020',
-  //     dogId: 2
-  //   }
+  test('POST /cdo/create/country route with invalid dog id returns 400', async () => {
+    const payload = {
+      country: ''
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/country',
+      auth,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      payload: querystring.stringify(payload)
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary li').length).toBe(1)
+    expect(document.querySelectorAll('.govuk-error-summary li')[0].textContent.trim()).toBe('Select a country')
+  })
   //
+  // test('POST /cdo/create/country route with invalid payload should show errors', async () => {
   //   const options = {
   //     method: 'POST',
-  //     url: '/cdo/create/dog-details',
-  //     auth,
-  //     headers: {
-  //       'content-type': 'application/x-www-form-urlencoded'
-  //     },
-  //     payload: querystring.stringify(payload)
-  //   }
-  //
-  //   setDog.mockImplementation(() => {
-  //     const error = new Error('Dog not found')
-  //
-  //     error.type = 'DOG_NOT_FOUND'
-  //
-  //     throw error
-  //   })
-  //
-  //   const response = await server.inject(options)
-  //
-  //   expect(response.statusCode).toBe(400)
-  //   expect(setDog).toHaveBeenCalledTimes(1)
-  // })
-  //
-  // test('POST /cdo/create/dog-details route with invalid payload should show errors', async () => {
-  //   const options = {
-  //     method: 'POST',
-  //     url: '/cdo/create/dog-details',
+  //     url: '/cdo/create/country',
   //     auth,
   //     payload: {}
   //   }
@@ -205,10 +195,10 @@ describe('Manually select country', () => {
   //   expect(messages).toContain('Application type is required')
   // })
   //
-  // test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
+  // test('POST /cdo/create/country route with invalid date should display error', async () => {
   //   const options = {
   //     method: 'POST',
-  //     url: '/cdo/create/dog-details',
+  //     url: '/cdo/create/country',
   //     auth,
   //     payload: {
   //       breed: 'Breed 1',
