@@ -53,7 +53,7 @@ function ViewModel (address, countries, validationError) {
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '8' }
     },
-    countries: mapToCountrySelector(countries, validationError, address.country),
+    country: mapToCountrySelector(countries, validationError, address.country),
     errors: []
   }
 
@@ -61,24 +61,17 @@ function ViewModel (address, countries, validationError) {
     for (const error of validationError.details) {
       const name = error.path[0]
 
-      if (name === 'country') {
+      const prop = this.model[name]
+
+      if (prop !== undefined) {
+        prop.errorMessage = {
+          text: error.message
+        }
+
         this.model.errors.push({
           text: error.message,
           href: `#${name}`
         })
-      } else {
-        const prop = this.model[name]
-
-        if (prop !== undefined) {
-          prop.errorMessage = {
-            text: error.message
-          }
-
-          this.model.errors.push({
-            text: error.message,
-            href: `#${name}`
-          })
-        }
       }
     }
   }
