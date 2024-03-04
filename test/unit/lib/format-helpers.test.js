@@ -14,5 +14,8 @@ describe('format-helpers', () => {
     test('should map undefined to undefined', () => {
       expect(mapOsCountryCodeToCountry(undefined)).toBe(undefined)
     })
+    test('should map null to undefined', () => {
+      expect(mapOsCountryCodeToCountry(null)).toBe(undefined)
+    })
   })
 })
