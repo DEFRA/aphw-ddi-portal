@@ -17,7 +17,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const details = getPostcodeLookupDetails(request)
+        const details = getPostcodeLookupDetails(request) || {}
         details.source = 'edit'
         const postcode = details?.postcode
         const houseNumber = details?.houseNumber

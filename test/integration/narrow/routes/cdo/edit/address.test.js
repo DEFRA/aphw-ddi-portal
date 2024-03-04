@@ -1,9 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 
-jest.mock('../../../../../../app/lib/back-helpers')
-const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
-
 describe('Address edit test', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
@@ -11,11 +8,15 @@ describe('Address edit test', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/person')
   const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
 
+  jest.mock('../../../../../../app/lib/back-helpers')
+  const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
+
   const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    getMainReturnPoint.mockReturnValue('')
     server = await createServer()
     await server.initialize()
   })
@@ -71,9 +72,10 @@ describe('Address edit test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
   })
+
   test('POST /cdo/create/address with valid data forwards to next screen', async () => {
-    const nextScreenUrl = 'http://localhost/main-return-point'
-    getMainReturnPoint.getReturnValue(nextScreenUrl)
+    const nextScreenUrl = '/main-return-point'
+    getMainReturnPoint.mockReturnValue(nextScreenUrl)
 
     const payload = {
       personReference: 'P-123',
@@ -84,7 +86,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/address',
+      url: '/cdo/edit/address',
       auth,
       payload
     }
