@@ -5,6 +5,7 @@ const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { admin } = require('../../../auth/permissions')
 const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { getCountries } = require('../../../api/ddi-index-api')
 
 module.exports = [{
   method: 'GET',
@@ -13,8 +14,9 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const address = getAddress(request)
+      const countries = await getCountries()
 
-      return h.view(views.address, new ViewModel(address))
+      return h.view(views.address, new ViewModel(address, countries))
     }
   }
 },
@@ -29,7 +31,9 @@ module.exports = [{
       payload: addressSchema,
       failAction: async (request, h, error) => {
         const address = { ...getAddress(request), ...request.payload }
-        return h.view(views.address, new ViewModel(address, error)).code(400).takeover()
+        const countries = await getCountries()
+
+        return h.view(views.address, new ViewModel(address, countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
