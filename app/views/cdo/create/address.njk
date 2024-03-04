@@ -5,6 +5,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block beforeContent %}
   <div class="govuk-grid-row">
@@ -47,6 +48,8 @@
           {{ govukInput(model.town) }}
         
           {{ govukInput(model.postcode) }}
+
+          {{ govukSelect(model.country) }}
 
           {{ govukButton({
             text: "Continue"
