@@ -50,18 +50,10 @@ module.exports = [
       handler: async (request, h) => {
         const selectedAddress = getFromSession(request, 'addresses')[request.payload.address]
 
-        const address = {
-          addressLine1: selectedAddress.addressLine1,
-          addressLine2: selectedAddress.addressLine2,
-          town: selectedAddress.addressTown,
-          postcode: selectedAddress.addressPostcode,
-          country: selectedAddress.addressCountry
-        }
-
-        setAddress(request, address)
+        setAddress(request, selectedAddress)
 
         const enforcementDetails = getEnforcementDetails(request) || {}
-        const policeForce = await lookupPoliceForceByPostcode(address.postcode)
+        const policeForce = await lookupPoliceForceByPostcode(selectedAddress.postcode)
 
         if (policeForce) {
           enforcementDetails.policeForce = policeForce.id

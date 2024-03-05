@@ -54,7 +54,7 @@ module.exports = [
 
         const person = await getPersonByReference(personReference)
 
-        const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress, true)
+        const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
 
         await updatePerson(updatePayload, getUser(request))
 

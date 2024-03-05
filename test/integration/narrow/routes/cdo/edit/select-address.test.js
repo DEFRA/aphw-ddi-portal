@@ -74,7 +74,7 @@ describe('SelectAddress edit test', () => {
 
   test('POST /cdo/edit/select-address with valid data returns 302', async () => {
     const nextScreenUrl = '/cdo/view/owner-details/P-123'
-    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', addressTown: 'town', addressPostcode: 'AB1 1TT', addressCountry: 'E' }])
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'E' }])
     const payload = {
       address: 0
     }
@@ -95,7 +95,7 @@ describe('SelectAddress edit test', () => {
   })
 
   test('POST /cdo/edit/select-address with invalid data returns error', async () => {
-    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', addressTown: 'town', addressPostcode: 'AB1 1TT', addressCountry: 'E' }])
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'E' }])
     const payload = {
     }
 
