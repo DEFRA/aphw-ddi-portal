@@ -71,10 +71,15 @@ const addBackNavigationForErrorCondition = (request) => {
   }
 }
 
+const stripSrcParamName = param => {
+  return param && param.indexOf('?src=') === 0 ? param.substr(5) : param
+}
+
 module.exports = {
   addBackNavigation,
   extractBackNavParam,
   addBackNavigationForErrorCondition,
   extractSrcParamFromUrl,
-  getMainReturnPoint
+  getMainReturnPoint,
+  stripSrcParamName
 }
