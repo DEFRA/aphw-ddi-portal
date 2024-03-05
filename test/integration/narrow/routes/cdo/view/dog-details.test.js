@@ -57,7 +57,7 @@ describe('View dog details', () => {
     expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
     expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
     expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check owner activity')
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {
