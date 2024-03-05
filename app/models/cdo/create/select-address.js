@@ -1,10 +1,12 @@
 const { routes } = require('../../../constants/cdo/owner')
 
 function ViewModel (details, addresses = [], error) {
-  const items = addresses.map((address, index) => ({
-    text: `${address.addressLine1}, ${address.town}, ${address.postcode}`,
-    value: index
-  }))
+  const items = addresses
+    ? addresses.map((address, index) => ({
+        text: `${address.addressLine1}, ${address.town}, ${address.postcode}`,
+        value: index
+      }))
+    : []
 
   this.model = {
     formAction: routes.address.get,

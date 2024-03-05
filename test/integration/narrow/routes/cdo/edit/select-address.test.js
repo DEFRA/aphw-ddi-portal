@@ -56,6 +56,19 @@ describe('SelectAddress edit test', () => {
     expect(getPostcodeAddresses).toHaveBeenCalledWith('TS1 1TS', 'house1')
   })
 
+  test('GET /cdo/edit/select-address route returns 200 even when no addresses', async () => {
+    getPostcodeAddresses.mockResolvedValue(null)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+  })
+
   test('POST /cdo/edit/select-address route returns 302 if not auth', async () => {
     const fd = new FormData()
     fd.append('firstName', 'John')

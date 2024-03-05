@@ -8,16 +8,33 @@ describe('SelectAddress test', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
+  jest.mock('../../../../../../app/api/os-places')
+  const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
+
   const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    getPostcodeAddresses.mockResolvedValue([{ addressLine1: 'addr1', postcode: 'postcode' }])
     server = await createServer()
     await server.initialize()
   })
 
   test('GET /cdo/create/select-address route returns 200', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/create/select-address route returns 200 even when no addresses', async () => {
+    getPostcodeAddresses.mockResolvedValue(null)
+
     const options = {
       method: 'GET',
       url: '/cdo/create/select-address',
