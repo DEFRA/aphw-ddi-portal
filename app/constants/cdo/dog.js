@@ -4,10 +4,6 @@ const constants = {
       get: '/cdo/create/dog-details',
       post: '/cdo/create/dog-details'
     },
-    microchipSearch: {
-      get: '/cdo/create/microchip-search',
-      post: '/cdo/create/microchip-search'
-    },
     confirm: {
       get: '/cdo/create/confirm-dog-details',
       post: '/cdo/create/confirm-dog-details'
@@ -56,7 +52,6 @@ const constants = {
   },
   views: {
     editDogDetails: 'cdo/edit/dog-details',
-    microchipSearch: 'cdo/edit/microchip-search',
     viewDogDetails: 'cdo/view/dog-details',
     viewDogActivities: 'cdo/view/check-activities',
     editExemptionDetails: 'cdo/edit/exemption-details',
@@ -74,7 +69,6 @@ const constants = {
     entry: 'dogs',
     breed: 'breed',
     name: 'name',
-    microchipSearch: 'microchipSearch',
     applicationType: 'applicationType',
     interimExemption: 'interimExemption',
     cdoIssued: 'cdoIssued',
