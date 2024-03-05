@@ -65,7 +65,7 @@ describe('API service contract tests', () => {
         withRequest: {
           method: 'POST',
           path: '/cdo',
-          body: validCdoRequest,
+          body: JSON.stringify(validCdoRequest),
           headers
         },
         willRespondWith: {
@@ -88,7 +88,7 @@ describe('API service contract tests', () => {
         withRequest: {
           method: 'POST',
           path: '/cdo',
-          body: validCdoRequestWithCountry,
+          body: JSON.stringify(validCdoRequestWithCountry),
           headers
         },
         willRespondWith: {
