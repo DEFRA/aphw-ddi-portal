@@ -14,6 +14,9 @@ describe('SelectAddress edit test', () => {
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getPostcodeLookupDetails } = require('../../../../../../app/session/cdo/owner')
 
+  jest.mock('../../../../../../app/api/os-places')
+  const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
+
   jest.mock('../../../../../../app/api/ddi-index-api/person')
   const { updatePerson, getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
 
@@ -23,6 +26,7 @@ describe('SelectAddress edit test', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     addBackNavigation.mockReturnValue({ backLink: '/back' })
+    getPostcodeAddresses.mockResolvedValue([{ addressLine1: 'line1' }])
     server = await createServer()
     await server.initialize()
   })
@@ -36,6 +40,20 @@ describe('SelectAddress edit test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/edit/select-address route returns 200 with lowercase postcode', async () => {
+    getPostcodeLookupDetails.mockReturnValue({ postcode: 'ts1 1ts', houseNumber: 'house1' })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getPostcodeAddresses).toHaveBeenCalledWith('TS1 1TS', 'house1')
   })
 
   test('POST /cdo/edit/select-address route returns 302 if not auth', async () => {

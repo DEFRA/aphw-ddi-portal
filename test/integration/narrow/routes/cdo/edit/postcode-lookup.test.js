@@ -96,7 +96,29 @@ describe('PostCode Lookup test', () => {
     expect(response.result.indexOf('&quot;postcode&quot; is required')).toBeGreaterThan(-1)
   })
 
+  test('POST /cdo/edit/postcode-lookup with valid data but missing person returns 404', async () => {
+    getPersonByReference.mockResolvedValue(null)
+
+    const payload = {
+      personReference: 'P-123',
+      postcode: 'AB1 1TT',
+      srcHashParam: '?src=abc'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/postcode-lookup',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(404)
+  })
+
   test('POST /cdo/edit/postcode-lookup with valid data forwards to next screen', async () => {
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123' })
+
     const nextScreenUrl = '/cdo/edit/select-address?src=abc'
 
     const payload = {
