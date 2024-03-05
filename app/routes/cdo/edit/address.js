@@ -4,6 +4,7 @@ const addressSchema = require('../../../schema/portal/owner/address')
 const { admin } = require('../../../auth/permissions')
 const getUser = require('../../../auth/get-user')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
+const { getCountries } = require('../../../api/ddi-index-api/countries')
 const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const { updatePerson } = require('../../../api/ddi-index-api/person')
@@ -24,13 +25,15 @@ module.exports = [{
 
       const backNav = addBackNavigation(request)
 
+      const countries = await getCountries()
+
       const form = {
         personReference,
         formAction: routes.editAddress.post,
         source: 'edit'
       }
 
-      return h.view(views.address, new ViewModel(person.address, form, backNav))
+      return h.view(views.address, new ViewModel(person.address, form, backNav, countries))
     }
   }
 },
@@ -48,13 +51,15 @@ module.exports = [{
 
         const person = request.payload
 
+        const countries = await getCountries()
+
         const form = {
           personReference: person.personReference,
           formAction: routes.editAddress.post,
           source: 'edit'
         }
 
-        return h.view(views.address, new ViewModel(person, form, backNav, error)).code(400).takeover()
+        return h.view(views.address, new ViewModel(person, form, backNav, countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

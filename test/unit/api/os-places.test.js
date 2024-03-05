@@ -17,6 +17,22 @@ const validAddresses = {
   }
 }
 
+const validAddressesWithCountry = {
+  payload: {
+    results: [
+      {
+        DPA: {
+          BUILDING_NUMBER: 1,
+          THOROUGHFARE_NAME: 'MAIN STREET',
+          POST_TOWN: 'TESTINGTON',
+          POSTCODE: 'AB11 2AB',
+          COUNTRY_CODE: 'W'
+        }
+      }
+    ]
+  }
+}
+
 const validAddressesWithFlat = {
   payload: {
     results: [
@@ -108,6 +124,13 @@ describe('OS Places test', () => {
     expect(res[0].addressLine1).toBe('1 MAIN STREET')
     expect(res[0].addressTown).toBe('TESTINGTON')
     expect(res[0].addressPostcode).toBe(postcode)
+  })
+
+  test('getPostcodeAddresses calls with postcode and country code', async () => {
+    wreck.get.mockResolvedValue(validAddressesWithCountry)
+    const postcode = 'SA36 0DZ'
+    const res = await getPostcodeAddresses(postcode)
+    expect(res[0].addressCountry).toBe('Wales')
   })
 
   test('getPostcodeAddresses calls with postcode and houseNumber', async () => {

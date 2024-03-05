@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
+const { countries: mockCountries } = require('../../../../../mocks/countries')
 
 describe('Address edit test', () => {
   jest.mock('../../../../../../app/auth')
@@ -7,6 +8,9 @@ describe('Address edit test', () => {
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
   const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/countries')
+  const { getCountries } = require('../../../../../../app/api/ddi-index-api/countries')
 
   jest.mock('../../../../../../app/lib/back-helpers')
   const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
@@ -17,6 +21,7 @@ describe('Address edit test', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getMainReturnPoint.mockReturnValue('')
+    getCountries.mockResolvedValue(mockCountries)
     server = await createServer()
     await server.initialize()
   })
@@ -81,7 +86,8 @@ describe('Address edit test', () => {
       personReference: 'P-123',
       addressLine1: '1 Testing Street',
       town: 'Testington',
-      postcode: 'AB1 1TT'
+      postcode: 'AB1 1TT',
+      country: 'Wales'
     }
 
     const options = {

@@ -9,7 +9,8 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
       addressLine1: address.addressLine1,
       addressLine2: address.addressLine2,
       town: address.town,
-      postcode: address.postcode
+      postcode: address.postcode,
+      country: address.country
     }
   },
   enforcementDetails: {
