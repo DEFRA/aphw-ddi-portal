@@ -44,17 +44,17 @@ const buildPersonUpdatePayload = (person) => ({
   secondaryTelephone: person.secondaryTelephone
 })
 
-const buildPersonAddressUpdatePayload = (person) => ({
+const buildPersonAddressUpdatePayload = (person, address, singleSelect = false) => ({
   personReference: person.personReference,
   firstName: person.firstName,
   lastName: person.lastName,
   dateOfBirth: person.birthDate,
   address: {
-    addressLine1: person.address.addressLine1,
-    addressLine2: person.address.addressLine2,
-    town: person.address.town,
-    postcode: person.address.postcode,
-    country: person.address.country
+    addressLine1: address.addressLine1,
+    addressLine2: address.addressLine2,
+    town: singleSelect ? address.addressTown : address.town,
+    postcode: singleSelect ? address.addressPostcode : address.postcode,
+    country: singleSelect ? address.addressCountry : address.country
   },
   email: person.contacts?.emails[0],
   primaryTelephone: person.contacts?.primaryTelephones[0],

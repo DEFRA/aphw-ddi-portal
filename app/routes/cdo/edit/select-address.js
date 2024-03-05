@@ -52,18 +52,9 @@ module.exports = [
         const personReference = getPostcodeLookupDetails(request)?.personReference
         const selectedAddress = getFromSession(request, 'addresses')[request.payload.address]
 
-        const address = {
-          addressLine1: selectedAddress.addressLine1,
-          addressLine2: selectedAddress.addressLine2,
-          town: selectedAddress.addressTown,
-          postcode: selectedAddress.addressPostcode,
-          country: selectedAddress.addressCountry
-        }
-
         const person = await getPersonByReference(personReference)
-        person.address = address
 
-        const updatePayload = buildPersonAddressUpdatePayload(person)
+        const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress, true)
 
         await updatePerson(updatePayload, getUser(request))
 

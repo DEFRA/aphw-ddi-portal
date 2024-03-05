@@ -63,14 +63,7 @@ module.exports = [{
         return h.response().code(404).takeover()
       }
 
-      person.address = {
-        addressLine1: request.payload.addressLine1,
-        addressLine2: request.payload.addressLine2,
-        town: request.payload.town,
-        postcode: request.payload.postcode,
-        country: request.payload.country
-      }
-      const updatePayload = buildPersonAddressUpdatePayload(person)
+      const updatePayload = buildPersonAddressUpdatePayload(person, request.payload)
 
       await updatePerson(updatePayload, getUser(request))
 
