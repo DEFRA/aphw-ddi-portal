@@ -60,7 +60,7 @@ module.exports = [
           setEnforcementDetails(request, enforcementDetails)
         }
 
-        return h.redirect(dogRoutes.details.get)
+        return h.redirect(dogRoutes.microchipSearch.get)
       }
     }
   }

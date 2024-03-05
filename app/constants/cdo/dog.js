@@ -56,7 +56,7 @@ const constants = {
   },
   views: {
     editDogDetails: 'cdo/edit/dog-details',
-    microchipSearch: 'cdo/edit/microchip-search',
+    microchipSearch: 'cdo/create/microchip-search',
     viewDogDetails: 'cdo/view/dog-details',
     viewDogActivities: 'cdo/view/check-activities',
     editExemptionDetails: 'cdo/edit/exemption-details',
