@@ -7,7 +7,8 @@ const Matchers = require('@pact-foundation/pact/dsl/matchers')
 describe('API service contract tests', () => {
   const headers = {
     'ddi-username': 'test@example.com',
-    'ddi-displayname': 'Example Tester'
+    'ddi-displayname': 'Example Tester',
+    'Content-Type': 'application/json'
   }
 
   beforeAll(async () => {

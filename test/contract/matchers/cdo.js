@@ -29,10 +29,9 @@ const validCdoResponseMatcher = {
   owner: {
     firstName: string('Shaun'),
     lastName: string('Fitzsimons'),
-    dateOfBirth: iso8601Date('1998-05-10'),
+    birthDate: iso8601Date('1998-05-10'),
     address: {
       addressLine1: string('14 Fake Street'),
-      addressLine2: string(''),
       town: string('City of London'),
       postcode: string('E1 7AA'),
       country: term({ generate: 'England', matcher: 'England|Scotland|Wales' })
