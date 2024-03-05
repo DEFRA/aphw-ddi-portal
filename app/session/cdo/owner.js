@@ -34,6 +34,19 @@ const setBirthDate = (request, value) => {
   set(request, keys.entry, keys.dateOfBirth, value)
 }
 
+/**
+ * @typedef Address
+ * @property {string} addressLine1
+ * @property {string} addressLine2
+ * @property {string} town
+ * @property {string} postcode
+ * @property {string} country
+ */
+
+/**
+ * @param request
+ * @returns {Address}
+ */
 const getAddress = (request) => {
   return get(request, keys.entry, keys.address) || {}
 }
@@ -82,6 +95,14 @@ const setEnforcementDetails = (request, value) => {
   set(request, keys.entry, keys.enforcementDetails, value)
 }
 
+const getPostcodeLookupDetails = (request) => {
+  return get(request, keys.entry, keys.postcodeLookup)
+}
+
+const setPostcodeLookupDetails = (request, value) => {
+  set(request, keys.entry, keys.postcodeLookup, value)
+}
+
 module.exports = {
   getOwner,
   setOwner,
@@ -100,5 +121,7 @@ module.exports = {
   getOwnerDetails,
   setOwnerDetails,
   getEnforcementDetails,
-  setEnforcementDetails
+  setEnforcementDetails,
+  getPostcodeLookupDetails,
+  setPostcodeLookupDetails
 }

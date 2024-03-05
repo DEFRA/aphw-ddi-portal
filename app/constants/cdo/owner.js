@@ -11,6 +11,10 @@ const constants = {
       get: '/cdo/create/select-address',
       post: '/cdo/create/select-address'
     },
+    country: {
+      get: '/cdo/create/country',
+      post: '/cdo/create/country'
+    },
     address: {
       get: '/cdo/create/address',
       post: '/cdo/create/address'
@@ -30,6 +34,18 @@ const constants = {
     viewOwnerDetails: {
       get: '/cdo/view/owner-details',
       post: '/cdo/view/owner-details'
+    },
+    postcodeLookup: {
+      get: '/cdo/edit/postcode-lookup',
+      post: '/cdo/edit/postcode-lookup'
+    },
+    selectAddressFromEdit: {
+      get: '/cdo/edit/select-address',
+      post: '/cdo/edit/select-address'
+    },
+    editAddress: {
+      get: '/cdo/edit/address',
+      post: '/cdo/edit/address'
     }
   },
   views: {
@@ -37,16 +53,20 @@ const constants = {
     ownerDetails: 'cdo/create/owner-details',
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
+    country: 'cdo/create/country',
     enforcementDetails: 'cdo/create/enforcement-details',
     fullSummary: 'cdo/create/confirm-all-details',
     editDetails: 'cdo/edit/owner-details',
-    viewOwnerDetails: 'cdo/view/owner-details'
+    viewOwnerDetails: 'cdo/view/owner-details',
+    postcodeLookup: 'cdo/edit/postcode-lookup',
+    selectAddressFromEdit: 'cdo/edit/select-address'
   },
   keys: {
     entry: 'owner',
     ownerDetails: 'ownerDetails',
     address: 'address',
-    enforcementDetails: 'enforcementDetails'
+    enforcementDetails: 'enforcementDetails',
+    postcodeLookup: 'postcodeLookup'
   }
 }
 

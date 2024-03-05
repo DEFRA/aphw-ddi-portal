@@ -9,7 +9,8 @@ const schema = Joi.object({
       addressLine1: Joi.string().required(),
       addressLine2: Joi.string().optional().allow('').allow(null),
       town: Joi.string().required(),
-      postcode: Joi.string().required()
+      postcode: Joi.string().required(),
+      country: Joi.string().optional().allow('').allow(null)
     }).required()
   }).required(),
   enforcementDetails: Joi.object({

@@ -12,18 +12,18 @@
         <div class="govuk-summary-card__content">
           <dl class="govuk-summary-list govuk-!-font-size-16">
 
-            <div class="govuk-summary-list__row govuk-!-width-one-third">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions govuk-!-width-one-third">
               <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ model.person.firstName }} {{ model.person.lastName }}</dd>
-            </div>
-
+            </div>      
+    
             {% if model.person.dateOfBirth %}
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Date of birth</dt>
               <dd class="govuk-summary-list__value">{{ model.person.dateOfBirth }}</dd>
             </div>
             {% endif %}
-
+            
             {% if model.person.addressLines and model.person.addressLines.length > 0 %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Address</dt>
@@ -32,32 +32,36 @@
               {{ line }}<br>
               {% endfor %}
               </dd>
+              <dd class="govuk-summary-list__actions defra-text-align-left">
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/postcode-lookup/{{ model.person.personReference }}{{ model.srcHashParam }}">Change<br>address<span class="govuk-visually-hidden"> (Owner details)</span></a>
+            </dd>
             </div>
             {% endif %}
-
+    
             {% if model.person.email %}
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Email</dt>
               <dd class="govuk-summary-list__value">{{ model.person.email }}</dd>
             </div>
             {% endif %}
-
+          
+      
             {% if model.person.telephoneNumber1 %}
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Telephone number 1</dt>
               <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber1 }}</dd>
             </div>
             {% endif %}
 
             {% if model.person.telephoneNumber2 %}
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Telephone number 2</dt>
               <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber2 }}</dd>
             </div>
             {% endif %}
 
             {% if model.person.country %}
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Country</dt>
               <dd class="govuk-summary-list__value">{{ model.person.country }}</dd>
             </div>

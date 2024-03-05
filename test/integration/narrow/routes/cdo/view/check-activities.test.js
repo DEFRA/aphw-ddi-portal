@@ -12,6 +12,9 @@ describe('Check activities', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
   const { getDogOwner } = require('../../../../../../app/api/ddi-index-api/dog')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
+
   jest.mock('../../../../../../app/api/ddi-events-api/event')
   const { getEvents } = require('../../../../../../app/api/ddi-events-api/event')
 
@@ -33,7 +36,7 @@ describe('Check activities', () => {
     jest.clearAllMocks()
   })
 
-  const validEvent = {
+  const validDogEvent = {
     events: [
       manualActivityEventBuilder({
         timestamp: '2024-02-15T16:12:41.937Z'
@@ -115,10 +118,28 @@ describe('Check activities', () => {
       })
     ]
   }
-  getEvents.mockResolvedValue(validEvent)
+
+  const validOwnerEvent = {
+    events: [
+      manualActivityEventBuilder({
+        activity: {
+          activity: '5',
+          activityType: 'sent',
+          pk: 'P-123',
+          source: 'owner',
+          activityDate: '2024-02-15T00:00:00.000Z',
+          activityLabel: 'Change of address form'
+        },
+        timestamp: '2024-02-14T15:12:41.937Z',
+        subject: 'DDI Activity Police correspondence'
+      })
+    ]
+  }
+
   getDogOwner.mockResolvedValue({ personReference: 'P-456' })
 
-  test('GET /cdo/view/activity route returns a 200 and valid content', async () => {
+  test('GET /cdo/view/activity/xxx/dog route returns a 200 and valid content', async () => {
+    getEvents.mockResolvedValue(validDogEvent)
     getCdo.mockResolvedValue({
       dog: {
         id: 300000,
@@ -174,7 +195,49 @@ describe('Check activities', () => {
     expect(rows[2].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO expiry date updated')
   })
 
-  test('GET /cdo/view/activity route returns a 200 and message given no activities exist', async () => {
+  test('GET /cdo/view/activity/xxx/owner route returns a 200 and valid content', async () => {
+    getEvents.mockResolvedValue(validOwnerEvent)
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      firstName: 'John',
+      lastName: 'Smith',
+      addresses: [{
+        address: {
+        }
+      }],
+      person_contacts: []
+    })
+    cleanUserDisplayName.mockReturnValue('Mr Developer')
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/activity/P-123/owner',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(getEvents).toBeCalledWith(['P-123'])
+    expect(cleanUserDisplayName).toBeCalledWith('Developer')
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('John Smith')
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
+    expect(document.querySelectorAll('caption.govuk-visually-hidden')[0].textContent.trim()).toBe('All activity')
+    expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Date')
+    expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Activity')
+    expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
+
+    const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
+    expect(rows.length).toBe(1)
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('15 February 2024')
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Change of address form sent')
+    expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
+  })
+
+  test('GET /cdo/view/activity/xxx/dog route returns a 200 and message given no activities exist', async () => {
     getCdo.mockResolvedValue({
       dog: {
         id: 300000,
@@ -184,7 +247,8 @@ describe('Check activities', () => {
         dog_breed: { breed: 'breed1' }
       },
       person: {
-        firstName: 'John Smith',
+        firstName: 'John',
+        lastName: 'Smith',
         addresses: [{
           address: {
           }
@@ -219,7 +283,8 @@ describe('Check activities', () => {
     expect(activityBlock.querySelectorAll('.govuk-list li')[2].textContent.trim()).toBe('witness statements')
     expect(activityBlock.querySelectorAll('.govuk-list li')[3].textContent.trim()).toBe('judicial review notices')
   })
-  test('GET /cdo/view/activity route returns 404 if no dog data found', async () => {
+
+  test('GET /cdo/view/activity/xxx/dog route returns 404 if no dog data found', async () => {
     getCdo.mockResolvedValue(undefined)
 
     const options = {
@@ -239,6 +304,51 @@ describe('Check activities', () => {
     const options = {
       method: 'GET',
       url: '/cdo/view/activity/ED123/not-a-dog',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
+  })
+
+  test('GET /cdo/view/activity/xxx/owner route returns a 200 and message given no activities exist', async () => {
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      firstName: 'John',
+      lastName: 'Smith',
+      addresses: [{
+        address: {
+        }
+      }],
+      person_contacts: []
+    })
+    getEvents.mockResolvedValue({ events: [] })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/activity/P-123/owner',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(document.querySelectorAll('.govuk-table').length).toBe(0)
+    const activityBlock = document.querySelector('div[data-testid="activity-info"]')
+    expect(activityBlock.textContent.trim()).toContain('Future owner activity on the record will display here.')
+    expect(activityBlock.textContent.trim()).toContain('The activities will include:')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[0].textContent.trim()).toBe('changes of address')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[1].textContent.trim()).toBe('changes of email address and telephone numbers')
+    expect(activityBlock.querySelectorAll('.govuk-list li')[2].textContent.trim()).toBe('changes of owner')
+  })
+  test('GET /cdo/view/activity/xxx/owner route returns 404 if no owner data found', async () => {
+    getPersonByReference.mockResolvedValue(undefined)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/activity/P-123/owner',
       auth
     }
 

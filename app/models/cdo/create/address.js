@@ -1,10 +1,21 @@
-const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
+const { mapToCountrySelector } = require('../../mappers/countries')
 
-function ViewModel (address, errors) {
+function ViewModel (address, form, backNav, countries, validationError) {
+/**
+ * @param {Address} address
+ * @param {Form} form
+ * @param {BackNav} backNav
+ * @param {string[]} countries
+ * @param {Joi.ValidationError} [validationError]
+ * @constructor
+ */
   this.model = {
-    formAction: routes.address.get,
-    backLink: routes.ownerDetails.get,
+    formAction: form.formAction,
+    backLink: backNav?.backLink,
+    buttonText: form.source === 'edit' ? 'Save address' : 'Continue',
+    srcHashParam: backNav?.srcHashParam,
+    personReference: form?.personReference,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',
@@ -46,21 +57,12 @@ function ViewModel (address, errors) {
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '8' }
     },
-    country: {
-      id: 'country',
-      name: 'country',
-      label: {
-        text: 'Country'
-      },
-      value: address.country,
-      autocomplete: forms.preventAutocomplete,
-      attributes: { maxlength: '30' }
-    },
+    country: mapToCountrySelector(countries, validationError, address.country),
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
+  if (validationError) {
+    for (const error of validationError.details) {
       const name = error.path[0]
 
       const prop = this.model[name]

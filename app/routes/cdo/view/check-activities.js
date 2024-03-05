@@ -1,16 +1,30 @@
 const { routes, views } = require('../../../constants/cdo/dog')
+const { sources: activitySources } = require('../../../constants/cdo/activity')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getDogOwner } = require('../../../api/ddi-index-api/dog')
+const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { getEvents } = require('../../../api/ddi-events-api/event')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
-  return source === 'dog'
-    ? await getCdo(pk)
-    : null
+  if (source === activitySources.dog) {
+    return await getCdo(pk)
+  } else if (source === activitySources.owner) {
+    return await getPersonByReference(pk)
+  }
+
+  return null
+}
+
+const getEventPkList = async (pk, source) => {
+  if (source === activitySources.dog) {
+    const { personReference } = await getDogOwner(pk)
+    return [pk, personReference]
+  }
+  return [pk]
 }
 
 module.exports = [
@@ -21,17 +35,21 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const pk = request.params.pk
-        const cdo = await getSourceEntity(pk, request.params.source)
-        const { personReference } = await getDogOwner(pk)
-        const allEvents = await getEvents([pk, personReference])
+        const source = request.params.source
 
-        if (cdo === null || cdo === undefined) {
+        const entity = await getSourceEntity(pk, source)
+        if (entity === null || entity === undefined) {
           return h.response().code(404).takeover()
         }
 
+        const eventPkList = await getEventPkList(pk, source)
+
+        const allEvents = await getEvents(eventPkList)
+
         const sourceEntity = {
           pk,
-          source: request.params.source
+          source: request.params.source,
+          title: source === activitySources.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`
         }
 
         const sortedActivities = sortEventsDesc(allEvents.events)
