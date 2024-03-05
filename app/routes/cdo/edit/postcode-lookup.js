@@ -67,7 +67,7 @@ module.exports = [
 
         setPostcodeLookupDetails(request, payload)
 
-        return h.redirect(`${routes.selectAddressFromEdit.get}${payload.srcHashParam}`)
+        return h.redirect(`${routes.selectAddressFromEdit.get}?src=${payload.srcHashParam}`)
       }
     }
   }

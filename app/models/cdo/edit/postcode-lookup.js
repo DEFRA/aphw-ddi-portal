@@ -1,11 +1,12 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
+const { stripSrcParamName } = require('../../../lib/back-helpers')
 
 function ViewModel (data, backNav, errors) {
   this.model = {
     formAction: routes.postcodeLookup.post,
     backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
+    srcHashParam: stripSrcParamName(backNav.srcHashParam),
     personReference: data.personReference,
     postcode: {
       label: {

@@ -122,7 +122,7 @@ describe('PostCode Lookup test', () => {
     const payload = {
       personReference: 'P-123',
       postcode: 'AB1 1TT',
-      srcHashParam: '?src=abc'
+      srcHashParam: 'abc'
     }
 
     const options = {
