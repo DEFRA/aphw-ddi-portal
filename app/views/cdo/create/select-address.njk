@@ -75,9 +75,7 @@
     <h1 class="govuk-heading-l">Select an address</h1>
     <form method="post" novalidate autocomplete="off">
       <div class="govuk-form-group" id="postcode">
-        <p class="govuk-label">Postcode</p>
         <p class="govuk-body">
-          <strong style="text-transform: uppercase;">{{ model.postcode }}</strong>
           <a href="{{ model.changePostcodeLink }}" class="govuk-link">Change Postcode</a>
         </p>
       </div>
@@ -85,13 +83,15 @@
       {{ govukRadios(model.results)}}
 
       {{ govukButton({
-        text: "Select address"
+        text: model.buttonText
       }) }}
     </form>
 
+    {% if model.source == 'create' %}
     <p class="govuk-body">
       or <a class ="govuk-link" href="{{ model.addressRoute }}">enter address manually</a>.
     </p>
+    {% endif %}
   </div>
 </div>
 

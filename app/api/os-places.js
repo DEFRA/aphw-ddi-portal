@@ -56,9 +56,9 @@ const buildAddressResult = (result) => {
   return {
     addressLine1: line1 === '' ? organisationName : line1,
     addressLine2: result.DPA.DEPENDENT_LOCALITY,
-    addressTown: result.DPA.POST_TOWN,
-    addressPostcode: result.DPA.POSTCODE,
-    addressCountry: addressCountry,
+    town: result.DPA.POST_TOWN,
+    postcode: result.DPA.POSTCODE,
+    country: addressCountry,
     sorting: `${leftPad(result.DPA.BUILDING_NUMBER)} ${leftPad(result.DPA.SUB_BUILDING_NAME)}`
   }
 }

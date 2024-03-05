@@ -122,15 +122,15 @@ describe('OS Places test', () => {
     expect(res).not.toBe(null)
     expect(res.length).toBe(1)
     expect(res[0].addressLine1).toBe('1 MAIN STREET')
-    expect(res[0].addressTown).toBe('TESTINGTON')
-    expect(res[0].addressPostcode).toBe(postcode)
+    expect(res[0].town).toBe('TESTINGTON')
+    expect(res[0].postcode).toBe(postcode)
   })
 
   test('getPostcodeAddresses calls with postcode and country code', async () => {
     wreck.get.mockResolvedValue(validAddressesWithCountry)
     const postcode = 'SA36 0DZ'
     const res = await getPostcodeAddresses(postcode)
-    expect(res[0].addressCountry).toBe('Wales')
+    expect(res[0].country).toBe('Wales')
   })
 
   test('getPostcodeAddresses calls with postcode and houseNumber', async () => {
@@ -141,8 +141,8 @@ describe('OS Places test', () => {
     expect(res).not.toBe(null)
     expect(res.length).toBe(1)
     expect(res[0].addressLine1).toBe('FLAT 2, 1 MAIN STREET')
-    expect(res[0].addressTown).toBe('TESTINGTON')
-    expect(res[0].addressPostcode).toBe(postcode)
+    expect(res[0].town).toBe('TESTINGTON')
+    expect(res[0].postcode).toBe(postcode)
   })
 
   test('getPostcodeAddresses returns zero results when no addresses found', async () => {
@@ -160,8 +160,8 @@ describe('OS Places test', () => {
     expect(res).not.toBe(null)
     expect(res.length).toBe(4)
     expect(res[0].addressLine1).toBe('FLAT 1, 1 MAIN STREET')
-    expect(res[0].addressTown).toBe('TESTINGTON')
-    expect(res[0].addressPostcode).toBe(postcode)
+    expect(res[0].town).toBe('TESTINGTON')
+    expect(res[0].postcode).toBe(postcode)
     expect(res[1].addressLine1).toBe('FLAT 2, 1 MAIN STREET')
     expect(res[2].addressLine1).toBe('FLAT 3, 1 MAIN STREET')
     expect(res[3].addressLine1).toBe('FLAT 4, 1 MAIN STREET')
