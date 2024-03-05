@@ -47,6 +47,8 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
+        console.log('Validation error in address edit:', error)
+
         const backNav = addBackNavigationForErrorCondition(request)
 
         const person = request.payload

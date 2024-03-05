@@ -47,12 +47,25 @@ describe('Address edit test', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('POST /cdo/create/address route returns 302 if not auth', async () => {
+  test('GET /cdo/edit/address route returns 404 when person not found', async () => {
+    getPersonByReference.mockResolvedValue(null)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/address/P-123',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(404)
+  })
+
+  test('POST /cdo/edit/address route returns 302 if not auth', async () => {
     const fd = new FormData()
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/address',
+      url: '/cdo/edit/address',
       headers: fd.getHeaders(),
       payload: fd.getBuffer()
     }
@@ -61,7 +74,17 @@ describe('Address edit test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /cdo/create/address with invalid data returns error', async () => {
+  test('POST /cdo/edit/address with invalid data returns error', async () => {
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
     const payload = {
       addressLine2: 'locality',
       postcode: 'AB1 1TT'
@@ -69,7 +92,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/address',
+      url: '/cdo/edit/address',
       auth,
       payload
     }
@@ -78,9 +101,41 @@ describe('Address edit test', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  test('POST /cdo/create/address with valid data forwards to next screen', async () => {
+  test('POST /cdo/edit/address with valid data but missing person returns 404', async () => {
+    getPersonByReference.mockResolvedValue(null)
+
+    const payload = {
+      personReference: 'P-123',
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'AB1 1TT',
+      country: 'Wales'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(404)
+  })
+
+  test('POST /cdo/edit/address with valid data forwards to next screen', async () => {
     const nextScreenUrl = '/main-return-point'
     getMainReturnPoint.mockReturnValue(nextScreenUrl)
+
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
 
     const payload = {
       personReference: 'P-123',

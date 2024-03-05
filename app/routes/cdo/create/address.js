@@ -34,7 +34,7 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
-        console.log('Validation error in address:', error)
+        console.log('Validation error in address create:', error)
 
         const address = { ...getAddress(request), ...request.payload }
 
