@@ -96,13 +96,11 @@ describe('PostCode Lookup test', () => {
     expect(response.result.indexOf('&quot;postcode&quot; is required')).toBeGreaterThan(-1)
   })
 
-  test('POST /cdo/edit/postcode-lookup with valid data but missing person returns 404', async () => {
+  test('POST /cdo/edit/postcode-lookup with invalid data and missing person returns 404', async () => {
     getPersonByReference.mockResolvedValue(null)
 
     const payload = {
-      personReference: 'P-123',
-      postcode: 'AB1 1TT',
-      srcHashParam: '?src=abc'
+      personReference: 'P-123'
     }
 
     const options = {
