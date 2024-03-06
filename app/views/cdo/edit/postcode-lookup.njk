@@ -1,0 +1,65 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+      {% call govukFieldset({
+        legend: {
+          text: "What is the owner's postcode?",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+
+      {{ govukInput(model.postcode) }}
+
+      {{ govukInput(model.houseNumber) }}
+
+      <input type="hidden" name="personReference" value="{{ model.personReference }}" />
+
+      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
+
+      {% endcall %}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+    <p class="govuk-body">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/address/{{ model.personReference }}?src={{ model.srcHashParam }}">Enter address manually</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

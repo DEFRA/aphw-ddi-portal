@@ -11,6 +11,9 @@ describe('Confirm activity', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/activities')
   const { getActivityById } = require('../../../../../../app/api/ddi-index-api/activities')
 
+  jest.mock('../../../../../../app/lib/back-helpers')
+  const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -35,6 +38,8 @@ describe('Confirm activity', () => {
       name: 'act1'
     })
 
+    getMainReturnPoint.mockReturnValue('/main-return-url')
+
     const options = {
       method: 'GET',
       url: '/cdo/edit/activity-confirmation',
@@ -45,9 +50,8 @@ describe('Confirm activity', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].textContent).toBe('Check activity for Dog ED12345')
-    expect(document.querySelectorAll('.govuk-list .govuk-link')[1].textContent).toBe('Go to the dog record for Dog ED12345')
-    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].getAttribute('href')).toBe('/cdo/view/activity/ED12345/dog')
+    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].textContent).toBe('Go to the dog record for Dog ED12345')
+    expect(document.querySelectorAll('.govuk-list .govuk-link')[0].getAttribute('href')).toBe('/main-return-url')
   })
 
   afterEach(async () => {

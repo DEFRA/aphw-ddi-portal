@@ -7,6 +7,9 @@ const { admin } = require('../../../auth/permissions')
 const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
 const { getCountries } = require('../../../api/ddi-index-api')
 
+const form = { formAction: routes.address.post }
+const backNav = { backLink: routes.ownerDetails.get }
+
 module.exports = [{
   method: 'GET',
   path: routes.address.get,
@@ -14,9 +17,10 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const address = getAddress(request)
+
       const countries = await getCountries()
 
-      return h.view(views.address, new ViewModel(address, countries))
+      return h.view(views.address, new ViewModel(address, form, backNav, countries))
     }
   }
 },
@@ -30,10 +34,13 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
+        console.log('Validation error in address create:', error)
+
         const address = { ...getAddress(request), ...request.payload }
+
         const countries = await getCountries()
 
-        return h.view(views.address, new ViewModel(address, countries, error)).code(400).takeover()
+        return h.view(views.address, new ViewModel(address, form, backNav, countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
