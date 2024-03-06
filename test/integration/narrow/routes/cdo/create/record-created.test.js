@@ -148,7 +148,8 @@ describe('Add dog details', () => {
         address: {
           addressLine1: '1 Test Street',
           town: 'Test Town',
-          postcode: 'TE1 1ST'
+          postcode: 'TE1 1ST',
+          country: 'Wales'
         },
         birthDate: new UTCDate('1980-01-01T00:00:00.000Z')
       },
@@ -187,11 +188,13 @@ describe('Add dog details', () => {
     expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Date of birth')
     expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('01 January 1980')
     expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('Address')
-    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('Court')
-    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('Test Court')
-    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[4].textContent.trim()).toBe('Police force')
-    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[4].textContent.trim()).toBe('Test Police Force')
-    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[5]).toBeFalsy()
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[3].textContent.trim()).toBe('Country')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[3].textContent.trim()).toBe('Wales')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[4].textContent.trim()).toBe('Court')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[4].textContent.trim()).toBe('Test Court')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[5].textContent.trim()).toBe('Police force')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[5].textContent.trim()).toBe('Test Police Force')
+    expect(ownerRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[6]).toBeFalsy()
   })
 
   afterEach(async () => {
