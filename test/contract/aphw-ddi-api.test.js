@@ -1,16 +1,18 @@
 const { ddiIndexApiProvider } = require('./mockServices')
 const { userWithDisplayname } = require('../mocks/auth')
-const { validCdoRequest, validCdoResponseMatcher, validCdoRequestWithCountry } = require('./matchers/cdo')
+const { validCdoRequest, validCdoRequestWithCountry, validCdoRequestWithPersonReference } = require('./matchers/cdo')
 const CdoCreatedViewModel = require('../../app/models/cdo/create/record-created')
-const Matchers = require('@pact-foundation/pact/dsl/matchers')
+
+const {
+  getCountriesInteraction
+} = require('./interactions/api/countries')
+
+const {
+  postCdoWithoutCountryInteraction,
+  postCdoWithCountryInteraction, postCdoWithOwnerLookupInteraction
+} = require('./interactions/api/cdo')
 
 describe('API service contract tests', () => {
-  const headers = {
-    'ddi-username': 'test@example.com',
-    'ddi-displayname': 'Example Tester',
-    'Content-Type': 'application/json'
-  }
-
   beforeAll(async () => {
     const mockService = ddiIndexApiProvider
     await mockService.setup()
@@ -28,23 +30,7 @@ describe('API service contract tests', () => {
       })
 
       test('GET /countries', async () => {
-        await ddiIndexApiProvider.addInteraction({
-          state: 'countries exist',
-          uponReceiving: 'get all countries',
-          withRequest: {
-            method: 'GET',
-            path: '/countries'
-          },
-          willRespondWith: {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: {
-              countries: Matchers.eachLike('England', null)
-            }
-          }
-        })
+        await ddiIndexApiProvider.addInteraction(getCountriesInteraction)
 
         const response = await countriesApi.getCountries()
         expect(response[0]).toEqual('England')
@@ -60,48 +46,23 @@ describe('API service contract tests', () => {
     })
 
     test('POST /cdo with mandatory data', async () => {
-      await ddiIndexApiProvider.addInteraction({
-        state: 'cdo has only mandatory data',
-        uponReceiving: 'submission to POST cdo data',
-        withRequest: {
-          method: 'POST',
-          path: '/cdo',
-          body: validCdoRequest,
-          headers
-        },
-        willRespondWith: {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          body: validCdoResponseMatcher
-        }
-      })
+      await ddiIndexApiProvider.addInteraction(postCdoWithoutCountryInteraction)
 
       const response = await cdoApi.createCdo(validCdoRequest, userWithDisplayname)
       expect(() => CdoCreatedViewModel(response)).not.toThrow()
     })
 
     test('POST /cdo with optional data including country', async () => {
-      await ddiIndexApiProvider.addInteraction({
-        state: 'cdo includes optional data and country',
-        uponReceiving: 'submission to POST cdo data',
-        withRequest: {
-          method: 'POST',
-          path: '/cdo',
-          body: validCdoRequestWithCountry,
-          headers
-        },
-        willRespondWith: {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          body: validCdoResponseMatcher
-        }
-      })
+      await ddiIndexApiProvider.addInteraction(postCdoWithCountryInteraction)
 
       const response = await cdoApi.createCdo(validCdoRequestWithCountry, userWithDisplayname)
+      expect(() => CdoCreatedViewModel(response)).not.toThrow()
+    })
+
+    test('POST /cdo with person reference', async () => {
+      await ddiIndexApiProvider.addInteraction(postCdoWithOwnerLookupInteraction)
+
+      const response = await cdoApi.createCdo(validCdoRequestWithPersonReference, userWithDisplayname)
       expect(() => CdoCreatedViewModel(response)).not.toThrow()
     })
   })
