@@ -4,7 +4,6 @@ const { forms } = require('../../../constants/forms')
 
 function ViewModel (enforcementDetails, courts, policeForces, errors) {
   this.model = {
-    formAction: routes.enforcementDetails.get,
     backLink: dogRoutes.confirm.get,
     addressRoute: routes.address.get,
     court: {

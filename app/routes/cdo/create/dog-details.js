@@ -41,7 +41,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.details.post,
+    path: `${routes.details.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       validate: {

@@ -1,8 +1,5 @@
-const { routes } = require('../../../constants/cdo/dog')
-
 function ViewModel (activity, backNav, errors) {
   this.model = {
-    formAction: routes.addActivity.post,
     backLink: backNav.backLink,
     srcHashParam: activity.srcHashParam,
     pk: activity.pk,
