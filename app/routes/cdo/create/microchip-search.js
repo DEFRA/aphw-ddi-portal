@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
 const { getDog } = require('../../../session/cdo/dog')
 const { admin } = require('../../../auth/permissions')
-const { schema: microchipSearchSchema } = require('../../../schema/portal/cdo/microchip-search')
+const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 
 module.exports = [{
   method: 'GET',
@@ -28,9 +28,11 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     validate: {
-      payload: microchipSearchSchema,
+      payload: validatePayload,
       failAction: async (request, h, error) => {
+        console.log('microchip fail post')
         const details = { ...getDog(request), ...request.payload }
+        console.log('microchip fail details', details)
         return h.view(views.ownerDetails, new ViewModel(details, error)).code(400).takeover()
       }
     },

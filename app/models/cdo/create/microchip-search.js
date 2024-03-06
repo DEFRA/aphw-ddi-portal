@@ -1,9 +1,7 @@
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { routes } = require('../../../constants/cdo/dog')
 
 function ViewModel (details, errors) {
   this.model = {
-    formAction: routes.details.post,
     backLink: ownerRoutes.ownerDetails.get,
     dogId: details.id,
     microchipNumber: {
