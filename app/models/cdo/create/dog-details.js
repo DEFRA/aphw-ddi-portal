@@ -1,10 +1,10 @@
-const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
+const { routes } = require('../../../constants/cdo/dog')
 const { keys } = require('../../../constants/cdo/dog')
 const { addDateErrors } = require('../../../lib/date-helpers')
 
 function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
-    backLink: ownerRoutes.ownerDetails.get,
+    backLink: routes.microchipSearch.get,
     dogId: dogDetails.id,
     breed: {
       id: 'breed',

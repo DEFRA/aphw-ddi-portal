@@ -8,12 +8,6 @@ const getDogIndex = (entry, dogId) => {
   return +dogId - 1
 }
 
-const set = (request, entryKey, key, value) => {
-  const entryValue = request.yar?.get(entryKey) || {}
-  entryValue[key] = typeof (value) === 'string' ? value.trim() : value
-  request.yar.set(entryKey, entryValue)
-}
-
 const get = (request) => {
   return request.yar?.get(keys.entry) || [{}]
 }
@@ -71,11 +65,11 @@ const deleteDog = (request) => {
 }
 
 const getMicrochipDetails = (request) => {
-  return get(request, keys.microchipSearch, keys.phoneNumber)
+  return request.yar?.get(keys.microchipSearch) || [{}]
 }
 
 const setMicrochipDetails = (request, value) => {
-  set(request, keys.entry, keys.microchipSearch, value)
+  request.yar.set(keys.microchipSearch, value)
 }
 
 module.exports = {

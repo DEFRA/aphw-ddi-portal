@@ -8,6 +8,9 @@ const constants = {
       get: '/cdo/create/microchip-search',
       post: '/cdo/create/microchip-search'
     },
+    microchipResults: {
+      get: '/cdo/create/microchip-results'
+    },
     confirm: {
       get: '/cdo/create/confirm-dog-details',
       post: '/cdo/create/confirm-dog-details'
@@ -57,6 +60,7 @@ const constants = {
   views: {
     editDogDetails: 'cdo/edit/dog-details',
     microchipSearch: 'cdo/create/microchip-search',
+    microchipResults: 'cdo/create/microchip-results',
     viewDogDetails: 'cdo/view/dog-details',
     viewDogActivities: 'cdo/view/check-activities',
     editExemptionDetails: 'cdo/edit/exemption-details',

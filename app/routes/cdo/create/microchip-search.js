@@ -1,8 +1,10 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
-const { getDog } = require('../../../session/cdo/dog')
+const { getDog, getMicrochipDetails } = require('../../../session/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
+const { setMicrochipDetails } = require('../../../session/cdo/dog')
+const { doSearch } = require('../../../api/ddi-index-api/search')
 
 module.exports = [{
   method: 'GET',
@@ -17,6 +19,7 @@ module.exports = [{
       }
 
       dog.id = request.params.dogId
+      dog.microchipNumber = getMicrochipDetails(request).microchipNumber
 
       return h.view(views.microchipSearch, new ViewModel(dog))
     }
@@ -37,9 +40,11 @@ module.exports = [{
     handler: async (request, h) => {
       const details = request.payload
 
+      details.results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
+
       setMicrochipDetails(request, details)
 
-      return h.redirect(routes.selectAddress.get)
+      return h.redirect(details.results.length > 0 ? routes.microchipResults.get : routes.details.get)
     }
   }
 }]

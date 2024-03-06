@@ -4,7 +4,7 @@ const validNewMicrochip = /^[0-9\s]+$/
 
 const validateMicrochip = (value, helpers) => {
   if (!value.match(validNewMicrochip)) {
-    return helpers.message('Microchip numbers can only contains numbers', { path: ['microchipNumber'] })
+    return helpers.message('Microchip numbers can only contain numbers', { path: ['microchipNumber'] })
   }
 
   return value
