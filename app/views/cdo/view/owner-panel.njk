@@ -33,7 +33,9 @@
               {% endfor %}
               </dd>
               <dd class="govuk-summary-list__actions defra-text-align-left">
+              {% if model.showChangeAddressLink %}
                 <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/postcode-lookup/{{ model.person.personReference }}{{ model.srcHashParam }}">Change<br>address<span class="govuk-visually-hidden"> (Owner details)</span></a>
+              {% endif %}
             </dd>
             </div>
             {% endif %}

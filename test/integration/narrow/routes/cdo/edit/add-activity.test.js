@@ -91,7 +91,7 @@ describe('Add activity', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/add-activity',
+      url: '/cdo/edit/add-activity/pk/source',
       auth,
       payload
     }
@@ -111,7 +111,7 @@ describe('Add activity', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/add-activity',
+      url: '/cdo/edit/add-activity/pk/source',
       auth,
       payload
     }
@@ -138,7 +138,7 @@ describe('Add activity', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/add-activity',
+      url: '/cdo/edit/add-activity/pk/source',
       auth,
       payload
     }

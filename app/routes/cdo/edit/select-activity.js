@@ -11,7 +11,8 @@ const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
-const { backNav } = require('../../../lib/select-activity-helper')
+// const { backNav } = require('../../../lib/select-activity-helper')
+const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 
 const getSourceEntity = async (details) => {
   return details.source === 'dog'
@@ -42,6 +43,12 @@ module.exports = [
 
         const activityList = await getActivities(activityDetails.activityType, activityDetails.source)
 
+        const backNav = addBackNavigation(request)
+
+        if (backNav.backLink === '/') {
+          backNav.backLink = getMainReturnPoint(request)
+        }
+
         const model = {
           activityType: activityDetails?.activityType,
           activityList,
@@ -49,14 +56,13 @@ module.exports = [
           source: activityDetails.source,
           activityDate: new Date(),
           editLink: getEditLink(activityDetails),
-          srcHashParam: activityDetails.srcHashParam,
           titleReference: activityDetails.titleReference,
           skippedFirstPage: activityDetails.skippedFirstPage
         }
 
         addDateComponents(model, 'activityDate')
 
-        return h.view(views.selectActivity, new ViewModel(model, backNav(activityDetails, request)))
+        return h.view(views.selectActivity, new ViewModel(model, backNav))
       }
     }
   },
@@ -82,7 +88,13 @@ module.exports = [
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
           model.editLink = getEditLink(model)
 
-          const viewModel = new ViewModel(model, backNav(payload, request), error)
+          const backNav = addBackNavigationForErrorCondition(request)
+
+          if (backNav.backLink === '/') {
+            backNav.backLink = getMainReturnPoint(request)
+          }
+
+          const viewModel = new ViewModel(model, backNav, error)
 
           return h.view(views.selectActivity, viewModel).code(400).takeover()
         }

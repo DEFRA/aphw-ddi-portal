@@ -1,9 +1,8 @@
-const { routes, keys } = require('../../../constants/cdo/dog')
+const { keys } = require('../../../constants/cdo/dog')
 const { addDateErrors } = require('../../../lib/date-helpers')
 
 function ViewModel (dogDetails, breedTypes, backNav, errors) {
   this.model = {
-    formAction: routes.editDogDetails.post,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     id: dogDetails.id,

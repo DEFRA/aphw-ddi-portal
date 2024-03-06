@@ -36,7 +36,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.postcodeLookup.post,
+    path: `${routes.postcodeLookup.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -67,7 +67,9 @@ module.exports = [
 
         setPostcodeLookupDetails(request, payload)
 
-        return h.redirect(`${routes.selectAddressFromEdit.get}?src=${payload.srcHashParam}`)
+        const backNav = addBackNavigation(request)
+
+        return h.redirect(`${routes.selectAddressFromEdit.get}${backNav.srcHashParam}`)
       }
     }
   }
