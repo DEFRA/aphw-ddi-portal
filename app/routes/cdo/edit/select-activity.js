@@ -11,7 +11,6 @@ const { recordActivity } = require('../../../api/ddi-index-api/activities')
 const getUser = require('../../../auth/get-user')
 const { deepClone } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
-// const { backNav } = require('../../../lib/select-activity-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 
 const getSourceEntity = async (details) => {
