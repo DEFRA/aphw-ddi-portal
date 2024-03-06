@@ -1,4 +1,16 @@
-const formatAddress = (address) => {
+/**
+ *
+ * @param {{
+ *    addressLine1: string;
+ *    addressLine2: string;
+ *    town: string;
+ *    postcode: string;
+ *    country: string;
+ * }} address
+ * @param {boolean} hideCountry
+ * @returns {*[]|null}
+ */
+const formatAddress = (address, hideCountry = false) => {
   if (!address) {
     return null
   }
@@ -6,12 +18,29 @@ const formatAddress = (address) => {
   const parts = []
 
   Object.keys(address).forEach(key => {
-    if (address[key]) {
+    const includeField = key !== 'country' || hideCountry === false
+
+    if (address[key] && includeField) {
       parts.push(address[key])
     }
   })
 
   return parts
+}
+
+/**
+ *
+ * @param {{
+ *    addressLine1: string;
+ *    addressLine2: string;
+ *    town: string;
+ *    postcode: string;
+ *    country: string;
+ * }} address
+ * @returns {string|null}
+ */
+const getCountryFromAddress = (address) => {
+  return address?.country || null
 }
 
 const countryCodeMap = {
@@ -32,5 +61,6 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
 
 module.exports = {
   formatAddress,
-  mapOsCountryCodeToCountry
+  mapOsCountryCodeToCountry,
+  getCountryFromAddress
 }

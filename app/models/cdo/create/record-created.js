@@ -1,5 +1,5 @@
 const { formatToGds } = require('../../../lib/date-helpers')
-const { formatAddress } = require('../../../lib/format-helpers')
+const { formatAddress, getCountryFromAddress } = require('../../../lib/format-helpers')
 
 function ViewModel (cdo) {
   const owner = cdo.owner
@@ -9,9 +9,10 @@ function ViewModel (cdo) {
   this.model = {
     owner: {
       name: `${owner.firstName} ${owner.lastName}`,
-      address: formatAddress(owner.address),
+      address: formatAddress(owner.address, true),
       birthDate: formatToGds(owner.birthDate)
     },
+    country: getCountryFromAddress(owner.address),
     enforcementDetails,
     dogs: dogs.map(dog => ({
       status: dog.status,
