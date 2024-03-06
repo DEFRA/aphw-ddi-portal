@@ -18,9 +18,9 @@ const formatAddress = (address, hideCountry = false) => {
   const parts = []
 
   Object.keys(address).forEach(key => {
-    const checkCountry = key !== 'country' || hideCountry === false
+    const includeField = key !== 'country' || hideCountry === false
 
-    if (address[key] && checkCountry) {
+    if (address[key] && includeField) {
       parts.push(address[key])
     }
   })
