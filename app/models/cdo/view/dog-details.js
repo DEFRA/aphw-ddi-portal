@@ -11,6 +11,7 @@ function ViewModel (cdo, backNav) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
+    showChangeAddressLink: false,
     dog: {
       id: cdo.dog.id,
       indexNumber: cdo.dog.indexNumber,

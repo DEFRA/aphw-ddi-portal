@@ -29,7 +29,6 @@ module.exports = [{
 
       const form = {
         personReference,
-        formAction: routes.editAddress.post,
         source: 'edit'
       }
 
@@ -39,7 +38,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: routes.editAddress.post,
+  path: `${routes.editAddress.post}/{personReference?}`,
   options: {
     validate: {
       options: {
@@ -57,7 +56,6 @@ module.exports = [{
 
         const form = {
           personReference: person.personReference,
-          formAction: routes.editAddress.post,
           source: 'edit'
         }
 

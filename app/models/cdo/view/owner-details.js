@@ -6,6 +6,7 @@ function ViewModel (personAndDogs, backNav) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
+    showChangeAddressLink: true,
     person: {
       id: personAndDogs.id,
       personReference: personAndDogs.personReference,

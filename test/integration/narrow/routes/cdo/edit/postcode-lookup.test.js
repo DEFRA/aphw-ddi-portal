@@ -8,11 +8,16 @@ describe('PostCode Lookup test', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/person')
   const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
 
+  jest.mock('../../../../../../app/lib/back-helpers')
+  const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../../../app/lib/back-helpers')
+
   const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    addBackNavigation.mockReturnValue({ backLink: '/back', srcHashParam: '?src=src-hash-param' })
+    addBackNavigationForErrorCondition.mockReturnValue({ backLink: '/back', srcHashParam: '?src=src-hash-param' })
     server = await createServer()
     await server.initialize()
   })
@@ -117,12 +122,11 @@ describe('PostCode Lookup test', () => {
   test('POST /cdo/edit/postcode-lookup with valid data forwards to next screen', async () => {
     getPersonByReference.mockResolvedValue({ personReference: 'P-123' })
 
-    const nextScreenUrl = '/cdo/edit/select-address?src=abc'
+    const nextScreenUrl = '/cdo/edit/select-address?src=src-hash-param'
 
     const payload = {
       personReference: 'P-123',
-      postcode: 'AB1 1TT',
-      srcHashParam: 'abc'
+      postcode: 'AB1 1TT'
     }
 
     const options = {

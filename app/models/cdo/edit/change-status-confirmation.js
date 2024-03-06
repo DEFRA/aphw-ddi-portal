@@ -3,7 +3,8 @@ function ViewModel (dog, backNav) {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,
-    status: dog.status
+    status: dog.status,
+    actionLink: backNav.actionLink
   }
 }
 

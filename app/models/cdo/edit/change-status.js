@@ -1,9 +1,7 @@
-const { routes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (dog, backNav, errors) {
   this.model = {
-    formAction: routes.changeStatus.post,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,

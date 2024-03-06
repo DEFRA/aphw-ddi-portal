@@ -1,18 +1,27 @@
 const { v4: uuidv4 } = require('uuid')
 const { setInSession, getFromSession } = require('../session/session-wrapper')
 
-const generateCurrentHashParam = (request) => {
+const lastHashParam = 'last-hash-param'
+const srcPrefix = '?src='
+const backUrl = 'back-url-'
+const lastReferer = 'last-referer'
+const mainReturnPoint = 'main-return-point'
+
+const generateHashParamForCurrentScreen = (request) => {
   const id = uuidv4()
   const urlHashRef = id.split('-').shift().toLocaleLowerCase('en-GB').match(/.{1,4}/g).join('-')
-  setInSession(request, `back-url-${urlHashRef}`, request.url.href)
-  return `?src=${urlHashRef}`
+  setInSession(request, `${backUrl}${urlHashRef}`, request.url.href)
+
+  return urlHashRef
 }
 
-const extractSrcParamFromUrl = (url, removPrefix) => {
-  if (url && url.indexOf('?src=') > -1) {
-    const origSrc = url.substring(url.indexOf('?src='))
-    return removPrefix ? origSrc.substring(origSrc.indexOf('?src=') + 5) : origSrc.substring(origSrc.indexOf('?src='))
+const extractSrcParamFromUrl = (url, stripSrcPrefix) => {
+  if (url && url.indexOf(srcPrefix) > -1) {
+    const origSrc = url.substring(url.indexOf(srcPrefix))
+
+    return stripSrcPrefix ? origSrc.substring(origSrc.indexOf(srcPrefix) + 5) : origSrc.substring(origSrc.indexOf(srcPrefix))
   }
+
   return ''
 }
 
@@ -20,36 +29,40 @@ const extractSrcParamFromReferer = (request, removPrefix) => {
   return extractSrcParamFromUrl(request?.headers?.referer, removPrefix)
 }
 
-const extractBackNavParam = (request, removPrefix) => {
-  const origSrc = extractSrcParamFromReferer(request, true)
-  const prevUrl = origSrc !== '' ? getFromSession(request, `back-url-${origSrc}`) : getFromSession(request, 'last-referer')
-  if (prevUrl && prevUrl.indexOf('?src=') > -1) {
-    return removPrefix ? prevUrl.substring(prevUrl.indexOf('?src=') + 5) : prevUrl.substring(prevUrl.indexOf('?src='))
-  }
-  return ''
+const extractBackNavParam = (request, stripSrcPrefix) => {
+  const callingSrcParam = extractSrcParamFromReferer(request, true)
+  const prevUrl = callingSrcParam !== '' ? getFromSession(request, `${backUrl}${callingSrcParam}`) : getFromSession(request, lastReferer)
+
+  return extractSrcParamFromUrl(prevUrl, stripSrcPrefix)
 }
 
 const getPreviousUrl = (request) => {
   const url = getFromSession(request, `back-url-${request?.query?.src}`)
+
   return url ?? '/'
 }
 
 const getMainReturnPoint = (request) => {
-  const url = getFromSession(request, 'main-return-point')
+  const url = getFromSession(request, mainReturnPoint)
+
   return url ?? '/'
 }
 
-const addBackNavigation = (request, markAsMainReturnPoint) => {
+const addBackNavigation = (request, markAsMainReturnPoint = false) => {
   if (markAsMainReturnPoint) {
-    setInSession(request, 'main-return-point', request.url.href)
+    setInSession(request, mainReturnPoint, request.url.href)
   }
 
-  const currentHashParam = generateCurrentHashParam(request)
+  const newHashParam = generateHashParamForCurrentScreen(request)
   const backLinkUrl = getPreviousUrl(request)
+
+  setInSession(request, lastHashParam, newHashParam)
 
   return {
     backLink: backLinkUrl,
-    srcHashParam: currentHashParam
+    srcHashParam: `${srcPrefix}${newHashParam}`,
+    srcHashValue: newHashParam,
+    currentHashParam: extractSrcParamFromUrl(request?.headers?.referer, true)
   }
 }
 
@@ -57,22 +70,20 @@ const addBackNavigationForErrorCondition = (request) => {
   const srcParam = extractSrcParamFromReferer(request, true)
   let backLinkUrl
   if (srcParam === '') {
-    backLinkUrl = getFromSession(request, 'last-referer') ?? '/'
+    backLinkUrl = getFromSession(request, lastReferer) ?? '/'
   } else {
-    backLinkUrl = getFromSession(request, `back-url-${srcParam}`) ?? '/'
+    backLinkUrl = getFromSession(request, `${backUrl}${srcParam}`) ?? '/'
     if (backLinkUrl !== '/') {
-      setInSession(request, 'last-referer', backLinkUrl)
+      setInSession(request, lastReferer, backLinkUrl)
     }
   }
 
   return {
     backLink: backLinkUrl,
-    srcHashParam: extractSrcParamFromUrl(backLinkUrl)
+    srcHashParam: `${srcPrefix}${getFromSession(request, lastHashParam)}`,
+    srcHashValue: getFromSession(request, lastHashParam),
+    currentHashParam: extractSrcParamFromUrl(backLinkUrl)
   }
-}
-
-const stripSrcParamName = param => {
-  return param && param.indexOf('?src=') === 0 ? param.substr(5) : param
 }
 
 module.exports = {
@@ -80,6 +91,5 @@ module.exports = {
   extractBackNavParam,
   addBackNavigationForErrorCondition,
   extractSrcParamFromUrl,
-  getMainReturnPoint,
-  stripSrcParamName
+  getMainReturnPoint
 }

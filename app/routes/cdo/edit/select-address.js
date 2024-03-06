@@ -4,7 +4,7 @@ const { getPostcodeAddresses } = require('../../../api/os-places')
 const { getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { admin } = require('../../../auth/permissions')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
@@ -60,7 +60,7 @@ module.exports = [
 
         setPostcodeLookupDetails(request, null)
 
-        return h.redirect(`${routes.viewOwnerDetails.get}/${personReference}`)
+        return h.redirect(getMainReturnPoint(request))
       }
     }
   }
