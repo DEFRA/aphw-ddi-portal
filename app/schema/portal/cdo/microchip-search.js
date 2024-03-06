@@ -3,8 +3,6 @@ const Joi = require('joi')
 const validNewMicrochip = /^[0-9\s]+$/
 
 const validateMicrochip = (value, helpers) => {
-  console.log('value', value)
-
   if (!value.match(validNewMicrochip)) {
     return helpers.message('Microchip numbers can only contains numbers', { path: ['microchipNumber'] })
   }
@@ -15,7 +13,7 @@ const validateMicrochip = (value, helpers) => {
 const schema = Joi.object({
   microchipNumber: Joi.string().trim().required().max(15).messages({
     'string.max': 'Microchip number must be no more than {#limit} characters',
-    'string.required': 'Enter a microchip number'
+    'string.empty': 'Enter a microchip number'
   }).custom(validateMicrochip)
 }).required()
 

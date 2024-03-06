@@ -30,16 +30,14 @@ module.exports = [{
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {
-        console.log('microchip fail post')
         const details = { ...getDog(request), ...request.payload }
-        console.log('microchip fail details', details)
-        return h.view(views.ownerDetails, new ViewModel(details, error)).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
       const details = request.payload
-      console.log('details', details)
-      // setMicrochipDetails(request, details)
+
+      setMicrochipDetails(request, details)
 
       return h.redirect(routes.selectAddress.get)
     }
