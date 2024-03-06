@@ -7,18 +7,21 @@ const backUrl = 'back-url-'
 const lastReferer = 'last-referer'
 const mainReturnPoint = 'main-return-point'
 
-const generateCurrentHashParam = (request) => {
+const generateHashParamForCurrentScreen = (request) => {
   const id = uuidv4()
   const urlHashRef = id.split('-').shift().toLocaleLowerCase('en-GB').match(/.{1,4}/g).join('-')
   setInSession(request, `${backUrl}${urlHashRef}`, request.url.href)
+
   return urlHashRef
 }
 
-const extractSrcParamFromUrl = (url, removPrefix) => {
+const extractSrcParamFromUrl = (url, stripSrcPrefix) => {
   if (url && url.indexOf(srcPrefix) > -1) {
     const origSrc = url.substring(url.indexOf(srcPrefix))
-    return removPrefix ? origSrc.substring(origSrc.indexOf(srcPrefix) + 5) : origSrc.substring(origSrc.indexOf(srcPrefix))
+
+    return stripSrcPrefix ? origSrc.substring(origSrc.indexOf(srcPrefix) + 5) : origSrc.substring(origSrc.indexOf(srcPrefix))
   }
+
   return ''
 }
 
@@ -26,22 +29,22 @@ const extractSrcParamFromReferer = (request, removPrefix) => {
   return extractSrcParamFromUrl(request?.headers?.referer, removPrefix)
 }
 
-const extractBackNavParam = (request, removPrefix) => {
-  const origSrc = extractSrcParamFromReferer(request, true)
-  const prevUrl = origSrc !== '' ? getFromSession(request, `${backUrl}${origSrc}`) : getFromSession(request, lastReferer)
-  if (prevUrl && prevUrl.indexOf(srcPrefix) > -1) {
-    return removPrefix ? prevUrl.substring(prevUrl.indexOf(srcPrefix) + 5) : prevUrl.substring(prevUrl.indexOf(srcPrefix))
-  }
-  return ''
+const extractBackNavParam = (request, stripSrcPrefix) => {
+  const callingSrcParam = extractSrcParamFromReferer(request, true)
+  const prevUrl = callingSrcParam !== '' ? getFromSession(request, `${backUrl}${callingSrcParam}`) : getFromSession(request, lastReferer)
+
+  return extractSrcParamFromUrl(prevUrl, stripSrcPrefix)
 }
 
 const getPreviousUrl = (request) => {
   const url = getFromSession(request, `back-url-${request?.query?.src}`)
+
   return url ?? '/'
 }
 
 const getMainReturnPoint = (request) => {
   const url = getFromSession(request, mainReturnPoint)
+
   return url ?? '/'
 }
 
@@ -50,7 +53,7 @@ const addBackNavigation = (request, markAsMainReturnPoint = false) => {
     setInSession(request, mainReturnPoint, request.url.href)
   }
 
-  const newHashParam = generateCurrentHashParam(request)
+  const newHashParam = generateHashParamForCurrentScreen(request)
   const backLinkUrl = getPreviousUrl(request)
 
   setInSession(request, lastHashParam, newHashParam)
