@@ -1,4 +1,4 @@
-const validNewMicrochip = /^[\d]+$/
+const validNewMicrochip = /^\d+$/
 
 const validateMicrochip = (value, helpers, compareOrig = false) => {
   let elemName = helpers.state.path[0]
