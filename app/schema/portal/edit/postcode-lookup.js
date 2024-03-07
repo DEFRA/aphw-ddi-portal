@@ -11,8 +11,7 @@ const schema = Joi.object({
   }),
   houseNumber: Joi.string().trim().optional().allow('').allow(null).max(24).messages({
     'string.max': 'Property name or number must be no more than {#limit} characters'
-  }),
-  srcHashParam: Joi.string().optional().allow('').allow(null)
+  })
 }).required()
 
 const validatePayload = (payload) => {

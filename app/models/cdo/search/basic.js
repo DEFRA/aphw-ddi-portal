@@ -1,9 +1,7 @@
-const { routes: searchRoutes } = require('../../../constants/search')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (searchCriteria, resultList, backNav, errors) {
   this.model = {
-    formAction: searchRoutes.searchBasic.get,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     searchTerms: {

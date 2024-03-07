@@ -11,7 +11,6 @@ function ViewModel (address, form, backNav, countries, validationError) {
  * @constructor
  */
   this.model = {
-    formAction: form.formAction,
     backLink: backNav?.backLink,
     buttonText: form.source === 'edit' ? 'Save address' : 'Continue',
     srcHashParam: backNav?.srcHashParam,

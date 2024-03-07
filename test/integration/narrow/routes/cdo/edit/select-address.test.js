@@ -6,7 +6,7 @@ describe('SelectAddress edit test', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/lib/back-helpers')
-  const { addBackNavigation } = require('../../../../../../app/lib/back-helpers')
+  const { addBackNavigation, getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { getFromSession } = require('../../../../../../app/session/session-wrapper')
@@ -86,7 +86,9 @@ describe('SelectAddress edit test', () => {
   })
 
   test('POST /cdo/edit/select-address with valid data returns 302', async () => {
-    const nextScreenUrl = '/cdo/view/owner-details/P-123'
+    const nextScreenUrl = '/main-return-point'
+
+    getMainReturnPoint.mockReturnValue('/main-return-point')
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'E' }])
     const payload = {
       address: 0

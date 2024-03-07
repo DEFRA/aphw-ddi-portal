@@ -33,7 +33,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+    <form method="post" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "What is the owner's postcode?",
@@ -48,8 +48,6 @@
 
       <input type="hidden" name="personReference" value="{{ model.personReference }}" />
 
-      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
-
       {% endcall %}
 
       {{ govukButton({
@@ -57,7 +55,7 @@
       }) }}
     </form>
     <p class="govuk-body">
-      <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/address/{{ model.personReference }}?src={{ model.srcHashParam }}">Enter address manually</a>
+      <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/address/{{ model.personReference }}{{ model.srcHashParam }}">Enter address manually</a>
     </p>
   </div>
 </div>

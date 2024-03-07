@@ -28,7 +28,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.certificate.post}`,
+    path: `${routes.certificate.post}/{dummy?}`,
     options: {
       validate: {
         payload: Joi.object({

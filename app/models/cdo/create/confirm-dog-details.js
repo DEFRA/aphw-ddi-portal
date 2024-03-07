@@ -3,7 +3,6 @@ const { formatToGds } = require('../../../lib/date-helpers')
 
 function ViewModel (dogs) {
   this.model = {
-    formAction: routes.confirm.post,
     backLink: routes.details.get,
     deleteLink: routes.delete.get,
     dogs: dogs.map((dog, index) => ({
