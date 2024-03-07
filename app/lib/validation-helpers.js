@@ -2,7 +2,6 @@ const validNewMicrochip = /^[0-9]+$/
 
 const validateMicrochip = (value, helpers, compareOrig = false) => {
   let elemName = helpers.state.path[0]
-  console.log('here0.1 elemName', elemName)
 
   // Compare new value against original to determine if already pre-populated in the DB
   // (old microchip numbers from legacy data can contain letters so don't validate against new rules)
