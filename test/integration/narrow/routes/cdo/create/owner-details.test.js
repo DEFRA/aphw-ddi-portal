@@ -122,6 +122,126 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
   })
 
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 1', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 1T',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 2', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB1 TT',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 3', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'S11',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 4', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'S1',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 5', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'S11 1TTT',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 6', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: '111 111',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
+  })
+
   test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup', async () => {
     const nextScreenUrl = routes.selectAddress.get
 
@@ -129,6 +249,28 @@ describe('OwnerDetails test', () => {
       firstName: 'John',
       lastName: 'Smith',
       postcode: 'AB1 1TT',
+      triggeredButton: 'primary'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup - no spaces', async () => {
+    const nextScreenUrl = routes.selectAddress.get
+
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      postcode: 'AB11TT',
       triggeredButton: 'primary'
     }
 
