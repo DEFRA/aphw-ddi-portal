@@ -65,7 +65,7 @@ const deleteDog = (request) => {
 }
 
 const getMicrochipDetails = (request) => {
-  return request.yar?.get(keys.microchipSearch) || [{}]
+  return request.yar?.get(keys.microchipSearch) || {}
 }
 
 const setMicrochipDetails = (request, value) => {
