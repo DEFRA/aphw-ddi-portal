@@ -36,7 +36,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
+    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       <span class="govuk-caption-l">Dog {{ model.exemption.indexNumber }}</span>
       {% call govukFieldset({
         legend: {

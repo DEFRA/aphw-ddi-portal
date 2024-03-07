@@ -33,7 +33,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
+    <form method="POST" novalidate autocomplete="off">
       <span class="govuk-caption-l">{{ model.titleReference }}</span>
       {% call govukFieldset({
         legend: {
@@ -51,8 +51,7 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Continue",
-          name: "submitButton"
+          text: "Continue"
         }) }}
       </div>
     </div>
