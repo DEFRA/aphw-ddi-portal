@@ -16,7 +16,7 @@ describe('Microchip search tests', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    doSearch.mockResolvedValue({ results: [] })
+    doSearch.mockResolvedValue([])
     server = await createServer()
     await server.initialize()
   })
@@ -134,7 +134,7 @@ describe('Microchip search tests', () => {
   })
 
   test('POST /cdo/create/microchip-search route with valid payload performs search one or more results', async () => {
-    doSearch.mockResolvedValue({ results: [{ id: 1 }, { id: 2 }] })
+    doSearch.mockResolvedValue([{ id: 1 }, { id: 2 }])
 
     const payload = {
       microchipNumber: '123456789012345'
@@ -151,7 +151,7 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(302)
     expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
-    expect(response.headers.location).toBe('/cdo/create/dog-details')
+    expect(response.headers.location).toBe('/cdo/create/microchip-results')
   })
 
   afterEach(async () => {
