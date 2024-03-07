@@ -33,7 +33,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" novalidate autocomplete="off">
+    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "Change the status for Dog " + model.indexNumber,
@@ -50,7 +50,8 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Change status"
+          text: "Change status",
+          name: "submitButton"
         }) }}
 
         <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>

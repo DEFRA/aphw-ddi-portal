@@ -37,7 +37,7 @@
 
     <h2 class="govuk-heading-m">Edit owner details</h2>
 
-    <form method="POST" novalidate autocomplete="off">
+    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {{ govukInput(model.person.firstName) }}
 
       {{ govukInput(model.person.lastName) }}
@@ -71,7 +71,8 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Save details"
+          text: "Save details",
+          name: "submitButton"
         }) }}
 
         <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>

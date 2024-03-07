@@ -33,7 +33,7 @@
       }) }}
     {% endif %}
 
-    <form method="post" novalidate autocomplete="off">
+    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "What is the owner's postcode?",
@@ -51,7 +51,8 @@
       {% endcall %}
 
       {{ govukButton({
-        text: "Continue"
+        text: "Continue",
+        name: "submitButton"
       }) }}
     </form>
     <p class="govuk-body">

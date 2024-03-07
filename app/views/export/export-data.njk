@@ -23,7 +23,7 @@
 
 
 {% block content %}
-  <form method="post" novalidate="novalidate">
+    <form method="POST" onsubmit=“submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "Export data",
@@ -43,7 +43,8 @@
             <p>Export all data as a CSV file</p>
             
               {{ govukButton({
-                text: "Export"
+                text: "Export",
+                name: "submitButton"
               }) }}
           </div>
         </div>
