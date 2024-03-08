@@ -11,6 +11,10 @@ const {
   postCdoWithoutCountryInteraction,
   postCdoWithCountryInteraction, postCdoWithOwnerLookupInteraction
 } = require('./interactions/api/cdo')
+const {
+  getPersonsFirstNameLastNameInteraction, getPersonsFirstNameLastNameDOBInteraction,
+  mandatoryGetPersonsQueryParams, allGetPersonsQueryParams
+} = require('./interactions/api/persons')
 
 describe('API service contract tests', () => {
   beforeAll(async () => {
@@ -64,6 +68,28 @@ describe('API service contract tests', () => {
 
       const response = await cdoApi.createCdo(validCdoRequestWithPersonReference, userWithDisplayname)
       expect(() => CdoCreatedViewModel(response)).not.toThrow()
+    })
+  })
+
+  describe('/persons', () => {
+    let personsApi
+
+    beforeAll(() => {
+      personsApi = require('../../app/api/ddi-index-api/persons')
+    })
+
+    test('GET /persons with firstName and lastName', async () => {
+      await ddiIndexApiProvider.addInteraction(getPersonsFirstNameLastNameInteraction)
+
+      const response = await personsApi.getPersons(mandatoryGetPersonsQueryParams)
+      expect(response.length < 100).toBe(true)
+    })
+
+    test('POST /cdo with optional data including country', async () => {
+      await ddiIndexApiProvider.addInteraction(getPersonsFirstNameLastNameDOBInteraction)
+
+      const response = await personsApi.getPersons(allGetPersonsQueryParams)
+      expect(response.length < 100).toBe(true)
     })
   })
 
