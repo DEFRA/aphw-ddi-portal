@@ -12,7 +12,7 @@ describe('SelectAddress edit test', () => {
   const { getFromSession } = require('../../../../../../app/session/session-wrapper')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getPostcodeLookupDetails } = require('../../../../../../app/session/cdo/owner')
+  const { getPostcodeLookupDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/api/os-places')
   const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
@@ -123,6 +123,39 @@ describe('SelectAddress edit test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
+  })
+
+  test('GET /cdo/edit/select-address route stores address in session when only one address', async () => {
+    getPostcodeAddresses.mockResolvedValue([
+      { addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(setAddress).toHaveBeenCalledTimes(1)
+  })
+
+  test('GET /cdo/edit/select-address route doesnt store address in session when multiple addresses', async () => {
+    getPostcodeAddresses.mockResolvedValue([
+      { addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' },
+      { addressLine1: 'addr1_2', addressLine2: 'addr2_2', town: 'town_2', postcode: 'AB1 1TT_2', country: 'England_2' }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(setAddress).not.toHaveBeenCalled()
   })
 
   afterEach(async () => {
