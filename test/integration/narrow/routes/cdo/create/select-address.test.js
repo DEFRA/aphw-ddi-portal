@@ -3,6 +3,8 @@ const FormData = require('form-data')
 const { routes } = require('../../../../../../app/constants/cdo/dog')
 const { getFromSession } = require('../../../../../../app/session/session-wrapper')
 jest.mock('../../../../../../app/session/session-wrapper')
+const { setAddress } = require('../../../../../../app/session/cdo/owner')
+jest.mock('../../../../../../app/session/cdo/owner')
 
 describe('SelectAddress test', () => {
   jest.mock('../../../../../../app/auth')
@@ -16,6 +18,7 @@ describe('SelectAddress test', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    setAddress.mockReturnValue()
     getPostcodeAddresses.mockResolvedValue([{ addressLine1: 'addr1', postcode: 'postcode' }])
     server = await createServer()
     await server.initialize()
@@ -43,6 +46,54 @@ describe('SelectAddress test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(setAddress).not.toHaveBeenCalled()
+  })
+
+  test('GET /cdo/create/select-address route stores address in session when only one address', async () => {
+    getPostcodeAddresses.mockResolvedValue([
+      { addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(setAddress).toHaveBeenCalledTimes(1)
+  })
+
+  test('GET /cdo/create/select-address route doesnt store address in session when multiple addresses', async () => {
+    getPostcodeAddresses.mockResolvedValue([
+      { addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' },
+      { addressLine1: 'addr1_2', addressLine2: 'addr2_2', town: 'town_2', postcode: 'AB1 1TT_2', country: 'England_2' }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(setAddress).not.toHaveBeenCalled()
+  })
+
+  test('GET /cdo/create/select-address route returns 200 even when no addresses', async () => {
+    getPostcodeAddresses.mockResolvedValue(null)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-address',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(setAddress).not.toHaveBeenCalled()
   })
 
   test('POST /cdo/create/select-address route returns 302 if not auth', async () => {
