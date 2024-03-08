@@ -30,7 +30,7 @@ describe('Persons test', () => {
 
     test('should throw an error given empty object', async () => {
       get.mockResolvedValue({ payload: {} })
-      await expect(getPersons({})).rejects.toThrow('Filter parameter - firstName is required')
+      await expect(getPersons({})).rejects.toThrow('ValidationError: "firstName" is required. "lastName" is required')
     })
 
     test('should throw an error given invalid query params', async () => {
@@ -39,7 +39,7 @@ describe('Persons test', () => {
         firstName: 'Homer',
         lastName: 'Simpson',
         queryParam: '1234'
-      })).rejects.toThrow('Filter parameter - queryParam not permitted')
+      })).rejects.toThrow('ValidationError: "queryParam" is not allowed')
     })
   })
 })

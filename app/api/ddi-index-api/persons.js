@@ -1,5 +1,5 @@
 const { get } = require('./base')
-
+const { personsFilter } = require('../../schema/ddi-index-api/persons/get')
 const personsEndpoint = 'persons'
 
 const options = {
@@ -21,34 +21,15 @@ const options = {
  * @returns {Promise<Person[]>}
  */
 const getPersons = async (filter) => {
-  const urlParams = []
-  /**
-   * @type {GetPersonsFilterKeys[]}
-   */
-  const requiredParams = ['firstName', 'lastName']
-  /**
-   * @type {GetPersonsFilterKeys[]}
-   */
-  const optionalParams = ['dateOfBirth']
-  const allParams = [...requiredParams, ...optionalParams]
-  Object.keys(filter).forEach(filterKey => {
-    if (!allParams.includes(filterKey)) {
-      throw Error(`Filter parameter - ${filterKey} not permitted`)
-    }
-  })
+  const validation = personsFilter.validate(filter, { abortEarly: false })
+  if (validation.error) {
+    throw new Error(validation.error.toString())
+  }
 
-  allParams.forEach(param => {
-    if (filter[param]) {
-      urlParams.push([param, filter[param]])
-    } else if (requiredParams.includes(param)) {
-      throw Error(`Filter parameter - ${param} is required`)
-    }
-  })
-
-  const searchParams = new URLSearchParams(urlParams)
+  const searchParams = new URLSearchParams(Object.entries(filter))
 
   const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, options)
-  return payload
+  return payload.persons
 }
 
 module.exports = {

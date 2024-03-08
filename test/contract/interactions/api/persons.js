@@ -13,6 +13,11 @@ const person = {
   }
 }
 
+const mandatoryGetPersonsQueryParams = {
+  firstName: 'Homer',
+  lastName: 'Simpson'
+}
+
 /**
  * @type {import('@pact-foundation/pact').InteractionObject | import('@pact-foundation/pact').Interaction}
  */
@@ -22,10 +27,7 @@ const getPersonsFirstNameLastNameInteraction = {
   withRequest: {
     method: 'GET',
     path: '/persons',
-    query: {
-      firstName: 'Homer',
-      lastName: 'Simpson'
-    }
+    query: mandatoryGetPersonsQueryParams
   },
   willRespondWith: {
     status: 200,
@@ -38,17 +40,19 @@ const getPersonsFirstNameLastNameInteraction = {
   }
 }
 
+const allGetPersonsQueryParams = {
+  firstName: 'Homer',
+  lastName: 'Simpson',
+  dateOfBirth: '1998-05-10'
+}
+
 const getPersonsFirstNameLastNameDOBInteraction = {
   state: 'aphw-ddi-api has a matching person Homer Simpson P-6076-A37C 1998-05-10',
   uponReceiving: 'request to get a list of matching persons with firstName, lastName and DOB',
   withRequest: {
     method: 'GET',
     path: '/persons',
-    query: {
-      firstName: 'Homer',
-      lastName: 'Simpson',
-      dateOfBirth: '1998-05-10'
-    }
+    query: allGetPersonsQueryParams
   },
   willRespondWith: {
     status: 200,
@@ -63,5 +67,7 @@ const getPersonsFirstNameLastNameDOBInteraction = {
 
 module.exports = {
   getPersonsFirstNameLastNameInteraction,
-  getPersonsFirstNameLastNameDOBInteraction
+  getPersonsFirstNameLastNameDOBInteraction,
+  mandatoryGetPersonsQueryParams,
+  allGetPersonsQueryParams
 }
