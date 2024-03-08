@@ -8,6 +8,8 @@ const routes = [].concat(
   require('../routes/cdo/create/full-summary'),
   require('../routes/cdo/create/dog-details'),
   require('../routes/cdo/create/confirm-dog-details'),
+  require('../routes/cdo/create/microchip-search'),
+  require('../routes/cdo/create/microchip-results'),
   require('../routes/cdo/search/basic'),
   require('../routes/cdo/create/confirm-dog-delete'),
   require('../routes/cdo/create/record-created'),

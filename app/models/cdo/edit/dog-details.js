@@ -141,7 +141,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
         classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
       value: dogDetails.microchipNumber,
-      attributes: { maxlength: '15' }
+      attributes: { maxlength: '20' }
     },
     microchipNumber2: {
       id: 'microchipNumber2',
@@ -152,7 +152,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
         classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
       value: dogDetails.microchipNumber2,
-      attributes: { maxlength: '15' }
+      attributes: { maxlength: '20' }
     },
     origMicrochipNumber: dogDetails.origMicrochipNumber ?? dogDetails.microchipNumber,
     origMicrochipNumber2: dogDetails.origMicrochipNumber2 ?? dogDetails.microchipNumber2,
