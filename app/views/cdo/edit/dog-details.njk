@@ -40,7 +40,7 @@
 
       <span class="govuk-caption-l">Dog {{ model.indexNumber }}</span>
 
-    <form method="POST" novalidate autocomplete="off">
+    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
 
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -80,7 +80,8 @@
 
         <div class="govuk-button-group">
           {{ govukButton({
-            text: "Save details"
+            text: "Save details",
+            name: "submitButton"
           }) }}
           <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>
         </div>

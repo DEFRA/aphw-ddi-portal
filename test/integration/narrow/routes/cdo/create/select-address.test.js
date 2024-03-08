@@ -62,7 +62,7 @@ describe('SelectAddress test', () => {
   })
 
   test('POST /cdo/create/select-address with valid data returns 302', async () => {
-    const nextScreenUrl = routes.details.get
+    const nextScreenUrl = routes.microchipSearch.get
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
       address: 0
