@@ -5,6 +5,7 @@ const schema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     dateOfBirth: Joi.string().optional().allow('').allow(null),
+    personReference: Joi.string().optional().allow('').allow(null),
     address: Joi.object({
       addressLine1: Joi.string().required(),
       addressLine2: Joi.string().optional().allow('').allow(null),

@@ -1,12 +1,6 @@
 /**
  *
- * @param {{
- *    addressLine1: string;
- *    addressLine2: string;
- *    town: string;
- *    postcode: string;
- *    country: string;
- * }} address
+ * @param {Address} address
  * @param {boolean} hideCountry
  * @returns {*[]|null}
  */
@@ -30,13 +24,7 @@ const formatAddress = (address, hideCountry = false) => {
 
 /**
  *
- * @param {{
- *    addressLine1: string;
- *    addressLine2: string;
- *    town: string;
- *    postcode: string;
- *    country: string;
- * }} address
+ * @param {Address} address
  * @returns {string|null}
  */
 const getCountryFromAddress = (address) => {
