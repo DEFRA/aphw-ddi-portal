@@ -8,19 +8,27 @@ const { getCountries } = require('../../../api/ddi-index-api/countries')
 const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const { updatePerson } = require('../../../api/ddi-index-api/person')
-const { setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { getAddress, setAddress, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 
 module.exports = [{
   method: 'GET',
-  path: `${routes.editAddress.get}/{personReference}`,
+  path: `${routes.editAddress.get}/{personReference}/{fromSessionOrDb?}`,
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const personReference = request.params.personReference
+      const fromSessionOrDb = request.params.fromSessionOrDb
 
-      const person = await getPersonByReference(personReference)
-      if (person == null) {
-        return h.response().code(404).takeover()
+      let person
+      if (fromSessionOrDb === 'session') {
+        person = {
+          address: getAddress(request)
+        }
+      } else {
+        person = await getPersonByReference(personReference)
+        if (person == null) {
+          return h.response().code(404).takeover()
+        }
       }
 
       const backNav = addBackNavigation(request)
@@ -38,7 +46,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${routes.editAddress.post}/{personReference?}`,
+  path: `${routes.editAddress.post}/{personReference}/{fromSessionOrDb?}`,
   options: {
     validate: {
       options: {
@@ -73,6 +81,8 @@ module.exports = [{
       await updatePerson(updatePayload, getUser(request))
 
       setPostcodeLookupDetails(request, null)
+
+      setAddress(request, null)
 
       return h.redirect(getMainReturnPoint(request))
     }
