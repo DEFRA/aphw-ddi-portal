@@ -4,10 +4,9 @@ const person = {
   firstName: Matchers.string('Homer'),
   lastName: Matchers.string('Simpson'),
   birthDate: Matchers.string('1998-05-10'),
-  personReference: Matchers.string('P-6076-A37C'),
+  personReference: Matchers.string('P-D9E1-22AD'),
   address: {
     addressLine1: Matchers.string('14 Fake Street'),
-    addressLine2: Matchers.string(null),
     town: Matchers.string('City of London'),
     postcode: Matchers.string('E1 7AA'),
     country: Matchers.string('England')

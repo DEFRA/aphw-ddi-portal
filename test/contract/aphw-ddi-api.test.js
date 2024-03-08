@@ -3,14 +3,14 @@ const { userWithDisplayname } = require('../mocks/auth')
 const { validCdoRequest, validCdoRequestWithCountry, validCdoRequestWithPersonReference } = require('./matchers/cdo')
 const CdoCreatedViewModel = require('../../app/models/cdo/create/record-created')
 
-const {
-  getCountriesInteraction
-} = require('./interactions/api/countries')
+const { getCountriesInteraction } = require('./interactions/api/countries')
 
 const {
   postCdoWithoutCountryInteraction,
   postCdoWithCountryInteraction, postCdoWithOwnerLookupInteraction
 } = require('./interactions/api/cdo')
+
+const { getPersonsFirstNameLastNameInteraction, getPersonsFirstNameLastNameDOBInteraction } = require('./interactions/api/persons')
 
 describe('API service contract tests', () => {
   beforeAll(async () => {
@@ -64,6 +64,33 @@ describe('API service contract tests', () => {
 
       const response = await cdoApi.createCdo(validCdoRequestWithPersonReference, userWithDisplayname)
       expect(() => CdoCreatedViewModel(response)).not.toThrow()
+    })
+  })
+
+  describe('/persons', () => {
+    let personApi
+
+    beforeAll(() => {
+      personApi = require('../../app/api/ddi-index-api/persons')
+    })
+
+    test('GET /persons with mandatory data', async () => {
+      await ddiIndexApiProvider.addInteraction(getPersonsFirstNameLastNameInteraction)
+
+      await personApi.getPersons({
+        firstName: 'Homer',
+        lastName: 'Simpson'
+      })
+    })
+
+    test('GET /persons with optional data', async () => {
+      await ddiIndexApiProvider.addInteraction(getPersonsFirstNameLastNameDOBInteraction)
+
+      await personApi.getPersons({
+        firstName: 'Homer',
+        lastName: 'Simpson',
+        dateOfBirth: '1998-05-10'
+      })
     })
   })
 
