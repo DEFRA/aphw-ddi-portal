@@ -12,15 +12,15 @@ const { getAddress, setAddress, setPostcodeLookupDetails } = require('../../../s
 
 module.exports = [{
   method: 'GET',
-  path: `${routes.editAddress.get}/{personReference}/{fromSession?}`,
+  path: `${routes.editAddress.get}/{personReference}/{fromSessionOrDb?}`,
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const personReference = request.params.personReference
-      const fromSession = request.params.fromSession
+      const fromSessionOrDb = request.params.fromSessionOrDb
 
       let person
-      if (fromSession) {
+      if (fromSessionOrDb === 'session') {
         person = {
           address: getAddress(request)
         }
@@ -46,7 +46,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${routes.editAddress.post}/{personReference}/{fromSession?}`,
+  path: `${routes.editAddress.post}/{personReference}/{fromSessionOrDb?}`,
   options: {
     validate: {
       options: {

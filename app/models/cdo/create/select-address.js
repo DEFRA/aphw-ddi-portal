@@ -12,7 +12,7 @@ function ViewModel (details, addresses = [], error) {
     backLink: details?.source === 'create' ? routes.ownerDetails.get : details?.backLink,
     changeAddressLink: details?.source === 'create'
       ? routes.address.get
-      : `${routes.editAddress.get}/${details.personReference}/true${details.srcHashParam}`,
+      : `${routes.editAddress.get}/${details.personReference}/session${details.srcHashParam}`,
     changePostcodeLink: details?.source === 'create'
       ? `${routes.ownerDetails.get}#postcode`
       : `${details?.backLink}#postcode`,

@@ -52,6 +52,29 @@ describe('Address edit test', () => {
     expect(getAddress).not.toHaveBeenCalled()
   })
 
+  test('GET /cdo/edit/address route returns 200 when data from DB when param supplied with value not equal session', async () => {
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/address/P-123/db',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getPersonByReference).toHaveBeenCalled()
+    expect(getAddress).not.toHaveBeenCalled()
+  })
+
   test('GET /cdo/edit/address route returns 200 when data from session', async () => {
     getAddress.mockReturnValue({
       addressLine1: '',
@@ -62,7 +85,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/edit/address/P-123/true',
+      url: '/cdo/edit/address/P-123/session',
       auth
     }
 
