@@ -120,7 +120,7 @@ describe('Address test', () => {
   })
 
   test('POST /cdo/create/address with valid data forwards to next screen', async () => {
-    const nextScreenUrl = routes.details.get
+    const nextScreenUrl = routes.microchipSearch.get
 
     const payload = {
       addressLine1: '1 Testing Street',

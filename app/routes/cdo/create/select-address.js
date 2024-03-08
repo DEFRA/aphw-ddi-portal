@@ -25,6 +25,11 @@ module.exports = [
         const addresses = await getPostcodeAddresses(postcode ? postcode.toUpperCase() : '', houseNumber)
 
         setInSession(request, 'addresses', addresses)
+
+        if (addresses && addresses.length === 1) {
+          setAddress(request, addresses[0])
+        }
+
         return h.view(views.selectAddress, new ViewModel(details, addresses))
       }
     }
@@ -60,7 +65,7 @@ module.exports = [
           setEnforcementDetails(request, enforcementDetails)
         }
 
-        return h.redirect(dogRoutes.details.get)
+        return h.redirect(dogRoutes.microchipSearch.get)
       }
     }
   }

@@ -1,8 +1,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% extends '_layout.njk' %}
 
@@ -33,32 +33,26 @@
       }) }}
     {% endif %}
 
-    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+    <form method="POST" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
-          text: "Change the status for Dog " + model.indexNumber,
+          text: "What is the microchip number?",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-      <div id="dogStatus-hint" class="govuk-hint defra-text govuk-!-margin-top-1 govuk-!-margin-bottom-5">Dog {{ model.indexNumber }} is currently {{ model.status }}.</div>
+        {{ govukInput(model.microchipNumber) }}
 
-      {{ govukRadios(model.newStatus) }}
+      {% endcall %}
 
-      <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
-
-      <div class="govuk-button-group">
-        {{ govukButton({
-          text: "Change status",
-          name: "submitButton"
-        }) }}
-
-        <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>
-      </div>
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+      <p class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/dog-details">I don’t have a microchip number</a>
+      </p>
     </div>
-
-    {% endcall %}
   </form>
 </div>
 

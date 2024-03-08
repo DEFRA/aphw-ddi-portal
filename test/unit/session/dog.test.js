@@ -1,4 +1,4 @@
-const { getDog, setDog, getDogs, deleteDog } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog, getMicrochipDetails, setMicrochipDetails } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -143,5 +143,51 @@ describe('dog session storage', () => {
       name: 'Buster',
       breed: 'Breed 2'
     }])
+  })
+
+  test('getMicrochipDetails returns details from session', () => {
+    mockRequest.yar.get.mockReturnValue({
+      microchipNumber: '12345',
+      results: [{ id: 1 }]
+    })
+
+    const details = getMicrochipDetails(mockRequest)
+
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('microchipSearch')
+    expect(details).toEqual({
+      microchipNumber: '12345',
+      results: [{ id: 1 }]
+    })
+  })
+
+  test('getMicrochipDetails returns empty object if no details in session', () => {
+    mockRequest.yar.get.mockReturnValue(null)
+
+    const details = getMicrochipDetails(mockRequest)
+
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('microchipSearch')
+    expect(details).toEqual({})
+  })
+
+  test('setMicrochipDetails updates details in session', () => {
+    mockRequest.yar.get.mockReturnValue({
+      microchipNumber: '12345',
+      results: [{ id: 1 }]
+    })
+
+    const details = {
+      microchipNumber: '567890',
+      results: [{ id: 2 }]
+    }
+
+    setMicrochipDetails(mockRequest, details)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('microchipSearch', {
+      microchipNumber: '567890',
+      results: [{ id: 2 }]
+    })
   })
 })
