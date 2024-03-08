@@ -15,6 +15,9 @@ describe('Address edit test', () => {
   jest.mock('../../../../../../app/lib/back-helpers')
   const { getMainReturnPoint } = require('../../../../../../app/lib/back-helpers')
 
+  jest.mock('../../../../../../app/session/cdo/owner')
+  const { getAddress } = require('../../../../../../app/session/cdo/owner')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -26,7 +29,7 @@ describe('Address edit test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/edit/address route returns 200', async () => {
+  test('GET /cdo/edit/address route returns 200 when data from DB', async () => {
     getPersonByReference.mockResolvedValue({
       personReference: 'P-123',
       address: {
@@ -45,6 +48,51 @@ describe('Address edit test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(getPersonByReference).toHaveBeenCalled()
+    expect(getAddress).not.toHaveBeenCalled()
+  })
+
+  test('GET /cdo/edit/address route returns 200 when data from DB when param supplied with value not equal session', async () => {
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/address/P-123/db',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getPersonByReference).toHaveBeenCalled()
+    expect(getAddress).not.toHaveBeenCalled()
+  })
+
+  test('GET /cdo/edit/address route returns 200 when data from session', async () => {
+    getAddress.mockReturnValue({
+      addressLine1: '',
+      addressLine2: '',
+      town: '',
+      postcode: ''
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/address/P-123/session',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getAddress).toHaveBeenCalled()
+    expect(getPersonByReference).not.toHaveBeenCalled()
   })
 
   test('GET /cdo/edit/address route returns 404 when person not found', async () => {
@@ -65,7 +113,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/address',
+      url: '/cdo/edit/address/P-123',
       headers: fd.getHeaders(),
       payload: fd.getBuffer()
     }
@@ -92,7 +140,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/address',
+      url: '/cdo/edit/address/P-123',
       auth,
       payload
     }
@@ -114,7 +162,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/address',
+      url: '/cdo/edit/address/P-123',
       auth,
       payload
     }
@@ -147,7 +195,7 @@ describe('Address edit test', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/edit/address',
+      url: '/cdo/edit/address/P-123',
       auth,
       payload
     }

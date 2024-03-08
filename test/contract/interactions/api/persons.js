@@ -4,14 +4,18 @@ const person = {
   firstName: Matchers.string('Homer'),
   lastName: Matchers.string('Simpson'),
   birthDate: Matchers.string('1998-05-10'),
-  personReference: Matchers.string('P-6076-A37C'),
+  personReference: Matchers.string('P-D9E1-22AD'),
   address: {
     addressLine1: Matchers.string('14 Fake Street'),
-    addressLine2: Matchers.string(null),
     town: Matchers.string('City of London'),
     postcode: Matchers.string('E1 7AA'),
     country: Matchers.string('England')
   }
+}
+
+const mandatoryGetPersonsQueryParams = {
+  firstName: 'Homer',
+  lastName: 'Simpson'
 }
 
 /**
@@ -23,10 +27,7 @@ const getPersonsFirstNameLastNameInteraction = {
   withRequest: {
     method: 'GET',
     path: '/persons',
-    query: {
-      firstName: 'Homer',
-      lastName: 'Simpson'
-    }
+    query: mandatoryGetPersonsQueryParams
   },
   willRespondWith: {
     status: 200,
@@ -39,17 +40,19 @@ const getPersonsFirstNameLastNameInteraction = {
   }
 }
 
+const allGetPersonsQueryParams = {
+  firstName: 'Homer',
+  lastName: 'Simpson',
+  dateOfBirth: '1998-05-10'
+}
+
 const getPersonsFirstNameLastNameDOBInteraction = {
   state: 'aphw-ddi-api has a matching person Homer Simpson P-6076-A37C 1998-05-10',
   uponReceiving: 'request to get a list of matching persons with firstName, lastName and DOB',
   withRequest: {
     method: 'GET',
     path: '/persons',
-    query: {
-      firstName: 'Homer',
-      lastName: 'Simpson',
-      dateOfBirth: '1998-05-10'
-    }
+    query: allGetPersonsQueryParams
   },
   willRespondWith: {
     status: 200,
@@ -64,5 +67,7 @@ const getPersonsFirstNameLastNameDOBInteraction = {
 
 module.exports = {
   getPersonsFirstNameLastNameInteraction,
-  getPersonsFirstNameLastNameDOBInteraction
+  getPersonsFirstNameLastNameDOBInteraction,
+  mandatoryGetPersonsQueryParams,
+  allGetPersonsQueryParams
 }
