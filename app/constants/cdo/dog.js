@@ -79,6 +79,7 @@ const constants = {
     breed: 'breed',
     name: 'name',
     microchipSearch: 'microchipSearch',
+    microchipNumber: 'microchipNumber',
     applicationType: 'applicationType',
     interimExemption: 'interimExemption',
     cdoIssued: 'cdoIssued',

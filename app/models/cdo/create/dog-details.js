@@ -103,6 +103,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
         }
       ]
     },
+    microchipNumber: dogDetails.microchipNumber,
     errors: []
   }
 

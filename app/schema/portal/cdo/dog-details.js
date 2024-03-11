@@ -119,7 +119,8 @@ const dogDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).custom(validateInterimExemptionDate),
-  cdoExpiry: Joi.date().iso().allow(null).allow('').optional()
+  cdoExpiry: Joi.date().iso().allow(null).allow('').optional(),
+  microchipNumber: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

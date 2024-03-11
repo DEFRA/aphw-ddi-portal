@@ -26,7 +26,7 @@ module.exports = [
         if (request.payload.addAnotherDog != null) {
           addAnotherDog(request)
 
-          return h.redirect(routes.details.get)
+          return h.redirect(routes.microchipSearch.get)
         }
 
         return h.redirect(ownerRoutes.enforcementDetails.get)

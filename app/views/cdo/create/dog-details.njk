@@ -74,6 +74,10 @@
           <input type="hidden" name="dogId" value="{{ model.dogId }}">
         {% endif %}
 
+        {% if model.microchipNumber is defined %}
+          <input type="hidden" name="microchipNumber" value="{{ model.microchipNumber }}">
+        {% endif %}
+
         {{ govukButton({
           text: "Add dog details"
         }) }}

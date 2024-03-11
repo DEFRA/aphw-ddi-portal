@@ -42,9 +42,9 @@ describe('Add dog details', () => {
 
     const summaryList = document.querySelector('.govuk-summary-list')
 
-    expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Breed')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 1')
-    expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog name')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Name')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Bruce')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('CDO issue date')
     expect(summaryList.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
@@ -89,9 +89,9 @@ describe('Add dog details', () => {
 
     expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[0].attributes.href.textContent).toBe('/cdo/create/dog-details/1')
     expect(summaryCard[0].querySelectorAll('.govuk-summary-card__actions a')[1].attributes.href.textContent).toBe('/cdo/create/confirm-dog-delete/1')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Breed')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 1')
-    expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog name')
+    expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Name')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Bruce')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('CDO issue date')
     expect(summaryList[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
@@ -100,9 +100,9 @@ describe('Add dog details', () => {
 
     expect(summaryCard[1].querySelectorAll('.govuk-summary-card__actions a')[0].attributes.href.textContent).toBe('/cdo/create/dog-details/2')
     expect(summaryCard[1].querySelectorAll('.govuk-summary-card__actions a')[1].attributes.href.textContent).toBe('/cdo/create/confirm-dog-delete/2')
-    expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Dog breed')
+    expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Breed')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Breed 2')
-    expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog name')
+    expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Name')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Fido')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('CDO issue date')
     expect(summaryList[1].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('10 October 2020')
@@ -149,7 +149,7 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/dog-details')
+    expect(response.headers.location).toBe('/cdo/create/microchip-search')
     expect(addAnotherDog).toHaveBeenCalledTimes(1)
   })
 

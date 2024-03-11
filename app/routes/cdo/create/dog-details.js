@@ -1,7 +1,7 @@
 const { routes, views, keys } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
-const { getDog, setDog } = require('../../../session/cdo/dog')
+const { getDog, setDog, getMicrochipDetails } = require('../../../session/cdo/dog')
 const { getBreeds } = require('../../../api/ddi-index-api')
 const { validatePayload } = require('../../../schema/portal/cdo/dog-details')
 const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
@@ -33,6 +33,11 @@ module.exports = [
 
         if (dog[keys.interimExemption] !== undefined) {
           addDateComponents(dog, keys.interimExemption)
+        }
+
+        const microchipDetails = getMicrochipDetails(request)
+        if (microchipDetails && microchipDetails?.microchipNumber) {
+          dog.microchipNumber = microchipDetails.microchipNumber
         }
 
         return h.view(views.details, new ViewModel(dog, breeds))
