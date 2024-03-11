@@ -115,13 +115,19 @@
           <div class="govuk-summary-card__content">
             <dl class="govuk-summary-list">
               <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Dog breed</dt>
+                <dt class="govuk-summary-list__key">Breed</dt>
                 <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
               </div>
               <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Dog name</dt>
+                <dt class="govuk-summary-list__key">Name</dt>
                 <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
               </div>
+              {% if dog.microchipNumber %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Microchip number</dt>
+                <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
+              </div>
+              {% endif %}
               {% if dog.cdoIssued %}
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">CDO issue date</dt>

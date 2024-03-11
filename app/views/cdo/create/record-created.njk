@@ -17,13 +17,19 @@
         {{ statusTag(dog.status, 'govuk-!-font-size-16') }}
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Breed type</dt>
+            <dt class="govuk-summary-list__key">Breed</dt>
             <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
           </div>
           {% if dog.name %}
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Dog name</dt>
+              <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
+            </div>
+          {% endif %}
+          {% if dog.microchipNumber %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Microchip number</dt>
+              <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
             </div>
           {% endif %}
           {% if dog.cdoIssued %}

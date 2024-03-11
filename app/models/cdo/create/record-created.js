@@ -18,6 +18,7 @@ function ViewModel (cdo) {
       status: dog.status,
       indexNumber: dog.indexNumber,
       name: dog.name,
+      microchipNumber: dog.microchipNumber,
       breed: dog.breed,
       cdoIssued: formatToGds(dog.cdoIssued),
       cdoExpiry: formatToGds(dog.cdoExpiry),

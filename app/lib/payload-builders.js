@@ -21,6 +21,7 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
   dogs: dogs.map(d => ({
     breed: d.breed,
     name: d.name,
+    microchipNumber: d.microchipNumber,
     applicationType: d.applicationType,
     cdoIssued: d.cdoIssued,
     cdoExpiry: d.cdoExpiry,
