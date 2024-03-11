@@ -36,7 +36,7 @@ module.exports = [
         }
 
         const microchipDetails = getMicrochipDetails(request)
-        if (microchipDetails && microchipDetails?.microchipNumber) {
+        if (microchipDetails?.microchipNumber) {
           dog.microchipNumber = microchipDetails.microchipNumber
         }
 
