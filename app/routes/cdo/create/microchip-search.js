@@ -1,6 +1,7 @@
+const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
-const { getDog, setDog, setMicrochipResults } = require('../../../session/cdo/dog')
+const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
@@ -32,11 +33,18 @@ module.exports = [{
       payload: validatePayload,
       failAction: async (request, h, error) => {
         const details = { ...getDog(request), ...request.payload }
+
         return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
       const details = { ...getDog(request), ...request.payload }
+
+      const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
+      if (duplicateMicrochipMessage) {
+        const error = new Joi.ValidationError(duplicateMicrochipMessage, [{ message: duplicateMicrochipMessage, path: ['microchipNumber'] }])
+        return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
+      }
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
 
@@ -50,3 +58,17 @@ module.exports = [{
     }
   }
 }]
+
+const duplicateMicrochipsInSession = (request, details) => {
+  const dogs = getDogs(request)
+  if (dogs) {
+    dogs.forEach((d, ind) => { d.id = ind + 1 })
+    const dupeDogs = dogs.filter(d => d.microchipNumber === details.microchipNumber)
+    if (dupeDogs.length) {
+      const dogName = dupeDogs[0].name ? ` (${dupeDogs[0].name})` : ''
+      return `This microchip number has already been used by Dog ${dupeDogs[0].id}${dogName}`
+    }
+  }
+
+  return null
+}
