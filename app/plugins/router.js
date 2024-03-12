@@ -2,6 +2,8 @@ const routes = [].concat(
   require('../routes/assets'),
   require('../routes/index'),
   require('../routes/cdo/create/owner-details'),
+  require('../routes/cdo/create/select-owner'),
+  require('../routes/cdo/create/postcode-lookup'),
   require('../routes/cdo/create/select-address'),
   require('../routes/cdo/create/address'),
   require('../routes/cdo/create/enforcement-details'),
