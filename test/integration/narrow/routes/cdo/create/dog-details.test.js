@@ -11,7 +11,7 @@ describe('Add dog details', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/cdo/dog')
-  const { getDog, setDog, getMicrochipDetails } = require('../../../../../../app/session/cdo/dog')
+  const { getDog, setDog } = require('../../../../../../app/session/cdo/dog')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -57,11 +57,11 @@ describe('Add dog details', () => {
   })
 
   test('GET /cdo/create/dog-details route returns 200 when microchip value', async () => {
-    getMicrochipDetails.mockReturnValue({ microchipNumber: '12345' })
     getDog.mockReturnValue({
       breed: 'Breed 1',
       name: 'Bruce',
-      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z')
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+      microchipNumber: '12345'
     })
 
     const options = {
