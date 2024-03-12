@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
-const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
+const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
@@ -16,6 +16,8 @@ module.exports = [{
 
       if (!ownerResults.length) {
         return h.redirect(routes.postcodeLookupCreate.get)
+      } else if (ownerResults.length === 1) {
+        setAddress(request, ownerResults[0].address)
       }
 
       return h.view(views.selectOwner, new ViewModel(ownerDetails, ownerResults))

@@ -30,20 +30,20 @@
     <h1 class="govuk-heading-l">Confirm address</h1>
     <form method="post" novalidate autocomplete="off">
       <p>
-      {% for addr in model.addresses[0].split(',') %}
+      {% for addr in model.addresses[0] %}
       {{ addr}}<br>
       {% endfor %}
       </p>
 
       <input type="hidden" name="address" value="0" />
 
-      <p class="govuk-body">
-        <a class ="govuk-link" href="{{ model.changeAddressLink }}">Confirm address</a>
-      </p>
-
-      {{ govukButton({
+      <div class="govuk-button-group">
+        {{ govukButton({
         text: "Confirm address"
-      }) }}
+        }) }}
+
+        <a class ="govuk-link govuk-link--no-visited-state" href="{{ model.changeAddressLink }}">Change address</a>
+      </div>
     </form>
   </div>
 </div>

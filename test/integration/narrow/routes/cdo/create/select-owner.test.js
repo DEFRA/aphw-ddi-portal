@@ -10,7 +10,7 @@ describe('OwnerResults test', () => {
   const { getPersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+  const { getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -53,12 +53,20 @@ describe('OwnerResults test', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
+    expect(getPersons).toBeCalledWith({ firstName: 'John', lastName: 'Smith' })
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    })
+    expect(document.querySelector('h1').textContent).toBe('Confirm address')
+    expect(document.querySelector('.govuk-grid-row form').textContent).toContain('Bully Green Farm')
+    expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Confirm address')
+    expect(document.querySelector('.govuk-grid-row form .govuk-link').textContent).toBe('Change address')
+    expect(document.querySelector('.govuk-grid-row form .govuk-link').getAttribute('href')).toBe(routes.address.get)
     expect(document.location.href).toBe(routes.selectAddress.get)
-    expect(document.querySelector('h1')).toBe('Confirm address')
-    expect(document.querySelector('.govuk-body').textContent).toContain('Bully Green Farm')
-    expect(document.querySelector('.govuk-body .govuk-button-group .govuk-button').textContent).toBe('Confirm address')
-    expect(document.querySelector('.govuk-body .govuk-button-group .govuk-link').textContent).toBe('Change address')
   })
 
   // test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
