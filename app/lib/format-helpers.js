@@ -9,17 +9,14 @@ const formatAddress = (address, hideCountry = false) => {
     return null
   }
 
-  const parts = []
+  const keys = ['addressLine1', 'addressLine2', 'town', 'postcode', 'country']
 
-  Object.keys(address).forEach(key => {
-    const includeField = key !== 'country' || hideCountry === false
-
-    if (address[key] && includeField) {
-      parts.push(address[key])
+  return keys.reduce((parts, key) => {
+    if (address[key] && (key !== 'country' || !hideCountry)) {
+      return [...parts, address[key]]
     }
-  })
-
-  return parts
+    return parts
+  }, [])
 }
 
 /**

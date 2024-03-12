@@ -1,11 +1,14 @@
 const { routes } = require('../../../constants/cdo/owner')
-const { formatAdress } = require('../../')
+const { formatAddress } = require('../../../lib/format-helpers')
+
 function ViewModel (ownerDetails, ownerResults, errors) {
+  console.log('~~~~~~ Chris Debug ~~~~~~ ', 'ownerResults', ownerResults)
+
   this.model = {
     backLink: routes.ownerDetails.get,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
-    addresses: ownerResults,
+    addresses: ownerResults.map(x => formatAddress(x.address)),
     errors: []
   }
 
