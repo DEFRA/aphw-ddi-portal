@@ -42,8 +42,7 @@ module.exports = [{
 
       const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
       if (duplicateMicrochipMessage) {
-        const error = new Joi.ValidationError(duplicateMicrochipMessage, [{ message: duplicateMicrochipMessage, path: ['microchipNumber'] }])
-        return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, generateDuplicateError(duplicateMicrochipMessage))).code(400).takeover()
       }
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
@@ -71,4 +70,8 @@ const duplicateMicrochipsInSession = (request, details) => {
   }
 
   return null
+}
+
+const generateDuplicateError = message => {
+  return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
 }
