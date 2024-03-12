@@ -18,7 +18,7 @@ const options = {
  */
 /**
  * @param {{ firstName: string; lastName: string; dateOfBirth?: string; }} filter
- * @returns {Promise<Person[]>}
+ * @returns {Promise<import('./person.js').Person[]>}
  */
 const getPersons = async (filter) => {
   const validation = personsFilter.validate(filter, { abortEarly: false })

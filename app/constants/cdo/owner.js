@@ -63,6 +63,7 @@ const constants = {
   views: {
     home: '/',
     ownerDetails: 'cdo/create/owner-details',
+    selectOwner: 'cdo/create/select-owner',
     selectAddress: 'cdo/create/select-address',
     address: 'cdo/create/address',
     country: 'cdo/create/country',

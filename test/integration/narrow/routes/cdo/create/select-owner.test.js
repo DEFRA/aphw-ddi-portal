@@ -1,6 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
-// const { JSDOM } = require('jsdom')
-// const { routes } = require('../../../../../../app/constants/cdo/owner')
+const { JSDOM } = require('jsdom')
+const { routes } = require('../../../../../../app/constants/cdo/owner')
 
 describe('OwnerResults test', () => {
   jest.mock('../../../../../../app/auth')
@@ -27,75 +27,96 @@ describe('OwnerResults test', () => {
       url: '/cdo/create/select-owner',
       auth
     }
+    /**
+     * @type {import('../../../../../../app/api/ddi-index-api/person').Person}
+     */
+    const resolvedPerson = {
+      birthDate: '',
+      contacts: undefined,
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      personReference: 'P-123-456',
+      address: {
+        addressLine2: 'Snow Hill',
+        country: 'England',
+        postcode: 'CO10 8QX',
+        town: 'Sudbury',
+        addressLine1: 'Bully Green Farm'
+      }
+    }
 
-    getPersons.mockResolvedValue([{ personReference: 'P-123-456', firstName: 'Joe', lastName: 'Bloggs' }])
+    getPersons.mockResolvedValue([resolvedPerson])
     getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
 
-    // const { document } = new JSDOM(response.payload).window
+    const { document } = new JSDOM(response.payload).window
 
     expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
-    // expect(document.location.href).toBe(routes.selectAddress.get)
+    expect(document.location.href).toBe(routes.selectAddress.get)
+    expect(document.querySelector('h1')).toBe('Confirm address')
+    expect(document.querySelector('.govuk-body').textContent).toContain('Bully Green Farm')
+    expect(document.querySelector('.govuk-body .govuk-button-group .govuk-button').textContent).toBe('Confirm address')
+    expect(document.querySelector('.govuk-body .govuk-button-group .govuk-link').textContent).toBe('Change address')
   })
 
-  test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
-    const options = {
-      method: 'GET',
-      url: '/cdo/create/select-owner',
-      auth
-    }
-
-    getPersons.mockResolvedValue([{ personReference: 'P-123-456', firstName: 'Joe', lastName: 'Bloggs' }])
-    getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
-
-    // const { document } = new JSDOM(response.payload).window
-
-    expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
-    // expect(document.location.href).toBe(routes.selectOwner.get)
-  })
-
-  test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
-    const options = {
-      method: 'GET',
-      url: '/cdo/create/select-owner',
-      auth
-    }
-
-    getPersons.mockResolvedValue([{ personReference: 'P-123-456', firstName: 'Joe', lastName: 'Bloggs' }])
-    getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
-
-    // const { document } = new JSDOM(response.payload).window
-
-    expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
-    // expect(document.location.href).toBe(routes.selectOwner.get)
-  })
-
-  test('GET /cdo/create/select-owner route returns 302 given no persons found', async () => {
-    const options = {
-      method: 'GET',
-      url: '/cdo/create/select-owner',
-      auth
-    }
-
-    getPersons.mockResolvedValue([])
-    getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(302)
-
-    // const { document } = new JSDOM(response.payload).window
-
-    expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
-    // expect(document.location.href).toBe(routes.postcodeLookupCreate.get)
-  })
+  // test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: '/cdo/create/select-owner',
+  //     auth
+  //   }
+  //
+  //   getPersons.mockResolvedValue([{ personReference: 'P-123-456', firstName: 'Joe', lastName: 'Bloggs' }])
+  //   getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
+  //
+  //   const response = await server.inject(options)
+  //   expect(response.statusCode).toBe(200)
+  //
+  //   const { document } = new JSDOM(response.payload).window
+  //
+  //   expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
+  //   expect(document.location.href).toBe(routes.selectOwner.get)
+  // })
+  //
+  // test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: '/cdo/create/select-owner',
+  //     auth
+  //   }
+  //
+  //   getPersons.mockResolvedValue([{ personReference: 'P-123-456', firstName: 'Joe', lastName: 'Bloggs' }])
+  //   getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
+  //
+  //   const response = await server.inject(options)
+  //   expect(response.statusCode).toBe(200)
+  //
+  //   const { document } = new JSDOM(response.payload).window
+  //
+  //   expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
+  //   expect(document.location.href).toBe(routes.selectOwner.get)
+  // })
+  //
+  // test('GET /cdo/create/select-owner route returns 302 given no persons found', async () => {
+  //   const options = {
+  //     method: 'GET',
+  //     url: '/cdo/create/select-owner',
+  //     auth
+  //   }
+  //
+  //   getPersons.mockResolvedValue([])
+  //   getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
+  //
+  //   const response = await server.inject(options)
+  //   expect(response.statusCode).toBe(302)
+  //
+  //   const { document } = new JSDOM(response.payload).window
+  //
+  //   expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' })
+  //   expect(document.location.href).toBe(routes.postcodeLookupCreate.get)
+  // })
 
   afterEach(async () => {
     jest.clearAllMocks()

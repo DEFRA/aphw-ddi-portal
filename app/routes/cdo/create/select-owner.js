@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
-const ViewModel = require('../../../models/cdo/create/owner-details')
+const ViewModel = require('../../../models/cdo/create/select-owner')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
@@ -18,7 +18,7 @@ module.exports = [{
         return h.redirect(routes.postcodeLookupCreate.get)
       }
 
-      return h.view(views.ownerDetails, new ViewModel(ownerDetails))
+      return h.view(views.selectOwner, new ViewModel(ownerDetails, ownerResults))
     }
   }
 },
