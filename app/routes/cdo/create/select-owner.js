@@ -3,6 +3,7 @@ const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner
 const ViewModel = require('../../../models/cdo/create/owner-details')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
+const { getPersons } = require('../../../api/ddi-index-api/persons')
 
 module.exports = [{
   method: 'GET',
@@ -11,6 +12,12 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
+      const ownerResults = await getPersons(ownerDetails)
+
+      if (!ownerResults.length) {
+        return h.redirect(routes.postcodeLookupCreate.get)
+      }
+
       return h.view(views.ownerDetails, new ViewModel(ownerDetails))
     }
   }
