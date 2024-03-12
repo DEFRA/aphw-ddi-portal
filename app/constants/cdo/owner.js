@@ -7,6 +7,14 @@ const constants = {
       get: '/cdo/create/owner-details',
       post: '/cdo/create/owner-details'
     },
+    selectOwner: {
+      get: '/cdo/create/owner-details',
+      post: '/cdo/create/owner-details'
+    },
+    owner: {
+      get: '/cdo/create/owner-details',
+      post: '/cdo/create/owner-details'
+    },
     selectAddress: {
       get: '/cdo/create/select-address',
       post: '/cdo/create/select-address'

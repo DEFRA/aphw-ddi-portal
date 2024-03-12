@@ -34,8 +34,7 @@ module.exports = [{
       setDateIfSupplied(ownerDetails)
       setOwnerDetails(request, ownerDetails)
 
-      const redirectUrl = ownerDetails.triggeredButton === 'primary' ? routes.selectAddress.get : routes.address.get
-      return h.redirect(redirectUrl)
+      return h.redirect(routes.selectOwner.get)
     }
   }
 }]
