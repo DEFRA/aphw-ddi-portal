@@ -31,17 +31,20 @@ module.exports = [{
     handler: async (request, h) => {
       const ownerDetails = request.payload
 
-      setDateIfSupplied(ownerDetails)
-      setOwnerDetails(request, ownerDetails)
+      setOwnerDetails(request, appendDateOfBirthIfSupplied(ownerDetails))
 
       return h.redirect(routes.selectOwner.get)
     }
   }
 }]
 
-const setDateIfSupplied = ownerDetails => {
+const appendDateOfBirthIfSupplied = ownerDetails => {
   if (!ownerDetails?.dobDay || !ownerDetails?.dobMonth | !ownerDetails?.dobYear) {
-    return
+    return ownerDetails
   }
-  ownerDetails.dateOfBirth = new UTCDate(`${ownerDetails.dobYear}-${ownerDetails.dobMonth}-${ownerDetails.dobDay}`)
+
+  return {
+    ...ownerDetails,
+    dateOfBirth: new UTCDate(`${ownerDetails.dobYear}-${ownerDetails.dobMonth}-${ownerDetails.dobDay}`)
+  }
 }

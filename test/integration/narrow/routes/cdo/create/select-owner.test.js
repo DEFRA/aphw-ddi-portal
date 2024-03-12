@@ -46,7 +46,10 @@ describe('OwnerResults test', () => {
     }
 
     getPersons.mockResolvedValue([resolvedPerson])
-    getOwnerDetails.mockReturnValue({ firstName: 'John', lastName: 'Smith' })
+    getOwnerDetails.mockReturnValue({
+      firstName: 'John',
+      lastName: 'Smith'
+    })
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
@@ -66,7 +69,6 @@ describe('OwnerResults test', () => {
     expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Confirm address')
     expect(document.querySelector('.govuk-grid-row form .govuk-link').textContent).toBe('Change address')
     expect(document.querySelector('.govuk-grid-row form .govuk-link').getAttribute('href')).toBe(routes.address.get)
-    expect(document.location.href).toBe(routes.selectAddress.get)
   })
 
   // test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {

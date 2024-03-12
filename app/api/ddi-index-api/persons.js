@@ -21,12 +21,13 @@ const options = {
  * @returns {Promise<import('./person.js').Person[]>}
  */
 const getPersons = async (filter) => {
-  const validation = personsFilter.validate(filter, { abortEarly: false })
+  const validation = personsFilter.validate(filter, { abortEarly: false, dateFormat: 'utc' })
+
   if (validation.error) {
     throw new Error(validation.error.toString())
   }
 
-  const searchParams = new URLSearchParams(Object.entries(filter))
+  const searchParams = new URLSearchParams(Object.entries(validation.value))
 
   const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, options)
   return payload.persons

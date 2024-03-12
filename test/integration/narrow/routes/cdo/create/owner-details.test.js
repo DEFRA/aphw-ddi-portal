@@ -9,6 +9,9 @@ describe('OwnerDetails test', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  jest.mock('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     server = await createServer()
@@ -123,7 +126,10 @@ describe('OwnerDetails test', () => {
 
     const payload = {
       firstName: 'John',
-      lastName: 'Smith'
+      lastName: 'Smith',
+      dobDay: '',
+      dobMonth: '',
+      dobYear: ''
     }
 
     const options = {
@@ -136,6 +142,41 @@ describe('OwnerDetails test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dobDay: '',
+      dobMonth: '',
+      dobYear: ''
+    })
+  })
+
+  test('POST /cdo/create/owner-details with valid data and empty dob forwards to owner results screen', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      dobDay: '01',
+      dobMonth: '01',
+      dobYear: '1999'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: new Date('1999-01-01'),
+      dobDay: '01',
+      dobMonth: '01',
+      dobYear: '1999'
+    })
   })
 
   test('POST /cdo/create/owner-details validates date field if supplied - future date not allowed', async () => {

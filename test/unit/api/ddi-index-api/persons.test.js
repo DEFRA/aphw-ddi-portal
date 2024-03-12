@@ -18,12 +18,40 @@ describe('Persons test', () => {
       expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
     })
 
+    test('should get people filtered by firstName and lastName and filter dobDay, dobMonth, dobYear', async () => {
+      get.mockResolvedValue({ payload: {} })
+      await getPersons({
+        firstName: 'Homer',
+        lastName: 'Simpson',
+        dobDay: '',
+        dobMonth: '',
+        dobYear: ''
+      })
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+    })
+
     test('should get people filtered by firstName and lastName and DOB', async () => {
       get.mockResolvedValue({ payload: {} })
       await getPersons({
         firstName: 'Homer',
         lastName: 'Simpson',
-        dateOfBirth: '1998-05-10'
+        dateOfBirth: '1998-05-10',
+        dobDay: '10',
+        dobMonth: '05',
+        dobYear: '1998'
+      })
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
+    })
+
+    test('should get people filtered by firstName and lastName and DOB as Date', async () => {
+      get.mockResolvedValue({ payload: {} })
+      await getPersons({
+        firstName: 'Homer',
+        lastName: 'Simpson',
+        dateOfBirth: new Date('1998-05-10'),
+        dobDay: '10',
+        dobMonth: '05',
+        dobYear: '1998'
       })
       expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
     })
