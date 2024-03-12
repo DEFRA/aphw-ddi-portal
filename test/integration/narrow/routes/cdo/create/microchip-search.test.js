@@ -181,7 +181,7 @@ describe('Microchip search tests', () => {
     expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This microchip number has already been used by Dog 2 (Fido)')
   })
 
-  test('POST /cdo/create/microchip-search route with duplicate multiple microchip returns 400 error', async () => {
+  test('POST /cdo/create/microchip-search route with no duplicate microchip returns 302', async () => {
     getDogs.mockReturnValue([
       { id: 1, name: 'Rex', microchipNumber: '11111' },
       { id: 2, name: 'Fido', microchipNumber: '12345' },
@@ -189,7 +189,7 @@ describe('Microchip search tests', () => {
     ])
 
     const payload = {
-      microchipNumber: '12345'
+      microchipNumber: '1234567'
     }
 
     const options = {
@@ -201,10 +201,8 @@ describe('Microchip search tests', () => {
 
     const response = await server.inject(options)
 
-    const { document } = new JSDOM(response.payload).window
-
-    expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This microchip number has already been used by Dog 2 (Fido)')
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/create/dog-details')
   })
 
   test('POST /cdo/create/microchip-search route with duplicate microchip returns 400 error given no dog name', async () => {
