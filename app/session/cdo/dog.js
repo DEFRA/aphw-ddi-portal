@@ -64,11 +64,11 @@ const deleteDog = (request) => {
   request.yar.set(keys.entry, entry)
 }
 
-const getMicrochipDetails = (request) => {
+const getMicrochipResults = (request) => {
   return request.yar?.get(keys.microchipSearch) || {}
 }
 
-const setMicrochipDetails = (request, value) => {
+const setMicrochipResults = (request, value) => {
   request.yar.set(keys.microchipSearch, value)
 }
 
@@ -78,6 +78,6 @@ module.exports = {
   setDog,
   addAnotherDog,
   deleteDog,
-  setMicrochipDetails,
-  getMicrochipDetails
+  setMicrochipResults,
+  getMicrochipResults
 }

@@ -1,7 +1,7 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-results')
 const { admin } = require('../../../auth/permissions')
-const { getMicrochipDetails } = require('../../../session/cdo/dog')
+const { getMicrochipResults } = require('../../../session/cdo/dog')
 
 module.exports = [{
   method: 'GET',
@@ -9,9 +9,9 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      const details = getMicrochipDetails(request)
+      const details = getMicrochipResults(request)
 
-      return h.view(views.microchipResults, new ViewModel(details))
+      return h.view(views.microchipResults, new ViewModel({ results: details }))
     }
   }
 }]

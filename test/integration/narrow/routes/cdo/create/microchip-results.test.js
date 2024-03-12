@@ -6,7 +6,7 @@ describe('Microchip results tests', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/cdo/dog')
-  const { getMicrochipDetails } = require('../../../../../../app/session/cdo/dog')
+  const { getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -19,7 +19,7 @@ describe('Microchip results tests', () => {
   })
 
   test('GET /cdo/create/microchip-results route returns 200', async () => {
-    getMicrochipDetails.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
 
     const options = {
       method: 'GET',

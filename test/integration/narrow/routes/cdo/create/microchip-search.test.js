@@ -6,7 +6,7 @@ describe('Microchip search tests', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/cdo/dog')
-  const { getDog, getMicrochipDetails } = require('../../../../../../app/session/cdo/dog')
+  const { getDog, getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
 
   jest.mock('../../../../../../app/api/ddi-index-api/search')
   const { doSearch } = require('../../../../../../app/api/ddi-index-api/search')
@@ -23,7 +23,7 @@ describe('Microchip search tests', () => {
 
   test('GET /cdo/create/microchip-search route returns 200', async () => {
     getDog.mockReturnValue({})
-    getMicrochipDetails.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
 
     const options = {
       method: 'GET',
@@ -41,7 +41,7 @@ describe('Microchip search tests', () => {
 
   test('GET /cdo/create/microchip-search route returns 404 when dog not found', async () => {
     getDog.mockReturnValue(undefined)
-    getMicrochipDetails.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
 
     const options = {
       method: 'GET',
