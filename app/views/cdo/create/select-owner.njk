@@ -1,9 +1,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% extends '_layout.njk' %}
-
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
@@ -23,53 +23,52 @@
 {% endblock %}
 
 {% block content %}
-
-{% if (model.addresses.length === 1) %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Confirm address</h1>
-    <form method="post" novalidate autocomplete="off">
-      <p>
-      {% for addr in model.addresses[0] %}
-      {{ addr}}<br>
-      {% endfor %}
-      </p>
-
-      <input type="hidden" name="address" value="0" />
-
-      <div class="govuk-button-group">
-        {{ govukButton({
-        text: "Confirm address"
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+      {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: model.errors
         }) }}
+      {% endif %}
+      {% if (model.owners.length === 1) %}
+          <h1 class="govuk-heading-l">Confirm address</h1>
+          <form method="post" novalidate autocomplete="off">
+            <p>
+                {% for addr in model.owners[0].address %}
+                {{ addr }}<br>
+                {% endfor %}
+            </p>
 
-        <a class ="govuk-link govuk-link--no-visited-state" href="{{ model.changeAddressLink }}">Change address</a>
+            <input type="hidden" name="address" value="0" />
+
+            <div class="govuk-button-group">
+              {{ govukButton({
+              text: "Confirm address"
+              }) }}
+
+              <a class ="govuk-link govuk-link--no-visited-state" href="{{ model.changeAddressLink }}">Change address</a>
+            </div>
+          </form>
+
+      {% else %}
+          <h1 class="govuk-heading-l">Select the address for {{ model.firstName }} {{ model.lastName }}</h1>
+          <form method="post" novalidate autocomplete="off">
+            {{ govukRadios(model.addresses)}}
+
+            {{ govukButton({
+              text: 'Continue'
+            }) }}
+          </form>
+
+
+          {% if model.source == 'create' %}
+          <p class="govuk-body">
+            or <a class ="govuk-link" href="{{ model.addressRoute }}">enter address manually</a>.
+          </p>
+          {% endif %}
+
+      {% endif %}
       </div>
-    </form>
-  </div>
-</div>
-
-{% else %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Select the address for {{ model.firstName }} {{ model.lastName }}</h1>
-    <form method="post" novalidate autocomplete="off">
-
-      {{ govukRadios(model.addressRadios)}}
-
-      {{ govukButton({
-        text: 'Continue'
-      }) }}
-    </form>
-
-    {% if model.source == 'create' %}
-    <p class="govuk-body">
-      or <a class ="govuk-link" href="{{ model.addressRoute }}">enter address manually</a>.
-    </p>
-    {% endif %}
-  </div>
-</div>
-
-{% endif %}
-
+    </div>
 {% endblock %}

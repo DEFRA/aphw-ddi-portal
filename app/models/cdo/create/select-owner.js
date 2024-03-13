@@ -6,21 +6,24 @@ function ViewModel (ownerDetails, ownerResults, errors) {
     backLink: routes.ownerDetails.get,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
-    addresses: ownerResults.map(x => formatAddress(x.address, true)),
+    owners: ownerResults.map(x => ({
+      ...x,
+      address: formatAddress(x.address, true)
+    })),
     changeAddressLink: routes.address.get,
-    addressRadios: {
-      id: 'selectedAddress',
-      name: 'selectedAddress',
-      items: ownerResults.map(type => ({
-        name: 'personReference',
+    addresses: {
+      id: 'addresses',
+      name: 'addresses',
+      items: ownerResults.map((type, idx) => ({
+        name: 'addresses',
         text: formatAddressSingleLine(type.address),
-        value: type.personReference
+        value: `${idx}`
       })).concat([
         {
           divider: 'or'
         },
         {
-          name: 'personReference',
+          name: 'addresses',
           text: "The owner's address is not listed",
           value: -1
         }

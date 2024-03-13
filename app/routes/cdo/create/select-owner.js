@@ -1,10 +1,10 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
-const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
-const { setInSession } = require('../../../session/session-wrapper')
+const { setInSession, getFromSession } = require('../../../session/session-wrapper')
+const Joi = require('joi')
 
 module.exports = [{
   method: 'GET',
@@ -33,10 +33,16 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     validate: {
-      payload: ownerDetailsSchema,
+      payload: Joi.object({
+        addresses: Joi.number().required().messages({
+          '*': 'Select an address'
+        })
+      }),
       failAction: async (request, h, error) => {
         const ownerDetails = { ...getOwnerDetails(request), ...request.payload }
-        return h.view(views.ownerDetails, new ViewModel(ownerDetails, error)).code(400).takeover()
+        const ownerResults = getFromSession(request, 'persons')
+
+        return h.view(views.selectOwner, new ViewModel(ownerDetails, ownerResults, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

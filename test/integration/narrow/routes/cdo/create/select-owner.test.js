@@ -1,6 +1,7 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { routes } = require('../../../../../../app/constants/cdo/owner')
+const FormData = require('form-data')
 
 describe('OwnerResults test', () => {
   jest.mock('../../../../../../app/auth')
@@ -13,10 +14,44 @@ describe('OwnerResults test', () => {
   const { getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
-  const { setInSession } = require('../../../../../../app/session/session-wrapper')
+  const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
 
   const createServer = require('../../../../../../app/server')
   let server
+
+  /**
+   * @type {import('../../../../../../app/api/ddi-index-api/person').Person[]}
+   */
+  const resolvedPersons = [
+    {
+      birthDate: '',
+      contacts: undefined,
+      firstName: 'Jack',
+      lastName: 'Jones',
+      personReference: 'P-123-456',
+      address: {
+        addressLine2: 'Snow Hill',
+        country: 'England',
+        postcode: 'CO10 8QX',
+        town: 'Sudbury',
+        addressLine1: 'Bully Green Farm'
+      }
+    },
+    {
+      birthDate: '',
+      contacts: undefined,
+      firstName: 'Jack',
+      lastName: 'Jones',
+      personReference: 'P-123-457',
+      address: {
+        addressLine1: '5 Station Road',
+        addressLine2: 'Woofferton',
+        country: 'England',
+        postcode: 'SY8 4NL',
+        town: 'Ludlow'
+      }
+    }
+  ]
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -99,40 +134,6 @@ describe('OwnerResults test', () => {
       auth
     }
 
-    /**
-     * @type {import('../../../../../../app/api/ddi-index-api/person').Person[]}
-     */
-    const resolvedPersons = [
-      {
-        birthDate: '',
-        contacts: undefined,
-        firstName: 'Jack',
-        lastName: 'Jones',
-        personReference: 'P-123-456',
-        address: {
-          addressLine2: 'Snow Hill',
-          country: 'England',
-          postcode: 'CO10 8QX',
-          town: 'Sudbury',
-          addressLine1: 'Bully Green Farm'
-        }
-      },
-      {
-        birthDate: '',
-        contacts: undefined,
-        firstName: 'Jack',
-        lastName: 'Jones',
-        personReference: 'P-123-457',
-        address: {
-          addressLine1: '5 Station Road',
-          addressLine2: 'Woofferton',
-          country: 'England',
-          postcode: 'SY8 4NL',
-          town: 'Ludlow'
-        }
-      }
-    ]
-
     getPersons.mockResolvedValue(resolvedPersons)
     getOwnerDetails.mockReturnValue({ firstName: 'Jack', lastName: 'Jones' })
 
@@ -146,12 +147,70 @@ describe('OwnerResults test', () => {
     expect(setInSession).toBeCalledWith(expect.anything(), 'persons', resolvedPersons)
     expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
     expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
-    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('P-123-456')
+    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
     expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('5 Station Road, Woofferton, Ludlow SY8 4NL')
-    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('P-123-457')
+    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('1')
     expect(document.querySelectorAll('form .govuk-radios__item label')[2].textContent.trim()).toContain("The owner's address is not listed")
+    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[2].getAttribute('value')).toBe('-1')
     expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Continue')
   })
+
+  test('POST /cdo/create/select-owner route returns 302 if not auth', async () => {
+    const fd = new FormData()
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      headers: fd.getHeaders(),
+      payload: fd.getBuffer()
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+  })
+
+  test('POST /cdo/create/select-owner with empty data returns error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload: {}
+    }
+
+    getFromSession.mockReturnValue(resolvedPersons)
+    getOwnerDetails.mockReturnValue({ firstName: 'Jack', lastName: 'Jones' })
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an address')
+    expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
+  })
+
+  // test('POST /cdo/create/select-owner with valid data returns 302', async () => {
+  //   const payload = {
+  //     addresses: '0'
+  //   }
+  //
+  //   const options = {
+  //     method: 'POST',
+  //     url: '/cdo/create/select-owner',
+  //     auth,
+  //     payload
+  //   }
+  //
+  //   const response = await server.inject(options)
+  //
+  //   expect(response.statusCode).toBe(302)
+  //   expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
+  //   // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+  //   // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+  //   // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
+  // })
 
   afterEach(async () => {
     jest.clearAllMocks()
