@@ -79,7 +79,7 @@ const generateDuplicateError = message => {
   return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
 }
 
-const getDogIndex = (request) => {
+const getLatestDogIndex = (request) => {
   if (getDogs(request)) {
     return getDogs(request)?.filter(x => x.applicationType).length + 1
   }
@@ -88,5 +88,5 @@ const getDogIndex = (request) => {
 }
 
 const determineDogId = (request, details) => {
-  return (details.dogId ?? null) || (request.params.dogId ?? null) || getDogIndex(request)
+  return (request.params.dogId ?? null) || (details.dogId ?? null) || getLatestDogIndex(request)
 }

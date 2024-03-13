@@ -39,10 +39,10 @@
               <dd class="govuk-summary-list__value">{{ model.dog.name }}</dd>
             </div>
           {% endif %}
-          {% if dog.microchipNumber %}
+          {% if model.dog.microchipNumber %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Microchip number</dt>
-            <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
+            <dd class="govuk-summary-list__value">{{ model.dog.microchipNumber }}</dd>
           </div>
           {% endif %}
           {% if model.dog.cdoIssued %}
