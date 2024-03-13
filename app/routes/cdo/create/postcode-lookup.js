@@ -9,7 +9,7 @@ const { setPostcodeLookupDetails, getPostcodeLookupDetails } = require('../../..
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.postcodeLookupCreate.get}/{personReference}`,
+    path: `${routes.postcodeLookupCreate.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -30,13 +30,13 @@ module.exports = [
           houseNumber: details?.houseNumber
         }
 
-        return h.view(views.postcodeLookup, new ViewModel(data, backNav))
+        return h.view(views.postcodeLookupCreate, new ViewModel(data, backNav))
       }
     }
   },
   {
     method: 'POST',
-    path: `${routes.postcodeLookupCreate.post}/{dummy?}`,
+    path: `${routes.postcodeLookupCreate.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {

@@ -4,6 +4,7 @@ const ViewModel = require('../../../models/cdo/create/select-owner')
 const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
+const { setInSession } = require('../../../session/session-wrapper')
 
 module.exports = [{
   method: 'GET',
@@ -13,6 +14,8 @@ module.exports = [{
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
       const ownerResults = await getPersons(ownerDetails)
+
+      setInSession(request, 'persons', ownerResults)
 
       if (!ownerResults.length) {
         return h.redirect(routes.postcodeLookupCreate.get)
