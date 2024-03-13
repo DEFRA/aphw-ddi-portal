@@ -1,10 +1,18 @@
-const { mapOsCountryCodeToCountry, formatAddress } = require('../../../app/lib/format-helpers')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
     const address = {
       addressLine1: '1 Anywhere St',
       addressLine2: 'Any Estate',
+      town: 'Chippenham',
+      postcode: 'SN15 4JH',
+      country: 'England'
+    }
+
+    const addressWithoutLine2 = {
+      addressLine1: '1 Anywhere St',
+      addressLine2: '',
       town: 'Chippenham',
       postcode: 'SN15 4JH',
       country: 'England'
@@ -19,6 +27,7 @@ describe('format-helpers', () => {
     }
 
     const expectedWithCountry = ['1 Anywhere St', 'Any Estate', 'Chippenham', 'SN15 4JH', 'England']
+    const expectedWithoutCountryAndAddressLine2 = ['1 Anywhere St', 'Chippenham', 'SN15 4JH', 'England']
     const expectedWithoutCountry = ['1 Anywhere St', 'Any Estate', 'Chippenham', 'SN15 4JH']
 
     test('should include country by default', () => {
@@ -36,6 +45,11 @@ describe('format-helpers', () => {
       expect(formattedAddress).toEqual(expectedWithoutCountry)
     })
 
+    test('should not include address line 2 given hideCountry set to true', () => {
+      const formattedAddress = formatAddress(addressWithoutLine2)
+      expect(formattedAddress).toEqual(expectedWithoutCountryAndAddressLine2)
+    })
+
     test('should not include country given hideCountry set to false and property order is incorrect', () => {
       const formattedAddress = formatAddress(addressIncorrectFieldOrder, false)
       expect(formattedAddress).toEqual(expectedWithCountry)
@@ -51,6 +65,53 @@ describe('format-helpers', () => {
       expect(formattedAddress).toEqual(null)
     })
   })
+
+  describe('formatAddressJoinTownPostcode', () => {
+    const address = {
+      addressLine1: '5 Station Road',
+      addressLine2: 'Woofferton',
+      town: 'Ludlow',
+      postcode: 'SY8 4NL',
+      country: 'England'
+    }
+
+    const addressWithoutLine2 = {
+      addressLine1: '5 Station Road',
+      addressLine2: '',
+      town: 'Ludlow',
+      postcode: 'SY8 4NL',
+      country: 'England'
+    }
+
+    const addressIncorrectFieldOrder = {
+      addressLine2: 'Isle of Dogs',
+      addressLine1: '23 Billson Street',
+      postcode: 'E14 3DA',
+      country: 'England',
+      town: 'London'
+    }
+
+    test('should turn address into a single line without country', () => {
+      const formattedAddress = formatAddressSingleLine(address)
+      expect(formattedAddress).toBe('5 Station Road, Woofferton, Ludlow SY8 4NL')
+    })
+
+    test('should turn address into a single line without country and strip empty fields', () => {
+      const formattedAddress = formatAddressSingleLine(addressWithoutLine2)
+      expect(formattedAddress).toBe('5 Station Road, Ludlow SY8 4NL')
+    })
+
+    test('should turn address into a single line without country and order correctly', () => {
+      const formattedAddress = formatAddressSingleLine(addressIncorrectFieldOrder, false)
+      expect(formattedAddress).toBe('23 Billson Street, Isle of Dogs, London E14 3DA')
+    })
+
+    test('should return null given no address', () => {
+      const formattedAddress = formatAddressSingleLine(undefined)
+      expect(formattedAddress).toBe(null)
+    })
+  })
+
   describe('mapCountry', () => {
     test('should map E to England', () => {
       expect(mapOsCountryCodeToCountry('E')).toBe('England')

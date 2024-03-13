@@ -19,6 +19,19 @@ const formatAddress = (address, hideCountry = false) => {
   }, [])
 }
 
+const formatAddressSingleLine = (address) => {
+  if (!address) {
+    return null
+  }
+
+  const updatedAddress = { ...address }
+
+  updatedAddress.town += ` ${updatedAddress.postcode}`
+  updatedAddress.postcode = ''
+
+  return formatAddress(updatedAddress, true).join(', ')
+}
+
 /**
  *
  * @param {Address} address
@@ -47,5 +60,6 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
-  getCountryFromAddress
+  getCountryFromAddress,
+  formatAddressSingleLine
 }
