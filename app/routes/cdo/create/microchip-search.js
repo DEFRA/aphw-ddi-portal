@@ -1,9 +1,9 @@
+const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
-const { getDog, getMicrochipDetails } = require('../../../session/cdo/dog')
+const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
-const { setMicrochipDetails } = require('../../../session/cdo/dog')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 
 module.exports = [{
@@ -19,7 +19,6 @@ module.exports = [{
       }
 
       dog.id = request.params.dogId
-      dog.microchipNumber = getMicrochipDetails(request).microchipNumber
 
       return h.view(views.microchipSearch, new ViewModel(dog))
     }
@@ -27,24 +26,52 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: routes.microchipSearch.post,
+  path: `${routes.microchipSearch.post}/{dogId?}`,
   options: {
     auth: { scope: [admin] },
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {
         const details = { ...getDog(request), ...request.payload }
+
         return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      const details = request.payload
+      const details = { ...getDog(request), ...request.payload }
 
-      details.results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
+      const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
+      if (duplicateMicrochipMessage) {
+        return h.view(views.microchipSearch, new ViewModel(details, generateDuplicateError(duplicateMicrochipMessage))).code(400).takeover()
+      }
 
-      setMicrochipDetails(request, details)
+      const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
 
-      return h.redirect(details.results.length > 0 ? routes.microchipResults.get : routes.details.get)
+      setMicrochipResults(request, results)
+
+      if (results.length === 0) {
+        setDog(request, details)
+      }
+
+      return h.redirect(results.length > 0 ? routes.microchipResults.get : routes.details.get)
     }
   }
 }]
+
+const duplicateMicrochipsInSession = (request, details) => {
+  const dogs = getDogs(request)
+  if (dogs) {
+    dogs.forEach((d, ind) => { d.id = ind + 1 })
+    const dupeDogs = dogs.filter(d => d.microchipNumber === details.microchipNumber)
+    if (dupeDogs.length) {
+      const dogName = dupeDogs[0].name ? ` (${dupeDogs[0].name})` : ''
+      return `This microchip number has already been used by Dog ${dupeDogs[0].id}${dogName}`
+    }
+  }
+
+  return null
+}
+
+const generateDuplicateError = message => {
+  return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
+}
