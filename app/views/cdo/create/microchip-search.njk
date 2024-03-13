@@ -44,6 +44,10 @@
 
         {{ govukInput(model.microchipNumber) }}
 
+        {% if model.dogId is defined %}
+          <input type="hidden" name="dogId" value="{{ model.dogId }}">
+        {% endif %}
+
       {% endcall %}
 
       {{ govukButton({

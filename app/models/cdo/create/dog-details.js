@@ -5,7 +5,7 @@ const { addDateErrors } = require('../../../lib/date-helpers')
 function ViewModel (dogDetails, breedTypes, errors) {
   this.model = {
     backLink: routes.microchipSearch.get,
-    dogId: dogDetails.id,
+    dogId: dogDetails.dogId,
     breed: {
       id: 'breed',
       name: 'breed',

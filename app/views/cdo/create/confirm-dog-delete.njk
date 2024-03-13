@@ -30,22 +30,28 @@
 
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Breed type</dt>
+            <dt class="govuk-summary-list__key">Breed</dt>
             <dd class="govuk-summary-list__value">{{ model.dog.breed }}</dd>
           </div>
           {% if model.dog.name | length  %}
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Dog name</dt>
+              <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ model.dog.name }}</dd>
             </div>
           {% endif %}
+          {% if model.dog.microchipNumber %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Microchip number</dt>
+            <dd class="govuk-summary-list__value">{{ model.dog.microchipNumber }}</dd>
+          </div>
+          {% endif %}
           {% if model.dog.cdoIssued %}
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">CDO issue date</dt>
+            <dt class="govuk-summary-list__key">CDO issued</dt>
             <dd class="govuk-summary-list__value">{{ model.dog.cdoIssued }}</dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">CDO expiry date</dt>
+            <dt class="govuk-summary-list__key">CDO expiry</dt>
             <dd class="govuk-summary-list__value">{{ model.dog.cdoExpiry }}</dd>
           </div>
           {% else %}
