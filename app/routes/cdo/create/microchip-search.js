@@ -18,7 +18,7 @@ module.exports = [{
         return h.response().code(404).takeover()
       }
 
-      dog.id = request.params.dogId
+      dog.dogId = determineDogId(request, dog)
 
       return h.view(views.microchipSearch, new ViewModel(dog))
     }
@@ -34,11 +34,14 @@ module.exports = [{
       failAction: async (request, h, error) => {
         const details = { ...getDog(request), ...request.payload }
 
+        details.dogId = determineDogId(request, details)
+
         return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
       const details = { ...getDog(request), ...request.payload }
+      details.dogId = determineDogId(request, details)
 
       const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
       if (duplicateMicrochipMessage) {
@@ -53,7 +56,7 @@ module.exports = [{
         setDog(request, details)
       }
 
-      return h.redirect(results.length > 0 ? routes.microchipResults.get : routes.details.get)
+      return h.redirect(results.length > 0 ? `${routes.microchipResults.get}/${details.dogId}` : `${routes.details.get}/${details.dogId}`)
     }
   }
 }]
@@ -61,11 +64,11 @@ module.exports = [{
 const duplicateMicrochipsInSession = (request, details) => {
   const dogs = getDogs(request)
   if (dogs) {
-    dogs.forEach((d, ind) => { d.id = ind + 1 })
-    const dupeDogs = dogs.filter(d => d.microchipNumber === details.microchipNumber)
+    dogs.forEach((d, ind) => { d.dogId = d.dogId || `${ind + 1}` })
+    const dupeDogs = dogs.filter(d => d.microchipNumber === details.microchipNumber && `${d.dogId}` !== `${details.dogId}`)
     if (dupeDogs.length) {
       const dogName = dupeDogs[0].name ? ` (${dupeDogs[0].name})` : ''
-      return `This microchip number has already been used by Dog ${dupeDogs[0].id}${dogName}`
+      return `This microchip number has already been used by Dog ${dupeDogs[0].dogId}${dogName}`
     }
   }
 
@@ -74,4 +77,16 @@ const duplicateMicrochipsInSession = (request, details) => {
 
 const generateDuplicateError = message => {
   return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
+}
+
+const getLatestDogIndex = (request) => {
+  if (getDogs(request)) {
+    return getDogs(request)?.filter(x => x.applicationType).length + 1
+  }
+
+  return 1
+}
+
+const determineDogId = (request, details) => {
+  return (request.params.dogId ?? null) || (details.dogId ?? null) || getLatestDogIndex(request)
 }
