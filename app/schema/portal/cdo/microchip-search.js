@@ -5,7 +5,8 @@ const schema = Joi.object({
   microchipNumber: Joi.string().trim().required().max(15).messages({
     'string.max': 'Microchip number must be no more than {#limit} characters',
     'string.empty': 'Enter a microchip number'
-  }).custom((value, helper) => validateMicrochip(value, helper, false))
+  }).custom((value, helper) => validateMicrochip(value, helper, false)),
+  dogId: Joi.string().allow('').allow(null).optional()
 }).required()
 
 const validatePayload = (payload) => {

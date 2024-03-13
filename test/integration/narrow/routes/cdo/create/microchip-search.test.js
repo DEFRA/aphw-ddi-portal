@@ -202,7 +202,31 @@ describe('Microchip search tests', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/dog-details')
+    expect(response.headers.location).toBe('/cdo/create/dog-details/1')
+  })
+
+  test('POST /cdo/create/microchip-search route with no duplicate microchip returns 302 on dog 3', async () => {
+    getDogs.mockReturnValue([
+      { id: 1, name: 'Rex', microchipNumber: '11111' },
+      { id: 2, name: 'Fido', microchipNumber: '12345' },
+      { id: 3, name: 'Bruce', microchipNumber: '12345' }
+    ])
+
+    const payload = {
+      microchipNumber: '1234567'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search/3',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/create/dog-details/3')
   })
 
   test('POST /cdo/create/microchip-search route with duplicate microchip returns 400 error given no dog name', async () => {
@@ -248,7 +272,7 @@ describe('Microchip search tests', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/dog-details')
+    expect(response.headers.location).toBe('/cdo/create/dog-details/1')
   })
 
   test('POST /cdo/create/microchip-search route with valid payload performs search zero results', async () => {
@@ -267,7 +291,7 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(302)
     expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
-    expect(response.headers.location).toBe('/cdo/create/dog-details')
+    expect(response.headers.location).toBe('/cdo/create/dog-details/1')
   })
 
   test('POST /cdo/create/microchip-search route with valid payload performs search one or more results', async () => {
@@ -288,7 +312,7 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(302)
     expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
-    expect(response.headers.location).toBe('/cdo/create/microchip-results')
+    expect(response.headers.location).toBe('/cdo/create/microchip-results/1')
   })
 
   afterEach(async () => {

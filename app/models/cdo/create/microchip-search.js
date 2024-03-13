@@ -3,7 +3,7 @@ const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 function ViewModel (details, errors) {
   this.model = {
     backLink: ownerRoutes.ownerDetails.get,
-    dogId: details.id,
+    dogId: details.dogId,
     microchipNumber: {
       id: 'microchipNumber',
       name: 'microchipNumber',
