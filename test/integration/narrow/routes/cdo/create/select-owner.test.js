@@ -1,6 +1,7 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { routes } = require('../../../../../../app/constants/cdo/owner')
+const { routes: dogRoutes } = require('../../../../../../app/constants/cdo/dog')
 const FormData = require('form-data')
 
 describe('OwnerResults test', () => {
@@ -11,14 +12,30 @@ describe('OwnerResults test', () => {
   const { getPersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
 
   const createServer = require('../../../../../../app/server')
   let server
-
+  /**
+   * @type {import('../../../../../../app/api/ddi-index-api/person').Person}
+   */
+  const resolvedPerson = {
+    birthDate: '',
+    contacts: undefined,
+    firstName: 'Joe',
+    lastName: 'Bloggs',
+    personReference: 'P-123-456',
+    address: {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    }
+  }
   /**
    * @type {import('../../../../../../app/api/ddi-index-api/person').Person[]}
    */
@@ -80,23 +97,6 @@ describe('OwnerResults test', () => {
       method: 'GET',
       url: '/cdo/create/select-owner',
       auth
-    }
-    /**
-     * @type {import('../../../../../../app/api/ddi-index-api/person').Person}
-     */
-    const resolvedPerson = {
-      birthDate: '',
-      contacts: undefined,
-      firstName: 'Joe',
-      lastName: 'Bloggs',
-      personReference: 'P-123-456',
-      address: {
-        addressLine2: 'Snow Hill',
-        country: 'England',
-        postcode: 'CO10 8QX',
-        town: 'Sudbury',
-        addressLine1: 'Bully Green Farm'
-      }
     }
 
     getPersons.mockResolvedValue([resolvedPerson])
@@ -191,26 +191,70 @@ describe('OwnerResults test', () => {
     expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
   })
 
-  // test('POST /cdo/create/select-owner with valid data returns 302', async () => {
-  //   const payload = {
-  //     addresses: '0'
-  //   }
-  //
-  //   const options = {
-  //     method: 'POST',
-  //     url: '/cdo/create/select-owner',
-  //     auth,
-  //     payload
-  //   }
-  //
-  //   const response = await server.inject(options)
-  //
-  //   expect(response.statusCode).toBe(302)
-  //   expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
-  //   // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
-  //   // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-  //   // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
-  // })
+  test('POST /cdo/create/select-owner with valid data returns 302', async () => {
+    const payload = {
+      address: '0'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload
+    }
+
+    getFromSession.mockReturnValue([resolvedPerson])
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs'
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), resolvedPerson)
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    })
+    expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
+    // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
+  })
+
+  test('POST /cdo/create/select-owner with valid data returns 302 given owners address not listed', async () => {
+    const payload = {
+      address: '-1'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload
+    }
+
+    getFromSession.mockReturnValue(resolvedPersons)
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs'
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).not.toHaveBeenCalled()
+    expect(setAddress).not.toHaveBeenCalled()
+
+    expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
+    // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
+  })
 
   afterEach(async () => {
     jest.clearAllMocks()

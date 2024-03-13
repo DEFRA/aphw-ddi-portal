@@ -54,7 +54,7 @@
       {% else %}
           <h1 class="govuk-heading-l">Select the address for {{ model.firstName }} {{ model.lastName }}</h1>
           <form method="post" novalidate autocomplete="off">
-            {{ govukRadios(model.addresses)}}
+            {{ govukRadios(model.address)}}
 
             {{ govukButton({
               text: 'Continue'

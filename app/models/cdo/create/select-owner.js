@@ -11,11 +11,10 @@ function ViewModel (ownerDetails, ownerResults, errors) {
       address: formatAddress(x.address, true)
     })),
     changeAddressLink: routes.address.get,
-    addresses: {
-      id: 'addresses',
-      name: 'addresses',
+    address: {
+      id: 'address',
+      name: 'address',
       items: ownerResults.map((type, idx) => ({
-        name: 'addresses',
         text: formatAddressSingleLine(type.address),
         value: `${idx}`
       })).concat([
@@ -23,7 +22,6 @@ function ViewModel (ownerDetails, ownerResults, errors) {
           divider: 'or'
         },
         {
-          name: 'addresses',
           text: "The owner's address is not listed",
           value: -1
         }

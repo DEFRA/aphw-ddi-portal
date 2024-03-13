@@ -1,4 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
+const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
 const { admin } = require('../../../auth/permissions')
@@ -34,7 +35,7 @@ module.exports = [{
     auth: { scope: [admin] },
     validate: {
       payload: Joi.object({
-        addresses: Joi.number().required().messages({
+        address: Joi.number().required().messages({
           '*': 'Select an address'
         })
       }),
@@ -46,11 +47,19 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const ownerDetails = request.payload
+      const ownerChosen = request.payload.address
+
+      if (ownerChosen === -1) {
+        return h.redirect(routes.postcodeLookupCreate.get)
+      }
+
+      const ownerResults = getFromSession(request, 'persons')
+      const ownerDetails = ownerResults[ownerChosen]
 
       setOwnerDetails(request, ownerDetails)
+      setAddress(request, ownerDetails.address)
 
-      return h.redirect(routes.selectOwner.get)
+      return h.redirect(dogRoutes.microchipSearch.get)
     }
   }
 }]
