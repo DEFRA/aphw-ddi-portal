@@ -168,7 +168,7 @@ describe('Microchip search tests', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/microchip-search',
+      url: '/cdo/create/microchip-search/1',
       auth,
       payload
     }
@@ -194,7 +194,7 @@ describe('Microchip search tests', () => {
 
     const options = {
       method: 'POST',
-      url: '/cdo/create/microchip-search',
+      url: '/cdo/create/microchip-search/2',
       auth,
       payload
     }
@@ -202,7 +202,31 @@ describe('Microchip search tests', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe('/cdo/create/dog-details/1')
+    expect(response.headers.location).toBe('/cdo/create/dog-details/2')
+  })
+
+  test('POST /cdo/create/microchip-search route with duplicate microchip on same dog returns 302', async () => {
+    getDogs.mockReturnValue([
+      { id: 1, name: 'Rex', microchipNumber: '11111' },
+      { id: 2, name: 'Fido', microchipNumber: '22222' },
+      { id: 3, name: 'Bruce', microchipNumber: '33333' }
+    ])
+
+    const payload = {
+      microchipNumber: '22222'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search/2',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/create/dog-details/2')
   })
 
   test('POST /cdo/create/microchip-search route with no duplicate microchip returns 302 on dog 3', async () => {
