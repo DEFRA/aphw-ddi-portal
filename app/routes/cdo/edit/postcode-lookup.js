@@ -59,7 +59,7 @@ module.exports = [
 
           const viewModel = new ViewModel(data, backNav, error)
 
-          return h.view(views.postcodeLookup, viewModel).code(400).takeover()
+          return h.view(views.postcodeLookupEdit, viewModel).code(400).takeover()
         }
       },
       handler: async (request, h) => {

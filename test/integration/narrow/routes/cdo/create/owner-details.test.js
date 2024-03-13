@@ -173,9 +173,9 @@ describe('OwnerDetails test', () => {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: new Date('1999-01-01'),
-      dobDay: '01',
-      dobMonth: '01',
-      dobYear: '1999'
+      dobDay: 1,
+      dobMonth: 1,
+      dobYear: 1999
     })
   })
 
