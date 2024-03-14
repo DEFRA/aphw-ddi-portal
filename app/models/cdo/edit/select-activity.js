@@ -1,13 +1,10 @@
-const { routes } = require('../../../constants/cdo/dog')
 const { keys } = require('../../../constants/cdo/activity')
 
 function ViewModel (model, backNav, errors) {
   this.model = {
-    formAction: routes.selectActivity.post,
     backLink: backNav.backLink,
     editLink: model.editLink,
     pk: model.pk,
-    srcHashParam: model.srcHashParam,
     titleReference: model.titleReference,
     skippedFirstPage: model.skippedFirstPage,
     source: model.source,

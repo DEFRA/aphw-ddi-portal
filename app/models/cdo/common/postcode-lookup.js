@@ -1,9 +1,7 @@
-const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 
 function ViewModel (data, backNav, errors) {
   this.model = {
-    formAction: routes.postcodeLookup.post,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     personReference: data.personReference,

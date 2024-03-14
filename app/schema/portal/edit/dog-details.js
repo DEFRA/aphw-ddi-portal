@@ -1,24 +1,6 @@
 const Joi = require('joi')
-const { getDateComponents } = require('../../../lib/date-helpers')
-const { validateDate } = require('../../../lib/date-helpers')
-
-const validNewMicrochip = /^[0-9\s]+$/
-
-const validateMicrochip = (value, helpers) => {
-  let elemName = helpers.state.path[0]
-  if (elemName?.length > 1) {
-    elemName = elemName.substring(0, 1).toUpperCase() + elemName.substring(1)
-  }
-  // Compare new value against original to determine if already pre-populated in the DB
-  // (old microchip numbers from legacy data can contain letters so don't validate against new rules)
-  if (value === helpers.state.ancestors[0][`orig${elemName}`]) {
-    return value
-  }
-  if (!value.match(validNewMicrochip)) {
-    return helpers.message('Microchip numbers can only contains numbers', { path: [elemName] })
-  }
-  return value
-}
+const { getDateComponents, validateDate } = require('../../../lib/date-helpers')
+const { validateMicrochip } = require('../../../lib/validation-helpers')
 
 const dogDetailsSchema = Joi.object({
   id: Joi.number().required(),
@@ -50,10 +32,10 @@ const dogDetailsSchema = Joi.object({
   }),
   microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number must be no more than {#limit} characters'
-  }).custom(validateMicrochip),
+  }).custom((value, helper) => validateMicrochip(value, helper, true)),
   microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
     'string.max': 'Microchip number 2 must be no more than {#limit} characters'
-  }).custom(validateMicrochip),
+  }).custom((value, helper) => validateMicrochip(value, helper, true)),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),

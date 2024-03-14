@@ -35,15 +35,6 @@ const setBirthDate = (request, value) => {
 }
 
 /**
- * @typedef Address
- * @property {string} addressLine1
- * @property {string} addressLine2
- * @property {string} town
- * @property {string} postcode
- * @property {string} country
- */
-
-/**
  * @param request
  * @returns {Address}
  */

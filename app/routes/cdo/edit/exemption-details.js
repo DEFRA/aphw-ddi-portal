@@ -56,7 +56,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.editExemptionDetails.post,
+    path: `${routes.editExemptionDetails.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       validate: {

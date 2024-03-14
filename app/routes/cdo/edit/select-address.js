@@ -1,10 +1,10 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { setAddress, getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { admin } = require('../../../auth/permissions')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
@@ -25,8 +25,13 @@ module.exports = [
 
         setInSession(request, 'addresses', addresses)
 
+        if (addresses && addresses.length === 1) {
+          setAddress(request, addresses[0])
+        }
+
         const backNav = addBackNavigation(request)
         details.backLink = backNav.backLink
+        details.srcHashParam = backNav.srcHashParam
 
         return h.view(views.selectAddress, new ViewModel(details, addresses))
       }
@@ -60,7 +65,7 @@ module.exports = [
 
         setPostcodeLookupDetails(request, null)
 
-        return h.redirect(`${routes.viewOwnerDetails.get}/${personReference}`)
+        return h.redirect(getMainReturnPoint(request))
       }
     }
   }

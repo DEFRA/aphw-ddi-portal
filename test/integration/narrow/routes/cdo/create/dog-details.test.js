@@ -56,6 +56,33 @@ describe('Add dog details', () => {
     expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
   })
 
+  test('GET /cdo/create/dog-details route returns 200 when microchip value', async () => {
+    getDog.mockReturnValue({
+      breed: 'Breed 1',
+      name: 'Bruce',
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+      microchipNumber: '12345'
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/dog-details',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('#breed').hasAttribute('checked')).toBeTruthy()
+    expect(document.querySelector('#name').getAttribute('value')).toBe('Bruce')
+    expect(document.querySelector('input[name="microchipNumber"]').getAttribute('value')).toBe('12345')
+    expect(document.querySelector('#cdoIssued-day').getAttribute('value')).toBe('10')
+    expect(document.querySelector('#cdoIssued-month').getAttribute('value')).toBe('10')
+    expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
+  })
+
   test('GET /cdo/create/dog-details route returns 404 if no dog in session', async () => {
     getDog.mockReturnValue(undefined)
 

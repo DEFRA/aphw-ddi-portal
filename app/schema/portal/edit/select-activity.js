@@ -5,7 +5,6 @@ const { validateDate } = require('../../../lib/date-helpers')
 const selectActivitySchema = Joi.object({
   pk: Joi.string().required(),
   source: Joi.string().required(),
-  srcHashParam: Joi.string().optional(),
   activityType: Joi.string().required(),
   activity: Joi.string().trim().required().messages({
     '*': 'Select an activity'

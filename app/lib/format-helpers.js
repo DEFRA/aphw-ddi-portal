@@ -1,17 +1,44 @@
-const formatAddress = (address) => {
+/**
+ *
+ * @param {Address} address
+ * @param {boolean} hideCountry
+ * @returns {*[]|null}
+ */
+const formatAddress = (address, hideCountry = false) => {
   if (!address) {
     return null
   }
 
-  const parts = []
+  const keys = ['addressLine1', 'addressLine2', 'town', 'postcode', 'country']
 
-  Object.keys(address).forEach(key => {
-    if (address[key]) {
-      parts.push(address[key])
+  return keys.reduce((parts, key) => {
+    if (address[key] && (key !== 'country' || !hideCountry)) {
+      return [...parts, address[key]]
     }
-  })
+    return parts
+  }, [])
+}
 
-  return parts
+const formatAddressSingleLine = (address) => {
+  if (!address) {
+    return null
+  }
+
+  const updatedAddress = { ...address }
+
+  updatedAddress.town += ` ${updatedAddress.postcode}`
+  updatedAddress.postcode = ''
+
+  return formatAddress(updatedAddress, true).join(', ')
+}
+
+/**
+ *
+ * @param {Address} address
+ * @returns {string|null}
+ */
+const getCountryFromAddress = (address) => {
+  return address?.country || null
 }
 
 const countryCodeMap = {
@@ -32,5 +59,7 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
 
 module.exports = {
   formatAddress,
-  mapOsCountryCodeToCountry
+  mapOsCountryCodeToCountry,
+  getCountryFromAddress,
+  formatAddressSingleLine
 }

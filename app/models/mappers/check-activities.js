@@ -232,6 +232,16 @@ const filterNonUpdatedFields = (auditFieldRecord) => {
   return true
 }
 
+/**
+ * @param {string} label
+ * @returns {boolean}
+ */
+const shouldShowPreviousValue = (label) => {
+  return labelsRequiringPreviousValue.indexOf(label) > -1
+}
+
+const labelsRequiringPreviousValue = ['First name', 'Last name', 'Address line 1', 'Address line 2', 'Town or city', 'Postcode']
+
 const addedEvents = ['date_exported', 'date_stolen', 'dog_date_of_death', 'date_untraceable']
 
 const activityLabels = {
@@ -290,9 +300,13 @@ const activityLabels = {
 const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) => {
   const [fieldValue] = auditFieldRecord
 
-  if (activityLabels[fieldValue]) {
-    return `${activityLabels[fieldValue]} ${eventType}`
+  const label = activityLabels[fieldValue]
+
+  if (label) {
+    const [, prevValue] = auditFieldRecord
+    return shouldShowPreviousValue(label) ? `${label} ${eventType} from ${prevValue}` : `${label} ${eventType}`
   }
+
   return 'N/A'
 }
 

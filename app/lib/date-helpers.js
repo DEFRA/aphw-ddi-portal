@@ -1,6 +1,5 @@
-const { parse, isValid, format } = require('date-fns')
 const { UTCDate } = require('@date-fns/utc')
-const { isFuture } = require('date-fns')
+const { parse, isValid, isFuture, format } = require('date-fns')
 
 const validDateFormats = [
   'yyyy-MM-dd',
@@ -17,6 +16,14 @@ const parseDate = (value) => {
   }
 
   return null
+}
+
+/**
+ * @param {Date} value
+ * @returns {string}
+ */
+const stripTimeFromUTC = (value) => {
+  return format(value, 'yyyy-MM-dd')
 }
 
 const dateComponentsToString = (payload, prefix) => {
@@ -137,5 +144,6 @@ module.exports = {
   addDateErrors,
   formatToGds,
   isEmptyDate,
-  validateDate
+  validateDate,
+  stripTimeFromUTC
 }

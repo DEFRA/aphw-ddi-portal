@@ -19,7 +19,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        dog.id = request.params.dogId
+        dog.dogId = request.params.dogId
 
         const { breeds } = await getBreeds()
 
@@ -41,7 +41,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.details.post,
+    path: `${routes.details.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       validate: {

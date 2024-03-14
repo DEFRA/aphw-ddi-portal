@@ -9,9 +9,13 @@ function ViewModel (details, addresses = [], error) {
     : []
 
   this.model = {
-    formAction: routes.address.get,
     backLink: details?.source === 'create' ? routes.ownerDetails.get : details?.backLink,
-    changePostcodeLink: details?.source === 'create' ? `${routes.ownerDetails.get}#postcode` : details?.backLink,
+    changeAddressLink: details?.source === 'create'
+      ? routes.address.get
+      : `${routes.editAddress.get}/${details.personReference}/session${details.srcHashParam}`,
+    changePostcodeLink: details?.source === 'create'
+      ? `${routes.ownerDetails.get}#postcode`
+      : `${details?.backLink}#postcode`,
     addressRoute: routes.address.get,
     buttonText: details?.source === 'create' ? 'Select address' : 'Save address',
     source: details?.source,

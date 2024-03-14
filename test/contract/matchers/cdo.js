@@ -1,4 +1,5 @@
 const { term, string, iso8601Date, eachLike } = require('@pact-foundation/pact/dsl/matchers')
+const { address } = require('./global')
 
 const validCdoRequest = {
   owner: {
@@ -30,12 +31,7 @@ const validCdoResponseMatcher = {
     firstName: string('Shaun'),
     lastName: string('Fitzsimons'),
     birthDate: iso8601Date('1998-05-10'),
-    address: {
-      addressLine1: string('14 Fake Street'),
-      town: string('City of London'),
-      postcode: string('E1 7AA'),
-      country: term({ generate: 'England', matcher: 'England|Scotland|Wales' })
-    }
+    address
   },
   enforcementDetails: {
     policeForce: string('Avon and Somerset Constabulary'),
@@ -50,6 +46,14 @@ const validCdoResponseMatcher = {
     cdoIssued: iso8601Date('2023-10-10'),
     cdoExpiry: iso8601Date('2023-12-10')
   })
+}
+
+const validCdoResponseWithPersonReferenceMatcher = {
+  ...validCdoResponseMatcher,
+  owner: {
+    ...validCdoResponseMatcher.owner,
+    personReference: string('P-6076-A37C')
+  }
 }
 
 const validCdoRequestWithCountry = {
@@ -79,6 +83,14 @@ const validCdoRequestWithCountry = {
       cdoExpiry: '2023-12-10T00:00:00.000Z'
     }
   ]
+}
+
+const validCdoRequestWithPersonReference = {
+  ...validCdoRequestWithCountry,
+  owner: {
+    ...validCdoRequestWithCountry.owner,
+    personReference: 'P-D9E1-22AD'
+  }
 }
 
 const validCdoResponseWithCountryMatcher = {
@@ -112,6 +124,8 @@ const validCdoResponseWithCountryMatcher = {
 module.exports = {
   validCdoRequest,
   validCdoRequestWithCountry,
+  validCdoRequestWithPersonReference,
   validCdoResponseMatcher,
-  validCdoResponseWithCountryMatcher
+  validCdoResponseWithCountryMatcher,
+  validCdoResponseWithPersonReferenceMatcher
 }

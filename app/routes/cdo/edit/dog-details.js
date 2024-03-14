@@ -47,7 +47,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: routes.editDogDetails.post,
+  path: `${routes.editDogDetails.post}/{dummy?}`,
   options: {
     auth: { scope: [admin] },
     validate: {

@@ -33,7 +33,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
           text: "What is the owner's postcode?",
@@ -48,12 +48,11 @@
 
       <input type="hidden" name="personReference" value="{{ model.personReference }}" />
 
-      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
-
       {% endcall %}
 
       {{ govukButton({
-        text: "Continue"
+        text: "Continue",
+        name: "submitButton"
       }) }}
     </form>
     <p class="govuk-body">

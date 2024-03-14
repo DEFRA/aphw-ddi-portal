@@ -22,7 +22,7 @@
 </div>
 
 <p class="govuk-body">
-  <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ model.indexNumber }}{{ model.srcHashParam }}">Go to the dog record for Dog {{ model.indexNumber }}</a>
+  <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Go to the dog record for Dog {{ model.indexNumber }}</a>
 </p>
 
 {% endblock %}

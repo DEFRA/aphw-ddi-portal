@@ -2,6 +2,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/change-status-confirmation')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
+const { getMainReturnPoint } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -16,9 +17,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const backNav = {
-          srcHashParam: request?.query?.src ? `?src=${request?.query?.src}` : ''
-        }
+        const backNav = { actionLink: getMainReturnPoint(request) }
 
         return h.view(views.changeStatusConfirmation, new ViewModel(cdo.dog, backNav))
       }

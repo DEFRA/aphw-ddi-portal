@@ -1,8 +1,8 @@
-const { format } = require('date-fns')
 const exportConstants = require('../../constants/export')
 const { admin } = require('../../auth/permissions')
 const getUser = require('../../auth/get-user')
 const { exportData } = require('../../api/ddi-index-api/export')
+const { stripTimeFromUTC } = require('../../lib/date-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -23,7 +23,7 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      const now = format(new Date(), 'yyyy-MM-dd')
+      const now = stripTimeFromUTC(new Date())
       const exported = await exportData(getUser(request))
       return h.response(exported)
         .header('Content-Type', 'application/octet-stream')

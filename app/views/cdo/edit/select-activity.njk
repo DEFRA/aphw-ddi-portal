@@ -34,7 +34,7 @@
       }) }}
     {% endif %}
 
-    <form method="POST" action="{{ model.formAction }}" novalidate autocomplete="off">
+    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       <span class="govuk-caption-l">{{ model.titleReference }}</span>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -69,13 +69,13 @@
       <input type="hidden" name="activityType" value="{{ model.activityType }}" />
       <input type="hidden" name="pk" value="{{ model.pk }}" />
       <input type="hidden" name="source" value="{{ model.source }}" />
-      <input type="hidden" name="srcHashParam" value="{{ model.srcHashParam }}" />
       <input type="hidden" name="titleReference" value="{{ model.titleReference }}" />
       <input type="hidden" name="skippedFirstPage" value="{{ model.skippedFirstPage }}" />
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Continue"
+          text: "Continue",
+          name: "submitButton"
         }) }}
       </div>
     </div>

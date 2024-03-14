@@ -51,7 +51,6 @@ const getCountry = address => address?.country || ''
 
 function ViewModel (owner, address, enforcement, courts, policeForces, dogs, error) {
   this.model = {
-    formAction: routes.fullSummary.post,
     backLink: routes.enforcementDetails.get,
     summary: {
       owner: {
@@ -66,6 +65,7 @@ function ViewModel (owner, address, enforcement, courts, policeForces, dogs, err
       dogs: dogs.map((dog, index) => ({
         id: index + 1,
         name: dog[keys.name],
+        microchipNumber: dog[keys.microchipNumber],
         breed: dog[keys.breed],
         cdoIssued: formatToGds(dog[keys.cdoIssued]),
         cdoExpiry: formatToGds(dog[keys.cdoExpiry]),

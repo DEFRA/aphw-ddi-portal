@@ -54,13 +54,13 @@ describe('Add dog details', () => {
 
     const summaryList = document.querySelector('.govuk-summary-list')
 
-    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[0].textContent).toBe('Breed type')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[0].textContent).toBe('Breed')
     expect(summaryList.querySelectorAll('.govuk-summary-list__value')[0].textContent).toBe('Breed 1')
-    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[1].textContent).toBe('Dog name')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[1].textContent).toBe('Name')
     expect(summaryList.querySelectorAll('.govuk-summary-list__value')[1].textContent).toBe('Bruce')
-    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[2].textContent).toBe('CDO issue date')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[2].textContent).toBe('CDO issued')
     expect(summaryList.querySelectorAll('.govuk-summary-list__value')[2].textContent).toBe('10 October 2020')
-    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[3].textContent).toBe('CDO expiry date')
+    expect(summaryList.querySelectorAll('.govuk-summary-list__key')[3].textContent).toBe('CDO expiry')
     expect(summaryList.querySelectorAll('.govuk-summary-list__value')[3].textContent).toBe('10 December 2020')
 
     expect(document.querySelector('input[type="hidden"][name="dogId"]').value).toBe('1')

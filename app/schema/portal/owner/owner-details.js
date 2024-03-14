@@ -1,6 +1,8 @@
 const Joi = require('joi')
 const { startOfDay, parse, isAfter, isValid, differenceInYears } = require('date-fns')
 
+const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
+
 const validate = (value, helper) => {
   const options = {
     locale: 'enGB'
@@ -49,11 +51,12 @@ const schema = Joi.object({
   dobYear: Joi.number().optional().allow('').messages({
     'number.base': 'Date of birth must include a year'
   }),
-  postcode: Joi.string().trim().max(8).when('triggeredButton', {
+  postcode: Joi.string().trim().max(8).regex(postcodeRegex).when('triggeredButton', {
     is: Joi.exist(),
     then: Joi.required().messages({
       'string.empty': 'Enter a postcode',
-      'string.max': 'Postcode must be no more than {#limit} characters'
+      'string.max': 'Postcode must be no more than {#limit} characters',
+      'string.pattern.base': 'Enter a real postcode'
     }),
     otherwise: Joi.optional().allow('')
   }),

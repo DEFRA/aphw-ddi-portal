@@ -26,7 +26,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.delete.post,
+    path: `${routes.delete.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {

@@ -4,7 +4,7 @@ const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/add-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/add-activity')
-const { getMainReturnPoint } = require('../../../lib/back-helpers')
+const { getMainReturnPoint, addBackNavigation } = require('../../../lib/back-helpers')
 const { getActivityDetails, setActivityDetails } = require('../../../session/cdo/activity')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
 const { getActivities } = require('../../../api/ddi-index-api/activities')
@@ -30,7 +30,8 @@ const handleForwardSkipIfNeeded = async (request, details, h) => {
   const numReceivedActivities = (await getActivities(keys.received, details.source)).length
 
   if (numSentActivities > 0 && numReceivedActivities > 0) {
-    return h.view(views.addActivity, new ViewModel(details, getBackNav(request)))
+    const backNav = addBackNavigation(request)
+    return h.view(views.addActivity, new ViewModel(details, backNav))
   } else {
     details.activityType = numSentActivities > 0 ? keys.sent : keys.received
     details.skippedFirstPage = 'true'
@@ -65,7 +66,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.addActivity.post,
+    path: `${routes.addActivity.post}/{pk}/{source}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -91,7 +92,9 @@ module.exports = [
 
         setActivityDetails(request, payload)
 
-        return h.redirect(`${routes.selectActivity.get}`)
+        const backNav = addBackNavigation(request)
+
+        return h.redirect(`${routes.selectActivity.get}${backNav.srcHashParam}`)
       }
     }
   }

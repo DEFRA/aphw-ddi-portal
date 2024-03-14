@@ -1,9 +1,8 @@
-const { routes, keys } = require('../../../constants/cdo/dog')
+const { keys } = require('../../../constants/cdo/dog')
 const { addDateErrors } = require('../../../lib/date-helpers')
 
 function ViewModel (dogDetails, breedTypes, backNav, errors) {
   this.model = {
-    formAction: routes.editDogDetails.post,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     id: dogDetails.id,
@@ -142,7 +141,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
         classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
       value: dogDetails.microchipNumber,
-      attributes: { maxlength: '15' }
+      attributes: { maxlength: '20' }
     },
     microchipNumber2: {
       id: 'microchipNumber2',
@@ -153,7 +152,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
         classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
       },
       value: dogDetails.microchipNumber2,
-      attributes: { maxlength: '15' }
+      attributes: { maxlength: '20' }
     },
     origMicrochipNumber: dogDetails.origMicrochipNumber ?? dogDetails.microchipNumber,
     origMicrochipNumber2: dogDetails.origMicrochipNumber2 ?? dogDetails.microchipNumber2,

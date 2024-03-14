@@ -1,4 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
+const { JSDOM } = require('jsdom')
 
 describe('Select activity', () => {
   jest.mock('../../../../../../app/auth')
@@ -9,6 +10,9 @@ describe('Select activity', () => {
 
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
   const { getDogOwner } = require('../../../../../../app/api/ddi-index-api/dog')
+
+  jest.mock('../../../../../../app/lib/back-helpers')
+  const { addBackNavigation, getMainReturnPoint, addBackNavigationForErrorCondition } = require('../../../../../../app/lib/back-helpers')
 
   jest.mock('../../../../../../app/session/cdo/activity')
   const { getActivityDetails } = require('../../../../../../app/session/cdo/activity')
@@ -24,7 +28,9 @@ describe('Select activity', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-
+    addBackNavigation.mockReturnValue({ backLink: '/back' })
+    addBackNavigationForErrorCondition.mockReturnValue({ backLink: '/back' })
+    getMainReturnPoint.mockReturnValue('/main-return-url')
     server = await createServer()
     await server.initialize()
   })
@@ -57,6 +63,42 @@ describe('Select activity', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelectorAll('.govuk-back-link')[0].href).toBe('/back')
+  })
+
+  test('GET /cdo/edit/select-activity route returns 200 but uses alternative back nav', async () => {
+    addBackNavigation.mockReturnValue({ backLink: '/' })
+
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'dog',
+      activityType: 'sent'
+    })
+
+    getCdo.mockResolvedValue({
+      dog: {
+        status: 'Exempt',
+        indexNumber: 'ED12345'
+      }
+    })
+
+    getActivities.mockResolvedValue([
+      { text: 'act1', value: 1 },
+      { text: 'act2', value: 2 }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-activity',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelectorAll('.govuk-back-link')[0].href).toBe('/main-return-url')
   })
 
   test('GET /cdo/edit/select-activity route returns 200 using owner', async () => {
@@ -284,6 +326,50 @@ describe('Select activity', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(400)
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelectorAll('.govuk-back-link')[0].href).toBe('/back')
+  })
+
+  test('POST /cdo/edit/select-activity route returns 400 for invalid payload with alternative back', async () => {
+    addBackNavigationForErrorCondition.mockReturnValue({ backLink: '/' })
+
+    getCdo.mockResolvedValue({
+      dog: {
+        status: 'Exempt',
+        indexNumber: 'ED12345'
+      }
+    })
+
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'dog',
+      activityType: 'sent'
+    })
+
+    getActivities.mockResolvedValue([
+      { text: 'act1', value: 1 },
+      { text: 'act2', value: 2 }
+    ])
+
+    const payload = {
+      pk: 'ED12345',
+      source: 'dog',
+      activityType: 'sent',
+      activity: '2'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/select-activity',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(400)
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelectorAll('.govuk-back-link')[0].href).toBe('/main-return-url')
   })
 
   test('POST /cdo/edit/select-activity route returns 404 for invalid payload and entity not found', async () => {
