@@ -56,7 +56,7 @@ module.exports = [{
       const ownerResults = getFromSession(request, 'persons')
       const ownerDetails = ownerResults[ownerChosen]
 
-      setOwnerDetails(request, ownerDetails)
+      setOwnerDetails(request, { ...ownerDetails, dateOfBirth: ownerDetails.birthDate })
       setAddress(request, ownerDetails.address)
 
       return h.redirect(dogRoutes.microchipSearch.get)

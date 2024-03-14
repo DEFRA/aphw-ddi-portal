@@ -212,7 +212,7 @@ describe('OwnerResults test', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), resolvedPerson)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
     expect(setAddress).toBeCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
@@ -221,9 +221,6 @@ describe('OwnerResults test', () => {
       addressLine1: 'Bully Green Farm'
     })
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
-    // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
-    // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-    // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
   })
 
   test('POST /cdo/create/select-owner with valid data returns 302 given owners address not listed', async () => {
@@ -251,9 +248,6 @@ describe('OwnerResults test', () => {
     expect(setAddress).not.toHaveBeenCalled()
 
     expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
-    // expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
-    // expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-    // expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
   })
 
   afterEach(async () => {
