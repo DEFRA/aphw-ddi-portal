@@ -2,7 +2,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% extends '_layout.njk' %}
@@ -14,7 +13,7 @@
     <div class="govuk-grid-column-one-half">
       {{ govukBackLink({
         text: "Back",
-        href: "/",
+        href: model.backLink,
         attributes: {
           id: "back"
         }
@@ -34,30 +33,30 @@
       }) }}
     {% endif %}
 
-    <form method="POST" novalidate autocomplete="off">
+    <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       {% call govukFieldset({
         legend: {
-          text: "Create new record",
+          text: "What is the owner's postcode?",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
 
-        <h2 class="govuk-heading-m">Owner details</h2>
+      {{ govukInput(model.postcode) }}
 
-        {{ govukInput(model.firstName) }}
-
-        {{ govukInput(model.lastName) }}
-      
-        {{ govukDateInput(model.dateOfBirth) }}
+      {{ govukInput(model.houseNumber) }}
 
       {% endcall %}
 
       {{ govukButton({
-        text: "Continue"
+        text: "Continue",
+        name: "submitButton"
       }) }}
-    </div>
-  </form>
+    </form>
+    <p class="govuk-body">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/address">Enter address manually</a>
+    </p>
+  </div>
 </div>
 
 {% endblock %}

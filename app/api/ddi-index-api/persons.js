@@ -18,15 +18,16 @@ const options = {
  */
 /**
  * @param {{ firstName: string; lastName: string; dateOfBirth?: string; }} filter
- * @returns {Promise<Person[]>}
+ * @returns {Promise<import('./person.js').Person[]>}
  */
 const getPersons = async (filter) => {
-  const validation = personsFilter.validate(filter, { abortEarly: false })
-  if (validation.error) {
-    throw new Error(validation.error.toString())
+  const { value, error } = personsFilter.validate(filter, { abortEarly: false, dateFormat: 'utc', stripUnknown: true })
+
+  if (error) {
+    throw new Error(error.toString())
   }
 
-  const searchParams = new URLSearchParams(Object.entries(filter))
+  const searchParams = new URLSearchParams(Object.entries(value))
 
   const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, options)
   return payload.persons

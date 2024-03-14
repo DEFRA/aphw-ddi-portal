@@ -203,7 +203,86 @@ describe('FullSummary test', () => {
             },
             dateOfBirth: '2000-03-17T00:00:00.000Z',
             firstName: 'John',
-            lastName: 'Smith'
+            lastName: 'Smith',
+            personReference: null
+          }
+        }
+      })
+  })
+
+  test('POST /cdo/create/full-summary route creates CDO with existing owner', async () => {
+    getDogs.mockReturnValue(
+      [
+        {
+          name: 'Bruce',
+          breed: 'Breed 1',
+          applicationType: 'cdo',
+          cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+          cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
+        }
+      ]
+    )
+
+    getOwnerDetails.mockReturnValue({
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: '2000-03-17T00:00:00.000Z',
+      personReference: 'P-AE73-43DA'
+    })
+    getAddress.mockReturnValue({
+      addressLine1: '1 Test Street',
+      addressLine2: 'Testarea',
+      town: 'Testington',
+      postcode: 'TS1 1TS',
+      country: 'Wales'
+    })
+    getEnforcementDetails.mockReturnValue({
+      court: 'court2',
+      policeForce: 'police-force-5',
+      legislationOfficer: 'DLO1'
+    })
+
+    wreck.post.mockResolvedValue({ payload: '{"resultCode": 200}' })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/full-summary',
+      auth,
+      payload: {}
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
+      {
+        payload: {
+          dogs: [
+            {
+              applicationType: 'cdo',
+              breed: 'Breed 1',
+              cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
+              cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
+              interimExemption: undefined,
+              name: 'Bruce'
+            }
+          ],
+          enforcementDetails: {
+            court: 'court2',
+            legislationOfficer: 'DLO1',
+            policeForce: 'police-force-5'
+          },
+          owner: {
+            address: {
+              addressLine1: '1 Test Street',
+              addressLine2: 'Testarea',
+              postcode: 'TS1 1TS',
+              town: 'Testington',
+              country: 'Wales'
+            },
+            dateOfBirth: '2000-03-17T00:00:00.000Z',
+            firstName: 'John',
+            lastName: 'Smith',
+            personReference: 'P-AE73-43DA'
           }
         }
       })

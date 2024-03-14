@@ -5,6 +5,7 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
     firstName: owner.firstName,
     lastName: owner.lastName,
     dateOfBirth: owner.dateOfBirth,
+    personReference: owner.personReference || null,
     address: {
       addressLine1: address.addressLine1,
       addressLine2: address.addressLine2,

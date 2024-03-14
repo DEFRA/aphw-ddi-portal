@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { admin } = require('../../../auth/permissions.js')
-const ViewModel = require('../../../models/cdo/edit/postcode-lookup')
+const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/edit/postcode-lookup')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
@@ -9,7 +9,7 @@ const { setPostcodeLookupDetails, getPostcodeLookupDetails } = require('../../..
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.postcodeLookup.get}/{personReference}`,
+    path: `${routes.postcodeLookupEdit.get}/{personReference}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -30,13 +30,13 @@ module.exports = [
           houseNumber: details?.houseNumber
         }
 
-        return h.view(views.postcodeLookup, new ViewModel(data, backNav))
+        return h.view(views.postcodeLookupEdit, new ViewModel(data, backNav))
       }
     }
   },
   {
     method: 'POST',
-    path: `${routes.postcodeLookup.post}/{dummy?}`,
+    path: `${routes.postcodeLookupEdit.post}/{dummy?}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -59,7 +59,7 @@ module.exports = [
 
           const viewModel = new ViewModel(data, backNav, error)
 
-          return h.view(views.postcodeLookup, viewModel).code(400).takeover()
+          return h.view(views.postcodeLookupEdit, viewModel).code(400).takeover()
         }
       },
       handler: async (request, h) => {

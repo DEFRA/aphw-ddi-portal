@@ -9,6 +9,9 @@ describe('OwnerDetails test', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  jest.mock('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     server = await createServer()
@@ -44,8 +47,7 @@ describe('OwnerDetails test', () => {
 
   test('POST /cdo/create/owner-details with invalid data returns error', async () => {
     const payload = {
-      firstName: 'John',
-      postcode: 'AB1 1TT'
+      firstName: 'John'
     }
 
     const options = {
@@ -62,7 +64,6 @@ describe('OwnerDetails test', () => {
   test('POST /cdo/create/owner-details with invalid date entry returns error 1', async () => {
     const payload = {
       firstName: 'John',
-      postcode: 'AB1 1TT',
       dobDay: 'a'
     }
 
@@ -82,7 +83,6 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT',
       dobDay: '32',
       dobMonth: '12',
       dobYear: '2000'
@@ -104,7 +104,6 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT',
       dobDay: '32',
       dobMonth: '12',
       dobYear: '200'
@@ -122,134 +121,15 @@ describe('OwnerDetails test', () => {
     expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
   })
 
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 1', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: 'AB1 1T',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 2', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: 'AB1 TT',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 3', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: 'S11',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 4', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: 'S1',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 5', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: 'S11 1TTT',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with invalid postcode returns 400 - scenario 6', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Smith',
-      postcode: '111 111',
-      triggeredButton: 'primary'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/create/owner-details',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real postcode')).toBeGreaterThan(-1)
-  })
-
-  test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup', async () => {
-    const nextScreenUrl = routes.selectAddress.get
+  test('POST /cdo/create/owner-details with valid data forwards to owner results screen', async () => {
+    const nextScreenUrl = routes.selectOwner.get
 
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT',
-      triggeredButton: 'primary'
+      dobDay: '',
+      dobMonth: '',
+      dobYear: ''
     }
 
     const options = {
@@ -262,16 +142,22 @@ describe('OwnerDetails test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dobDay: '',
+      dobMonth: '',
+      dobYear: ''
+    })
   })
 
-  test('POST /cdo/create/owner-details with valid data forwards to next screen if postcode lookup - no spaces', async () => {
-    const nextScreenUrl = routes.selectAddress.get
-
+  test('POST /cdo/create/owner-details with valid data and empty dob forwards to owner results screen', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB11TT',
-      triggeredButton: 'primary'
+      dobDay: '01',
+      dobMonth: '01',
+      dobYear: '1999'
     }
 
     const options = {
@@ -283,16 +169,23 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe(nextScreenUrl)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: new Date('1999-01-01'),
+      dobDay: 1,
+      dobMonth: 1,
+      dobYear: 1999
+    })
   })
 
-  test('POST /cdo/create/owner-details with valid data forwards to next screen if manual address entry', async () => {
-    const nextScreenUrl = routes.address.get
-
+  test('POST /cdo/create/owner-details updates owner details session given one exists', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT'
+      dobDay: '01',
+      dobMonth: '01',
+      dobYear: '1999'
     }
 
     const options = {
@@ -302,16 +195,31 @@ describe('OwnerDetails test', () => {
       payload
     }
 
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Cruella',
+      lastName: 'de Vil',
+      postcode: 'E1 1AA',
+      houseNumber: ''
+    })
+
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(response.headers.location).toBe(nextScreenUrl)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: new Date('1999-01-01'),
+      dobDay: 1,
+      dobMonth: 1,
+      dobYear: 1999,
+      postcode: 'E1 1AA',
+      houseNumber: ''
+    })
   })
 
   test('POST /cdo/create/owner-details validates date field if supplied - future date not allowed', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT',
       dobDay: '24',
       dobMonth: '8',
       dobYear: '2030'
@@ -332,7 +240,6 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      postcode: 'AB1 1TT',
       dobDay: '24',
       dobMonth: '8',
       dobYear: '2022'
