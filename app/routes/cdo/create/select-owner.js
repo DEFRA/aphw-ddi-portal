@@ -72,7 +72,7 @@ module.exports = [{
         setDog(request, dogs[0])
         return h.redirect(dogRoutes.confirm.get)
       }
-      
+
       const enforcementDetails = getEnforcementDetails(request) || {}
       const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
 
