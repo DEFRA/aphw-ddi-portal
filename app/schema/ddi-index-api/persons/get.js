@@ -5,10 +5,7 @@ const personsFilter = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
   dateOfBirth: Joi.date().iso().allow(null).optional().custom((value) => {
-    if (value !== undefined) {
-      return stripTimeFromUTC(new Date(value))
-    }
-    return undefined
+    return stripTimeFromUTC(new Date(value))
   }),
   dobDay: Joi.number().optional().allow('').strip(),
   dobMonth: Joi.number().optional().allow('').strip(),

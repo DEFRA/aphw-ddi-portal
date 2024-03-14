@@ -42,9 +42,7 @@ module.exports = [
             houseNumber: payload.houseNumber
           }
 
-          const viewModel = new ViewModel(data, backLink, error)
-
-          return h.view(views.postcodeLookupCreate, viewModel).code(400).takeover()
+          return h.view(views.postcodeLookupCreate, new ViewModel(data, backLink, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {
