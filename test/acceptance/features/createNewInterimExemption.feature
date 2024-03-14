@@ -32,12 +32,13 @@ Feature: Create new Interim exemption scheme
         And I expect that element "(//dd)[1]" contains the text "John Smith"
         And I expect that element "(//dd)[3]" not contains any text
         And I expect that element "(//dd)[5]" contains the text "LS20 8DA"
-        And I expect that element "(//dd)[7]" contains the text "West Yorkshire Police"
-        And I expect that element "(//dd)[8]" contains the text "John"
-        And I expect that element "(//dd)[9]" not contains any text
-        And I expect that element "(//dd)[10]" contains the text "XL Bully"
-        And I expect that element "(//dd)[11]" contains the text "Fido"
-        And I expect that element "(//dd)[12]" contains the text "01 February 2024"              
+        And I expect that element "(//dd)[7]" contains the text "England"
+        And I expect that element "(//dd)[8]" contains the text "West Yorkshire Police"
+        And I expect that element "(//dd)[9]" contains the text "John"
+        And I expect that element "(//dd)[10]" not contains any text
+        And I expect that element "(//dd)[11]" contains the text "XL Bully"
+        And I expect that element "(//dd)[12]" contains the text "Fido"
+        And I expect that element "(//dd)[13]" contains the text "01 February 2024"              
 
     Scenario: Interim exemption scheme record created successfully
         And I click on the element "button=Confirm details"
