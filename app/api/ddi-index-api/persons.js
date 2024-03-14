@@ -21,7 +21,7 @@ const options = {
  * @returns {Promise<import('./person.js').Person[]>}
  */
 const getPersons = async (filter) => {
-  const validation = personsFilter.validate(filter, { abortEarly: false, dateFormat: 'utc' })
+  const validation = personsFilter.validate(filter, { abortEarly: false, dateFormat: 'utc', stripUnknown: true })
 
   if (validation.error) {
     throw new Error(validation.error.toString())

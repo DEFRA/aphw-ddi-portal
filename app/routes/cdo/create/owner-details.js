@@ -31,7 +31,9 @@ module.exports = [{
     handler: async (request, h) => {
       const ownerDetails = request.payload
 
-      setOwnerDetails(request, appendDateOfBirthIfSupplied(ownerDetails))
+      const gotOwnerDetails = getOwnerDetails(request) || {}
+
+      setOwnerDetails(request, appendDateOfBirthIfSupplied({ ...gotOwnerDetails, ...ownerDetails }))
 
       return h.redirect(routes.selectOwner.get)
     }

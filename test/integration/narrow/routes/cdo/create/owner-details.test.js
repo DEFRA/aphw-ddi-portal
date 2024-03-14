@@ -10,7 +10,7 @@ describe('OwnerDetails test', () => {
   let server
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { setOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -176,6 +176,43 @@ describe('OwnerDetails test', () => {
       dobDay: 1,
       dobMonth: 1,
       dobYear: 1999
+    })
+  })
+
+  test('POST /cdo/create/owner-details updates owner details session given one exists', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      dobDay: '01',
+      dobMonth: '01',
+      dobYear: '1999'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/owner-details',
+      auth,
+      payload
+    }
+
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Cruella',
+      lastName: 'de Vil',
+      postcode: 'E1 1AA',
+      houseNumber: ''
+    })
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: new Date('1999-01-01'),
+      dobDay: 1,
+      dobMonth: 1,
+      dobYear: 1999,
+      postcode: 'E1 1AA',
+      houseNumber: ''
     })
   })
 

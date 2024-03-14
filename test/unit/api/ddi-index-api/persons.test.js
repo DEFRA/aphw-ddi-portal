@@ -15,7 +15,7 @@ describe('Persons test', () => {
         firstName: 'Homer',
         lastName: 'Simpson'
       })
-      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
     })
 
     test('should get people filtered by firstName and lastName and filter dobDay, dobMonth, dobYear', async () => {
@@ -27,7 +27,7 @@ describe('Persons test', () => {
         dobMonth: '',
         dobYear: ''
       })
-      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
     })
 
     test('should get people filtered by firstName and lastName and DOB', async () => {
@@ -40,7 +40,7 @@ describe('Persons test', () => {
         dobMonth: '05',
         dobYear: '1998'
       })
-      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
     })
 
     test('should get people filtered by firstName and lastName and DOB as Date', async () => {
@@ -53,7 +53,7 @@ describe('Persons test', () => {
         dobMonth: '05',
         dobYear: '1998'
       })
-      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
     })
 
     test('should throw an error given empty object', async () => {
@@ -61,13 +61,14 @@ describe('Persons test', () => {
       await expect(getPersons({})).rejects.toThrow('ValidationError: "firstName" is required. "lastName" is required')
     })
 
-    test('should throw an error given invalid query params', async () => {
+    test('should strip invalid query params', async () => {
       get.mockResolvedValue({ payload: {} })
       await expect(getPersons({
         firstName: 'Homer',
         lastName: 'Simpson',
         queryParam: '1234'
-      })).rejects.toThrow('ValidationError: "queryParam" is not allowed')
+      }))
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
     })
   })
 })

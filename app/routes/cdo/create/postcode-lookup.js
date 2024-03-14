@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { admin } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/cdo/postcode-lookup')
-const { getOwnerDetails, setOwnerDetails, getOwner } = require('../../../session/cdo/owner')
+const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [
