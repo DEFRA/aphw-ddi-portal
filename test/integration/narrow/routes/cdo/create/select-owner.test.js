@@ -12,10 +12,13 @@ describe('OwnerResults test', () => {
   const { getPersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { setOwnerDetails, getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
+
+  jest.mock('../../../../../../app/api/police-area')
+  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -209,6 +212,9 @@ describe('OwnerResults test', () => {
       lastName: 'Bloggs'
     })
 
+    lookupPoliceForceByPostcode.mockResolvedValue({
+      id: 5
+    })
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
@@ -219,6 +225,9 @@ describe('OwnerResults test', () => {
       postcode: 'CO10 8QX',
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
+    })
+    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), {
+      policeForce: 5
     })
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
@@ -236,9 +245,15 @@ describe('OwnerResults test', () => {
     }
 
     getFromSession.mockReturnValue(resolvedPersons)
+    lookupPoliceForceByPostcode.mockResolvedValue(undefined)
     getOwnerDetails.mockReturnValue({
       firstName: 'Joe',
       lastName: 'Bloggs'
+    })
+    getEnforcementDetails.mockReturnValue({
+      court: 2,
+      policeForce: 5,
+      legislationOfficer: 'DLO1'
     })
 
     const response = await server.inject(options)
