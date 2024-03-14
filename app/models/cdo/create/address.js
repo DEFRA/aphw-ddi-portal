@@ -1,4 +1,5 @@
 const { forms } = require('../../../constants/forms')
+const { defaultErrorPusher } = require('../../../lib/model-helpers')
 const { mapToCountrySelector } = require('../../mappers/countries')
 
 function ViewModel (address, form, backNav, countries, validationError) {
@@ -60,24 +61,7 @@ function ViewModel (address, form, backNav, countries, validationError) {
     errors: []
   }
 
-  if (validationError) {
-    for (const error of validationError.details) {
-      const name = error.path[0]
-
-      const prop = this.model[name]
-
-      if (prop !== undefined) {
-        prop.errorMessage = {
-          text: error.message
-        }
-
-        this.model.errors.push({
-          text: error.message,
-          href: `#${name}`
-        })
-      }
-    }
-  }
+  defaultErrorPusher(validationError, this.model)
 }
 
 module.exports = ViewModel

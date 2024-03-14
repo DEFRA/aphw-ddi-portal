@@ -1,5 +1,6 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { formatAddress, formatAddressSingleLine } = require('../../../lib/format-helpers')
+const { defaultErrorPusher } = require('../../../lib/model-helpers')
 
 function ViewModel (ownerDetails, ownerResults, errors) {
   this.model = {
@@ -30,23 +31,7 @@ function ViewModel (ownerDetails, ownerResults, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0]
-      const prop = this.model[name]
-
-      if (prop !== undefined) {
-        prop.errorMessage = {
-          text: error.message
-        }
-
-        this.model.errors.push({
-          text: error.message,
-          href: `#${name}`
-        })
-      }
-    }
-  }
+  defaultErrorPusher(errors, this.model)
 }
 
 module.exports = ViewModel

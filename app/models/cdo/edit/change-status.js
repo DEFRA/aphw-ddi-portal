@@ -1,4 +1,5 @@
 const { forms } = require('../../../constants/forms')
+const { defaultErrorPusher } = require('../../../lib/model-helpers')
 
 function ViewModel (dog, backNav, errors) {
   this.model = {
@@ -56,17 +57,7 @@ function ViewModel (dog, backNav, errors) {
     }
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0] ?? error.context.path[0]
-      const prop = this.model[name]
-
-      if (prop) {
-        prop.errorMessage = { text: error.message }
-        this.model.errors.push({ text: error.message, href: `#${name}` })
-      }
-    }
-  }
+  defaultErrorPusher(errors, this.model)
 }
 
 module.exports = ViewModel

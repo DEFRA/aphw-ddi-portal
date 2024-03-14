@@ -5,7 +5,9 @@ const ViewModel = require('../../../models/cdo/create/select-owner')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
+const { setDog } = require('../../../session/cdo/dog')
 const Joi = require('joi')
+const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 
 module.exports = [{
   method: 'GET',
@@ -14,6 +16,11 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
+
+      if (ownerDetails.dateOfBirth === null) {
+        delete ownerDetails.dateOfBirth
+      }
+
       const ownerResults = await getPersons(ownerDetails)
 
       setInSession(request, 'persons', ownerResults)
@@ -58,6 +65,12 @@ module.exports = [{
 
       setOwnerDetails(request, { ...ownerDetails, dateOfBirth: ownerDetails.birthDate })
       setAddress(request, ownerDetails.address)
+
+      const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
+      if (dogs && dogs.length === 1) {
+        setDog(request, dogs[0])
+        return h.redirect(dogRoutes.confirm.get)
+      }
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

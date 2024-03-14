@@ -1,4 +1,5 @@
 const { keys } = require('../../../constants/cdo/activity')
+const { defaultErrorPusher } = require('../../../lib/model-helpers')
 
 function ViewModel (model, backNav, errors) {
   this.model = {
@@ -57,17 +58,7 @@ function ViewModel (model, backNav, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0] ?? error.context.path[0]
-      const prop = this.model[name]
-
-      if (prop) {
-        prop.errorMessage = { text: error.message }
-        this.model.errors.push({ text: error.message, href: `#${name}` })
-      }
-    }
-  }
+  defaultErrorPusher(errors, this.model)
 }
 
 const determineActivityTitle = activityType => {

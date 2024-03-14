@@ -103,7 +103,11 @@
             <h2 class="govuk-summary-card__title">Dog {{ dog.id }}</h2>
             <ul class="govuk-summary-card__actions">
               <li class="govuk-summary-card__action">
+                {% if dog.indexNumber %}
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/confirm-dog-details"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+                {% else %}
                 <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/microchip-search/{{ dog.id }}"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+                {% endif %}
               </li>
               {% if model.dogs | length > 1 %}
               <li class="govuk-summary-card__action">
@@ -128,6 +132,12 @@
                 <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
               </div>
               {% endif %}
+              {% if dog.microchipNumber2 %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Microchip number 2</dt>
+                <dd class="govuk-summary-list__value">{{ dog.microchipNumber2 }}</dd>
+              </div>
+              {% endif %}
               {% if dog.cdoIssued %}
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">CDO issued</dt>
@@ -141,6 +151,12 @@
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
                 <dd class="govuk-summary-list__value">{{ dog.interimExemption }}</dd>
+              </div>
+              {% endif %}
+              {% if dog.indexNumber %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Index number</dt>
+                <dd class="govuk-summary-list__value">{{ dog.indexNumber }}</dd>
               </div>
               {% endif %}
             </dl>
