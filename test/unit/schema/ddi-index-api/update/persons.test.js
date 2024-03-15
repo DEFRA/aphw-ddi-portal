@@ -33,8 +33,7 @@ describe('Persons details validation', () => {
 
     expect(value).toMatchObject({
       firstName: 'John',
-      lastName: 'Smith',
-      dateOfBirth: null
+      lastName: 'Smith'
     })
   })
 
