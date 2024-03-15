@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const { getDateComponents } = require('../../../lib/date-helpers')
-const { validateCdoIssueDate, validateInterimExemptionDate, calculateCdoExpiryDate } = require('../../../lib/validation-helpers')
+const { calculateCdoExpiryDate } = require('../../../lib/validation-helpers')
+const { applicationTypeSchemaElements } = require('../common/components/application-type')
 
 const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
@@ -9,20 +10,7 @@ const dogDetailsSchema = Joi.object({
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
-  applicationType: Joi.string().trim().required().messages({
-    '*': 'Application type is required'
-  }),
-  cdoIssued: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).custom(validateCdoIssueDate),
-  interimExemption: Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).custom(validateInterimExemptionDate),
-  cdoExpiry: Joi.date().iso().allow(null).allow('').optional(),
+  ...applicationTypeSchemaElements,
   microchipNumber: Joi.string().allow(null).allow('').optional()
 }).required()
 
