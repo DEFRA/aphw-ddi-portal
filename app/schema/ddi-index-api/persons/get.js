@@ -4,7 +4,7 @@ const { stripTimeFromUTC } = require('../../../lib/date-helpers')
 const personsFilter = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  dateOfBirth: Joi.date().iso().allow(null).optional().custom((value) => {
+  dateOfBirth: Joi.date().iso().empty(null).allow(null).optional().custom((value) => {
     return stripTimeFromUTC(new Date(value))
   }),
   dobDay: Joi.number().optional().allow('').strip(),
