@@ -12,10 +12,13 @@ describe('OwnerResults test', () => {
   const { getPersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { setOwnerDetails, getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
+
+  jest.mock('../../../../../../app/api/police-area')
+  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -119,12 +122,12 @@ describe('OwnerResults test', () => {
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(document.querySelector('h1').textContent).toBe('Confirm address')
-    expect(document.querySelector('.govuk-grid-row form').textContent).toContain('Bully Green Farm')
-    expect(document.querySelector('.govuk-grid-row form').textContent).not.toContain('England')
-    expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Confirm address')
-    expect(document.querySelector('.govuk-grid-row form .govuk-link').textContent).toBe('Change address')
-    expect(document.querySelector('.govuk-grid-row form .govuk-link').getAttribute('href')).toBe(routes.address.get)
+    expect(document.querySelector('h1').textContent).toBe('Select the address for John Smith')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain("The owner's address is not listed")
+    expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('-1')
+    expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Continue')
   })
 
   test('GET /cdo/create/select-owner route returns 200 given more than one person found', async () => {
@@ -209,6 +212,9 @@ describe('OwnerResults test', () => {
       lastName: 'Bloggs'
     })
 
+    lookupPoliceForceByPostcode.mockResolvedValue({
+      id: 5
+    })
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
@@ -219,6 +225,9 @@ describe('OwnerResults test', () => {
       postcode: 'CO10 8QX',
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
+    })
+    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), {
+      policeForce: 5
     })
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
@@ -236,9 +245,15 @@ describe('OwnerResults test', () => {
     }
 
     getFromSession.mockReturnValue(resolvedPersons)
+    lookupPoliceForceByPostcode.mockResolvedValue(undefined)
     getOwnerDetails.mockReturnValue({
       firstName: 'Joe',
       lastName: 'Bloggs'
+    })
+    getEnforcementDetails.mockReturnValue({
+      court: 2,
+      policeForce: 5,
+      legislationOfficer: 'DLO1'
     })
 
     const response = await server.inject(options)
