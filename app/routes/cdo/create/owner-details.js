@@ -41,7 +41,8 @@ module.exports = [{
 }]
 
 const appendDateOfBirthIfSupplied = ownerDetails => {
-  if (!ownerDetails?.dobDay || !ownerDetails?.dobMonth | !ownerDetails?.dobYear) {
+  if (!ownerDetails?.dobDay || !ownerDetails?.dobMonth || !ownerDetails?.dobYear) {
+    delete ownerDetails.dateOfBirth
     return ownerDetails
   }
 
