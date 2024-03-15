@@ -1,5 +1,5 @@
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { defaultErrorPusher } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/model-helpers')
 
 function ViewModel (details, errors) {
   this.model = {
@@ -15,7 +15,7 @@ function ViewModel (details, errors) {
     errors: []
   }
 
-  defaultErrorPusher(errors, this.model)
+  errorPusherDefault(errors, this.model)
 }
 
 module.exports = ViewModel

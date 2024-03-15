@@ -13,10 +13,6 @@ module.exports = [
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
-        console.log('dogs', dogs)
-        const temp = new ViewModel(dogs)
-        console.log('dogModel', JSON.parse(JSON.stringify(temp.model)))
-
         return h.view(views.confirm, new ViewModel(dogs))
       }
     }

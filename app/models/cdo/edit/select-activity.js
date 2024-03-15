@@ -1,5 +1,5 @@
 const { keys } = require('../../../constants/cdo/activity')
-const { defaultErrorPusher } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/model-helpers')
 
 function ViewModel (model, backNav, errors) {
   this.model = {
@@ -58,7 +58,7 @@ function ViewModel (model, backNav, errors) {
     errors: []
   }
 
-  defaultErrorPusher(errors, this.model)
+  errorPusherDefault(errors, this.model)
 }
 
 const determineActivityTitle = activityType => {

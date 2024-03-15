@@ -1,4 +1,4 @@
-const { defaultErrorPusher } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/model-helpers')
 
 function ViewModel (activity, backNav, errors) {
   this.model = {
@@ -26,7 +26,7 @@ function ViewModel (activity, backNav, errors) {
     errors: []
   }
 
-  defaultErrorPusher(errors, this.model)
+  errorPusherDefault(errors, this.model)
 }
 
 module.exports = ViewModel

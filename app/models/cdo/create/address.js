@@ -1,5 +1,5 @@
 const { forms } = require('../../../constants/forms')
-const { defaultErrorPusher } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/model-helpers')
 const { mapToCountrySelector } = require('../../mappers/countries')
 
 function ViewModel (address, form, backNav, countries, validationError) {
@@ -61,7 +61,7 @@ function ViewModel (address, form, backNav, countries, validationError) {
     errors: []
   }
 
-  defaultErrorPusher(validationError, this.model)
+  errorPusherDefault(validationError, this.model)
 }
 
 module.exports = ViewModel

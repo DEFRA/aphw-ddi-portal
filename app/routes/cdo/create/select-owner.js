@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
-const { getOwnerDetails, setOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
+const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
@@ -8,7 +8,7 @@ const { setInSession, getFromSession } = require('../../../session/session-wrapp
 const { setDog } = require('../../../session/cdo/dog')
 const Joi = require('joi')
 const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
-const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -73,13 +73,7 @@ module.exports = [{
         return h.redirect(dogRoutes.confirm.get)
       }
 
-      const enforcementDetails = getEnforcementDetails(request) || {}
-      const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
-
-      if (policeForce) {
-        enforcementDetails.policeForce = policeForce.id
-        setEnforcementDetails(request, enforcementDetails)
-      }
+      await setPoliceForce(request)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

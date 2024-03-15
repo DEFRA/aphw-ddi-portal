@@ -11,20 +11,18 @@ describe('Application type', () => {
   const { getDog, setDog } = require('../../../../../../app/session/cdo/dog')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
+  const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
-  jest.mock('../../../../../../app/api/police-area')
-  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
+  jest.mock('../../../../../../app/lib/model-helpers')
+  const { setPoliceForce } = require('../../../../../../app/lib/model-helpers')
 
   const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    lookupPoliceForceByPostcode.mockResolvedValue({ id: 50, name: 'Police Force 50' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
-    getEnforcementDetails.mockReturnValue(null)
-    setEnforcementDetails.mockReturnValue()
+    setPoliceForce.mockResolvedValue()
     server = await createServer()
     await server.initialize()
   })

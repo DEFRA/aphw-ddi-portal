@@ -15,13 +15,13 @@ describe('OwnerResults test', () => {
   const { getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { setOwnerDetails, getOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
 
-  jest.mock('../../../../../../app/api/police-area')
-  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
+  jest.mock('../../../../../../app/lib/model-helpers')
+  const { setPoliceForce } = require('../../../../../../app/lib/model-helpers')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -78,6 +78,7 @@ describe('OwnerResults test', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    setPoliceForce.mockResolvedValue()
     server = await createServer()
     await server.initialize()
   })
@@ -216,9 +217,6 @@ describe('OwnerResults test', () => {
       lastName: 'Bloggs'
     })
 
-    lookupPoliceForceByPostcode.mockResolvedValue({
-      id: 5
-    })
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
@@ -230,7 +228,7 @@ describe('OwnerResults test', () => {
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), {
+    expect(setPoliceForce).toBeCalledWith(expect.anything(), {
       policeForce: 5
     })
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
@@ -282,15 +280,9 @@ describe('OwnerResults test', () => {
     }
 
     getFromSession.mockReturnValue(resolvedPersons)
-    lookupPoliceForceByPostcode.mockResolvedValue(undefined)
     getOwnerDetails.mockReturnValue({
       firstName: 'Joe',
       lastName: 'Bloggs'
-    })
-    getEnforcementDetails.mockReturnValue({
-      court: 2,
-      policeForce: 5,
-      legislationOfficer: 'DLO1'
     })
 
     const response = await server.inject(options)

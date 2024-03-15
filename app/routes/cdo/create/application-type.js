@@ -4,8 +4,7 @@ const { admin } = require('../../../auth/permissions')
 const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
 const ViewModel = require('../../../models/cdo/create/application-type')
 const { getDog, setDog } = require('../../../session/cdo/dog')
-const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = require('../../../session/cdo/owner')
-const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 const { validatePayload } = require('../../../schema/portal/cdo/application-type')
 
 module.exports = [
@@ -75,14 +74,3 @@ module.exports = [
     }
   }
 ]
-
-const setPoliceForce = async (request) => {
-  const ownerDetails = getOwnerDetails(request)
-  const enforcementDetails = getEnforcementDetails(request) || {}
-  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
-
-  if (policeForce) {
-    enforcementDetails.policeForce = policeForce.id
-    setEnforcementDetails(request, enforcementDetails)
-  }
-}

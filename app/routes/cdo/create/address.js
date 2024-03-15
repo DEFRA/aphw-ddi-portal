@@ -1,10 +1,10 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
-const { getAddress, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
+const { getAddress, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { admin } = require('../../../auth/permissions')
-const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
 
 const form = { formAction: routes.address.post }
@@ -46,13 +46,7 @@ module.exports = [{
     handler: async (request, h) => {
       setAddress(request, request.payload)
 
-      const enforcementDetails = getEnforcementDetails(request) || {}
-      const policeForce = await lookupPoliceForceByPostcode(request.payload?.postcode)
-
-      if (policeForce) {
-        enforcementDetails.policeForce = policeForce.id
-        setEnforcementDetails(request, enforcementDetails)
-      }
+      await setPoliceForce(request, request.payload?.postcode)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

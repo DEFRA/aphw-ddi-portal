@@ -1,7 +1,7 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
-const { defaultErrorPusher } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/model-helpers')
 
 function ViewModel (enforcementDetails, courts, policeForces, errors) {
   this.model = {
@@ -55,7 +55,7 @@ function ViewModel (enforcementDetails, courts, policeForces, errors) {
     errors: []
   }
 
-  defaultErrorPusher(errors, this.model)
+  errorPusherDefault(errors, this.model)
 }
 
 module.exports = ViewModel
