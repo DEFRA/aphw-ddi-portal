@@ -1,5 +1,5 @@
 const { forms } = require('../../../constants/forms')
-const { errorPusherWithDate } = require('../../../lib/model-helpers')
+const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (person, countries, backNav, errors) {
   this.model = {

@@ -19,7 +19,7 @@ describe('Microchip results tests', () => {
   })
 
   test('GET /cdo/create/microchip-results route returns 200', async () => {
-    getMicrochipResults.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({ microchipNumber: '12345' })
 
     const options = {
       method: 'GET',
@@ -32,7 +32,7 @@ describe('Microchip results tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelector('h1').textContent.trim()).toBe('There’s an existing dog record with microchip number')
+    expect(document.querySelector('h1').textContent.trim()).toBe('There’s an existing dog record with microchip number 12345')
   })
 
   afterEach(async () => {

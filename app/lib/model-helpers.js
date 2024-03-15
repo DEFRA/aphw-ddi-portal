@@ -1,6 +1,5 @@
 const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails } = require('../session/cdo/owner')
 const { lookupPoliceForceByPostcode } = require('../api/police-area')
-const { addDateErrors } = require('../lib/date-helpers')
 
 const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
@@ -74,38 +73,6 @@ const cleanUserDisplayName = (displayName) => {
   return displayName
 }
 
-const errorPusherDefault = (errors, model) => {
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0] ?? error.context.path[0]
-      const prop = model[name]
-
-      if (prop) {
-        prop.errorMessage = { text: error.message }
-        model.errors.push({ text: error.message, href: `#${name}` })
-      }
-    }
-  }
-}
-
-const errorPusherWithDate = (errors, model) => {
-  if (errors) {
-    for (const error of errors.details) {
-      let name = error.path[0] ?? error.context.path[0]
-      const prop = model[name]
-
-      if (prop) {
-        if (prop.type === 'date') {
-          name = addDateErrors(error, prop)
-        }
-
-        prop.errorMessage = { text: error.message }
-        model.errors.push({ text: error.message, href: `#${name}` })
-      }
-    }
-  }
-}
-
 const setPoliceForce = async (request, postcode = null) => {
   const ownerDetails = postcode ? { address: { postcode } } : getOwnerDetails(request)
   const enforcementDetails = getEnforcementDetails(request) || {}
@@ -126,7 +93,5 @@ module.exports = {
   extractLatestSecondaryTelephoneNumber,
   deepClone,
   cleanUserDisplayName,
-  errorPusherDefault,
-  errorPusherWithDate,
   setPoliceForce
 }

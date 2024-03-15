@@ -1,5 +1,5 @@
 const { keys } = require('../../../constants/cdo/activity')
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (model, backNav, errors) {
   this.model = {

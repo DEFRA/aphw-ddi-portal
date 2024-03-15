@@ -1,5 +1,5 @@
 const { keys } = require('../../../constants/cdo/dog')
-const { errorPusherWithDate } = require('../../../lib/model-helpers')
+const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (dogDetails, breedTypes, backNav, errors) {
   this.model = {

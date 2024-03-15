@@ -1,6 +1,6 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { formatAddress, formatAddressSingleLine } = require('../../../lib/format-helpers')
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (ownerDetails, ownerResults, errors) {
   this.model = {

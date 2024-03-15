@@ -1,7 +1,7 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (enforcementDetails, courts, policeForces, errors) {
   this.model = {

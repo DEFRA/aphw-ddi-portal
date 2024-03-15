@@ -1,6 +1,6 @@
 const { routes } = require('../../../constants/cdo/dog')
 const { applicationTypeElements } = require('../common/components/application-type')
-const { errorPusherWithDate } = require('../../../lib/model-helpers')
+const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (dogDetails, errors) {
   this.model = {

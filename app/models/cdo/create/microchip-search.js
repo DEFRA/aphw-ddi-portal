@@ -1,5 +1,5 @@
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (details, errors) {
   this.model = {

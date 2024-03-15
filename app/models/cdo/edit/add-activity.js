@@ -1,4 +1,4 @@
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (activity, backNav, errors) {
   this.model = {

@@ -1,5 +1,5 @@
 const { forms } = require('../../../constants/forms')
-const { errorPusherDefault } = require('../../../lib/model-helpers')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (searchCriteria, resultList, backNav, errors) {
   this.model = {

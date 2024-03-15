@@ -18,10 +18,6 @@ module.exports = [{
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
 
-      if (ownerDetails.dateOfBirth === null) {
-        delete ownerDetails.dateOfBirth
-      }
-
       const ownerResults = await getPersons(ownerDetails)
 
       setInSession(request, 'persons', ownerResults)

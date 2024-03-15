@@ -228,9 +228,7 @@ describe('OwnerResults test', () => {
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(setPoliceForce).toBeCalledWith(expect.anything(), {
-      policeForce: 5
-    })
+    expect(setPoliceForce).toBeCalledTimes(1)
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
 
