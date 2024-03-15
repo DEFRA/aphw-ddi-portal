@@ -216,7 +216,6 @@ describe('OwnerDetails test', () => {
     })
   })
 
-
   test('POST /cdo/create/owner-details updates owner details session correctly given one exists with DOB and person-reference', async () => {
     const payload = {
       firstName: 'John',
