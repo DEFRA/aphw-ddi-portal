@@ -198,7 +198,7 @@ describe('OwnerResults test', () => {
     expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
   })
 
-  test('POST /cdo/create/select-owner with valid data  and no existing dogs returns 302', async () => {
+  test('POST /cdo/create/select-owner with valid data and no existing dogs returns 302', async () => {
     const payload = {
       address: '0'
     }
@@ -232,7 +232,7 @@ describe('OwnerResults test', () => {
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
 
-  test('POST /cdo/create/select-owner with valid data  and one existing dog returns 302', async () => {
+  test('POST /cdo/create/select-owner with valid data and one existing dog returns 302', async () => {
     const payload = {
       address: '0'
     }
@@ -287,7 +287,7 @@ describe('OwnerResults test', () => {
 
     expect(response.statusCode).toBe(302)
     expect(setOwnerDetails).not.toHaveBeenCalled()
-    expect(setAddress).not.toHaveBeenCalled()
+    expect(setAddress).toBeCalledWith(expect.anything(), {})
 
     expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
   })
