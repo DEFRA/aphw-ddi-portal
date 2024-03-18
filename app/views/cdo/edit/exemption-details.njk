@@ -37,7 +37,7 @@
     {% endif %}
 
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
-      <span class="govuk-caption-l">Dog {{ model.exemption.indexNumber }}</span>
+      <span class="govuk-caption-l">Dog {{ model.indexNumber }}</span>
       {% call govukFieldset({
         legend: {
           text: "Edit exemption details",
@@ -50,53 +50,53 @@
         Status
       </p>
       <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-2">
-            <li class="govuk-summary-list__actions-list-item govuk-body govuk-!-font-size-16">{{ model.exemption.status }}</li>
-            <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.exemption.indexNumber }}{{ model.srcHashParam }}">Change status</a></li>
+            <li class="govuk-summary-list__actions-list-item govuk-body govuk-!-font-size-16">{{ model.status }}</li>
+            <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.indexNumber }}{{ model.srcHashParam }}">Change status</a></li>
           </ul>
 
-      {{ govukDateInput(model.exemption.certificateIssued) }}
+      {{ govukDateInput(model.certificateIssued) }}
 
-      {% if model.exemption.exemptionOrder.value != 2023 %}
-      {{ govukDateInput(model.exemption.cdoIssued) }}
+      {% if model.exemptionOrder.value != 2023 %}
+      {{ govukDateInput(model.cdoIssued) }}
 
-      {{ govukDateInput(model.exemption.cdoExpiry) }}
+      {{ govukDateInput(model.cdoExpiry) }}
       
-      {{ accessibleAutocomplete(model.exemption.court) }}
+      {{ accessibleAutocomplete(model.court) }}
       {% endif %}
 
-      {{ govukSelect(model.exemption.policeForce) }}
+      {{ govukSelect(model.policeForce) }}
 
-      {{ govukInput(model.exemption.legislationOfficer) }}
+      {{ govukInput(model.legislationOfficer) }}
 
-      {{ govukDateInput(model.exemption.applicationFeePaid) }}
+      {{ govukDateInput(model.applicationFeePaid) }}
 
-      {{ govukSelect(model.exemption.insuranceCompany) }}
+      {{ govukSelect(model.insuranceCompany) }}
 
-      {{ govukDateInput(model.exemption.insuranceRenewal) }}
+      {{ govukDateInput(model.insuranceRenewal) }}
 
-      {{ govukDateInput(model.exemption.neuteringConfirmation) }}
+      {{ govukDateInput(model.neuteringConfirmation) }}
 
-      {{ govukDateInput(model.exemption.microchipVerification) }}
+      {{ govukDateInput(model.microchipVerification) }}
 
-      {{ govukDateInput(model.exemption.joinedExemptionScheme) }}
+      {{ govukDateInput(model.joinedExemptionScheme) }}
 
-      {{ govukDateInput(model.exemption.removedFromCdoProcess) }}
+      {{ govukDateInput(model.removedFromCdoProcess) }}
 
-      {% if model.exemption.exemptionOrder.value == 2023 %}
+      {% if model.exemptionOrder.value == 2023 %}
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7">
       <h2 class="govuk-heading-m">Dangerous dogs exemption 2023 order</h2>
       <p class="govuk-hint">The information in this section is specific to dogs registered under the 2023 order.</p>
       
-      {{ govukDateInput(model.exemption.microchipDeadline) }}
-      {{ govukDateInput(model.exemption.typedByDlo) }}
-      {{ govukDateInput(model.exemption.withdrawn) }}
+      {{ govukDateInput(model.microchipDeadline) }}
+      {{ govukDateInput(model.typedByDlo) }}
+      {{ govukDateInput(model.withdrawn) }}
       {% endif %}
 
-      <input type="hidden" name="exemptionOrder" value="{{ model.exemption.exemptionOrder.value }}" />
+      <input type="hidden" name="exemptionOrder" value="{{ model.exemptionOrder.value }}" />
 
-      <input type="hidden" name="indexNumber" value="{{ model.exemption.indexNumber }}" />
+      <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
 
-      <input type="hidden" name="status" value="{{ model.exemption.status }}" />
+      <input type="hidden" name="status" value="{{ model.status }}" />
 
       <div class="govuk-button-group">
         {{ govukButton({

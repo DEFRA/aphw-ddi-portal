@@ -2,11 +2,11 @@ const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { setAddress, getOwnerDetails, setEnforcementDetails, getEnforcementDetails } = require('../../../session/cdo/owner')
+const { setAddress, getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { admin } = require('../../../auth/permissions')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
-const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 
 const source = 'create'
 
@@ -57,13 +57,7 @@ module.exports = [
 
         setAddress(request, selectedAddress)
 
-        const enforcementDetails = getEnforcementDetails(request) || {}
-        const policeForce = await lookupPoliceForceByPostcode(selectedAddress.postcode)
-
-        if (policeForce) {
-          enforcementDetails.policeForce = policeForce.id
-          setEnforcementDetails(request, enforcementDetails)
-        }
+        await setPoliceForce(request, selectedAddress.postcode)
 
         return h.redirect(dogRoutes.microchipSearch.get)
       }

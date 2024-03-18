@@ -65,7 +65,9 @@ function ViewModel (owner, address, enforcement, courts, policeForces, dogs, err
       dogs: dogs.map((dog, index) => ({
         id: index + 1,
         name: dog[keys.name],
+        indexNumber: dog[keys.indexNumber],
         microchipNumber: dog[keys.microchipNumber],
+        microchipNumber2: dog[keys.microchipNumber2],
         breed: dog[keys.breed],
         cdoIssued: formatToGds(dog[keys.cdoIssued]),
         cdoExpiry: formatToGds(dog[keys.cdoExpiry]),

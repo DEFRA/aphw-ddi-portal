@@ -1,0 +1,43 @@
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Breed</dt>
+    <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Name</dt>
+    <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
+  </div>
+  {% if dog.microchipNumber %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Microchip number</dt>
+    <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
+  </div>
+  {% endif %}
+  {% if dog.microchipNumber2 %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Microchip number 2</dt>
+    <dd class="govuk-summary-list__value">{{ dog.microchipNumber2 }}</dd>
+  </div>
+  {% endif %}
+  {% if dog.cdoIssued %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">CDO issued</dt>
+    <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">CDO expiry</dt>
+    <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
+  </div>
+  {% elif dog.interimExemption %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
+    <dd class="govuk-summary-list__value">{{ dog.interimExemption }}</dd>
+  </div>
+  {% endif %}
+  {% if dog.indexNumber %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Index number</dt>
+    <dd class="govuk-summary-list__value">{{ dog.indexNumber }}</dd>
+  </div>
+  {% endif %}
+</dl>

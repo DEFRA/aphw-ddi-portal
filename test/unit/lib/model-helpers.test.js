@@ -1,6 +1,16 @@
-const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance } = require('../../../app/lib/model-helpers')
+const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce } = require('../../../app/lib/model-helpers')
+
+jest.mock('../../../app/session/cdo/owner')
+const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = require('../../../app/session/cdo/owner')
+
+jest.mock('../../../app/api/police-area')
+const { lookupPoliceForceByPostcode } = require('../../../app/api/police-area')
 
 describe('ModelHelpers', () => {
+  beforeEach(async () => {
+    getOwnerDetails.mockResolvedValue()
+  })
+
   test('extractEmail handles no emails', () => {
     const email = extractEmail(null)
     expect(email).toBe('')
@@ -30,6 +40,14 @@ describe('ModelHelpers', () => {
     expect(email).toBe('email1@here.com')
   })
 
+  test('extractEmail returns empty string if no emails', () => {
+    const contacts = []
+
+    const email = extractEmail(contacts)
+
+    expect(email).toBe('')
+  })
+
   test('extractLatestPrimaryTelephoneNumber returns latest primary phone number', () => {
     const contacts = [
       { contact: { id: 1, contact: 'phone1', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
@@ -48,6 +66,19 @@ describe('ModelHelpers', () => {
 
   test('extractLatestPrimaryTelephoneNumber handles no contacts', () => {
     const phoneNumber = extractLatestPrimaryTelephoneNumber(null)
+    expect(phoneNumber).toBe(null)
+  })
+
+  test('extractLatestPrimaryTelephoneNumber returns null if no primary phone numbers', () => {
+    const contacts = [
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 5, contact: 'phone4', contact_type_id: 3, contact_type: { contact_type: 'SecondaryPhone' } } }
+    ]
+
+    const phoneNumber = extractLatestPrimaryTelephoneNumber(contacts)
+
     expect(phoneNumber).toBe(null)
   })
 
@@ -73,6 +104,20 @@ describe('ModelHelpers', () => {
     expect(phoneNumber).toBe(null)
   })
 
+  test('extractLatestSecondaryTelephoneNumber returns null if no secondary phone numbers', () => {
+    const contacts = [
+      { contact: { id: 1, contact: 'phone1', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } },
+      { contact: { id: 2, contact: 'email1@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 3, contact: 'email2@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 4, contact: 'email3@here.com', contact_type_id: 2, contact_type: { contact_type: 'Email' } } },
+      { contact: { id: 6, contact: 'phone3', contact_type_id: 1, contact_type: { contact_type: 'Phone' } } }
+    ]
+
+    const phoneNumber = extractLatestSecondaryTelephoneNumber(contacts)
+
+    expect(phoneNumber).toBe(null)
+  })
+
   test('extractLatestAddress handles no addresses', () => {
     const address = extractLatestAddress(null)
     expect(address).toEqual({})
@@ -93,6 +138,40 @@ describe('ModelHelpers', () => {
     const insurance = extractLatestInsurance(insurances)
 
     expect(insurance.policy_number).toBe('CURRENT')
+  })
+
+  test('setPoliceForce sets valid force when postcode from ownerDetails', async () => {
+    lookupPoliceForceByPostcode.mockResolvedValue({ id: 5, name: 'Force 5' })
+    getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
+    getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+
+    await setPoliceForce({})
+
+    expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
+  })
+
+  test('setPoliceForce sets valid force when postcode supplied', async () => {
+    lookupPoliceForceByPostcode.mockResolvedValue({ id: 5, name: 'Force 5' })
+    getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
+    getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+
+    await setPoliceForce({}, 'TS2 2TS')
+
+    expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
+  })
+
+  test('setPoliceForce doesnt set force when lookup fails', async () => {
+    lookupPoliceForceByPostcode.mockResolvedValue(null)
+    getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
+    getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+
+    await setPoliceForce({}, 'TS2 2TS')
+
+    expect(setEnforcementDetails).not.toHaveBeenCalled()
+  })
+
+  afterEach(async () => {
+    jest.clearAllMocks()
   })
 
   describe('cleanUserDisplayName', () => {

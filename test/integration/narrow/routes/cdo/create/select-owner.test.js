@@ -11,14 +11,17 @@ describe('OwnerResults test', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/persons')
   const { getPersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
+
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { setOwnerDetails, getOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
+  const { setOwnerDetails, getOwnerDetails, setAddress } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/session-wrapper')
   const { setInSession, getFromSession } = require('../../../../../../app/session/session-wrapper')
 
-  jest.mock('../../../../../../app/api/police-area')
-  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
+  jest.mock('../../../../../../app/lib/model-helpers')
+  const { setPoliceForce } = require('../../../../../../app/lib/model-helpers')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -75,6 +78,7 @@ describe('OwnerResults test', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    setPoliceForce.mockResolvedValue()
     server = await createServer()
     await server.initialize()
   })
@@ -194,7 +198,7 @@ describe('OwnerResults test', () => {
     expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
   })
 
-  test('POST /cdo/create/select-owner with valid data returns 302', async () => {
+  test('POST /cdo/create/select-owner with valid data  and no existing dogs returns 302', async () => {
     const payload = {
       address: '0'
     }
@@ -206,15 +210,13 @@ describe('OwnerResults test', () => {
       payload
     }
 
+    getPersonAndDogs.mockResolvedValue({ personReference: 'P-123-456', dogs: [] })
     getFromSession.mockReturnValue([resolvedPerson])
     getOwnerDetails.mockReturnValue({
       firstName: 'Joe',
       lastName: 'Bloggs'
     })
 
-    lookupPoliceForceByPostcode.mockResolvedValue({
-      id: 5
-    })
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
@@ -226,10 +228,41 @@ describe('OwnerResults test', () => {
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), {
-      policeForce: 5
-    })
+    expect(setPoliceForce).toBeCalledTimes(1)
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
+  })
+
+  test('POST /cdo/create/select-owner with valid data  and one existing dog returns 302', async () => {
+    const payload = {
+      address: '0'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload
+    }
+
+    getPersonAndDogs.mockResolvedValue({ personReference: 'P-123-456', dogs: [{ id: 1, name: 'Rex' }] })
+    getFromSession.mockReturnValue([resolvedPerson])
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs'
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    })
+    expect(response.headers.location).toBe(dogRoutes.confirm.get)
   })
 
   test('POST /cdo/create/select-owner with valid data returns 302 given owners address not listed', async () => {
@@ -245,15 +278,9 @@ describe('OwnerResults test', () => {
     }
 
     getFromSession.mockReturnValue(resolvedPersons)
-    lookupPoliceForceByPostcode.mockResolvedValue(undefined)
     getOwnerDetails.mockReturnValue({
       firstName: 'Joe',
       lastName: 'Bloggs'
-    })
-    getEnforcementDetails.mockReturnValue({
-      court: 2,
-      policeForce: 5,
-      legislationOfficer: 'DLO1'
     })
 
     const response = await server.inject(options)

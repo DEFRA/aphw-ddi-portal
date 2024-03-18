@@ -10,8 +10,7 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const details = getMicrochipResults(request)
-
-      return h.view(views.microchipResults, new ViewModel({ results: details }))
+      return h.view(views.microchipResults, new ViewModel(details))
     }
   }
 }]

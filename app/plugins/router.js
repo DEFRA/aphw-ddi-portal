@@ -6,6 +6,7 @@ const routes = [].concat(
   require('../routes/cdo/create/postcode-lookup'),
   require('../routes/cdo/create/select-address'),
   require('../routes/cdo/create/address'),
+  require('../routes/cdo/create/application-type'),
   require('../routes/cdo/create/enforcement-details'),
   require('../routes/cdo/create/full-summary'),
   require('../routes/cdo/create/dog-details'),

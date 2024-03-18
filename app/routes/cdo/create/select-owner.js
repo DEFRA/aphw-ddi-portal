@@ -1,12 +1,14 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
-const { getOwnerDetails, setOwnerDetails, setAddress, getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
+const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
 const { admin } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
+const { setDog } = require('../../../session/cdo/dog')
 const Joi = require('joi')
-const { lookupPoliceForceByPostcode } = require('../../../api/police-area')
+const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -15,6 +17,7 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
+
       const ownerResults = await getPersons(ownerDetails)
 
       setInSession(request, 'persons', ownerResults)
@@ -60,13 +63,13 @@ module.exports = [{
       setOwnerDetails(request, { ...ownerDetails, dateOfBirth: ownerDetails.birthDate })
       setAddress(request, ownerDetails.address)
 
-      const enforcementDetails = getEnforcementDetails(request) || {}
-      const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
-
-      if (policeForce) {
-        enforcementDetails.policeForce = policeForce.id
-        setEnforcementDetails(request, enforcementDetails)
+      const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
+      if (dogs && dogs.length === 1) {
+        setDog(request, dogs[0])
+        return h.redirect(dogRoutes.confirm.get)
       }
+
+      await setPoliceForce(request)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

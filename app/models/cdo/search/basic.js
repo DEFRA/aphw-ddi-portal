@@ -1,4 +1,5 @@
 const { forms } = require('../../../constants/forms')
+const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (searchCriteria, resultList, backNav, errors) {
   this.model = {
@@ -48,23 +49,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0]
-      const prop = this.model[name]
-
-      if (prop !== undefined) {
-        prop.errorMessage = {
-          text: error.message
-        }
-
-        this.model.errors.push({
-          text: error.message,
-          href: `#${name}`
-        })
-      }
-    }
-  }
+  errorPusherDefault(errors, this.model)
 }
 
 module.exports = ViewModel

@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/cdo/dog')
+const { routes: dogRoutes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
@@ -7,7 +7,7 @@ const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
 module.exports = [
   {
     method: 'GET',
-    path: routes.confirm.get,
+    path: dogRoutes.confirm.get,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -19,14 +19,19 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: routes.confirm.post,
+    path: dogRoutes.confirm.post,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
         if (request.payload.addAnotherDog != null) {
           addAnotherDog(request)
 
-          return h.redirect(routes.microchipSearch.get)
+          return h.redirect(dogRoutes.microchipSearch.get)
+        }
+
+        const dogs = getDogs(request)
+        if (dogs?.length === 1 && dogs[0].indexNumber) {
+          return h.redirect(`${dogRoutes.applicationType.get}/1`)
         }
 
         return h.redirect(ownerRoutes.enforcementDetails.get)
