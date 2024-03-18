@@ -1,10 +1,10 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
+const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 
-function ViewModel (data, backNav, errors) {
+function ViewModel (data, errors) {
   this.model = {
-    backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
+    backLink: ownerRoutes.ownerDetails.get,
     personReference: data.personReference,
     postcode: {
       label: {
