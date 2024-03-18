@@ -46,6 +46,7 @@ describe('Address test', () => {
     expect(getCountries).toBeCalled()
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
   })
 
   test('POST /cdo/create/address route returns 302 if not auth', async () => {
