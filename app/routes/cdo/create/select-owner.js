@@ -54,6 +54,7 @@ module.exports = [{
       const ownerChosen = request.payload.address
 
       if (ownerChosen === -1) {
+        setAddress(request, {})
         return h.redirect(routes.postcodeLookupCreate.get)
       }
 
