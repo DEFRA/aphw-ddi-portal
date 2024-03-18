@@ -4,6 +4,10 @@ const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/cdo/postcode-lookup')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
 
+const backNav = {
+  backLink: routes.ownerDetails.get
+}
+
 module.exports = [
   {
     method: 'GET',
@@ -18,7 +22,7 @@ module.exports = [
           houseNumber: details?.houseNumber
         }
 
-        return h.view(views.postcodeLookupCreate, new ViewModel(data))
+        return h.view(views.postcodeLookupCreate, new ViewModel(data, backNav))
       }
     }
   },
@@ -37,7 +41,7 @@ module.exports = [
             houseNumber: payload.houseNumber
           }
 
-          return h.view(views.postcodeLookupCreate, new ViewModel(data, error)).code(400).takeover()
+          return h.view(views.postcodeLookupCreate, new ViewModel(data, backNav, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {
