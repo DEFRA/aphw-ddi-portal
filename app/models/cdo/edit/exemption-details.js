@@ -467,7 +467,6 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
   }
 
   errorPusherWithDate(errors, this.model)
-  console.log('this.model.errors', this.model.errors)
 }
 
 module.exports = ViewModel
