@@ -26,7 +26,8 @@ const buildCdoCreatePayload = (owner, address, enforcementDetails, dogs) => ({
     applicationType: d.applicationType,
     cdoIssued: d.cdoIssued,
     cdoExpiry: d.cdoExpiry,
-    interimExemption: d.interimExemption
+    interimExemption: d.interimExemption,
+    indexNumber: d.indexNumber
   }))
 })
 
