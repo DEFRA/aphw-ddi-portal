@@ -8,7 +8,7 @@ const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
 
 const form = { formAction: routes.address.post }
-const backNav = { backLink: routes.ownerDetails.get }
+const backNav = { backLink: routes.postcodeLookupCreate.get }
 
 module.exports = [{
   method: 'GET',
