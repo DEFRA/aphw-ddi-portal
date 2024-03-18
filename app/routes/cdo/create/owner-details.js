@@ -12,6 +12,7 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
+
       return h.view(views.ownerDetails, new ViewModel(ownerDetails))
     }
   }
