@@ -216,7 +216,7 @@ describe('OwnerDetails test', () => {
     })
   })
 
-  test('POST /cdo/create/owner-details updates owner details session correctly given one exists and DOB is empty', async () => {
+  test('POST /cdo/create/owner-details updates owner details session correctly given one exists with DOB and person-reference', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -237,7 +237,8 @@ describe('OwnerDetails test', () => {
       lastName: 'de Vil',
       postcode: 'E1 1AA',
       houseNumber: '',
-      dateOfBirth: '1999-01-01'
+      dateOfBirth: '1999-01-01',
+      personReference: 'P-1234-5678'
     })
 
     const response = await server.inject(options)

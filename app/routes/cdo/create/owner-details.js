@@ -33,21 +33,23 @@ module.exports = [{
 
       const gotOwnerDetails = getOwnerDetails(request) || {}
 
-      setOwnerDetails(request, appendDateOfBirthIfSupplied({ ...gotOwnerDetails, ...ownerDetails }))
+      setOwnerDetails(request, hydrateOwnerDetails({ ...gotOwnerDetails, ...ownerDetails }))
 
       return h.redirect(routes.selectOwner.get)
     }
   }
 }]
 
-const appendDateOfBirthIfSupplied = ownerDetails => {
-  if (!ownerDetails?.dobDay || !ownerDetails?.dobMonth || !ownerDetails?.dobYear) {
-    delete ownerDetails.dateOfBirth
-    return ownerDetails
+const hydrateOwnerDetails = (ownerDetails = {}) => {
+  const { dateOfBirth, personReference, ...hydratedOwnerDetailBase } = ownerDetails
+  const { dobDay, dobMonth, dobYear } = ownerDetails
+
+  if (!dobDay || !dobMonth || !dobYear) {
+    return hydratedOwnerDetailBase
   }
 
   return {
-    ...ownerDetails,
-    dateOfBirth: new UTCDate(`${ownerDetails.dobYear}-${ownerDetails.dobMonth}-${ownerDetails.dobDay}`)
+    ...hydratedOwnerDetailBase,
+    dateOfBirth: new UTCDate(`${dobYear}-${dobMonth}-${dobDay}`)
   }
 }
