@@ -1,4 +1,5 @@
 const { routes } = require('../../../constants/cdo/owner')
+const { dedupeAddresses } = require('../../../lib/model-helpers')
 
 function ViewModel (details, addresses = [], error) {
   const items = addresses
@@ -23,7 +24,7 @@ function ViewModel (details, addresses = [], error) {
     results: {
       id: 'addresses',
       name: 'address',
-      items,
+      items: dedupeAddresses(items),
       classes: 'govuk-radios--small'
     }
   }

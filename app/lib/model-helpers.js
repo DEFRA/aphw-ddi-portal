@@ -84,6 +84,20 @@ const setPoliceForce = async (request, postcode = null) => {
   }
 }
 
+const dedupeAddresses = items => {
+  const uniqueAddressTexts = new Set()
+  const uniqueAddressObjects = []
+  if (items) {
+    items.forEach(addr => {
+      if (!uniqueAddressTexts.has(addr.text)) {
+        uniqueAddressTexts.add(addr.text)
+        uniqueAddressObjects.push(addr)
+      }
+    })
+  }
+  return uniqueAddressObjects
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -93,5 +107,6 @@ module.exports = {
   extractLatestSecondaryTelephoneNumber,
   deepClone,
   cleanUserDisplayName,
-  setPoliceForce
+  setPoliceForce,
+  dedupeAddresses
 }

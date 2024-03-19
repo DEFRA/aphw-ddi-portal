@@ -61,7 +61,17 @@ const deleteDog = (request) => {
 
   entry.splice(index, 1)
 
+  renumberEntries(entry)
+
   request.yar.set(keys.entry, entry)
+}
+
+const renumberEntries = entries => {
+  if (entries) {
+    entries.forEach((value, index) => {
+      value.dogId = index + 1
+    })
+  }
 }
 
 const getMicrochipResults = (request) => {
@@ -79,5 +89,6 @@ module.exports = {
   addAnotherDog,
   deleteDog,
   setMicrochipResults,
-  getMicrochipResults
+  getMicrochipResults,
+  renumberEntries
 }

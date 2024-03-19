@@ -1,4 +1,4 @@
-const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -141,8 +141,44 @@ describe('dog session storage', () => {
     expect(requestWithPayload.yar.set).toHaveBeenCalledTimes(1)
     expect(requestWithPayload.yar.set).toHaveBeenCalledWith('dogs', [{
       name: 'Buster',
-      breed: 'Breed 2'
+      breed: 'Breed 2',
+      dogId: 1
     }])
+  })
+
+  test('renumberEntries renumbers', () => {
+    const dogs = [
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 2
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 5
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 4
+      }]
+
+    renumberEntries(dogs)
+
+    expect(dogs).toEqual([
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 2
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }]
+    )
   })
 
   test('getMicrochipDetails returns details from session', () => {

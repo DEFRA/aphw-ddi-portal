@@ -1,4 +1,4 @@
-const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce } = require('../../../app/lib/model-helpers')
+const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = require('../../../app/session/cdo/owner')
@@ -168,6 +168,58 @@ describe('ModelHelpers', () => {
     await setPoliceForce({}, 'TS2 2TS')
 
     expect(setEnforcementDetails).not.toHaveBeenCalled()
+  })
+
+  test('dedupeAddresses handles no addresses', () => {
+    const addresses = null
+    const res = dedupeAddresses(addresses)
+    expect(res).toEqual([])
+  })
+
+  test('dedupeAddresses handles unique addresses', () => {
+    const addresses = [
+      { text: 'address 1', value: 0 },
+      { text: 'address 2', value: 1 },
+      { text: 'address 3', value: 2 }
+    ]
+    const res = dedupeAddresses(addresses)
+    expect(res).toEqual([
+      { text: 'address 1', value: 0 },
+      { text: 'address 2', value: 1 },
+      { text: 'address 3', value: 2 }
+    ])
+  })
+
+  test('dedupeAddresses handles duplicate addresses', () => {
+    const addresses = [
+      { text: 'address 1', value: 0 },
+      { text: 'address 1', value: 1 },
+      { text: 'address 1', value: 2 }
+    ]
+    const res = dedupeAddresses(addresses)
+    expect(res).toEqual([
+      { text: 'address 1', value: 0 }
+    ])
+  })
+
+  test('dedupeAddresses handles duplicates and unique addresses', () => {
+    const addresses = [
+      { text: 'address 1', value: 0 },
+      { text: 'address 1', value: 1 },
+      { text: 'address 2', value: 2 },
+      { text: 'address 3', value: 3 },
+      { text: 'address 3', value: 4 },
+      { text: 'address 3', value: 5 },
+      { text: 'address 4', value: 6 },
+      { text: 'address 4', value: 7 }
+    ]
+    const res = dedupeAddresses(addresses)
+    expect(res).toEqual([
+      { text: 'address 1', value: 0 },
+      { text: 'address 2', value: 2 },
+      { text: 'address 3', value: 3 },
+      { text: 'address 4', value: 6 }
+    ])
   })
 
   afterEach(async () => {
