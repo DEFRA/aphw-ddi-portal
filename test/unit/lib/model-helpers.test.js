@@ -198,7 +198,7 @@ describe('ModelHelpers', () => {
     ]
     const res = dedupeAddresses(addresses)
     expect(res).toEqual([
-      { text: 'address 1', value: 0 }
+      { text: 'address 1', value: 2 }
     ])
   })
 
@@ -215,10 +215,10 @@ describe('ModelHelpers', () => {
     ]
     const res = dedupeAddresses(addresses)
     expect(res).toEqual([
-      { text: 'address 1', value: 0 },
+      { text: 'address 1', value: 1 },
       { text: 'address 2', value: 2 },
-      { text: 'address 3', value: 3 },
-      { text: 'address 4', value: 6 }
+      { text: 'address 3', value: 5 },
+      { text: 'address 4', value: 7 }
     ])
   })
 

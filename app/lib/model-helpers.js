@@ -85,17 +85,15 @@ const setPoliceForce = async (request, postcode = null) => {
 }
 
 const dedupeAddresses = items => {
-  const uniqueAddressTexts = new Set()
-  const uniqueAddressObjects = []
+  const uniqueAddressMap = new Map()
+
   if (items) {
     items.forEach(addr => {
-      if (!uniqueAddressTexts.has(addr.text)) {
-        uniqueAddressTexts.add(addr.text)
-        uniqueAddressObjects.push(addr)
-      }
+      uniqueAddressMap.set(addr.text, addr)
     })
   }
-  return uniqueAddressObjects
+
+  return [...uniqueAddressMap].map(([_, value]) => value)
 }
 
 module.exports = {
