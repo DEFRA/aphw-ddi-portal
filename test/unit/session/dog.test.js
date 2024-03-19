@@ -1,4 +1,4 @@
-const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries, addAnotherDog } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -98,6 +98,18 @@ describe('dog session storage', () => {
     }])
   })
 
+  test('setDog throws error if dog not found in session', () => {
+    mockRequest.yar.get.mockReturnValue([])
+
+    const dog = {
+      id: 2,
+      name: 'Alice',
+      breed: 'Breed 2'
+    }
+
+    expect(() => setDog(mockRequest, dog)).toThrow('Dog -1 does not exist')
+  })
+
   test('getDogs returns dogs from session', () => {
     mockRequest.yar.get.mockReturnValue([{
       name: 'Fido',
@@ -146,6 +158,15 @@ describe('dog session storage', () => {
     }])
   })
 
+  test('addAnotherDog sets new blank dog in session', () => {
+    mockRequest.yar.get.mockReturnValue([])
+
+    addAnotherDog(mockRequest)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [{}])
+  })
+
   test('renumberEntries renumbers', () => {
     const dogs = [
       {
@@ -179,6 +200,14 @@ describe('dog session storage', () => {
         dogId: 3
       }]
     )
+  })
+
+  test('renumberEntries handles no entries', () => {
+    const dogs = null
+
+    renumberEntries(dogs)
+
+    expect(dogs).toBe(null)
   })
 
   test('getMicrochipDetails returns details from session', () => {
