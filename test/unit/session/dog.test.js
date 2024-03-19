@@ -1,4 +1,4 @@
-const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries, addAnotherDog } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -98,6 +98,18 @@ describe('dog session storage', () => {
     }])
   })
 
+  test('setDog throws error if dog not found in session', () => {
+    mockRequest.yar.get.mockReturnValue([])
+
+    const dog = {
+      id: 2,
+      name: 'Alice',
+      breed: 'Breed 2'
+    }
+
+    expect(() => setDog(mockRequest, dog)).toThrow('Dog -1 does not exist')
+  })
+
   test('getDogs returns dogs from session', () => {
     mockRequest.yar.get.mockReturnValue([{
       name: 'Fido',
@@ -141,8 +153,61 @@ describe('dog session storage', () => {
     expect(requestWithPayload.yar.set).toHaveBeenCalledTimes(1)
     expect(requestWithPayload.yar.set).toHaveBeenCalledWith('dogs', [{
       name: 'Buster',
-      breed: 'Breed 2'
+      breed: 'Breed 2',
+      dogId: 1
     }])
+  })
+
+  test('addAnotherDog sets new blank dog in session', () => {
+    mockRequest.yar.get.mockReturnValue([])
+
+    addAnotherDog(mockRequest)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', [{}])
+  })
+
+  test('renumberEntries renumbers', () => {
+    const dogs = [
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 2
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 5
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 4
+      }]
+
+    renumberEntries(dogs)
+
+    expect(dogs).toEqual([
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 2
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }]
+    )
+  })
+
+  test('renumberEntries handles no entries', () => {
+    const dogs = null
+
+    renumberEntries(dogs)
+
+    expect(dogs).toBe(null)
   })
 
   test('getMicrochipDetails returns details from session', () => {
