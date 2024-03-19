@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
+const { JSDOM } = require('jsdom')
 
 describe('PostCode Lookup test', () => {
   jest.mock('../../../../../../app/auth')
@@ -31,6 +32,9 @@ describe('PostCode Lookup test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
   })
 
   test('POST /cdo/create/postcode-lookup route returns 302 if not auth', async () => {
