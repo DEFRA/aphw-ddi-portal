@@ -50,13 +50,14 @@ module.exports = [{
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
 
-      setMicrochipResults(request, results)
+      const searchResults = { results, microchipNumber: details.microchipNumber }
+      setMicrochipResults(request, searchResults)
 
-      if (results.length === 0) {
+      if (searchResults.results.length === 0) {
         setDog(request, details)
       }
 
-      return h.redirect(results.length > 0 ? `${routes.microchipResults.get}/${details.dogId}` : `${routes.details.get}/${details.dogId}`)
+      return h.redirect(searchResults.results.length > 0 ? `${routes.microchipResults.get}/${details.dogId}` : `${routes.details.get}/${details.dogId}`)
     }
   }
 }]

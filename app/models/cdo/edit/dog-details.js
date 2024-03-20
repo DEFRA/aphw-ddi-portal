@@ -1,5 +1,5 @@
 const { keys } = require('../../../constants/cdo/dog')
-const { addDateErrors } = require('../../../lib/date-helpers')
+const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (dogDetails, breedTypes, backNav, errors) {
   this.model = {
@@ -252,21 +252,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      let name = error.path[0]
-      const prop = this.model[name]
-
-      if (prop) {
-        if (prop.type === 'date') {
-          name = addDateErrors(error, prop)
-        }
-
-        prop.errorMessage = { text: error.message }
-        this.model.errors.push({ text: error.message, href: `#${name}` })
-      }
-    }
-  }
+  errorPusherWithDate(errors, this.model)
 }
 
 module.exports = ViewModel

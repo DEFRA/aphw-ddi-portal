@@ -27,6 +27,9 @@
       <h1 class="govuk-heading-l">Confirm dog details</h1>
 
       {% for dog in model.dogs %}
+        {% if dog.indexNumber %}
+            {% include "./cdo/create/confirm-dog-details-single.njk" %}
+        {% else %}
         <div class="govuk-summary-card">
           <div class="govuk-summary-card__title-wrapper">
             <h2 class="govuk-summary-card__title">Dog {{ dog.id }}</h2>
@@ -42,37 +45,10 @@
             </ul>
           </div>
           <div class="govuk-summary-card__content">
-            <dl class="govuk-summary-list">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Breed</dt>
-                <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Name</dt>
-                <dd class="govuk-summary-list__value">{{ dog.name }}</dd>
-              </div>
-              {% if dog.microchipNumber %}
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Microchip number</dt>
-                <dd class="govuk-summary-list__value">{{ dog.microchipNumber }}</dd>
-              </div>
-              {% endif %}
-              {% if dog.cdoIssued %}
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">CDO issued</dt>
-                <dd class="govuk-summary-list__value">{{ dog.cdoIssued }}</dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">CDO expiry</dt>
-                <dd class="govuk-summary-list__value">{{ dog.cdoExpiry }}</dd>
-              </div>
-              {% else %}
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Joined interim exemption scheme</dt>
-                <dd class="govuk-summary-list__value">{{ dog.interimExemption }}</dd>
-              </div>
-              {% endif %}
-            </dl>
+
+            {% include "./cdo/create/confirm-dog-details-single.njk" %}
+
+      {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -82,11 +58,13 @@
           text: "Confirm details"
         }) }}
 
+        {% if model.allowAddDog %}
         {{ govukButton({
           text: "Add another dog for this owner",
           classes: "govuk-button--secondary",
           name: "addAnotherDog"
         }) }}
+        {% endif %}
       </div>
     </div>
   </form>

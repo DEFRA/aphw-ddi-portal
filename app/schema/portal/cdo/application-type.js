@@ -1,23 +1,16 @@
 const Joi = require('joi')
-const { getDateComponents } = require('../../../lib/date-helpers')
 const { calculateCdoExpiryDate } = require('../../../lib/validation-helpers')
+const { getDateComponents } = require('../../../lib/date-helpers')
 const { applicationTypeSchemaElements } = require('../common/components/application-type')
 
-const dogDetailsSchema = Joi.object({
-  breed: Joi.string().trim().required().messages({
-    '*': 'Breed type is required'
-  }),
-  name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
-    'string.max': 'Dog name must be no more than {#limit} characters'
-  }),
-  ...applicationTypeSchemaElements,
-  microchipNumber: Joi.string().allow(null).allow('').optional()
-}).required()
+const applicationTypeSchema = Joi.object(
+  applicationTypeSchemaElements
+).required()
 
 const validatePayload = (payload) => {
   payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
-  payload.cdoExpiry = calculateCdoExpiryDate(payload.cdoIssued)
   payload.interimExemption = getDateComponents(payload, 'interimExemption')
+  payload.cdoExpiry = calculateCdoExpiryDate(payload.cdoIssued)
 
   const schema = Joi.object({
     'cdoIssued-year': Joi.number().allow(null).allow(''),
@@ -27,7 +20,7 @@ const validatePayload = (payload) => {
     'interimExemption-year': Joi.number().allow(null).allow(''),
     'interimExemption-month': Joi.number().allow(null).allow(''),
     'interimExemption-day': Joi.number().allow(null).allow('')
-  }).concat(dogDetailsSchema)
+  }).concat(applicationTypeSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
 
@@ -39,6 +32,5 @@ const validatePayload = (payload) => {
 }
 
 module.exports = {
-  dogDetailsSchema,
   validatePayload
 }

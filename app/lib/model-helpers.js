@@ -1,3 +1,6 @@
+const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails } = require('../session/cdo/owner')
+const { lookupPoliceForceByPostcode } = require('../api/police-area')
+
 const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
     return ''
@@ -70,6 +73,29 @@ const cleanUserDisplayName = (displayName) => {
   return displayName
 }
 
+const setPoliceForce = async (request, postcode = null) => {
+  const ownerDetails = postcode ? { address: { postcode } } : getOwnerDetails(request)
+  const enforcementDetails = getEnforcementDetails(request) || {}
+  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
+
+  if (policeForce) {
+    enforcementDetails.policeForce = policeForce.id
+    setEnforcementDetails(request, enforcementDetails)
+  }
+}
+
+const dedupeAddresses = items => {
+  const uniqueAddressMap = new Map()
+
+  if (items) {
+    items.forEach(addr => {
+      uniqueAddressMap.set(addr.text, addr)
+    })
+  }
+
+  return [...uniqueAddressMap].map(([_, value]) => value)
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -78,5 +104,7 @@ module.exports = {
   extractLatestPrimaryTelephoneNumber,
   extractLatestSecondaryTelephoneNumber,
   deepClone,
-  cleanUserDisplayName
+  cleanUserDisplayName,
+  setPoliceForce,
+  dedupeAddresses
 }

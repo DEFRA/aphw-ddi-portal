@@ -134,6 +134,28 @@ describe('Add dog details', () => {
     expect(response.headers.location).toBe('/cdo/create/enforcement-details')
   })
 
+  test('POST /cdo/create/confirm-dog-details route with single existing dog returns 302', async () => {
+    getDogs.mockReturnValue([{
+      breed: 'Breed 1',
+      name: 'Bruce',
+      indexNumber: 'ED123',
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+      cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
+    }])
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/confirm-dog-details',
+      auth,
+      payload: {}
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/create/application-type/1')
+  })
+
   test('POST /cdo/create/confirm-dog-details route with add another dog returns 302', async () => {
     const payload = {
       addAnotherDog: ''

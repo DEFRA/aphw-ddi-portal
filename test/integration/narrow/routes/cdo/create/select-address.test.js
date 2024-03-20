@@ -4,6 +4,7 @@ const { routes } = require('../../../../../../app/constants/cdo/dog')
 const { getFromSession } = require('../../../../../../app/session/session-wrapper')
 jest.mock('../../../../../../app/session/session-wrapper')
 const { setAddress } = require('../../../../../../app/session/cdo/owner')
+const { JSDOM } = require('jsdom')
 jest.mock('../../../../../../app/session/cdo/owner')
 
 describe('SelectAddress test', () => {
@@ -32,6 +33,7 @@ describe('SelectAddress test', () => {
     }
 
     const response = await server.inject(options)
+
     expect(response.statusCode).toBe(200)
   })
 
@@ -79,7 +81,10 @@ describe('SelectAddress test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
     expect(setAddress).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-link[data-testid="change-postcode-link"]').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
   })
 
   test('GET /cdo/create/select-address route returns 200 even when no addresses', async () => {

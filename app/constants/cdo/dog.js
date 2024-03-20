@@ -11,6 +11,10 @@ const constants = {
     microchipResults: {
       get: '/cdo/create/microchip-results'
     },
+    applicationType: {
+      get: '/cdo/create/application-type',
+      post: '/cdo/create/application-type'
+    },
     confirm: {
       get: '/cdo/create/confirm-dog-details',
       post: '/cdo/create/confirm-dog-details'
@@ -66,6 +70,7 @@ const constants = {
     editExemptionDetails: 'cdo/edit/exemption-details',
     changeStatus: 'cdo/edit/change-status',
     changeStatusConfirmation: 'cdo/edit/change-status-confirmation',
+    applicationType: 'cdo/create/application-type',
     details: 'cdo/create/dog-details',
     confirm: 'cdo/create/confirm-dog-details',
     delete: 'cdo/create/confirm-dog-delete',
@@ -80,8 +85,10 @@ const constants = {
     name: 'name',
     microchipSearch: 'microchipSearch',
     microchipNumber: 'microchipNumber',
+    microchipNumber2: 'microchipNumber2',
     applicationType: 'applicationType',
     interimExemption: 'interimExemption',
+    indexNumber: 'indexNumber',
     cdoIssued: 'cdoIssued',
     cdoExpiry: 'cdoExpiry',
     dateOfBirth: 'dateOfBirth',
