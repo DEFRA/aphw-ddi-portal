@@ -12,6 +12,13 @@
         <div class="govuk-summary-card__content">
           <dl class="govuk-summary-list govuk-!-font-size-16">
 
+            {% if model.person.organisationName %}
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions govuk-!-width-one-third">
+              <dt class="govuk-summary-list__key">Organisation</dt>
+              <dd class="govuk-summary-list__value">{{ model.person.organisationName }}</dd>
+            </div>
+            {% endif %}
+
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions govuk-!-width-one-third">
               <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ model.person.firstName }} {{ model.person.lastName }}</dd>
