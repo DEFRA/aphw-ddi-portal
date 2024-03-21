@@ -11,7 +11,7 @@ describe('Index test', () => {
   const { clearAllDogs } = require('../../../../app/session/cdo/dog')
 
   jest.mock('../../../../app/session/cdo/owner')
-  const { setOwnerDetails } = require('../../../../app/session/cdo/owner')
+  const { setOwnerDetails, setAddress, setEnforcementDetails } = require('../../../../app/session/cdo/owner')
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
@@ -40,6 +40,8 @@ describe('Index test', () => {
     expect(response.statusCode).toBe(200)
     expect(clearAllDogs).toHaveBeenCalledTimes(1)
     expect(setOwnerDetails).toHaveBeenCalledTimes(1)
+    expect(setAddress).toHaveBeenCalledTimes(1)
+    expect(setEnforcementDetails).toHaveBeenCalledTimes(1)
   })
 
   afterEach(async () => {

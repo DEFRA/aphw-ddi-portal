@@ -1,6 +1,6 @@
 const { admin } = require('../auth/permissions')
 const { clearAllDogs } = require('../session/cdo/dog')
-const { setOwnerDetails } = require('../session/cdo/owner')
+const { setOwnerDetails, setAddress, setEnforcementDetails } = require('../session/cdo/owner')
 
 module.exports = {
   method: 'GET',
@@ -10,6 +10,8 @@ module.exports = {
     handler: (request, h) => {
       clearAllDogs(request)
       setOwnerDetails(request, null)
+      setAddress(request, null)
+      setEnforcementDetails(request, null)
       return h.view('index')
     }
   }
