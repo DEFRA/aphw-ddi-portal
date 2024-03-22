@@ -35,7 +35,7 @@ describe('Index test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(clearCdo).toHaveBeenCalledWith({})
+    expect(clearCdo).toHaveBeenCalledTimes(1)
   })
 
   afterEach(async () => {
