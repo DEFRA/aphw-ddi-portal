@@ -256,7 +256,7 @@ describe('dog session storage', () => {
     })
   })
 
-  test('claerAllDogs removes dog details from session', () => {
+  test('clearAllDogs removes dog details from session', () => {
     clearAllDogs(mockRequest)
 
     expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
