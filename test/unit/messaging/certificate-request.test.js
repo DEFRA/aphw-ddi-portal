@@ -95,7 +95,7 @@ describe('certificate request message sender', () => {
             }
           }
         ],
-        organisation: { organisationName: 'Test org' }
+        organisationName: 'Test org'
       },
       dog: {
         indexNumber: 'ED1234',
