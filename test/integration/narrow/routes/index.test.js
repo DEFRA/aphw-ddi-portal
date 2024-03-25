@@ -8,9 +8,6 @@ describe('Index test', () => {
   const createServer = require('../../../../app/server')
   let server
 
-  jest.mock('../../../../app/auth')
-  const mockAuth = require('../../../../app/auth')
-
   jest.mock('../../../../app/session/cdo')
   const { clearCdo } = require('../../../../app/session/cdo')
 
