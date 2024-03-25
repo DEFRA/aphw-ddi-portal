@@ -8,6 +8,12 @@ describe('Index test', () => {
   const createServer = require('../../../../app/server')
   let server
 
+  jest.mock('../../../../app/auth')
+  const mockAuth = require('../../../../app/auth')
+
+  jest.mock('../../../../app/session/cdo')
+  const { clearCdo } = require('../../../../app/session/cdo')
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     server = await createServer()
@@ -24,7 +30,7 @@ describe('Index test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('GET / route returns 200', async () => {
+  test('GET / route returns 200 and clears previous details', async () => {
     const options = {
       method: 'GET',
       url: '/',
@@ -35,6 +41,7 @@ describe('Index test', () => {
     expect(response.statusCode).toBe(200)
     const { document } = new JSDOM(response.payload).window
     expect(document.querySelectorAll('.govuk-card--dashboard .govuk-link')[1].textContent).toBe('Process new CDO or Interim Exemption')
+    expect(clearCdo).toHaveBeenCalledTimes(1)
   })
 
   afterEach(async () => {

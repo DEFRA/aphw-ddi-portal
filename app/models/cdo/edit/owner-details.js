@@ -61,6 +61,7 @@ function ViewModel (person, countries, backNav, errors) {
         }
       ]
     },
+    organisationName: person.organisationName,
     addressLine1: {
       id: 'addressLine1',
       name: 'addressLine1',

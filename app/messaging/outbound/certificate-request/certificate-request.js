@@ -12,7 +12,8 @@ const createMessage = (data) => ({
         line2: data.person.addresses[0].address.address_line_2,
         line3: data.person.addresses[0].address.town,
         postcode: data.person.addresses[0].address.postcode
-      }
+      },
+      organisationName: data.person.organisationName
     },
     dog: {
       indexNumber: data.dog.indexNumber,
