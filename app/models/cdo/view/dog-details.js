@@ -43,7 +43,8 @@ function ViewModel (cdo, backNav) {
       navlink: {
         url: ownerRoutes.viewOwnerDetails.get,
         text: 'Owner record'
-      }
+      },
+      organisationName: person.organisationName
     },
     exemption: {
       certificateIssued: formatToGds(cdo.exemption.certificateIssued),

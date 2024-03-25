@@ -23,16 +23,7 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-        {% if model.person.organisationName %}
-        {{ model.person.organisationName }}
-        {% else %}
-        {{ model.person.firstName }} {{ model.person.lastName }}
-        {% endif %}
-      </h1>
-    </div>
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-full">
       <div class="govuk-button-group defra-align-right-simple">
         <a href="/cdo/edit/add-activity/{{ model.person.personReference }}/owner{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
           Add an activity
@@ -41,6 +32,13 @@
           Check owner activity
         </a>
       </div>
+      <h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">
+        {% if model.person.organisationName %}
+        {{ model.person.organisationName }}
+        {% else %}
+        {{ model.person.firstName }} {{ model.person.lastName }}
+        {% endif %}
+      </h1>
     </div>
   </div>
   <div class="govuk-grid-row">
