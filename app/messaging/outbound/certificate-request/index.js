@@ -7,7 +7,6 @@ const sendMessage = async (data) => {
 
   const message = createMessage(data)
 
-  console.log('message', message)
   await certificateRequestSender.sendMessage(message)
   await certificateRequestSender.closeConnection()
 
