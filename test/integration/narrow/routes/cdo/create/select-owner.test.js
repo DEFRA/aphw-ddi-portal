@@ -232,6 +232,48 @@ describe('OwnerResults test', () => {
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
 
+  test('POST /cdo/create/select-owner with DOB with valid data and no existing dogs or owner DOB returns 302 and appends DOB', async () => {
+    const payload = {
+      address: '0'
+    }
+
+    const resolvedPersonFromSession = {
+      ...resolvedPerson,
+      birthDate: null
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload
+    }
+
+    const newDateOfBirth = new Date('2000-01-01')
+
+    getPersonAndDogs.mockResolvedValue({ personReference: 'P-123-456', dogs: [] })
+    getFromSession.mockReturnValue([{ ...resolvedPersonFromSession }])
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      dateOfBirth: newDateOfBirth
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPersonFromSession, dateOfBirth: newDateOfBirth })
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    })
+    expect(setPoliceForce).toBeCalledTimes(1)
+    expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
+  })
+
   test('POST /cdo/create/select-owner with valid data and one existing dog returns 302', async () => {
     const payload = {
       address: '0'
