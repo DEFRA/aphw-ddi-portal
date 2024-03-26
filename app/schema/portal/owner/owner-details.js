@@ -1,8 +1,7 @@
 const Joi = require('joi')
 const { validateOwnerDateOfBirth } = require('../../../lib/validation-helpers')
 const { getDateComponents } = require('../../../lib/date-helpers')
-
-const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
+const { dateOfBirthSchema } = require('../common/components/date-of-birth')
 
 const ownerDetailsSchema = Joi.object({
   firstName: Joi.string().trim().required().max(30).messages({
@@ -17,27 +16,8 @@ const ownerDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateOwnerDateOfBirth),
-  postcode: Joi.string().trim().max(8).regex(postcodeRegex).when('triggeredButton', {
-    is: Joi.exist(),
-    then: Joi.required().messages({
-      'string.empty': 'Enter a postcode',
-      'string.max': 'Postcode must be no more than {#limit} characters',
-      'string.pattern.base': 'Enter a real postcode'
-    }),
-    otherwise: Joi.optional().allow('')
-  }),
-  houseNumber: Joi.string().trim().max(50).optional().allow('').messages({
-    'string.max': 'Property name or number must be no more than {#limit} characters'
-  }),
-  triggeredButton: Joi.string().trim().optional().allow('')
+  }).custom(validateOwnerDateOfBirth)
 }).required()
-
-const dateOfBirthSchema = Joi.object({
-  'dateOfBirth-year': Joi.number().allow(null).allow(''),
-  'dateOfBirth-month': Joi.number().allow(null).allow(''),
-  'dateOfBirth-day': Joi.number().allow(null).allow('')
-})
 
 const validatePayload = (payload) => {
   payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')

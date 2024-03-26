@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const { getDateComponents } = require('../../../lib/date-helpers')
 const { validateOwnerDateOfBirth } = require('../../../lib/validation-helpers')
+const { dateOfBirthSchema } = require('../common/components/date-of-birth')
 
 const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
 
@@ -53,12 +54,6 @@ const ownerDetailsSchema = Joi.object({
   secondaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
   country: Joi.string().trim().optional().allow(null).allow('')
 }).required()
-
-const dateOfBirthSchema = Joi.object({
-  'dateOfBirth-year': Joi.number().allow(null).allow(''),
-  'dateOfBirth-month': Joi.number().allow(null).allow(''),
-  'dateOfBirth-day': Joi.number().allow(null).allow('')
-})
 
 const validatePayload = (payload) => {
   payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')
