@@ -1,4 +1,4 @@
-const { isFuture, isWithinInterval, sub, addMonths } = require('date-fns')
+const { isFuture, isWithinInterval, sub, addMonths, startOfDay, differenceInYears } = require('date-fns')
 const { parseDate } = require('./date-helpers')
 const validNewMicrochip = /^\d+$/
 
@@ -120,9 +120,60 @@ const calculateCdoExpiryDate = (value) => {
   return addMonths(parseDate(dateString), 2)
 }
 
+const validateOwnerDateOfBirth = (value, helpers) => {
+  const { day, month, year } = value
+  const dateComponents = { day, month, year }
+  const invalidComponents = []
+
+  for (const key in dateComponents) {
+    if (!dateComponents[key]) {
+      invalidComponents.push(key)
+    }
+  }
+
+  if (invalidComponents.length === 0) {
+    const dateString = `${year}-${month}-${day}`
+    const date = parseDate(dateString)
+
+    if (!date) {
+      if (year.length !== 4) {
+        return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
+      }
+      return helpers.message('Enter a real date', { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
+    if (year.length !== 4) {
+      return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
+    if (isFuture(date)) {
+      return helpers.message('Enter a date of birth that is in the past', { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
+    const today = startOfDay(new Date())
+
+    const age = differenceInYears(today, date, { locale: 'enGB' })
+
+    if (age < 16) {
+      return helpers.message('The dog owner must be aged 16 or over', { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
+    return date
+  }
+
+  if (invalidComponents.length === 3) {
+    return null
+  }
+
+  const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
+
+  return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
+}
+
 module.exports = {
   validateMicrochip,
   validateCdoIssueDate,
   validateInterimExemptionDate,
-  calculateCdoExpiryDate
+  calculateCdoExpiryDate,
+  validateOwnerDateOfBirth
 }

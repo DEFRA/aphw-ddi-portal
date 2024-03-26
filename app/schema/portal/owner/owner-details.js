@@ -1,39 +1,10 @@
 const Joi = require('joi')
-const { startOfDay, parse, isAfter, isValid, differenceInYears } = require('date-fns')
+const { validateOwnerDateOfBirth } = require('../../../lib/validation-helpers')
+const { getDateComponents } = require('../../../lib/date-helpers')
 
 const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
 
-const validate = (value, helper) => {
-  const options = {
-    locale: 'enGB'
-  }
-
-  const dob = `${value.dobYear || ''}-${value.dobMonth || ''}-${value.dobDay || ''}`
-
-  // Allow DOB to be optional
-  if (dob !== '--') {
-    const today = startOfDay(new Date())
-    const parsedDob = parse(dob, 'yyyy-MM-dd', new Date(), options)
-
-    if (!isValid(parsedDob) || `${value.dobYear}`.length !== 4) {
-      return helper.message('Enter a real date')
-    }
-
-    if (isAfter(parsedDob, today)) {
-      return helper.message('Date of birth must be in the past')
-    }
-
-    const age = differenceInYears(today, parsedDob, options)
-
-    if (age < 16) {
-      return helper.message('The dog owner must be aged 16 or over')
-    }
-  }
-
-  return value
-}
-
-const schema = Joi.object({
+const ownerDetailsSchema = Joi.object({
   firstName: Joi.string().trim().required().max(30).messages({
     'string.empty': 'Enter a first name',
     'string.max': 'First name must be no more than {#limit} characters'
@@ -42,15 +13,11 @@ const schema = Joi.object({
     'string.empty': 'Enter a last name',
     'string.max': 'Last name must be no more than {#limit} characters'
   }),
-  dobDay: Joi.number().optional().allow('').messages({
-    'number.base': 'Date of birth must include a day'
-  }),
-  dobMonth: Joi.number().optional().allow('').messages({
-    'number.base': 'Date of birth must include a month'
-  }),
-  dobYear: Joi.number().optional().allow('').messages({
-    'number.base': 'Date of birth must include a year'
-  }),
+  dateOfBirth: Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).custom(validateOwnerDateOfBirth),
   postcode: Joi.string().trim().max(8).regex(postcodeRegex).when('triggeredButton', {
     is: Joi.exist(),
     then: Joi.required().messages({
@@ -64,6 +31,29 @@ const schema = Joi.object({
     'string.max': 'Property name or number must be no more than {#limit} characters'
   }),
   triggeredButton: Joi.string().trim().optional().allow('')
-}).required().custom(validate)
+}).required()
 
-module.exports = schema
+const dateOfBirthSchema = Joi.object({
+  'dateOfBirth-year': Joi.number().allow(null).allow(''),
+  'dateOfBirth-month': Joi.number().allow(null).allow(''),
+  'dateOfBirth-day': Joi.number().allow(null).allow('')
+})
+
+const validatePayload = (payload) => {
+  payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')
+
+  const schema = ownerDetailsSchema.concat(dateOfBirthSchema)
+
+  const { value, error } = schema.validate(payload, { abortEarly: false })
+
+  if (error) {
+    throw error
+  }
+
+  return value
+}
+
+module.exports = {
+  ownerDetailsSchema,
+  validatePayload
+}

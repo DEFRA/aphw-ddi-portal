@@ -64,7 +64,8 @@ describe('OwnerDetails test', () => {
   test('POST /cdo/create/owner-details with invalid date entry returns error 1', async () => {
     const payload = {
       firstName: 'John',
-      dobDay: 'a'
+      lastName: 'Smith',
+      'dateOfBirth-day': 'a'
     }
 
     const options = {
@@ -76,16 +77,16 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Date of birth must include a day')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('An owner date of birth must include a month and year')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with invalid date entry returns error 2', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '32',
-      dobMonth: '12',
-      dobYear: '2000'
+      'dateOfBirth-day': '32',
+      'dateOfBirth-month': '12',
+      'dateOfBirth-year': '2000'
     }
 
     const options = {
@@ -104,9 +105,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '32',
-      dobMonth: '12',
-      dobYear: '200'
+      'dateOfBirth-day': '32',
+      'dateOfBirth-month': '12',
+      'dateOfBirth-year': '200'
     }
 
     const options = {
@@ -118,7 +119,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Enter a 4-digit year')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with valid data forwards to owner results screen', async () => {
@@ -127,9 +128,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '',
-      dobMonth: '',
-      dobYear: ''
+      'dateOfBirth-day': '',
+      'dateOfBirth-month': '',
+      'dateOfBirth-year': ''
     }
 
     const options = {
@@ -145,9 +146,9 @@ describe('OwnerDetails test', () => {
     expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '',
-      dobMonth: '',
-      dobYear: ''
+      'dateOfBirth-day': '',
+      'dateOfBirth-month': '',
+      'dateOfBirth-year': ''
     })
   })
 
@@ -155,9 +156,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '01',
-      dobMonth: '01',
-      dobYear: '1999'
+      'dateOfBirth-day': '01',
+      'dateOfBirth-month': '01',
+      'dateOfBirth-year': '1999'
     }
 
     const options = {
@@ -173,9 +174,9 @@ describe('OwnerDetails test', () => {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: new Date('1999-01-01'),
-      dobDay: 1,
-      dobMonth: 1,
-      dobYear: 1999
+      'dateOfBirth-day': 1,
+      'dateOfBirth-month': 1,
+      'dateOfBirth-year': 1999
     })
   })
 
@@ -183,9 +184,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '01',
-      dobMonth: '01',
-      dobYear: '1999'
+      'dateOfBirth-day': '01',
+      'dateOfBirth-month': '01',
+      'dateOfBirth-year': '1999'
     }
 
     const options = {
@@ -208,9 +209,9 @@ describe('OwnerDetails test', () => {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: new Date('1999-01-01'),
-      dobDay: 1,
-      dobMonth: 1,
-      dobYear: 1999,
+      'dateOfBirth-day': 1,
+      'dateOfBirth-month': 1,
+      'dateOfBirth-year': 1999,
       postcode: 'E1 1AA',
       houseNumber: ''
     })
@@ -220,9 +221,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '',
-      dobMonth: '',
-      dobYear: ''
+      'dateOfBirth-day': '',
+      'dateOfBirth-month': '',
+      'dateOfBirth-year': ''
     }
 
     const options = {
@@ -246,9 +247,9 @@ describe('OwnerDetails test', () => {
     expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '',
-      dobMonth: '',
-      dobYear: '',
+      'dateOfBirth-day': '',
+      'dateOfBirth-month': '',
+      'dateOfBirth-year': '',
       postcode: 'E1 1AA',
       houseNumber: ''
     })
@@ -258,9 +259,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '24',
-      dobMonth: '8',
-      dobYear: '2030'
+      'dateOfBirth-day': '24',
+      'dateOfBirth-month': '8',
+      'dateOfBirth-year': '2030'
     }
 
     const options = {
@@ -278,9 +279,9 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      dobDay: '24',
-      dobMonth: '8',
-      dobYear: '2022'
+      'dateOfBirth-day': '24',
+      'dateOfBirth-month': '8',
+      'dateOfBirth-year': '2022'
     }
 
     const options = {
