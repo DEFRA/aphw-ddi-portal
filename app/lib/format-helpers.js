@@ -26,9 +26,6 @@ const formatAddressSingleLine = (address) => {
 
   const updatedAddress = { ...address }
 
-  updatedAddress.town += ` ${updatedAddress.postcode}`
-  updatedAddress.postcode = ''
-
   return formatAddress(updatedAddress, true).join(', ')
 }
 
