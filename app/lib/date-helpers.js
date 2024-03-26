@@ -107,16 +107,16 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
     const dateString = `${year}-${month}-${day}`
     const date = parseDate(dateString)
 
+    if (!date) {
+      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
     if (year.length !== 4) {
       return helpers.message('Enter a 4-digit year', { path: [elementPath, ['year']] })
     }
 
     if (preventFutureDates && isFuture(date)) {
       return helpers.message('Enter a date that is today or in the past', { path: [elementPath, ['day', 'month', 'year']] })
-    }
-
-    if (!date) {
-      return helpers.message('Enter a real date', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     return date
