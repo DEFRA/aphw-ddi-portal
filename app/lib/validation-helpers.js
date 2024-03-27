@@ -136,10 +136,9 @@ const validateOwnerDateOfBirth = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      if (year.length !== 4) {
-        return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
-      }
-      return helpers.message('Enter a real date', { path: ['birthDate', ['day', 'month', 'year']] })
+      return helpers.message(
+        year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date',
+        { path: ['birthDate', ['day', 'month', 'year']] })
     }
 
     if (year.length !== 4) {
