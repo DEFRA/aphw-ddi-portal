@@ -136,9 +136,7 @@ const validateOwnerDateOfBirth = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message(
-        year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date',
-        { path: ['birthDate', ['day', 'month', 'year']] })
+      return helpers.message(year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date', { path: ['birthDate', ['day', 'month', 'year']] })
     }
 
     if (year.length !== 4) {
@@ -149,11 +147,7 @@ const validateOwnerDateOfBirth = (value, helpers) => {
       return helpers.message('Enter a date of birth that is in the past', { path: ['birthDate', ['day', 'month', 'year']] })
     }
 
-    const today = startOfDay(new Date())
-
-    const age = differenceInYears(today, date, { locale: 'enGB' })
-
-    if (age < 16) {
+    if (notOldEnough(date)) {
       return helpers.message('The dog owner must be aged 16 or over', { path: ['birthDate', ['day', 'month', 'year']] })
     }
 
@@ -167,6 +161,14 @@ const validateOwnerDateOfBirth = (value, helpers) => {
   const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
 
   return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
+}
+
+const notOldEnough = date => {
+  const today = startOfDay(new Date())
+
+  const age = differenceInYears(today, date, { locale: 'enGB' })
+
+  return age < 16
 }
 
 module.exports = {
