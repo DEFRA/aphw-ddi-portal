@@ -135,20 +135,9 @@ const validateOwnerDateOfBirth = (value, helpers) => {
     const dateString = `${year}-${month}-${day}`
     const date = parseDate(dateString)
 
-    if (!date) {
-      return helpers.message(year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    if (year.length !== 4) {
-      return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    if (isFuture(date)) {
-      return helpers.message('Enter a date of birth that is in the past', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    if (notOldEnough(date)) {
-      return helpers.message('The dog owner must be aged 16 or over', { path: ['birthDate', ['day', 'month', 'year']] })
+    const messageText = validateDob(date, year)
+    if (messageText) {
+      return helpers.message(messageText, { path: ['birthDate', ['day', 'month', 'year']] })
     }
 
     return date
@@ -169,6 +158,25 @@ const notOldEnough = date => {
   const age = differenceInYears(today, date, { locale: 'enGB' })
 
   return age < 16
+}
+
+const validateDob = (date, year) => {
+  if (!date) {
+    return year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date'
+  }
+
+  if (year.length !== 4) {
+    return 'Enter a 4-digit year'
+  }
+
+  if (isFuture(date)) {
+    return 'Enter a date of birth that is in the past'
+  }
+
+  if (notOldEnough(date)) {
+    return 'The dog owner must be aged 16 or over'
+  }
+  return null
 }
 
 module.exports = {

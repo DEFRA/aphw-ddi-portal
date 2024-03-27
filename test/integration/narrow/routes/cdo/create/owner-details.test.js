@@ -105,7 +105,7 @@ describe('OwnerDetails test', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
-      'dateOfBirth-day': '32',
+      'dateOfBirth-day': '31',
       'dateOfBirth-month': '12',
       'dateOfBirth-year': '200'
     }
