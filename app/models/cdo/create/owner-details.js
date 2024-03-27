@@ -1,5 +1,6 @@
 const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
+const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (ownerDetails, errors) {
   this.model = {
@@ -28,7 +29,8 @@ function ViewModel (ownerDetails, errors) {
       attributes: { maxlength: '24' }
     },
     dateOfBirth: {
-      id: 'owner-date-of-birth',
+      id: 'dateOfBirth',
+      namePrefix: 'dateOfBirth',
       fieldset: {
         legend: {
           text: 'Date of birth (optional)',
@@ -41,25 +43,25 @@ function ViewModel (ownerDetails, errors) {
       },
       items: [
         {
-          name: 'dobDay',
+          name: 'day',
           classes: 'govuk-input--width-2',
-          value: ownerDetails?.dobDay,
+          value: ownerDetails['dateOfBirth-day'],
           label: 'Day',
           autocomplete: forms.preventAutocomplete,
           attributes: { maxlength: '2' }
         },
         {
-          name: 'dobMonth',
+          name: 'month',
           classes: 'govuk-input--width-2',
-          value: ownerDetails?.dobMonth,
+          value: ownerDetails['dateOfBirth-month'],
           label: 'Month',
           autocomplete: forms.preventAutocomplete,
           attributes: { maxlength: '2' }
         },
         {
-          name: 'dobYear',
+          name: 'year',
           classes: 'govuk-input--width-4',
-          value: ownerDetails?.dobYear,
+          value: ownerDetails['dateOfBirth-year'],
           label: 'Year',
           autocomplete: forms.preventAutocomplete,
           attributes: { maxlength: '4' }
@@ -94,36 +96,7 @@ function ViewModel (ownerDetails, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0]
-      const prop = this.model[name] || this.model.dateOfBirth.items.find(item => item.name === name) || this.model.dateOfBirth
-
-      if (prop !== undefined) {
-        prop.errorMessage = {
-          text: error.message
-        }
-
-        this.model.errors.push({
-          text: error.message,
-          href: `#${name || this.model.dateOfBirth.id}`
-        })
-      }
-
-      const propDOB = this.model.dateOfBirth.items.find(item => item.name === name)
-
-      if (propDOB !== undefined) {
-        propDOB.classes += ' govuk-input--error'
-        this.model.dateOfBirth.errorMessage = {
-          text: propDOB.errorMessage.text
-        }
-      }
-
-      if (name === undefined) {
-        this.model.dateOfBirth.items.forEach(x => { x.classes += ' govuk-input--error' })
-      }
-    }
-  }
+  errorPusherWithDate(errors, this.model)
 }
 
 module.exports = ViewModel
