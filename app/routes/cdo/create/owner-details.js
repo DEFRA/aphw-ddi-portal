@@ -1,9 +1,10 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/owner-details')
-const ownerDetailsSchema = require('../../../schema/portal/owner/owner-details')
+const { validatePayload } = require('../../../schema/portal/owner/owner-details')
 const { admin } = require('../../../auth/permissions')
 const { UTCDate } = require('@date-fns/utc')
+const { addDateComponents } = require('../../../lib/date-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -11,7 +12,9 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      const ownerDetails = getOwnerDetails(request)
+      const ownerDetails = getOwnerDetails(request) || {}
+
+      addDateComponents(ownerDetails, 'dateOfBirth')
 
       return h.view(views.ownerDetails, new ViewModel(ownerDetails))
     }
@@ -23,7 +26,7 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     validate: {
-      payload: ownerDetailsSchema,
+      payload: validatePayload,
       failAction: async (request, h, error) => {
         const ownerDetails = { ...getOwnerDetails(request), ...request.payload }
         return h.view(views.ownerDetails, new ViewModel(ownerDetails, error)).code(400).takeover()
@@ -43,7 +46,9 @@ module.exports = [{
 
 const hydrateOwnerDetails = (ownerDetails = {}) => {
   const { dateOfBirth, personReference, ...hydratedOwnerDetailBase } = ownerDetails
-  const { dobDay, dobMonth, dobYear } = ownerDetails
+  const dobDay = ownerDetails['dateOfBirth-day']
+  const dobMonth = ownerDetails['dateOfBirth-month']
+  const dobYear = ownerDetails['dateOfBirth-year']
 
   if (!dobDay || !dobMonth || !dobYear) {
     return hydratedOwnerDetailBase

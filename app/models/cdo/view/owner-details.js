@@ -18,6 +18,7 @@ function ViewModel (personAndDogs, backNav) {
       email: extractEmail(personAndDogs?.contacts),
       telephoneNumber1: extractLatestPrimaryTelephoneNumber(personAndDogs?.contacts),
       telephoneNumber2: extractLatestSecondaryTelephoneNumber(personAndDogs?.contacts),
+      organisationName: personAndDogs?.organisationName,
       navlink: {
         url: ownerRoutes.editDetails.get,
         text: 'Edit details'

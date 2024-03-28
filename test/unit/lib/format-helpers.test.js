@@ -93,17 +93,17 @@ describe('format-helpers', () => {
 
     test('should turn address into a single line without country', () => {
       const formattedAddress = formatAddressSingleLine(address)
-      expect(formattedAddress).toBe('5 Station Road, Woofferton, Ludlow SY8 4NL')
+      expect(formattedAddress).toBe('5 Station Road, Woofferton, Ludlow, SY8 4NL')
     })
 
     test('should turn address into a single line without country and strip empty fields', () => {
       const formattedAddress = formatAddressSingleLine(addressWithoutLine2)
-      expect(formattedAddress).toBe('5 Station Road, Ludlow SY8 4NL')
+      expect(formattedAddress).toBe('5 Station Road, Ludlow, SY8 4NL')
     })
 
     test('should turn address into a single line without country and order correctly', () => {
       const formattedAddress = formatAddressSingleLine(addressIncorrectFieldOrder, false)
-      expect(formattedAddress).toBe('23 Billson Street, Isle of Dogs, London E14 3DA')
+      expect(formattedAddress).toBe('23 Billson Street, Isle of Dogs, London, E14 3DA')
     })
 
     test('should return null given no address', () => {

@@ -1,4 +1,4 @@
-const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries, addAnotherDog } = require('../../../app/session/cdo/dog')
+const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries, addAnotherDog, clearAllDogs } = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -254,5 +254,12 @@ describe('dog session storage', () => {
       microchipNumber: '567890',
       results: [{ id: 2 }]
     })
+  })
+
+  test('clearAllDogs removes dog details from session', () => {
+    clearAllDogs(mockRequest)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', null)
   })
 })

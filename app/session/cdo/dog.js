@@ -46,6 +46,10 @@ const setDog = (request, value) => {
   request.yar.set(keys.entry, dogs)
 }
 
+const clearAllDogs = (request) => {
+  request.yar.set(keys.entry, null)
+}
+
 const addAnotherDog = (request) => {
   const entryValue = get(request)
 
@@ -90,5 +94,6 @@ module.exports = {
   deleteDog,
   setMicrochipResults,
   getMicrochipResults,
-  renumberEntries
+  renumberEntries,
+  clearAllDogs
 }

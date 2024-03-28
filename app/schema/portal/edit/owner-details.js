@@ -1,6 +1,7 @@
 const Joi = require('joi')
-const { startOfDay, isFuture, differenceInYears } = require('date-fns')
-const { parseDate, getDateComponents } = require('../../../lib/date-helpers')
+const { getDateComponents } = require('../../../lib/date-helpers')
+const { validateOwnerDateOfBirth } = require('../../../lib/validation-helpers')
+const { dateOfBirthSchema } = require('../common/components/date-of-birth')
 
 const postcodeRegex = /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i
 
@@ -12,53 +13,6 @@ const validatePhoneNumber = (value, helpers) => {
   }
 
   return value
-}
-
-const validateDateOfBirth = (value, helpers) => {
-  const { day, month, year } = value
-  const dateComponents = { day, month, year }
-  const invalidComponents = []
-
-  for (const key in dateComponents) {
-    if (!dateComponents[key]) {
-      invalidComponents.push(key)
-    }
-  }
-
-  if (invalidComponents.length === 0) {
-    if (year.length !== 4) {
-      return helpers.message('Enter a 4-digit year', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    const dateString = `${year}-${month}-${day}`
-    const date = parseDate(dateString)
-
-    if (!date) {
-      return helpers.message('Enter a real date', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    if (isFuture(date)) {
-      return helpers.message('Enter a date of birth that is in the past', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    const today = startOfDay(new Date())
-
-    const age = differenceInYears(today, date, { locale: 'enGB' })
-
-    if (age < 16) {
-      return helpers.message('The dog owner must be aged 16 or over', { path: ['birthDate', ['day', 'month', 'year']] })
-    }
-
-    return date
-  }
-
-  if (invalidComponents.length === 3) {
-    return null
-  }
-
-  const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
-
-  return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
 }
 
 const ownerDetailsSchema = Joi.object({
@@ -91,7 +45,7 @@ const ownerDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom(validateDateOfBirth),
+  }).custom(validateOwnerDateOfBirth),
   email: Joi.string().email({ tlds: { allow: false } }).trim().max(254).optional().allow(null).allow('').messages({
     'string.max': 'Email must be no more than {#limit} characters',
     'string.email': 'Enter a real email address'
@@ -100,12 +54,6 @@ const ownerDetailsSchema = Joi.object({
   secondaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
   country: Joi.string().trim().optional().allow(null).allow('')
 }).required()
-
-const dateOfBirthSchema = Joi.object({
-  'dateOfBirth-year': Joi.number().allow(null).allow(''),
-  'dateOfBirth-month': Joi.number().allow(null).allow(''),
-  'dateOfBirth-day': Joi.number().allow(null).allow('')
-})
 
 const validatePayload = (payload) => {
   payload.dateOfBirth = getDateComponents(payload, 'dateOfBirth')

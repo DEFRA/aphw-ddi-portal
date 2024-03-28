@@ -38,6 +38,13 @@
     <h2 class="govuk-heading-m">Edit owner details</h2>
 
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+      {% if model.organisationName %}
+      <div class="govuk-form-group">
+        <label class="govuk-label govuk-!-font-weight-bold govuk-!-font-size-16">Organisation</label>
+        <span class="govuk-label govuk-!-font-weight-regular">{{ model.organisationName }}</span>
+      </div>
+      {% endif %}
+
       {{ govukInput(model.firstName) }}
 
       {{ govukInput(model.lastName) }}

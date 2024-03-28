@@ -58,10 +58,16 @@ module.exports = [{
         return h.redirect(routes.postcodeLookupCreate.get)
       }
 
+      const submittedOwnerDetails = getOwnerDetails(request)
       const ownerResults = getFromSession(request, 'persons')
       const ownerDetails = ownerResults[ownerChosen]
+      let dateOfBirth = ownerDetails.birthDate
 
-      setOwnerDetails(request, { ...ownerDetails, dateOfBirth: ownerDetails.birthDate })
+      if (dateOfBirth === null && submittedOwnerDetails.dateOfBirth !== null) {
+        dateOfBirth = submittedOwnerDetails.dateOfBirth
+      }
+
+      setOwnerDetails(request, { ...ownerDetails, dateOfBirth })
       setAddress(request, ownerDetails.address)
 
       const { dogs } = await getPersonAndDogs(ownerDetails.personReference)

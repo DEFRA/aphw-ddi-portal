@@ -25,39 +25,40 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
     {% if model.errors | length > 0 %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
       {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: model.errors
       }) }}
+      </div>
+    </div>
     {% endif %}
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Process new CDO or Interim Exemption</h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
     <form method="POST" novalidate autocomplete="off">
-      {% call govukFieldset({
-        legend: {
-          text: "Create new record",
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: true
-        }
-      }) %}
 
-        <h2 class="govuk-heading-m">Owner details</h2>
+      <h2 class="govuk-heading-m">Owner details</h2>
 
-        {{ govukInput(model.firstName) }}
+      {{ govukInput(model.firstName) }}
 
-        {{ govukInput(model.lastName) }}
+      {{ govukInput(model.lastName) }}
       
-        {{ govukDateInput(model.dateOfBirth) }}
-
-      {% endcall %}
+      {{ govukDateInput(model.dateOfBirth) }}
 
       {{ govukButton({
         text: "Continue"
       }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

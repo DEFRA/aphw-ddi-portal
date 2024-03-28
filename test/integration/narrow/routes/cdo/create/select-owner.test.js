@@ -127,7 +127,7 @@ describe('OwnerResults test', () => {
       addressLine1: 'Bully Green Farm'
     })
     expect(document.querySelector('h1').textContent).toBe('Select the address for John Smith')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
     expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain("The owner's address is not listed")
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('-1')
@@ -153,9 +153,9 @@ describe('OwnerResults test', () => {
 
     expect(setInSession).toBeCalledWith(expect.anything(), 'persons', resolvedPersons)
     expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('5 Station Road, Woofferton, Ludlow SY8 4NL')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('5 Station Road, Woofferton, Ludlow, SY8 4NL')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('1')
     expect(document.querySelectorAll('form .govuk-radios__item label')[2].textContent.trim()).toContain("The owner's address is not listed")
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[2].getAttribute('value')).toBe('-1')
@@ -195,7 +195,7 @@ describe('OwnerResults test', () => {
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
     expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an address')
     expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
   })
 
   test('POST /cdo/create/select-owner with valid data and no existing dogs returns 302', async () => {
@@ -221,6 +221,48 @@ describe('OwnerResults test', () => {
 
     expect(response.statusCode).toBe(302)
     expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine2: 'Snow Hill',
+      country: 'England',
+      postcode: 'CO10 8QX',
+      town: 'Sudbury',
+      addressLine1: 'Bully Green Farm'
+    })
+    expect(setPoliceForce).toBeCalledTimes(1)
+    expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
+  })
+
+  test('POST /cdo/create/select-owner with DOB with valid data and no existing dogs or owner DOB returns 302 and appends DOB', async () => {
+    const payload = {
+      address: '0'
+    }
+
+    const resolvedPersonFromSession = {
+      ...resolvedPerson,
+      birthDate: null
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-owner',
+      auth,
+      payload
+    }
+
+    const newDateOfBirth = new Date('2000-01-01')
+
+    getPersonAndDogs.mockResolvedValue({ personReference: 'P-123-456', dogs: [] })
+    getFromSession.mockReturnValue([{ ...resolvedPersonFromSession }])
+    getOwnerDetails.mockReturnValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      dateOfBirth: newDateOfBirth
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPersonFromSession, dateOfBirth: newDateOfBirth })
     expect(setAddress).toBeCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',

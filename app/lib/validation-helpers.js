@@ -1,4 +1,4 @@
-const { isFuture, isWithinInterval, sub, addMonths } = require('date-fns')
+const { isFuture, isWithinInterval, sub, addMonths, startOfDay, differenceInYears } = require('date-fns')
 const { parseDate } = require('./date-helpers')
 const validNewMicrochip = /^\d+$/
 
@@ -120,9 +120,69 @@ const calculateCdoExpiryDate = (value) => {
   return addMonths(parseDate(dateString), 2)
 }
 
+const validateOwnerDateOfBirth = (value, helpers) => {
+  const { day, month, year } = value
+  const dateComponents = { day, month, year }
+  const invalidComponents = []
+
+  for (const key in dateComponents) {
+    if (!dateComponents[key]) {
+      invalidComponents.push(key)
+    }
+  }
+
+  if (invalidComponents.length === 0) {
+    const dateString = `${year}-${month}-${day}`
+    const date = parseDate(dateString)
+
+    const messageText = validateDob(date, year)
+    if (messageText) {
+      return helpers.message(messageText, { path: ['birthDate', ['day', 'month', 'year']] })
+    }
+
+    return date
+  }
+
+  if (invalidComponents.length === 3) {
+    return null
+  }
+
+  const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
+
+  return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
+}
+
+const notOldEnough = date => {
+  const today = startOfDay(new Date())
+
+  const age = differenceInYears(today, date, { locale: 'enGB' })
+
+  return age < 16
+}
+
+const validateDob = (date, year) => {
+  if (!date) {
+    return year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date'
+  }
+
+  if (year.length !== 4) {
+    return 'Enter a 4-digit year'
+  }
+
+  if (isFuture(date)) {
+    return 'Enter a date of birth that is in the past'
+  }
+
+  if (notOldEnough(date)) {
+    return 'The dog owner must be aged 16 or over'
+  }
+  return null
+}
+
 module.exports = {
   validateMicrochip,
   validateCdoIssueDate,
   validateInterimExemptionDate,
-  calculateCdoExpiryDate
+  calculateCdoExpiryDate,
+  validateOwnerDateOfBirth
 }
