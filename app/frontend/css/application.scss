@@ -232,13 +232,14 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     margin-top: -18px;
     margin-bottom: 0;
   }
+
   .defra-navigation__right {
     color: #0b0c0c !important;
     font-size: 1rem;
     float: right;
-  }
-  
-  .defra-navigation__right:visited {
-    color: #0b0c0c;
+
+    &:visited {
+        color: #0b0c0c;
+    }
   }
   
