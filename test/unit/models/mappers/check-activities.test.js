@@ -692,6 +692,22 @@ describe('Check Activity Mappers', () => {
        */
       const items = [
         {
+          added: {
+            id: 2,
+            comment: 'Comment text',
+            cdo_issued: '2010-02-22'
+          },
+          operation: 'added comment',
+          actioningUser: {
+            username: 'import-user',
+            displayname: 'Import user'
+          },
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.import',
+          rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161936',
+          subject: 'DDI Import Comment'
+        },
+        {
           activity: {
             activity: '4',
             activityType: 'received',
@@ -761,6 +777,11 @@ describe('Check Activity Mappers', () => {
        * @type {ActivityRow[]}
        */
       const expectedActivityRows = [
+        {
+          date: '22 February 2010',
+          activityLabel: 'Comments made by index users: Comment text',
+          teamMember: 'Import user'
+        },
         {
           date: '12 February 2024',
           activityLabel: 'Police correspondence received',
