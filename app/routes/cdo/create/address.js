@@ -3,7 +3,7 @@ const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getAddress, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
 
@@ -14,7 +14,7 @@ module.exports = [{
   method: 'GET',
   path: routes.address.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const address = getAddress(request)
 

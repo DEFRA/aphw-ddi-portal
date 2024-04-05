@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/edit/postcode-lookup')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
@@ -11,7 +11,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.postcodeLookupEdit.get}/{personReference}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const personReference = request.params.personReference
 
@@ -38,7 +38,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.postcodeLookupEdit.post}/{dummy?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/cdo/postcode-lookup')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
@@ -13,7 +13,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.postcodeLookupCreate.get}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const details = getOwnerDetails(request)
 
@@ -30,7 +30,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.postcodeLookupCreate.post}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

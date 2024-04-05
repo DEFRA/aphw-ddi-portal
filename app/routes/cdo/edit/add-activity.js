@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { keys } = require('../../../constants/cdo/activity.js')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/add-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/add-activity')
@@ -46,7 +46,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.addActivity.get}/{pk}/{source}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const entity = await getSourceEntity(request.params.pk, request.params.source)
 
@@ -68,7 +68,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.addActivity.post}/{pk}/{source}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

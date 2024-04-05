@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-owner')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { setDog } = require('../../../session/cdo/dog')
@@ -14,7 +14,7 @@ module.exports = [{
   method: 'GET',
   path: routes.selectOwner.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
 
@@ -36,7 +36,7 @@ module.exports = [{
   method: 'POST',
   path: routes.selectOwner.post,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     validate: {
       payload: Joi.object({
         address: Joi.number().required().messages({

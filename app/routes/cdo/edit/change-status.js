@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/change-status')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
@@ -12,7 +12,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.changeStatus.get}/{indexNumber}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const cdo = await getCdo(request.params.indexNumber)
 
@@ -30,7 +30,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.changeStatus.post}/{dummy?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

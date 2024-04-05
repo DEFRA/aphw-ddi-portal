@@ -3,7 +3,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
@@ -15,7 +15,7 @@ module.exports = [
     method: 'GET',
     path: routes.selectAddressFromEdit.get,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const details = getPostcodeLookupDetails(request) || {}
         details.source = 'edit'
@@ -41,7 +41,7 @@ module.exports = [
     method: 'POST',
     path: routes.selectAddressFromEdit.post,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: Joi.object({
           address: Joi.number().min(0).required()

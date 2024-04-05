@@ -1,5 +1,5 @@
 const { routes, views, keys } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
 const { getBreeds } = require('../../../api/ddi-index-api')
@@ -11,7 +11,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.details.get}/{dogId?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const dog = getDog(request)
 
@@ -43,7 +43,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.details.post}/{dummy?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

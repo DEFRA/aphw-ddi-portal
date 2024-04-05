@@ -3,7 +3,7 @@ const { routes: indexRoutes } = require('../../../constants/cdo/index')
 const { getOwnerDetails, getEnforcementDetails, getAddress } = require('../../../session/cdo/owner')
 const { getDogs } = require('../../../session/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/full-summary')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getCourts, getPoliceForces } = require('../../../api/ddi-index-api')
 const getUser = require('../../../auth/get-user')
 const { cdo } = require('../../../api/ddi-index-api')
@@ -14,7 +14,7 @@ module.exports = [{
   method: 'GET',
   path: routes.fullSummary.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request)
       const address = getAddress(request)
@@ -31,7 +31,7 @@ module.exports = [{
   method: 'POST',
   path: routes.fullSummary.post,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const owner = getOwnerDetails(request)
       const address = getAddress(request)

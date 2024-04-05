@@ -5,14 +5,14 @@ const { setUploaded } = require('../../../storage/repos/register-status')
 const Joi = require('joi')
 const ViewModel = require('../../../models/upload/register')
 const { sendMessage } = require('../../../messaging/outbound/register-import')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getUser } = require('../../../auth')
 
 module.exports = [{
   method: 'GET',
   path: uploadConstants.routes.register.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     plugins: {
       crumb: false
     },
@@ -25,7 +25,7 @@ module.exports = [{
   method: 'POST',
   path: uploadConstants.routes.register.post,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     plugins: {
       crumb: false
     },

@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { sources: activitySources } = require('../../../constants/cdo/activity')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/check-activities')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getDogOwner } = require('../../../api/ddi-index-api/dog')
@@ -32,7 +32,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.viewActivities.get}/{pk}/{source}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const pk = request.params.pk
         const source = request.params.source
