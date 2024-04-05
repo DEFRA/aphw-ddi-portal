@@ -6,7 +6,8 @@ const {
   filterNonUpdatedFields,
   getActivityLabelFromEvent,
   getActivityLabelFromCreatedDog,
-  mapCreatedEventToCheckActivityRows
+  mapCreatedEventToCheckActivityRows,
+  mapImportEventToCheckActivityRows
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -159,6 +160,31 @@ describe('Check Activity Mappers', () => {
         teamMember: 'Developer'
       }
       expect(mapActivityDtoToCheckActivityRow(event)).toEqual(expectedActivityRow)
+    })
+
+    test('should map a received import event', () => {
+      const event = {
+        timestamp: '2024-02-14T08:24:22.487Z',
+        type: 'uk.gov.defra.ddi.event.import',
+        subject: 'DDI Import Comment',
+        operation: 'added comment',
+        added: {
+          id: 2,
+          comment: 'Comment text',
+          cdo_issued: '2010-02-22'
+        },
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'DeveloperName'
+        },
+        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161936'
+      }
+      const expectedActivityRow = [{
+        date: '22 February 2010',
+        activityLabel: 'Comments made by index users: Comment text',
+        teamMember: 'DeveloperName'
+      }]
+      expect(mapImportEventToCheckActivityRows(event)).toEqual(expectedActivityRow)
     })
   })
 
