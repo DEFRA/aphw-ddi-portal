@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/owner-details')
 const { validatePayload } = require('../../../schema/portal/owner/owner-details')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { UTCDate } = require('@date-fns/utc')
 const { addDateComponents } = require('../../../lib/date-helpers')
 
@@ -10,7 +10,7 @@ module.exports = [{
   method: 'GET',
   path: routes.ownerDetails.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetails(request) || {}
 
@@ -24,7 +24,7 @@ module.exports = [{
   method: 'POST',
   path: routes.ownerDetails.post,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {

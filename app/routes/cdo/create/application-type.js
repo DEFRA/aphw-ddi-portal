@@ -1,6 +1,6 @@
 const { routes: dogRoutes, views, keys } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
 const ViewModel = require('../../../models/cdo/create/application-type')
 const { getDog, setDog } = require('../../../session/cdo/dog')
@@ -12,7 +12,7 @@ module.exports = [
     method: 'GET',
     path: `${dogRoutes.applicationType.get}/{dogId?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const dog = getDog(request)
 
@@ -42,7 +42,7 @@ module.exports = [
     method: 'POST',
     path: `${dogRoutes.applicationType.post}/{dummy?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

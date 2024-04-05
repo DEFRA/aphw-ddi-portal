@@ -1,6 +1,6 @@
 const { routes: dogRoutes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
 const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
 
@@ -9,7 +9,7 @@ module.exports = [
     method: 'GET',
     path: dogRoutes.confirm.get,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
@@ -21,7 +21,7 @@ module.exports = [
     method: 'POST',
     path: dogRoutes.confirm.post,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         if (request.payload.addAnotherDog != null) {
           addAnotherDog(request)

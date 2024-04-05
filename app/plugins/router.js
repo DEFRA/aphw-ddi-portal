@@ -41,6 +41,7 @@ const routes = [].concat(
   require('../routes/dev-auth'),
   require('../routes/upload/register/upload-register'),
   require('../routes/export/export-data'),
+  require('../routes/admin/index'),
   require('../routes/admin/regular-jobs'),
   require('../routes/admin/process-comments')
 )

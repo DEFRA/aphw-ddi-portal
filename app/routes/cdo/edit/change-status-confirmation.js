@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/change-status-confirmation')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
@@ -9,7 +9,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.changeStatusConfirmation.get}/{indexNumber}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const cdo = await getCdo(request.params.indexNumber)
 

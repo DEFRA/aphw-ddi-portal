@@ -6,20 +6,22 @@ const getAuthenticationUrl = () => {
   return '/dev-auth'
 }
 
+const currentRole = admin // standard
+
 const authenticate = async (redirectCode, cookieAuth) => {
   cookieAuth.set({
-    scope: [admin],
+    scope: [currentRole],
     account: devAccount
   })
 }
 
 const refresh = async (account, cookieAuth, forceRefresh = true) => {
   cookieAuth.set({
-    scope: [admin],
+    scope: [currentRole],
     account: devAccount
   })
 
-  return [admin]
+  return [currentRole]
 }
 
 const logout = async (account) => {

@@ -5,14 +5,14 @@ const { validatePayload } = require('../../../schema/portal/edit/dog-details')
 const { getDogDetails, updateDogDetails } = require('../../../api/ddi-index-api/dog')
 const { getBreeds } = require('../../../api/ddi-index-api/dog-breeds')
 const { addDateComponents } = require('../../../lib/date-helpers')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 
 module.exports = [{
   method: 'GET',
   path: `${routes.editDogDetails.get}/{indexNumber?}`,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const indexNumber = request.params.indexNumber
       const dog = await getDogDetails(indexNumber)
@@ -49,7 +49,7 @@ module.exports = [{
   method: 'POST',
   path: `${routes.editDogDetails.post}/{dummy?}`,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {
