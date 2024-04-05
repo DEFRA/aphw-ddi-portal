@@ -2,7 +2,7 @@ const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
 const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 
@@ -10,7 +10,7 @@ module.exports = [{
   method: 'GET',
   path: `${routes.microchipSearch.get}/{dogId?}`,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const dog = getDog(request)
 
@@ -28,7 +28,7 @@ module.exports = [{
   method: 'POST',
   path: `${routes.microchipSearch.post}/{dogId?}`,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {

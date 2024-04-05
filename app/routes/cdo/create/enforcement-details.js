@@ -2,14 +2,14 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/enforcement-details')
 const enforcementDetailsSchema = require('../../../schema/portal/owner/enforcement-details')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getCourts, getPoliceForces } = require('../../../api/ddi-index-api')
 
 module.exports = [{
   method: 'GET',
   path: routes.enforcementDetails.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const enforcementDetails = getEnforcementDetails(request)
       const courts = await getCourts()
@@ -22,7 +22,7 @@ module.exports = [{
   method: 'POST',
   path: routes.enforcementDetails.post,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     validate: {
       payload: enforcementDetailsSchema,
       failAction: async (request, h, error) => {

@@ -36,5 +36,6 @@ module.exports = {
   testEnvironment: 'node',
   testPathIgnorePatterns: [],
   setupFilesAfterEnv: ['./jest.setup.js'],
-  verbose: true
+  verbose: true,
+  workerIdleMemoryLimit: '512MB'
 }

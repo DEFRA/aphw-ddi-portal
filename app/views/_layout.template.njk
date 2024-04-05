@@ -39,6 +39,14 @@
             {{ serviceName }}
           </a>
       </div>
+
+      {% if auth.isAdminUser %}
+      <div class="defra-header__right">
+        <p class="govuk-body">
+          <a class="govuk-link defra-navigation__right" href="/admin/index">Admin</a>
+        </p>
+      </div>
+      {% endif %}
     </div>
   </header>
 {% endblock %}

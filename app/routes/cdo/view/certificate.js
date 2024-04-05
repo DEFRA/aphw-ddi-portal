@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/certificate')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
@@ -12,7 +12,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.certificate.get}/{indexNumber}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const cdo = await getCdo(request.params.indexNumber)
 
@@ -38,7 +38,7 @@ module.exports = [
           return h.response().code(400).takeover()
         }
       },
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const cdo = await getCdo(request.payload.indexNumber)
 

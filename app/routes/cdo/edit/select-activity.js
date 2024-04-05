@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/select-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { validatePayload } = require('../../../schema/portal/edit/select-activity')
@@ -30,7 +30,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.selectActivity.get}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const activityDetails = getActivityDetails(request)
 
@@ -69,7 +69,7 @@ module.exports = [
     method: 'POST',
     path: routes.selectActivity.post,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {

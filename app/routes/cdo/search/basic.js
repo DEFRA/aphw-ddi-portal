@@ -2,14 +2,14 @@ const { routes, views } = require('../../../constants/search')
 const ViewModel = require('../../../models/cdo/search/basic')
 const searchSchema = require('../../../schema/portal/search/basic')
 const { doSearch } = require('../../../api/ddi-index-api/search')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [{
   method: 'GET',
   path: routes.searchBasic.get,
   options: {
-    auth: { scope: [admin] },
+    auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const searchCriteria = request.query
 

@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-delete-dog')
 const { getDog, getDogs, deleteDog } = require('../../../session/cdo/dog')
 
@@ -8,7 +8,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.delete.get}/{dogId}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
@@ -28,7 +28,7 @@ module.exports = [
     method: 'POST',
     path: `${routes.delete.post}/{dummy?}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const dogs = getDogs(request)
 

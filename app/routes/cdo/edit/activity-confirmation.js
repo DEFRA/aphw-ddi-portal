@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
-const { admin } = require('../../../auth/permissions.js')
+const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/activity-confirmation')
 const { getActivityDetails, setActivityDetails } = require('../../../session/cdo/activity')
 const { getActivityById } = require('../../../api/ddi-index-api/activities')
@@ -19,7 +19,7 @@ module.exports = [
     method: 'GET',
     path: `${routes.activityConfirmation.get}`,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const details = getActivityDetails(request)
 

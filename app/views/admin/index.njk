@@ -1,0 +1,60 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/">Home</a>
+    </li>
+  </ol>
+</div>{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      Admin area
+    </h1>
+
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
+    Export data
+    </h2>
+
+    <ul class="govuk-list">
+        <li>
+            <a class="govuk-link govuk-link--no-visited-state" href="/export">Export the data in the Index</a>
+        </li>
+    </ul>
+
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
+    Manage team members
+    </h2>
+
+    <ul class="govuk-list">
+        <li>
+            <a class="govuk-link govuk-link--no-visited-state" href="/admin/pseudonyms">Add or remove pseudonyms</a>
+        </li>
+    </ul>
+
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
+    Manage Index lists
+    </h2>
+
+    <ul class="govuk-list">
+        <li>
+            <a class="govuk-link govuk-link--no-visited-state" href="police-forces">Add or remove police forces</a>
+        </li>
+    </ul>
+
+    </div>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@ const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
-const { admin } = require('../../../auth/permissions')
+const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 
@@ -15,7 +15,7 @@ module.exports = [
     method: 'GET',
     path: routes.selectAddress.get,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const details = getOwnerDetails(request) || {}
         details.source = source
@@ -38,7 +38,7 @@ module.exports = [
     method: 'POST',
     path: routes.selectAddress.post,
     options: {
-      auth: { scope: [admin] },
+      auth: { scope: anyLoggedInUser },
       validate: {
         payload: Joi.object({
           address: Joi.number().min(0).required()
