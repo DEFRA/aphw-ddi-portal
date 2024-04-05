@@ -193,7 +193,7 @@ const getActivityLabelFromEvent = (event) => {
  * @returns {Omit<ActivityRow, 'activityLabel'>}
  */
 const getDateAndTeamMemberFromEvent = (event) => {
-  const date = event.activity?.activityDate || event.timestamp
+  const date = event.activity?.activityDate || event.added?.cdo_issued || event.timestamp
 
   return {
     date: formatToGds(date),
@@ -374,6 +374,19 @@ const mapCreatedEventToCheckActivityRows = (event) => {
 }
 
 /**
+ * @param {ImportEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapImportEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return [{
+    activityLabel: `Comments made by index users: ${event.added?.comment}`,
+    ...dateAndTeamMemberData
+  }]
+}
+
+/**
  * @param {DDIEvent[]} events
  * @returns {ActivityRow[]}
  */
@@ -400,6 +413,10 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapCreatedEventToCheckActivityRows(event))
     }
 
+    if (event.type === 'uk.gov.defra.ddi.event.import') {
+      addedRows.push(...mapImportEventToCheckActivityRows(event))
+    }
+
     return [...activityRows, ...addedRows]
   }, activityRowsAccumulator)
 }
@@ -412,5 +429,6 @@ module.exports = {
   getActivityLabelFromAuditFieldRecord,
   flatMapActivityDtoToCheckActivityRow,
   getActivityLabelFromCreatedDog,
-  mapCreatedEventToCheckActivityRows
+  mapCreatedEventToCheckActivityRows,
+  mapImportEventToCheckActivityRows
 }
