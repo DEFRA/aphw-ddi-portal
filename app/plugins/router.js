@@ -43,6 +43,7 @@ const routes = [].concat(
   require('../routes/export/export-data'),
   require('../routes/admin/index'),
   require('../routes/admin/regular-jobs'),
+  require('../routes/admin/pseudonyms'),
   require('../routes/admin/process-comments')
 )
 

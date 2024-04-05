@@ -12,15 +12,13 @@ describe('users test', () => {
 
   test('getUsers calls endpoint', async () => {
     get.mockResolvedValue({
-      payload: {
-        users: [
-          {
-            username: 'internal-user',
-            pseudonym: 'Hal',
-            rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
-          }
-        ]
-      }
+      users: [
+        {
+          username: 'internal-user',
+          pseudonym: 'Hal',
+          rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+        }
+      ]
     })
     const users = await getUsers(adminUser)
     expect(get).toHaveBeenCalledWith('users', adminUser)

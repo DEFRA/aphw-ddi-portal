@@ -16,7 +16,7 @@ const getUsers = async (actioningUser) => {
     throw new NotAuthorizedError('Admin user required for this action')
   }
   const response = await get('users', actioningUser)
-  return response.payload.users
+  return response.users
 }
 
 /**

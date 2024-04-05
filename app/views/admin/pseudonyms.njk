@@ -1,0 +1,44 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+<div class="govuk-width-container">
+    {% block beforeContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            {{ govukBackLink({
+            text: "Back",
+            href: model.backLink,
+            attributes: {
+            id: "back"
+            }
+            })
+            }}
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form class="form" action="pseudonym-added" method="post">
+                <h1 class="govuk-heading-l">Add or remove pseudonyms</h1>
+                <p class="govuk-body">
+                    <a class="govuk-link govuk-link--no-visited-state" href="#add-a-pseudonym">Add a team member pseudonym</a>
+                </p>
+                <p class="govuk-body">To change a pseudonym, remove the pseudonym first. Then add the new pseudonym and the team member’s email address.</p>
+                <div class="govuk-inset-text">
+                    Pseudonyms delete instantly if you select ‘Remove’ in the list below.
+                </div>
+                <p class="govuk-body govuk-!-margin-bottom-7">Team members without a pseudonym will be displayed on the Index as ‘Index user’.</p>
+                <div id="add-a-pseudonym">Coming soon...</div>
+            </form>
+        </div>
+    </div>
+
+    {% endblock %}
+</div>
