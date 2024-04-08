@@ -57,6 +57,12 @@ describe('Pseudonyms', () => {
     expect(document.querySelectorAll('table.govuk-table th')[1].textContent).toEqual('Pseudonym')
     expect(document.querySelectorAll('table.govuk-table td.govuk-table__cell')[0].textContent).toEqual('internal-user')
     expect(document.querySelectorAll('table.govuk-table td.govuk-table__cell')[1].textContent).toEqual('Hal')
+    expect(document.querySelector('h2.govuk-fieldset__heading').textContent).toBe('Add a team member pseudonym')
+    expect(document.querySelector('#add-a-pseudonym h2').textContent).toBe('Add a team member pseudonym')
+    expect(document.querySelectorAll('#add-a-pseudonym #email')).not.toBeNull()
+    expect(document.querySelectorAll('#add-a-pseudonym #pseudonym')).not.toBeNull()
+    expect(document.querySelectorAll('#add-a-pseudonym #pseudonym')).not.toBeNull()
+    expect(document.querySelector('#add-a-pseudonym button').textContent).toBe('Add pseudonym')
   })
 
   test('GET /admin/pseudonyms route returns 200 given no users returned', async () => {
