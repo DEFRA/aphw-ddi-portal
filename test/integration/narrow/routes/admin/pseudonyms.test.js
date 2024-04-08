@@ -2,13 +2,14 @@ const { auth, user } = require('../../../../mocks/auth')
 const mockAuth = require('../../../../../app/auth')
 const { JSDOM } = require('jsdom')
 const exp = require('constants')
+const FormData = require('form-data')
 
 describe('Pseudonyms', () => {
   jest.mock('../../../../../app/auth')
   const mockAuth = require('../../../../../app/auth')
 
   jest.mock('../../../../../app/api/ddi-events-api/users')
-  const { getUsers } = require('../../../../../app/api/ddi-events-api/users')
+  const { getUsers, createUser } = require('../../../../../app/api/ddi-events-api/users')
 
   const createServer = require('../../../../../app/server')
   let server
@@ -84,5 +85,38 @@ describe('Pseudonyms', () => {
     const pageContent = document.querySelector('#main-content').textContent
     expect(pageContent).toContain('No pseudonyms have been added')
     expect(document.querySelector('table.govuk-table')).toBeNull()
+  })
+
+  test('POST /admin/pseudonym route returns 302 if not auth', async () => {
+    const fd = new FormData()
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      headers: fd.getHeaders(),
+      payload: fd.getBuffer()
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+  })
+
+  test('POST /admin/pseudonyms route returns 200 given team member is submitted', async () => {
+    const payload = {
+      email: 'new.user@example.com',
+      pseudonym: 'George'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(createUser).toBeCalledWith({ username: 'new.user@example.com', pseudonym: 'George' }, user)
+    expect(getUsers).toBeCalledWith(user)
   })
 })

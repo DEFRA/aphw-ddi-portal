@@ -10,7 +10,8 @@ const constants = {
       get: '/admin/process-comments'
     },
     pseudonyms: {
-      get: '/admin/pseudonyms'
+      get: '/admin/pseudonyms',
+      post: '/admin/pseudonyms'
     }
   },
   views: {
