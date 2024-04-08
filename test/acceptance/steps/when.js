@@ -1,5 +1,6 @@
 import clearInputField from '../support/action/clearInputField'
 import clickElement from '../support/action/clickElement'
+import clickElementContaining from '../support/action/clickElementContaining'
 import closeLastOpenedWindow from '../support/action/closeLastOpenedWindow'
 import deleteCookies from '../support/action/deleteCookies'
 import dragElement from '../support/action/dragElement'
@@ -25,6 +26,11 @@ const { When } = require('cucumber')
 When(
   /^I (click|doubleclick) on the (link|button|element) "([^"]*)?"$/,
   clickElement
+)
+
+When(
+  /^I (click) on the (link|button|element) containing "([^"]*)?"$/,
+  clickElementContaining
 )
 
 When(/^I clicks on the button$/, function () {

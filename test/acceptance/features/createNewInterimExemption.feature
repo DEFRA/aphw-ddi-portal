@@ -1,13 +1,13 @@
-Feature: Create new CDO
+Feature: Create new interim exemption
 
     Scenario: Enter new owner details
         Given I open the url "/"
-        When I click on the link "Create new record"
+        When I click on the link containing "Process new CDO or"
         And I set "Mike" to the inputfield "#firstName"
         And I set "Clark" to the inputfield "#lastName"
-        And I set "03" to the inputfield "#owner-date-of-birth-dobDay"
-        And I set "03" to the inputfield "#owner-date-of-birth-dobMonth"
-        And I set "1980" to the inputfield "#owner-date-of-birth-dobYear"
+        And I set "03" to the inputfield "#dateOfBirth-day"
+        And I set "03" to the inputfield "#dateOfBirth-month"
+        And I set "1980" to the inputfield "#dateOfBirth-year"
         And I click on the element "button=Continue"
         Then I expect that element "h1" contains the text "What is the owner's postcode?"
 
@@ -60,7 +60,7 @@ Feature: Create new CDO
         And I expect that element "(//dd)[13]" contains the text "345671234512345"
         And I expect that element "(//dd)[14]" contains the text "01 February 2024"
 
-    Scenario: CDO record created successfully
+    Scenario: Interim exemption record created successfully
         And I click on the element "button=Confirm details"
         Then I expect that element "h1" contains the text "Record created" 
         And I expect that element "(//dd)[1]" contains the text "Dogo Argentino"
