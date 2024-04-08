@@ -34,8 +34,38 @@
                 <div class="govuk-inset-text">
                     Pseudonyms delete instantly if you select ‘Remove’ in the list below.
                 </div>
-                <p class="govuk-body govuk-!-margin-bottom-7">Team members without a pseudonym will be displayed on the Index as ‘Index user’.</p>
-                <div id="add-a-pseudonym">Coming soon...</div>
+                <p class="govuk-body govuk-!-margin-bottom-7">Team members without a pseudonym will be displayed on the Index as<br />‘Index user’.</p>
+
+                {% if model.pseudonyms | length > 0 %}
+                <table class="govuk-table govuk-!-margin-bottom-7">
+                    <caption class="govuk-visually-hidden">Team pseudonyms</caption>
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Email</th>
+                        <th scope="col" class="govuk-table__header">Pseudonym</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Remove team member</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Pseudonym List -->
+                        {% for pseudonym in model.pseudonyms %}
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell defra-align-table">{{pseudonym.username}}</td>
+                            <td class="govuk-table__cell defra-align-table">{{pseudonym.pseudonym}}</td>
+                            <td class="govuk-table__cell defra-align-table govuk-table__cell--numeric">
+                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="remove" value="{{pseudonym.username}}">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <!-- / Pseudonym List -->
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="govuk-body">No pseudonyms have been added</p>
+                {% endif %}
+
             </form>
         </div>
     </div>

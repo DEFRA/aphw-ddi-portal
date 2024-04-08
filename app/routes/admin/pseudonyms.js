@@ -11,8 +11,8 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        await getUsers(getUser(request))
-        return h.view(views.pseudonyms, new ViewModel({}))
+        const users = await getUsers(getUser(request))
+        return h.view(views.pseudonyms, new ViewModel(users))
       }
     }
   }
