@@ -9,7 +9,7 @@ describe('Pseudonyms', () => {
   const mockAuth = require('../../../../../app/auth')
 
   jest.mock('../../../../../app/api/ddi-events-api/users')
-  const { getUsers, createUser } = require('../../../../../app/api/ddi-events-api/users')
+  const { getUsers, createUser, deleteUser } = require('../../../../../app/api/ddi-events-api/users')
 
   const createServer = require('../../../../../app/server')
   let server
@@ -81,10 +81,9 @@ describe('Pseudonyms', () => {
     expect(getUsers).toHaveBeenCalledWith(user)
 
     const { document } = new JSDOM(response.payload).window
-
-    const pageContent = document.querySelector('#main-content').textContent
-    expect(pageContent).toContain('No pseudonyms have been added')
+    expect(document.querySelector('h1').textContent).toBe('Add a team member pseudonym')
     expect(document.querySelector('table.govuk-table')).toBeNull()
+    expect(document.querySelector('form#pseudonym-remove')).toBeNull()
   })
 
   test('POST /admin/pseudonym route returns 302 if not auth', async () => {
@@ -117,6 +116,24 @@ describe('Pseudonyms', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
     expect(createUser).toBeCalledWith({ username: 'new.user@example.com', pseudonym: 'George' }, user)
+    expect(getUsers).toBeCalledWith(user)
+  })
+
+  test('POST /admin/pseudonyms route returns 200 given team member is removed', async () => {
+    const payload = {
+      remove: 'old.user@example.com'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(deleteUser).toBeCalledWith('old.user@example.com', user)
     expect(getUsers).toBeCalledWith(user)
   })
 })
