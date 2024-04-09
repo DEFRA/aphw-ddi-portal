@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
@@ -84,6 +85,13 @@ module.exports = {
         from: 'app/frontend/images',
         to: 'images' // Copies all files from above dest to dist/images
       }]
-    })
+    }),
+    new ReplaceInFileWebpackPlugin([{
+      dir: 'app/dist/css',
+      rules: [{
+        search: /"GDS Transport",arial/ig,
+        replace: '"Helvetica Neue", Arial, Helvetica'
+      }]
+    }])
   ]
 }
