@@ -75,7 +75,7 @@ module.exports = [
                 email,
                 pseudonym
               }
-              const validation = duplicateEmailSchema.validate(validationPayload)
+              const validation = duplicateEmailSchema.validate(validationPayload, { abortEarly: false })
 
               const users = await getUsers(actioningUser)
 

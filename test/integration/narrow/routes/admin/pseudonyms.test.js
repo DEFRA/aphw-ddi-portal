@@ -3,6 +3,7 @@ const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { ApiConflictError } = require('../../../../../app/errors/apiConflictError')
 const { ApiErrorFailure } = require('../../../../../app/errors/apiErrorFailure')
+const { createUser, getUsers } = require('../../../../../app/api/ddi-events-api/users')
 
 describe('Pseudonyms', () => {
   jest.mock('../../../../../app/auth')
@@ -232,6 +233,42 @@ describe('Pseudonyms', () => {
     expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
     expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This pseudonym is already in use')
+  })
+
+  test('POST /admin/pseudonyms with duplicate username and pseudonym eturns error', async () => {
+    createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
+      payload: { error: 'Username already exists. Pseudonym already exists.', message: 'Username already exists. Pseudonym already exists.', statusCode: 409 },
+      statusCode: 409,
+      statusMessage: 'Conflict'
+    })))
+    getUsers.mockResolvedValue([{
+      email: 'abe.lincon@example.com',
+      pseudonym: 'Abe',
+      rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+    }])
+    const payload = {
+      email: 'abe.lincon@example.com',
+      pseudonym: 'Abe2'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(2)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address already has a pseudonym')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('This pseudonym is already in use')
+
+    expect(document.querySelector('#email').getAttribute('value')).toBe('abe.lincon@example.com')
+    expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe2')
   })
 
   test('POST /admin/pseudonyms route returns 200 given team member is removed', async () => {

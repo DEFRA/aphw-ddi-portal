@@ -26,7 +26,7 @@
 
     {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div id="pseudonym-body" class="govuk-grid-column-two-thirds">
             {% if model.errors | length > 0 %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
@@ -35,7 +35,7 @@
             {% endif %}
             <h1 class="govuk-heading-l">{{model.title}}</h1>
             {% if model.pseudonyms | length > 0 %}
-            <form class="form" method="post" id="pseudonym-remove" action="pseudonyms#pseudonym-table">
+            <form class="form" method="post" id="pseudonym-remove" action="pseudonyms#pseudonym-body">
                 <p class="govuk-body">
                     <a class="govuk-link govuk-link--no-visited-state" href="#add-a-pseudonym">Add a team member pseudonym</a>
                 </p>
@@ -71,7 +71,7 @@
                 </table>
             </form>
             {% endif %}
-            <form class="form" id="add-a-pseudonym" method="post" action="pseudonyms#pseudonym-table">
+            <form class="form" id="add-a-pseudonym" method="post" action="pseudonyms#pseudonym-body">
                 <fieldset class="govuk-fieldset">
                     {% if model.pseudonyms | length > 0 %}
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
