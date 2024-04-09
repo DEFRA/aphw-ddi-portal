@@ -89,8 +89,8 @@ module.exports = {
     new ReplaceInFileWebpackPlugin([{
       dir: 'app/dist/css',
       rules: [{
-          search: /GDS Transport/ig,
-          replace: 'Helvetica Neue'
+        search: /"GDS Transport",arial/ig,
+        replace: '"Helvetica Neue", Arial, Helvetica'
       }]
     }])
   ]
