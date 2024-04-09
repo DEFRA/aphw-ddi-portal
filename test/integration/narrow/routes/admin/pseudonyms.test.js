@@ -169,7 +169,7 @@ describe('Pseudonyms', () => {
 
   test('POST /admin/pseudonyms with duplicate username returns error', async () => {
     createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
-      payload: { error: 'Username already exists', message: 'Username already exists', statusCode: 409 },
+      payload: { error: 'Resource already found with username abe.lincon@example.com.', message: 'Resource already found with username abe.lincon@example.com.', statusCode: 409 },
       statusCode: 409,
       statusMessage: 'Conflict'
     })))
@@ -204,7 +204,7 @@ describe('Pseudonyms', () => {
 
   test('POST /admin/pseudonyms with duplicate pseudonym returns error', async () => {
     createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
-      payload: { error: 'Pseudonym already exists', message: 'Pseudonym already exists', statusCode: 409 },
+      payload: { error: 'Resource already found with pseudonym George.', message: 'Resource already found with pseudonym George.', statusCode: 409 },
       statusCode: 409,
       statusMessage: 'Conflict'
     })))
@@ -234,9 +234,9 @@ describe('Pseudonyms', () => {
     expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This pseudonym is already in use')
   })
 
-  test('POST /admin/pseudonyms with duplicate username and pseudonym eturns error', async () => {
+  test('POST /admin/pseudonyms with duplicate username and pseudonym returns error', async () => {
     createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
-      payload: { error: 'Username already exists. Pseudonym already exists.', message: 'Username already exists. Pseudonym already exists.', statusCode: 409 },
+      payload: { error: 'Resource already found with username abe.lincoln@example.com. Resource already found with pseudonym Abe.', message: 'Resource already found with username abe.lincoln@example.com. Resource already found with pseudonym Abe.', statusCode: 409 },
       statusCode: 409,
       statusMessage: 'Conflict'
     })))
@@ -247,7 +247,7 @@ describe('Pseudonyms', () => {
     }])
     const payload = {
       email: 'abe.lincon@example.com',
-      pseudonym: 'Abe2'
+      pseudonym: 'Abe'
     }
 
     const options = {
@@ -267,7 +267,7 @@ describe('Pseudonyms', () => {
     expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('This pseudonym is already in use')
 
     expect(document.querySelector('#email').getAttribute('value')).toBe('abe.lincon@example.com')
-    expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe2')
+    expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe')
   })
 
   test('POST /admin/pseudonyms route returns 200 given team member is removed', async () => {

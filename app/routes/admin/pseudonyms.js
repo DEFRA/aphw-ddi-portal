@@ -11,10 +11,10 @@ const mapBoomError = (e, request) => {
   let email
   let pseudonym
 
-  if (errorPayload.includes('Username')) {
+  if (errorPayload.includes('username')) {
     email = request.payload.email
   }
-  if (errorPayload.includes('Pseudonym')) {
+  if (errorPayload.includes('pseudonym')) {
     pseudonym = request.payload.pseudonym
   }
 
@@ -71,9 +71,7 @@ module.exports = [
 
         if (request.payload.remove) {
           await deleteUser(request.payload.remove, actioningUser)
-        }
-
-        if (!request.payload.remove) {
+        } else {
           const payload = {
             username: request.payload.email,
             pseudonym: request.payload.pseudonym
