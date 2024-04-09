@@ -1,6 +1,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% extends '_layout.njk' %}
@@ -25,6 +27,12 @@
     {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            {% if model.errors | length > 0 %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: model.errors
+                }) }}
+            {% endif %}
             <h1 class="govuk-heading-l">{{model.title}}</h1>
             {% if model.pseudonyms | length > 0 %}
             <form class="form" method="post" id="pseudonym-remove" action="pseudonyms#pseudonym-table">
@@ -70,14 +78,8 @@
                         <h2 class="govuk-fieldset__heading">Add a team member pseudonym</h2>
                     </legend>
                     {% endif %}
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="email">Email</label>
-                        <input class="govuk-input govuk-!-width-one-half" id="email" name="email" type="text">
-                    </div>
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="pseudonym">Pseudonym</label>
-                        <input class="govuk-input govuk-!-width-one-third" id="pseudonym" name="pseudonym" type="text">
-                    </div>
+                    {{ govukInput(model.email) }}
+                    {{ govukInput(model.pseudonym) }}
                 </fieldset>
                 <button type="submit" class="govuk-button" data-module="govuk-button">Add pseudonym</button>
             </form>

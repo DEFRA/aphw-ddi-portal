@@ -1,8 +1,8 @@
 const { auth, user } = require('../../../../mocks/auth')
-const mockAuth = require('../../../../../app/auth')
 const { JSDOM } = require('jsdom')
-const exp = require('constants')
 const FormData = require('form-data')
+const { ApiConflictError } = require('../../../../../app/errors/apiConflictError')
+const { ApiErrorFailure } = require('../../../../../app/errors/apiErrorFailure')
 
 describe('Pseudonyms', () => {
   jest.mock('../../../../../app/auth')
@@ -101,6 +101,11 @@ describe('Pseudonyms', () => {
   })
 
   test('POST /admin/pseudonyms route returns 200 given team member is submitted', async () => {
+    getUsers.mockResolvedValue([{
+      username: 'new.user@example.com',
+      pseudonym: 'George',
+      rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+    }])
     const payload = {
       email: 'new.user@example.com',
       pseudonym: 'George'
@@ -115,8 +120,118 @@ describe('Pseudonyms', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
     expect(createUser).toBeCalledWith({ username: 'new.user@example.com', pseudonym: 'George' }, user)
     expect(getUsers).toBeCalledWith(user)
+    expect(document.querySelector('#email').getAttribute('value')).toBe(null)
+    expect(document.querySelector('#pseudonym').getAttribute('pseudonym')).toBe(null)
+  })
+
+  test('POST /admin/pseudonyms with empty data returns error', async () => {
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload: {}
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(2)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Enter an email address')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('Enter a pseudonym')
+  })
+
+  test('POST /admin/pseudonyms with invalid email returns error', async () => {
+    const payload = {
+      email: 'not.a.valid.email',
+      pseudonym: 'George'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Enter an email address in the correct format, like name@defra.gov.uk')
+  })
+
+  test('POST /admin/pseudonyms with duplicate username returns error', async () => {
+    createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
+      payload: { error: 'Username already exists', message: 'Username already exists', statusCode: 409 },
+      statusCode: 409,
+      statusMessage: 'Conflict'
+    })))
+    getUsers.mockResolvedValue([{
+      email: 'abe.lincon@example.com',
+      pseudonym: 'Abe',
+      rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+    }])
+    const payload = {
+      email: 'abe.lincon@example.com',
+      pseudonym: 'Abe2'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address already has a pseudonym')
+
+    expect(document.querySelector('#email').getAttribute('value')).toBe('abe.lincon@example.com')
+    expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe2')
+  })
+
+  test('POST /admin/pseudonyms with duplicate pseudonym returns error', async () => {
+    createUser.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
+      payload: { error: 'Pseudonym already exists', message: 'Pseudonym already exists', statusCode: 409 },
+      statusCode: 409,
+      statusMessage: 'Conflict'
+    })))
+    getUsers.mockResolvedValue([{
+      username: 'user3@example.com',
+      pseudonym: 'George',
+      rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+    }])
+    const payload = {
+      email: 'user@example.com',
+      pseudonym: 'George'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This pseudonym is already in use')
   })
 
   test('POST /admin/pseudonyms route returns 200 given team member is removed', async () => {

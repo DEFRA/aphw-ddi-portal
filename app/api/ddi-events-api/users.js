@@ -1,6 +1,8 @@
-const { get, post, callDelete } = require('../ddi-events-api/base')
 const createUserSchema = require('../../schema/ddi-events-api/users/create')
 const { NotAuthorizedError } = require('../../errors/notAuthorizedError')
+const { postWithBoom, get, callDelete } = require('./base')
+const { ApiErrorFailure } = require('../../errors/apiErrorFailure')
+const { ApiConflictError } = require('../../errors/apiConflictError')
 /**
  * @typedef {{username: string}} ActioningUser
  */
@@ -34,8 +36,17 @@ const createUser = async (newUser, actioningUser) => {
     throw error
   }
 
-  const response = await post('users', value, actioningUser)
-  return response.payload
+  try {
+    const response = await postWithBoom('users', value, actioningUser)
+    return response.payload
+  } catch (e) {
+    if (e instanceof ApiErrorFailure) {
+      if (e.boom.statusCode === 409) {
+        throw new ApiConflictError(e)
+      }
+    }
+    throw e
+  }
 }
 
 /**
