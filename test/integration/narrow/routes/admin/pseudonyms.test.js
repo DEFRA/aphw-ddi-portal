@@ -3,7 +3,6 @@ const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { ApiConflictError } = require('../../../../../app/errors/apiConflictError')
 const { ApiErrorFailure } = require('../../../../../app/errors/apiErrorFailure')
-const { createUser, getUsers } = require('../../../../../app/api/ddi-events-api/users')
 
 describe('Pseudonyms', () => {
   jest.mock('../../../../../app/auth')
