@@ -1,0 +1,90 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+<div class="govuk-width-container">
+    {% block beforeContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            {{ govukBackLink({
+            text: "Back",
+            href: model.backLink,
+            attributes: {
+            id: "back"
+            }
+            })
+            }}
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <div class="govuk-grid-row">
+        <div id="pseudonym-body" class="govuk-grid-column-two-thirds">
+            {% if model.errors | length > 0 %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: model.errors
+                }) }}
+            {% endif %}
+            <h1 class="govuk-heading-l">{{model.title}}</h1>
+            {% if model.pseudonyms | length > 0 %}
+            <form class="form" method="post" id="pseudonym-remove" action="pseudonyms#pseudonym-body">
+                <p class="govuk-body">
+                    <a class="govuk-link govuk-link--no-visited-state" href="#add-a-pseudonym">Add a team member pseudonym</a>
+                </p>
+                <p class="govuk-body">To change a pseudonym, remove the pseudonym first. Then add the new pseudonym and the team member’s email address.</p>
+                <div class="govuk-inset-text">
+                    Pseudonyms delete instantly if you select ‘Remove’ in the list below.
+                </div>
+                <p class="govuk-body govuk-!-margin-bottom-7">Team members without a pseudonym will be displayed on the Index as<br />‘Index user’.</p>
+                <table class="govuk-table govuk-!-margin-bottom-7" id="pseudonym-table">
+                    <caption class="govuk-visually-hidden">Team pseudonyms</caption>
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Email</th>
+                        <th scope="col" class="govuk-table__header">Pseudonym</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Remove team member</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Pseudonym List -->
+                        {% for pseudonym in model.pseudonyms %}
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell defra-align-table">{{pseudonym.username}}</td>
+                            <td class="govuk-table__cell defra-align-table">{{pseudonym.pseudonym}}</td>
+                            <td class="govuk-table__cell defra-align-table govuk-table__cell--numeric">
+                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="remove" value="{{pseudonym.username}}">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <!-- / Pseudonym List -->
+                    </tbody>
+                </table>
+            </form>
+            {% endif %}
+            <form class="form" id="add-a-pseudonym" method="post" action="pseudonyms#pseudonym-body">
+                <fieldset class="govuk-fieldset">
+                    {% if model.pseudonyms | length > 0 %}
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">Add a team member pseudonym</h2>
+                    </legend>
+                    {% endif %}
+                    {{ govukInput(model.email) }}
+                    {{ govukInput(model.pseudonym) }}
+                </fieldset>
+                <button type="submit" class="govuk-button" data-module="govuk-button">Add pseudonym</button>
+            </form>
+        </div>
+    </div>
+
+    {% endblock %}
+</div>
