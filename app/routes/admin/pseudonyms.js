@@ -6,6 +6,26 @@ const { getUser } = require('../../auth')
 const { validatePseudonymPayload, duplicateEmailSchema } = require('../../schema/portal/admin/pseudonyms')
 const { ApiConflictError } = require('../../errors/apiConflictError')
 
+const mapBoomError = (e, request) => {
+  const errorPayload = e.boom.payload.error
+  let email
+  let pseudonym
+
+  if (errorPayload.includes('Username')) {
+    email = request.payload.email
+  }
+  if (errorPayload.includes('Pseudonym')) {
+    pseudonym = request.payload.pseudonym
+  }
+
+  const validationPayload = {
+    email,
+    pseudonym
+  }
+  const { error } = duplicateEmailSchema.validate(validationPayload, { abortEarly: false })
+  return error
+}
+
 module.exports = [
   {
     method: 'GET',
@@ -51,38 +71,26 @@ module.exports = [
 
         if (request.payload.remove) {
           await deleteUser(request.payload.remove, actioningUser)
-        } else {
+        }
+
+        if (!request.payload.remove) {
           const payload = {
             username: request.payload.email,
             pseudonym: request.payload.pseudonym
           }
+
           try {
             await createUser(payload, actioningUser)
             requestPayload = {}
           } catch (e) {
             if (e instanceof ApiConflictError) {
-              const boomObject = e.boom
-              let email
-              let pseudonym
-
-              if (boomObject.payload.error.includes('Username')) {
-                email = request.payload.email
-              }
-              if (boomObject.payload.error.includes('Pseudonym')) {
-                pseudonym = request.payload.pseudonym
-              }
-              const validationPayload = {
-                email,
-                pseudonym
-              }
-              const validation = duplicateEmailSchema.validate(validationPayload, { abortEarly: false })
+              const validationError = mapBoomError(e, request)
 
               const users = await getUsers(actioningUser)
-
-              return h.view(views.pseudonyms, new ViewModel(requestPayload, users, validation.error)).code(400)
-            } else {
-              throw e
+              return h.view(views.pseudonyms, new ViewModel(requestPayload, users, validationError)).code(400)
             }
+
+            throw e
           }
         }
 
