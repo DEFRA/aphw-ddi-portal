@@ -145,6 +145,29 @@ describe('Pseudonyms', () => {
     expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('Enter a pseudonym')
   })
 
+  test('POST /admin/pseudonyms with internal server error at api returns 500', async () => {
+    getUsers.mockResolvedValue([{
+      username: 'new.user@example.com',
+      pseudonym: 'George',
+      rowKey: '6917e9f6-a921-47b8-a0a0-d2851ce8b944'
+    }])
+    createUser.mockRejectedValue(new Error('Internal server error'))
+    const payload = {
+      email: 'new.user@example.com',
+      pseudonym: 'George'
+    }
+    const options = {
+      method: 'POST',
+      url: '/admin/pseudonyms',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
+  })
+
   test('POST /admin/pseudonyms with invalid email returns error', async () => {
     const payload = {
       email: 'not.a.valid.email',
