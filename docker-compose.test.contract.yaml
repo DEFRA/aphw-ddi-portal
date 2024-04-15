@@ -22,5 +22,10 @@ services:
       PACT_BROKER_DATABASE_HOST: 'aphw-ddi-pact-postgres'
       PACT_BROKER_DATABASE_NAME: 'aphw-ddi-pact'
       PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "5"
+  aphw-ddi-event-store-azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+    command: "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --loose"
+    labels:
+      com.docker.compose.pay.role: aphw-ddi-event-store-azurite
 volumes:
   pact_postgres_data:
