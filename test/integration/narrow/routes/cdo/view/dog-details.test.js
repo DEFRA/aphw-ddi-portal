@@ -1,4 +1,4 @@
-const { auth, user } = require('../../../../../mocks/auth')
+const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('View dog details', () => {
@@ -18,10 +18,11 @@ describe('View dog details', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/view/dog-details route returns 200', async () => {
+  describe('GET /cdo/view/dog-details returns 200', () => {
     getCdo.mockResolvedValue({
       dog: {
         id: 1,
+        indexNumber: 'ED123',
         name: 'Bruno',
         status: { status: 'TEST' },
         dog_breed: { breed: 'breed1' }
@@ -42,22 +43,42 @@ describe('View dog details', () => {
       }
     })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
-      auth
-    }
+    test('GET /cdo/view/dog-details route returns 200 given standard', async () => {
+      const options = {
+        method: 'GET',
+        url: '/cdo/view/dog-details/ED123',
+        auth: standardAuth
+      }
 
-    const response = await server.inject(options)
+      const response = await server.inject(options)
 
-    const { document } = new JSDOM(response.payload).window
+      const { document } = new JSDOM(response.payload).window
 
-    expect(response.statusCode).toBe(200)
-    expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
-    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-    expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED123')
+      expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
+      expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
+      expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
+    })
+
+    test('GET /cdo/view/dog-details route returns 200 given admin user', async () => {
+      const options = {
+        method: 'GET',
+        url: '/cdo/view/dog-details/ED123',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').textContent.trim()).toBe('Delete dog record')
+      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').getAttribute('href')).toBe('/cdo/view/dog-details/ED123/delete')
+    })
   })
 
   test('GET /cdo/view/dog-details route returns 404 if no data found', async () => {

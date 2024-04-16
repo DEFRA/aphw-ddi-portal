@@ -49,6 +49,10 @@
 
       <!-- owner -->
       {% include "./cdo/view/owner-panel.njk" %}
+      <!-- button -->
+      {% if auth.isAdminUser %}
+        <a href="/cdo/view/dog-details/{{ model.dog.indexNumber }}/delete" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-testid="delete-dog-record-btn">Delete dog record</a>
+      {% endif %}
     </div>
 
     <div class="govuk-grid-column-one-half">

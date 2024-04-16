@@ -1,6 +1,11 @@
 const isInRole = require('./is-in-role')
 const { admin } = require('./permissions')
 
+/**
+ *
+ * @param request
+ * @returns {{isAnonymous: boolean, isAuthenticated: boolean, isAdminUser:boolean}}
+ */
 const mapAuth = (request) => {
   return {
     isAuthenticated: request.auth.isAuthenticated,
