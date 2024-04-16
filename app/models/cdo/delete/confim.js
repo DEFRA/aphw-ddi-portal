@@ -35,6 +35,7 @@ function ViewModel (details, backNav, errors) {
     },
     confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.confirmReferenceText}?`,
     nameOrReference: details.nameOrReference,
+    nameOrReferenceText: details.nameOrReferenceText,
     pk: details.pk,
     errors: []
   }

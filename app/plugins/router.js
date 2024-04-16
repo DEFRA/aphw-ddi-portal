@@ -31,7 +31,7 @@ const routes = [].concat(
   require('../routes/cdo/edit/postcode-lookup'),
   require('../routes/cdo/edit/select-address'),
   require('../routes/cdo/edit/address'),
-  require('../routes/cdo/delete/confirm-owner'),
+  require('../routes/cdo/delete/owner'),
   require('../routes/cdo/delete/dog'),
   require('../routes/healthy'),
   require('../routes/healthz'),

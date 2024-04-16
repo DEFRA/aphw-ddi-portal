@@ -28,7 +28,9 @@ const put = async (endpoint, data, user) => {
 const callDelete = async (endpoint, user) => {
   const options = user?.username ? { json: true, headers: addHeaders(user) } : { json: true }
 
-  return wreck.delete(`${baseUrl}/${endpoint}`, options)
+  const { payload } = await wreck.delete(`${baseUrl}/${endpoint}`, options)
+
+  return payload
 }
 
 module.exports = {
