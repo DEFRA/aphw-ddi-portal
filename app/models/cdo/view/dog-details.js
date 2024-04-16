@@ -2,7 +2,7 @@ const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
 
-function ViewModel (cdo, backNav, isAdminUser) {
+function ViewModel (cdo, backNav) {
   const person = cdo.person
   const contacts = person.person_contacts
   const insurance = cdo.exemption.insurance[0]
