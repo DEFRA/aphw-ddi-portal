@@ -3,7 +3,7 @@ const ViewModel = require('../../../models/cdo/delete/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
-const { getPersonByReference } = require('../../../api/ddi-index-api/person')
+const { getPersonByReference, deletePerson } = require('../../../api/ddi-index-api/person')
 
 module.exports = [{
   method: 'GET',
@@ -48,9 +48,10 @@ module.exports = [{
       if (payload.confirm === 'N') {
         return h.redirect(`${routes.viewOwnerDetails.get}/${payload.pk}${extractBackNavParam(request)}`)
       }
+
       const details = await buildDetails(payload.pk)
 
-      // Do the delete or abort
+      await deletePerson(payload.pk)
 
       return h.view(views.confirmation, new ViewModel(details))
     }
