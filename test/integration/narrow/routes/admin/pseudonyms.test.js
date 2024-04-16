@@ -1,8 +1,8 @@
 const { auth, user } = require('../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
-const { ApiConflictError } = require('../../../../../app/errors/apiConflictError')
-const { ApiErrorFailure } = require('../../../../../app/errors/apiErrorFailure')
+const { ApiConflictError } = require('../../../../../app/errors/api-conflict-error')
+const { ApiErrorFailure } = require('../../../../../app/errors/api-error-failure')
 
 describe('Pseudonyms', () => {
   jest.mock('../../../../../app/auth')

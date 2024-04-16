@@ -1,4 +1,4 @@
-const { ApiErrorFailure } = require('./apiErrorFailure')
+const { ApiErrorFailure } = require('./api-error-failure')
 
 function ApiConflictError (apiErrorFailure) {
   this.apiErrorFailure = apiErrorFailure

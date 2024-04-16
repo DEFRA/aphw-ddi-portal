@@ -15,10 +15,6 @@ module.exports = [{
 
       const details = await buildDetails(pk)
 
-      if (details.entity == null) {
-        return h.response().code(404).takeover()
-      }
-
       const backNav = addBackNavigation(request)
 
       return h.view(views.deleteGeneric, new ViewModel(details, backNav))
@@ -59,14 +55,14 @@ module.exports = [{
 }]
 
 const buildDetails = async (pk) => {
-  const entity = await getDogDetails(pk)
+  await getDogDetails(pk)
 
   return {
     action: 'delete',
     pk,
     recordTypeText: 'dog',
     nameOrReference: `${pk}`,
-    nameOrReferenceText: `${pk}`,
-    entity
+    nameOrReferenceText: `Dog ${pk}`,
+    confirmReferenceText: `${pk}`
   }
 }

@@ -15,10 +15,6 @@ module.exports = [{
 
       const details = await buildDetails(pk)
 
-      if (details.entity == null) {
-        return h.response().code(404).takeover()
-      }
-
       const backNav = addBackNavigation(request)
 
       return h.view(views.delete, new ViewModel(details, backNav))
@@ -67,6 +63,6 @@ const buildDetails = async (pk) => {
     recordTypeText: 'the owner',
     nameOrReference: `${entity.firstName} ${entity.lastName}`,
     nameOrReferenceText: `for ${entity.firstName} ${entity.lastName}`,
-    entity
+    confirmReferenceText: `for ${entity.firstName} ${entity.lastName}`
   }
 }

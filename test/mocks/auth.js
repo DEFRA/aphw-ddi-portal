@@ -1,4 +1,4 @@
-const { admin } = require('../../app/auth/permissions')
+const { admin, standard } = require('../../app/auth/permissions')
 
 const user = {
   userId: '1',
@@ -13,8 +13,11 @@ const userWithDisplayname = {
 
 const auth = { strategy: 'session-auth', credentials: { scope: [admin], account: { user } } }
 
+const standardAuth = { strategy: 'session-auth', credentials: { scope: [standard], account: { user } } }
+
 module.exports = {
   user,
   auth,
+  standardAuth,
   userWithDisplayname
 }

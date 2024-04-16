@@ -1,7 +1,7 @@
 const wreck = require('@hapi/wreck')
 const { user } = require('../../../mocks/auth')
-const { ApiErrorFailure } = require('../../../../app/errors/apiErrorFailure')
-const { NotAuthorizedError } = require('../../../../app/errors/notAuthorizedError')
+const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
+const { NotAuthorizedError } = require('../../../../app/errors/not-authorized-error')
 jest.mock('@hapi/wreck')
 
 describe('Base API', () => {
