@@ -3,6 +3,7 @@ const { ddiIndexApiProvider } = require('./mockServices')
 const { countriesTests } = require('./describe/api/countries')
 const { cdoTests } = require('./describe/api/cdo')
 const { personsTests } = require('./describe/api/persons')
+const { dogsTests } = require('./describe/api/dogs')
 
 describe('API service contract tests', () => {
   beforeAll(async () => {
@@ -18,6 +19,8 @@ describe('API service contract tests', () => {
   describe('/cdo', () => cdoTests(ddiIndexApiProvider))
 
   describe('/persons', () => personsTests(ddiIndexApiProvider))
+
+  describe('/dogs', () => dogsTests(ddiIndexApiProvider))
 
   afterEach(async () => {
     await ddiIndexApiProvider.verify()

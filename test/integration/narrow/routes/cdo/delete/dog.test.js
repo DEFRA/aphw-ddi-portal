@@ -8,7 +8,7 @@ describe('Delete Dog', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
-  const { getDogDetails } = require('../../../../../../app/api/ddi-index-api/dog')
+  const { getDogDetails, deleteDog } = require('../../../../../../app/api/ddi-index-api/dog')
 
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
@@ -99,6 +99,7 @@ describe('Delete Dog', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
+      expect(deleteDog).toHaveBeenCalledWith('ED200010', user)
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog record deleted')
       expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200010')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog record ED200010 will no longer appear in search results or on the owner record.')
@@ -147,6 +148,7 @@ describe('Delete Dog', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
+      expect(deleteDog).not.toHaveBeenCalled()
     })
 
     test('POST /cdo/delete/dog route with a confirmation returns 400 given radio not entered', async () => {

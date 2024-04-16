@@ -3,8 +3,9 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/delete/confim')
 const DeletedViewModel = require('../../../models/cdo/delete/deleted')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
-const { getDogDetails } = require('../../../api/ddi-index-api/dog')
+const { getDogDetails, deleteDog } = require('../../../api/ddi-index-api/dog')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -44,6 +45,8 @@ module.exports = [
           return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`)
         }
         const details = await buildDetails(pk)
+
+        await deleteDog(pk, getUser(request))
 
         const backNav = addBackNavigation(request)
 
