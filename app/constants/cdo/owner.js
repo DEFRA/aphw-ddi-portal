@@ -58,6 +58,10 @@ const constants = {
     editAddress: {
       get: '/cdo/edit/address',
       post: '/cdo/edit/address'
+    },
+    delete: {
+      get: '/cdo/delete/owner',
+      post: '/cdo/delete/owner'
     }
   },
   views: {
@@ -73,7 +77,8 @@ const constants = {
     editDetails: 'cdo/edit/owner-details',
     viewOwnerDetails: 'cdo/view/owner-details',
     postcodeLookupEdit: 'cdo/edit/postcode-lookup',
-    selectAddressFromEdit: 'cdo/edit/select-address'
+    selectAddressFromEdit: 'cdo/edit/select-address',
+    delete: 'common/confirm'
   },
   keys: {
     entry: 'owner',
