@@ -19,6 +19,10 @@ const constants = {
       get: '/cdo/create/confirm-dog-details',
       post: '/cdo/create/confirm-dog-details'
     },
+    deleteDog: {
+      get: '/cdo/delete/dog',
+      post: '/cdo/delete/dog'
+    },
     viewDogDetails: {
       get: '/cdo/view/dog-details',
       post: '/cdo/view/dog-details'
@@ -83,7 +87,8 @@ const constants = {
     selectActivity: 'cdo/edit/select-activity',
     activityConfirmation: 'cdo/edit/activity-confirmation',
     confirmDeleteGeneric: 'common/confirm',
-    confirmation: 'common/deleted/dog'
+    confirmation: 'common/deleted/dog',
+    deleteGeneric: 'common/deleted/dog'
   },
   keys: {
     entry: 'dogs',

@@ -10,7 +10,7 @@ const { getUser } = require('../../../auth')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.deleteGeneric.get}/{indexNumber?}`,
+    path: `${routes.deleteDog.get}/{indexNumber?}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -24,7 +24,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.deleteGeneric.post}/{indexNumber?}`,
+    path: `${routes.deleteDog.post}/{indexNumber?}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -50,7 +50,7 @@ module.exports = [
 
         const backNav = addBackNavigation(request)
 
-        return h.view(views.confirmation, new DeletedViewModel(details, backNav))
+        return h.view(views.deleteGeneric, new DeletedViewModel(details, backNav))
       }
     }
   }
