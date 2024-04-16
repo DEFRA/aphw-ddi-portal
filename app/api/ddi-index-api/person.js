@@ -1,4 +1,4 @@
-const { get, post, put } = require('./base')
+const { get, post, put, callDelete } = require('./base')
 const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
@@ -77,9 +77,16 @@ const updatePerson = async (data, user) => {
   return res
 }
 
+const deletePerson = async (reference, user) => {
+  const res = await callDelete(`${personEndpoint}/${reference}`, user)
+
+  return res
+}
+
 module.exports = {
   addPerson,
   getPersonAndDogs,
   getPersonByReference,
-  updatePerson
+  updatePerson,
+  deletePerson
 }

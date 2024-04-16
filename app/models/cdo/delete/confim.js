@@ -1,5 +1,19 @@
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
+/**
+ * @typedef ConfirmDeleteDetails
+ * @property {string} action
+ * @property {string} pk
+ * @property {string} recordTypeText
+ * @property {string} nameOrReferenceText
+ * @property {string} nameOrReference
+ */
+/**
+ * @param {ConfirmDeleteDetails} details
+ * @param backNav
+ * @param [errors]
+ * @constructor
+ */
 function ViewModel (details, backNav, errors) {
   this.model = {
     backLink: backNav?.backLink,

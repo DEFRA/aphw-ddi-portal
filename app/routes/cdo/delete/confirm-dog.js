@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/delete/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
-const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getDogDetails } = require('../../../api/ddi-index-api/dog')
 
 module.exports = [{
@@ -43,11 +43,17 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      // const payload = request.payload
+      const payload = request.payload
 
-      // Do the delete or abort
+      if (payload.confirm === 'N') {
+        return h.redirect(`${routes.viewDogDetails.get}/${payload.pk}${extractBackNavParam(request)}`)
+      }
 
-      return h.view(views.deleteGeneric, new ViewModel())
+      const details = await buildDetails(payload.pk)
+
+      // Do the delete
+
+      return h.view(views.deleteGeneric, new ViewModel(details))
     }
   }
 }]
@@ -60,6 +66,7 @@ const buildDetails = async (pk) => {
     pk,
     recordTypeText: 'dog',
     nameOrReference: `${pk}`,
+    nameOrReferenceText: `${pk}`,
     entity
   }
 }
