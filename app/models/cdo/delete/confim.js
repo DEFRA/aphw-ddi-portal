@@ -5,9 +5,8 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
  * @property {string} action
  * @property {string} pk
  * @property {string} recordTypeText
+ * @property {string} nameOrReferenceText
  * @property {string} nameOrReference
- * @property {string} recordType
- * @property {unknown} entity
  */
 /**
  * @param {ConfirmDeleteDetails} details
