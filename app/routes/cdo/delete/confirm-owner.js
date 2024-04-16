@@ -3,7 +3,7 @@ const ViewModel = require('../../../models/cdo/delete/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
-const { getPersonByReference /* , deletePerson */ } = require('../../../api/ddi-index-api/person')
+const { getPersonByReference, deletePerson } = require('../../../api/ddi-index-api/person')
 
 module.exports = [{
   method: 'GET',
@@ -47,7 +47,7 @@ module.exports = [{
 
       const details = await buildDetails(payload.pk)
 
-      // await deletePerson(payload.pk)
+      await deletePerson(payload.pk)
 
       return h.view(views.confirmation, new ViewModel(details))
     }
