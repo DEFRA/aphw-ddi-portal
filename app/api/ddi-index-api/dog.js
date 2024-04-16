@@ -1,4 +1,4 @@
-const { get, put } = require('./base')
+const { get, put, callDelete } = require('./base')
 
 const dogEndpoint = 'dog'
 
@@ -33,9 +33,14 @@ const updateStatus = async (payload, user) => {
   return await put(dogEndpoint, dog, user)
 }
 
+const deleteDog = async (indexNumber, user) => {
+  return callDelete(`${dogEndpoint}/${indexNumber}`, user)
+}
+
 module.exports = {
   updateDogDetails,
   updateStatus,
   getDogDetails,
-  getDogOwner
+  getDogOwner,
+  deleteDog
 }

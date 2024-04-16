@@ -80,7 +80,7 @@ const config = {
   },
   cookie: {
     cookieNameCookiePolicy: 'dangerous_dog_act_portal_cookie_policy',
-    cookieNameSession: 'dangerous_dog_act_protal_session',
+    cookieNameSession: 'dangerous_dog_act_portal_session',
     isSameSite: 'Lax',
     isSecure: process.env.NODE_ENV === 'production',
     password: process.env.COOKIE_PASSWORD

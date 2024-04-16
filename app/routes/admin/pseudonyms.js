@@ -4,7 +4,7 @@ const ViewModel = require('../../models/admin/pseudonyms')
 const { getUsers, createUser, deleteUser } = require('../../api/ddi-events-api/users')
 const { getUser } = require('../../auth')
 const { validatePseudonymPayload, duplicateEmailSchema } = require('../../schema/portal/admin/pseudonyms')
-const { ApiConflictError } = require('../../errors/apiConflictError')
+const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const mapBoomError = (e, request) => {
   const errorPayload = e.boom.payload.error

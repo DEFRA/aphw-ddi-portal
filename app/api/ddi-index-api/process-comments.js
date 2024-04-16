@@ -7,7 +7,7 @@ const options = {
 }
 
 /**
- * @param maxRecordsParam
+ * @param {number} [maxRecordsParam]
  * @returns {Promise<{
  *    "rowsProcessed": number,
  *    "rowsInError": number,
