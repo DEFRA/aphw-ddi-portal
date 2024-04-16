@@ -49,7 +49,7 @@ module.exports = [{
 
       // Do the delete
 
-      return h.view(views.deleteGeneric, new ViewModel(details))
+      return h.view(views.confirmation, new ViewModel(details))
     }
   }
 }]
