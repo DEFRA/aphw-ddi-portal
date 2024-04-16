@@ -2,8 +2,8 @@ const config = require('../../config')
 
 const wreck = require('@hapi/wreck')
 const { buildPostRequest, addHeaders } = require('../shared')
-const { NotAuthorizedError } = require('../../errors/notAuthorizedError')
-const { ApiErrorFailure } = require('../../errors/apiErrorFailure')
+const { NotAuthorizedError } = require('../../errors/not-authorized-error')
+const { ApiErrorFailure } = require('../../errors/api-error-failure')
 
 const baseUrl = config.ddiEventsApi.baseUrl
 

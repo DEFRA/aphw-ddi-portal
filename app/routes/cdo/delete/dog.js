@@ -3,7 +3,7 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/delete/confim')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { getDogDetails } = require('../../../api/ddi-index-api/dog')
-const { NotFoundError } = require('../../../errors/notFoundError')
+const { NotFoundError } = require('../../../errors/not-found-error')
 module.exports = [
   {
     method: 'GET',
