@@ -77,7 +77,7 @@ describe('View dog details', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').textContent.trim()).toBe('Delete dog record')
-      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').getAttribute('href')).toBe('/cdo/view/dog-details/ED123/delete')
+      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').getAttribute('href')).toBe('/cdo/delete/dog/ED123')
     })
   })
 

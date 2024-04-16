@@ -52,6 +52,10 @@ module.exports = [{
   }
 }]
 
+/**
+ * @param pk
+ * @returns {Promise<ConfirmDeleteDetails>}
+ */
 const buildDetails = async (pk) => {
   const entity = await getDogDetails(pk)
 

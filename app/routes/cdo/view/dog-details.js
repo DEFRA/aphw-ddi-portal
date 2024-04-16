@@ -4,6 +4,7 @@ const ViewModel = require('../../../models/cdo/view/dog-details')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { setActivityDetails } = require('../../../session/cdo/activity')
+const { getDogDetails } = require('../../../api/ddi-index-api/dog')
 
 module.exports = [
   {
