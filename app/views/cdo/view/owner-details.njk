@@ -46,7 +46,7 @@
       <!-- owner -->
       {% include "./cdo/view/owner-panel.njk" %}
 
-        {% if auth.isAdminUser and model.dogs.length == 1 %}
+        {% if auth.isAdminUser and model.dogs.length == 0 %}
         <a href="/cdo/delete/owner/{{ model.person.personReference }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
           Delete owner record
         </a>
