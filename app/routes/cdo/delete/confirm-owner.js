@@ -2,7 +2,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const ViewModel = require('../../../models/cdo/delete/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
-const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 
 module.exports = [{
@@ -43,11 +43,16 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      // const payload = request.payload
+      const payload = request.payload
+
+      if (payload.confirm === 'N') {
+        return h.redirect(`${routes.viewOwnerDetails.get}/${payload.pk}${extractBackNavParam(request)}`)
+      }
+      const details = await buildDetails(payload.pk)
 
       // Do the delete or abort
 
-      return h.view(views.delete, new ViewModel())
+      return h.view(views.confirmation, new ViewModel(details))
     }
   }
 }]
@@ -59,7 +64,8 @@ const buildDetails = async (pk) => {
     action: 'delete',
     pk,
     recordTypeText: 'the owner',
-    nameOrReference: `for ${entity.firstName} ${entity.lastName}`,
+    nameOrReference: `${entity.firstName} ${entity.lastName}`,
+    nameOrReferenceText: `for ${entity.firstName} ${entity.lastName}`,
     entity
   }
 }

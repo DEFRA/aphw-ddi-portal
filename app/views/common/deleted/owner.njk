@@ -1,0 +1,36 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: "Owner record deleted",
+        html: model.nameOrReference
+      }) }}
+
+
+      <p class="govuk-body">Owner record {{ model.nameOrReference }} will no longer appear in search results.</p>
+
+      <p class="govuk-body">Raise a support ticket if you need to recover deleted records.</p>
+
+      <p class="govuk-body">
+        <a href="/cdo/search/basic" class="govuk-link">Search the Index</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

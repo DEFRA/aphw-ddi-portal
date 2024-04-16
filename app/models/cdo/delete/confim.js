@@ -2,12 +2,11 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (details, backNav, errors) {
   this.model = {
-    backLink: backNav.backLink,
+    backLink: backNav?.backLink,
     confirm: {
       id: 'confirm',
       name: 'confirm',
       classes: 'govuk-!-font-size-16',
-      // value: question.confirm,
       items: [
         {
           text: 'Yes',
@@ -19,8 +18,8 @@ function ViewModel (details, backNav, errors) {
         }
       ]
     },
-    confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.nameOrReference}?`,
-    recordType: details.recordType,
+    confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.nameOrReferenceText}?`,
+    nameOrReference: details.nameOrReference,
     pk: details.pk,
     errors: []
   }
