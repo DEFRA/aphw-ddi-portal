@@ -2,7 +2,6 @@ const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const Boom = require('@hapi/boom')
-const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
 describe('Delete Dog', () => {
   jest.mock('../../../../../../app/auth')
