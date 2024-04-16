@@ -1,9 +1,11 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/delete/confim')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const DeletedViewModel = require('../../../models/cdo/delete/deleted')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getDogDetails } = require('../../../api/ddi-index-api/dog')
-const { NotFoundError } = require('../../../errors/not-found-error')
+const { validatePayload } = require('../../../schema/portal/common/confirm')
+
 module.exports = [
   {
     method: 'GET',
@@ -11,20 +13,41 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        let details
-
-        try {
-          details = await buildDetails(request.params.indexNumber)
-        } catch (e) {
-          if (e instanceof NotFoundError) {
-            return h.response().code(404).takeover()
-          }
-          throw e
-        }
+        const details = await buildDetails(request.params.indexNumber)
 
         const backNav = addBackNavigation(request)
 
         return h.view(views.confirmDeleteGeneric, new ViewModel(details, backNav))
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: `${routes.deleteDog.post}/{indexNumber?}`,
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        payload: validatePayload,
+        failAction: async (request, h, error) => {
+          const details = await buildDetails(request.params.indexNumber)
+
+          const backNav = addBackNavigationForErrorCondition(request)
+
+          return h.view(views.confirmDeleteGeneric, new ViewModel(details, backNav, error)).code(400).takeover()
+        }
+      },
+      handler: async (request, h) => {
+        const payload = request.payload
+        const pk = request.params.indexNumber
+
+        if (payload.confirm === 'N') {
+          return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`)
+        }
+        const details = await buildDetails(pk)
+
+        const backNav = addBackNavigation(request)
+
+        return h.view(views.deleteGeneric, new DeletedViewModel(details, backNav))
       }
     }
   }
@@ -35,17 +58,15 @@ module.exports = [
  * @returns {Promise<ConfirmDeleteDetails>}
  */
 const buildDetails = async (pk) => {
-  const dogDetails = await getDogDetails(pk)
-
-  if (dogDetails === undefined) {
-    throw new NotFoundError(`Dog not found with index number ${pk}`)
-  }
+  // check if dog exists
+  await getDogDetails(pk)
 
   return {
     action: 'delete',
     pk,
     recordTypeText: 'dog',
     nameOrReference: `${pk}`,
-    nameOrReferenceText: `${pk}`
+    confirmReferenceText: `${pk}`,
+    nameOrReferenceText: `Dog ${pk}`
   }
 }

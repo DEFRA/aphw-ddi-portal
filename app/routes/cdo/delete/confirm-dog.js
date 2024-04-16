@@ -44,12 +44,13 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const payload = request.payload
+      const pk = request.params.pk
 
       if (payload.confirm === 'N') {
         return h.redirect(`${routes.viewDogDetails.get}/${payload.pk}${extractBackNavParam(request)}`)
       }
 
-      const details = await buildDetails(payload.pk)
+      const details = await buildDetails(pk)
 
       // Do the delete
 
@@ -69,7 +70,7 @@ const buildDetails = async (pk) => {
     action: 'delete',
     pk,
     recordTypeText: 'dog',
-    nameOrReference: `${pk}`,
+    nameOrReference: `Dog ${pk}`,
     nameOrReferenceText: `${pk}`,
     entity
   }

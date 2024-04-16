@@ -6,6 +6,7 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
  * @property {string} pk
  * @property {string} recordTypeText
  * @property {string} nameOrReferenceText
+ * @property {string} confirmReferenceText
  * @property {string} nameOrReference
  */
 /**
@@ -32,7 +33,7 @@ function ViewModel (details, backNav, errors) {
         }
       ]
     },
-    confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.nameOrReferenceText}?`,
+    confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.confirmReferenceText}?`,
     nameOrReference: details.nameOrReference,
     pk: details.pk,
     errors: []
