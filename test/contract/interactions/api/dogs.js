@@ -14,9 +14,6 @@ const deleteDog = {
   },
   willRespondWith: {
     status: 204,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
     body: ''
   }
 }
