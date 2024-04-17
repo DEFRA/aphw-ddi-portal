@@ -11,7 +11,7 @@ const dogsTests = (ddiIndexApiProvider) => {
   test('DELETE /dog with ', async () => {
     await ddiIndexApiProvider.addInteraction(deleteDog)
 
-    await dogsApi.deleteDog('ED300006', userWithDisplayname)
+    await dogsApi.deleteDog('ED300000', userWithDisplayname)
   })
 }
 
