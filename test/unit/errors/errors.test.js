@@ -1,5 +1,5 @@
-const { ApiErrorFailure } = require('../../../app/errors/apiErrorFailure')
-const { ApiConflictError } = require('../../../app/errors/apiConflictError')
+const { ApiErrorFailure } = require('../../../app/errors/api-error-failure')
+const { ApiConflictError } = require('../../../app/errors/api-conflict-error')
 describe('errors', () => {
   describe('ApiErrorFailure', () => {
     test('should include the payload of the error', () => {

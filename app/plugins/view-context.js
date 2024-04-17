@@ -1,5 +1,6 @@
 const { serviceName } = require('../config')
-const { mapAuth, getUser } = require('../auth')
+const { getUser } = require('../auth')
+const mapAuth = require('../auth/map-auth')
 
 module.exports = {
   plugin: {

@@ -3,13 +3,14 @@ const wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 
 describe('Base API', () => {
-  const { get, post, put } = require('../../../../app/api/ddi-index-api/base')
+  const { get, post, put, callDelete } = require('../../../../app/api/ddi-index-api/base')
 
   beforeEach(() => {
     jest.clearAllMocks()
     wreck.get.mockResolvedValue({ payload: { result: 'ok' } })
     wreck.post.mockResolvedValue({ payload: '{"resultCode": 200}' })
     wreck.put.mockResolvedValue({ payload: '{"resultCode": 200}' })
+    wreck.delete.mockResolvedValue({ payload: '{"resultCode": 200}' })
   })
 
   test('get should call GET', async () => {
@@ -40,5 +41,15 @@ describe('Base API', () => {
   test('put should call PUT with username in header', async () => {
     await put('endpoint3', { val: 456 }, user)
     expect(wreck.put).toHaveBeenCalledWith('test/endpoint3', { payload: { val: 456 }, headers: { 'ddi-username': 'test@example.com' } })
+  })
+
+  test('delete should call DELETE', async () => {
+    await callDelete('endpoint3')
+    expect(wreck.delete).toHaveBeenCalledWith('test/endpoint3', { json: true })
+  })
+
+  test('delete should call DELETE with username in header', async () => {
+    await callDelete('endpoint3', user)
+    expect(wreck.delete).toHaveBeenCalledWith('test/endpoint3', { json: true, headers: { 'ddi-username': 'test@example.com' } })
   })
 })

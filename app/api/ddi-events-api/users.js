@@ -1,8 +1,8 @@
 const createUserSchema = require('../../schema/ddi-events-api/users/create')
-const { NotAuthorizedError } = require('../../errors/notAuthorizedError')
+const { NotAuthorizedError } = require('../../errors/not-authorized-error')
 const { postWithBoom, get, callDelete } = require('./base')
-const { ApiErrorFailure } = require('../../errors/apiErrorFailure')
-const { ApiConflictError } = require('../../errors/apiConflictError')
+const { ApiErrorFailure } = require('../../errors/api-error-failure')
+const { ApiConflictError } = require('../../errors/api-conflict-error')
 /**
  * @typedef {{username: string}} ActioningUser
  */

@@ -3,9 +3,9 @@ const { user: adminUser } = require('../../../mocks/auth')
 
 jest.mock('../../../../app/api/ddi-events-api/base')
 const { get, callDelete, postWithBoom } = require('../../../../app/api/ddi-events-api/base')
-const { NotAuthorizedError } = require('../../../../app/errors/notAuthorizedError')
-const { ApiErrorFailure } = require('../../../../app/errors/apiErrorFailure')
-const { ApiConflictError } = require('../../../../app/errors/apiConflictError')
+const { NotAuthorizedError } = require('../../../../app/errors/not-authorized-error')
+const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
+const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
 describe('users test', () => {
   beforeEach(() => {
