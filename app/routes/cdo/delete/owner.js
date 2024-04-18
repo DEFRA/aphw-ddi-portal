@@ -2,6 +2,7 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const ViewModel = require('../../../models/cdo/delete/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
+const getUser = require('../../../auth/get-user')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getPersonByReference, deletePerson } = require('../../../api/ddi-index-api/person')
 
@@ -47,7 +48,7 @@ module.exports = [{
 
       const details = await buildDetails(payload.pk)
 
-      await deletePerson(payload.pk)
+      await deletePerson(payload.pk, getUser(request))
 
       return h.view(views.confirmation, new ViewModel(details))
     }
