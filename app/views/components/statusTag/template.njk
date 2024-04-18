@@ -12,6 +12,8 @@
   <strong class="govuk-tag govuk-tag--pink  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'Inactive' %}
   <strong class="govuk-tag govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == undefined %}
+  &nbsp;
 {% else %}
   <strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">Invalid status: {{ status }}</strong>
 {% endif %}
