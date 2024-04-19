@@ -1,4 +1,4 @@
-const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine } = require('../../../app/lib/format-helpers')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
@@ -127,6 +127,71 @@ describe('format-helpers', () => {
     })
     test('should map null to undefined', () => {
       expect(mapOsCountryCodeToCountry(null)).toBe(undefined)
+    })
+  })
+
+  describe('formatDogRadioAsHtml', () => {
+    test('should map a dog', () => {
+      const dog = {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1,
+        indexNumber: 'ED123',
+        microchipNumber: '12345'
+      }
+      const res = formatDogRadioAsHtml(dog)
+      expect(res).toBe('Fido<div class="govuk-hint defra-radio-text-block">Breed: Breed 1</div><div class="govuk-hint defra-radio-text-block">Index number: ED123</div><div class="govuk-hint defra-radio-text-block">Microchip number: 12345</div>')
+    })
+    test('should map a dog with no microchip', () => {
+      const dog = {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1,
+        indexNumber: 'ED123'
+      }
+      const res = formatDogRadioAsHtml(dog)
+      expect(res).toBe('Fido<div class="govuk-hint defra-radio-text-block">Breed: Breed 1</div><div class="govuk-hint defra-radio-text-block">Index number: ED123</div>')
+    })
+
+    test('should map a dog with no microchip and no name', () => {
+      const dog = {
+        breed: 'Breed 1',
+        dogId: 1,
+        indexNumber: 'ED123'
+      }
+      const res = formatDogRadioAsHtml(dog)
+      expect(res).toBe('<div class="govuk-hint defra-radio-text-block">Breed: Breed 1</div><div class="govuk-hint defra-radio-text-block">Index number: ED123</div>')
+    })
+
+    test('should detect injection', () => {
+      const dog = {
+        name: 'Fido',
+        breed: 'Breed> 1',
+        dogId: 1,
+        indexNumber: 'ED123',
+        microchipNumber: '12345'
+      }
+      const res = formatDogRadioAsHtml(dog)
+      expect(res).toBe('Possible injected code')
+    })
+  })
+
+  describe('containsPossibleInjectedCode', () => {
+    test('should detect possible injection', () => {
+      const dogHtml = 'name: \'Fido>\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\''
+      const res = containsPossibleInjectedCode(dogHtml)
+      expect(res).toBeTruthy()
+    })
+    test('should detect possible injection 2', () => {
+      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'E<D123\', microchipNumber: \'12345\''
+      const res = containsPossibleInjectedCode(dogHtml)
+      expect(res).toBeTruthy()
+    })
+
+    test('should pass', () => {
+      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\''
+      const res = containsPossibleInjectedCode(dogHtml)
+      expect(res).toBeFalsy()
     })
   })
 })

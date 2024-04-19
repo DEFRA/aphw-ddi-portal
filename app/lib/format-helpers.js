@@ -54,9 +54,33 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
   return undefined
 }
 
+const formatDogRadioAsHtml = (details) => {
+  if (containsPossibleInjectedCode(`${details.name}${details.breed}${details.indexNumber}${details.microchipNumber}`)) {
+    return 'Possible injected code'
+  }
+
+  const hintStart = '<div class="govuk-hint defra-radio-text-block">'
+  const hintEnd = '</div>'
+  const hintLines = [
+    `${hintStart}Breed: ${details.breed}${hintEnd}`,
+    `${hintStart}Index number: ${details.indexNumber}${hintEnd}`
+  ]
+  if (details.microchipNumber) {
+    const microchipNumber = `Microchip number: ${details.microchipNumber}`
+    hintLines.push(`${hintStart}${microchipNumber}${hintEnd}`)
+  }
+  return `${details.name ? details.name : ''}${hintLines.join('')}`
+}
+
+const containsPossibleInjectedCode = str => {
+  return str && (str.indexOf('<') > -1 || str.indexOf('>') > -1)
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
   getCountryFromAddress,
-  formatAddressSingleLine
+  formatAddressSingleLine,
+  formatDogRadioAsHtml,
+  containsPossibleInjectedCode
 }

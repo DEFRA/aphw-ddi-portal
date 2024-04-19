@@ -1,4 +1,16 @@
-const { getDog, setDog, getDogs, deleteDog, getMicrochipResults, setMicrochipResults, renumberEntries, addAnotherDog, clearAllDogs } = require('../../../app/session/cdo/dog')
+const {
+  getDog,
+  setDog,
+  getDogs,
+  deleteDog,
+  getMicrochipResults,
+  setMicrochipResults,
+  renumberEntries,
+  addAnotherDog,
+  clearAllDogs,
+  getExistingDogs,
+  setExistingDogs
+} = require('../../../app/session/cdo/dog')
 
 describe('dog session storage', () => {
   const mockRequest = {
@@ -261,5 +273,94 @@ describe('dog session storage', () => {
 
     expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
     expect(mockRequest.yar.set).toHaveBeenCalledWith('dogs', null)
+  })
+
+  test('getExistingDogs returns details from session', () => {
+    mockRequest.yar.get.mockReturnValue([
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 2
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }
+    ])
+
+    const details = getExistingDogs(mockRequest)
+
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('existingDogs')
+    expect(details).toEqual([
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 2
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }
+    ])
+  })
+
+  test('getExistingDogs returns empty array if no details in session', () => {
+    mockRequest.yar.get.mockReturnValue(null)
+
+    const details = getExistingDogs(mockRequest)
+
+    expect(mockRequest.yar.get).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.get).toHaveBeenCalledWith('existingDogs')
+    expect(details).toEqual([])
+  })
+
+  test('getExistingDogs updates details in session', () => {
+    mockRequest.yar.get.mockReturnValue([
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buster',
+        breed: 'Breed 2',
+        dogId: 2
+      }
+    ])
+
+    const details = [
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }
+    ]
+
+    setExistingDogs(mockRequest, details)
+
+    expect(mockRequest.yar.set).toHaveBeenCalledTimes(1)
+    expect(mockRequest.yar.set).toHaveBeenCalledWith('existingDogs', [
+      {
+        name: 'Fido',
+        breed: 'Breed 1',
+        dogId: 1
+      }, {
+        name: 'Buruno',
+        breed: 'Breed 3',
+        dogId: 3
+      }
+    ])
   })
 })

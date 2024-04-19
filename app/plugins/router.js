@@ -10,6 +10,7 @@ const routes = [].concat(
   require('../routes/cdo/create/enforcement-details'),
   require('../routes/cdo/create/full-summary'),
   require('../routes/cdo/create/dog-details'),
+  require('../routes/cdo/create/select-existing-dog'),
   require('../routes/cdo/create/confirm-dog-details'),
   require('../routes/cdo/create/microchip-search'),
   require('../routes/cdo/create/microchip-results'),
