@@ -73,7 +73,6 @@ const formatDogRadioAsHtml = (details) => {
 }
 
 const containsPossibleInjectedCode = str => {
-  console.log('str', str)
   return str && (str.indexOf('<') > -1 || str.indexOf('>') > -1)
 }
 
