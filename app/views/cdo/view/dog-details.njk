@@ -51,7 +51,7 @@
       {% include "./cdo/view/owner-panel.njk" %}
       <!-- button -->
       {% if auth.isAdminUser %}
-        <a href="/cdo/delete/dog/{{ model.dog.indexNumber }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-testid="delete-dog-record-btn">Delete dog record</a>
+        <a href="/cdo/delete/dog/{{ model.dog.indexNumber }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-testid="delete-dog-record-btn">Delete dog record</a>
       {% endif %}
     </div>
 
