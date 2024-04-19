@@ -71,11 +71,9 @@ module.exports = [{
       setAddress(request, ownerDetails.address)
 
       const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
-      if (dogs) {
-        if (dogs.length >= 1) {
-          setExistingDogs(request, dogs)
-          return h.redirect(dogRoutes.selectExistingDog.get)
-        }
+      if (dogs && dogs.length >= 1) {
+        setExistingDogs(request, dogs)
+        return h.redirect(dogRoutes.selectExistingDog.get)
       }
 
       await setPoliceForce(request)

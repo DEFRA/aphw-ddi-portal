@@ -62,7 +62,8 @@ const formatDogRadioAsHtml = (details) => {
     `${hintStart}Index number: ${details.indexNumber}${hintEnd}`
   ]
   if (details.microchipNumber) {
-    hintLines.push(`${hintStart}${`Microchip number: ${details.microchipNumber}`}${hintEnd}`)
+    const microchipNumber = `Microchip number: ${details.microchipNumber}`
+    hintLines.push(`${hintStart}${microchipNumber}${hintEnd}`)
   }
   return `${details.name ? details.name : ''}${hintLines.join('')}`
 }
