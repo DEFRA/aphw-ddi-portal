@@ -5,7 +5,7 @@ const ViewModel = require('../../../models/cdo/create/select-owner')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
-const { setDog } = require('../../../session/cdo/dog')
+const { setExistingDogs } = require('../../../session/cdo/dog')
 const Joi = require('joi')
 const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 const { setPoliceForce } = require('../../../lib/model-helpers')
@@ -71,9 +71,9 @@ module.exports = [{
       setAddress(request, ownerDetails.address)
 
       const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
-      if (dogs && dogs.length === 1) {
-        setDog(request, dogs[0])
-        return h.redirect(dogRoutes.confirm.get)
+      if (dogs && dogs.length >= 1) {
+        setExistingDogs(request, dogs)
+        return h.redirect(dogRoutes.selectExistingDog.get)
       }
 
       await setPoliceForce(request)
