@@ -54,9 +54,23 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
   return undefined
 }
 
+const formatDogRadioAsHtml = (details) => {
+  const hintStart = '<div class="govuk-hint defra-radio-text-block">'
+  const hintEnd = '</div>'
+  const hintLines = [
+    `${hintStart}Breed: ${details.breed}${hintEnd}`,
+    `${hintStart}Index number: ${details.indexNumber}${hintEnd}`
+  ]
+  if (details.microchipNumber) {
+    hintLines.push(`${hintStart}${`Microchip number: ${details.microchipNumber}`}${hintEnd}`)
+  }
+  return `${details.name ? details.name : ''}${hintLines.join('')}`
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
   getCountryFromAddress,
-  formatAddressSingleLine
+  formatAddressSingleLine,
+  formatDogRadioAsHtml
 }

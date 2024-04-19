@@ -4,6 +4,10 @@ const constants = {
       get: '/cdo/create/dog-details',
       post: '/cdo/create/dog-details'
     },
+    selectExistingDog: {
+      get: '/cdo/create/select-existing-dog',
+      post: '/cdo/create/select-existing-dog'
+    },
     microchipSearch: {
       get: '/cdo/create/microchip-search',
       post: '/cdo/create/microchip-search'
@@ -80,6 +84,7 @@ const constants = {
     changeStatusConfirmation: 'cdo/edit/change-status-confirmation',
     applicationType: 'cdo/create/application-type',
     details: 'cdo/create/dog-details',
+    selectExistingDog: 'cdo/create/select-existing-dog',
     confirm: 'cdo/create/confirm-dog-details',
     delete: 'cdo/create/confirm-dog-delete',
     certificate: 'cdo/view/certificate',
@@ -106,7 +111,8 @@ const constants = {
     dateOfDeath: 'dateOfDeath',
     dateExported: 'dateExported',
     dateStolen: 'dateStolen',
-    dateUntraceable: 'dateUntraceable'
+    dateUntraceable: 'dateUntraceable',
+    existingDogs: 'existingDogs'
   }
 }
 

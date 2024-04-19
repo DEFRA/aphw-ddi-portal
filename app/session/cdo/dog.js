@@ -86,6 +86,14 @@ const setMicrochipResults = (request, value) => {
   request.yar.set(keys.microchipSearch, value)
 }
 
+const setExistingDogs = (request, value) => {
+  request.yar.set(keys.existingDogs, value)
+}
+
+const getExistingDogs = (request) => {
+  return request.yar?.get(keys.existingDogs) || []
+}
+
 module.exports = {
   getDog,
   getDogs,
@@ -95,5 +103,7 @@ module.exports = {
   setMicrochipResults,
   getMicrochipResults,
   renumberEntries,
+  setExistingDogs,
+  getExistingDogs,
   clearAllDogs
 }

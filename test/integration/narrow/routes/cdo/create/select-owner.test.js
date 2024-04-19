@@ -304,7 +304,7 @@ describe('OwnerResults test', () => {
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(response.headers.location).toBe(dogRoutes.confirm.get)
+    expect(response.headers.location).toBe(dogRoutes.selectExistingDog.get)
   })
 
   test('POST /cdo/create/select-owner with valid data returns 302 given owners address not listed', async () => {
