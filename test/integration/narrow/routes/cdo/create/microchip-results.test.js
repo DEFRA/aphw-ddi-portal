@@ -32,7 +32,7 @@ describe('Microchip results tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
-    expect(document.querySelector('h1').textContent.trim()).toBe('There’s an existing dog record with microchip number 12345')
+    expect(document.querySelector('h1').textContent.trim()).toBe('Microchip number 12345 is in use on a current dog record with a different owner')
   })
 
   afterEach(async () => {

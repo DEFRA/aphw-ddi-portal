@@ -27,7 +27,7 @@
       <form class="form" method="post">
 
       <h1 class="govuk-heading-l">
-        There’s an existing dog record with microchip number {{ model.microchipNumber }}
+        Microchip number {{ model.microchipNumber }} is in use on a current dog record with a different owner
       </h1>
 
       {% for result in model.results %}
@@ -35,20 +35,7 @@
       {% endfor %}
 
       <p class="govuk-body">
-        Look at the original paperwork for:
-      </p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>the dog you are adding to check you’ve entered the microchip number correctly</li>
-        <li>the existing dog record that has the same microchip number to check if an error was made when it was first added to the index</li>
-      </ul>
-
-      <p class="govuk-body govuk-!-margin-bottom-0">
-        If you find an error with the data, you should use the original paperwork to correct the data for the record which has the error.
-      </p>
-      <br/>
-      <p class="govuk-body">
-      If you do not find an error with the data, you should escalate to a line manager to agree the next step.
+        Currently you cannot transfer a dog to a new owner. You should escalate to a line manager to agree the next step.
       </p>
 
       <p class="govuk-body">
