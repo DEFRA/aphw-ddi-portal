@@ -10,33 +10,37 @@ describe('CDO API endpoints', () => {
     jest.clearAllMocks()
   })
 
-  test('getCdo should do GET to API', async () => {
-    get.mockResolvedValue({ cdo: {} })
-    await cdo.getCdo('ED123')
+  describe('getCdo', () => {
+    test('getCdo should do GET to API', async () => {
+      get.mockResolvedValue({ cdo: {} })
+      await cdo.getCdo('ED123')
 
-    expect(get).toHaveBeenCalledTimes(1)
+      expect(get).toHaveBeenCalledTimes(1)
+    })
   })
 
-  test('createCdo with valid payload should post to API', async () => {
-    await cdo.createCdo(valid)
+  describe('createCdo', () => {
+    test('createCdo with valid payload should post to API', async () => {
+      await cdo.createCdo(valid)
 
-    expect(post).toHaveBeenCalledTimes(1)
-  })
+      expect(post).toHaveBeenCalledTimes(1)
+    })
 
-  test('createCdo with valid payload including country should post to API', async () => {
-    await cdo.createCdo(validWithCountry)
+    test('createCdo with valid payload including country should post to API', async () => {
+      await cdo.createCdo(validWithCountry)
 
-    expect(post).toHaveBeenCalledTimes(1)
-  })
+      expect(post).toHaveBeenCalledTimes(1)
+    })
 
-  test('createCdo with valid payload including person reference should post to API', async () => {
-    await cdo.createCdo(validWithCountryAndPersonReference)
+    test('createCdo with valid payload including person reference should post to API', async () => {
+      await cdo.createCdo(validWithCountryAndPersonReference)
 
-    expect(post).toHaveBeenCalledTimes(1)
-  })
+      expect(post).toHaveBeenCalledTimes(1)
+    })
 
-  test('createCdo with invalid payload should not post to API', async () => {
-    await expect(cdo.createCdo(invalid)).rejects.toThrow()
-    expect(post).not.toHaveBeenCalled()
+    test('createCdo with invalid payload should not post to API', async () => {
+      await expect(cdo.createCdo(invalid)).rejects.toThrow()
+      expect(post).not.toHaveBeenCalled()
+    })
   })
 })
