@@ -8,7 +8,7 @@ describe('CDO API endpoints', () => {
     jest.clearAllMocks()
   })
   describe('getSummaryCdos', () => {
-    test('should get summary cdos', async () => {
+    test('should call endpoint with a single status and dueWithin', async () => {
       get.mockResolvedValue({
         cdos: [
           {
@@ -44,10 +44,39 @@ describe('CDO API endpoints', () => {
         policeForce: 'Cheshire Constabulary'
       }
 
-      const summaryCdoDtos = await cdos.getSummaryCdos()
+      const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] })
 
-      expect(get).toBeCalledWith('cdos', { json: true })
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
       expect(summaryCdoDtos).toEqual([expectedSummaryCdoDto])
+    })
+
+    test('should call endpoint with a single status', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+
+      await cdos.getSummaryCdos({ status: ['PreExempt'] })
+
+      expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
+    })
+
+    test('should call endpoint with multiple statuses', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+
+      await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] })
+
+      expect(get).toBeCalledWith('cdos?status=PreExempt&status=InterimExempt', { json: true })
+    })
+
+    test('should call endpoint with dueWithin', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+      await cdos.getSummaryCdos({ dueWithin: 30 })
+
+      expect(get).toBeCalledWith('cdos?withinDays=30', { json: true })
     })
   })
 })

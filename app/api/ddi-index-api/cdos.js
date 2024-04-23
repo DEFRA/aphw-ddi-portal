@@ -1,4 +1,5 @@
 const { get } = require('./base')
+const { fi } = require('date-fns/locale')
 
 const cdosEndpoint = 'cdos'
 
@@ -61,8 +62,29 @@ const summaryCdoMapper = (summaryCdo) => {
     cdoExpiry: new Date(summaryCdo.exemption.cdoExpiry)
   }
 }
-const getSummaryCdos = async () => {
-  const payload = await get(`${cdosEndpoint}`, options)
+/**
+ * @typedef {'InterimExempt'|'PreExempt'|'Exempt'|'Failed'|'InBreach'|'Withdrawn'|'Inactive'} CdoStatusShort
+ */
+/**
+ *
+ * @param {{status?: CdoStatusShort[]; dueWithin?: number;}} filter
+ * @return {Promise<SummaryCdo[]>}
+ */
+const getSummaryCdos = async (filter) => {
+  const searchParams = new URLSearchParams()
+
+  if (filter.status) {
+    filter.status.forEach(status => {
+      searchParams.append('status', status)
+    })
+  }
+
+  if (filter.dueWithin) {
+    searchParams.set('withinDays', filter.dueWithin.toString())
+  }
+
+  const queryParams = searchParams.toString()
+  const payload = await get(`${cdosEndpoint}?${queryParams}`, options)
   return payload.cdos.map(summaryCdoMapper)
 }
 
