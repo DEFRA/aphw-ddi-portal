@@ -1,5 +1,4 @@
 const { get } = require('./base')
-const { fi } = require('date-fns/locale')
 
 const cdosEndpoint = 'cdos'
 
@@ -23,6 +22,7 @@ const options = {
  * @typedef SummaryExemptionDto
  * @property {string} policeForce - e.g. 'Cheshire Constabulary',
  * @property {string} cdoExpiry - e.g. '2024-03-01'
+ * @property {string} joinedExemptionScheme - e.g. '2024-03-01'
  */
 /**
  * @typedef SummaryCdoDto
@@ -38,7 +38,8 @@ const options = {
  * @property {string} status - e.g. 'Pre-exempt',
  * @property {string} owner - e.g. 'Scott Pilgrim',
  * @property {string} personReference - e.g. 'P-1234-5678',
- * @property {Date} cdoExpiry - e.g. 2024-03-01,
+ * @property {Date|null} cdoExpiry - e.g. 2024-03-01,
+ * @property {Date|null} joinedExemptionScheme - e.g. 2024-03-01,
  * @property {string} policeForce - e.g. 'Cheshire Constabulary'
  */
 
@@ -52,6 +53,9 @@ const summaryCdoMapper = (summaryCdo) => {
     summaryCdo.person.lastName
   ].join(' ')
 
+  const cdoExpiryDto = summaryCdo.exemption.cdoExpiry ?? null
+  const joinedExemptionSchemeDto = summaryCdo.exemption.joinedExemptionScheme ?? null
+
   return {
     id: summaryCdo.dog.id,
     index: summaryCdo.dog.dogReference,
@@ -59,18 +63,29 @@ const summaryCdoMapper = (summaryCdo) => {
     personReference: summaryCdo.person.personReference,
     policeForce: summaryCdo.exemption.policeForce,
     status: summaryCdo.dog.status,
-    cdoExpiry: new Date(summaryCdo.exemption.cdoExpiry)
+    cdoExpiry: cdoExpiryDto !== null ? new Date(summaryCdo.exemption.cdoExpiry) : null,
+    joinedExemptionScheme: joinedExemptionSchemeDto !== null ? new Date(summaryCdo.exemption.joinedExemptionScheme) : null
   }
 }
 /**
  * @typedef {'InterimExempt'|'PreExempt'|'Exempt'|'Failed'|'InBreach'|'Withdrawn'|'Inactive'} CdoStatusShort
  */
 /**
- *
- * @param {{status?: CdoStatusShort[]; dueWithin?: number;}} filter
+ * @typedef CdoFilter
+ * @property {CdoStatusShort[]} [status]
+ * @property {number} [dueWithin]
+ */
+/**
+ * @typedef CdoSort
+ * @property {string} [column]
+ * @property {'ASC'|'DESC'} [order]
+ */
+/**
+ * @param {CdoFilter} filter
+ * @param {CdoSort} sort
  * @return {Promise<SummaryCdo[]>}
  */
-const getSummaryCdos = async (filter) => {
+const getSummaryCdos = async (filter, sort = {}) => {
   const searchParams = new URLSearchParams()
 
   if (filter.status) {
@@ -83,11 +98,56 @@ const getSummaryCdos = async (filter) => {
     searchParams.set('withinDays', filter.dueWithin.toString())
   }
 
+  if (sort.column) {
+    searchParams.set('sortKey', sort.column)
+  }
+
+  if (['ASC', 'DESC'].includes(sort?.order)) {
+    searchParams.set('sortOrder', sort.order)
+  }
+
   const queryParams = searchParams.toString()
   const payload = await get(`${cdosEndpoint}?${queryParams}`, options)
   return payload.cdos.map(summaryCdoMapper)
 }
 
+const getLiveCdos = async (sort = {}) => {
+  const filter = { status: ['PreExempt'] }
+  return getSummaryCdos(filter, sort)
+}
+
+const getLiveCdosWithinMonth = async (sort = {}) => {
+  /**
+   * @type {CdoFilter}
+   */
+  const filter = { status: ['PreExempt'], dueWithin: 30 }
+  return getSummaryCdos(filter, sort)
+}
+
+/**
+ * @param {CdoSort} [sort]
+ * @return {Promise<SummaryCdo[]>}
+ */
+const getInterimExemptions = async (sort = {}) => {
+  /**
+   * @type {CdoSort}
+   */
+  const interimSort = {
+    column: 'joinedExemptionScheme',
+    ...sort
+  }
+
+  /**
+   * @type {CdoFilter}
+   */
+  const filter = { status: ['InterimExempt'] }
+  return getSummaryCdos(filter, interimSort)
+}
+
 module.exports = {
-  getSummaryCdos
+  summaryCdoMapper,
+  getSummaryCdos,
+  getLiveCdos,
+  getLiveCdosWithinMonth,
+  getInterimExemptions
 }
