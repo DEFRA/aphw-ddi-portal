@@ -1,0 +1,75 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageHeading = "Upload XLB data" %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: "/upload/import-validation",
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+  <form method="post" novalidate="novalidate" onsubmit="importSave.disabled = true; return true;">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <h1 class="govuk-heading-l">Import results</h1>
+
+            {% if model.logRows.length == 0 %}
+              <p>No log entries</p>
+            {% else %}
+          <h2 class="govuk-heading-m">Log output</h2>
+          <table class="govuk-table">
+            <tbody class="govuk-table__body">
+              {% for logRow in model.logRows %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ logRow }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+            {% endif %}
+
+
+          <h2 class="govuk-heading-m">Save records to DB</h2>
+
+          {{ govukCheckboxes(model.confirm) }}
+
+            {{ govukButton({
+              text: "Save records to DB",
+              name: "importSave",
+              attributes: {
+                id: "save",
+                "data-testid": "save"
+              }
+            }) }}
+
+            <div class="govuk-hint">The import can take several seconds</div>
+
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}

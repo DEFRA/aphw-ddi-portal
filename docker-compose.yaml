@@ -27,9 +27,3 @@ services:
       MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-test}
       REGISTER_IMPORT_REQUEST_QUEUE: ${REGISTER_IMPORT_REQUEST_QUEUE:-aphw-ddi-register-import-request}${MESSAGE_QUEUE_SUFFIX}
       CERTIFICATE_REQUEST_QUEUE: ${CERTIFICATE_REQUEST_QUEUE:-aphw-ddi-certificate-request}${MESSAGE_QUEUE_SUFFIX}
-
-  aphw-ddi-portal-azurite:
-    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
-    command: "azurite --skipApiVersionCheck --loose --blobHost 0.0.0.0 --tableHost 0.0.0.0"
-    labels:
-      com.docker.compose.pay.role: aphw-ddi-portal-azurite
