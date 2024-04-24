@@ -23,22 +23,53 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
     <div class="govuk-grid-column-one-half">
       <h1 class="govuk-heading-l">
         Manage CDOs
       </h1>
     </div>
+
     <div class="govuk-grid-column-one-half">
-      <div class="govuk-button-group defra-align-right-simple">
+      <!--<div class="govuk-button-group defra-align-right-simple">
         <a href="/cdo/manage/interim{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
           Interim exemptions
         </a>
-      </div>
+      </div> -->
     </div>
+
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      <ul class="govuk-tabs__list govuk-!-margin-bottom-7">
+        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+          <a class="govuk-tabs__tab" href="/cdos/manage">
+            Live CDOs
+          </a>
+        </li>
+        <!-- <li class="govuk-tabs__list-item">
+          <a class="govuk-tabs__tab" href="/cdos/manage/expired">
+            Expired
+          </a>
+        </li> -->
+        <li class="govuk-tabs__list-item">
+          <a class="govuk-tabs__tab" href="/cdos/manage/due">
+            Due within 30 days
+          </a>
+        </li>
+      </ul>
+      <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="ascending">CDO expiry</th>
+          <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="none">Index number</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="none">Owner</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-third" aria-sort="none">Police force</th>
+        </tr>
+        </thead>
+      </table>
+      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
       <p class="govuk-body">More to come</p>
     </div>
   </div>

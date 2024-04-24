@@ -31,6 +31,11 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(200)
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
+    expect(document.querySelector('.govuk-table')).not.toBeNull()
+    expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('CDO expiry')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
+    expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
   })
 
   test('GET /cdo/search/basic route returns 302 if not auth', async () => {
