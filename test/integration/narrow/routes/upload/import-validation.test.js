@@ -63,6 +63,32 @@ describe('Upload validation', () => {
     })
   })
 
+  describe('GET /upload/import-validation route', () => {
+    test('returns 200 when no rows', async () => {
+      const options = {
+        method: 'GET',
+        url: '/upload/import-validation',
+        auth
+      }
+
+      getFromSession.mockReturnValue({
+        errors: ['error1'],
+        rows: null,
+        log: ['log1']
+      })
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(document.querySelectorAll('.govuk-table__cell')[0].textContent).toBe('error1')
+
+      expect(document.querySelectorAll('.govuk-table__cell')[1].textContent).toBe('log1')
+    })
+  })
+
   describe('POST /upload/import-validation route', () => {
     test('returns 302', async () => {
       const options = {
