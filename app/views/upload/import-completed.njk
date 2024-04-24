@@ -26,7 +26,7 @@
               {% if model.errors.length == 0 %}
                 <p>No errors</p>
               {% else %}
-              <h2 class="govuk-heading-s govuk-error-message">As errors occurred, it is likely the import failed</h2>
+              <h2 class="govuk-heading-s govuk-error-message">As errors occurred, the import failed and any imported records have been rolled back</h2>
             <table class="govuk-table">
               <tbody class="govuk-table__body">
                 {% for error in model.errors %}

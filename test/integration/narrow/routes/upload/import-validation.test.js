@@ -40,7 +40,8 @@ describe('Upload validation', () => {
             }
           },
           dogs: [
-            { name: 'Rex' }
+            { name: 'Rex', indexNumber: 12345 },
+            { name: 'Fido', indexNumber: 23456 }
           ]
         }],
         log: ['log1']
@@ -59,7 +60,10 @@ describe('Upload validation', () => {
       expect(document.querySelectorAll('.govuk-table__cell')[2].textContent).toBe('1')
       expect(document.querySelectorAll('.govuk-table__cell')[3].textContent).toBe('John Smith')
       expect(document.querySelectorAll('.govuk-table__cell')[4].textContent).toBe('TS1 1TS')
-      expect(document.querySelectorAll('.govuk-table__cell')[5].textContent).toBe('Rex')
+      expect(document.querySelectorAll('.govuk-table__cell')[5].textContent.trim().indexOf('12345')).not.toBe(-1)
+      expect(document.querySelectorAll('.govuk-table__cell')[5].textContent.trim().indexOf('Rex')).not.toBe(-1)
+      expect(document.querySelectorAll('.govuk-table__cell')[5].textContent.trim().indexOf('23456')).not.toBe(-1)
+      expect(document.querySelectorAll('.govuk-table__cell')[5].textContent.trim().indexOf('Fido')).not.toBe(-1)
     })
   })
 
