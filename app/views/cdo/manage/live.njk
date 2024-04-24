@@ -47,11 +47,11 @@
             Live CDOs
           </a>
         </li>
-        <!-- <li class="govuk-tabs__list-item">
+        <!--<li class="govuk-tabs__list-item">
           <a class="govuk-tabs__tab" href="/cdos/manage/expired">
             Expired
           </a>
-        </li> -->
+        </li>-->
         <li class="govuk-tabs__list-item">
           <a class="govuk-tabs__tab" href="/cdos/manage/due">
             Due within 30 days
@@ -61,16 +61,25 @@
       <table class="govuk-table">
         <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
         <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="ascending">CDO expiry</th>
-          <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="none">Index number</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="none">Owner</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-third" aria-sort="none">Police force</th>
-        </tr>
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="ascending">CDO expiry</th>
+            <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="none">Index number</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="none">Owner</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-one-third" aria-sort="none">Police force</th>
+          </tr>
         </thead>
+        <tbody class="govuk-table__body">
+        {% for cdo in model.resultList %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" data-sort-value="19">{{cdo.cdoExpiry}}</td>
+            <td class="govuk-table__cell" data-sort-value="17343"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
+            <td class="govuk-table__cell" data-sort-value="{{cdo.owner}}">{{cdo.owner}}</td>
+            <td class="govuk-table__cell">{{cdo.policeForce}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
       </table>
       <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
-      <p class="govuk-body">More to come</p>
     </div>
   </div>
 
