@@ -1,0 +1,46 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <h1 class="govuk-heading-l">
+        Manage CDOs
+      </h1>
+    </div>
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-button-group defra-align-right-simple">
+        <a href="/cdo/manage/interim{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Interim exemptions
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body">More to come</p>
+    </div>
+  </div>
+
+{% endblock %}
