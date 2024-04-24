@@ -86,6 +86,14 @@ const formatToGds = date => {
   return format(new Date(date), 'dd MMMM yyyy')
 }
 
+const formatToDateTime = date => {
+  if (date === null || date === undefined) {
+    return date
+  }
+
+  return format(new Date(date), 'dd MMMM yyyy hh:mm:ss')
+}
+
 const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
@@ -135,6 +143,27 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
   return helpers.message(errorMessage, { path: [elementPath, invalidComponents] })
 }
 
+const getElapsed = (end, start) => {
+  const endTime = new Date(end)
+  const startTime = new Date(start)
+
+  let diff = Math.abs(endTime - startTime) / 1000
+
+  const hours = Math.floor(diff / 3600) % 24
+  diff -= hours * 3600
+
+  const minutes = Math.floor(diff / 60) % 60
+  diff -= minutes * 60
+
+  const seconds = Math.floor(diff % 60)
+
+  return `${leftPadTo2(hours)}:${leftPadTo2(minutes)}:${leftPadTo2(seconds)}`
+}
+
+const leftPadTo2 = val => {
+  return val < 10 ? `0${val}` : `${val}`
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -145,5 +174,7 @@ module.exports = {
   formatToGds,
   isEmptyDate,
   validateDate,
-  stripTimeFromUTC
+  stripTimeFromUTC,
+  formatToDateTime,
+  getElapsed
 }

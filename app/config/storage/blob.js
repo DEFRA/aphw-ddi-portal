@@ -13,7 +13,7 @@ const schema = Joi.object({
 const config = {
   connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING,
   storageAccount: process.env.AZURE_STORAGE_ACCOUNT_NAME,
-  registerContainer: 'register-uploads',
+  registerContainer: 'uploads',
   certificateContainer: 'certificates',
   useConnectionString: process.env.AZURE_STORAGE_USE_CONNECTION_STRING
 }

@@ -1,0 +1,110 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageHeading = "Upload XLB data" %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: "/upload/import-xlb",
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate="novalidate" onsubmit="dummyRun.disabled = true; return true;">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <h1 class="govuk-heading-l">Validation results</h1>
+
+          <h2 class="govuk-heading-m">Errors</h2>
+            {% if model.errors.length == 0 %}
+              <p>No errors</p>
+            {% else %}
+          <table class="govuk-table">
+            <tbody class="govuk-table__body">
+              {% for error in model.errors %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ error }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+            {% endif %}
+
+          <h2 class="govuk-heading-m">Warnings</h2>
+            {% if model.log.length == 0 %}
+              <p>No warnings</p>
+            {% else %}
+          <table class="govuk-table">
+            <tbody class="govuk-table__body">
+              {% for logRow in model.log %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ logRow }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+            {% endif %}
+
+          <h2 class="govuk-heading-m">{{ model.numOwners }} owners and {{ model.numDogs }} dogs found</h2>
+
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Owner #</th>
+                <th scope="col" class="govuk-table__header">Owner name</th>
+                <th scope="col" class="govuk-table__header">Postcode</th>
+                <th scope="col" class="govuk-table__header">Dog(s) - index number and name</th>
+              </tr>
+            </thead>
+
+            <tbody class="govuk-table__body">
+            {% for row in model.rows %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ row.ownerNumber }}</td>
+                <td class="govuk-table__cell">{{ row.ownerName }}</td>
+                <td class="govuk-table__cell">{{ row.postcode }}</td>
+                <td class="govuk-table__cell">
+                {% for dog in row.dogs %}
+                {{ dog.indexNumber }}
+                {{ dog.name }}<br>
+                {% endfor %}
+                </td
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+            {% if model.errors.length == 0 or model.rows.length > 100 %}
+            <h2 class="govuk-heading-m">Perform a dummy run</h2>
+            <ul>
+              <li>Police force will be looked up based on postcode</li>
+              <li>No records will be saved to the database at this stage</li>
+              <li>The dummy run can take several seconds</li>
+            </ul>
+            {{ govukButton({
+              text: "Perform dummy run",
+              name: "dummyRun",
+              attributes: {
+                id: "save",
+                "data-testid": "save"
+              }
+            }) }}
+            {% endif %}
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}
