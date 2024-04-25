@@ -35,14 +35,28 @@ function ViewModel (resultList, tab, sort, backNav) {
     link: constants.routes.manageInterim.get
   }
 
+  const breadcrumbs = [
+    {
+      label: 'Home',
+      link: '/'
+    }
+  ]
+
   if (tab === 'interim') {
     secondaryBtn = {
       label: 'Manage CDOs',
       link: constants.routes.manage.get
     }
+
+    breadcrumbs.push({
+      label: 'Manage CDOs',
+      link: constants.routes.manage.get
+    })
   }
+
   this.model = {
     title,
+    breadcrumbs,
     showTabNav: tab !== 'interim',
     secondaryBtn,
     backLink: backNav.backLink,

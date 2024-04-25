@@ -1,18 +1,18 @@
-const { auth, user } = require('../../../../../mocks/auth')
+const { auth, user } = require('../../../../mocks/auth')
 const FormData = require('form-data')
-jest.mock('../../../../../../app/session/session-wrapper')
-const { setInSession } = require('../../../../../../app/session/session-wrapper')
+jest.mock('../../../../../app/session/session-wrapper')
+const { setInSession } = require('../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
-jest.mock('../../../../../../app/api/ddi-index-api/search')
+jest.mock('../../../../../app/api/ddi-index-api/search')
 
 describe('Manage Live Cdos test', () => {
-  jest.mock('../../../../../../app/auth')
-  const mockAuth = require('../../../../../../app/auth')
+  jest.mock('../../../../../app/auth')
+  const mockAuth = require('../../../../../app/auth')
 
-  jest.mock('../../../../../../app/api/ddi-index-api/cdos')
-  const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions } = require('../../../../../../app/api/ddi-index-api/cdos')
+  jest.mock('../../../../../app/api/ddi-index-api/cdos')
+  const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions } = require('../../../../../app/api/ddi-index-api/cdos')
 
-  const createServer = require('../../../../../../app/server')
+  const createServer = require('../../../../../app/server')
   let server
 
   setInSession.mockReturnValue()
@@ -183,8 +183,10 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage')
-    expect(document.querySelector('.govuk-breadcrumbs__link').textContent.trim()).toBe('Home')
-    expect(document.querySelector('.govuk-breadcrumbs__link').getAttribute('href')).toBe('/')
+    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].textContent.trim()).toBe('Home')
+    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].getAttribute('href')).toBe('/')
+    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].textContent.trim()).toBe('Manage CDOs')
+    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/cdo/manage')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('Interim exempt for')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
