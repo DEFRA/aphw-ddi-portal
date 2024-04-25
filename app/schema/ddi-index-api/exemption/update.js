@@ -13,7 +13,7 @@ const exemption = Joi.object({
   neuteringConfirmation: Joi.date().iso().allow(null).optional(),
   microchipVerification: Joi.date().iso().allow(null).optional(),
   joinedExemptionScheme: Joi.date().iso().allow(null).optional(),
-  removedFromCdoProcess: Joi.date().iso().allow(null).optional(),
+  nonComplianceLetterSent: Joi.date().iso().allow(null).optional(),
   insurance: Joi.object({
     company: Joi.string().optional(),
     renewalDate: Joi.date().iso().required()

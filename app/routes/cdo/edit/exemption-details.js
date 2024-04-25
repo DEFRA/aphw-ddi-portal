@@ -44,7 +44,7 @@ module.exports = [
         addDateComponents(exemption, 'microchipDeadline')
         addDateComponents(exemption, 'typedByDlo')
         addDateComponents(exemption, 'withdrawn')
-        addDateComponents(exemption, 'removedFromCdoProcess')
+        addDateComponents(exemption, 'nonComplianceLetterSent')
 
         const backNav = addBackNavigation(request)
 

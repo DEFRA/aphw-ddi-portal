@@ -66,7 +66,7 @@ function ViewModel (cdo, backNav) {
       typedByDlo: formatToGds(cdo.exemption.typedByDlo),
       withdrawn: formatToGds(cdo.exemption.withdrawn),
       microchipVerification: formatToGds(cdo.exemption.microchipVerification),
-      removedFromCdoProcess: formatToGds(cdo.exemption.removedFromCdoProcess)
+      nonComplianceLetterSent: formatToGds(cdo.exemption.nonComplianceLetterSent)
     }
   }
 }

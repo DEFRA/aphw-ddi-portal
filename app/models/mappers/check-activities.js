@@ -97,7 +97,7 @@ const { cleanUserDisplayName } = require('../../lib/model-helpers')
  * @typedef {null|string} typed_by_dlo
  * @typedef {null|string} microchip_deadline
  * @typedef {null|string} neutering_deadline
- * @typedef {null|string} removed_from_cdo_process
+ * @typedef {null|string} non_compliance_letter_sent
  * @typedef {{ "name": string }} police_force
  * @typedef {{ name: null|string }} court
  */
@@ -254,7 +254,8 @@ const activityLabels = {
   neutering_confirmation: 'Neutering confirmed',
   microchip_verification: 'Microchip number verified',
   joined_exemption_scheme: 'Joined interim exemption scheme',
-  removed_from_cdo_process: 'Removed from CDO process',
+  removed_from_cdo_process: 'Non-compliance letter sent',
+  non_compliance_letter_sent: 'Non-compliance letter sent',
   court: 'Court',
   legislation_officer: 'Dog legislation officer',
   police_force: 'Police force',

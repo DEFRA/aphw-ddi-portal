@@ -126,7 +126,7 @@ const createdDogEventBuilder = (partialCreatedDogEvent = {}) => {
       typed_by_dlo: null,
       microchip_deadline: null,
       neutering_deadline: null,
-      removed_from_cdo_process: null,
+      non_compliance_letter_sent: null,
       police_force: {
         name: 'Avon and Somerset Constabulary'
       },
