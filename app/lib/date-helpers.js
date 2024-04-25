@@ -164,6 +164,21 @@ const leftPadTo2 = val => {
   return val < 10 ? `0${val}` : `${val}`
 }
 
+const getMonthsSince = (date, dateFromOptional) => {
+  const dateFrom = dateFromOptional || new Date()
+  const day = 24 * 60 * 60 * 1000
+  const difference = dateFrom - date
+  const differenceMonths = Math.floor(difference / day / 30)
+
+  if (differenceMonths === 1) {
+    return `${differenceMonths} month`
+  } else if (differenceMonths > 1) {
+    return `${differenceMonths} months`
+  }
+
+  return 'Less than 1 month'
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -176,5 +191,6 @@ module.exports = {
   validateDate,
   stripTimeFromUTC,
   formatToDateTime,
-  getElapsed
+  getElapsed,
+  getMonthsSince
 }
