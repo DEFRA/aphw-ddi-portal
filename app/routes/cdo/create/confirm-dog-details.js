@@ -3,6 +3,8 @@ const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
 const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
+const { getEnforcementDetails, getAddress } = require('../../../session/cdo/owner')
+const { setPoliceForce } = require('../../../lib/model-helpers')
 
 module.exports = [
   {
@@ -32,6 +34,12 @@ module.exports = [
         const dogs = getDogs(request)
         if (dogs?.length === 1 && dogs[0].indexNumber) {
           return h.redirect(`${dogRoutes.applicationType.get}/1`)
+        }
+
+        const enforcementDetails = getEnforcementDetails(request)
+        const addressDetails = getAddress(request)
+        if (!enforcementDetails?.policeForce && addressDetails?.postcode) {
+          await setPoliceForce(request, addressDetails.postcode)
         }
 
         return h.redirect(ownerRoutes.enforcementDetails.get)

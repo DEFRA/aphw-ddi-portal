@@ -4,7 +4,7 @@ const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
 function ViewModel (dogDetails, errors) {
   this.model = {
-    backLink: routes.confirm.get,
+    backLink: routes.selectExistingDog.get,
     dogId: dogDetails.dogId,
     ...applicationTypeElements(dogDetails),
     errors: []
