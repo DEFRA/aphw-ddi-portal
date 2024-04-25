@@ -134,6 +134,17 @@ describe('Manage Live Cdos test', () => {
     expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
   })
 
+  test('GET /cdo/manage/invalid-tab route returns 404', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/invalid-tab',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(404)
+  })
+
   test('GET /cdo/manage route returns 302 if not auth', async () => {
     const fd = new FormData()
 
