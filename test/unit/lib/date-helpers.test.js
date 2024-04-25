@@ -1,4 +1,4 @@
-const { getElapsed, formatToDateTime } = require('../../../app/lib/date-helpers')
+const { getElapsed, formatToDateTime, getMonthsSince } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
   describe('getElapsed', () => {
@@ -37,6 +37,42 @@ describe('date-helpers', () => {
     test('should handle normal dates', () => {
       const result = formatToDateTime(new Date(2024, 5, 5, 10, 4, 1))
       expect(result).toBe('05 June 2024 10:04:01')
+    })
+  })
+
+  describe('getMonthsSince', () => {
+    test('should return value with "months" given over than one month', () => {
+      const sinceMonth = new Date('2024-06-01')
+      const date = new Date('2024-02-01')
+      const result = getMonthsSince(date, sinceMonth)
+      expect(result).toBe('4 months')
+    })
+
+    test('should return value with "month" given one month', () => {
+      const sinceMonth = new Date('2024-06-01')
+      const date = new Date('2024-05-02')
+      const result = getMonthsSince(date, sinceMonth)
+      expect(result).toBe('1 month')
+    })
+
+    test('should return Less than 1 month given less one month', () => {
+      const sinceMonth = new Date('2024-06-01')
+      const date = new Date('2024-05-03')
+      const result = getMonthsSince(date, sinceMonth)
+      expect(result).toBe('Less than 1 month')
+    })
+
+    test('should return Less than 1 month given time is now', () => {
+      const date = new Date()
+      const result = getMonthsSince(date)
+      expect(result).toBe('Less than 1 month')
+    })
+
+    test('should return Less than 1 month given value is in the future', () => {
+      const sinceMonth = new Date('2024-03-03')
+      const date = new Date('2024-03-04')
+      const result = getMonthsSince(date, sinceMonth)
+      expect(result).toBe('Less than 1 month')
     })
   })
 })

@@ -9,6 +9,10 @@ describe('CDO API endpoints', () => {
     jest.clearAllMocks()
   })
 
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   describe('summaryCdoMapper', () => {
     test('should map a SummaryCdoDto to a SummaryCdo', () => {
       const summaryCdoDto = {
@@ -41,12 +45,16 @@ describe('CDO API endpoints', () => {
         cdoExpiry: new Date('2024-04-19'),
         humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: null,
+        interimExemptFor: null,
         policeForce: 'Cheshire Constabulary'
       }
       expect(summaryCdoMapper(summaryCdoDto)).toEqual(expectedSummaryCdoDto)
     })
 
     test('should map a SummaryCdoDto to a SummaryCdo given Interim Exempt', () => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2024-04-25'))
+
       const summaryCdoDto = {
         person: {
           id: 121,
@@ -77,6 +85,7 @@ describe('CDO API endpoints', () => {
         cdoExpiry: null,
         humanReadableCdoExpiry: '',
         joinedExemptionScheme: new Date('2024-04-19'),
+        interimExemptFor: 'Less than 1 month',
         policeForce: 'Cheshire Constabulary'
       }
       expect(summaryCdoMapper(summaryCdoDto)).toEqual(expectedSummaryCdoDto)
@@ -85,6 +94,9 @@ describe('CDO API endpoints', () => {
 
   describe('getSummaryCdos', () => {
     test('should call endpoint with a single status and dueWithin', async () => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2024-04-25'))
+
       get.mockResolvedValue({
         cdos: [
           {
@@ -120,6 +132,7 @@ describe('CDO API endpoints', () => {
         cdoExpiry: new Date('2024-04-19'),
         humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: new Date('2024-04-19'),
+        interimExemptFor: 'Less than 1 month',
         policeForce: 'Cheshire Constabulary'
       }
 
