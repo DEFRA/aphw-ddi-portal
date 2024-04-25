@@ -144,10 +144,10 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.removedFromCdoProcess %}
+            {% if model.exemption.nonComplianceLetterSent %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-              <dt class="govuk-summary-list__key">Removed from CDO process</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.removedFromCdoProcess }}</dd>
+              <dt class="govuk-summary-list__key">Non-compliance letter sent</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.nonComplianceLetterSent }}</dd>
             </div>
             {% endif %}
           </dl>

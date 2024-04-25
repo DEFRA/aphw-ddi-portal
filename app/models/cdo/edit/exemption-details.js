@@ -432,13 +432,13 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         }
       ]
     },
-    removedFromCdoProcess: {
+    nonComplianceLetterSent: {
       type: 'date',
-      id: 'removedFromCdoProcess',
-      namePrefix: 'removedFromCdoProcess',
+      id: 'nonComplianceLetterSent',
+      namePrefix: 'nonComplianceLetterSent',
       fieldset: {
         legend: {
-          text: 'Removed from CDO process',
+          text: 'Non-compliance letter sent',
           classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
         }
       },
@@ -446,19 +446,19 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         {
           name: 'day',
           classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['removedFromCdoProcess-day'],
+          value: exemption['nonComplianceLetterSent-day'],
           attributes: { maxlength: '2' }
         },
         {
           name: 'month',
           classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['removedFromCdoProcess-month'],
+          value: exemption['nonComplianceLetterSent-month'],
           attributes: { maxlength: '2' }
         },
         {
           name: 'year',
           classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['removedFromCdoProcess-year'],
+          value: exemption['nonComplianceLetterSent-year'],
           attributes: { maxlength: '4' }
         }
       ]

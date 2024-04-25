@@ -292,7 +292,8 @@ describe('Check Activity Mappers', () => {
       ['Neutering confirmed updated', 'neutering_confirmation', 'updated'],
       ['Microchip number verified updated', 'microchip_verification', 'updated'],
       ['Joined interim exemption scheme updated', 'joined_exemption_scheme', 'updated'],
-      ['Removed from CDO process updated', 'removed_from_cdo_process', 'updated'],
+      ['Non-compliance letter sent updated', 'removed_from_cdo_process', 'updated'],
+      ['Non-compliance letter sent updated', 'non_compliance_letter_sent', 'updated'],
       ['Court updated', 'court', 'updated'],
       ['Insurance company updated', 'insurance_company', 'updated'],
       ['Insurance renewal date updated', 'insurance_renewal_date', 'updated'],
@@ -385,7 +386,7 @@ describe('Check Activity Mappers', () => {
               '2024-01-01T00:00:00.000Z'
             ],
             [
-              'removed_from_cdo_process',
+              'non_compliance_letter_sent',
               '2024-02-18',
               '2024-02-18T00:00:00.000Z'
             ]
@@ -459,7 +460,7 @@ describe('Check Activity Mappers', () => {
               '2024-01-01T00:00:00.000Z'
             ],
             [
-              'removed_from_cdo_process',
+              'non_compliance_letter_sent',
               '2024-02-17',
               '2024-02-18T00:00:00.000Z'
             ],
@@ -546,7 +547,7 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Removed from CDO process updated'
+          activityLabel: 'Non-compliance letter sent updated'
         },
         {
           date: '19 February 2024',

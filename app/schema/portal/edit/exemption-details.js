@@ -75,7 +75,7 @@ const exemptionDetailsSchema = Joi.object({
   microchipDeadline: optionalDate(false),
   typedByDlo: optionalDate(true),
   withdrawn: optionalDate(true),
-  removedFromCdoProcess: optionalDate(true)
+  nonComplianceLetterSent: optionalDate(true)
 }).custom(validateInsurance).required()
 
 const validatePayload = (payload) => {
@@ -88,7 +88,7 @@ const validatePayload = (payload) => {
   payload.microchipDeadline = getDateComponents(payload, 'microchipDeadline')
   payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
   payload.withdrawn = getDateComponents(payload, 'withdrawn')
-  payload.removedFromCdoProcess = getDateComponents(payload, 'removedFromCdoProcess')
+  payload.nonComplianceLetterSent = getDateComponents(payload, 'nonComplianceLetterSent')
 
   if (payload.exemptionOrder !== 2023 && payload.exemptionOrder !== '2023') {
     payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
@@ -129,9 +129,9 @@ const validatePayload = (payload) => {
     'withdrawn-year': Joi.number().allow(null).allow(''),
     'withdrawn-month': Joi.number().allow(null).allow(''),
     'withdrawn-day': Joi.number().allow(null).allow(''),
-    'removedFromCdoProcess-year': Joi.number().allow(null).allow(''),
-    'removedFromCdoProcess-month': Joi.number().allow(null).allow(''),
-    'removedFromCdoProcess-day': Joi.number().allow(null).allow('')
+    'nonComplianceLetterSent-year': Joi.number().allow(null).allow(''),
+    'nonComplianceLetterSent-month': Joi.number().allow(null).allow(''),
+    'nonComplianceLetterSent-day': Joi.number().allow(null).allow('')
   }).concat(exemptionDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
