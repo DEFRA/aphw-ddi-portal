@@ -1,4 +1,3 @@
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,15 +8,14 @@
 
 {% block beforeContent %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      {{ govukBackLink({
-        text: "Back",
-        href: model.backLink,
-        attributes: {
-          id: "back"
-        }
-        }) 
-      }}
+    <div class="govuk-grid-column-full">
+      <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+          <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/">Home</a>
+          </li>
+        </ol>
+      </div>
     </div>
   </div>
 {% endblock %}

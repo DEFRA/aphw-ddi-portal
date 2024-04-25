@@ -1,14 +1,11 @@
-const { errorPusherDefault } = require('../../../lib/error-helpers')
-
 /**
  * @param {SummaryCdo[]} resultList
  * @param {string} tab
  * @param {{ column: string; order: 'ASC'|'DESC'}} sort
  * @param backNav
- * @param [errors]
  * @constructor
  */
-function ViewModel (resultList, tab, sort, backNav, errors) {
+function ViewModel (resultList, tab, sort, backNav) {
   const tabs = [
     {
       visible: true,
@@ -38,11 +35,8 @@ function ViewModel (resultList, tab, sort, backNav, errors) {
       order: 'ASC',
       ...sort
     },
-    resultList,
-    errors: []
+    resultList
   }
-
-  errorPusherDefault(errors, this.model)
 }
 
 module.exports = ViewModel
