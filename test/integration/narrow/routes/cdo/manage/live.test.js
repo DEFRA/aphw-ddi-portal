@@ -10,7 +10,7 @@ describe('Manage Live Cdos test', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/cdos')
-  const { getLiveCdos, getLiveCdosWithinMonth } = require('../../../../../../app/api/ddi-index-api/cdos')
+  const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions } = require('../../../../../../app/api/ddi-index-api/cdos')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -63,7 +63,10 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
+    expect(document.querySelector('ul[data-testid="tab-navigation"]')).not.toBeNull()
     expect(document.querySelector('.govuk-table')).not.toBeNull()
+    expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Interim exemptions')
+    expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage/interim')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('CDO expiry')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
@@ -128,6 +131,68 @@ describe('Manage Live Cdos test', () => {
     const cols = document.querySelectorAll('.govuk-table .govuk-table__row td')
 
     expect(cols[0].textContent.trim()).toBe('19 April 2024')
+    expect(cols[1].textContent.trim()).toBe('ED20001')
+    expect(cols[1].querySelector('.govuk-link').getAttribute('href')).toContain('/cdo/view/dog-details/ED20001')
+    expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')
+    expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
+  })
+
+  test('GET /cdo/manage/interim route returns 200', async () => {
+    getInterimExemptions.mockResolvedValue([
+      {
+        id: 20001,
+        index: 'ED20001',
+        status: 'Pre-exempt',
+        owner: 'Scott Pilgrim',
+        personReference: 'P-A133-7E4C',
+        cdoExpiry: null,
+        humanReadableCdoExpiry: '',
+        joinedExemptionScheme: new Date('2023-10-19'),
+        interimExemptFor: '6 months',
+        policeForce: 'Cheshire Constabulary'
+      },
+      {
+        id: 20002,
+        index: 'ED20002',
+        status: 'Pre-exempt ',
+        owner: 'Ramona Flowers ',
+        personReference: 'P-A133-7E5C',
+        cdoExpiry: null,
+        humanReadableCdoExpiry: '',
+        joinedExemptionScheme: new Date('2024-04-20'),
+        interimExemptFor: '1 month',
+        policeForce: 'Kent Police '
+      }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/interim',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getInterimExemptions).toHaveBeenCalledWith({
+      column: 'joinedExemptionScheme',
+      order: 'ASC'
+    })
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage interim exemptions')
+    expect(document.querySelector('ul[data-testid="tab-navigation"]')).toBeNull()
+    expect(document.querySelector('.govuk-table')).not.toBeNull()
+    expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Manage CDOs')
+    expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage')
+    expect(document.querySelector('.govuk-breadcrumbs__link').textContent.trim()).toBe('Home')
+    expect(document.querySelector('.govuk-breadcrumbs__link').getAttribute('href')).toBe('/')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('Interim exempt for')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
+    expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
+
+    const cols = document.querySelectorAll('.govuk-table .govuk-table__row td')
+
+    expect(cols[0].textContent.trim()).toBe('6 months')
     expect(cols[1].textContent.trim()).toBe('ED20001')
     expect(cols[1].querySelector('.govuk-link').getAttribute('href')).toContain('/cdo/view/dog-details/ED20001')
     expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')

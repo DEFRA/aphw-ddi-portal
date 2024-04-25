@@ -22,24 +22,25 @@
 
 {% block content %}
   <div class="govuk-grid-row govuk-!-margin-bottom-3">
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">
-        Manage CDOs
+        {{model.title}}
       </h1>
     </div>
 
-    <div class="govuk-grid-column-one-half">
-      <!--<div class="govuk-button-group defra-align-right-simple">
-        <a href="/cdo/manage/interim{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-          Interim exemptions
+    <div class="govuk-grid-column-one-third defra-text-align-right">
+      <div class="govuk-button-group defra-align-right-simple">
+        <a href="{{model.secondaryBtn.link}}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          {{model.secondaryBtn.label}}
         </a>
-      </div> -->
+      </div>
     </div>
 
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <ul class="govuk-tabs__list govuk-!-margin-bottom-7">
+      {% if model.showTabNav %}
+      <ul class="govuk-tabs__list govuk-!-margin-bottom-7" data-testid="tab-navigation">
         {% for tab in model.tabs %}
         {% if tab.visible %}
         <li class="govuk-tabs__list-item {% if tab.active %}govuk-tabs__list-item--selected{% endif %}">
@@ -50,11 +51,16 @@
         {% endif %}
         {% endfor %}
       </ul>
+      {% endif %}
       <table class="govuk-table">
         <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header govuk-input--width-10">CDO expiry</th>
+            {% if model.tab == 'interim' %}
+              <th scope="col" class="govuk-table__header govuk-input--width-10">Interim exempt for</th>
+            {% else %}
+              <th scope="col" class="govuk-table__header govuk-input--width-10">CDO expiry</th>
+            {% endif %}
             <th scope="col" class="govuk-table__header govuk-input--width-10">Index number</th>
             <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Owner</th>
             <th scope="col" class="govuk-table__header govuk-!-width-one-third">Police force</th>
@@ -63,7 +69,11 @@
         <tbody class="govuk-table__body">
         {% for cdo in model.resultList %}
           <tr class="govuk-table__row">
+            {% if model.tab == 'interim' %}
+            <td class="govuk-table__cell">{{cdo.interimExemptFor}}</td>
+            {% else %}
             <td class="govuk-table__cell">{{cdo.humanReadableCdoExpiry}}</td>
+            {% endif %}
             <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
             <td class="govuk-table__cell">{{cdo.owner}}</td>
             <td class="govuk-table__cell">{{cdo.policeForce}}</td>

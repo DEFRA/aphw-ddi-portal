@@ -1,3 +1,5 @@
+const constants = require('../../../constants/cdo')
+
 /**
  * @param {SummaryCdo[]} resultList
  * @param {string} tab
@@ -26,9 +28,26 @@ function ViewModel (resultList, tab, sort, backNav) {
       label: 'Due within 30 days'
     }
   ]
+
+  const title = tab === 'interim' ? 'Manage interim exemptions' : 'Manage CDOs'
+  let secondaryBtn = {
+    label: 'Interim exemptions',
+    link: constants.routes.manageInterim.get
+  }
+
+  if (tab === 'interim') {
+    secondaryBtn = {
+      label: 'Manage CDOs',
+      link: constants.routes.manage.get
+    }
+  }
   this.model = {
+    title,
+    showTabNav: tab !== 'interim',
+    secondaryBtn,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
+    tab,
     tabs,
     sort: {
       column: 'cdoExpiry',
