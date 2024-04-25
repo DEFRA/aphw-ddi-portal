@@ -71,7 +71,7 @@
         <tbody class="govuk-table__body">
         {% for cdo in model.resultList %}
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell" data-sort-value="19">{{cdo.cdoExpiry}}</td>
+            <td class="govuk-table__cell" data-sort-value="19">{{cdo.humanReadableCdoExpiry}}</td>
             <td class="govuk-table__cell" data-sort-value="17343"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
             <td class="govuk-table__cell" data-sort-value="{{cdo.owner}}">{{cdo.owner}}</td>
             <td class="govuk-table__cell">{{cdo.policeForce}}</td>

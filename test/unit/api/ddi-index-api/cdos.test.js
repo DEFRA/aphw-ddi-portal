@@ -39,6 +39,7 @@ describe('CDO API endpoints', () => {
         owner: 'Scott Pilgrim',
         personReference: 'P-A133-7E4C',
         cdoExpiry: new Date('2024-04-19'),
+        humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: null,
         policeForce: 'Cheshire Constabulary'
       }
@@ -74,6 +75,7 @@ describe('CDO API endpoints', () => {
         owner: 'Scott Pilgrim',
         personReference: 'P-A133-7E4C',
         cdoExpiry: null,
+        humanReadableCdoExpiry: '',
         joinedExemptionScheme: new Date('2024-04-19'),
         policeForce: 'Cheshire Constabulary'
       }
@@ -116,6 +118,7 @@ describe('CDO API endpoints', () => {
         owner: 'Scott Pilgrim',
         personReference: 'P-A133-7E4C',
         cdoExpiry: new Date('2024-04-19'),
+        humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: new Date('2024-04-19'),
         policeForce: 'Cheshire Constabulary'
       }
