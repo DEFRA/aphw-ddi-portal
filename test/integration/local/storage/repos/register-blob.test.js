@@ -4,7 +4,7 @@ const { uploadRegisterFile } = require('../../../../../app/storage/repos/registe
 
 describe('register blob functions', () => {
   beforeAll(async () => {
-    await blobServiceClient.createContainer('register-uploads')
+    await blobServiceClient.createContainer('uploads')
   })
 
   test('should upload register file', async () => {
@@ -15,7 +15,7 @@ describe('register blob functions', () => {
 
     await uploadRegisterFile(filename, stream)
 
-    const container = blobServiceClient.getContainerClient('register-uploads')
+    const container = blobServiceClient.getContainerClient('uploads')
     const blobClient = await container.getBlockBlobClient(filename)
     const res = await blobClient.downloadToBuffer()
 

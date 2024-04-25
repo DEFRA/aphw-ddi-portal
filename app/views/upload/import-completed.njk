@@ -1,0 +1,60 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% set pageHeading = "Upload XLB data" %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/">Home</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate="novalidate">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <h1 class="govuk-heading-l">Import completed</h1>
+
+            <h2 class="govuk-heading-m">Errors</h2>
+              {% if model.errors.length == 0 %}
+                <p>No errors</p>
+              {% else %}
+              <h2 class="govuk-heading-s govuk-error-message">As errors occurred, the import failed and any imported records have been rolled back</h2>
+            <table class="govuk-table">
+              <tbody class="govuk-table__body">
+                {% for error in model.errors %}
+                <tr class="govuk-table__row">
+                  <td class="govuk-table__cell">{{ error }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+              {% endif %}
+
+          <h2 class="govuk-heading-m">Log output</h2>
+            {% if model.log.length == 0 %}
+              <p>No log entries</p>
+            {% else %}
+          <table class="govuk-table">
+            <tbody class="govuk-table__body">
+              {% for logRow in model.log %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ logRow }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+            {% endif %}
+
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}

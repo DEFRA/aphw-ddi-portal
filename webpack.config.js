@@ -84,6 +84,9 @@ module.exports = {
       patterns: [{
         from: 'app/frontend/images',
         to: 'images' // Copies all files from above dest to dist/images
+      }, {
+        from: 'app/frontend/templates',
+        to: 'templates'
       }]
     }),
     new ReplaceInFileWebpackPlugin([{
