@@ -1,0 +1,78 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+          <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="/">Home</a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-one-half">
+      <h1 class="govuk-heading-l">
+        Manage CDOs
+      </h1>
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <!--<div class="govuk-button-group defra-align-right-simple">
+        <a href="/cdo/manage/interim{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Interim exemptions
+        </a>
+      </div> -->
+    </div>
+
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <ul class="govuk-tabs__list govuk-!-margin-bottom-7">
+        {% for tab in model.tabs %}
+        {% if tab.visible %}
+        <li class="govuk-tabs__list-item {% if tab.active %}govuk-tabs__list-item--selected{% endif %}">
+          <a class="govuk-tabs__tab" href="{{tab.href}}">
+            {{tab.label}}
+          </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-input--width-10">CDO expiry</th>
+            <th scope="col" class="govuk-table__header govuk-input--width-10">Index number</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Owner</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-one-third">Police force</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% for cdo in model.resultList %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{cdo.humanReadableCdoExpiry}}</td>
+            <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
+            <td class="govuk-table__cell">{{cdo.owner}}</td>
+            <td class="govuk-table__cell">{{cdo.policeForce}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+    </div>
+  </div>
+
+{% endblock %}
