@@ -5,6 +5,7 @@ const { getCourts } = require('./courts')
 const { getPoliceForces } = require('./police-forces')
 const { getCompanies } = require('./insurance')
 const cdo = require('./cdo')
+const cdos = require('./cdos')
 const exemption = require('./exemption')
 const people = require('./person')
 const dog = require('./dog')
@@ -17,6 +18,7 @@ module.exports = {
   getPoliceForces,
   getCompanies,
   cdo,
+  cdos,
   exemption,
   people,
   dog
