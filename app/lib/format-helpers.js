@@ -55,7 +55,7 @@ const mapOsCountryCodeToCountry = (osPlacesCountryCode) => {
 }
 
 const formatDogRadioAsHtml = (details) => {
-  if (containsPossibleInjectedCode(`${details.name}${details.breed}${details.indexNumber}${details.microchipNumber}`)) {
+  if (containsPossibleInjectedCode(`${details.name}${details.breed}${details.indexNumber}${details.microchipNumber}${details.microchipNumber2}`)) {
     return 'Possible injected code'
   }
 
@@ -68,6 +68,10 @@ const formatDogRadioAsHtml = (details) => {
   if (details.microchipNumber) {
     const microchipNumber = `Microchip number: ${details.microchipNumber}`
     hintLines.push(`${hintStart}${microchipNumber}${hintEnd}`)
+  }
+  if (details.microchipNumber2) {
+    const microchipNumber2 = `Microchip number 2: ${details.microchipNumber2}`
+    hintLines.push(`${hintStart}${microchipNumber2}${hintEnd}`)
   }
   return `${details.name ? details.name : ''}${hintLines.join('')}`
 }

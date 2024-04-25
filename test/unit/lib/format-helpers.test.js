@@ -137,10 +137,11 @@ describe('format-helpers', () => {
         breed: 'Breed 1',
         dogId: 1,
         indexNumber: 'ED123',
-        microchipNumber: '12345'
+        microchipNumber: '12345',
+        microchipNumber2: '23456'
       }
       const res = formatDogRadioAsHtml(dog)
-      expect(res).toBe('Fido<div class="govuk-hint defra-radio-text-block">Breed: Breed 1</div><div class="govuk-hint defra-radio-text-block">Index number: ED123</div><div class="govuk-hint defra-radio-text-block">Microchip number: 12345</div>')
+      expect(res).toBe('Fido<div class="govuk-hint defra-radio-text-block">Breed: Breed 1</div><div class="govuk-hint defra-radio-text-block">Index number: ED123</div><div class="govuk-hint defra-radio-text-block">Microchip number: 12345</div><div class="govuk-hint defra-radio-text-block">Microchip number 2: 23456</div>')
     })
     test('should map a dog with no microchip', () => {
       const dog = {
@@ -169,7 +170,8 @@ describe('format-helpers', () => {
         breed: 'Breed> 1',
         dogId: 1,
         indexNumber: 'ED123',
-        microchipNumber: '12345'
+        microchipNumber: '12345',
+        microchipNumber2: '23456'
       }
       const res = formatDogRadioAsHtml(dog)
       expect(res).toBe('Possible injected code')
@@ -178,18 +180,18 @@ describe('format-helpers', () => {
 
   describe('containsPossibleInjectedCode', () => {
     test('should detect possible injection', () => {
-      const dogHtml = 'name: \'Fido>\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\''
+      const dogHtml = 'name: \'Fido>\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\', microchipNumber2: \'23456\''
       const res = containsPossibleInjectedCode(dogHtml)
       expect(res).toBeTruthy()
     })
     test('should detect possible injection 2', () => {
-      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'E<D123\', microchipNumber: \'12345\''
+      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'E<D123\', microchipNumber: \'12345\', microchipNumber2: \'23456\''
       const res = containsPossibleInjectedCode(dogHtml)
       expect(res).toBeTruthy()
     })
 
     test('should pass', () => {
-      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\''
+      const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\', microchipNumber2: \'23456\''
       const res = containsPossibleInjectedCode(dogHtml)
       expect(res).toBeFalsy()
     })
