@@ -294,4 +294,36 @@ describe('CDO API endpoints', () => {
       expect(results).toEqual(expect.any(Array))
     })
   })
+
+  describe('getExpiredCdos', () => {
+    test('should get expired cdos', async () => {
+      get.mockResolvedValue({
+        cdos: [
+          {
+            person: {
+              id: 121,
+              firstName: 'Scott',
+              lastName: 'Pilgrim',
+              personReference: 'P-A133-7E4C'
+            },
+            dog: {
+              id: 300162,
+              status: 'Interim exempt',
+              dogReference: 'ED300162'
+            },
+            exemption: {
+              policeForce: 'Cheshire Constabulary',
+              cdoExpiry: null,
+              joinedExemptionScheme: '2020-10-11'
+            }
+          }
+        ]
+      })
+      const sort = {}
+
+      const results = await cdos.getExpiredCdos(sort)
+      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', { json: true })
+      expect(results).toEqual(expect.any(Array))
+    })
+  })
 })
