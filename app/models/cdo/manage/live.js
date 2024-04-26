@@ -16,7 +16,7 @@ function ViewModel (resultList, tab, sort, backNav) {
       label: 'Live CDOs'
     },
     {
-      visible: false,
+      visible: true,
       active: tab === 'expired',
       href: '/cdo/manage/expired',
       label: 'Expired'
