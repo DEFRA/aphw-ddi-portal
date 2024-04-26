@@ -465,6 +465,11 @@ describe('Check Activity Mappers', () => {
               '2024-02-18T00:00:00.000Z'
             ],
             [
+              'removed_from_cdo_process',
+              '2024-02-17',
+              '2024-02-18T00:00:00.000Z'
+            ],
+            [
               'court',
               171,
               159
@@ -547,7 +552,12 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Non-compliance letter sent updated'
+          activityLabel: 'Non-compliance letter sent '
+        },
+        {
+          date: '19 February 2024',
+          teamMember: 'Robert Developer',
+          activityLabel: 'Non-compliance letter sent '
         },
         {
           date: '19 February 2024',

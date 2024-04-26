@@ -1,10 +1,11 @@
 const { v4: uuidv4 } = require('uuid')
 const { CERTIFICATE_REQUESTED } = require('../../../constants/events')
 
-const createMessage = (data) => ({
+const createMessage = (data, user) => ({
   body: {
     certificateId: uuidv4(),
     exemptionOrder: data.exemption.exemptionOrder,
+    user,
     owner: {
       name: `${data.person.firstName} ${data.person.lastName}`,
       address: {
