@@ -1,5 +1,5 @@
 const { get } = require('./base')
-const { formatToGds } = require('../../lib/date-helpers')
+const { formatToGds, getMonthsSince } = require('../../lib/date-helpers')
 
 const cdosEndpoint = 'cdos'
 
@@ -40,8 +40,9 @@ const options = {
  * @property {string} owner - e.g. 'Scott Pilgrim',
  * @property {string} personReference - e.g. 'P-1234-5678',
  * @property {Date|null} cdoExpiry - e.g. 2024-03-01,
- * @property {string} humanReadableCdoExpiry - e.g. 2024-03-01,
+ * @property {string} humanReadableCdoExpiry - e.g. '16 November 2023'
  * @property {Date|null} joinedExemptionScheme - e.g. 2024-03-01,
+ * @property {string} interimExemptFor - e.g. 6 months
  * @property {string} policeForce - e.g. 'Cheshire Constabulary'
  */
 
@@ -58,6 +59,7 @@ const summaryCdoMapper = (summaryCdo) => {
   const cdoExpiryDto = summaryCdo.exemption.cdoExpiry ?? null
   const joinedExemptionSchemeDto = summaryCdo.exemption.joinedExemptionScheme ?? null
   const cdoExpiry = cdoExpiryDto !== null ? new Date(summaryCdo.exemption.cdoExpiry) : null
+  const joinedExemptionScheme = joinedExemptionSchemeDto !== null ? new Date(joinedExemptionSchemeDto) : null
 
   return {
     id: summaryCdo.dog.id,
@@ -68,7 +70,8 @@ const summaryCdoMapper = (summaryCdo) => {
     status: summaryCdo.dog.status,
     cdoExpiry,
     humanReadableCdoExpiry: formatToGds(cdoExpiry) || '',
-    joinedExemptionScheme: joinedExemptionSchemeDto !== null ? new Date(summaryCdo.exemption.joinedExemptionScheme) : null
+    joinedExemptionScheme: joinedExemptionScheme,
+    interimExemptFor: joinedExemptionSchemeDto !== null ? getMonthsSince(joinedExemptionScheme) : null
   }
 }
 /**

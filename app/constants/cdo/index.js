@@ -5,6 +5,9 @@ const constants = {
     },
     manage: {
       get: '/cdo/manage'
+    },
+    manageInterim: {
+      get: '/cdo/manage/interim'
     }
   },
   views: {
