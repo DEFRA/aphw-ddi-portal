@@ -381,10 +381,19 @@ const mapCreatedEventToCheckActivityRows = (event) => {
 const mapImportEventToCheckActivityRows = (event) => {
   const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
 
-  return [{
-    activityLabel: `Comments made by index users: ${event.added?.comment}`,
-    ...dateAndTeamMemberData
-  }]
+  if (event.type === 'uk.gov.defra.ddi.event.import') {
+    return [{
+      activityLabel: `Comments made by index users: ${event.added?.comment}`,
+      ...dateAndTeamMemberData
+    }]
+  }
+
+  if (event.type === 'uk.gov.defra.ddi.event.import.manual') {
+    return [{
+      activityLabel: 'Record imported',
+      ...dateAndTeamMemberData
+    }]
+  }
 }
 
 /**
@@ -414,7 +423,7 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapCreatedEventToCheckActivityRows(event))
     }
 
-    if (event.type === 'uk.gov.defra.ddi.event.import') {
+    if (event.type.indexOf('uk.gov.defra.ddi.event.import') === 0) {
       addedRows.push(...mapImportEventToCheckActivityRows(event))
     }
 
