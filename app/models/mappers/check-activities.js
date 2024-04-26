@@ -244,6 +244,8 @@ const labelsRequiringPreviousValue = ['First name', 'Last name', 'Address line 1
 
 const addedEvents = ['date_exported', 'date_stolen', 'dog_date_of_death', 'date_untraceable']
 
+const activitiesWhereLabelOnly = ['removed_from_cdo_process', 'non_compliance_letter_sent']
+
 const activityLabels = {
   cdo_issued: 'CDO issue date',
   cdo_expiry: 'CDO expiry date',
@@ -339,6 +341,11 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
       const [,, statusName] = changeRecord
       changeType = statusName
     }
+
+    if (activitiesWhereLabelOnly.includes(changeRecord[0])) {
+      changeType = ''
+    }
+
     const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
     if (filterNonUpdatedFields(changeRecord) && activityLabel !== 'N/A') {
@@ -388,6 +395,19 @@ const mapImportEventToCheckActivityRows = (event) => {
 }
 
 /**
+ * @param {CreatedEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapCertificateEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return [{
+    activityLabel: 'Certificate issued',
+    ...dateAndTeamMemberData
+  }]
+}
+
+/**
  * @param {DDIEvent[]} events
  * @returns {ActivityRow[]}
  */
@@ -418,6 +438,10 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapImportEventToCheckActivityRows(event))
     }
 
+    if (event.type === 'uk.gov.defra.ddi.event.certificate.issued') {
+      addedRows.push(...mapCertificateEventToCheckActivityRows(event))
+    }
+
     return [...activityRows, ...addedRows]
   }, activityRowsAccumulator)
 }
@@ -431,5 +455,6 @@ module.exports = {
   flatMapActivityDtoToCheckActivityRow,
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
-  mapImportEventToCheckActivityRows
+  mapImportEventToCheckActivityRows,
+  mapCertificateEventToCheckActivityRows
 }
