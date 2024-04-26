@@ -3,7 +3,6 @@ const FormData = require('form-data')
 jest.mock('../../../../../app/session/session-wrapper')
 const { setInSession } = require('../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
-const { getExpiredCdos } = require('../../../../../app/api/ddi-index-api/cdos')
 jest.mock('../../../../../app/api/ddi-index-api/search')
 
 describe('Manage Live Cdos test', () => {
