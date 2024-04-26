@@ -395,6 +395,19 @@ const mapImportEventToCheckActivityRows = (event) => {
 }
 
 /**
+ * @param {ImportEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapImportManualEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return [{
+    activityLabel: 'Record imported',
+    ...dateAndTeamMemberData
+  }]
+}
+
+/**
  * @param {CreatedEvent} event
  * @returns {ActivityRow[]}
  */
@@ -438,6 +451,10 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapImportEventToCheckActivityRows(event))
     }
 
+    if (event.type === 'uk.gov.defra.ddi.event.import.manual') {
+      addedRows.push(...mapImportManualEventToCheckActivityRows(event))
+    }
+
     if (event.type === 'uk.gov.defra.ddi.event.certificate.issued') {
       addedRows.push(...mapCertificateEventToCheckActivityRows(event))
     }
@@ -456,5 +473,6 @@ module.exports = {
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
+  mapImportManualEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows
 }
