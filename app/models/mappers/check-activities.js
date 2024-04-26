@@ -388,19 +388,23 @@ const mapCreatedEventToCheckActivityRows = (event) => {
 const mapImportEventToCheckActivityRows = (event) => {
   const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
 
-  if (event.type === 'uk.gov.defra.ddi.event.import') {
-    return [{
-      activityLabel: `Comments made by index users: ${event.added?.comment}`,
-      ...dateAndTeamMemberData
-    }]
-  }
+  return [{
+    activityLabel: `Comments made by index users: ${event.added?.comment}`,
+    ...dateAndTeamMemberData
+  }]
+}
 
-  if (event.type === 'uk.gov.defra.ddi.event.import.manual') {
-    return [{
-      activityLabel: 'Record imported',
-      ...dateAndTeamMemberData
-    }]
-  }
+/**
+ * @param {ImportEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapImportManualEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return [{
+    activityLabel: 'Record imported',
+    ...dateAndTeamMemberData
+  }]
 }
 
 /**
@@ -443,8 +447,12 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapCreatedEventToCheckActivityRows(event))
     }
 
-    if (event.type.indexOf('uk.gov.defra.ddi.event.import') === 0) {
+    if (event.type === 'uk.gov.defra.ddi.event.import') {
       addedRows.push(...mapImportEventToCheckActivityRows(event))
+    }
+
+    if (event.type === 'uk.gov.defra.ddi.event.import.manual') {
+      addedRows.push(...mapImportManualEventToCheckActivityRows(event))
     }
 
     if (event.type === 'uk.gov.defra.ddi.event.certificate.issued') {
@@ -465,5 +473,6 @@ module.exports = {
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
+  mapImportManualEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows
 }
