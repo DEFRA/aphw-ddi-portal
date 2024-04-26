@@ -455,5 +455,6 @@ module.exports = {
   flatMapActivityDtoToCheckActivityRow,
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
-  mapImportEventToCheckActivityRows
+  mapImportEventToCheckActivityRows,
+  mapCertificateEventToCheckActivityRows
 }

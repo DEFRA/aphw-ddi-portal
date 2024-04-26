@@ -7,7 +7,8 @@ const {
   getActivityLabelFromEvent,
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
-  mapImportEventToCheckActivityRows
+  mapImportEventToCheckActivityRows,
+  mapCertificateEventToCheckActivityRows
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -696,12 +697,44 @@ describe('Check Activity Mappers', () => {
     })
   })
 
+  describe('mapCertificateEventToCheckActivityRows', () => {
+    test('should map a certificate event', () => {
+      const certificateEvent = createdEventBuilder({
+        type: 'uk.gov.defra.ddi.event.certificate.issued',
+        timestamp: '2024-02-14T08:24:22.487Z',
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'Developer'
+        }
+      })
+      const expectedRows = [
+        {
+          date: '14 February 2024',
+          activityLabel: 'Certificate issued',
+          teamMember: 'Developer'
+        }
+      ]
+      expect(mapCertificateEventToCheckActivityRows(certificateEvent)).toEqual(expectedRows)
+    })
+  })
+
   describe('flatMapActivityDtoToCheckActivityRow', () => {
     test('should filter and flat map a selection of different events', () => {
       /**
        * @type {DDIEvent[]}
        */
       const items = [
+        {
+          operation: 'certificate issued',
+          actioningUser: {
+            username: 'import-user',
+            displayname: 'Import user'
+          },
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.certificate.issued',
+          rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161935',
+          subject: 'DDI Certificate Issued'
+        },
         {
           added: {
             id: 2,
@@ -788,6 +821,11 @@ describe('Check Activity Mappers', () => {
        * @type {ActivityRow[]}
        */
       const expectedActivityRows = [
+        {
+          date: '13 February 2024',
+          activityLabel: 'Certificate issued',
+          teamMember: 'Import user'
+        },
         {
           date: '22 February 2010',
           activityLabel: 'Comments made by index users: Comment text',
