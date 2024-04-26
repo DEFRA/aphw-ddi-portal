@@ -81,6 +81,7 @@ const summaryCdoMapper = (summaryCdo) => {
  * @typedef CdoFilter
  * @property {CdoStatusShort[]} [status]
  * @property {number} [dueWithin]
+ * @property {boolean} [nonComplianceLetterSent]
  */
 /**
  * @typedef CdoSort
@@ -103,6 +104,10 @@ const getSummaryCdos = async (filter, sort = {}) => {
 
   if (filter.dueWithin) {
     searchParams.set('withinDays', filter.dueWithin.toString())
+  }
+
+  if (filter.nonComplianceLetterSent !== undefined) {
+    searchParams.set('nonComplianceLetterSent', filter.nonComplianceLetterSent.toString())
   }
 
   if (sort.column) {
@@ -151,10 +156,23 @@ const getInterimExemptions = async (sort = {}) => {
   return getSummaryCdos(filter, interimSort)
 }
 
+/**
+ * @param {CdoSort} [sort]
+ * @return {Promise<SummaryCdo[]>}
+ */
+const getExpiredCdos = async (sort = {}) => {
+  /**
+   * @type {CdoFilter}
+   */
+  const filter = { status: ['Failed'], nonComplianceLetterSent: false }
+  return getSummaryCdos(filter, sort)
+}
+
 module.exports = {
   summaryCdoMapper,
   getSummaryCdos,
   getLiveCdos,
   getLiveCdosWithinMonth,
-  getInterimExemptions
+  getInterimExemptions,
+  getExpiredCdos
 }
