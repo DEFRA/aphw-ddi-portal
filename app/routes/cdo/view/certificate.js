@@ -6,6 +6,7 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { downloadCertificate } = require('../../../storage/repos/certificate')
 const { sendMessage } = require('../../../messaging/outbound/certificate-request')
+const getUser = require('../../../auth/get-user')
 
 module.exports = [
   {
@@ -46,7 +47,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const certificateId = await sendMessage(cdo)
+        const certificateId = await sendMessage(cdo, getUser(request))
 
         try {
           const cert = await downloadCertificate(request.payload.indexNumber, certificateId)

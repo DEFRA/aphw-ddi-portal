@@ -4,6 +4,9 @@ describe('View certificate', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
+  jest.mock('../../../../../../app/auth/get-user')
+  const getUser = require('../../../../../../app/auth/get-user')
+
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
@@ -12,18 +15,22 @@ describe('View certificate', () => {
   jest.mock('../../../../../../app/storage/repos/certificate')
   const { downloadCertificate } = require('../../../../../../app/storage/repos/certificate')
 
+  jest.mock('../../../../../../app/messaging/outbound/certificate-request')
+  const { sendMessage } = require('../../../../../../app/messaging/outbound/certificate-request')
+
   const createServer = require('../../../../../../app/server')
   let server
 
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
 
   const user = {
-    userId: '1',
-    username: 'test@example.com'
+    displayname: 'Dev User',
+    username: 'dev@example.com'
   }
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    getUser.mockReturnValue(user)
 
     server = await createServer()
     await server.initialize()
@@ -60,6 +67,7 @@ describe('View certificate', () => {
   test('POST /cdo/view/certificate route returns 200', async () => {
     getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
     downloadCertificate.mockResolvedValue('certificate')
+    sendMessage.mockResolvedValue(12345)
 
     const options = {
       method: 'POST',
@@ -79,6 +87,7 @@ describe('View certificate', () => {
   test('POST /cdo/view/certificate route returns 404 when certificate not found', async () => {
     getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
     downloadCertificate.mockRejectedValue({ type: 'CertificateNotFound' })
+    sendMessage.mockResolvedValue(12345)
 
     const options = {
       method: 'POST',
