@@ -121,26 +121,22 @@ function ViewModel (resultList, tab, sort, backNav) {
     {
       label: tab === 'interim' ? 'Interim exempt for' : 'CDO expiry',
       link: columnLink(tab, sort, undefined),
-      ariaSort: getAriaSort(tab, sort, undefined),
-      sortActive: 'ASC'
+      ariaSort: getAriaSort(tab, sort, undefined)
     },
     {
       label: 'Index number',
       link: columnLink(tab, sort, 'indexNumber'),
-      ariaSort: getAriaSort(tab, sort, 'indexNumber'),
-      sortActive: undefined
+      ariaSort: getAriaSort(tab, sort, 'indexNumber')
     },
     {
       label: 'Owner',
       link: columnLink(tab, sort, 'owner'),
-      ariaSort: getAriaSort(tab, sort, 'owner'),
-      sortActive: undefined
+      ariaSort: getAriaSort(tab, sort, 'owner')
     },
     {
       label: 'Police force',
       link: columnLink(tab, sort, 'policeForce'),
-      ariaSort: getAriaSort(tab, sort, 'policeForce'),
-      sortActive: undefined
+      ariaSort: getAriaSort(tab, sort, 'policeForce')
     }
   ]
 
