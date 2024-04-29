@@ -12,22 +12,55 @@ const baseMap = {
  *  column: 'joinedExemptionScheme'
  *  order: 'ASC'|'DESC'
  * }} sort
+ * @param {string} column
+ * @return {string}
+ */
+const getAriaSort = (tab, sort, column) => {
+  let calculatedColumn = column
+
+  if (column === undefined) {
+    calculatedColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
+  }
+
+  if (calculatedColumn === sort.column && sort.order === 'DESC') {
+    return 'descending'
+  }
+
+  if (calculatedColumn === sort.column) {
+    return 'ascending'
+  }
+
+  return 'none'
+}
+/**
+ * @param {'live', 'expired', 'due', 'interim'} tab
+ * @param {{
+ *  column: 'joinedExemptionScheme'
+ *  order: 'ASC'|'DESC'
+ * }} sort
+ * @param {string} column
+ * @return {string}
  */
 const columnLink = (tab, sort, column) => {
   const base = baseMap[tab]
   const queryParams = new URLSearchParams()
+  let calculatedColumn = column
 
-  if (column !== 'cdoExpiry' && column !== 'joinedExemptionScheme') {
-    queryParams.set('sortKey', column)
+  if (column === undefined) {
+    calculatedColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
   }
 
-  if (column === sort.column && sort.order === 'ASC') {
+  if (calculatedColumn !== 'cdoExpiry' && calculatedColumn !== 'joinedExemptionScheme') {
+    queryParams.set('sortKey', calculatedColumn)
+  }
+
+  if (calculatedColumn === sort.column && sort.order === 'ASC') {
     queryParams.set('sortOrder', 'DESC')
   }
 
   const queryParamsStr = queryParams.toString()
   const queryParamStrWithQM = queryParamsStr.length ? `?${queryParamsStr}` : ''
-  console.log('~~~~~~ Chris Debug ~~~~~~ b', 'Base, queryParamStrWithQM', base, queryParamStrWithQM)
+
   return base + queryParamStrWithQM
 }
 /**
@@ -87,22 +120,26 @@ function ViewModel (resultList, tab, sort, backNav) {
   const tableHeadings = [
     {
       label: tab === 'interim' ? 'Interim exempt for' : 'CDO expiry',
-      link: columnLink(tab, sort, tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'),
+      link: columnLink(tab, sort, undefined),
+      ariaSort: getAriaSort(tab, sort, tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'),
       sortActive: 'ASC'
     },
     {
       label: 'Index number',
       link: columnLink(tab, sort, 'indexNumber'),
+      ariaSort: getAriaSort(tab, sort, 'indexNumber'),
       sortActive: undefined
     },
     {
       label: 'Owner',
       link: columnLink(tab, sort, 'owner'),
+      ariaSort: getAriaSort(tab, sort, 'owner'),
       sortActive: undefined
     },
     {
       label: 'Police force',
       link: columnLink(tab, sort, 'policeForce'),
+      ariaSort: getAriaSort(tab, sort, 'policeForce'),
       sortActive: undefined
     }
   ]
