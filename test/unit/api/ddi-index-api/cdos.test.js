@@ -251,7 +251,7 @@ describe('CDO API endpoints', () => {
   })
 
   describe('getInterimExemptions', () => {
-    test('should get interim exemptions', async () => {
+    test('should get interim exemptions defaulting to ASC', async () => {
       get.mockResolvedValue({
         cdos: [
           {
@@ -281,12 +281,25 @@ describe('CDO API endpoints', () => {
       expect(results).toEqual(expect.any(Array))
     })
 
-    test('should get interim exemptions descending by joinedExemptionScheme', async () => {
+    test('should get interim exemptions ascending by joinedExemptionScheme when called with descending', async () => {
       get.mockResolvedValue({
         cdos: []
       })
       const sort = {
         order: 'DESC'
+      }
+
+      const results = await cdos.getInterimExemptions(sort)
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+      expect(results).toEqual(expect.any(Array))
+    })
+
+    test('should get interim exemptions descending by joinedExemptionScheme when called with ascending', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+      const sort = {
+        order: 'ASC'
       }
 
       const results = await cdos.getInterimExemptions(sort)
