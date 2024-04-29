@@ -21,8 +21,17 @@ module.exports = [
       handler: async (request, h) => {
         const backNav = addBackNavigation(request)
         const tab = request.params.tab
-        const defaultColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
-        const order = request.query.sortOrder
+        let defaultOrder
+
+        const defaultColumn = tab === 'interim' ? 'interimExemptFor' : 'cdoExpiry'
+
+        if (request.query.sortKey === undefined && tab === 'interim') {
+          defaultOrder = 'DESC'
+        } else {
+          defaultOrder = 'ASC'
+        }
+
+        const order = request.query.sortOrder ?? defaultOrder
         const column = request.query.sortKey ?? defaultColumn
 
         const sort = {

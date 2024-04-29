@@ -41,6 +41,8 @@ describe('Manage CDOs', () => {
         ['indexNumber', 'DESC'],
         ['joinedExemptionScheme', 'ASC'],
         ['joinedExemptionScheme', 'DESC'],
+        ['interimExemptFor', 'ASC'],
+        ['interimExemptFor', 'DESC'],
         ['cdoExpiry', 'ASC'],
         ['cdoExpiry', 'DESC'],
         ['owner', 'ASC'],
@@ -74,8 +76,7 @@ describe('Manage CDOs', () => {
       const { value, error } = manageCdosQueryschema.validate(params)
 
       expect(value).toMatchObject({
-        sortKey,
-        sortOrder: 'ASC'
+        sortKey
       })
       expect(error).toBeUndefined()
     })
@@ -85,9 +86,7 @@ describe('Manage CDOs', () => {
 
       const { value, error } = manageCdosQueryschema.validate(params)
 
-      expect(value).toMatchObject({
-        sortOrder: 'ASC'
-      })
+      expect(value).toMatchObject({})
       expect(error).toBeUndefined()
     })
 

@@ -273,8 +273,8 @@ describe('Manage Live Cdos test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
     expect(getInterimExemptions).toHaveBeenCalledWith({
-      column: 'joinedExemptionScheme',
-      order: 'ASC'
+      column: 'interimExemptFor',
+      order: 'DESC'
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage interim exemptions')
@@ -287,8 +287,8 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/cdo/manage')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('Interim exempt for')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
-    expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim?sortOrder=DESC')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('descending')
+    expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim?sortOrder=ASC')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
     expect(document.querySelectorAll('.govuk-table thead th a')[1].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=indexNumber')
     expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('none')
@@ -306,6 +306,26 @@ describe('Manage Live Cdos test', () => {
     expect(cols[1].querySelector('.govuk-link').getAttribute('href')).toContain('/cdo/view/dog-details/ED20001')
     expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')
     expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
+  })
+
+  test('GET /cdo/manage/interim?sortOrder=ASC route returns 200', async () => {
+    getInterimExemptions.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/interim?sortOrder=ASC',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getInterimExemptions).toHaveBeenCalledWith({
+      column: 'interimExemptFor',
+      order: 'ASC'
+    })
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim')
   })
 
   test('GET /cdo/manage/interim?sortKey=indexNumber route returns 200', async () => {

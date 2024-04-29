@@ -19,7 +19,7 @@ const getAriaSort = (tab, sort, column) => {
   let calculatedColumn = column
 
   if (column === undefined) {
-    calculatedColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
+    calculatedColumn = tab === 'interim' ? 'interimExemptFor' : 'cdoExpiry'
   }
 
   if (calculatedColumn === sort.column && sort.order === 'DESC') {
@@ -47,15 +47,17 @@ const columnLink = (tab, sort, column) => {
   let calculatedColumn = column
 
   if (column === undefined) {
-    calculatedColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
+    calculatedColumn = tab === 'interim' ? 'interimExemptFor' : 'cdoExpiry'
   }
 
-  if (calculatedColumn !== 'cdoExpiry' && calculatedColumn !== 'joinedExemptionScheme') {
+  const defaultSortOrder = calculatedColumn === 'interimExemptFor' ? ['DESC', 'ASC'] : ['ASC', 'DESC']
+
+  if (calculatedColumn !== 'cdoExpiry' && calculatedColumn !== 'interimExemptFor') {
     queryParams.set('sortKey', calculatedColumn)
   }
 
-  if (calculatedColumn === sort.column && sort.order === 'ASC') {
-    queryParams.set('sortOrder', 'DESC')
+  if (calculatedColumn === sort.column && sort.order === defaultSortOrder[0]) {
+    queryParams.set('sortOrder', defaultSortOrder[1])
   }
 
   const queryParamsStr = queryParams.toString()
