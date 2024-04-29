@@ -62,7 +62,7 @@
           <tr class="govuk-table__row">
             {% for colHeading in model.tableHeadings %}
               <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="{{colHeading.ariaSort}}">
-                <a class="govuk-link govuk-link--no-visited-state" href="{{colHeading.link}}">
+                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
                   {{colHeading.label}}
                 </a>
               </th>
