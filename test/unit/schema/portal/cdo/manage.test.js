@@ -80,13 +80,12 @@ describe('Manage CDOs', () => {
       expect(error).toBeUndefined()
     })
 
-    test('should default to cdoExpiry, ASC', () => {
+    test('should default to undefined, ASC', () => {
       const params = {}
 
       const { value, error } = manageCdosGetschema.validate(params)
 
       expect(value).toMatchObject({
-        sortKey: 'cdoExpiry',
         sortOrder: 'ASC'
       })
       expect(error).toBeUndefined()
