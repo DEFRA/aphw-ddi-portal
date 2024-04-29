@@ -1,4 +1,4 @@
-const { manageCdosGetschema } = require('../../../../../app/schema/portal/cdo/manage')
+const { manageCdosGetschema, manageCdosQueryschema } = require('../../../../../app/schema/portal/cdo/manage')
 
 describe('Manage CDOs', () => {
   describe('Manage CDOs tab navigation', () => {
@@ -51,7 +51,7 @@ describe('Manage CDOs', () => {
     )('should pass validation when sort key is %s and order is %s', (sortKey, sortOrder) => {
       const params = { sortKey, sortOrder }
 
-      const { value, error } = manageCdosGetschema.validate(params)
+      const { value, error } = manageCdosQueryschema.validate(params)
 
       expect(value).toMatchObject({
         sortKey,
@@ -71,7 +71,7 @@ describe('Manage CDOs', () => {
     )('should pass validation when sort key is %s and order is undefined', (sortKey) => {
       const params = { sortKey }
 
-      const { value, error } = manageCdosGetschema.validate(params)
+      const { value, error } = manageCdosQueryschema.validate(params)
 
       expect(value).toMatchObject({
         sortKey,
@@ -83,7 +83,7 @@ describe('Manage CDOs', () => {
     test('should default to undefined, ASC', () => {
       const params = {}
 
-      const { value, error } = manageCdosGetschema.validate(params)
+      const { value, error } = manageCdosQueryschema.validate(params)
 
       expect(value).toMatchObject({
         sortOrder: 'ASC'
@@ -94,7 +94,7 @@ describe('Manage CDOs', () => {
     test('should not validate if sort key is invalid', () => {
       const params = { sortKey: 'unknown' }
 
-      const { error } = manageCdosGetschema.validate(params)
+      const { error } = manageCdosQueryschema.validate(params)
 
       expect(error).not.toBeUndefined()
     })
@@ -102,7 +102,7 @@ describe('Manage CDOs', () => {
     test('should not validate if sort order is invalid', () => {
       const params = { sortKey: 'owner', sortOrder: 'ASCENDING' }
 
-      const { error } = manageCdosGetschema.validate(params)
+      const { error } = manageCdosQueryschema.validate(params)
 
       expect(error).not.toBeUndefined()
     })
