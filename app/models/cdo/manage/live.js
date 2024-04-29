@@ -1,5 +1,35 @@
 const constants = require('../../../constants/cdo')
 
+const baseMap = {
+  live: constants.routes.manage.get,
+  expired: constants.routes.manageExpired.get,
+  due: constants.routes.manageDue.get,
+  interim: constants.routes.manageInterim.get
+}
+/**
+ * @param {'live', 'expired', 'due', 'interim'} tab
+ * @param {{
+ *  column: 'joinedExemptionScheme'
+ *  order: 'ASC'|'DESC'
+ * }} sort
+ */
+const columnLink = (tab, sort, column) => {
+  const base = baseMap[tab]
+  const queryParams = new URLSearchParams()
+
+  if (column !== 'cdoExpiry' && column !== 'joinedExemptionScheme') {
+    queryParams.set('sortKey', column)
+  }
+
+  if (column === sort.column && sort.order === 'ASC') {
+    queryParams.set('sortOrder', 'DESC')
+  }
+
+  const queryParamsStr = queryParams.toString()
+  const queryParamStrWithQM = queryParamsStr.length ? `?${queryParamsStr}` : ''
+  console.log('~~~~~~ Chris Debug ~~~~~~ b', 'Base, queryParamStrWithQM', base, queryParamStrWithQM)
+  return base + queryParamStrWithQM
+}
 /**
  * @param {SummaryCdo[]} resultList
  * @param {string} tab
@@ -54,6 +84,29 @@ function ViewModel (resultList, tab, sort, backNav) {
     })
   }
 
+  const tableHeadings = [
+    {
+      label: tab === 'interim' ? 'Interim exempt for' : 'CDO expiry',
+      link: columnLink(tab, sort, tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'),
+      sortActive: 'ASC'
+    },
+    {
+      label: 'Index number',
+      link: columnLink(tab, sort, 'indexNumber'),
+      sortActive: undefined
+    },
+    {
+      label: 'Owner',
+      link: columnLink(tab, sort, 'owner'),
+      sortActive: undefined
+    },
+    {
+      label: 'Police force',
+      link: columnLink(tab, sort, 'policeForce'),
+      sortActive: undefined
+    }
+  ]
+
   this.model = {
     title,
     breadcrumbs,
@@ -61,6 +114,7 @@ function ViewModel (resultList, tab, sort, backNav) {
     secondaryBtn,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
+    tableHeadings,
     tab,
     tabs,
     sort: {

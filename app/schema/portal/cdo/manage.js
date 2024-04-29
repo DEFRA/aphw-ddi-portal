@@ -6,7 +6,7 @@ const manageCdosGetschema = Joi.object({
 
 const manageCdosQueryschema = Joi.object({
   sortOrder: Joi.string().valid('ASC', 'DESC').default('ASC'),
-  sortKey: Joi.string().valid('indexNumber', 'cdoExpiry', 'owner', 'policeForce', 'interimExempt')
+  sortKey: Joi.string().valid('indexNumber', 'cdoExpiry', 'owner', 'policeForce', 'joinedExemptionScheme')
 })
 
 module.exports = {

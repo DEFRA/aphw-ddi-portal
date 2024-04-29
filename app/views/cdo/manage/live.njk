@@ -60,14 +60,9 @@
         <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            {% if model.tab == 'interim' %}
-              <th scope="col" class="govuk-table__header govuk-input--width-10">Interim exempt for</th>
-            {% else %}
-              <th scope="col" class="govuk-table__header govuk-input--width-10">CDO expiry</th>
-            {% endif %}
-            <th scope="col" class="govuk-table__header govuk-input--width-10">Index number</th>
-            <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Owner</th>
-            <th scope="col" class="govuk-table__header govuk-!-width-one-third">Police force</th>
+            {% for colHeading in model.tableHeadings %}
+              <th scope="col" class="govuk-table__header govuk-input--width-10"><a class="govuk-link govuk-link--no-visited-state" href="{{colHeading.link}}">{{colHeading.label}}</a></th>
+            {% endfor %}
           </tr>
         </thead>
         <tbody class="govuk-table__body">

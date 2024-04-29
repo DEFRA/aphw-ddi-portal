@@ -39,8 +39,8 @@ describe('Manage CDOs', () => {
       [
         ['indexNumber', 'ASC'],
         ['indexNumber', 'DESC'],
-        ['interimExempt', 'ASC'],
-        ['interimExempt', 'DESC'],
+        ['joinedExemptionScheme', 'ASC'],
+        ['joinedExemptionScheme', 'DESC'],
         ['cdoExpiry', 'ASC'],
         ['cdoExpiry', 'DESC'],
         ['owner', 'ASC'],
@@ -63,7 +63,7 @@ describe('Manage CDOs', () => {
     test.each(
       [
         ['indexNumber'],
-        ['interimExempt'],
+        ['joinedExemptionScheme'],
         ['cdoExpiry'],
         ['owner'],
         ['policeForce']
