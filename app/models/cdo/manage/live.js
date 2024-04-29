@@ -121,7 +121,7 @@ function ViewModel (resultList, tab, sort, backNav) {
     {
       label: tab === 'interim' ? 'Interim exempt for' : 'CDO expiry',
       link: columnLink(tab, sort, undefined),
-      ariaSort: getAriaSort(tab, sort, tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'),
+      ariaSort: getAriaSort(tab, sort, undefined),
       sortActive: 'ASC'
     },
     {
