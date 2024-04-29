@@ -85,6 +85,57 @@ describe('Manage Live Cdos test', () => {
     expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
   })
 
+  test('GET /cdo/manage?sortKey=owner route returns 200', async () => {
+    getLiveCdos.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage?sortKey=owner',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getLiveCdos).toHaveBeenCalledWith({
+      column: 'owner',
+      order: 'ASC'
+    })
+  })
+
+  test('GET /cdo/manage?sortKey=owner&sortOrder=ASC route returns 200', async () => {
+    getLiveCdos.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage?sortKey=owner&sortOrder=DESC',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getLiveCdos).toHaveBeenCalledWith({
+      column: 'owner',
+      order: 'DESC'
+    })
+  })
+
+  test('GET /cdo/manage?sortKey=owner&sortOrder=DESC route returns 200', async () => {
+    getLiveCdos.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage?sortKey=owner&sortOrder=DESC',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getLiveCdos).toHaveBeenCalledWith({
+      column: 'owner',
+      order: 'DESC'
+    })
+  })
+
   test('GET /cdo/manage/due route returns 200', async () => {
     getLiveCdosWithinMonth.mockResolvedValue([
       {
@@ -206,6 +257,40 @@ describe('Manage Live Cdos test', () => {
     expect(cols[1].querySelector('.govuk-link').getAttribute('href')).toContain('/cdo/view/dog-details/ED20001')
     expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')
     expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
+  })
+
+  test('GET /cdo/manage/interim?sortKey=indexNumber route returns 200', async () => {
+    getInterimExemptions.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/interim?sortKey=indexNumber',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getInterimExemptions).toHaveBeenCalledWith({
+      column: 'indexNumber',
+      order: 'ASC'
+    })
+  })
+
+  test('GET /cdo/manage/interim?sortKey=indexNumber&sortOrder=DESC route returns 200', async () => {
+    getInterimExemptions.mockResolvedValue([])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/interim?sortKey=indexNumber&sortOrder=DESC',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getInterimExemptions).toHaveBeenCalledWith({
+      column: 'indexNumber',
+      order: 'DESC'
+    })
   })
 
   test('GET /cdo/manage/expired route returns 200', async () => {

@@ -3,7 +3,7 @@ const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const ViewModel = require('../../../models/cdo/manage/live')
 const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions, getExpiredCdos } = require('../../../api/ddi-index-api/cdos')
-const { manageCdosGetschema } = require('../../../schema/portal/cdo/manage')
+const { manageCdosGetschema, manageCdosQueryschema } = require('../../../schema/portal/cdo/manage')
 
 module.exports = [
   {
@@ -13,6 +13,7 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       validate: {
         params: manageCdosGetschema,
+        query: manageCdosQueryschema,
         failAction: async (_, h) => {
           return h.response().code(404).takeover()
         }
@@ -20,11 +21,13 @@ module.exports = [
       handler: async (request, h) => {
         const backNav = addBackNavigation(request)
         const tab = request.params.tab
-        const column = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
+        const defaultColumn = tab === 'interim' ? 'joinedExemptionScheme' : 'cdoExpiry'
+        const order = request.query.sortOrder
+        const column = request.query.sortKey ?? defaultColumn
 
         const sort = {
           column,
-          order: 'ASC'
+          order
         }
 
         let dogRecords
