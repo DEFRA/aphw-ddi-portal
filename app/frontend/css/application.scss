@@ -251,6 +251,57 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     margin-bottom: 0px !important;
     line-height: 1.25 !important;
   }
+
+  &-sortable-table {
+
+    th[aria-sort="none"] a,
+    th[aria-sort="ascending"] a,
+    th[aria-sort="descending"] a {
+      position: relative;
+    }
+
+    th[aria-sort="none"] a {
+
+      &::before {
+        content: " ▼";
+        position: absolute;
+        right: -9px;
+        top: 9px;
+        font-size: .5em;
+      }
+
+      &::after {
+        content: " ▲";
+        position: absolute;
+        right: -9px;
+        top: 1px;
+        font-size: .5em;
+      }
+    }
+
+    th[aria-sort="ascending"] a {
+
+      &::after {
+        content: " ▲";
+        font-size: .8em;
+        position: absolute;
+        right: -13px;
+        top: 2px;
+      }
+
+    }
+
+    th[aria-sort="descending"] a {
+
+      &::after {
+        content: " ▼";
+        font-size: .8em;
+        position: absolute;
+        right: -13px;
+        top: 2px;
+      }
+    }
+  }
 }
 
 

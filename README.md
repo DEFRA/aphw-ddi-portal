@@ -89,6 +89,11 @@ process.env.OS_PLACES_API_KEY = 'some-api-key'
 process.env.POLICE_API_BASE_URL = 'http://localhost/police'
 ```
 
+alternatively, you could add `--setupFilesAfterEnv=<rootDir>/jest.setup.single.js` to your jest arguments:
+
+```
+npm run test <path>/<filename> --setupFilesAfterEnv=<rootDir>/jest.setup.single.js
+```
 
 ## Pact Broker
 

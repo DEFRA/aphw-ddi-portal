@@ -137,16 +137,32 @@ const getLiveCdosWithinMonth = async (sort = {}) => {
 }
 
 /**
- * @param {CdoSort} [sort]
+ * getInterimExemptions
+ *
+ * We need to swap around the sort order as the api sorts on joinedExemptionScheme
+ * while the UI sorts on 'interimExemptFor'
+ *
+ * @param {CdoSort} [interimExemptForSort]
  * @return {Promise<SummaryCdo[]>}
  */
-const getInterimExemptions = async (sort = {}) => {
+const getInterimExemptions = async (interimExemptForSort = {}) => {
+  /**
+   * @type {Partial<CdoSort>}
+   */
+  let sortOptions = {}
+
+  if (interimExemptForSort.column !== 'interimExemptFor' && interimExemptForSort.column !== undefined) {
+    sortOptions = interimExemptForSort
+  } else if (interimExemptForSort.order === 'ASC') {
+    sortOptions = { order: 'DESC' }
+  }
+
   /**
    * @type {CdoSort}
    */
   const interimSort = {
     column: 'joinedExemptionScheme',
-    ...sort
+    ...sortOptions
   }
 
   /**
