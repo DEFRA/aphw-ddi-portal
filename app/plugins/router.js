@@ -50,6 +50,7 @@ const routes = [].concat(
   require('../routes/admin/index'),
   require('../routes/admin/regular-jobs'),
   require('../routes/admin/pseudonyms'),
+  require('../routes/admin/courts'),
   require('../routes/admin/process-comments')
 )
 

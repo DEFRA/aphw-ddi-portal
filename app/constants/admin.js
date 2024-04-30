@@ -3,6 +3,9 @@ const constants = {
     index: {
       get: '/admin/index'
     },
+    courts: {
+      get: '/admin/courts'
+    },
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -18,7 +21,9 @@ const constants = {
     index: 'admin/index',
     regularJobs: 'admin/regular-jobs',
     pseudonyms: 'admin/pseudonyms',
-    processComments: 'admin/process-comments'
+    processComments: 'admin/process-comments',
+    courts: 'admin/courts',
+    addOrRemove: 'common/addOrRemove'
   },
   keys: {
   }
