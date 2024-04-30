@@ -68,6 +68,27 @@ describe('Add dog details', () => {
       expect(actions[0].attributes.href.textContent).toBe('/cdo/create/microchip-search/1')
     })
 
+    test('route forwards to application-type if single dog that is existing dog', async () => {
+      getDogs.mockReturnValue([{
+        breed: 'Breed 1',
+        name: 'Bruce',
+        indexNumber: 'ED123',
+        cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z'),
+        cdoExpiry: new UTCDate('2020-12-10T00:00:00.000Z')
+      }])
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/create/confirm-dog-details',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toContain('/cdo/create/application-type')
+    })
+
     test('route renders multple dogs', async () => {
       getDogs.mockReturnValue([{
         breed: 'Breed 1',

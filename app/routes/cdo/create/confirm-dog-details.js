@@ -15,6 +15,10 @@ module.exports = [
       handler: async (request, h) => {
         const dogs = getDogs(request)
 
+        if (dogs?.length === 1 && dogs[0].indexNumber) {
+          return h.redirect(dogRoutes.applicationType.get)
+        }
+
         return h.view(views.confirm, new ViewModel(dogs))
       }
     }
