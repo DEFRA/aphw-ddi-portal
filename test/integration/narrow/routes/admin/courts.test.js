@@ -33,7 +33,8 @@ describe('Courts page', () => {
 
     expect(response.statusCode).toBe(200)
     expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
-    // expect(document.querySelector('#main-content').textContent.trim()).toContain('Manage Index lists')
+    expect(document.querySelectorAll('.govuk-radios__input')[0].textContent.trim()).toContain('Add')
+    expect(document.querySelectorAll('.govuk-radios__input')[0].textContent.trim()).toContain('Remove')
     // expect(document.querySelector('#main-content').textContent.trim()).toContain('Courts')
   })
 })
