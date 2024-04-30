@@ -1,7 +1,7 @@
 jest.mock('../../../../app/api/ddi-index-api/base')
-const { post } = require('../../../../app/api/ddi-index-api/base')
+const { post, callDelete } = require('../../../../app/api/ddi-index-api/base')
 
-const { addCourt } = require('../../../../app/api/ddi-index-api/courts')
+const { addCourt, removeCourt } = require('../../../../app/api/ddi-index-api/courts')
 const { user } = require('../../../mocks/auth')
 
 describe('DDI API courts', () => {
@@ -25,6 +25,18 @@ describe('DDI API courts', () => {
       const createdCourt = await addCourt(court, user)
       expect(createdCourt).toEqual(expectedCourt)
       expect(post).toHaveBeenCalledWith('courts', court, user)
+    })
+  })
+
+  describe('removeCourt', () => {
+    test('should create a new court', async () => {
+      const courtId = 29
+
+      callDelete.mockResolvedValue()
+
+      await removeCourt(courtId, user)
+
+      expect(callDelete).toHaveBeenCalledWith('courts/29', user)
     })
   })
 })

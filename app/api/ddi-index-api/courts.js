@@ -1,4 +1,4 @@
-const { get, post } = require('./base')
+const { get, post, callDelete } = require('./base')
 
 const courtsEndpoint = 'courts'
 
@@ -41,7 +41,12 @@ const addCourt = async (court, user) => {
   return payload
 }
 
+const removeCourt = async (courtId, user) => {
+  await callDelete(`${courtsEndpoint}/${courtId}`, user)
+}
+
 module.exports = {
   getCourts,
+  removeCourt,
   addCourt
 }
