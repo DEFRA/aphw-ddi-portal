@@ -4,7 +4,16 @@ const constants = {
       get: '/admin/index'
     },
     courts: {
-      get: '/admin/courts'
+      get: '/admin/courts',
+      post: '/admin/courts'
+    },
+    addCourt: {
+      get: '/admin/courts/add',
+      post: '/admin/courts/add'
+    },
+    removeCourt: {
+      get: '/admin/courts/remove',
+      post: '/admin/courts/remove'
     },
     regularJobs: {
       get: '/admin/regular-jobs'

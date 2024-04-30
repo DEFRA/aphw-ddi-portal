@@ -3,25 +3,25 @@ describe('doYouWant', () => {
   describe('douYouWantPayloadSchema', () => {
     test('should validate given option is add', () => {
       const payload = {
-        addRemoveCourt: 'add'
+        addOrRemove: 'add'
       }
 
       const value = validatePayload(payload)
 
       expect(value).toMatchObject({
-        addRemoveCourt: 'add'
+        addOrRemove: 'add'
       })
     })
 
     test('should validate given option is remove', () => {
       const payload = {
-        addRemoveCourt: 'remove'
+        addOrRemove: 'remove'
       }
 
       const value = validatePayload(payload)
 
       expect(value).toMatchObject({
-        addRemoveCourt: 'remove'
+        addOrRemove: 'remove'
       })
     })
 
@@ -31,9 +31,9 @@ describe('doYouWant', () => {
       expect(() => validatePayload(payload)).toThrow()
     })
 
-    test('should not validate given addRemoveCourt is invalid', () => {
+    test('should not validate given addOrRemove is invalid', () => {
       const payload = {
-        addRemoveCourt: 'yes'
+        addOrRemove: 'yes'
       }
 
       expect(() => validatePayload(payload)).toThrow('Select an option')

@@ -1,7 +1,7 @@
 const Joi = require('joi')
 
 const validateDoYouWantSchema = Joi.object({
-  addRemoveCourt: Joi.string().valid('add', 'remove').required().messages({
+  addOrRemove: Joi.string().valid('add', 'remove').required().messages({
     '*': 'Select an option'
   })
 })

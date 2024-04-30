@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const FormData = require('form-data')
 
 describe('Courts page', () => {
   jest.mock('../../../../../app/auth')
@@ -33,8 +34,69 @@ describe('Courts page', () => {
 
     expect(response.statusCode).toBe(200)
     expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
-    expect(document.querySelectorAll('.govuk-radios__input')[0].textContent.trim()).toContain('Add')
-    expect(document.querySelectorAll('.govuk-radios__input')[0].textContent.trim()).toContain('Remove')
+    expect(document.querySelectorAll('.govuk-radios__label')[0].textContent.trim()).toContain('Add')
+    expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toContain('Remove')
     // expect(document.querySelector('#main-content').textContent.trim()).toContain('Courts')
+  })
+
+  test('POST /admin/courts add court route returns 200', async () => {
+    const options = {
+      method: 'POST',
+      url: '/admin/courts',
+      auth,
+      payload: {
+        addOrRemove: 'add'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/admin/courts/add')
+  })
+
+  test('POST /admin/courts remove court route returns 200', async () => {
+    const options = {
+      method: 'POST',
+      url: '/admin/courts',
+      auth,
+      payload: {
+        addOrRemove: 'remove'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/admin/courts/remove')
+  })
+
+  test('POST /admin/courts without an option returns 400', async () => {
+    const options = {
+      method: 'POST',
+      url: '/admin/courts',
+      auth,
+      payload: {}
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
+    expect(response.statusCode).toBe(400)
+  })
+
+  test('POST /admin/courts route returns 302 if not auth', async () => {
+    const fd = new FormData()
+
+    const options = {
+      method: 'POST',
+      url: '/admin/courts',
+      headers: fd.getHeaders(),
+      payload: fd.getBuffer()
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
   })
 })
