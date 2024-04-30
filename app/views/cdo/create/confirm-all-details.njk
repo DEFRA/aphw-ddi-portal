@@ -104,7 +104,7 @@
             <ul class="govuk-summary-card__actions">
               <li class="govuk-summary-card__action">
                 {% if dog.indexNumber %}
-                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/confirm-dog-details"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/select-existing-dog"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
                 {% else %}
                 <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/microchip-search/{{ dog.id }}"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
                 {% endif %}
