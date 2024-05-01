@@ -87,7 +87,7 @@ module.exports = [{
 const getOwnerDetailsWithClear = request => {
   const ownerDetails = getOwnerDetails(request)
 
-  if (!ownerDetails?.dateOfBirthEntered && request.query?.clear) {
+  if (!ownerDetails?.dateOfBirthEntered && request.query?.back) {
     ownerDetails.dateOfBirth = null
     ownerDetails['dateOfBirth-day'] = null
     ownerDetails['dateOfBirth-month'] = null

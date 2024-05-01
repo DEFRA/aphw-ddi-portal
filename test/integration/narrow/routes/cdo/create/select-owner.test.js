@@ -165,7 +165,7 @@ describe('OwnerResults test', () => {
   test('GET /cdo/create/select-owner route returns 200 and clears DOB if no DOB entered', async () => {
     const options = {
       method: 'GET',
-      url: '/cdo/create/select-owner?clear=true',
+      url: '/cdo/create/select-owner?back=true',
       auth
     }
 
@@ -188,7 +188,7 @@ describe('OwnerResults test', () => {
   test('GET /cdo/create/select-owner route returns 200 and doesnt clear DOB if DOB was entered', async () => {
     const options = {
       method: 'GET',
-      url: '/cdo/create/select-owner?clear=true',
+      url: '/cdo/create/select-owner?back=true',
       auth
     }
 
