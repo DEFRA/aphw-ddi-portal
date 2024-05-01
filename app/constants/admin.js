@@ -28,6 +28,7 @@ const constants = {
   },
   views: {
     index: 'admin/index',
+    confirm: 'common/confirm',
     regularJobs: 'admin/regular-jobs',
     pseudonyms: 'admin/pseudonyms',
     processComments: 'admin/process-comments',

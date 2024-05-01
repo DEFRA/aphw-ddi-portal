@@ -28,8 +28,7 @@ function ViewModel (details, backNav, errors) {
     id: details.recordType,
     name: details.recordType,
     value: details.recordValue ?? null,
-    autocomplete: forms.preventAutocomplete,
-    attributes: { maxlength: '8' }
+    autocomplete: forms.preventAutocomplete
   }
 
   this.model = {

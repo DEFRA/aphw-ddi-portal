@@ -1,12 +1,68 @@
-const { singleSubmitSchemaConfirm, singleSubmitSchema } = require('../../../../../app/schema/portal/common/single-submit')
+const { hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, isInputFieldInPayload, confirmFlowValidFields } = require('../../../../../app/schema/portal/common/single-submit')
 const { ValidationError } = require('joi')
 describe('singleSubmit', () => {
+  describe('validFields', () => {
+    test('should validate given correct fields are added', () => {
+      const requestPayload = {
+        court: 'Rivendell Magistrates Court',
+        confirm: 'Y',
+        confirmation: true
+      }
+      const courtSchema = confirmFlowValidFields('court')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toBeUndefined()
+    })
+
+    test('should not validate given additional fields are passed', () => {
+      const requestPayload = {
+        court: 'Rivendell Magistrates Court',
+        confirm: 'Y',
+        confirmation: true,
+        extraField: true
+      }
+      const courtSchema = confirmFlowValidFields('court')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).not.toBeUndefined()
+    })
+  })
+  describe('isConfirmationSchema', () => {
+    test('should validate if confirmation is true', () => {
+      const requestPayload = {
+        confirmation: 'true'
+      }
+      const { error, value } = hasConfirmationFormBeenSubmitted.validate(requestPayload)
+
+      expect(value).toEqual({
+        confirmation: true
+      })
+      expect(error).toBeUndefined()
+    })
+
+    test('should not validate given confirmation is false', () => {
+      const requestPayload = {
+        confirmation: 'false'
+      }
+      const { error } = hasConfirmationFormBeenSubmitted.validate(requestPayload)
+
+      expect(error).not.toBeUndefined()
+    })
+
+    test('should not validate if payload is empty', () => {
+      const requestPayload = {}
+      const { error } = hasConfirmationFormBeenSubmitted.validate(requestPayload)
+
+      expect(error).not.toBeUndefined()
+    })
+  })
+
   describe('singleSubmitSchema', () => {
     test('should validate if payload includes a court', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court'
       }
-      const courtSchema = singleSubmitSchema('court', 'Court')
+      const courtSchema = isInputFieldInPayload('court', 'Court')
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(value).toEqual({
@@ -17,7 +73,7 @@ describe('singleSubmit', () => {
 
     test('should not validate if payload is empty', () => {
       const requestPayload = {}
-      const courtSchema = singleSubmitSchema('court', 'Court')
+      const courtSchema = isInputFieldInPayload('court', 'Court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Court is required'))
@@ -27,24 +83,30 @@ describe('singleSubmit', () => {
   describe('singleSubmitSchemaConfirm', () => {
     test('should validate if payload includes a court and confirm', () => {
       const requestPayload = {
-        court: 'Rivendell Magistrates Court',
-        confirm: 'Y',
-        confirmation: 'true'
+        confirm: 'Y'
       }
-      const courtSchema = singleSubmitSchemaConfirm('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected('court')
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(error).toBeUndefined()
       expect(value).toEqual({
-        court: 'Rivendell Magistrates Court',
-        confirm: true,
-        confirmation: true
+        confirm: true
       })
     })
 
     test('should not validate if payload is empty', () => {
       const requestPayload = {}
-      const courtSchema = singleSubmitSchemaConfirm('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected('court')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toBeInstanceOf(ValidationError)
+    })
+
+    test('should not validate if confirm payload is not Y or N', () => {
+      const requestPayload = {
+        confirm: 'Yess'
+      }
+      const courtSchema = hasAreYouSureRadioBeenSelected('court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toBeInstanceOf(ValidationError)
@@ -54,7 +116,7 @@ describe('singleSubmit', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court'
       }
-      const courtSchema = singleSubmitSchemaConfirm('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected('court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Select an option'))

@@ -97,5 +97,19 @@ describe('Courts page', () => {
       expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
       expect(response.statusCode).toBe(400)
     })
+
+    test('POST /admin/courts route returns 302 if not auth', async () => {
+      const fd = new FormData()
+
+      const options = {
+        method: 'POST',
+        url: '/admin/courts',
+        headers: fd.getHeaders(),
+        payload: fd.getBuffer()
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
   })
 })

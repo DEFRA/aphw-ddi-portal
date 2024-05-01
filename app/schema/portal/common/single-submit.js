@@ -1,24 +1,36 @@
 const Joi = require('joi')
 
-const singleSubmitSchema = (field, fieldText) => {
+const confirmFlowValidFields = (field) => {
+  return Joi.object({
+    [field]: Joi.any(),
+    confirmation: Joi.any(),
+    confirm: Joi.any()
+  })
+}
+
+const isInputFieldInPayload = (field, fieldText) => {
   return Joi.object({
     [field]: Joi.string().required().messages({
       '*': `${fieldText} is required`
     })
-  })
+  }).unknown(true)
 }
 
-const singleSubmitSchemaConfirm = (field) => {
+const hasConfirmationFormBeenSubmitted = Joi.object({
+  confirmation: Joi.boolean().valid(true).required()
+}).unknown(true)
+
+const hasAreYouSureRadioBeenSelected = (field, fieldText) => {
   return Joi.object({
-    confirmation: Joi.boolean(),
     confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
       '*': 'Select an option'
-    }),
-    [field]: Joi.string().required()
-  })
+    })
+  }).unknown(true)
 }
 
 module.exports = {
-  singleSubmitSchemaConfirm,
-  singleSubmitSchema
+  confirmFlowValidFields,
+  hasAreYouSureRadioBeenSelected,
+  isInputFieldInPayload,
+  hasConfirmationFormBeenSubmitted
 }
