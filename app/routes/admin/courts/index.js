@@ -1,7 +1,7 @@
-const { routes, views } = require('../../constants/admin')
-const { admin } = require('../../auth/permissions')
-const ViewModel = require('../../models/common/add-or-remove')
-const { validatePayload } = require('../../schema/portal/common/do-you-want')
+const { routes, views } = require('../../../constants/admin')
+const { admin } = require('../../../auth/permissions')
+const ViewModel = require('../../../models/common/add-or-remove')
+const { validatePayload } = require('../../../schema/portal/common/do-you-want')
 
 module.exports = [
   {

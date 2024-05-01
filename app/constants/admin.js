@@ -32,7 +32,8 @@ const constants = {
     pseudonyms: 'admin/pseudonyms',
     processComments: 'admin/process-comments',
     courts: 'admin/courts',
-    addOrRemove: 'common/addOrRemove'
+    addOrRemove: 'common/add-or-remove',
+    addAdminRecord: 'common/add-admin-record'
   },
   keys: {
   }
