@@ -1,7 +1,7 @@
-const { singleSubmitSchema } = require('../../../../../app/schema/portal/common/single-submit')
+const { singleSubmitSchemaConfirm, singleSubmitSchema } = require('../../../../../app/schema/portal/common/single-submit')
 const { ValidationError } = require('joi')
 describe('singleSubmit', () => {
-  describe('singleSubmitConfirmSchema', () => {
+  describe('singleSubmitSchema', () => {
     test('should validate if payload includes a court', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court'
@@ -22,13 +22,15 @@ describe('singleSubmit', () => {
 
       expect(error).toEqual(new ValidationError('Court is required'))
     })
+  })
 
+  describe('singleSubmitSchemaConfirm', () => {
     test('should validate if payload includes a court and confirm', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court',
         confirm: 'Y'
       }
-      const courtSchema = singleSubmitSchema('court', 'Court')
+      const courtSchema = singleSubmitSchemaConfirm('court')
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(error).toBeUndefined()
@@ -36,6 +38,24 @@ describe('singleSubmit', () => {
         court: 'Rivendell Magistrates Court',
         confirm: true
       })
+    })
+
+    test('should not validate if payload is empty', () => {
+      const requestPayload = {}
+      const courtSchema = singleSubmitSchemaConfirm('court')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toBeInstanceOf(ValidationError)
+    })
+
+    test('should not validate if payload is missing a confirm option', () => {
+      const requestPayload = {
+        court: 'Rivendell Magistrates Court'
+      }
+      const courtSchema = singleSubmitSchemaConfirm('court')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toEqual(new ValidationError('Select an option'))
     })
   })
 })
