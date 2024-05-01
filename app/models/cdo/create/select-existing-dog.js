@@ -4,7 +4,7 @@ const { formatDogRadioAsHtml } = require('../../../lib/format-helpers')
 
 function ViewModel (ownerDetails, dogResults, errors) {
   this.model = {
-    backLink: ownerRoutes.selectOwner.get,
+    backLink: `${ownerRoutes.selectOwner.get}?clear=true`,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
     dogs: dogResults,

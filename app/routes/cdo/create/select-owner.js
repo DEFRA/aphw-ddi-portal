@@ -16,7 +16,7 @@ module.exports = [{
   options: {
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
-      const ownerDetails = getOwnerDetails(request)
+      const ownerDetails = getOwnerDetailsWithClear(request)
 
       const ownerResults = await getPersons(ownerDetails)
 
@@ -62,12 +62,13 @@ module.exports = [{
       const ownerResults = getFromSession(request, 'persons')
       const ownerDetails = ownerResults[ownerChosen]
       let dateOfBirth = ownerDetails.birthDate
+      const dateOfBirthEntered = submittedOwnerDetails.dateOfBirthEntered
 
       if (dateOfBirth === null && submittedOwnerDetails.dateOfBirth !== null) {
         dateOfBirth = submittedOwnerDetails.dateOfBirth
       }
 
-      setOwnerDetails(request, { ...ownerDetails, dateOfBirth })
+      setOwnerDetails(request, { ...ownerDetails, dateOfBirth, dateOfBirthEntered })
       setAddress(request, ownerDetails.address)
 
       const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
@@ -82,3 +83,16 @@ module.exports = [{
     }
   }
 }]
+
+const getOwnerDetailsWithClear = request => {
+  const ownerDetails = getOwnerDetails(request)
+
+  if (!ownerDetails?.dateOfBirthEntered && request.query?.clear) {
+    ownerDetails.dateOfBirth = null
+    ownerDetails['dateOfBirth-day'] = null
+    ownerDetails['dateOfBirth-month'] = null
+    ownerDetails['dateOfBirth-year'] = null
+  }
+
+  return ownerDetails
+}

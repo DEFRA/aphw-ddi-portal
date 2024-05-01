@@ -162,6 +162,50 @@ describe('OwnerResults test', () => {
     expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Continue')
   })
 
+  test('GET /cdo/create/select-owner route returns 200 and clears DOB if no DOB entered', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-owner?clear=true',
+      auth
+    }
+
+    getPersons.mockResolvedValue(resolvedPersons)
+    getOwnerDetails.mockReturnValue({ firstName: 'Jack', lastName: 'Jones', dateOfBirth: '2000-01-01' })
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+
+    expect(getPersons).toHaveBeenCalledWith({
+      dateOfBirth: null,
+      'dateOfBirth-day': null,
+      'dateOfBirth-month': null,
+      'dateOfBirth-year': null,
+      firstName: 'Jack',
+      lastName: 'Jones'
+    })
+  })
+
+  test('GET /cdo/create/select-owner route returns 200 and doesnt clear DOB if DOB was entered', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/select-owner?clear=true',
+      auth
+    }
+
+    getPersons.mockResolvedValue(resolvedPersons)
+    getOwnerDetails.mockReturnValue({ firstName: 'Jack', lastName: 'Jones', dateOfBirth: '2000-01-01', dateOfBirthEntered: '2000-01-01' })
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+
+    expect(getPersons).toHaveBeenCalledWith({
+      dateOfBirth: '2000-01-01',
+      dateOfBirthEntered: '2000-01-01',
+      firstName: 'Jack',
+      lastName: 'Jones'
+    })
+  })
+
   test('POST /cdo/create/select-owner route returns 302 if not auth', async () => {
     const fd = new FormData()
 
