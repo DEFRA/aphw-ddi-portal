@@ -10,6 +10,7 @@ const singleSubmitSchema = (field, fieldText) => {
 
 const singleSubmitSchemaConfirm = (field) => {
   return Joi.object({
+    confirmation: Joi.boolean(),
     confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
       '*': 'Select an option'
     }),

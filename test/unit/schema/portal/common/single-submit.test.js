@@ -28,7 +28,8 @@ describe('singleSubmit', () => {
     test('should validate if payload includes a court and confirm', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court',
-        confirm: 'Y'
+        confirm: 'Y',
+        confirmation: 'true'
       }
       const courtSchema = singleSubmitSchemaConfirm('court')
       const { error, value } = courtSchema.validate(requestPayload)
@@ -36,7 +37,8 @@ describe('singleSubmit', () => {
       expect(error).toBeUndefined()
       expect(value).toEqual({
         court: 'Rivendell Magistrates Court',
-        confirm: true
+        confirm: true,
+        confirmation: true
       })
     })
 
