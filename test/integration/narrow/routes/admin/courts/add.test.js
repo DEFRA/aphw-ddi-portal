@@ -37,6 +37,22 @@ describe('Courts page', () => {
     expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add court')
   })
 
+  test('POST /admin/courts/add court route returns 200', async () => {
+    const options = {
+      method: 'POST',
+      url: '/admin/courts',
+      auth,
+      payload: {
+        addOrRemove: 'add'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/admin/courts/add')
+  })
+
   test('GET /admin/courts/add route returns 403 given user is standard user', async () => {
     const options = {
       method: 'GET',
