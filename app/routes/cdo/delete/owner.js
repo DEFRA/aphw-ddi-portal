@@ -1,5 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/owner')
-const ViewModel = require('../../../models/cdo/delete/confim')
+const ViewModel = require('../../../models/common/confim')
 const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { admin } = require('../../../auth/permissions')
 const getUser = require('../../../auth/get-user')
