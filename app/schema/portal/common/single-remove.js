@@ -3,22 +3,17 @@ const Joi = require('joi')
 const confirmFlowValidFields = (field) => {
   return Joi.object({
     [field]: Joi.any(),
-    deletePk: Joi.any(),
     confirmation: Joi.any(),
     confirm: Joi.any()
   })
 }
 
-const isInputFieldAndPkInPayload = (field, fieldText) => {
+const isInputFieldPkInPayload = (field, fieldText) => {
   return Joi.object({
-    [field]: Joi.string().required().messages({
+    [field]: Joi.number().required().messages({
       '*': `${fieldText} is required`
     })
-  }).unknown(true).concat(Joi.object({
-    deletePk: Joi.number().required().messages({
-      '*': `Please choose a valid ${fieldText.toLowerCase()}`
-    })
-  }).unknown(true))
+  }).unknown(true)
 }
 
 const notFoundSchema = (field, fieldValue) => {
@@ -31,6 +26,6 @@ const notFoundSchema = (field, fieldValue) => {
 
 module.exports = {
   confirmFlowValidFields,
-  isInputFieldAndPkInPayload,
+  isInputFieldPkInPayload,
   notFoundSchema
 }

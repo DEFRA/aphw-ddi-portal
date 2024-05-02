@@ -1,14 +1,13 @@
 const {
-  isInputFieldAndPkInPayload, confirmFlowValidFields, notFoundSchema
+  isInputFieldPkInPayload, confirmFlowValidFields, notFoundSchema
 } = require('../../../../../app/schema/portal/common/single-remove')
 const { ValidationError } = require('joi')
 describe('singleRemove', () => {
   describe('confirmFlowValidFields', () => {
     test('should validate given correct fields are added', () => {
       const requestPayload = {
-        court: 'Rivendell Magistrates Court',
+        court: '111',
         confirm: 'Y',
-        deletePk: '123',
         confirmation: 'true'
       }
       const courtSchema = confirmFlowValidFields('court')
@@ -19,7 +18,7 @@ describe('singleRemove', () => {
 
     test('should not validate given additional fields are passed', () => {
       const requestPayload = {
-        court: 'Rivendell Magistrates Court',
+        court: '111',
         confirm: 'Y',
         confirmation: true,
         deletePk: '123',
@@ -32,45 +31,34 @@ describe('singleRemove', () => {
     })
   })
 
-  describe('isInputFieldAndPkInPayload', () => {
+  describe('isInputFieldPkInPayload', () => {
     test('should validate if payload includes a court and court id', () => {
       const requestPayload = {
-        court: 'Rivendell Magistrates Court',
-        deletePk: '111'
+        court: '111'
       }
-      const courtSchema = isInputFieldAndPkInPayload('court', 'Court')
+      const courtSchema = isInputFieldPkInPayload('court', 'Court')
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(value).toEqual({
-        court: 'Rivendell Magistrates Court',
-        deletePk: 111
+        court: 111
       })
       expect(error).toBeUndefined()
     })
 
-    test('should not validate if court id is missing', () => {
-      const requestPayload = {
-        court: 'Rivendell Magistrates Court'
-      }
-      const courtSchema = isInputFieldAndPkInPayload('court', 'Court')
-      const { error } = courtSchema.validate(requestPayload)
-
-      expect(error).toEqual(new ValidationError('Please choose a valid court'))
-    })
-
-    test('should not validate if court is missing', () => {
-      const requestPayload = {
-        deletePk: 111
-      }
-      const courtSchema = isInputFieldAndPkInPayload('court', 'Court')
+    test('should not validate if payload is empty', () => {
+      const requestPayload = {}
+      const courtSchema = isInputFieldPkInPayload('court', 'Court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error.details.length).toBe(1)
     })
 
-    test('should not validate if payload is empty', () => {
-      const requestPayload = {}
-      const courtSchema = isInputFieldAndPkInPayload('court', 'Court')
+    test('should not validate if court id is empty', () => {
+      const requestPayload = {
+        court: ''
+      }
+      const courtSchema = isInputFieldPkInPayload('court', 'Court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Court is required'))
@@ -81,7 +69,7 @@ describe('singleRemove', () => {
   describe('notFoundSchema', () => {
     test('should produce Validation error if court param is validated', () => {
       const requestPayload = {
-        court: 'Rivendell Magistrates Court'
+        court: '111'
       }
       const courtSchema = notFoundSchema('court', 'Rivendell Magistrates Court')
       const { error } = courtSchema.validate(requestPayload)
