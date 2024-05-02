@@ -3,6 +3,7 @@ const Joi = require('joi')
 const confirmFlowValidFields = (field) => {
   return Joi.object({
     [field]: Joi.any(),
+    pk: Joi.any(),
     confirmation: Joi.any(),
     confirm: Joi.any()
   })
@@ -16,6 +17,18 @@ const isInputFieldPkInPayload = (field, fieldText) => {
   }).unknown(true)
 }
 
+const areYouSureRemoveSchema = (field) => {
+  return Joi.object({
+    [field]: Joi.string().required(),
+    pk: Joi.number().required(),
+    confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
+      '*': 'Select an option'
+    })
+  }).unknown(true)
+}
+// confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
+//   '*': 'Select an option'
+// })
 const notFoundSchema = (field, fieldValue) => {
   return Joi.object({
     [field]: Joi.any().forbidden().messages({
@@ -27,5 +40,6 @@ const notFoundSchema = (field, fieldValue) => {
 module.exports = {
   confirmFlowValidFields,
   isInputFieldPkInPayload,
+  areYouSureRemoveSchema,
   notFoundSchema
 }

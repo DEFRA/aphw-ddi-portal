@@ -1,13 +1,14 @@
 const {
-  isInputFieldPkInPayload, confirmFlowValidFields, notFoundSchema
+  isInputFieldPkInPayload, confirmFlowValidFields, notFoundSchema, areYouSureRemoveSchema
 } = require('../../../../../app/schema/portal/common/single-remove')
 const { ValidationError } = require('joi')
 describe('singleRemove', () => {
   describe('confirmFlowValidFields', () => {
     test('should validate given correct fields are added', () => {
       const requestPayload = {
-        court: '111',
+        court: 'Rivendell Magistrates Court',
         confirm: 'Y',
+        pk: '111',
         confirmation: 'true'
       }
       const courtSchema = confirmFlowValidFields('court')
@@ -18,10 +19,10 @@ describe('singleRemove', () => {
 
     test('should not validate given additional fields are passed', () => {
       const requestPayload = {
-        court: '111',
+        court: 'Rivendell Magistrates Court',
         confirm: 'Y',
-        confirmation: true,
-        deletePk: '123',
+        pk: '111',
+        confirmation: 'true',
         extraField: true
       }
       const courtSchema = confirmFlowValidFields('court')
@@ -63,6 +64,34 @@ describe('singleRemove', () => {
 
       expect(error).toEqual(new ValidationError('Court is required'))
       expect(error.details.length).toBe(1)
+    })
+  })
+
+  describe('areYouSureRemoveSchema', () => {
+    test('should validate if confirm has been selected', () => {
+      const requestPayload = {
+        court: 'Rivendell Magistrates Court',
+        pk: '111',
+        confirm: 'Y'
+      }
+      const courtSchema = areYouSureRemoveSchema('court')
+      const { error, value } = courtSchema.validate(requestPayload)
+      expect(value).toEqual({
+        court: 'Rivendell Magistrates Court',
+        pk: 111,
+        confirm: true
+      })
+      expect(error).toBeUndefined()
+    })
+
+    test('should not validate if confirm has need been selected', () => {
+      const requestPayload = {
+        court: 'Rivendell Magistrates Court',
+        pk: '111'
+      }
+      const courtSchema = areYouSureRemoveSchema('court')
+      const { error } = courtSchema.validate(requestPayload)
+      expect(error.message).toEqual('Select an option')
     })
   })
 
