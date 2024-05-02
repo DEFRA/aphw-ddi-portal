@@ -1,5 +1,5 @@
 const { user } = require('../../../mocks/auth')
-const { getActivities, getActivityById, recordActivity } = require('../../../../app/api/ddi-index-api/activities')
+const { getActivities, getActivityById, recordActivity, getAllActivities } = require('../../../../app/api/ddi-index-api/activities')
 const { get, post } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
@@ -47,5 +47,15 @@ describe('Activity test', () => {
       targetPk: 'owner',
       pk: 'P-123-456'
     }, user)
+  })
+
+  test('getAllActivities calls correct endpoints', async () => {
+    get.mockResolvedValue({ payload: {} })
+    await getAllActivities()
+    expect(get).toHaveBeenCalledTimes(4)
+    expect(get.mock.calls[0]).toEqual(['activities/sent/dog'])
+    expect(get.mock.calls[1]).toEqual(['activities/received/dog'])
+    expect(get.mock.calls[2]).toEqual(['activities/sent/owner'])
+    expect(get.mock.calls[3]).toEqual(['activities/received/owner'])
   })
 })
