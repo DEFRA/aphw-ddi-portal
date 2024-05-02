@@ -40,7 +40,7 @@ const constants = {
     activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
     processComments: 'admin/process-comments',
-    pseudonyms: 'admin/pseudonyms'
+    pseudonyms: 'admin/pseudonyms',
     confirm: 'common/confirm',
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',
