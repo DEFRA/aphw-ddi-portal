@@ -34,7 +34,8 @@ const constants = {
     processComments: 'admin/process-comments',
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',
-    addAdminRecord: 'common/add-admin-record'
+    addAdminRecord: 'common/add-admin-record',
+    success: 'admin/success'
   },
   keys: {
   }

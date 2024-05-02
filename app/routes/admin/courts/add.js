@@ -4,6 +4,9 @@ const FormViewModel = require('../../../models/common/single-submit')
 const ConfirmViewModel = require('../../../models/common/confim')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
 const { isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields } = require('../../../schema/portal/common/single-submit')
+const { addCourt } = require('../../../api/ddi-index-api/courts')
+const { getUser } = require('../../../auth')
+const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
 
 const courtFieldNames = {
   recordTypeText: 'court',
@@ -12,9 +15,10 @@ const courtFieldNames = {
   buttonText: 'Add court'
 }
 
-const stepOneCheckCourtSubmited = {
+const stepOneCheckCourtSubmitted = {
   method: (request, h) => {
-    return validatePayloadBuilder(isInputFieldInPayload('court', 'Court name'))(request.payload)
+    const courtForm = validatePayloadBuilder(isInputFieldInPayload('court', 'Court name'))(request.payload)
+    return courtForm.court
   },
   failAction: (request, h, error) => {
     const backLink = routes.courts.get
@@ -24,7 +28,7 @@ const stepOneCheckCourtSubmited = {
       ...courtFieldNames
     }, undefined, error)).code(400).takeover()
   },
-  assign: 'courtForm'
+  assign: 'court'
 }
 
 const stepTwoCheckConfirmation = {
@@ -43,7 +47,7 @@ const stepTwoCheckConfirmation = {
       action: 'add'
     })).code(200).takeover()
   },
-  assign: 'confirmForm'
+  assign: 'confirmPage'
 }
 
 const stepThreeCheckConfirmation = {
@@ -91,7 +95,7 @@ module.exports = [
         payload: validatePayloadBuilder(confirmFlowValidFields('court'))
       },
       pre: [
-        stepOneCheckCourtSubmited,
+        stepOneCheckCourtSubmitted,
         stepTwoCheckConfirmation,
         stepThreeCheckConfirmation
       ],
@@ -99,7 +103,11 @@ module.exports = [
         if (!request.pre.addCourtConfirmation) {
           return h.redirect(routes.courts.get)
         }
-        return h.response().code(501).takeover()
+
+        const court = request.pre.court
+        const courtResponse = await addCourt({ name: court }, getUser(request))
+
+        return h.view(views.success, CourtAddedViewModel(courtResponse.name))
       }
     }
   }
