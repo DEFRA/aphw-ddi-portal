@@ -1,4 +1,5 @@
 const { get, post, callDelete } = require('./base')
+const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const courtsEndpoint = 'courts'
 
@@ -36,9 +37,20 @@ const addCourt = async (court, user) => {
   const data = {
     name: court.name
   }
-  const payload = await post(courtsEndpoint, data, user)
 
-  return payload
+  try {
+    const payload = await post(courtsEndpoint, data, user)
+
+    return payload
+  } catch (e) {
+    if (e.isBoom && e.output.statusCode === 409) {
+      throw new ApiConflictError({
+        ...e,
+        message: 'This court name is already in the Index'
+      })
+    }
+    throw e
+  }
 }
 
 const removeCourt = async (courtId, user) => {

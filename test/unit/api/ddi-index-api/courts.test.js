@@ -3,6 +3,7 @@ const { post, callDelete } = require('../../../../app/api/ddi-index-api/base')
 
 const { addCourt, removeCourt } = require('../../../../app/api/ddi-index-api/courts')
 const { user } = require('../../../mocks/auth')
+const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
 describe('DDI API courts', () => {
   beforeEach(() => {
@@ -25,6 +26,29 @@ describe('DDI API courts', () => {
       const createdCourt = await addCourt(court, user)
       expect(createdCourt).toEqual(expectedCourt)
       expect(post).toHaveBeenCalledWith('courts', court, user)
+    })
+
+    test('should throw an ApiConflictError given there is a duplicate', async () => {
+      post.mockRejectedValue({
+        isBoom: true,
+        output: {
+          statusCode: 409,
+          payload: {
+            statusCode: 409,
+            error: 'Conflict',
+            message: 'Response Error: 409 Conflict'
+          },
+          headers: {}
+        }
+      })
+
+      await expect(addCourt({ name: 'Rivendell Valley Court' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This court name is already in the Index' }))
+    })
+
+    test('should throw a normal error given there is an error code other than 409', async () => {
+      post.mockRejectedValue(new Error('server error'))
+
+      await expect(addCourt({ name: 'Rivendell Valley Court' }, user)).rejects.toThrow(new Error('server error'))
     })
   })
 
