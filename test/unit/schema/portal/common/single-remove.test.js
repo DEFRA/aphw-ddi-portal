@@ -35,20 +35,20 @@ describe('singleRemove', () => {
   describe('isInputFieldPkInPayload', () => {
     test('should validate if payload includes a court and court id', () => {
       const requestPayload = {
-        court: '111'
+        pk: '111'
       }
-      const courtSchema = isInputFieldPkInPayload('court', 'Court')
+      const courtSchema = isInputFieldPkInPayload('Court')
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(value).toEqual({
-        court: 111
+        pk: 111
       })
       expect(error).toBeUndefined()
     })
 
     test('should not validate if payload is empty', () => {
       const requestPayload = {}
-      const courtSchema = isInputFieldPkInPayload('court', 'Court')
+      const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Court is required'))
@@ -57,9 +57,9 @@ describe('singleRemove', () => {
 
     test('should not validate if court id is empty', () => {
       const requestPayload = {
-        court: ''
+        pk: ''
       }
-      const courtSchema = isInputFieldPkInPayload('court', 'Court')
+      const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Court is required'))

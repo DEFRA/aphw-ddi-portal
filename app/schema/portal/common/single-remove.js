@@ -9,9 +9,9 @@ const confirmFlowValidFields = (field) => {
   })
 }
 
-const isInputFieldPkInPayload = (field, fieldText) => {
+const isInputFieldPkInPayload = (fieldText) => {
   return Joi.object({
-    [field]: Joi.number().required().messages({
+    pk: Joi.number().required().messages({
       '*': `${fieldText} is required`
     })
   }).unknown(true)
@@ -26,9 +26,7 @@ const areYouSureRemoveSchema = (field) => {
     })
   }).unknown(true)
 }
-// confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
-//   '*': 'Select an option'
-// })
+
 const notFoundSchema = (field, fieldValue) => {
   return Joi.object({
     [field]: Joi.any().forbidden().messages({
