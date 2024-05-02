@@ -1,0 +1,38 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: model.successMessage,
+        titleHtml: model.titleHtml,
+        html: model.panelHtml,
+        classes: 'govuk-!-margin-bottom-7'
+      }) }}
+
+      <p class="govuk-body">{{ model.bodyContent }}</p>
+
+      <p class="govuk-body">
+        <a href="{{ model.bottomLink.link }}" class="govuk-link govuk-link--no-visited-state">{{ model.bottomLink.label }}</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}
