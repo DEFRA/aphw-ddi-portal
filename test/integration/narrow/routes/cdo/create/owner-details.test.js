@@ -148,7 +148,8 @@ describe('OwnerDetails test', () => {
       lastName: 'Smith',
       'dateOfBirth-day': '',
       'dateOfBirth-month': '',
-      'dateOfBirth-year': ''
+      'dateOfBirth-year': '',
+      dateOfBirthEntered: null
     })
   })
 
@@ -176,7 +177,8 @@ describe('OwnerDetails test', () => {
       dateOfBirth: new Date('1999-01-01'),
       'dateOfBirth-day': 1,
       'dateOfBirth-month': 1,
-      'dateOfBirth-year': 1999
+      'dateOfBirth-year': 1999,
+      dateOfBirthEntered: new Date('1999-01-01')
     })
   })
 
@@ -212,6 +214,7 @@ describe('OwnerDetails test', () => {
       'dateOfBirth-day': 1,
       'dateOfBirth-month': 1,
       'dateOfBirth-year': 1999,
+      dateOfBirthEntered: new Date('1999-01-01'),
       postcode: 'E1 1AA',
       houseNumber: ''
     })
@@ -250,6 +253,7 @@ describe('OwnerDetails test', () => {
       'dateOfBirth-day': '',
       'dateOfBirth-month': '',
       'dateOfBirth-year': '',
+      dateOfBirthEntered: null,
       postcode: 'E1 1AA',
       houseNumber: ''
     })

@@ -51,11 +51,15 @@ const hydrateOwnerDetails = (ownerDetails = {}) => {
   const dobYear = ownerDetails['dateOfBirth-year']
 
   if (!dobDay || !dobMonth || !dobYear) {
-    return hydratedOwnerDetailBase
+    return {
+      ...hydratedOwnerDetailBase,
+      dateOfBirthEntered: null
+    }
   }
 
   return {
     ...hydratedOwnerDetailBase,
-    dateOfBirth: new UTCDate(`${dobYear}-${dobMonth}-${dobDay}`)
+    dateOfBirth: new UTCDate(`${dobYear}-${dobMonth}-${dobDay}`),
+    dateOfBirthEntered: new UTCDate(`${dobYear}-${dobMonth}-${dobDay}`)
   }
 }
