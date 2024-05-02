@@ -45,6 +45,7 @@ const constants = {
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',
     addAdminRecord: 'common/add-admin-record',
+    removeAdminRecord: 'common/remove-admin-record',
     success: 'admin/success'
   },
   addRemove: {

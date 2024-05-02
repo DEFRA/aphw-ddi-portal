@@ -28,8 +28,7 @@ function ViewModel (details, backNav, errors) {
         },
         {
           text: 'Remove',
-          value: 'remove',
-          disabled: true
+          value: 'remove'
         }
       ]
     },
