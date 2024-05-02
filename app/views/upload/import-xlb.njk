@@ -34,11 +34,11 @@
             <div id="location-upload-hint">
               <p>The file should:</p>
               <ul class="govuk-list govuk-list--bullet">
-                <li>Have an extension of .xls or .xlsx</li>
-                <li>Have a sheet name of 'Passed' to hold the rows for import</li>
-                <li>Be no larger than 10 MB</li>
-                <li>Have no more than 100 rows</li>
-                <li>Have a structure with identical column headings to <a class="govuk-link govuk-link--no-visited-state" href="/static/templates/XL Bully Import Blank Template.xlsx">this template spreadsheet</a> (your file may include additional columns that will be ignored by the import)</li>
+                <li>have an extension of .xls or .xlsx</li>
+                <li>have a sheet name of 'Passed' to hold the rows for import</li>
+                <li>be no larger than 10 MB</li>
+                <li>have no more than 30 rows</li>
+                <li>have a structure with identical column headings to <a class="govuk-link govuk-link--no-visited-state" href="/static/templates/XL Bully Import Blank Template.xlsx">this template spreadsheet</a> (your file may include additional columns that will be ignored by the import)</li>
               </ul>
             </div>
               {{ govukFileUpload(model) }}
