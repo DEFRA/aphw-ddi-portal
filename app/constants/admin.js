@@ -12,13 +12,17 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
+    },
+    activities: {
+      get: '/admin/activities'
     }
   },
   views: {
     index: 'admin/index',
+    activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
-    pseudonyms: 'admin/pseudonyms',
-    processComments: 'admin/process-comments'
+    processComments: 'admin/process-comments',
+    pseudonyms: 'admin/pseudonyms'
   },
   keys: {
   }

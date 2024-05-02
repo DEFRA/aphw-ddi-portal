@@ -1,0 +1,158 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">
+            Manage activity lists
+            </h1>
+
+            <p class="govuk-body">
+            Add or remove activities to the dog record and owner record activity lists.
+            </p>
+
+            <p class="govuk-body">
+            Removed activities will not be available for new applications. Exisiting records are unchanged.
+            </p>
+
+            <h2 class="govuk-heading-m">
+            Dog records
+            </h2>
+
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Send activities</h2>
+                    <div class="govuk-summary-card__actions">
+                        <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/add/sent/dog">Add an activity<span class="govuk-visually-hidden"> to the dog record list of send activities (Send activities)</span></a>
+                    </div>
+                </div>
+
+                {% if model.dogSent.length %}
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                    {% for activity in model.dogSent %}
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key govuk-!-font-weight-regular govuk-!-width-three-quarters">
+                        {{ activity.label }}
+                        </dt>
+                        <dd class="govuk-summary-list__value"></dd>
+                        <dd class="govuk-summary-list__actions">
+                          <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/remove/{{ activity.id }}">Remove<span class="govuk-visually-hidden">{{ activity.label }} (Send activities)</span></a>
+                        </dd>
+                      </div>
+                    {% endfor %}
+                    </dl>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Receive activities</h2>
+                    <div class="govuk-summary-card__actions">
+                        <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/add/received/dog">Add an activity<span class="govuk-visually-hidden"> to the dog record list of receive activities (Receive activities)</span></a>
+                    </div>
+                </div>
+
+                {% if model.dogReceived.length %}
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                    {% for activity in model.dogReceived %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key govuk-!-font-weight-regular govuk-!-width-three-quarters">
+                            {{ activity.label }}
+                            </dt>
+                            <dd class="govuk-summary-list__value"></dd>
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/remove/{{ activity.id }}">Remove<span class="govuk-visually-hidden">{{ activity.label }} (Receive activities)</span></a>
+                            </dd>
+                        </div>
+                    {% endfor %}
+                    </dl>
+                </div>
+                {% endif %}
+            </div>
+
+            <h2 class="govuk-heading-m">
+            Owner records
+            </h2>
+
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Send activities</h2>
+                    <div class="govuk-summary-card__actions">
+                        <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/add/sent/owner">Add an activity<span class="govuk-visually-hidden"> to the owner record send activities (Send activities)</span></a>
+                    </div>
+                </div>
+
+                {% if model.ownerSent.length %}
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                    {% for activity in model.ownerSent %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key govuk-!-font-weight-regular govuk-!-width-three-quarters">
+                            {{ activity.label }}
+                            </dt>
+                            <dd class="govuk-summary-list__value"></dd>
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/remove/{{ activity.id }}">Remove<span class="govuk-visually-hidden">{{ activity.label }} (Send activities)</span></a>
+                            </dd>
+                        </div>
+                    {% endfor %}
+                    </dl>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">Receive activities</h2>
+                    <div class="govuk-summary-card__actions">
+                        <a class="govuk-link" href="/admin/activities/add/received/owner">Add an activity<span class="govuk-visually-hidden">  to the owner record receive activities (Receive activities)</span></a>
+                    </div>
+                </div>
+
+                {% if model.ownerReceived.length %}
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                    {% for activity in model.ownerReceived %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key govuk-!-font-weight-regular govuk-!-width-three-quarters">
+                            {{ activity.label }}
+                            </dt>
+                            <dd class="govuk-summary-list__value"></dd>
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="/admin/activities/remove/{{ activity.id }}">Remove<span class="govuk-visually-hidden">{{ activity.label }} (Receive activities)</span></a>
+                            </dd>
+                        </div>
+                    {% endfor %}
+                    </dl>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
