@@ -30,14 +30,18 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
+    },
+    activities: {
+      get: '/admin/activities'
     }
   },
   views: {
     index: 'admin/index',
-    confirm: 'common/confirm',
+    activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
-    pseudonyms: 'admin/pseudonyms',
     processComments: 'admin/process-comments',
+    pseudonyms: 'admin/pseudonyms'
+    confirm: 'common/confirm',
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',
     addAdminRecord: 'common/add-admin-record',

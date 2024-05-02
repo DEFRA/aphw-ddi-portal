@@ -8,17 +8,15 @@
 {% set pageHeading = "Upload XLB data" %}
 
 {% block beforeContent %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      {{ govukBackLink({
-        text: "Back",
-        href: "/admin/index",
-        attributes: {
-          id: "back"
-        }
-        }) 
-      }}
-    </div>
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
   </div>
 {% endblock %}
 
