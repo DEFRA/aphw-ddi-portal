@@ -1,5 +1,6 @@
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { ApiConflictError } = require('../../../../../../app/errors/api-conflict-error')
 // const FormData = require('form-data')
 
 describe('Courts page', () => {
@@ -161,6 +162,28 @@ describe('Courts page', () => {
       expect(breadcrumbs[0].getAttribute('href')).toBe('/')
       expect(breadcrumbs[1].textContent.trim()).toBe('Admin')
       expect(breadcrumbs[1].getAttribute('href')).toBe('/admin/index')
+    })
+
+    test('POST /admin/courts/add court route returns 409 and the enter court name page given duplicate exists', async () => {
+      addCourt.mockRejectedValue(new ApiConflictError('conflict'))
+
+      const options = {
+        method: 'POST',
+        url: '/admin/courts/add',
+        auth,
+        payload: {
+          court: 'Metropolis City Court',
+          confirmation: 'true',
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(409)
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This court name is already in the Index')
     })
   })
 })

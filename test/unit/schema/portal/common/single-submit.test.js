@@ -85,7 +85,7 @@ describe('singleSubmit', () => {
       const requestPayload = {
         confirm: 'Y'
       }
-      const courtSchema = hasAreYouSureRadioBeenSelected('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected
       const { error, value } = courtSchema.validate(requestPayload)
 
       expect(error).toBeUndefined()
@@ -96,7 +96,7 @@ describe('singleSubmit', () => {
 
     test('should not validate if payload is empty', () => {
       const requestPayload = {}
-      const courtSchema = hasAreYouSureRadioBeenSelected('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toBeInstanceOf(ValidationError)
@@ -106,7 +106,7 @@ describe('singleSubmit', () => {
       const requestPayload = {
         confirm: 'Yess'
       }
-      const courtSchema = hasAreYouSureRadioBeenSelected('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toBeInstanceOf(ValidationError)
@@ -116,7 +116,7 @@ describe('singleSubmit', () => {
       const requestPayload = {
         court: 'Rivendell Magistrates Court'
       }
-      const courtSchema = hasAreYouSureRadioBeenSelected('court')
+      const courtSchema = hasAreYouSureRadioBeenSelected
       const { error } = courtSchema.validate(requestPayload)
 
       expect(error).toEqual(new ValidationError('Select an option'))

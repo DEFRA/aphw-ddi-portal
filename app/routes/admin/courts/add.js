@@ -3,10 +3,14 @@ const { admin } = require('../../../auth/permissions')
 const FormViewModel = require('../../../models/common/single-submit')
 const ConfirmViewModel = require('../../../models/common/confim')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
-const { isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields } = require('../../../schema/portal/common/single-submit')
+const {
+  isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields,
+  duplicateEntrySchema
+} = require('../../../schema/portal/common/single-submit')
 const { addCourt } = require('../../../api/ddi-index-api/courts')
 const { getUser } = require('../../../auth')
 const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
+const { ApiConflictError } = require('../../../errors/api-conflict-error')
 
 const courtFieldNames = {
   recordTypeText: 'court',
@@ -16,11 +20,11 @@ const courtFieldNames = {
 }
 
 const stepOneCheckCourtSubmitted = {
-  method: (request, h) => {
+  method: request => {
     const courtForm = validatePayloadBuilder(isInputFieldInPayload('court', 'Court name'))(request.payload)
     return courtForm.court
   },
-  failAction: (request, h, error) => {
+  failAction: (_request, h, error) => {
     const backLink = routes.courts.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
@@ -32,7 +36,7 @@ const stepOneCheckCourtSubmitted = {
 }
 
 const stepTwoCheckConfirmation = {
-  method: (request, h) => {
+  method: request => {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: (request, h, err) => {
@@ -51,8 +55,8 @@ const stepTwoCheckConfirmation = {
 }
 
 const stepThreeCheckConfirmation = {
-  method: (request, h) => {
-    const { confirm } = validatePayloadBuilder(hasAreYouSureRadioBeenSelected('court'))(request.payload)
+  method: request => {
+    const { confirm } = validatePayloadBuilder(hasAreYouSureRadioBeenSelected)(request.payload)
     return confirm
   },
   assign: 'addCourtConfirmation',
@@ -76,7 +80,7 @@ module.exports = [
     path: `${routes.addCourt.get}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (request, h) => {
+      handler: async (_request, h) => {
         const backLink = routes.courts.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
@@ -92,7 +96,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       validate: {
-        payload: validatePayloadBuilder(confirmFlowValidFields('court'))
+        payload: validatePayloadBuilder(confirmFlowValidFields('court', 'court name'))
       },
       pre: [
         stepOneCheckCourtSubmitted,
@@ -105,9 +109,25 @@ module.exports = [
         }
 
         const court = request.pre.court
-        const courtResponse = await addCourt({ name: court }, getUser(request))
 
-        return h.view(views.success, CourtAddedViewModel(courtResponse.name))
+        try {
+          const courtResponse = await addCourt({ name: court }, getUser(request))
+
+          return h.view(views.success, CourtAddedViewModel(courtResponse.name))
+        } catch (e) {
+          if (e instanceof ApiConflictError) {
+            const { error } = duplicateEntrySchema('court', 'court name').validate(request.payload)
+
+            const backLink = routes.courts.get
+
+            return h.view(views.addAdminRecord, new FormViewModel({
+              backLink,
+              recordValue: court,
+              ...courtFieldNames
+            }, undefined, error)).code(409)
+          }
+          throw e
+        }
       }
     }
   }

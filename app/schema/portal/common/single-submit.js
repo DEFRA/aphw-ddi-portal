@@ -20,10 +20,16 @@ const hasConfirmationFormBeenSubmitted = Joi.object({
   confirmation: Joi.boolean().valid(true).required()
 }).unknown(true)
 
-const hasAreYouSureRadioBeenSelected = (field, fieldText) => {
+const hasAreYouSureRadioBeenSelected = Joi.object({
+  confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
+    '*': 'Select an option'
+  })
+}).unknown(true)
+
+const duplicateEntrySchema = (field, fieldText) => {
   return Joi.object({
-    confirm: Joi.boolean().truthy('Y').falsy('N').required().messages({
-      '*': 'Select an option'
+    [field]: Joi.any().forbidden().messages({
+      'any.unknown': `This ${fieldText} is already in the Index`
     })
   }).unknown(true)
 }
@@ -32,5 +38,6 @@ module.exports = {
   confirmFlowValidFields,
   hasAreYouSureRadioBeenSelected,
   isInputFieldInPayload,
-  hasConfirmationFormBeenSubmitted
+  hasConfirmationFormBeenSubmitted,
+  duplicateEntrySchema
 }
