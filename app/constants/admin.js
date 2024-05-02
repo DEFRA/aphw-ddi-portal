@@ -1,20 +1,26 @@
+const courtBackLinks = {
+  index: {
+    get: '/admin/courts',
+    post: '/admin/courts'
+  },
+  add: {
+    get: '/admin/courts/add',
+    post: '/admin/courts/add'
+  },
+  remove: {
+    get: '/admin/courts/remove',
+    post: '/admin/courts/remove'
+  }
+}
+
 const constants = {
   routes: {
     index: {
       get: '/admin/index'
     },
-    courts: {
-      get: '/admin/courts',
-      post: '/admin/courts'
-    },
-    addCourt: {
-      get: '/admin/courts/add',
-      post: '/admin/courts/add'
-    },
-    removeCourt: {
-      get: '/admin/courts/remove',
-      post: '/admin/courts/remove'
-    },
+    courts: courtBackLinks.index,
+    addCourt: courtBackLinks.add,
+    removeCourt: courtBackLinks.remove,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -37,7 +43,13 @@ const constants = {
     addAdminRecord: 'common/add-admin-record',
     success: 'admin/success'
   },
-  keys: {
+  addRemove: {
+    courtConstants: {
+      inputField: 'court',
+      messageLabel: 'court name',
+      messageLabelCapital: 'Court name',
+      backLinks: courtBackLinks
+    }
   }
 }
 
