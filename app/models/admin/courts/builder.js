@@ -1,16 +1,5 @@
-const { routes } = require('../../../constants/admin')
+const { routes, breadcrumbs } = require('../../../constants/admin')
 const ViewModel = require('../success')
-
-const breadcrumbs = [
-  {
-    label: 'Home',
-    link: '/'
-  },
-  {
-    label: 'Admin',
-    link: routes.index.get
-  }
-]
 
 /**
  *
