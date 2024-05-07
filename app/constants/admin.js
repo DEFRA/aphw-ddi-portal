@@ -86,7 +86,7 @@ const constants = {
       backLinks: courtBackLinks
     },
     policeConstants: {
-      inputField: 'police_force',
+      inputField: 'police',
       messageLabel: 'police force',
       messageLabelCapital: 'Police force',
       backLinks: policeBackLinks

@@ -12,7 +12,7 @@ const PoliceForceAddedViewModel = (policeForce) => {
     titleHtml: `You added<br /> ${policeForce}`,
     bodyContent: [`${policeForce} is available in the Index.`],
     bottomLink: {
-      link: routes.courts.get,
+      link: routes.police.get,
       label: 'Add or remove a police force'
     }
   })
@@ -27,13 +27,13 @@ const CourtRemovedViewModel = (policeForce) => {
       'Existing records are unchanged.'
     ],
     bottomLink: {
-      link: routes.courts.get,
+      link: routes.police.get,
       label: 'Add or remove a police force'
     }
   })
 }
 
 module.exports = {
-  CourtAddedViewModel: PoliceForceAddedViewModel,
+  PoliceForceAddedViewModel: PoliceForceAddedViewModel,
   CourtRemovedViewModel
 }
