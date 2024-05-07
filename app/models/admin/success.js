@@ -8,13 +8,12 @@
  * @typedef SuccessDetails
  * @property {string} [successMessage]
  * @property {string} [titleHtml]
- * @property {string} bodyContent
+ * @property {string[]} bodyContent
  * @property {Link[]} breadcrumbs
  * @property {Link} bottomLink
  */
 /**
  * @param {SuccessDetails} details
- * @param [errors]
  * @constructor
  */
 function ViewModel (details) {
