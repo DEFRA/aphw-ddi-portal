@@ -6,16 +6,13 @@
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
-  <div class="govuk-breadcrumbs">
-    <ol class="govuk-breadcrumbs__list">
-      <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/">Home</a>
-      </li>
-      <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
-      </li>
-    </ol>
-  </div>
+  {% for breadcrumb in model.breadcrumbs %}
+  <li class="govuk-breadcrumbs__list-item">
+    <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.link }}">
+      {{ breadcrumb.label }}
+    </a>
+  </li>
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -28,7 +25,9 @@
         classes: 'govuk-!-margin-bottom-7'
       }) }}
 
-      <p class="govuk-body">{{ model.bodyContent }}</p>
+      {% for paragraph in model.bodyContent %}
+      <p class="govuk-body">{{ paragraph }}</p>
+      {% endfor %}
 
       <p class="govuk-body">
         <a href="{{ model.bottomLink.link }}" class="govuk-link govuk-link--no-visited-state">{{ model.bottomLink.label }}</a>

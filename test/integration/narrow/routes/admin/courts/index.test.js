@@ -37,6 +37,10 @@ describe('Courts page', () => {
       expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
       expect(document.querySelectorAll('.govuk-radios__label')[0].textContent.trim()).toContain('Add')
       expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toContain('Remove')
+      expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].textContent.trim()).toBe('Home')
+      expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].getAttribute('href')).toBe('/')
+      expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].textContent.trim()).toBe('Admin')
+      expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/admin/index')
     })
 
     test('GET /admin/courts route returns 403 given user is standard user', async () => {

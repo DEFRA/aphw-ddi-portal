@@ -83,7 +83,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (_request, h) => {
-        const backLink = addRemoveConstants.backLinks.index
+        const backLink = addRemoveConstants.backLinks.index.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
           backLink,

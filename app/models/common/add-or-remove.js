@@ -1,10 +1,11 @@
 const { errorPusherDefault } = require('../../lib/error-helpers')
-const { routes } = require('../../constants/admin')
+const { routes, breadcrumbs } = require('../../constants/admin')
 
 /**
  * @typedef AddOrRemoveDetails
  * @property {string} [optionText]
  * @property {string} recordType
+ * @property {Link[]} breadcrumbs
  * @property {string} recordTypeText
  */
 
@@ -17,6 +18,7 @@ const { routes } = require('../../constants/admin')
 function ViewModel (details, backNav, errors) {
   this.model = {
     backLink: backNav?.backLink || routes.index.get,
+    breadcrumbs: details.breadcrumbs ?? breadcrumbs,
     addOrRemove: {
       id: 'addOrRemove',
       name: 'addOrRemove',
@@ -28,8 +30,7 @@ function ViewModel (details, backNav, errors) {
         },
         {
           text: 'Remove',
-          value: 'remove',
-          disabled: true
+          value: 'remove'
         }
       ]
     },

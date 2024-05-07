@@ -1,6 +1,7 @@
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { ApiConflictError } = require('../../../../../../app/errors/api-conflict-error')
+const FormData = require('form-data')
 // const FormData = require('form-data')
 
 describe('Courts page', () => {
@@ -69,6 +70,20 @@ describe('Courts page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add court')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Court name is required')
+    })
+
+    test('POST /admin/courts/add route returns 302 if not auth', async () => {
+      const fd = new FormData()
+
+      const options = {
+        method: 'POST',
+        url: '/admin/courts/add',
+        headers: fd.getHeaders(),
+        payload: fd.getBuffer()
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
     })
   })
 

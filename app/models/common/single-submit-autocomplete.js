@@ -1,13 +1,21 @@
 const { errorPusherDefault } = require('../../lib/error-helpers')
 const { forms } = require('../../constants/forms')
+/**
+ * @typedef AutoCompleteItem
+ * @property {string} text
+ * @property {string|null} value
+ */
 
 /**
  * @typedef AddOrRemoveDetails
  * @property {string} recordType
  * @property {string} recordTypeText
  * @property {string} buttonText
+ * @property {string} pk
+ * @property {AutoCompleteItem[]} items
  * @property {string} [optionText]
- * @property {string} [recordValue]
+ * @property {string} [recordText]
+ * @property {string} [recordId]
  * @property {string} [backLink]
  * @property {'add'|'remove'} action
  */
@@ -25,18 +33,19 @@ function ViewModel (details, backNav, errors) {
       classes: 'govuk-label--l',
       isPageHeading: true
     },
-    id: details.recordType,
-    name: details.recordType,
-    value: details.recordValue ?? null,
+    id: 'pk',
+    name: 'pk',
+    value: details.pk,
+    placeholder: `Start typing to choose ${details.recordType}`,
+    items: [{ text: '', value: null }, ...details.items],
     autocomplete: forms.preventAutocomplete
   }
-
   this.model = {
     backLink: details.backLink ?? backNav?.backLink,
-    get govukInput () {
-      return this[details.recordType]
+    get govukAutoComplete () {
+      return this.pk
     },
-    [details.recordType]: inputModel,
+    pk: inputModel,
     buttonText: details.buttonText,
     errors: []
   }
