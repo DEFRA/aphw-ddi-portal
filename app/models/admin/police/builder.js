@@ -18,7 +18,7 @@ const PoliceForceAddedViewModel = (policeForce) => {
   })
 }
 
-const CourtRemovedViewModel = (policeForce) => {
+const PoliceForceRemovedViewModel = (policeForce) => {
   return new ViewModel({
     breadcrumbs,
     titleHtml: `You removed<br /> ${policeForce}`,
@@ -34,6 +34,6 @@ const CourtRemovedViewModel = (policeForce) => {
 }
 
 module.exports = {
-  PoliceForceAddedViewModel: PoliceForceAddedViewModel,
-  CourtRemovedViewModel
+  PoliceForceAddedViewModel,
+  PoliceForceRemovedViewModel
 }

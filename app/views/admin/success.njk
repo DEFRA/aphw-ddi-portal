@@ -6,13 +6,17 @@
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
-  {% for breadcrumb in model.breadcrumbs %}
-  <li class="govuk-breadcrumbs__list-item">
-    <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.link }}">
-      {{ breadcrumb.label }}
-    </a>
-  </li>
-  {% endfor %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      {% for breadcrumb in model.breadcrumbs %}
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.link }}">
+          {{ breadcrumb.label }}
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
 {% endblock %}
 
 {% block content %}
