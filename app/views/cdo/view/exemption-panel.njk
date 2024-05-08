@@ -41,6 +41,7 @@
             </div>
             {% endif %}
 
+            {% if model.exemption.cdoExpiry or model.exemption.exemptionOrder != '2023' %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">CDO expiry</dt>
               {% if model.exemption.cdoExpiry %}
@@ -49,6 +50,7 @@
                 <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
               {% endif %}
             </div>
+            {% endif %}
 
             {% if model.exemption.exemptionOrder != '2015' %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -71,6 +73,7 @@
             </div>
             {% endif %}
 
+            {% if model.exemption.court or model.exemption.exemptionOrder != '2023' %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Court</dt>
               {% if model.exemption.court %}
@@ -79,6 +82,7 @@
                 <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
               {% endif %}
             </div>
+            {% endif %}
 
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Police force</dt>

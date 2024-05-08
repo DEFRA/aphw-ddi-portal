@@ -1,6 +1,5 @@
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
 describe('View dog details', () => {
   jest.mock('../../../../../../app/auth')
@@ -66,7 +65,7 @@ describe('View dog details', () => {
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
     })
 
-    test('GET /cdo/view/dog-details route returns 200 and Not entered values given fields missing', async () => {
+    test('GET /cdo/view/dog-details route returns 200 with Not entered values given fields missing', async () => {
       getCdo.mockResolvedValue({
         person: {
           id: 183,
@@ -178,7 +177,7 @@ describe('View dog details', () => {
       ] = ownerDetails.querySelectorAll('.govuk-summary-list__key')
       const [
         nameValue,
-        dateOfBirthValue,,
+        dateOfBirthValue, ,
         emailValue,
         telephoneNumberValue
       ] = ownerDetails.querySelectorAll('.govuk-summary-list__value')
@@ -195,7 +194,7 @@ describe('View dog details', () => {
       expect(telephoneNumberValue.textContent.trim()).toBe(notEntered)
 
       const [,
-        firstCertificateIssuedKey,,
+        firstCertificateIssuedKey, ,
         cdoExpiryKey,
         courtKey,
         policeForceKey,
@@ -206,7 +205,7 @@ describe('View dog details', () => {
         microchipNumberVerifiedKey
       ] = exemptionDetails.querySelectorAll('.govuk-summary-list__key')
       const [,
-        firstCertificateIssuedValue,,
+        firstCertificateIssuedValue, ,
         cdoExpiryValue,
         courtValue,
         policeForceValue,
@@ -237,6 +236,96 @@ describe('View dog details', () => {
       expect(neuteringConfirmationValue.textContent.trim()).toBe(notEntered)
       expect(microchipNumberVerifiedValue.textContent.trim()).toBe(notEntered)
       expect(firstCertificateIssued).toBeUndefined()
+    })
+
+    test('GET /cdo/view/dog-details route to 2023 order returns 200 with Not entered values given fields missing', async () => {
+      getCdo.mockResolvedValue({
+        person: {
+          id: 184,
+          personReference: 'P-FB18-9016',
+          firstName: 'Super',
+          lastName: 'Mario',
+          dateOfBirth: null,
+          addresses: [{
+            id: 199,
+            person_id: 184,
+            address_id: 199,
+            created_at: '2024-05-08T12:52:07.553Z',
+            deleted_at: null,
+            updated_at: '2024-05-08T12:52:07.567Z',
+            address: {
+              id: 199,
+              address_line_1: '17 SUSSEX COURT, SPRING STREET',
+              address_line_2: null,
+              town: 'LONDON',
+              postcode: 'W2 1JF',
+              county: null,
+              country_id: 1,
+              created_at: '2024-05-08T12:52:07.553Z',
+              deleted_at: null,
+              updated_at: '2024-05-08T12:52:07.563Z',
+              country: { id: 1, country: 'England' }
+            }
+          }],
+          person_contacts: [],
+          organisationName: null
+        },
+        dog: {
+          id: 300243,
+          dogReference: '49864370-16ea-4d5b-92c6-79f360eff00c',
+          indexNumber: 'ED300243',
+          name: '',
+          breed: 'XL Bully',
+          status: 'Interim exempt',
+          dateOfBirth: null,
+          dateOfDeath: null,
+          tattoo: null,
+          colour: null,
+          sex: null,
+          dateExported: null,
+          dateStolen: null,
+          dateUntraceable: null,
+          microchipNumber: null,
+          microchipNumber2: null
+        },
+        exemption: {
+          exemptionOrder: '2023',
+          cdoIssued: null,
+          cdoExpiry: null,
+          policeForce: 'Metropolitan Police Service',
+          legislationOfficer: '',
+          certificateIssued: null,
+          applicationFeePaid: null,
+          insurance: [],
+          neuteringConfirmation: null,
+          microchipVerification: null,
+          joinedExemptionScheme: '2024-05-08',
+          nonComplianceLetterSent: null
+        }
+      })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/view/dog-details/ED123',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      const [,, exemptionDetails] = document.querySelectorAll('.govuk-summary-card__content')
+
+      const [,
+        firstCertificateIssuedKey,
+        orderKey,
+        policeForceKey
+      ] = exemptionDetails.querySelectorAll('.govuk-summary-list__key')
+
+      expect(firstCertificateIssuedKey.textContent.trim()).toBe('First certificate issued')
+      expect(orderKey.textContent.trim()).toBe('Order')
+      expect(policeForceKey.textContent.trim()).toBe('Police force')
     })
 
     test('GET /cdo/view/dog-details route returns 200 given admin user', async () => {
