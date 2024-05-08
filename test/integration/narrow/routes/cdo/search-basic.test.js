@@ -59,7 +59,7 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('GET /cdo/search/basic with valid data and empty Dog name and Microchip number returns 200', async () => {
+  test('GET /cdo/search/basic dog record search with valid data and empty Dog name and Microchip number returns 200', async () => {
     doSearch.mockResolvedValue([
       {
         address: {
@@ -95,6 +95,41 @@ describe('SearchBasic test', () => {
     expect(dogNameResult.textContent.trim()).toBe('Not entered')
     expect(ownerNameResult.textContent.trim()).toBe('Wreck it Ralph')
     expect(microchipNumberResult.textContent.trim()).toBe('Not entered')
+  })
+
+  test('GET /cdo/search/basic owner record search with valid data and empty Dog name returns 200', async () => {
+    doSearch.mockResolvedValue([
+      {
+        personId: 183,
+        personReference: 'P-4813-BF4F',
+        lastName: 'Ralph',
+        firstName: 'Wreck it',
+        rank: 0.0607927,
+        distance: 9,
+        address: '47 PARK STREET, LONDON, W1K 7EB',
+        dogs: [
+          {
+            dogId: 300242,
+            dogIndex: 'ED300242',
+            dogName: '',
+            dogStatus: 'Pre-exempt'
+          }
+        ]
+      }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/search/basic?searchTerms=ED300242&searchType=owner',
+      auth
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    const [, dogNameResult] = document.querySelectorAll('.govuk-table__body td')
+    expect(dogNameResult.textContent.trim()).toBe('Not entered')
   })
 
   test('GET /cdo/create/select-address with invalid data returns error', async () => {

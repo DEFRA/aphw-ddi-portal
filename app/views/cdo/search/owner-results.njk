@@ -3,7 +3,7 @@
     <div class="govuk-summary-card">
       <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-2 govuk-!-padding-bottom-1">
         <h2 class="govuk-summary-card__title defra-summary-header"><a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="">
-            <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
+            <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
                     {{ result.firstName }} {{ result.lastName }}
             </a>
         </h2>
@@ -41,6 +41,9 @@
               </td>
               <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
                       {{ dog.dogName }}
+                  {% if dog.dogNameNotEntered %}
+                  <span class="defra-secondary-text">Not entered</span>
+                  {% endif %}
               </td>
               <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
                 {{ statusTag(dog.dogStatus, 'govuk-!-font-size-16')}}
