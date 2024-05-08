@@ -22,15 +22,17 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.certificateIssued %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">First certificate issued</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
-              <dd class="govuk-summary-list__actions defra-text-align-left">
-                <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
-              </dd>
+              {% if model.exemption.certificateIssued %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
+                <dd class="govuk-summary-list__actions defra-text-align-left">
+                  <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
+                </dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
             {% if model.exemption.cdoIssued %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -39,12 +41,14 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.cdoExpiry %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">CDO expiry</dt>
+              {% if model.exemption.cdoExpiry %}
               <dd class="govuk-summary-list__value">{{ model.exemption.cdoExpiry }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
             {% if model.exemption.exemptionOrder != '2015' %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -67,19 +71,23 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.court %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Court</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.court }}</dd>
+              {% if model.exemption.court %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.court }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
-            {% if model.exemption.policeForce %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Police force</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.policeForce }}</dd>
+              {% if model.exemption.policeForce %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.policeForce }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
             {% if model.exemption.dogLegislationOfficer %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -88,40 +96,50 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.applicationFeePaid %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Application fee paid</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.applicationFeePaid }}</dd>
+              {% if model.exemption.applicationFeePaid %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.applicationFeePaid }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
-            {% if model.exemption.insuranceCompany %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Insurance company</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.insuranceCompany }}</dd>
+              {% if model.exemption.insuranceCompany %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.insuranceCompany }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
-            {% if model.exemption.insuranceRenewalDate %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Insurance renewal date</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.insuranceRenewalDate }}</dd>
+              {% if model.exemption.insuranceRenewalDate %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.insuranceRenewalDate }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
-            {% if model.exemption.neuteringConfirmation %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Neutering confirmed</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringConfirmation }}</dd>
+              {% if model.exemption.neuteringConfirmation %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.neuteringConfirmation }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
-            {% if model.exemption.microchipVerification %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Microchip number verified</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.microchipVerification }}</dd>
+              {% if model.exemption.microchipVerification %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.microchipVerification }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
             {% if model.exemption.joinedExemptionScheme %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
