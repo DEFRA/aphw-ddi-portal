@@ -1,5 +1,6 @@
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
 describe('View dog details', () => {
   jest.mock('../../../../../../app/auth')
@@ -19,27 +20,29 @@ describe('View dog details', () => {
   })
 
   describe('GET /cdo/view/dog-details returns 200', () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        id: 1,
-        indexNumber: 'ED123',
-        name: 'Bruno',
-        status: { status: 'TEST' },
-        dog_breed: { breed: 'breed1' }
-      },
-      person: {
-        firstName: 'John Smith',
-        addresses: [{
-          address: {}
-        }],
-        person_contacts: []
-      },
-      exemption: {
-        exemptionOrder: 2015,
-        insurance: [{
-          company: 'Dogs Trust'
-        }]
-      }
+    beforeEach(() => {
+      getCdo.mockResolvedValue({
+        dog: {
+          id: 1,
+          indexNumber: 'ED123',
+          name: 'Bruno',
+          status: { status: 'TEST' },
+          dog_breed: { breed: 'breed1' }
+        },
+        person: {
+          firstName: 'John Smith',
+          addresses: [{
+            address: {}
+          }],
+          person_contacts: []
+        },
+        exemption: {
+          exemptionOrder: 2015,
+          insurance: [{
+            company: 'Dogs Trust'
+          }]
+        }
+      })
     })
 
     test('GET /cdo/view/dog-details route returns 200 given standard', async () => {
@@ -56,8 +59,8 @@ describe('View dog details', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED123')
       expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
-      expect(document.querySelectorAll('.govuk-summary-list__value')[1].textContent.trim()).toBe('John Smith')
-      expect(document.querySelectorAll('.govuk-summary-list__value')[3].textContent.trim()).toBe('Dogs Trust')
+      expect(document.querySelectorAll('.govuk-summary-card:nth-child(2) .govuk-summary-list__value')[0].textContent.trim()).toBe('John Smith')
+      expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[6].textContent.trim()).toBe('Dogs Trust')
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
