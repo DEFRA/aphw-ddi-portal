@@ -33,6 +33,9 @@
             <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
                   {{ result.dogName }}
+                  {% if result.dogNameNotEntered %}
+                  <span class="defra-secondary-text">Not entered</span>
+                  {% endif %}
               </td>
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
                 <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
@@ -40,7 +43,11 @@
                 </a>
               </td>
               <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-results">
-                      {{ result.microchipNumber }}<br/>
+                      {{ result.microchipNumber }}
+                      {% if result.microchipNumberNotEntered %}
+                      <span class="defra-secondary-text">Not entered</span>
+                      {% endif %}
+                      <br/>
                       {{ result.microchipNumber2 }}
               </td>
             </tr>

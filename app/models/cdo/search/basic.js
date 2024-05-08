@@ -44,7 +44,11 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
       ]
     },
     results: {
-      items: resultList || []
+      items: resultList.map(resultObj => ({
+        ...resultObj,
+        dogNameNotEntered: !resultObj.dogName?.length,
+        microchipNumberNotEntered: !resultObj.microchipNumber?.length
+      })) || []
     },
     errors: []
   }
