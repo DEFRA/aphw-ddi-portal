@@ -24,13 +24,15 @@
               <dd class="govuk-summary-list__value">{{ model.person.firstName }} {{ model.person.lastName }}</dd>
             </div>      
     
-            {% if model.person.dateOfBirth %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Date of birth</dt>
-              <dd class="govuk-summary-list__value">{{ model.person.dateOfBirth }}</dd>
+              {% if model.person.dateOfBirth %}
+                <dd class="govuk-summary-list__value">{{ model.person.dateOfBirth }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
-            
+
             {% if model.person.addressLines and model.person.addressLines.length > 0 %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Address</dt>
@@ -47,20 +49,24 @@
             </div>
             {% endif %}
     
-            {% if model.person.email %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Email</dt>
-              <dd class="govuk-summary-list__value">{{ model.person.email }}</dd>
+              {% if model.person.email %}
+                <dd class="govuk-summary-list__value">{{ model.person.email }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
-          
+
       
-            {% if model.person.telephoneNumber1 %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Telephone number 1</dt>
-              <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber1 }}</dd>
+              {% if model.person.telephoneNumber1 %}
+                <dd class="govuk-summary-list__value">{{ model.person.telephoneNumber1 }}</dd>
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
-            {% endif %}
 
             {% if model.person.telephoneNumber2 %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">

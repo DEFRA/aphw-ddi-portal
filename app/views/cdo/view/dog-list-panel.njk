@@ -28,8 +28,16 @@
 
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row govuk-!-font-size-16 govuk-!-margin-bottom-0">
-            <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">{{ dog.name }}</td>
+            {% if dog.name %}
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0">{{ dog.name }}</td>
+            {% else %}
+              <td class="govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-secondary-text">Not entered</td>
+            {% endif %}
+            {% if dog.microchipNumber %}
             <td class="govuk-table__header--numeric govuk-!-padding-top-2 govuk-!-padding-bottom-0">{{ dog.microchipNumber }}</td>
+            {% else %}
+            <td class="govuk-table__header--numeric govuk-!-padding-top-2 govuk-!-padding-bottom-0 defra-secondary-text">Not entered</td>
+            {% endif %}
           </tr>
         </tbody>
       </table>
