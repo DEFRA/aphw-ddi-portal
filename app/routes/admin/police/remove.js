@@ -5,20 +5,21 @@ const ConfirmViewModel = require('../../../models/common/confim')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
 const { hasConfirmationFormBeenSubmitted } = require('../../../schema/portal/common/single-submit')
 const { isInputFieldPkInPayload, notFoundSchema, confirmFlowValidFields, areYouSureRemoveSchema } = require('../../../schema/portal/common/single-remove')
-const { getCourts, removeCourt } = require('../../../api/ddi-index-api/courts')
 const { getUser } = require('../../../auth')
-const { CourtRemovedViewModel } = require('../../../models/admin/courts/builder')
+const { PoliceForceRemovedViewModel } = require('../../../models/admin/police/builder')
+const { getPoliceForces } = require('../../../api/ddi-index-api')
+const { removePoliceForce } = require('../../../api/ddi-index-api/police-forces')
 
-const addRemoveConstants = addRemove.courtConstants
+const addRemoveConstants = addRemove.policeConstants
 
 /**
  * @type {{buttonText: string, recordTypeText: string, recordType: string, action: string}}
  */
 const fieldNames = {
-  recordTypeText: addRemoveConstants.inputField,
+  recordTypeText: addRemoveConstants.messageLabel,
   recordType: addRemoveConstants.inputField,
   action: 'remove',
-  buttonText: `Remove ${addRemoveConstants.inputField}`
+  buttonText: `Remove ${addRemoveConstants.messageLabel}`
 }
 
 const stepOneCheckSubmitted = {
@@ -29,9 +30,9 @@ const stepOneCheckSubmitted = {
   failAction: async (_request, h, error) => {
     const backLink = addRemoveConstants.links.index.get
 
-    const items = (await getCourts()).map(court => ({
-      text: court.name,
-      value: court.id
+    const items = (await getPoliceForces()).map(policeForce => ({
+      text: policeForce.name,
+      value: policeForce.id
     }))
 
     return h.view(views.removeAdminRecord, new FormViewModel({
@@ -51,8 +52,8 @@ const stepTwoCheckConfirmation = {
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
-    const courts = await getCourts()
-    const recordValue = courts.find(court => court.id === pk).name
+    const policeForces = await getPoliceForces()
+    const recordValue = policeForces.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -68,15 +69,15 @@ const stepTwoCheckConfirmation = {
 
 const stepThreeCheckConfirmation = {
   method: request => {
-    return validatePayloadBuilder(areYouSureRemoveSchema('court'))(request.payload)
+    return validatePayloadBuilder(areYouSureRemoveSchema('police'))(request.payload)
   },
   assign: 'addConfirmation',
   failAction: async (request, h, error) => {
-    const backLink = routes.removeCourt.get
+    const backLink = routes.removePoliceForce.get
 
     const pk = request.pre.inputField
-    const courts = await getCourts()
-    const recordValue = courts.find(court => court.id === pk).name
+    const policeForces = await getPoliceForces()
+    const recordValue = policeForces.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -92,15 +93,15 @@ const stepThreeCheckConfirmation = {
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.removeCourt.get}`,
+    path: `${routes.removePoliceForce.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (_request, h) => {
         const backLink = addRemoveConstants.links.index.get
 
-        const items = (await getCourts()).map(court => ({
-          text: court.name,
-          value: court.id
+        const items = (await getPoliceForces()).map(policeForce => ({
+          text: policeForce.name,
+          value: policeForce.id
         }))
 
         return h.view(views.removeAdminRecord, new FormViewModel({
@@ -113,7 +114,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.removeCourt.post}`,
+    path: `${routes.removePoliceForce.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -129,26 +130,26 @@ module.exports = [
           return h.redirect(addRemoveConstants.links.index.get)
         }
 
-        const court = request.pre.addConfirmation.court
+        const policeForce = request.pre.addConfirmation.police
         const pk = request.pre.inputField
 
         try {
-          await removeCourt(pk, getUser(request))
+          await removePoliceForce(pk, getUser(request))
 
-          return h.view(views.success, CourtRemovedViewModel(court))
+          return h.view(views.success, PoliceForceRemovedViewModel(policeForce))
         } catch (e) {
           if (e.isBoom && e.output.statusCode === 404) {
-            const { error } = notFoundSchema('pk', court).validate(request.payload)
-            const backLink = routes.courts.get
+            const { error } = notFoundSchema('pk', policeForce).validate(request.payload)
+            const backLink = routes.police.get
 
-            const items = (await getCourts()).map(court => ({
+            const items = (await getPoliceForces()).map(court => ({
               text: court.name,
               value: court.id
             }))
 
             return h.view(views.removeAdminRecord, new FormViewModel({
               backLink,
-              recordValue: court,
+              recordValue: policeForce,
               items,
               ...fieldNames
             }, undefined, error)).code(404)

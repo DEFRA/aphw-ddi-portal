@@ -36,7 +36,7 @@ function ViewModel (details, backNav, errors) {
     id: 'pk',
     name: 'pk',
     value: details.pk,
-    placeholder: `Start typing to choose ${details.recordType}`,
+    placeholder: `Start typing to choose ${details.recordTypeText}`,
     items: [{ text: '', value: null }, ...details.items],
     autocomplete: forms.preventAutocomplete
   }
