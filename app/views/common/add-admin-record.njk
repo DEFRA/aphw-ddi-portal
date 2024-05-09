@@ -33,6 +33,9 @@
       }) }}
     {% endif %}
 
+    {% if model.confirmHint %}
+    <span class="govuk-caption-l">{{ model.confirmHint }}</span>
+    {% endif %}
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">

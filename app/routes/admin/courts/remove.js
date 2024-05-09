@@ -5,11 +5,11 @@ const ViewModel = require('../../../models/common/single-submit-autocomplete')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.removeCourt.get}`,
+    path: `${routes.courts.remove.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const backLink = routes.courts.get
+        const backLink = routes.courts.remove.get
 
         return h.view(views.addAdminRecord, new ViewModel({
           backLink,
@@ -23,7 +23,7 @@ module.exports = [
   }
   // {
   //   method: 'POST',
-  //   path: `${routes.courts.post}`,
+  //   path: `${routes.courts.remove.post}`,
   //   options: {
   //     auth: { scope: [admin] },
   //     validate: {

@@ -2,17 +2,19 @@ const { routes, views, addRemove } = require('../../../constants/admin')
 const { admin } = require('../../../auth/permissions')
 const FormViewModel = require('../../../models/common/single-submit')
 const ConfirmViewModel = require('../../../models/common/confim')
+const { sources, keys } = require('../../../constants/cdo/activity')
+const { getUser } = require('../../../auth')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
 const {
   isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields,
   duplicateEntrySchema
 } = require('../../../schema/portal/common/single-submit')
-const { addCourt } = require('../../../api/ddi-index-api/courts')
-const { getUser } = require('../../../auth')
 const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
 
-const addRemoveConstants = addRemove.courtConstants
+const backLink = routes.activities.index.get
+
+const addRemoveConstants = addRemove.activityConstants
 
 const fieldNames = {
   recordTypeText: addRemoveConstants.inputField,
@@ -31,6 +33,7 @@ const stepOneCheckSubmitted = {
 
     return h.view(views.addAdminRecord, new FormViewModel({
       backLink,
+      confirmHint: `${_request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${_request.params.activityType === keys.sent ? 'send' : 'receive'}`,
       ...fieldNames
     }, undefined, error)).code(400).takeover()
   },
@@ -47,7 +50,8 @@ const stepTwoCheckConfirmation = {
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
-      confirmText: `Are you sure you want to add ‘${recordValue}’ to the Index?`,
+      confirmText: `Are you sure you want to add ‘${recordValue}’ to the activity list?`,
+      confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
       nameOrReference: addRemoveConstants.inputField,
       recordValue,
       action: 'add'
@@ -68,7 +72,8 @@ const stepThreeCheckConfirmation = {
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
-      confirmText: `Are you sure you want to add ‘${recordValue}’ to the Index?`,
+      confirmText: `Are you sure you want to add ‘${recordValue}’ to the activity list?`,
+      confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
       nameOrReference: addRemoveConstants.inputField,
       recordValue,
       action: 'add'
@@ -79,13 +84,12 @@ const stepThreeCheckConfirmation = {
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.courts.add.get}`,
+    path: `${routes.activities.add.get}/{activityType}/{activitySource}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (_request, h) => {
-        const backLink = addRemoveConstants.backLinks.index.get
-
+      handler: async (request, h) => {
         return h.view(views.addAdminRecord, new FormViewModel({
+          confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
           backLink,
           ...fieldNames
         }))
@@ -94,7 +98,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.courts.add.post}`,
+    path: `${routes.activities.add.post}/{activityType}/{activitySource}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -113,14 +117,14 @@ module.exports = [
         const court = request.pre.inputField
 
         try {
-          const courtResponse = await addCourt({ name: court }, getUser(request))
+          // const courtResponse = await addCourt({ name: court }, getUser(request))
 
-          return h.view(views.success, CourtAddedViewModel(courtResponse.name))
+          return h.view(views.success, CourtAddedViewModel({})) // courtResponse.name))
         } catch (e) {
           if (e instanceof ApiConflictError) {
             const { error } = duplicateEntrySchema(addRemoveConstants.inputField, addRemoveConstants.messageLabel).validate(request.payload)
 
-            const backLink = routes.courts.get
+            const backLink = routes.activities.index.get
 
             return h.view(views.addAdminRecord, new FormViewModel({
               backLink,

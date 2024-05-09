@@ -1,4 +1,4 @@
-const courtBackLinks = {
+const courtLinks = {
   index: {
     get: '/admin/courts',
     post: '/admin/courts'
@@ -13,14 +13,27 @@ const courtBackLinks = {
   }
 }
 
+const activityLinks = {
+  index: {
+    get: '/admin/activities'
+  },
+  add: {
+    get: '/admin/activities/add',
+    post: '/admin/activities/add'
+  },
+  remove: {
+    get: '/admin/activities/remove',
+    post: '/admin/activities/remove'
+  }
+}
+
 const constants = {
   routes: {
     index: {
       get: '/admin/index'
     },
-    courts: courtBackLinks.index,
-    addCourt: courtBackLinks.add,
-    removeCourt: courtBackLinks.remove,
+    activities: activityLinks,
+    courts: courtLinks,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -30,9 +43,6 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
-    },
-    activities: {
-      get: '/admin/activities'
     }
   },
   views: {
@@ -52,7 +62,13 @@ const constants = {
       inputField: 'court',
       messageLabel: 'court name',
       messageLabelCapital: 'Court name',
-      backLinks: courtBackLinks
+      backLinks: courtLinks
+    },
+    activityConstants: {
+      inputField: 'activity',
+      messageLabel: 'activity name',
+      messageLabelCapital: 'Activity name',
+      backLinks: activityLinks
     }
   }
 }

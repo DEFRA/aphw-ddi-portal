@@ -6,7 +6,7 @@ const { validatePayload } = require('../../../schema/portal/common/do-you-want')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.courts.get}`,
+    path: `${routes.courts.index.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
@@ -19,7 +19,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.courts.post}`,
+    path: `${routes.courts.index.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -36,9 +36,9 @@ module.exports = [
         let redirectUrl
 
         if (addRemoveCourt === 'remove') {
-          redirectUrl = routes.removeCourt.get
+          redirectUrl = routes.courts.remove.get
         } else {
-          redirectUrl = routes.addCourt.get
+          redirectUrl = routes.courts.add.get
         }
 
         return h.redirect(redirectUrl)

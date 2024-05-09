@@ -1,4 +1,4 @@
-const { get, post } = require('./base')
+const { get, post, callDelete } = require('./base')
 const { keys, sources } = require('../../constants/cdo/activity')
 const { getDogOwner } = require('./dog')
 
@@ -37,9 +37,14 @@ const recordActivity = async (activity, user) => {
   return await post(activityEndpoint, activity, user)
 }
 
+const deleteActivity = async (activityId, user) => {
+  await callDelete(`${activitiesEndpoint}/${activityId}`, user)
+}
+
 module.exports = {
   getActivities,
   getAllActivities,
   getActivityById,
-  recordActivity
+  recordActivity,
+  deleteActivity
 }
