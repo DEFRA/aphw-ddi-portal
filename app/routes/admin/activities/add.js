@@ -4,13 +4,14 @@ const FormViewModel = require('../../../models/common/single-submit')
 const ConfirmViewModel = require('../../../models/common/confim')
 const { sources, keys } = require('../../../constants/cdo/activity')
 const { getUser } = require('../../../auth')
+const { addActivity } = require('../../../api/ddi-index-api/activities')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
 const {
   isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields,
   duplicateEntrySchema
 } = require('../../../schema/portal/common/single-submit')
-const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
+const { ActivityAddedViewModel } = require('../../../models/admin/activities/builder')
 
 const backLink = routes.activities.index.get
 
@@ -25,8 +26,8 @@ const fieldNames = {
 
 const stepOneCheckSubmitted = {
   method: request => {
-    const courtForm = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
-    return courtForm.court
+    const activityForm = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
+    return activityForm.activity
   },
   failAction: (_request, h, error) => {
     const backLink = addRemoveConstants.backLinks.index.get
@@ -68,7 +69,7 @@ const stepThreeCheckConfirmation = {
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
-    const backLink = routes.courts.add.get
+    const backLink = routes.activities.add.get
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -114,12 +115,16 @@ module.exports = [
           return h.redirect(addRemoveConstants.backLinks.index.get)
         }
 
-        const court = request.pre.inputField
+        const label = request.pre.inputField
 
         try {
-          // const courtResponse = await addCourt({ name: court }, getUser(request))
+          const activityResponse = await addActivity({
+            label,
+            activityType: request.params.activityType,
+            activitySource: request.params.activitySource
+          }, getUser(request))
 
-          return h.view(views.success, CourtAddedViewModel({})) // courtResponse.name))
+          return h.view(views.success, ActivityAddedViewModel(activityResponse))
         } catch (e) {
           if (e instanceof ApiConflictError) {
             const { error } = duplicateEntrySchema(addRemoveConstants.inputField, addRemoveConstants.messageLabel).validate(request.payload)
@@ -128,7 +133,7 @@ module.exports = [
 
             return h.view(views.addAdminRecord, new FormViewModel({
               backLink,
-              recordValue: court,
+              recordValue: label,
               ...fieldNames
             }, undefined, error)).code(409)
           }

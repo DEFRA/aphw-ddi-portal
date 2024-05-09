@@ -1,6 +1,5 @@
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-// const FormData = require('form-data')
 
 describe('Remove Courts page', () => {
   jest.mock('../../../../../../app/auth')

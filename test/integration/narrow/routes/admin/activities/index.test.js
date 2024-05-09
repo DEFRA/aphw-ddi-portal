@@ -1,14 +1,14 @@
-const { auth, user } = require('../../../../mocks/auth')
+const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('Activities admin', () => {
   jest.mock('../../../../../app/auth')
-  const mockAuth = require('../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../app/api/ddi-index-api/activities')
-  const { getAllActivities } = require('../../../../../app/api/ddi-index-api/activities')
+  const { getAllActivities } = require('../../../../../../app/api/ddi-index-api/activities')
 
-  const createServer = require('../../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {

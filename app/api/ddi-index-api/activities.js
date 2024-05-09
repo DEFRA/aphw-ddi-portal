@@ -1,5 +1,6 @@
 const { get, post, callDelete } = require('./base')
 const { keys, sources } = require('../../constants/cdo/activity')
+const { ApiConflictError } = require('../../errors/api-conflict-error')
 const { getDogOwner } = require('./dog')
 
 const activitiesEndpoint = 'activities'
@@ -37,6 +38,39 @@ const recordActivity = async (activity, user) => {
   return await post(activityEndpoint, activity, user)
 }
 
+/**
+ * @typedef ActivityRequest
+ * @property {string} label
+ * @property {string} activityType
+ * @property {string} activitySource
+ */
+
+/**
+ * @param {ActivityRequest} activity
+ * @return {Promise<ActivityRequest>}
+ */
+const addActivity = async (activity, user) => {
+  const data = {
+    label: activity.label,
+    activityType: activity.activityType,
+    activitySource: activity.activitySource
+  }
+
+  try {
+    const payload = await post(activitiesEndpoint, data, user)
+
+    return payload
+  } catch (e) {
+    if (e.isBoom && e.output.statusCode === 409) {
+      throw new ApiConflictError({
+        ...e,
+        message: 'This activity name is already in use'
+      })
+    }
+    throw e
+  }
+}
+
 const deleteActivity = async (activityId, user) => {
   await callDelete(`${activitiesEndpoint}/${activityId}`, user)
 }
@@ -46,5 +80,6 @@ module.exports = {
   getAllActivities,
   getActivityById,
   recordActivity,
+  addActivity,
   deleteActivity
 }
