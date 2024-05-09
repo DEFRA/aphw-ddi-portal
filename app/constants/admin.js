@@ -1,4 +1,4 @@
-const courtBackLinks = {
+const courtLinks = {
   index: {
     get: '/admin/courts',
     post: '/admin/courts'
@@ -13,6 +13,21 @@ const courtBackLinks = {
   }
 }
 
+const policeLinks = {
+  index: {
+    get: '/admin/police',
+    post: '/admin/police'
+  },
+  add: {
+    get: '/admin/police/add',
+    post: '/admin/police/add'
+  },
+  remove: {
+    get: '/admin/police/remove',
+    post: '/admin/police/remove'
+  }
+}
+
 const adminIndex = {
   get: '/admin/index'
 }
@@ -20,9 +35,12 @@ const adminIndex = {
 const constants = {
   routes: {
     index: adminIndex,
-    courts: courtBackLinks.index,
-    addCourt: courtBackLinks.add,
-    removeCourt: courtBackLinks.remove,
+    courts: courtLinks.index,
+    addCourt: courtLinks.add,
+    removeCourt: courtLinks.remove,
+    police: policeLinks.index,
+    addPoliceForce: policeLinks.add,
+    removePoliceForce: policeLinks.remove,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -65,7 +83,13 @@ const constants = {
       inputField: 'court',
       messageLabel: 'court name',
       messageLabelCapital: 'Court name',
-      backLinks: courtBackLinks
+      links: courtLinks
+    },
+    policeConstants: {
+      inputField: 'police',
+      messageLabel: 'police force',
+      messageLabelCapital: 'Police force',
+      links: policeLinks
     }
   }
 }

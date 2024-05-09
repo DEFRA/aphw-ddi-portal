@@ -7,24 +7,24 @@ const {
   isInputFieldInPayload, hasAreYouSureRadioBeenSelected, hasConfirmationFormBeenSubmitted, confirmFlowValidFields,
   duplicateEntrySchema
 } = require('../../../schema/portal/common/single-submit')
-const { addCourt } = require('../../../api/ddi-index-api/courts')
+const { addPoliceForce } = require('../../../api/ddi-index-api/police-forces')
 const { getUser } = require('../../../auth')
-const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
+const { PoliceForceAddedViewModel } = require('../../../models/admin/police/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
 
-const addRemoveConstants = addRemove.courtConstants
+const addRemoveConstants = addRemove.policeConstants
 
 const fieldNames = {
-  recordTypeText: addRemoveConstants.inputField,
+  recordTypeText: addRemoveConstants.messageLabel,
   recordType: addRemoveConstants.inputField,
   action: 'add',
-  buttonText: `Add ${addRemoveConstants.inputField}`
+  buttonText: `Add ${addRemoveConstants.messageLabel}`
 }
 
 const stepOneCheckSubmitted = {
   method: request => {
-    const courtForm = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
-    return courtForm.court
+    const policeForce = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
+    return policeForce.police
   },
   failAction: (_request, h, error) => {
     const backLink = addRemoveConstants.links.index.get
@@ -64,7 +64,7 @@ const stepThreeCheckConfirmation = {
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
-    const backLink = routes.addCourt.get
+    const backLink = routes.addPoliceForce.get
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -79,7 +79,7 @@ const stepThreeCheckConfirmation = {
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.addCourt.get}`,
+    path: `${routes.addPoliceForce.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (_request, h) => {
@@ -94,7 +94,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${routes.addCourt.post}`,
+    path: `${routes.addPoliceForce.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
@@ -110,21 +110,21 @@ module.exports = [
           return h.redirect(addRemoveConstants.links.index.get)
         }
 
-        const court = request.pre.inputField
+        const policeForce = request.pre.inputField
 
         try {
-          const courtResponse = await addCourt({ name: court }, getUser(request))
+          const policeForcesResponse = await addPoliceForce({ name: policeForce }, getUser(request))
 
-          return h.view(views.success, CourtAddedViewModel(courtResponse.name))
+          return h.view(views.success, PoliceForceAddedViewModel(policeForcesResponse.name))
         } catch (e) {
           if (e instanceof ApiConflictError) {
             const { error } = duplicateEntrySchema(addRemoveConstants.inputField, addRemoveConstants.messageLabel).validate(request.payload)
 
-            const backLink = routes.courts.get
+            const backLink = routes.police.get
 
             return h.view(views.addAdminRecord, new FormViewModel({
               backLink,
-              recordValue: court,
+              recordValue: policeForce,
               ...fieldNames
             }, undefined, error)).code(409)
           }

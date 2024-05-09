@@ -2,7 +2,7 @@ const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 
-describe('Courts page', () => {
+describe('Police force page', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -21,11 +21,11 @@ describe('Courts page', () => {
     jest.clearAllMocks()
   })
 
-  describe('/admin/courts', () => {
-    test('GET /admin/courts route returns 200', async () => {
+  describe('/admin/police', () => {
+    test('GET /admin/police route returns 200', async () => {
       const options = {
         method: 'GET',
-        url: '/admin/courts',
+        url: '/admin/police',
         auth
       }
 
@@ -34,16 +34,16 @@ describe('Courts page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
-      expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
+      expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a police force?')
       expect(document.querySelectorAll('.govuk-radios__label')[0].textContent.trim()).toContain('Add')
       expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toContain('Remove')
       expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/admin/index')
     })
 
-    test('GET /admin/courts route returns 403 given user is standard user', async () => {
+    test('GET /admin/police route returns 403 given user is standard user', async () => {
       const options = {
         method: 'GET',
-        url: '/admin/courts',
+        url: '/admin/police',
         auth: standardAuth
       }
 
@@ -52,10 +52,10 @@ describe('Courts page', () => {
       expect(response.statusCode).toBe(403)
     })
 
-    test('POST /admin/courts add court route returns 200', async () => {
+    test('POST /admin/police add court route returns 200', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/courts',
+        url: '/admin/police',
         auth,
         payload: {
           addOrRemove: 'add'
@@ -65,13 +65,13 @@ describe('Courts page', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/admin/courts/add')
+      expect(response.headers.location).toBe('/admin/police/add')
     })
 
-    test('POST /admin/courts remove court route returns 200', async () => {
+    test('POST /admin/police remove court route returns 200', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/courts',
+        url: '/admin/police',
         auth,
         payload: {
           addOrRemove: 'remove'
@@ -81,13 +81,13 @@ describe('Courts page', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/admin/courts/remove')
+      expect(response.headers.location).toBe('/admin/police/remove')
     })
 
-    test('POST /admin/courts without an option returns 400', async () => {
+    test('POST /admin/police without an option returns 400', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/courts',
+        url: '/admin/police',
         auth,
         payload: {}
       }
@@ -95,16 +95,16 @@ describe('Courts page', () => {
       const response = await server.inject(options)
 
       const { document } = new JSDOM(response.payload).window
-      expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a court?')
+      expect(document.querySelector('.govuk-fieldset__heading').textContent.trim()).toBe('Do you want to add or remove a police force?')
       expect(response.statusCode).toBe(400)
     })
 
-    test('POST /admin/courts route returns 302 if not auth', async () => {
+    test('POST /admin/police route returns 302 if not auth', async () => {
       const fd = new FormData()
 
       const options = {
         method: 'POST',
-        url: '/admin/courts',
+        url: '/admin/police',
         headers: fd.getHeaders(),
         payload: fd.getBuffer()
       }

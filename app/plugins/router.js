@@ -54,6 +54,9 @@ const routes = [].concat(
   require('../routes/admin/courts/index'),
   require('../routes/admin/courts/add'),
   require('../routes/admin/courts/remove'),
+  require('../routes/admin/police/index'),
+  require('../routes/admin/police/add'),
+  require('../routes/admin/police/remove'),
   require('../routes/admin/process-comments')
 )
 
