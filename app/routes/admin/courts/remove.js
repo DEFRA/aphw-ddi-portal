@@ -27,7 +27,7 @@ const stepOneCheckSubmitted = {
     return pk
   },
   failAction: async (_request, h, error) => {
-    const backLink = addRemoveConstants.backLinks.index.get
+    const backLink = addRemoveConstants.links.index.get
 
     const items = (await getCourts()).map(court => ({
       text: court.name,
@@ -48,7 +48,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: async (request, h) => {
-    const backLink = addRemoveConstants.backLinks.remove.get
+    const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
     const courts = await getCourts()
@@ -96,7 +96,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (_request, h) => {
-        const backLink = addRemoveConstants.backLinks.index.get
+        const backLink = addRemoveConstants.links.index.get
 
         const items = (await getCourts()).map(court => ({
           text: court.name,
@@ -126,7 +126,7 @@ module.exports = [
       ],
       handler: async (request, h) => {
         if (!request.pre.addConfirmation.confirm) {
-          return h.redirect(addRemoveConstants.backLinks.index.get)
+          return h.redirect(addRemoveConstants.links.index.get)
         }
 
         const court = request.pre.addConfirmation.court

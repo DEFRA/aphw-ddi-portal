@@ -27,7 +27,7 @@ const stepOneCheckSubmitted = {
     return courtForm.court
   },
   failAction: (_request, h, error) => {
-    const backLink = addRemoveConstants.backLinks.index.get
+    const backLink = addRemoveConstants.links.index.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
       backLink,
@@ -43,7 +43,7 @@ const stepTwoCheckConfirmation = {
   },
   failAction: (request, h) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
-    const backLink = addRemoveConstants.backLinks.add.get
+    const backLink = addRemoveConstants.links.add.get
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -83,7 +83,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (_request, h) => {
-        const backLink = addRemoveConstants.backLinks.index.get
+        const backLink = addRemoveConstants.links.index.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
           backLink,
@@ -107,7 +107,7 @@ module.exports = [
       ],
       handler: async (request, h) => {
         if (!request.pre.addConfirmation) {
-          return h.redirect(addRemoveConstants.backLinks.index.get)
+          return h.redirect(addRemoveConstants.links.index.get)
         }
 
         const court = request.pre.inputField

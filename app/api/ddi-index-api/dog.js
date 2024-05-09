@@ -18,6 +18,7 @@ const getDogOwner = async (indexNumber) => {
 
 const updateDogDetails = async (dog, username) => {
   dog.dogId = dog.id
+
   return await put(dogEndpoint, dog, username)
 }
 
