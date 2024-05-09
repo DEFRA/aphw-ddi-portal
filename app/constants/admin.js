@@ -27,6 +27,10 @@ const activityLinks = {
   }
 }
 
+const adminIndex = {
+  get: '/admin/index'
+}
+
 const constants = {
   routes: {
     index: {
@@ -34,6 +38,8 @@ const constants = {
     },
     activities: activityLinks,
     courts: courtLinks,
+    addCourt: courtLinks.add,
+    removeCourt: courtLinks.remove,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -55,8 +61,19 @@ const constants = {
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',
     addAdminRecord: 'common/add-admin-record',
+    removeAdminRecord: 'common/remove-admin-record',
     success: 'admin/success'
   },
+  breadcrumbs: [
+    {
+      label: 'Home',
+      link: '/'
+    },
+    {
+      label: 'Admin',
+      link: adminIndex.get
+    }
+  ],
   addRemove: {
     courtConstants: {
       inputField: 'court',

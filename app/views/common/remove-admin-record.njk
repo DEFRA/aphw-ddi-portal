@@ -2,24 +2,26 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "components/accessibleAutocomplete/macro.njk" import accessibleAutocomplete %}
 
 {% extends '_layout.njk' %}
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
-<div class="govuk-breadcrumbs">
-  <ol class="govuk-breadcrumbs__list">
-    {% for breadcrumb in model.breadcrumbs %}
-      <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.link }}">
-          {{ breadcrumb.label }}
-        </a>
-      </li>
-    {% endfor %}
-  </ol>
-</div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
@@ -35,20 +37,13 @@
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">
-              {{ model.optionText }}
-            </h1>
-          </legend>
-
-           {{ govukRadios(model.addOrRemove) }}
-
+          {{ accessibleAutocomplete(model.govukAutoComplete) }}
         </fieldset>
       </div>
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Continue",
+          text: model.buttonText,
           name: "submitButton"
         }) }}
       </div>
