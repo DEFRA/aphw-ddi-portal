@@ -1,8 +1,46 @@
+const courtLinks = {
+  index: {
+    get: '/admin/courts',
+    post: '/admin/courts'
+  },
+  add: {
+    get: '/admin/courts/add',
+    post: '/admin/courts/add'
+  },
+  remove: {
+    get: '/admin/courts/remove',
+    post: '/admin/courts/remove'
+  }
+}
+
+const policeLinks = {
+  index: {
+    get: '/admin/police',
+    post: '/admin/police'
+  },
+  add: {
+    get: '/admin/police/add',
+    post: '/admin/police/add'
+  },
+  remove: {
+    get: '/admin/police/remove',
+    post: '/admin/police/remove'
+  }
+}
+
+const adminIndex = {
+  get: '/admin/index'
+}
+
 const constants = {
   routes: {
-    index: {
-      get: '/admin/index'
-    },
+    index: adminIndex,
+    courts: courtLinks.index,
+    addCourt: courtLinks.add,
+    removeCourt: courtLinks.remove,
+    police: policeLinks.index,
+    addPoliceForce: policeLinks.add,
+    removePoliceForce: policeLinks.remove,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -12,15 +50,47 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
+    },
+    activities: {
+      get: '/admin/activities'
     }
   },
   views: {
     index: 'admin/index',
+    activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
+    processComments: 'admin/process-comments',
     pseudonyms: 'admin/pseudonyms',
-    processComments: 'admin/process-comments'
+    confirm: 'common/confirm',
+    courts: 'admin/courts',
+    addOrRemove: 'common/add-or-remove',
+    addAdminRecord: 'common/add-admin-record',
+    removeAdminRecord: 'common/remove-admin-record',
+    success: 'admin/success'
   },
-  keys: {
+  breadcrumbs: [
+    {
+      label: 'Home',
+      link: '/'
+    },
+    {
+      label: 'Admin',
+      link: adminIndex.get
+    }
+  ],
+  addRemove: {
+    courtConstants: {
+      inputField: 'court',
+      messageLabel: 'court name',
+      messageLabelCapital: 'Court name',
+      links: courtLinks
+    },
+    policeConstants: {
+      inputField: 'police',
+      messageLabel: 'police force',
+      messageLabelCapital: 'Police force',
+      links: policeLinks
+    }
   }
 }
 

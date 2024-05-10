@@ -1,23 +1,27 @@
-const { errorPusherDefault } = require('../../../lib/error-helpers')
+const { errorPusherDefault } = require('../../lib/error-helpers')
 
 /**
- * @typedef ConfirmDeleteDetails
+ * @typedef ConfirmDetails
  * @property {string} action
- * @property {string} pk
- * @property {string} recordTypeText
  * @property {string} nameOrReferenceText
  * @property {string} confirmReferenceText
  * @property {string} nameOrReference
+ * @property {string} [recordTypeText]
+ * @property {string} [pk]
+ * @property {string} [recordValue]
+ * @property {string} [backlink]
+ * @property {string} [confirmText]
  */
 /**
- * @param {ConfirmDeleteDetails} details
- * @param backNav
+ * @param {ConfirmDetails} details
+ * @param [backNav]
  * @param [errors]
  * @constructor
  */
 function ViewModel (details, backNav, errors) {
+  const inputReference = details.nameOrReference ?? 'recordValue'
   this.model = {
-    backLink: backNav?.backLink,
+    backLink: details.backLink ?? backNav?.backLink,
     confirm: {
       id: 'confirm',
       name: 'confirm',
@@ -33,10 +37,15 @@ function ViewModel (details, backNav, errors) {
         }
       ]
     },
-    confirmText: `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.confirmReferenceText}?`,
+    confirmText: details.confirmText ?? `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.confirmReferenceText}?`,
     nameOrReference: details.nameOrReference,
     nameOrReferenceText: details.nameOrReferenceText,
     pk: details.pk,
+    inputReference,
+    [inputReference]: details.recordValue,
+    get inputValue () {
+      return this[inputReference]
+    },
     errors: []
   }
 

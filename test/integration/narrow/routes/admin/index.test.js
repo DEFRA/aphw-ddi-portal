@@ -33,5 +33,8 @@ describe('Admin index', () => {
 
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Admin area')
+    expect(document.querySelector('#main-content').textContent.trim()).toContain('Manage Index lists')
+    expect(document.querySelector('#main-content').textContent.trim()).toContain('Courts')
+    expect(document.querySelector('#main-content').textContent.trim()).toContain('Police forces')
   })
 })

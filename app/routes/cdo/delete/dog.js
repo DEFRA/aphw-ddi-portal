@@ -1,6 +1,6 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { admin } = require('../../../auth/permissions')
-const ViewModel = require('../../../models/cdo/delete/confim')
+const ViewModel = require('../../../models/common/confim')
 const DeletedViewModel = require('../../../models/cdo/delete/deleted')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getDogDetails, deleteDog } = require('../../../api/ddi-index-api/dog')
@@ -58,7 +58,7 @@ module.exports = [
 
 /**
  * @param pk
- * @returns {Promise<ConfirmDeleteDetails>}
+ * @returns {Promise<ConfirmDetails>}
  */
 const buildDetails = async (pk) => {
   // check if dog exists

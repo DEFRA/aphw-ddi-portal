@@ -48,7 +48,14 @@
         </fieldset>
       </div>
 
+      {% if model.pk is defined %}
       <input type="hidden" name="pk" value="{{ model.pk }}" />
+      {% endif %}
+
+      {% if model.inputValue is defined %}
+      <input type="hidden" name="{{ model.inputReference }}" value="{{ model.inputValue }}" />
+      <input type="hidden" name="confirmation" value="true" />
+      {% endif %}
 
       <div class="govuk-button-group">
         {{ govukButton({

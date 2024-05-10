@@ -1,4 +1,5 @@
 const { get, post } = require('./base')
+const { keys, sources } = require('../../constants/cdo/activity')
 const { getDogOwner } = require('./dog')
 
 const activitiesEndpoint = 'activities'
@@ -8,6 +9,15 @@ const getActivities = async (activityType, activitySource) => {
   const payload = await get(`${activitiesEndpoint}/${activityType}/${activitySource}`)
 
   return payload.activities
+}
+
+const getAllActivities = async () => {
+  return {
+    dogSent: await getActivities(keys.sent, sources.dog),
+    dogReceived: await getActivities(keys.received, sources.dog),
+    ownerSent: await getActivities(keys.sent, sources.owner),
+    ownerReceived: await getActivities(keys.received, sources.owner)
+  }
 }
 
 const getActivityById = async (activityId) => {
@@ -29,6 +39,7 @@ const recordActivity = async (activity, user) => {
 
 module.exports = {
   getActivities,
+  getAllActivities,
   getActivityById,
   recordActivity
 }
