@@ -37,7 +37,7 @@ const ActivityAddedViewModel = (activity) => {
       }
     ],
     titleHtml: `You added ${activity.label}`,
-    bodyContent: [`${activity.label} is available in the list of ${activity.activitySource} record ${activityTypeText} activities.`],
+    bodyContent: [`${activity.label} is available in the ${activity.activitySource} record ${activityTypeText} activities.`],
     bottomLink: {
       link: routes.activities.index.get,
       label: 'Manage activity lists'
