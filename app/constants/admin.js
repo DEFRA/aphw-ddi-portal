@@ -95,7 +95,7 @@ const constants = {
       inputField: 'court',
       messageLabel: 'court name',
       messageLabelCapital: 'Court name',
-      backLinks: courtLinks
+      links: courtLinks
     },
     activityConstants: {
       inputField: 'activity',
