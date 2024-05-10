@@ -48,6 +48,7 @@ const routes = [].concat(
   require('../routes/upload/import-completed'),
   require('../routes/export/export-data'),
   require('../routes/admin/index'),
+  require('../routes/admin/activities'),
   require('../routes/admin/regular-jobs'),
   require('../routes/admin/pseudonyms'),
   require('../routes/admin/courts/index'),
@@ -56,6 +57,9 @@ const routes = [].concat(
   require('../routes/admin/activities'),
   require('../routes/admin/activities/add'),
   require('../routes/admin/activities/remove'),
+  require('../routes/admin/police/index'),
+  require('../routes/admin/police/add'),
+  require('../routes/admin/police/remove'),
   require('../routes/admin/process-comments')
 )
 

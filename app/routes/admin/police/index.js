@@ -6,28 +6,28 @@ const { validatePayload } = require('../../../schema/portal/common/do-you-want')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.courts.get}`,
+    path: `${routes.police.get}`,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
         return h.view(views.addOrRemove, new ViewModel({
-          recordTypeText: 'court',
-          recordType: 'court'
+          recordTypeText: 'police force',
+          recordType: 'police'
         }))
       }
     }
   },
   {
     method: 'POST',
-    path: `${routes.courts.post}`,
+    path: `${routes.police.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
           return h.view(views.addOrRemove, new ViewModel({
-            recordTypeText: 'court',
-            recordType: 'court'
+            recordTypeText: 'police force',
+            recordType: 'police'
           }, undefined, error)).code(400).takeover()
         }
       },
@@ -36,9 +36,9 @@ module.exports = [
         let redirectUrl
 
         if (addRemoveCourt === 'remove') {
-          redirectUrl = routes.removeCourt.get
+          redirectUrl = routes.removePoliceForce.get
         } else {
-          redirectUrl = routes.addCourt.get
+          redirectUrl = routes.addPoliceForce.get
         }
 
         return h.redirect(redirectUrl)

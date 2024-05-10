@@ -27,19 +27,35 @@ const activityLinks = {
   }
 }
 
+const policeLinks = {
+  index: {
+    get: '/admin/police',
+    post: '/admin/police'
+  },
+  add: {
+    get: '/admin/police/add',
+    post: '/admin/police/add'
+  },
+  remove: {
+    get: '/admin/police/remove',
+    post: '/admin/police/remove'
+  }
+}
+
 const adminIndex = {
   get: '/admin/index'
 }
 
 const constants = {
   routes: {
-    index: {
-      get: '/admin/index'
-    },
+    index: adminIndex,
     activities: activityLinks,
-    courts: courtLinks,
+    courts: courtLinks.index,
     addCourt: courtLinks.add,
     removeCourt: courtLinks.remove,
+    police: policeLinks.index,
+    addPoliceForce: policeLinks.add,
+    removePoliceForce: policeLinks.remove,
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -85,7 +101,13 @@ const constants = {
       inputField: 'activity',
       messageLabel: 'activity name',
       messageLabelCapital: 'Activity name',
-      backLinks: activityLinks
+      links: activityLinks
+    },
+    policeConstants: {
+      inputField: 'police',
+      messageLabel: 'police force',
+      messageLabelCapital: 'Police force',
+      links: policeLinks
     }
   }
 }

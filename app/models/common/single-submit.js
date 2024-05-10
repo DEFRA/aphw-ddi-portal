@@ -38,7 +38,6 @@ function ViewModel (details, backNav, errors) {
     },
     [details.recordType]: inputModel,
     buttonText: details.buttonText,
-    confirmHint: details.confirmHint,
     errors: []
   }
 
