@@ -54,7 +54,7 @@ const routes = [].concat(
   require('../routes/admin/courts/index'),
   require('../routes/admin/courts/add'),
   require('../routes/admin/courts/remove'),
-  require('../routes/admin/activities'),
+  require('../routes/admin/activities/index'),
   require('../routes/admin/activities/add'),
   require('../routes/admin/activities/remove'),
   require('../routes/admin/police/index'),
