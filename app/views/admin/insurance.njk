@@ -1,0 +1,87 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+<div class="govuk-width-container">
+
+    {% block content %}
+    <div class="govuk-grid-row">
+        <div id="insurance-body" class="govuk-grid-column-two-thirds">
+            {% if model.errors | length > 0 %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: model.errors
+                }) }}
+            {% endif %}
+            <h1 class="govuk-heading-l">{{model.title}}</h1>
+            {% if model.insuranceCompanies | length > 0 %}
+            <form class="form" method="post" id="insurer-remove" action="insurance#insurance-body">
+                <p class="govuk-body">
+                    <a class="govuk-link govuk-link--no-visited-state" href="#insurer">Add a dog insurer</a>
+                </p>
+                <p class="govuk-body">To change a dog insurer name, remove the dog insurer first. Then add the changed dog insurer name.</p>
+                <div class="govuk-inset-text">
+                    Dog insurers are removed instantly if you select ‘Remove’ in the list below.
+                </div>
+                <p class="govuk-body govuk-!-margin-bottom-7">Existing records are unchanged.</p>
+                <table class="govuk-table govuk-!-margin-bottom-7" id="pseudonym-table">
+                    <caption class="govuk-visually-hidden">Dog insurers</caption>
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Dog insurer</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Remove dog insurer</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dog insurer List -->
+                        {% for insuranceCompany in model.insuranceCompanies %}
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell defra-align-table">{{insuranceCompany.name}}</td>
+                            <td class="govuk-table__cell defra-align-table govuk-table__cell--numeric">
+                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="remove" value="{{insuranceCompany.id}}">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <!-- / Dog insurer List -->
+                    </tbody>
+                </table>
+            </form>
+            {% endif %}
+            <form class="form" id="insurer" method="post" action="insurance#insurance-body">
+                <fieldset class="govuk-fieldset">
+                    {% if model.insuranceCompanies | length > 0 %}
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">Add a dog insurer</h2>
+                    </legend>
+                    {% endif %}
+                    {{ govukInput(model.name) }}
+                </fieldset>
+                <button type="submit" class="govuk-button" data-module="govuk-button">Add dog insurer</button>
+            </form>
+        </div>
+    </div>
+
+    {% endblock %}
+</div>

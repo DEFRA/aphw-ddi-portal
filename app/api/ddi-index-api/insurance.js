@@ -7,6 +7,13 @@ const insuranceCompaniesEndpoint = `${insuranceEndpoint}/companies`
 const options = {
   json: true
 }
+/**
+ * @typedef {{ id: number; name: string }} InsuranceCompany
+ */
+/**
+ *
+ * @return {Promise<InsuranceCompany[]>}
+ */
 
 const getCompanies = async () => {
   const payload = await get(insuranceCompaniesEndpoint, options)
