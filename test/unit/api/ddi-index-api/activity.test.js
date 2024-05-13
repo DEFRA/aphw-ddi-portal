@@ -1,6 +1,7 @@
 const { user } = require('../../../mocks/auth')
-const { getActivities, getActivityById, recordActivity, getAllActivities } = require('../../../../app/api/ddi-index-api/activities')
-const { get, post } = require('../../../../app/api/ddi-index-api/base')
+const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
+const { getActivities, getActivityById, recordActivity, getAllActivities, addActivity, deleteActivity } = require('../../../../app/api/ddi-index-api/activities')
+const { get, post, callDelete } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
 const { getDogOwner } = require('../../../../app/api/ddi-index-api/dog')
@@ -57,5 +58,40 @@ describe('Activity test', () => {
     expect(get.mock.calls[1]).toEqual(['activities/received/dog'])
     expect(get.mock.calls[2]).toEqual(['activities/sent/owner'])
     expect(get.mock.calls[3]).toEqual(['activities/received/owner'])
+  })
+
+  test('addActivity calls correct endpoint', async () => {
+    post.mockResolvedValue({ payload: {} })
+    await addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)
+    expect(post).toHaveBeenCalledWith('activities', { activitySource: 'dog', activityType: 'sent', label: 'Activity 1' }, user)
+  })
+
+  test('addActivity catches boom', async () => {
+    post.mockRejectedValue({
+      isBoom: true,
+      output: {
+        statusCode: 409,
+        payload: {
+          statusCode: 409,
+          error: 'Conflict',
+          message: 'Response Error: 409 Conflict'
+        },
+        headers: {}
+      }
+    })
+
+    await expect(addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This activity name is already in use' }))
+  })
+
+  test('should throw a normal error given there is an error code other than 409', async () => {
+    post.mockRejectedValue(new Error('server error'))
+
+    await expect(addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)).rejects.toThrow(new Error('server error'))
+  })
+
+  test('deleteActivity calls correct endpoint', async () => {
+    callDelete.mockResolvedValue({ payload: {} })
+    await deleteActivity(123, user)
+    expect(callDelete).toHaveBeenCalledWith('activities/123', user)
   })
 })

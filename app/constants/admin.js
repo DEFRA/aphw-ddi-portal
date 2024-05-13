@@ -13,6 +13,20 @@ const courtLinks = {
   }
 }
 
+const activityLinks = {
+  index: {
+    get: '/admin/activities'
+  },
+  add: {
+    get: '/admin/activities/add',
+    post: '/admin/activities/add'
+  },
+  remove: {
+    get: '/admin/activities/remove',
+    post: '/admin/activities/remove'
+  }
+}
+
 const policeLinks = {
   index: {
     get: '/admin/police',
@@ -35,6 +49,7 @@ const adminIndex = {
 const constants = {
   routes: {
     index: adminIndex,
+    activities: activityLinks,
     courts: courtLinks.index,
     addCourt: courtLinks.add,
     removeCourt: courtLinks.remove,
@@ -50,9 +65,6 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
-    },
-    activities: {
-      get: '/admin/activities'
     },
     insurance: {
       get: '/admin/insurance',
@@ -89,6 +101,12 @@ const constants = {
       messageLabel: 'court name',
       messageLabelCapital: 'Court name',
       links: courtLinks
+    },
+    activityConstants: {
+      inputField: 'activity',
+      messageLabel: 'activity name',
+      messageLabelCapital: 'Activity name',
+      links: activityLinks
     },
     policeConstants: {
       inputField: 'police',
