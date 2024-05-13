@@ -178,4 +178,21 @@ describe('Remove Activities page', () => {
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Activity 1 does not exist in the index')
     })
   })
+
+  test('POST /admin/activities/remove route returns 500 when different error', async () => {
+    deleteActivity.mockImplementation(() => { throw new Error('db error') })
+
+    const options = {
+      method: 'POST',
+      url: '/admin/activities/remove/1',
+      auth,
+      payload: {
+        confirm: 'Y'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
+  })
 })
