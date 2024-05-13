@@ -2,10 +2,10 @@ const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('Activities admin', () => {
-  jest.mock('../../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../app/api/ddi-index-api/activities')
+  jest.mock('../../../../../../app/api/ddi-index-api/activities')
   const { getAllActivities } = require('../../../../../../app/api/ddi-index-api/activities')
 
   const createServer = require('../../../../../../app/server')

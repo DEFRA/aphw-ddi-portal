@@ -48,7 +48,6 @@ const routes = [].concat(
   require('../routes/upload/import-completed'),
   require('../routes/export/export-data'),
   require('../routes/admin/index'),
-  require('../routes/admin/activities'),
   require('../routes/admin/regular-jobs'),
   require('../routes/admin/pseudonyms'),
   require('../routes/admin/courts/index'),

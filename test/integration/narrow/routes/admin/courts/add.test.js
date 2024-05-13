@@ -2,7 +2,6 @@ const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { ApiConflictError } = require('../../../../../../app/errors/api-conflict-error')
 const FormData = require('form-data')
-// const FormData = require('form-data')
 
 describe('Courts page', () => {
   jest.mock('../../../../../../app/auth')

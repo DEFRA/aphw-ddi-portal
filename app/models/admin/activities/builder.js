@@ -1,4 +1,4 @@
-const { routes } = require('../../../constants/admin')
+const { routes, breadcrumbs } = require('../../../constants/admin')
 const { keys } = require('../../../constants/cdo/activity')
 const ViewModel = require('../success')
 
@@ -26,16 +26,7 @@ const ActivityListViewModel = (activities) => {
 const ActivityAddedViewModel = (activity) => {
   const activityTypeText = activity.activityType === keys.sent ? 'send' : 'receive'
   return new ViewModel({
-    breadcrumbs: [
-      {
-        label: 'Home',
-        link: '/'
-      },
-      {
-        label: 'Admin',
-        link: routes.index.get
-      }
-    ],
+    breadcrumbs,
     titleHtml: `You added ${activity.label}`,
     bodyContent: [`${activity.label} is available in the ${activity.activitySource} record ${activityTypeText} activities.`],
     bottomLink: {
@@ -52,16 +43,7 @@ const ActivityAddedViewModel = (activity) => {
  */
 const ActivityRemovedViewModel = (activity) => {
   return new ViewModel({
-    breadcrumbs: [
-      {
-        label: 'Home',
-        link: '/'
-      },
-      {
-        label: 'Admin',
-        link: routes.index.get
-      }
-    ],
+    breadcrumbs,
     titleHtml: `You removed ${activity.label}`,
     bodyContent: [
       `${activity.label} is removed from the activity list.`,

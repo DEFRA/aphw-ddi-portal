@@ -7,6 +7,7 @@ const { validatePayload } = require('../../../schema/portal/common/confirm')
 const { deleteActivity } = require('../../../api/ddi-index-api/activities')
 const { ActivityRemovedViewModel } = require('../../../models/admin/activities/builder')
 const { getUser } = require('../../../auth')
+const { notFoundSchema } = require('../../../schema/portal/common/single-remove')
 
 const backLink = routes.activities.index.get
 
@@ -58,9 +59,22 @@ module.exports = [
 
         const activity = await getActivityById(request.params.activityId)
 
-        await deleteActivity(request.params.activityId, getUser(request))
+        try {
+          await deleteActivity(request.params.activityId, getUser(request))
 
-        return h.view(views.success, ActivityRemovedViewModel(activity))
+          return h.view(views.success, ActivityRemovedViewModel(activity))
+        } catch (e) {
+          if (e.isBoom && e.output.statusCode === 404) {
+            const { error } = notFoundSchema('confirm', activity.label).validate(request.payload)
+            const backLink = routes.activities.index.get
+
+            return h.view(views.confirm, new ViewModel({
+              ...getActivityConstants(activity),
+              backLink
+            }, undefined, error)).code(404)
+          }
+          throw e
+        }
       }
     }
   }
