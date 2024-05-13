@@ -38,6 +38,24 @@ describe('Add activities page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
+      expect(document.querySelector('main span').textContent.trim()).toBe('Dog record: something we send')
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
+      expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
+    })
+
+    test('returns a 200 with different params', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/activities/add/received/owner',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelector('main span').textContent.trim()).toBe('Owner record: something we receive')
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
     })
@@ -182,7 +200,7 @@ describe('Add activities page', () => {
       expect(breadcrumbs[1].getAttribute('href')).toBe('/admin/index')
     })
 
-    test('POST /admin/activities/add route returns 409 and the enter activity name page given duplicate exists', async () => {
+    test('POST /admin/activities/add route returns 404 and the enter activity name page given duplicate exists', async () => {
       addActivity.mockRejectedValue(new ApiConflictError('conflict'))
 
       const options = {
@@ -203,5 +221,24 @@ describe('Add activities page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This activity name is already in the Index')
     })
+  })
+
+  test('POST /admin/activities/add route throws 500 when other error', async () => {
+    addActivity.mockImplementation(() => { throw new Error('db error') })
+
+    const options = {
+      method: 'POST',
+      url: '/admin/activities/add/sent/dog',
+      auth,
+      payload: {
+        activity: 'New activity 1',
+        confirmation: 'true',
+        confirm: 'Y'
+      }
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
   })
 })

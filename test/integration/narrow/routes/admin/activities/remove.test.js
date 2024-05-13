@@ -14,6 +14,13 @@ describe('Remove Activities page', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
 
+    getActivityById.mockResolvedValue({
+      id: 1,
+      label: 'Activity 1',
+      activity_source: { name: 'dog' },
+      activity_type: { name: 'sent' }
+    })
+
     server = await createServer()
     await server.initialize()
   })
@@ -21,11 +28,6 @@ describe('Remove Activities page', () => {
   afterEach(async () => {
     await server.stop()
     jest.clearAllMocks()
-  })
-
-  getActivityById.mockResolvedValue({
-    id: 1,
-    label: 'Activity 1'
   })
 
   describe('Are you sure page', () => {
@@ -42,6 +44,32 @@ describe('Remove Activities page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(getActivityById).toHaveBeenCalled()
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog record: something we send')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
+      expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+    })
+
+    test('GET /admin/activities/remove returns a 200 with different params', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/activities/remove/1',
+        auth
+      }
+
+      getActivityById.mockResolvedValue({
+        id: 1,
+        label: 'Activity 1',
+        activity_source: { name: 'owner' },
+        activity_type: { name: 'received' }
+      })
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(getActivityById).toHaveBeenCalled()
+      expect(document.querySelector('form span').textContent.trim()).toBe('Owner record: something we receive')
       expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
     })
