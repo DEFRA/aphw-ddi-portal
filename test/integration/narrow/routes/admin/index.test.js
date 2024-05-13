@@ -36,5 +36,6 @@ describe('Admin index', () => {
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Manage Index lists')
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Courts')
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Police forces')
+    expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog insurers')
   })
 })
