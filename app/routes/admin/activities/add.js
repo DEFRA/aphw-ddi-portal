@@ -24,6 +24,10 @@ const fieldNames = {
   buttonText: `Add ${addRemoveConstants.inputField}`
 }
 
+const getConfirmHint = request => {
+  return `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`
+}
+
 const stepOneCheckSubmitted = {
   method: request => {
     const activityForm = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
@@ -34,7 +38,7 @@ const stepOneCheckSubmitted = {
 
     return h.view(views.addAdminRecord, new FormViewModel({
       backLink,
-      confirmHint: `${_request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${_request.params.activityType === keys.sent ? 'send' : 'receive'}`,
+      confirmHint: getConfirmHint(_request),
       ...fieldNames
     }, undefined, error)).code(400).takeover()
   },
@@ -52,7 +56,7 @@ const stepTwoCheckConfirmation = {
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
       confirmText: `Are you sure you want to add ‘${recordValue}’ to the activity list?`,
-      confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
+      confirmHint: getConfirmHint(request),
       nameOrReference: addRemoveConstants.inputField,
       recordValue,
       action: 'add'
@@ -74,7 +78,7 @@ const stepThreeCheckConfirmation = {
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
       confirmText: `Are you sure you want to add ‘${recordValue}’ to the activity list?`,
-      confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
+      confirmHint: getConfirmHint(request),
       nameOrReference: addRemoveConstants.inputField,
       recordValue,
       action: 'add'
@@ -90,7 +94,7 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         return h.view(views.addAdminRecord, new FormViewModel({
-          confirmHint: `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`,
+          confirmHint: getConfirmHint(request),
           backLink,
           ...fieldNames
         }))
