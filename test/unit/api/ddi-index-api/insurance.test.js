@@ -3,12 +3,26 @@ const { ApiConflictError } = require('../../../../app/errors/api-conflict-error'
 
 describe('DDI API insuranceCompanys', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
-  const { post, callDelete } = require('../../../../app/api/ddi-index-api/base')
+  const { post, callDelete, get } = require('../../../../app/api/ddi-index-api/base')
 
-  const { addInsuranceCompany, removeInsuranceCompany } = require('../../../../app/api/ddi-index-api/insurance')
+  const { addInsuranceCompany, removeInsuranceCompany, getCompanies } = require('../../../../app/api/ddi-index-api/insurance')
 
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('getCompanies', () => {
+    test('should get companies', async () => {
+      const expectedCompanies = [{ id: 1, name: 'Dogs Trust' }]
+      get.mockResolvedValue({
+        companies: expectedCompanies
+      })
+
+      const insuranceCompanies = await getCompanies()
+
+      expect(get).toHaveBeenCalledWith('insurance/companies', { json: true })
+      expect(insuranceCompanies).toEqual(expectedCompanies)
+    })
   })
 
   describe('addInsuranceCompany', () => {

@@ -48,8 +48,9 @@ module.exports = [
         let requestPayload = request.payload
 
         if (request.payload.remove) {
-          const { value, errors } = removeSchema.validate(request.payload)
-          if (errors) {
+          const { value, error } = removeSchema.validate(request.payload)
+
+          if (error) {
             throw new Error('Invalid request')
           }
           await removeInsuranceCompany(value.remove, actioningUser)

@@ -261,4 +261,21 @@ describe('Insurance', () => {
     expect(removeInsuranceCompany).toHaveBeenCalledWith(2, user)
     expect(getCompanies).toHaveBeenCalled()
   })
+
+  test('POST /admin/insurance route returns 500 given team member is removed', async () => {
+    const payload = {
+      remove: 'An insurance company not an id'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/admin/insurance',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(500)
+    expect(removeInsuranceCompany).not.toHaveBeenCalled()
+  })
 })
