@@ -1,4 +1,4 @@
-const { auth, user } = require('../../../../../mocks/auth')
+const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('Activities admin', () => {
@@ -92,5 +92,17 @@ describe('Activities admin', () => {
       expect(hrefs[8].getAttribute('href')).toBe('/admin/activities/remove/9')
       expect(hrefs[9].getAttribute('href')).toBe('/admin/activities/remove/10')
     })
+  })
+
+  test('GET /admin/activities route returns 403 given user is standard user', async () => {
+    const options = {
+      method: 'GET',
+      url: '/admin/activities',
+      auth: standardAuth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(403)
   })
 })

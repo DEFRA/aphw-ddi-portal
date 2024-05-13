@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/admin')
+const { routes, views, addRemove } = require('../../../constants/admin')
 const { sources, keys } = require('../../../constants/cdo/activity')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/common/confim')
@@ -11,11 +11,13 @@ const { notFoundSchema } = require('../../../schema/portal/common/single-remove'
 
 const backLink = routes.activities.index.get
 
+const addRemoveConstants = addRemove.activityConstants
+
 const getActivityConstants = activity => ({
-  recordTypeText: 'activity',
-  recordType: 'activity',
+  recordTypeText: addRemoveConstants.inputField,
+  recordType: addRemoveConstants.inputField,
   action: 'remove',
-  buttonText: 'Remove activity',
+  buttonText: `Remove ${addRemoveConstants.inputField}`,
   confirmReferenceText: activity.label,
   confirmHint: `${activity.activity_source?.name === sources.dog ? 'Dog' : 'Owner'} record: something we ${activity.activity_type?.name === keys.sent ? 'send' : 'receive'}`
 })

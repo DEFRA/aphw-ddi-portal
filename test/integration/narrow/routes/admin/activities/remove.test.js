@@ -137,7 +137,7 @@ describe('Remove Activities page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
-      // expect(deleteActivity).toHaveBeenCalledWith(1, user)
+      expect(deleteActivity).toHaveBeenCalledWith('1', user)
       expect(document.querySelector('h1.govuk-panel__title').textContent.trim()).toBe('You removed Activity 1')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Activity 1 is removed from the activity list.')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Existing records are unchanged.')
