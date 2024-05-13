@@ -23,7 +23,7 @@ const CourtRemovedViewModel = (court) => {
     breadcrumbs,
     titleHtml: `You removed<br /> ${court}`,
     bodyContent: [
-      `${court} is removed from the Index and will not be available for new applications.`,
+      `${court} is removed from the Index.`,
       'Existing records are unchanged.'
     ],
     bottomLink: {

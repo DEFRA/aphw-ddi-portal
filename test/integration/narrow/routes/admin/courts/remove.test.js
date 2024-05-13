@@ -186,7 +186,7 @@ describe('Remove Courts page', () => {
       expect(removeCourt).toHaveBeenCalledWith(95, user)
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1.govuk-panel__title').textContent.trim()).toBe('You removed Isengard City Court')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Isengard City Court is removed from the Index and will not be available for new applications.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Isengard City Court is removed from the Index.')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Existing records are unchanged.')
 
       const courtLink = document.querySelector('#main-content .govuk-link')

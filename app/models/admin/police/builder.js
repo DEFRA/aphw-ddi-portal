@@ -23,7 +23,7 @@ const PoliceForceRemovedViewModel = (policeForce) => {
     breadcrumbs,
     titleHtml: `You removed<br /> ${policeForce}`,
     bodyContent: [
-      `${policeForce} is removed from the Index and will not be available for new applications.`,
+      `${policeForce} is removed from the Index.`,
       'Existing records are unchanged.'
     ],
     bottomLink: {
