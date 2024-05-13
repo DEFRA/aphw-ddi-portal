@@ -1,7 +1,7 @@
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
-const { getActivities, getActivityById, recordActivity, getAllActivities, addActivity } = require('../../../../app/api/ddi-index-api/activities')
-const { get, post } = require('../../../../app/api/ddi-index-api/base')
+const { getActivities, getActivityById, recordActivity, getAllActivities, addActivity, deleteActivity } = require('../../../../app/api/ddi-index-api/activities')
+const { get, post, callDelete } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
 const { getDogOwner } = require('../../../../app/api/ddi-index-api/dog')
@@ -87,5 +87,11 @@ describe('Activity test', () => {
     post.mockRejectedValue(new Error('server error'))
 
     await expect(addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)).rejects.toThrow(new Error('server error'))
+  })
+
+  test('deleteActivity calls correct endpoint', async () => {
+    callDelete.mockResolvedValue({ payload: {} })
+    await deleteActivity(123, user)
+    expect(callDelete).toHaveBeenCalledWith('activities/123', user)
   })
 })
