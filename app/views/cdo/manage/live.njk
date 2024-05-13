@@ -79,7 +79,11 @@
             {% endif %}
             <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
             <td class="govuk-table__cell">{{cdo.owner}}</td>
+            {% if cdo.policeForce %}
             <td class="govuk-table__cell">{{cdo.policeForce}}</td>
+            {% else %}
+            <td class="govuk-table__cell defra-secondary-text">Not entered</td>
+            {% endif %}
           </tr>
         {% endfor %}
         </tbody>

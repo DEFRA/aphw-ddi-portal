@@ -23,8 +23,8 @@ describe('DDI API policeForces', () => {
        * @type {PoliceForceRequest}
        */
       const policeForce = { name }
-      const createdCourt = await addPoliceForce(policeForce, user)
-      expect(createdCourt).toEqual(expectedPoliceForce)
+      const createdPolicForce = await addPoliceForce(policeForce, user)
+      expect(createdPolicForce).toEqual(expectedPoliceForce)
       expect(post).toHaveBeenCalledWith('police-forces', policeForce, user)
     })
 

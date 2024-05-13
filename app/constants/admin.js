@@ -65,6 +65,10 @@ const constants = {
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
+    },
+    insurance: {
+      get: '/admin/insurance',
+      post: '/admin/insurance'
     }
   },
   views: {
@@ -73,6 +77,7 @@ const constants = {
     regularJobs: 'admin/regular-jobs',
     processComments: 'admin/process-comments',
     pseudonyms: 'admin/pseudonyms',
+    insurance: 'admin/insurance',
     confirm: 'common/confirm',
     courts: 'admin/courts',
     addOrRemove: 'common/add-or-remove',

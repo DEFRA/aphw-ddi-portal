@@ -180,7 +180,7 @@ describe('Remove Police Forces page', () => {
   describe('Success Page', () => {
     removePoliceForce.mockResolvedValue()
 
-    test('POST /admin/police/remove police force route returns 200 and success page given police force has been submitted', async () => {
+    test('POST /admin/police/remove police force route returns 200 and success page given police force has been removed', async () => {
       const options = {
         method: 'POST',
         url: '/admin/police/remove',
@@ -199,7 +199,7 @@ describe('Remove Police Forces page', () => {
       expect(removePoliceForce).toHaveBeenCalledWith(95, user)
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1.govuk-panel__title').textContent.trim()).toBe('You removed Isengard Constabulary')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Isengard Constabulary is removed from the Index and will not be available for new applications.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Isengard Constabulary is removed from the Index.')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Existing records are unchanged.')
 
       const policeForceLink = document.querySelector('#main-content .govuk-link')
