@@ -263,8 +263,8 @@ describe('Insurance', () => {
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
       expect(removeInsuranceCompany).toHaveBeenCalledWith(2, user)
-      expect(getCompanies).not.toHaveBeenCalled()
-      expect(getCompaniesNewest).toHaveBeenCalled()
+      expect(getCompanies).toHaveBeenCalled()
+      expect(getCompaniesNewest).not.toHaveBeenCalled()
     })
 
     test('POST /admin/insurance route returns 500 given insurance company is removed', async () => {

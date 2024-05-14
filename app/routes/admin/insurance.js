@@ -46,6 +46,7 @@ module.exports = [
       handler: async (request, h) => {
         const actioningUser = getUser(request)
         let requestPayload = request.payload
+        let insuranceCompanies = []
 
         if (request.payload.remove) {
           const { value, error } = removeSchema.validate(request.payload)
@@ -54,6 +55,8 @@ module.exports = [
             throw new Error('Invalid request')
           }
           await removeInsuranceCompany(value.remove, actioningUser)
+
+          insuranceCompanies = await getCompanies()
         } else {
           const payload = {
             name: requestPayload.name
@@ -73,9 +76,10 @@ module.exports = [
 
             throw e
           }
+
+          insuranceCompanies = await getCompaniesNewest()
         }
 
-        const insuranceCompanies = await getCompaniesNewest()
         return h.view(views.insurance, new ViewModel(requestPayload, insuranceCompanies))
       }
     }

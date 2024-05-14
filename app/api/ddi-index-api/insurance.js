@@ -22,7 +22,7 @@ const getCompanies = async () => {
 }
 
 const getCompaniesNewest = async () => {
-  const payload = await get(insuranceCompaniesEndpoint, options)
+  const payload = await get(`${insuranceCompaniesEndpoint}?sortKey=updatedAt&sortOrder=DESC`, options)
 
   return payload.companies
 }
