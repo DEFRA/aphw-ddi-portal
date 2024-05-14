@@ -1,4 +1,4 @@
-const { auth, user } = require('../../../../mocks/auth')
+const { auth: adminUser, standardAuth, user } = require('../../../../mocks/auth')
 
 describe('Export test', () => {
   const createServer = require('../../../../../app/server')
@@ -20,7 +20,7 @@ describe('Export test', () => {
     const options = {
       method: 'GET',
       url: '/export',
-      auth
+      auth: adminUser
     }
 
     const response = await server.inject(options)
@@ -38,16 +38,52 @@ describe('Export test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /export route returns 200 and calls exportData', async () => {
+  test('POST /export route returns 200 and calls exportData for admin user', async () => {
     const options = {
       method: 'POST',
       url: '/export',
-      auth
+      auth: adminUser
     }
 
     exportData.mockResolvedValue({})
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+  })
+
+  describe('GET /export-create-file', () => {
+    test('returns 200 for admin user', async () => {
+      const options = {
+        method: 'GET',
+        url: '/export-create-file',
+        auth: adminUser
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('returns 302 if not auth', async () => {
+      const options = {
+        method: 'GET',
+        url: '/export-create-file'
+      }
+
+      exportData.mockResolvedValue({})
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('returns 403 if standard user', async () => {
+      const options = {
+        method: 'GET',
+        url: '/export-create-file',
+        auth: standardAuth
+      }
+
+      exportData.mockResolvedValue({})
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(403)
+    })
   })
 
   afterEach(async () => {
