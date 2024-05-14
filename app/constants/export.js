@@ -3,6 +3,9 @@ const exportData = {
     export: {
       get: '/export',
       post: '/export'
+    },
+    exportCreateFile: {
+      get: '/export-create-file'
     }
   },
   views: {
