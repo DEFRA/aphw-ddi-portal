@@ -5,7 +5,7 @@ const { getUser } = require('../../auth')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
 const { getCompanies } = require('../../api/ddi-index-api')
 const { validateInsurancePayload, duplicateInsuranceCompanySchema, removeSchema } = require('../../schema/portal/admin/insurance')
-const { removeInsuranceCompany, addInsuranceCompany } = require('../../api/ddi-index-api/insurance')
+const { removeInsuranceCompany, addInsuranceCompany, getCompaniesNewest } = require('../../api/ddi-index-api/insurance')
 
 module.exports = [
   {
@@ -75,7 +75,7 @@ module.exports = [
           }
         }
 
-        const insuranceCompanies = await getCompanies()
+        const insuranceCompanies = await getCompaniesNewest()
         return h.view(views.insurance, new ViewModel(requestPayload, insuranceCompanies))
       }
     }
