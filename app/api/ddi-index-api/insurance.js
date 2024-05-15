@@ -21,6 +21,12 @@ const getCompanies = async () => {
   return payload.companies
 }
 
+const getCompaniesNewest = async () => {
+  const payload = await get(`${insuranceCompaniesEndpoint}?sortKey=updatedAt&sortOrder=DESC`, options)
+
+  return payload.companies
+}
+
 /**
  * @typedef {{name: string}} InsuranceCompanyRequest
  */
@@ -57,5 +63,6 @@ const removeInsuranceCompany = async (insuranceCompanyId, user) => {
 module.exports = {
   getCompanies,
   addInsuranceCompany,
-  removeInsuranceCompany
+  removeInsuranceCompany,
+  getCompaniesNewest
 }
