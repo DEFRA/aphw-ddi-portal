@@ -18,7 +18,8 @@ const streamToBuffer = async (readableStream) => {
 
 describe('register blob functions', () => {
   beforeAll(async () => {
-    await blobServiceClient.createContainer('uploads-export')
+    const container = blobServiceClient.getContainerClient('uploads')
+    await container.createIfNotExists()
   })
 
   test('should download blob', async () => {
