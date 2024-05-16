@@ -1,4 +1,4 @@
-const { auth, standardAuth, user } = require('../../../mocks/auth')
+const { adminAuth, standardAuth, user } = require('../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
 describe('Index test', () => {
@@ -31,7 +31,7 @@ describe('Index test', () => {
     const options = {
       method: 'GET',
       url: '/',
-      auth
+      auth: adminAuth
     }
 
     const response = await server.inject(options)

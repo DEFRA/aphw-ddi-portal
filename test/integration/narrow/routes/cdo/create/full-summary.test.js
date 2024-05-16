@@ -177,6 +177,10 @@ describe('FullSummary test', () => {
     expect(response.statusCode).toBe(302)
     expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
       {
+        headers: {
+          'ddi-displayname': 'Example Tester',
+          'ddi-username': 'test@example.com'
+        },
         payload: {
           dogs: [
             {
@@ -255,6 +259,10 @@ describe('FullSummary test', () => {
     expect(response.statusCode).toBe(302)
     expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
       {
+        headers: {
+          'ddi-displayname': 'Example Tester',
+          'ddi-username': 'test@example.com'
+        },
         payload: {
           dogs: [
             {
