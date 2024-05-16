@@ -1,18 +1,26 @@
-const { auth: adminUser, standardAuth, user } = require('../../../../mocks/auth')
+const { adminAuth, standardAuth, userWithDisplayname } = require('../../../../mocks/auth')
 
 describe('Export test', () => {
   const createServer = require('../../../../../app/server')
   let server
 
   jest.mock('../../../../../app/api/ddi-index-api/export')
-  const { exportData } = require('../../../../../app/api/ddi-index-api/export')
+  const { exportAudit } = require('../../../../../app/api/ddi-index-api/export')
 
-  jest.mock('../../../../../app/auth')
-  const mockAuth = require('../../../../../app/auth')
+  jest.mock('../../../../../app/storage/repos/download-blob')
+  const { downloadBlob } = require('../../../../../app/storage/repos/download-blob')
+
+  jest.mock('../../../../../app/api/ddi-index-api/export')
+  const { createExportFile } = require('../../../../../app/api/ddi-index-api/export')
 
   beforeEach(async () => {
-    mockAuth.getUser.mockReturnValue(user)
     server = await createServer()
+    const PassThrough = require('stream').PassThrough
+    const stream = new PassThrough()
+    downloadBlob.mockResolvedValue({ readableStreamBody: stream })
+    stream.push('some dummy file content for testing')
+    stream.push(null)
+    exportAudit.mockResolvedValue()
     await server.initialize()
   })
 
@@ -20,7 +28,7 @@ describe('Export test', () => {
     const options = {
       method: 'GET',
       url: '/export',
-      auth: adminUser
+      auth: adminAuth
     }
 
     const response = await server.inject(options)
@@ -33,21 +41,20 @@ describe('Export test', () => {
       url: '/export'
     }
 
-    exportData.mockResolvedValue({})
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /export route returns 200 and calls exportData for admin user', async () => {
+  test('POST /export route returns 200 and calls exportAudit for admin user', async () => {
     const options = {
       method: 'POST',
       url: '/export',
-      auth: adminUser
+      auth: adminAuth
     }
 
-    exportData.mockResolvedValue({})
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(exportAudit.mock.calls[0]).toEqual([userWithDisplayname])
   })
 
   describe('GET /export-create-file', () => {
@@ -55,8 +62,10 @@ describe('Export test', () => {
       const options = {
         method: 'GET',
         url: '/export-create-file',
-        auth: adminUser
+        auth: adminAuth
       }
+
+      createExportFile.mockReturnValue()
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
@@ -68,7 +77,8 @@ describe('Export test', () => {
         url: '/export-create-file'
       }
 
-      exportData.mockResolvedValue({})
+      createExportFile.mockReturnValue()
+
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
     })
@@ -80,7 +90,8 @@ describe('Export test', () => {
         auth: standardAuth
       }
 
-      exportData.mockResolvedValue({})
+      createExportFile.mockReturnValue()
+
       const response = await server.inject(options)
       expect(response.statusCode).toBe(403)
     })

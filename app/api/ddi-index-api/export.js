@@ -1,12 +1,10 @@
 const { get } = require('./base')
 
-const exportEndpoint = 'export'
+const exportAuditEndpoint = 'export-audit'
 const createExportFileEndpoint = 'export-create-file'
 
-const exportData = async (user) => {
-  const payload = await get(exportEndpoint, user)
-
-  return payload.csv
+const exportAudit = async (user) => {
+  await get(exportAuditEndpoint, user)
 }
 
 const createExportFile = async (batchSize) => {
@@ -14,6 +12,6 @@ const createExportFile = async (batchSize) => {
 }
 
 module.exports = {
-  exportData,
+  exportAudit,
   createExportFile
 }
