@@ -42,16 +42,12 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      console.log('here1', getUser)
       const now = stripTimeFromUTC(new Date())
       const stream = new PassThrough()
       const requestingUser = getUser(request)
-      console.log('here2 user', requestingUser)
 
       stream.on('finish', () => {
-        console.log('here3')
         exportAudit(requestingUser)
-        console.log('here4')
       })
 
       await downloadBlobAsStream('daily_export.csv', stream)
