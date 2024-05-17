@@ -14,7 +14,7 @@ describe('register blob functions', () => {
     stream.push('test stream')
     stream.push(null)
 
-    await uploadRegisterFile(filename, stream)
+    await uploadRegisterFile('uploads', filename, stream)
 
     const container = blobServiceClient.getContainerClient('uploads')
     const blobClient = await container.getBlockBlobClient(filename)
