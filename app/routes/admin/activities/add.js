@@ -51,7 +51,7 @@ const stepTwoCheckConfirmation = {
   },
   failAction: (request, h) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
-    const backLink = addRemoveConstants.links.add.get
+    const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,
@@ -73,7 +73,7 @@ const stepThreeCheckConfirmation = {
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
-    const backLink = routes.activities.add.get
+    const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 
     return h.view(views.confirm, new ConfirmViewModel({
       backLink,

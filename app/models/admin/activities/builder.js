@@ -26,7 +26,10 @@ const ActivityListViewModel = (activities) => {
 const ActivityAddedViewModel = (activity) => {
   const activityTypeText = activity.activityType === keys.sent ? 'send' : 'receive'
   return new ViewModel({
-    breadcrumbs,
+    breadcrumbs: breadcrumbs.concat({
+      label: 'Activities',
+      link: routes.activities.index.get
+    }),
     titleHtml: `You added ${activity.label}`,
     bodyContent: [`${activity.label} is available in the ${activity.activitySource} record ${activityTypeText} activities.`],
     bottomLink: {
@@ -43,7 +46,10 @@ const ActivityAddedViewModel = (activity) => {
  */
 const ActivityRemovedViewModel = (activity) => {
   return new ViewModel({
-    breadcrumbs,
+    breadcrumbs: breadcrumbs.concat({
+      label: 'Activities',
+      link: routes.activities.index.get
+    }),
     titleHtml: `You removed ${activity.label}`,
     bodyContent: [
       `${activity.label} is removed from the activity list.`,
