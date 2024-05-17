@@ -1,8 +1,7 @@
 const { blobServiceClient } = require('../get-blob-client')
-const { blobConfig } = require('../../config')
 
-const downloadBlob = async (filename) => {
-  const container = blobServiceClient.getContainerClient(blobConfig.registerContainer)
+const downloadBlob = async (containerName, filename) => {
+  const container = blobServiceClient.getContainerClient(containerName)
 
   const blobClient = await container.getBlockBlobClient(filename)
 
