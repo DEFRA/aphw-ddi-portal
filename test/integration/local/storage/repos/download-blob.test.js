@@ -18,7 +18,7 @@ const streamToBuffer = async (readableStream) => {
 
 describe('register blob functions', () => {
   beforeAll(async () => {
-    const container = blobServiceClient.getContainerClient('uploads')
+    const container = blobServiceClient.getContainerClient('certificates')
     await container.createIfNotExists()
   })
 
