@@ -28,15 +28,15 @@ describe('register blob functions', () => {
     stream.push('test stream')
     stream.push(null)
 
-    await uploadRegisterFile(filename, stream)
+    await uploadRegisterFile('certificates', filename, stream)
 
-    const res = await downloadBlob(filename)
+    const res = await downloadBlob('certificates', filename)
 
     const downloaded = await streamToBuffer(res.readableStreamBody)
     expect(downloaded.toString()).toEqual('test stream')
   })
 
   test('should throw when not exists', async () => {
-    await expect(downloadBlob('not-found.csv')).rejects.toThrow('File not-found.csv does not exist')
+    await expect(downloadBlob('certificates', 'not-found.csv')).rejects.toThrow('File not-found.csv does not exist')
   })
 })

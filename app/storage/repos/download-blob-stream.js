@@ -1,7 +1,7 @@
 const { downloadBlob } = require('./download-blob')
 
-const downloadBlobAsStream = async (filename, writableStream) => {
-  const downloadResponse = await downloadBlob(filename)
+const downloadBlobAsStream = async (containerName, filename, writableStream) => {
+  const downloadResponse = await downloadBlob(containerName, filename)
 
   downloadResponse.readableStreamBody.pipe(writableStream)
 }

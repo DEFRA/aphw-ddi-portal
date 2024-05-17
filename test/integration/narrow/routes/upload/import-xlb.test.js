@@ -56,7 +56,7 @@ describe('Upload XLB', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(uploadRegisterFile).toHaveBeenCalledWith('ddi-upload-2023-11-14T00:00:00.000Z', expect.any(Readable))
+      expect(uploadRegisterFile).toHaveBeenCalledWith('uploads', 'ddi-upload-2023-11-14T00:00:00.000Z', expect.any(Readable))
     })
 
     test('with missing register returns 200', async () => {

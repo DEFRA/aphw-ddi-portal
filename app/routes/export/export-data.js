@@ -5,6 +5,7 @@ const getUser = require('../../auth/get-user')
 const { createExportFile, exportAudit } = require('../../api/ddi-index-api/export')
 const { stripTimeFromUTC, formatToDateTime } = require('../../lib/date-helpers')
 const { downloadBlobAsStream } = require('../../storage/repos/download-blob-stream')
+const { blobConfig } = require('../../config')
 
 module.exports = [{
   method: 'GET',
@@ -50,7 +51,7 @@ module.exports = [{
         exportAudit(requestingUser)
       })
 
-      await downloadBlobAsStream('daily_export.csv', stream)
+      await downloadBlobAsStream(blobConfig.certificateContainer, 'daily_export.csv', stream)
 
       return h.response(stream)
         .header('Content-Type', 'application/octet-stream')
