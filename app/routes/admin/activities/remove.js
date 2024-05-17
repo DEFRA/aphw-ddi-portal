@@ -19,7 +19,8 @@ const getActivityConstants = activity => ({
   action: 'remove',
   buttonText: `Remove ${addRemoveConstants.inputField}`,
   confirmReferenceText: activity.label,
-  confirmHint: `${activity.activity_source?.name === sources.dog ? 'Dog' : 'Owner'} record: something we ${activity.activity_type?.name === keys.sent ? 'send' : 'receive'}`
+  confirmHint: `${activity.activity_source?.name === sources.dog ? 'Dog' : 'Owner'} record: something we ${activity.activity_type?.name === keys.sent ? 'send' : 'receive'}`,
+  confirmText: `Are you sure you want to remove ‘${activity.label}’ from the activity list?`
 })
 
 module.exports = [
