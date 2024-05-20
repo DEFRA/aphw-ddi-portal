@@ -201,7 +201,7 @@ describe('Update dog details', () => {
       indexNumber: 'ED123',
       name: 'Bruno',
       breed: 'breed1',
-      microchipNumber: '12345',
+      microchipNumber: '123451234512345',
       origMicrochipNumber: 'ua12345',
       'dateOfBirth-day': '1',
       'dateOfBirth-month': '1',

@@ -14,6 +14,7 @@ const routes = [].concat(
   require('../routes/cdo/create/confirm-dog-details'),
   require('../routes/cdo/create/microchip-search'),
   require('../routes/cdo/create/microchip-results'),
+  require('../routes/cdo/create/microchip-results-stop'),
   require('../routes/cdo/search/basic'),
   require('../routes/cdo/create/confirm-dog-delete'),
   require('../routes/cdo/create/record-created'),

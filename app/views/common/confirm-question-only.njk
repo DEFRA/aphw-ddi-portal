@@ -1,0 +1,35 @@
+  <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+  {% if model.confirmHint %}
+  <span class="govuk-caption-l">{{ model.confirmHint }}</span>
+  {% endif %}
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend {{ model.confirmTextClass }}">
+          <h1 class="govuk-fieldset__heading">
+            {{ model.confirmText }}
+          </h1>
+        </legend>
+
+        {{ govukRadios(model.confirm) }}
+
+      </fieldset>
+    </div>
+
+    {% if model.pk is defined %}
+    <input type="hidden" name="pk" value="{{ model.pk }}" />
+    {% endif %}
+
+    {% if model.inputValue is defined %}
+    <input type="hidden" name="{{ model.inputReference }}" value="{{ model.inputValue }}" />
+    <input type="hidden" name="confirmation" value="true" />
+    {% endif %}
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Continue",
+        name: "submitButton"
+      }) }}
+    </div>
+  </div>
+
+</form>

@@ -13,7 +13,11 @@ const constants = {
       post: '/cdo/create/microchip-search'
     },
     microchipResults: {
-      get: '/cdo/create/microchip-results'
+      get: '/cdo/create/microchip-results',
+      post: '/cdo/create/microchip-results'
+    },
+    microchipResultsStop: {
+      get: '/cdo/create/microchip-results-stop'
     },
     applicationType: {
       get: '/cdo/create/application-type',
@@ -77,6 +81,7 @@ const constants = {
     editDogDetails: 'cdo/edit/dog-details',
     microchipSearch: 'cdo/create/microchip-search',
     microchipResults: 'cdo/create/microchip-results',
+    microchipResultsStop: 'cdo/create/microchip-results-stop',
     viewDogDetails: 'cdo/view/dog-details',
     viewDogActivities: 'cdo/view/check-activities',
     editExemptionDetails: 'cdo/edit/exemption-details',
