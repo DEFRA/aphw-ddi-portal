@@ -31,10 +31,10 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Tattoo must be no more than {#limit} characters'
   }),
   microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip number must be no more than {#limit} characters'
+    'string.max': 'Microchip numbers must be {#limit} digits'
   }).custom((value, helper) => validateMicrochip(value, helper, true)),
   microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip number 2 must be no more than {#limit} characters'
+    'string.max': 'Microchip numbers must be {#limit} digits'
   }).custom((value, helper) => validateMicrochip(value, helper, true)),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),

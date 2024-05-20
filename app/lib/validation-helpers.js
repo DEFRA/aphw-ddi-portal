@@ -16,6 +16,10 @@ const validateMicrochip = (value, helpers, compareOrig = false) => {
     }
   }
 
+  if (value?.length < 15) {
+    return helpers.message('Microchip numbers must be 15 digits', { path: [elemName] })
+  }
+
   if (!value.match(validNewMicrochip)) {
     return helpers.message('Microchip numbers can only contain numbers', { path: [elemName] })
   }
