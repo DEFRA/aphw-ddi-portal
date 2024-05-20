@@ -38,7 +38,21 @@ const validatePayload = (payload) => {
   return value
 }
 
+/**
+ * @param {string[]} disallowedMicrochipIds
+ * @return {Joi.ObjectSchema<any>}
+ */
+const microchipValidation = (disallowedMicrochipIds) => Joi.object({
+  microchipNumber: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
+    '*': 'The microchip number already exists'
+  }),
+  microchipNumber2: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
+    '*': 'The microchip number already exists'
+  })
+})
+
 module.exports = {
   dogDetailsSchema,
-  validatePayload
+  validatePayload,
+  microchipValidation
 }
