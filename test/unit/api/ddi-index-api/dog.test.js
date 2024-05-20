@@ -3,8 +3,6 @@ const { updateStatus, getDogDetails, updateDogDetails, getDogOwner, deleteDog } 
 jest.mock('../../../../app/api/ddi-index-api/base')
 const { get, post, put, callDelete, boomRequest } = require('../../../../app/api/ddi-index-api/base')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
-const { postWithBoom } = require('../../../../app/api/ddi-events-api/base')
-const { createUser } = require('../../../../app/api/ddi-events-api/users')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
 const validDog = {

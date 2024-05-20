@@ -1,5 +1,4 @@
 const { get, put, callDelete, boomRequest } = require('./base')
-const { postWithBoom } = require('../ddi-events-api/base')
 const { ApiErrorFailure } = require('../../errors/api-error-failure')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
 
