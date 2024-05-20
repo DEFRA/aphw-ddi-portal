@@ -29,6 +29,19 @@ describe('ValidationHelpers - validateMicrochip', () => {
     expect(res).toBe('123456789012345')
   })
 
+  test('gives error if microchip 1 too short', () => {
+    const value = '12345678901234'
+
+    const res = validateMicrochip(value, mockMicrochipHelpers, false)
+
+    expect(res).toEqual({
+      elemName: {
+        path: ['microchipNumber']
+      },
+      error: 'Microchip numbers must be 15 digits'
+    })
+  })
+
   test('gives error if invalid microchip 1', () => {
     const value = '12345678901234x'
 
@@ -43,7 +56,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
   })
 
   test('gives error if invalid microchip 2', () => {
-    const value = '123456-78'
+    const value = '123456-78012345'
 
     const res = validateMicrochip(value, mockMicrochipHelpers, false)
 
@@ -56,7 +69,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
   })
 
   test('gives error if invalid microchip 3', () => {
-    const value = '123456 78'
+    const value = '123456 78012345'
 
     const res = validateMicrochip(value, mockMicrochipHelpers, false)
 
@@ -81,7 +94,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
   })
 
   test('fails invalid microchip if some change from original microchip', () => {
-    const value = '123456x78'
+    const value = '123456x78012345'
 
     mockMicrochipHelpers.state.ancestors = [
       { origMicrochipNumber: '123456x7899' }

@@ -199,6 +199,36 @@ describe('Update dog details', () => {
       expect(messages).toContain('Enter a 4-digit year')
     })
 
+    test('POST /cdo/edit/dog-details with invalid microchip returns 302 original microchip', async () => {
+      updateDogDetails.mockResolvedValue()
+      const payload = {
+        id: 1,
+        indexNumber: 'ED123',
+        name: 'Bruno',
+        breed: 'breed1',
+        microchipNumber: '123451234512345',
+        origMicrochipNumber: 'ua12345',
+        'dateOfBirth-day': '1',
+        'dateOfBirth-month': '1',
+        'dateOfBirth-year': '1980'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/dog-details',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(302)
+      expect(updateDogDetails).toHaveBeenCalled()
+      expect(document.querySelector('.govuk-error-summary')).toBeNull()
+    })
+
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 1', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,

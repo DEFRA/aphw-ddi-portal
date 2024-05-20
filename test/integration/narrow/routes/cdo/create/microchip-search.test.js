@@ -57,7 +57,7 @@ describe('Microchip search tests', () => {
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error hyphens', async () => {
     const payload = {
-      microchipNumber: '123-456'
+      microchipNumber: '123-456-789-123'
     }
 
     const options = {
@@ -112,12 +112,32 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be no more than 15 characters')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
+  })
+
+  test('POST /cdo/create/microchip-search route with invalid payload returns 400 error too short', async () => {
+    const payload = {
+      microchipNumber: '12345678901234'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error space', async () => {
     const payload = {
-      microchipNumber: '123 456'
+      microchipNumber: '123 45678901234'
     }
 
     const options = {
@@ -137,7 +157,7 @@ describe('Microchip search tests', () => {
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error letters', async () => {
     const payload = {
-      microchipNumber: '123a456'
+      microchipNumber: '123a45689012345'
     }
 
     const options = {
@@ -157,13 +177,13 @@ describe('Microchip search tests', () => {
 
   test('POST /cdo/create/microchip-search route with duplicate microchip returns 400 error', async () => {
     getDogs.mockReturnValue([
-      { id: 1, name: 'Rex', microchipNumber: '11111' },
-      { id: 2, name: 'Fido', microchipNumber: '12345' },
-      { id: 3, name: 'Bruce', microchipNumber: '22222' }
+      { id: 1, name: 'Rex', microchipNumber: '111112222233333' },
+      { id: 2, name: 'Fido', microchipNumber: '123456789012345' },
+      { id: 3, name: 'Bruce', microchipNumber: '222223333344444' }
     ])
 
     const payload = {
-      microchipNumber: '12345'
+      microchipNumber: '123456789012345'
     }
 
     const options = {
@@ -189,7 +209,7 @@ describe('Microchip search tests', () => {
     ])
 
     const payload = {
-      microchipNumber: '1234567'
+      microchipNumber: '123456789012345'
     }
 
     const options = {
@@ -213,7 +233,7 @@ describe('Microchip search tests', () => {
     ])
 
     const payload = {
-      microchipNumber: '22222'
+      microchipNumber: '222223333344444'
     }
 
     const options = {
@@ -237,7 +257,7 @@ describe('Microchip search tests', () => {
     ])
 
     const payload = {
-      microchipNumber: '1234567'
+      microchipNumber: '123456789012345'
     }
 
     const options = {
@@ -255,13 +275,13 @@ describe('Microchip search tests', () => {
 
   test('POST /cdo/create/microchip-search route with duplicate microchip returns 400 error given no dog name', async () => {
     getDogs.mockReturnValue([
-      { id: 1, name: 'Rex', microchipNumber: '11111' },
-      { id: 2, name: 'Fido', microchipNumber: '12345' },
-      { id: 3, name: '', microchipNumber: '22222' }
+      { id: 1, name: 'Rex', microchipNumber: '111112222233333' },
+      { id: 2, name: 'Fido', microchipNumber: '123451234512345' },
+      { id: 3, name: '', microchipNumber: '222223333344444' }
     ])
 
     const payload = {
-      microchipNumber: '22222'
+      microchipNumber: '222223333344444'
     }
 
     const options = {
@@ -283,7 +303,7 @@ describe('Microchip search tests', () => {
     getDogs.mockReturnValue()
 
     const payload = {
-      microchipNumber: '12345'
+      microchipNumber: '123451234512345'
     }
 
     const options = {
