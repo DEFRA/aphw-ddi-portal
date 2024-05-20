@@ -45,7 +45,7 @@ describe('Remove Activities page', () => {
       expect(response.statusCode).toBe(200)
       expect(getActivityById).toHaveBeenCalled()
       expect(document.querySelector('form span').textContent.trim()).toBe('Dog record: something we send')
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove ‘Activity 1’ from the activity list?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
     })
 
@@ -70,7 +70,7 @@ describe('Remove Activities page', () => {
       expect(response.statusCode).toBe(200)
       expect(getActivityById).toHaveBeenCalled()
       expect(document.querySelector('form span').textContent.trim()).toBe('Owner record: something we receive')
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove ‘Activity 1’ from the activity list?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
     })
 
@@ -99,7 +99,7 @@ describe('Remove Activities page', () => {
 
       expect(response.statusCode).toBe(400)
 
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to remove ‘Activity 1’ from the activity list?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
     })
@@ -174,7 +174,7 @@ describe('Remove Activities page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(404)
-      expect(document.querySelector('h1').textContent.trim()).toBe('Are you sure you want to remove activity record Activity 1?')
+      expect(document.querySelector('h1').textContent.trim()).toBe('Are you sure you want to remove ‘Activity 1’ from the activity list?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Activity 1 does not exist in the index')
     })
   })
