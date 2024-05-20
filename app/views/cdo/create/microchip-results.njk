@@ -1,5 +1,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% extends '_layout.njk' %}
 
@@ -23,6 +26,13 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: model.errors
+        }) }}
+      {% endif %}
+
 
       <form class="form" method="post">
 
@@ -35,12 +45,14 @@
       {% endfor %}
 
       <p class="govuk-body">
-        Currently you cannot transfer a dog to a new owner. You should escalate to a line manager to confirm the next step.
+        You can transfer ownership of the dog if the microchip number is correct.
       </p>
 
       <p class="govuk-body">
         If you entered the number incorrectly, <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/microchip-search">change the microchip number</a>
       </p>
+
+      {% include "./common/confirm-question-only.njk" %}
 
     </form>
   </div>

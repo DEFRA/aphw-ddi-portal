@@ -76,7 +76,7 @@ const cleanUserDisplayName = (displayName) => {
 const setPoliceForce = async (request, postcode = null) => {
   const ownerDetails = postcode ? { address: { postcode } } : getOwnerDetails(request)
   const enforcementDetails = getEnforcementDetails(request) || {}
-  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address.postcode)
+  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address?.postcode ?? ownerDetails.postcode)
 
   if (policeForce) {
     enforcementDetails.policeForce = policeForce.id

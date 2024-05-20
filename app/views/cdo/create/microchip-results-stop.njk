@@ -1,0 +1,57 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    <form class="form">
+
+      <h1 class="govuk-heading-l">
+        You cannot proceed with this application
+      </h1>
+
+      <p class="govuk-body">
+        <span class="govuk-!-font-weight-bold">Microchip number</span>
+        <br>
+        {{ model.microchipNumber }}
+        </p>
+
+        <p class="govuk-body">
+        The same microchip number cannot be used on more than one dog record. You should escalate to a line manager to confirm the next step.
+        </p>
+
+        <p class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/microchip-search/{{ model.dogId }}">Change the microchip number</a> if you entered the number incorrectly.
+        </p>
+
+        <p class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Change the dog owner</a>
+          if you want to transfer ownership and proceed the application.
+        </p>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

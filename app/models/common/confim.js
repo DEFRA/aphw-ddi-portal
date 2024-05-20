@@ -38,6 +38,7 @@ function ViewModel (details, backNav, errors) {
       ]
     },
     confirmText: details.confirmText ?? `Are you sure you want to ${details.action} ${details.recordTypeText} record ${details.confirmReferenceText}?`,
+    confirmTextClass: details.confirmTextClass ?? 'govuk-fieldset__legend--l',
     nameOrReference: details.nameOrReference,
     nameOrReferenceText: details.nameOrReferenceText,
     confirmHint: details.confirmHint,
