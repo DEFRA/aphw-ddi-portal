@@ -81,10 +81,10 @@ describe('Base API', () => {
       await expect(boomRequest('endpoint2', 'PUT', { val: 123 })).rejects.toThrow(new ApiErrorFailure('409 Conflict', { error: 'Username already exists', message: 'Username already exists', statusCode: 409 }))
     })
 
-    test('postWithBoom should call request POST with username in header', async () => {
+    test('postWithBoom should call request PUT with username in header', async () => {
       const res = await boomRequest('endpoint2', 'PUT', { val: 123 }, user)
       expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
-      expect(wreck.request).toHaveBeenCalledWith('POST', 'test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
+      expect(wreck.request).toHaveBeenCalledWith('PUT', 'test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
     })
   })
 })
