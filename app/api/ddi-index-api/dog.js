@@ -1,4 +1,7 @@
-const { get, put, callDelete } = require('./base')
+const { get, put, callDelete, boomRequest } = require('./base')
+const { postWithBoom } = require('../ddi-events-api/base')
+const { ApiErrorFailure } = require('../../errors/api-error-failure')
+const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const dogEndpoint = 'dog'
 
@@ -19,7 +22,17 @@ const getDogOwner = async (indexNumber) => {
 const updateDogDetails = async (dog, username) => {
   dog.dogId = dog.id
 
-  return await put(dogEndpoint, dog, username)
+  try {
+    const response = await boomRequest(dogEndpoint, 'PUT', dog, username)
+    return response.payload
+  } catch (e) {
+    if (e instanceof ApiErrorFailure) {
+      if (e.boom.statusCode === 409) {
+        throw new ApiConflictError(e)
+      }
+    }
+    throw e
+  }
 }
 
 const updateStatus = async (payload, user) => {
