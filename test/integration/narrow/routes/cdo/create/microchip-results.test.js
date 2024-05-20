@@ -5,6 +5,9 @@ describe('Microchip results tests', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/dog')
+  const { getDogDetails } = require('../../../../../../app/api/ddi-index-api/dog')
+
   jest.mock('../../../../../../app/session/cdo/dog')
   const { getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
 
@@ -67,6 +70,8 @@ describe('Microchip results tests', () => {
         auth,
         payload
       }
+
+      getDogDetails.mockResolvedValue()
 
       const response = await server.inject(options)
 
