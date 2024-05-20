@@ -8,27 +8,18 @@ const { addDateComponents } = require('../../../lib/date-helpers')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
-const Joi = require('joi')
+const { microchipValidation } = require('../../../schema/portal/cdo/dog-details')
 
 const mapBoomError = (e, request) => {
   const { microchipNumber, microchipNumber2 } = request.payload
 
   const disallowedMicrochipIds = e.boom.payload.microchipNumbers
 
-  const microchipValidation = Joi.object({
-    microchipNumber: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
-      '*': 'The microchip number already exists'
-    }),
-    microchipNumber2: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
-      '*': 'The microchip number already exists'
-    })
-  })
-
   const validationPayload = {
     microchipNumber,
     microchipNumber2
   }
-  const { error } = microchipValidation.validate(validationPayload, { abortEarly: false })
+  const { error } = microchipValidation(disallowedMicrochipIds).validate(validationPayload, { abortEarly: false })
   return error
 }
 
