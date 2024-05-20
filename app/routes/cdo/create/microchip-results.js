@@ -11,7 +11,7 @@ const getCombinedResults = request => {
   const ownerDetails = getOwnerDetails(request)
   details.newFirstName = ownerDetails.firstName
   details.newLastName = ownerDetails.lastName
-  details.dogId = request.params.dogId
+  details.dogId = request.params?.dogId
   return details
 }
 
