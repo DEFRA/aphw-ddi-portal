@@ -18,6 +18,11 @@ const getDogOwner = async (indexNumber) => {
   return payload.owner
 }
 
+const getDogOwnerWithDogs = async (indexNumber) => {
+  const payload = await get(`dog-owner/${indexNumber}?includeDogs=true`, options)
+  return payload.owner
+}
+
 const updateDogDetails = async (dog, username) => {
   dog.dogId = dog.id
 
@@ -55,5 +60,6 @@ module.exports = {
   updateStatus,
   getDogDetails,
   getDogOwner,
+  getDogOwnerWithDogs,
   deleteDog
 }
