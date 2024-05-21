@@ -2,9 +2,8 @@ const Joi = require('joi')
 const { validateMicrochip } = require('../../../lib/validation-helpers')
 
 const schema = Joi.object({
-  microchipNumber: Joi.string().trim().required().min(15).max(15).messages({
-    'string.min': 'Microchip numbers must be {#limit} digits',
-    'string.max': 'Microchip numbers must be {#limit} digits',
+  microchipNumber: Joi.string().trim().required().max(15).messages({
+    'string.max': 'Microchip numbers must be {#limit} numbers long',
     'string.empty': 'Enter a microchip number'
   }).custom((value, helper) => validateMicrochip(value, helper, false)),
   dogId: Joi.string().allow('').allow(null).optional()
