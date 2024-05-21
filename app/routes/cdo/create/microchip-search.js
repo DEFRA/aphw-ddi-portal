@@ -6,6 +6,8 @@ const { anyLoggedInUser } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 
+const alreadyOwnThisDogMessage = 'This dog is already owned by this owner'
+
 module.exports = [{
   method: 'GET',
   path: `${routes.microchipSearch.get}/{dogId?}`,
@@ -45,10 +47,14 @@ module.exports = [{
 
       const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
       if (duplicateMicrochipMessage) {
-        return h.view(views.microchipSearch, new ViewModel(details, generateDuplicateError(duplicateMicrochipMessage))).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(duplicateMicrochipMessage))).code(400).takeover()
       }
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
+
+      if (results.some(x => x.microchipNumber === details.microchipNumber || x.microchipNumber2 === details.microchipNumber)) {
+        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()
+      }
 
       const searchResults = { results, microchipNumber: details.microchipNumber }
       setMicrochipResults(request, searchResults)
@@ -76,7 +82,7 @@ const duplicateMicrochipsInSession = (request, details) => {
   return null
 }
 
-const generateDuplicateError = message => {
+const generateMicrochipError = message => {
   return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
 }
 

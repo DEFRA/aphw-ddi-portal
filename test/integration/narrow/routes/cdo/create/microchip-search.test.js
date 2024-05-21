@@ -359,6 +359,50 @@ describe('Microchip search tests', () => {
     expect(response.headers.location).toBe('/cdo/create/microchip-results/1')
   })
 
+  test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip1', async () => {
+    doSearch.mockResolvedValue([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+
+    const payload = {
+      microchipNumber: '123456789012345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+  })
+
+  test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip2', async () => {
+    doSearch.mockResolvedValue([{ id: 1, microchipNumber2: '123456789012345' }, { id: 2 }])
+
+    const payload = {
+      microchipNumber: '123456789012345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()
