@@ -112,7 +112,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error too short', async () => {
@@ -132,7 +132,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error space', async () => {
