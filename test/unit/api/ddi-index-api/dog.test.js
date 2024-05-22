@@ -1,5 +1,5 @@
 const { user, adminUser } = require('../../../mocks/auth')
-const { updateStatus, getDogDetails, updateDogDetails, getDogOwner, deleteDog } = require('../../../../app/api/ddi-index-api/dog')
+const { updateStatus, getDogDetails, updateDogDetails, getDogOwner, deleteDog, getDogOwnerWithDogs } = require('../../../../app/api/ddi-index-api/dog')
 jest.mock('../../../../app/api/ddi-index-api/base')
 const { get, post, put, callDelete, boomRequest } = require('../../../../app/api/ddi-index-api/base')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
@@ -52,6 +52,14 @@ describe('Dog test', () => {
       get.mockResolvedValue({ payload: {} })
       await getDogOwner('ED12345')
       expect(get).toHaveBeenCalledWith('dog-owner/ED12345', expect.anything())
+    })
+  })
+
+  describe('getDogOwnerWithDogs', () => {
+    test('should calls endpoint', async () => {
+      get.mockResolvedValue({ payload: {} })
+      await getDogOwnerWithDogs('ED12345')
+      expect(get).toHaveBeenCalledWith('dog-owner/ED12345?includeDogs=true', expect.anything())
     })
   })
 
