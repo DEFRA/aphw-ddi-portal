@@ -8,7 +8,10 @@ describe('Delete Dog', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
-  const { getDogDetails, deleteDog } = require('../../../../../../app/api/ddi-index-api/dog')
+  const { getDogDetails, deleteDog, getDogOwnerWithDogs } = require('../../../../../../app/api/ddi-index-api/dog')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference, deletePerson } = require('../../../../../../app/api/ddi-index-api/person')
 
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
   const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
@@ -33,6 +36,25 @@ describe('Delete Dog', () => {
       indexNumber: 'ED24957',
       name: 'Kyleigh'
     })
+    getDogOwnerWithDogs.mockResolvedValue({
+      firstName: 'Ralph',
+      lastName: 'Wreck it',
+      birthDate: null,
+      personReference: 'P-4169-0315',
+      contacts: [],
+      dogs: [
+        {
+          id: 24957,
+          indexNumber: 'ED24957',
+          name: 'Kyleigh'
+        },
+        {
+          id: 300741,
+          indexNumber: 'ED300741',
+          name: 'Lassie'
+        }
+      ]
+    })
 
     test('GET /cdo/delete/dog route returns 200 given admin', async () => {
       const options = {
@@ -46,7 +68,40 @@ describe('Delete Dog', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
+      expect(getDogOwnerWithDogs).toHaveBeenCalled()
       expect(document.querySelector('h1').textContent.trim()).toBe('Are you sure you want to delete dog record ED200010?')
+      expect(document.querySelector('input[name=\'ownerPk\']')).toBeNull()
+    })
+
+    test('GET /cdo/delete/dog route returns 200 and includes hidden ownerPk input given admin and dog is last dog of owner', async () => {
+      getDogOwnerWithDogs.mockResolvedValue({
+        firstName: 'Ralph',
+        lastName: 'Wreck it',
+        birthDate: null,
+        personReference: 'P-4169-0315',
+        contacts: [],
+        dogs: [
+          {
+            id: 24957,
+            indexNumber: 'ED24957',
+            name: 'Kyleigh'
+          }
+        ]
+      })
+      const options = {
+        method: 'GET',
+        url: '/cdo/delete/dog/ED200010',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(getDogOwnerWithDogs).toHaveBeenCalled()
+      expect(document.querySelector('h1').textContent.trim()).toBe('Are you sure you want to delete dog record ED200010?')
+      expect(document.querySelector('input[name=\'ownerPk\']').getAttribute('value')).toBe('P-4169-0315')
     })
 
     test('GET /cdo/delete/dog route returns 403 given standard user', async () => {
@@ -102,7 +157,7 @@ describe('Delete Dog', () => {
       expect(deleteDog).toHaveBeenCalledWith('ED200010', user)
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog record deleted')
       expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200010')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog record ED200010 will no longer appear in search results or on the owner record.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
     })
 
@@ -216,6 +271,144 @@ describe('Delete Dog', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
+    })
+  })
+
+  describe('POST /cdo/delete/dog with owner', () => {
+    beforeEach(() => {
+      getPersonByReference.mockResolvedValue({
+        firstName: 'Mark',
+        lastName: 'Turner',
+        birthDate: '1998-05-10',
+        personReference: 'P-35E5-8264',
+        address: {
+          addressLine1: 'Flat 504',
+          addressLine2: '1 Pepys Street',
+          town: 'City of London',
+          postcode: 'EC3N 2NU',
+          country: 'England'
+        },
+        contacts: {
+          emails: [],
+          primaryTelephones: [],
+          secondaryTelephones: []
+        }
+      })
+      getDogDetails.mockResolvedValue({
+        id: 200011,
+        indexNumber: 'ED200011',
+        name: 'Kyleigh'
+      })
+    })
+
+    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload and ownerPk', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED200011',
+        auth,
+        payload: {
+          confirm: 'Y',
+          pk: 'ED200011',
+          ownerPk: 'P-35E5-8264',
+          confirmation: 'true'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getPersonByReference).toHaveBeenCalledWith('P-35E5-8264')
+      expect(document.querySelector('h1').textContent.trim()).toBe('Delete the owner record')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleting dog record ED200011 means the owner record Mark Turner no longer has a dog linked to it.')
+      expect(document.querySelector('legend').textContent.trim()).toContain('Delete the owner record for Mark Turner?')
+      expect(document.querySelector('input[name=\'ownerPk\']').getAttribute('value')).toBe('P-35E5-8264')
+      expect(document.querySelector('input[name=\'pk\']').getAttribute('value')).toBe('ED200011')
+      expect(document.querySelector('input[name=\'confirm\']').getAttribute('value')).toBe('Y')
+    })
+
+    test('POST /cdo/delete/dog route returns 400 given admin and Yes payload and ownerPk without owner confirmation', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED200011',
+        auth,
+        payload: {
+          confirm: 'Y',
+          pk: 'ED200011',
+          ownerPk: 'P-35E5-8264',
+          ownerConfirmation: 'true'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(400)
+
+      expect(document.querySelector('h1').textContent.trim()).toBe('Delete the owner record')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
+    })
+
+    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload, ownerPk and confirmOwner payload', async () => {
+      const payload = {
+        confirm: 'Y',
+        pk: 'ED200011',
+        ownerPk: 'P-E516-0334',
+        confirmOwner: 'Y',
+        ownerConfirmation: 'true'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED200011',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(deleteDog).toHaveBeenCalledWith('ED200011', user)
+      expect(deletePerson).toHaveBeenCalledWith('P-E516-0334', user)
+
+      expect(document.querySelector('h1').textContent.trim()).toBe('Records deleted')
+      expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200011 and Mark Turner')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover deleted records.')
+    })
+
+    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload, ownerPk and confirmOwner N', async () => {
+      const payload = {
+        confirm: 'Y',
+        ownerPk: 'P-E516-0334',
+        pk: 'ED200011',
+        confirmOwner: 'N',
+        ownerConfirmation: 'true'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED200011',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(deleteDog).toHaveBeenCalledWith('ED200011', user)
+
+      expect(document.querySelector('h1').textContent.trim()).toBe('Dog record deleted')
+      expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200011')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
     })
   })
 
