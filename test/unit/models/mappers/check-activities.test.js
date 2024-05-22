@@ -737,6 +737,18 @@ describe('Check Activity Mappers', () => {
           subject: 'DDI Certificate Issued'
         },
         {
+          operation: 'changed dog owner',
+          actioningUser: {
+            username: 'import-user',
+            displayname: 'Import user'
+          },
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.change.owner',
+          rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c5|1707837161936',
+          subject: 'DDI Changed Dog Owner',
+          details: 'Dog ED100 moved to John Smith'
+        },
+        {
           added: {
             id: 2,
             comment: 'Comment text',
@@ -839,6 +851,11 @@ describe('Check Activity Mappers', () => {
         {
           date: '13 February 2024',
           activityLabel: 'Certificate issued',
+          teamMember: 'Import user'
+        },
+        {
+          date: '13 February 2024',
+          activityLabel: 'Dog ED100 moved to John Smith',
           teamMember: 'Import user'
         },
         {
