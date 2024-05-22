@@ -6,6 +6,7 @@ const { errorPusherDefault } = require('../../lib/error-helpers')
  * @property {string} nameOrReferenceText
  * @property {string} confirmReferenceText
  * @property {string} nameOrReference
+ * @property {string} [inputReference]
  * @property {string} [recordTypeText]
  * @property {string} [pk]
  * @property {string} [recordValue]
@@ -19,7 +20,7 @@ const { errorPusherDefault } = require('../../lib/error-helpers')
  * @constructor
  */
 function ViewModel (details, backNav, errors) {
-  const inputReference = details.nameOrReference ?? 'recordValue'
+  const inputReference = details.inputReference ?? details.nameOrReference ?? 'recordValue'
   this.model = {
     backLink: details.backLink ?? backNav?.backLink,
     confirm: {
