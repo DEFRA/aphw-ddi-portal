@@ -11,6 +11,9 @@ describe('Microchip search tests', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/search')
   const { doSearch } = require('../../../../../../app/api/ddi-index-api/search')
 
+  jest.mock('../../../../../../app/session/cdo/owner')
+  const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -112,7 +115,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error too short', async () => {
@@ -132,7 +135,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 digits')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error space', async () => {
@@ -356,6 +359,73 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(302)
     expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
+    expect(response.headers.location).toBe('/cdo/create/microchip-results/1')
+  })
+
+  test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip1', async () => {
+    doSearch.mockResolvedValue([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+    getOwnerDetails.mockResolvedValue()
+
+    const payload = {
+      microchipNumber: '123456789012345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+  })
+
+  test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip2', async () => {
+    doSearch.mockResolvedValue([{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111222' }, { id: 2 }])
+    getOwnerDetails.mockReturnValue({ personReference: 'P-111222' })
+
+    const payload = {
+      microchipNumber: '123456789012345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+  })
+
+  test('POST /cdo/create/microchip-search route with existing microchip of dog that owner doesnt already own returns 302', async () => {
+    doSearch.mockResolvedValue([{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111' }, { id: 2 }])
+    getOwnerDetails.mockReturnValue({ personReference: 'P-222' })
+
+    const payload = {
+      microchipNumber: '123456789012345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/microchip-search',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe('/cdo/create/microchip-results/1')
   })
 

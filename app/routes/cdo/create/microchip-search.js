@@ -5,6 +5,9 @@ const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../sessi
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
+const { getOwnerDetails } = require('../../../session/cdo/owner')
+
+const alreadyOwnThisDogMessage = 'This dog is already owned by this owner'
 
 module.exports = [{
   method: 'GET',
@@ -45,10 +48,14 @@ module.exports = [{
 
       const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
       if (duplicateMicrochipMessage) {
-        return h.view(views.microchipSearch, new ViewModel(details, generateDuplicateError(duplicateMicrochipMessage))).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(duplicateMicrochipMessage))).code(400).takeover()
       }
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
+
+      if (isDogUnderSameOwner(results, details, request)) {
+        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()
+      }
 
       const searchResults = { results, microchipNumber: details.microchipNumber }
       setMicrochipResults(request, searchResults)
@@ -76,7 +83,13 @@ const duplicateMicrochipsInSession = (request, details) => {
   return null
 }
 
-const generateDuplicateError = message => {
+const isDogUnderSameOwner = (results, details, request) => {
+  const owner = getOwnerDetails(request)
+  return results.some(result => (result.microchipNumber === details.microchipNumber || result.microchipNumber2 === details.microchipNumber) &&
+  result.personReference === owner.personReference)
+}
+
+const generateMicrochipError = message => {
   return new Joi.ValidationError(message, [{ message, path: ['microchipNumber'] }])
 }
 

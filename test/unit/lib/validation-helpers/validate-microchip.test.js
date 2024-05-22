@@ -38,7 +38,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['microchipNumber']
       },
-      error: 'Microchip numbers must be 15 digits'
+      error: 'Microchip numbers must be 15 numbers long'
     })
   })
 
