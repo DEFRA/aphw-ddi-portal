@@ -85,8 +85,8 @@ const duplicateMicrochipsInSession = (request, details) => {
 
 const isDogUnderSameOwner = (results, details, request) => {
   const owner = getOwnerDetails(request)
-  return results.some(x => (x.microchipNumber === details.microchipNumber || x.microchipNumber2 === details.microchipNumber) &&
-    x.personReference === owner.personReference)
+  return results.some(result => (result.microchipNumber === details.microchipNumber || result.microchipNumber2 === details.microchipNumber) &&
+  result.personReference === owner.personReference)
 }
 
 const generateMicrochipError = message => {
