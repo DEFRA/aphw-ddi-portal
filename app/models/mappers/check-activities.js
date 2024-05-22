@@ -421,6 +421,19 @@ const mapCertificateEventToCheckActivityRows = (event) => {
 }
 
 /**
+ * @param {ChangeOwnerEvent} event
+ * @returns {ActivityRow[]}
+ */
+const mapChangeOwnerEventToCheckActivityRows = (event) => {
+  const dateAndTeamMemberData = getDateAndTeamMemberFromEvent(event)
+
+  return [{
+    activityLabel: event.details,
+    ...dateAndTeamMemberData
+  }]
+}
+
+/**
  * @param {DDIEvent[]} events
  * @returns {ActivityRow[]}
  */
@@ -459,6 +472,10 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
       addedRows.push(...mapCertificateEventToCheckActivityRows(event))
     }
 
+    if (event.type === 'uk.gov.defra.ddi.event.change.owner') {
+      addedRows.push(...mapChangeOwnerEventToCheckActivityRows(event))
+    }
+
     return [...activityRows, ...addedRows]
   }, activityRowsAccumulator)
 }
@@ -474,5 +491,6 @@ module.exports = {
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
   mapImportManualEventToCheckActivityRows,
-  mapCertificateEventToCheckActivityRows
+  mapCertificateEventToCheckActivityRows,
+  mapChangeOwnerEventToCheckActivityRows
 }
