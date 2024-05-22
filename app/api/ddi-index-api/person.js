@@ -65,6 +65,10 @@ const getPersonAndDogs = async (personReference) => {
   return payload
 }
 
+/**
+ * @param reference
+ * @return {Promise<Person>}
+ */
 const getPersonByReference = async (reference) => {
   const res = await get(`${personEndpoint}/${reference}`)
 

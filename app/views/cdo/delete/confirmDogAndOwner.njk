@@ -1,0 +1,68 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-row">
+      {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: model.errors
+        }) }}
+      {% endif %}
+
+      <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+        {% if model.confirmHint %}
+          <span class="govuk-caption-l">{{ model.confirmHint }}</span>
+        {% endif %}
+        <h1 class="govuk-heading-l">
+          Delete the owner record
+        </h1>
+        <p class="govuk-body">
+          Deleting dog record {{ model.pk }} means the owner record {{ model.ownerRecordName }} no longer has a dog linked to it.
+        </p>
+        <div class="govuk-form-group">
+          {{ govukRadios(model.confirmOwner) }}
+        </div>
+
+        <input type="hidden" name="pk" value="{{ model.pk }}" />
+        <input type="hidden" name="confirm" value="Y" />
+        <input type="hidden" name="ownerConfirmation" value="true" />
+        <input type="hidden" name="ownerPk" value="{{ model.ownerPk }}" />
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+          text: "Continue",
+          name: "submitButton"
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

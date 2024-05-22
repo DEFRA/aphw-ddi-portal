@@ -98,7 +98,9 @@ const constants = {
     activityConfirmation: 'cdo/edit/activity-confirmation',
     confirmDeleteGeneric: 'common/confirm',
     confirmation: 'common/deleted/dog',
-    deleteGeneric: 'common/deleted/dog'
+    confirmDogAndOwner: 'cdo/delete/confirmDogAndOwner',
+    deleteGeneric: 'common/deleted/dog',
+    deleteDogAndOwner: 'common/deleted/dogAndOwner'
   },
   keys: {
     entry: 'dogs',
