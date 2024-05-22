@@ -8,7 +8,8 @@ const {
   getActivityLabelFromCreatedDog,
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
-  mapCertificateEventToCheckActivityRows
+  mapCertificateEventToCheckActivityRows,
+  mapChangeOwnerEventToCheckActivityRows
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -878,6 +879,28 @@ describe('Check Activity Mappers', () => {
       ]
 
       expect(flatMapActivityDtoToCheckActivityRow(items)).toEqual(expectedActivityRows)
+    })
+  })
+
+  describe('mapChangeOwnerEventToCheckActivityRows', () => {
+    test('should map a created event with one dog to a single row array of dog created rows', () => {
+      const createdEvent = createdEventBuilder({
+        details: 'Dog ED100 moved to John Smith',
+        timestamp: '2024-02-14T08:24:22.487Z',
+        actioningUser: {
+          username: 'Developer',
+          displayname: 'Developer'
+        }
+      })
+
+      const expectedRows = [
+        {
+          date: '14 February 2024',
+          activityLabel: 'Dog ED100 moved to John Smith',
+          teamMember: 'Developer'
+        }
+      ]
+      expect(mapChangeOwnerEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
     })
   })
 })
