@@ -63,7 +63,7 @@ describe('Application type', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/create/application-type',
+      url: '/cdo/create/application-type/1',
       auth
     }
 
@@ -75,7 +75,7 @@ describe('Application type', () => {
     expect(document.querySelector('#cdoIssued-day').getAttribute('value')).toBe('10')
     expect(document.querySelector('#cdoIssued-month').getAttribute('value')).toBe('10')
     expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
-    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/microchip-results')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/microchip-results/1')
   })
 
   test('GET /cdo/create/application-type route returns 404 if no dog in session', async () => {
