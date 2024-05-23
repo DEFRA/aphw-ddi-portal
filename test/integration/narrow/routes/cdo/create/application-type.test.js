@@ -8,7 +8,7 @@ describe('Application type', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/cdo/dog')
-  const { getDog, setDog } = require('../../../../../../app/session/cdo/dog')
+  const { getDog, setDog, getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
 
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
@@ -23,6 +23,7 @@ describe('Application type', () => {
     mockAuth.getUser.mockReturnValue(user)
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
     setPoliceForce.mockResolvedValue()
+    getMicrochipResults.mockReturnValue()
     server = await createServer()
     await server.initialize()
   })
@@ -48,6 +49,33 @@ describe('Application type', () => {
     expect(document.querySelector('#cdoIssued-day').getAttribute('value')).toBe('10')
     expect(document.querySelector('#cdoIssued-month').getAttribute('value')).toBe('10')
     expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-existing-dog')
+  })
+
+  test('GET /cdo/create/application-type route returns 200 with correct backLink when visited existing microchip', async () => {
+    getDog.mockReturnValue({
+      breed: 'Breed 1',
+      name: 'Bruce',
+      cdoIssued: new UTCDate('2020-10-10T00:00:00.000Z')
+    })
+
+    getMicrochipResults.mockReturnValue({ results: [{ indeNumber: 'ED100' }] })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/application-type',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('#cdoIssued-day').getAttribute('value')).toBe('10')
+    expect(document.querySelector('#cdoIssued-month').getAttribute('value')).toBe('10')
+    expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/microchip-results')
   })
 
   test('GET /cdo/create/application-type route returns 404 if no dog in session', async () => {

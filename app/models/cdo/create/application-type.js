@@ -1,10 +1,9 @@
-const { routes } = require('../../../constants/cdo/dog')
 const { applicationTypeElements } = require('../common/components/application-type')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
-function ViewModel (dogDetails, errors) {
+function ViewModel (dogDetails, backLink, errors) {
   this.model = {
-    backLink: routes.selectExistingDog.get,
+    backLink,
     dogId: dogDetails.dogId,
     ...applicationTypeElements(dogDetails),
     errors: []

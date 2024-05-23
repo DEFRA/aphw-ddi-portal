@@ -1,5 +1,5 @@
 const { keys } = require('../../constants/cdo')
-const { clearAllDogs } = require('./dog')
+const { clearAllDogs, setExistingDogs, setMicrochipResults } = require('./dog')
 const { setOwnerDetails, setAddress, setEnforcementDetails } = require('./owner')
 
 const get = (request, entryKey, key) => {
@@ -16,6 +16,8 @@ const setCreatedCdo = (request, cdo) => {
 
 const clearCdo = (request) => {
   clearAllDogs(request)
+  setExistingDogs(request, [])
+  setMicrochipResults(request, [])
   setOwnerDetails(request, null)
   setAddress(request, null)
   setEnforcementDetails(request, null)
