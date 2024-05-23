@@ -9,7 +9,8 @@ const { validatePayload } = require('../../../schema/portal/cdo/application-type
 
 const determineBackLink = request => {
   const existingDogs = getMicrochipResults(request)
-  return existingDogs?.results?.length > 0 ? dogRoutes.microchipResults.get : dogRoutes.selectExistingDog.get
+  const dogId = request.params.dogId
+  return existingDogs?.results?.length > 0 ? `${dogRoutes.microchipResults.get}/${dogId}` : dogRoutes.selectExistingDog.get
 }
 
 module.exports = [
