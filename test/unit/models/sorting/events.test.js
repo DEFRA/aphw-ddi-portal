@@ -1,4 +1,4 @@
-const { sortEventsDesc, sortEventsDescCompareFn } = require('../../../../app/models/sorting/event')
+const { sortEventsDesc, sortEventsDescCompareFn, filterEvents } = require('../../../../app/models/sorting/event')
 describe('Event sorting', () => {
   const activityPoliceEarly = {
     activity: {
@@ -123,5 +123,58 @@ describe('Event sorting', () => {
     ]
 
     expect(sortEventsDesc(events)).toEqual(expectedOrder)
+  })
+
+  const changeOwnerEvents = {
+    events: [
+      {
+        operation: 'changed dog owner',
+        details: 'Dog ED123 moved from Peter Snow',
+        timestamp: '2024-05-24T12:16:05.812Z',
+        type: 'uk.gov.defra.ddi.event.change.owner',
+        rowKey: '7809b93e-8920-4138-9e83-ae192e4d71cf|1716552966176',
+        subject: 'DDI Changed Dog Owner'
+      },
+      {
+        operation: 'changed dog owner',
+        details: 'Dog ED111 moved from Peter Snow',
+        timestamp: '2024-05-24T12:16:05.812Z',
+        type: 'uk.gov.defra.ddi.event.change.owner',
+        rowKey: '7809b93e-8920-4138-9e83-ae192e4d71cf|1716552966176',
+        subject: 'DDI Changed Dog Owner'
+      },
+      {
+        operation: 'changed dog owner',
+        details: 'Owner changed from Peter Snow',
+        timestamp: '2024-05-24T12:16:05.812Z',
+        type: 'uk.gov.defra.ddi.event.change.owner',
+        rowKey: '7809b93e-8920-4138-9e83-ae192e4d71cf|1716552966176',
+        subject: 'DDI Changed Dog Owner'
+      }
+    ]
+  }
+
+  describe('filterEvents', () => {
+    test('should exclude any dog change owner events that are for a different dog to the one specified', () => {
+      const config = {
+        pk: 'ED123',
+        source: 'dog'
+      }
+      const filteredEvents = filterEvents(changeOwnerEvents, config)
+      expect(filteredEvents.length).toBe(1)
+      expect(filteredEvents[0].details).toBe('Dog ED123 moved from Peter Snow')
+    })
+
+    test('should include all events for the owner', () => {
+      const config = {
+        pk: 'P-123',
+        source: 'owner'
+      }
+      const filteredEvents = filterEvents(changeOwnerEvents, config)
+      expect(filteredEvents.length).toBe(3)
+      expect(filteredEvents[0].details).toBe('Dog ED123 moved from Peter Snow')
+      expect(filteredEvents[1].details).toBe('Dog ED111 moved from Peter Snow')
+      expect(filteredEvents[2].details).toBe('Owner changed from Peter Snow')
+    })
   })
 })

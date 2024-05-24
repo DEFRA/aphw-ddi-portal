@@ -38,6 +38,30 @@ describe('Check activities', () => {
 
   const validDogEvent = {
     events: [
+      {
+        operation: 'changed dog owner',
+        actioningUser: {
+          username: 'import-user',
+          displayname: 'Import user'
+        },
+        timestamp: '2024-02-13T11:12:41.937Z',
+        type: 'uk.gov.defra.ddi.event.change.owner',
+        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c5|1707837161111',
+        subject: 'DDI Changed Dog Owner',
+        details: 'Dog ED100 moved to John Smith'
+      },
+      {
+        operation: 'changed dog owner',
+        actioningUser: {
+          username: 'import-user',
+          displayname: 'Import user'
+        },
+        timestamp: '2024-02-13T12:12:41.937Z',
+        type: 'uk.gov.defra.ddi.event.change.owner',
+        rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c5|1707837161222',
+        subject: 'DDI Changed Dog Owner',
+        details: 'Dog ED123 moved to Peter Snow'
+      },
       manualActivityEventBuilder({
         timestamp: '2024-02-15T16:12:41.937Z'
       }),
@@ -187,12 +211,18 @@ describe('Check activities', () => {
     expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Team member')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(8)
+    expect(rows.length).toBe(9)
     expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('15 February 2024')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
     expect(rows[1].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO issue date updated')
     expect(rows[2].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO expiry date updated')
+    expect(rows[3].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog record created (Pre-exempt)')
+    expect(rows[4].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Address line 1 updated from 93 SILVERDALE AVENUE')
+    expect(rows[5].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Email address updated')
+    expect(rows[6].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog colour updated')
+    expect(rows[7].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Police correspondence received')
+    expect(rows[8].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog ED123 moved to Peter Snow')
   })
 
   test('GET /cdo/view/activity/xxx/owner route returns a 200 and valid content', async () => {

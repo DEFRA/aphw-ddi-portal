@@ -7,7 +7,7 @@ const { getDogOwner } = require('../../../api/ddi-index-api/dog')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { getEvents } = require('../../../api/ddi-events-api/event')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
-const { sortEventsDesc } = require('../../../models/sorting/event')
+const { sortEventsDesc, filterEvents } = require('../../../models/sorting/event')
 
 const getSourceEntity = async (pk, source) => {
   if (source === activitySources.dog) {
@@ -52,7 +52,9 @@ module.exports = [
           title: source === activitySources.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`
         }
 
-        const sortedActivities = sortEventsDesc(allEvents.events)
+        const filteredEvents = filterEvents(allEvents, sourceEntity)
+
+        const sortedActivities = sortEventsDesc(filteredEvents)
 
         const backNav = {
           backLink: getMainReturnPoint(request)
