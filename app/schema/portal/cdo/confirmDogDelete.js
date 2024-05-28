@@ -20,8 +20,8 @@ const confirmOwnerSchema = Joi.object({
 }).unknown(true)
 
 const isSingleDogSchema = Joi.object({
-  pk: Joi.string().required(),
-  ownerPk: Joi.string().forbidden()
+  pk: Joi.string().required()
+  // ownerPk: Joi.string().forbidden()
 }).unknown(true)
 
 const confirmOwnerRadioSchema = Joi.object({

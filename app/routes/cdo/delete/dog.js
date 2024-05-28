@@ -5,7 +5,7 @@ const DeletedViewModel = require('../../../models/cdo/delete/deleted')
 const ConfirmOwnerDeleteViewModel = require('../../../models/cdo/delete/confimDogAndOwner')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getDogDetails, deleteDog, getDogOwnerWithDogs } = require('../../../api/ddi-index-api/dog')
-const { validatePayload, confirmOwnerRadioSchema, bypassSchemaForDeleteOnlyDog, completeOwnerSchema, isSingleDogSchema } = require('../../../schema/portal/cdo/confirmDogDelete')
+const { validatePayload, confirmOwnerRadioSchema, bypassSchemaForDeleteOnlyDog } = require('../../../schema/portal/cdo/confirmDogDelete')
 const { getUser } = require('../../../auth')
 const { deletePerson, getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
@@ -33,6 +33,7 @@ const dogAndOwnerConfirmation = {
   assign: 'dogPk'
 }
 
+/*
 const dogAndOwnerRadioValidation = {
   method: request => {
     const { value, error } = isSingleDogSchema.validate(request.payload)
@@ -61,6 +62,7 @@ const dogAndOwnerRadioValidation = {
   },
   assign: 'dogPk'
 }
+*/
 
 module.exports = [
   {
@@ -94,8 +96,8 @@ module.exports = [
         }
       },
       pre: [
-        dogAndOwnerConfirmation,
-        dogAndOwnerRadioValidation
+        dogAndOwnerConfirmation
+        // dogAndOwnerRadioValidation
       ],
       handler: async (request, h) => {
         const payload = request.payload

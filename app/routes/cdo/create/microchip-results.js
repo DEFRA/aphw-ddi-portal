@@ -29,6 +29,9 @@ module.exports = [{
     handler: async (request, h) => {
       const details = getCombinedResults(request)
 
+      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
+      setDog(request, dog)
+
       return h.view(views.microchipResults, new ViewModel(details))
     }
   }
@@ -50,9 +53,6 @@ module.exports = [{
       if (!request.payload.confirm) {
         return h.redirect(`${routes.microchipResultsStop.get}/${request.params.dogId}`)
       }
-
-      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
-      setDog(request, dog)
 
       return h.redirect(`${routes.applicationType.get}/${request.params.dogId}`)
     }
