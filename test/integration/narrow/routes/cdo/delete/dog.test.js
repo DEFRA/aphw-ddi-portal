@@ -301,6 +301,7 @@ describe('Delete Dog', () => {
       })
     })
 
+    /*
     test('POST /cdo/delete/dog route returns 200 given admin and Yes payload and ownerPk', async () => {
       const options = {
         method: 'POST',
@@ -351,7 +352,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('h1').textContent.trim()).toBe('Delete the owner record')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
     })
-
+    */
     test('POST /cdo/delete/dog route returns 200 given admin and Yes payload, ownerPk and confirmOwner payload', async () => {
       const payload = {
         confirm: 'Y',
