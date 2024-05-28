@@ -161,8 +161,9 @@ describe('Event sorting', () => {
         source: 'dog'
       }
       const filteredEvents = filterEvents(changeOwnerEvents, config)
-      expect(filteredEvents.length).toBe(1)
+      expect(filteredEvents.length).toBe(2)
       expect(filteredEvents[0].details).toBe('Dog ED123 moved from Peter Snow')
+      expect(filteredEvents[1].details).toBe('Owner changed from Peter Snow')
     })
 
     test('should include all events for the owner', () => {

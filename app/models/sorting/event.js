@@ -13,8 +13,17 @@ const sortEventsDesc = (events) => {
 }
 
 const filterEvents = (events, entityConfig) => {
-  return events.events.filter(event => event.type !== CHANGE_OWNER ||
-    (entityConfig.source === 'dog' ? event.details?.startsWith(`Dog ${entityConfig.pk}`) : true))
+  return events.events.filter(event => {
+    if (event.type !== CHANGE_OWNER) {
+      return true
+    }
+
+    if (entityConfig.source === 'dog' && event.details?.startsWith('Dog')) {
+      return event.details?.startsWith(`Dog ${entityConfig.pk}`)
+    }
+
+    return true
+  })
 }
 
 module.exports = {
