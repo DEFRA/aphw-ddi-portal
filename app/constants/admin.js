@@ -42,6 +42,13 @@ const policeLinks = {
   }
 }
 
+const deleteLinks = {
+  dogs: {
+    get: '/admin/delete/dogs',
+    post: '/admin/delete/dogs'
+  }
+}
+
 const adminIndex = {
   get: '/admin/index'
 }
@@ -56,11 +63,9 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
+    deleteDogs: deleteLinks.dogs,
     regularJobs: {
       get: '/admin/regular-jobs'
-    },
-    processComments: {
-      get: '/admin/process-comments'
     },
     pseudonyms: {
       get: '/admin/pseudonyms',
@@ -75,7 +80,6 @@ const constants = {
     index: 'admin/index',
     activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
-    processComments: 'admin/process-comments',
     pseudonyms: 'admin/pseudonyms',
     insurance: 'admin/insurance',
     confirm: 'common/confirm',
@@ -83,7 +87,8 @@ const constants = {
     addOrRemove: 'common/add-or-remove',
     addAdminRecord: 'common/add-admin-record',
     removeAdminRecord: 'common/remove-admin-record',
-    success: 'admin/success'
+    success: 'admin/success',
+    deleteDogs: 'admin/delete/dogs'
   },
   breadcrumbs: [
     {

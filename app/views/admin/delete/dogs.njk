@@ -1,0 +1,85 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+          {% for breadcrumb in model.breadcrumbs %}
+          <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="{{breadcrumb.link}}">
+              {{breadcrumb.label}}
+            </a>
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-two-thirds">
+    <form class="form" action="/v13/admin/delete-dogs-2" method="post">
+      <span class="govuk-caption-l">Delete dogs older than 15</span>
+      <h1 class="govuk-heading-l">
+        Unselect the dog records you want to keep
+      </h1>
+
+      <p class="govuk-body">Dog records with these statuses have been selected to be deleted:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Exempt</li>
+        <li>Inactive</li>
+        <li>Withdrawn</li>
+        <li>Failed</li>
+      </ul>
+
+      <p class="govuk-body">Unselect any dog records you want to keep.
+      </p>
+
+      {{ govukButton({
+      text: 'Continue'
+      }) }}
+
+    </form>
+
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table defra-sortable-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {% for colHeading in model.tableHeadings %}
+              <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="{{colHeading.ariaSort}}">
+                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
+                  {{colHeading.label}}
+                </a>
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% for dog in model.resultList %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{dog.status}}</td>
+            <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
+            <td class="govuk-table__cell">{{formatAsGds(dog.birthDate)}}</td>
+            <td class="govuk-table__cell">{{formatAsGds(dog.cdoIssued)}}</td>
+            <td class="govuk-table__cell">{{dog.deleteCheckbox}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+    </div>
+  </div>
+
+{% endblock %}

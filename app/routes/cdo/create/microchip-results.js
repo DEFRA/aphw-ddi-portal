@@ -47,12 +47,12 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
+      setDog(request, dog)
+
       if (!request.payload.confirm) {
         return h.redirect(`${routes.microchipResultsStop.get}/${request.params.dogId}`)
       }
-
-      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
-      setDog(request, dog)
 
       return h.redirect(`${routes.applicationType.get}/${request.params.dogId}`)
     }
