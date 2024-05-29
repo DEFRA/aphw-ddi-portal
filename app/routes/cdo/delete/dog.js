@@ -5,7 +5,7 @@ const DeletedViewModel = require('../../../models/cdo/delete/deleted')
 const ConfirmOwnerDeleteViewModel = require('../../../models/cdo/delete/confimDogAndOwner')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 const { getDogDetails, deleteDog, getDogOwnerWithDogs } = require('../../../api/ddi-index-api/dog')
-const { validatePayload, confirmOwnerRadioSchema, bypassSchemaForDeleteOnlyDog } = require('../../../schema/portal/cdo/confirmDogDelete')
+const { validatePayload, confirmOwnerRadioSchema, bypassSchemaForDeleteOnlyDog, completeOwnerSchema, isSingleDogSchema } = require('../../../schema/portal/cdo/confirmDogDelete')
 const { getUser } = require('../../../auth')
 const { deletePerson, getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
@@ -19,7 +19,11 @@ const dogAndOwnerConfirmation = {
     const pk = request.payload.pk
     const ownerPk = request.payload.ownerPk
 
-    const backLink = `${routes.deleteDog.get}/${pk}`
+    if (request.payload.confirm === 'N') {
+      return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`).takeover()
+    }
+
+    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -33,7 +37,6 @@ const dogAndOwnerConfirmation = {
   assign: 'dogPk'
 }
 
-/*
 const dogAndOwnerRadioValidation = {
   method: request => {
     const { value, error } = isSingleDogSchema.validate(request.payload)
@@ -49,7 +52,7 @@ const dogAndOwnerRadioValidation = {
     const pk = request.payload.pk
     const ownerPk = request.payload.ownerPk
 
-    const backLink = `${routes.deleteDog.get}/${pk}`
+    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -62,7 +65,6 @@ const dogAndOwnerRadioValidation = {
   },
   assign: 'dogPk'
 }
-*/
 
 module.exports = [
   {
@@ -96,8 +98,8 @@ module.exports = [
         }
       },
       pre: [
-        dogAndOwnerConfirmation
-        // dogAndOwnerRadioValidation
+        dogAndOwnerConfirmation,
+        dogAndOwnerRadioValidation
       ],
       handler: async (request, h) => {
         const payload = request.payload
