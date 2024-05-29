@@ -23,7 +23,7 @@ const dogAndOwnerConfirmation = {
       return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`).takeover()
     }
 
-    const backLink = `${routes.deleteDog.get}/${pk}`
+    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -52,7 +52,7 @@ const dogAndOwnerRadioValidation = {
     const pk = request.payload.pk
     const ownerPk = request.payload.ownerPk
 
-    const backLink = `${routes.deleteDog.get}/${pk}`
+    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
