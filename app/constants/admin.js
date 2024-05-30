@@ -42,10 +42,17 @@ const policeLinks = {
   }
 }
 
-const deleteLinks = {
+const deleteDogsLinks1 = {
   dogs: {
-    get: '/admin/delete/dogs',
-    post: '/admin/delete/dogs'
+    get: '/admin/delete/dogs-1',
+    post: '/admin/delete/dogs-1'
+  }
+}
+
+const deleteDogsLinks2 = {
+  dogs: {
+    get: '/admin/delete/dogs-2',
+    post: '/admin/delete/dogs-2'
   }
 }
 
@@ -63,7 +70,8 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
-    deleteDogs: deleteLinks.dogs,
+    deleteDogs1: deleteDogsLinks1.dogs,
+    deleteDogs2: deleteDogsLinks2.dogs,
     regularJobs: {
       get: '/admin/regular-jobs'
     },

@@ -28,14 +28,12 @@
 {% block content %}
   <div class="govuk-grid-row govuk-!-margin-bottom-3">
     <div class="govuk-grid-column-two-thirds">
-    <form class="form" action="/v13/admin/delete-dogs-2" method="post">
       <span class="govuk-caption-l">Delete dogs older than 15</span>
       <h1 class="govuk-heading-l">
         Unselect the dog records you want to keep
       </h1>
 
-      <p class="govuk-body">Dog records with these statuses have been selected to be deleted:
-      </p>
+      <p class="govuk-body">Dog records in this list have these statuses:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>Exempt</li>
         <li>Inactive</li>
@@ -43,41 +41,57 @@
         <li>Failed</li>
       </ul>
 
-      <p class="govuk-body">Unselect any dog records you want to keep.
-      </p>
+      <p class="govuk-body">These dog records will be deleted but you can unselect the dog records you want to keep.</p>
 
-      {{ govukButton({
-      text: 'Continue'
-      }) }}
-
-    </form>
+    </div>
 
     <div class="govuk-grid-column-full">
-      <table class="govuk-table defra-sortable-table">
-        <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            {% for colHeading in model.tableHeadings %}
-              <th scope="col" class="govuk-table__header govuk-input--width-10" aria-sort="{{colHeading.ariaSort}}">
-                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
-                  {{colHeading.label}}
+      <form class="form" method="post">
+
+        {{ govukButton({
+        text: 'Continue'
+        }) }}
+
+        <table class="govuk-table govuk-!-margin-top-6">
+          <caption class="govuk-table__caption govuk-visually-hidden">Active CDOs ordered by deadline</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              {% for colHeading in model.tableHeadings %}
+                <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
+                    {{colHeading.label}}
+                  </a>
+                </th>
+              {% endfor %}
+              <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">
+                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="/admin/delete/dogs?sortKey=selected">
+                Delete dog record
                 </a>
               </th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {% for dog in model.resultList %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{dog.status}}</td>
-            <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
-            <td class="govuk-table__cell">{{formatAsGds(dog.birthDate)}}</td>
-            <td class="govuk-table__cell">{{formatAsGds(dog.cdoIssued)}}</td>
-            <td class="govuk-table__cell">{{dog.deleteCheckbox}}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+          {% for dog in model.resultList %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{dog.status.status}}</td>
+              <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
+              <td class="govuk-table__cell">{{dog.humanReadableBirthDate}}</td>
+              <td class="govuk-table__cell">{{dog.humanReadableCdoIssued}}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <div class="govuk-checkboxes govuk-checkboxes--small defra-align-right-simple" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" name="deleteDog" id="dog-index-{{ dog.indexNumber }}" value="{{ dog.indexNumber }}" type="checkbox" checked="true">
+                    <label class="govuk-label govuk-checkboxes__label" for="deleteDog">
+                    </label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </form>
+
       <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
     </div>
   </div>

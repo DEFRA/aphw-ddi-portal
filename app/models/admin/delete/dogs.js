@@ -1,3 +1,6 @@
+const { breadcrumbs } = require('../../../constants/admin')
+const { formatToGds } = require('../../../lib/date-helpers')
+
 /**
  * @param {{
  *  column: 'status'
@@ -74,8 +77,8 @@ function ViewModel (resultList, sort, backNav) {
     },
     {
       label: 'Date of birth',
-      link: columnLink(sort, 'birthDate'),
-      ariaSort: getAriaSort(sort, 'birthDate')
+      link: columnLink(sort, 'dateOfBirth'),
+      ariaSort: getAriaSort(sort, 'dateOfBirth')
     },
     {
       label: 'CDO issued',
@@ -84,7 +87,14 @@ function ViewModel (resultList, sort, backNav) {
     }
   ]
 
+  const rows = [...resultList]
+  rows.forEach(row => {
+    row.humanReadableCdoIssued = formatToGds(row.cdoIssued)
+    row.humanReadableBirthDate = formatToGds(row.dateOfBirth)
+  })
+
   this.model = {
+    breadcrumbs,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     tableHeadings,
