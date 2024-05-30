@@ -36,27 +36,21 @@ const getAriaSort = (sort, column) => {
  */
 const columnLink = (sort, column) => {
   const queryParams = new URLSearchParams()
-  let calculatedColumn = column
 
   if (column === undefined) {
-    calculatedColumn = 'status'
+    column = 'status'
   }
 
-  const defaultSortOrder = calculatedColumn === 'interimExemptFor' ? ['DESC', 'ASC'] : ['ASC', 'DESC']
+  queryParams.set('sortKey', column)
 
-  if (calculatedColumn !== 'cdoExpiry' && calculatedColumn !== 'interimExemptFor') {
-    queryParams.set('sortKey', calculatedColumn)
-  }
-
-  if (calculatedColumn === sort.column && sort.order === defaultSortOrder[0]) {
-    queryParams.set('sortOrder', defaultSortOrder[1])
-  }
+  queryParams.set('sortOrder', sort.order === 'ASC' && column === sort.column ? 'DESC' : 'ASC')
 
   const queryParamsStr = queryParams.toString()
   const queryParamStrWithQM = queryParamsStr.length ? `?${queryParamsStr}` : ''
 
   return queryParamStrWithQM
 }
+
 /**
  * @param {Dog[]} resultList
  * @param {{ column: string; order: 'ASC'|'DESC'}} sort
@@ -87,11 +81,11 @@ function ViewModel (resultList, sort, backNav) {
     }
   ]
 
-  const rows = [...resultList]
-  rows.forEach(row => {
-    row.humanReadableCdoIssued = formatToGds(row.cdoIssued)
-    row.humanReadableBirthDate = formatToGds(row.dateOfBirth)
-  })
+  const rows = resultList.map(row => ({
+    ...row,
+    humanReadableCdoIssued: formatToGds(row.cdoIssued),
+    humanReadableBirthDate: formatToGds(row.dateOfBirth)
+  }))
 
   this.model = {
     breadcrumbs,
@@ -103,8 +97,12 @@ function ViewModel (resultList, sort, backNav) {
       order: 'ASC',
       ...sort
     },
-    resultList
+    resultList: rows
   }
 }
 
-module.exports = ViewModel
+module.exports = {
+  ViewModel,
+  getAriaSort,
+  columnLink
+}
