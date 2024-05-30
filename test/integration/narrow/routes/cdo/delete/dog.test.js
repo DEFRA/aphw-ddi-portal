@@ -341,7 +341,7 @@ describe('Delete Dog', () => {
 
       // const { document } = new JSDOM(response.payload).window
 
-      expect(response.statusCode).toBe(200)
+      expect(response.statusCode).toBe(302)
     })
 
     test('should return 200 given admin and Yes payload and ownerPk', async () => {
