@@ -29,6 +29,9 @@ module.exports = [{
     handler: async (request, h) => {
       const details = getCombinedResults(request)
 
+      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
+      setDog(request, dog)
+
       return h.view(views.microchipResults, new ViewModel(details))
     }
   }
