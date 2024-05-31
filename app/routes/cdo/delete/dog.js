@@ -24,7 +24,7 @@ const dogAndOwnerConfirmation = {
       return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`).takeover()
     }
 
-    const backNav = getBackLinkToSamePage(request)
+    const backLink = getBackLinkToSamePage(request)
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -32,7 +32,7 @@ const dogAndOwnerConfirmation = {
       lastName: dogOwner.lastName,
       ownerPk: ownerPk,
       pk: pk,
-      backLink: backNav
+      backLink
     })).code(200).takeover()
   },
   assign: 'dogAndOwnerConfirmation'
@@ -50,6 +50,7 @@ const dogAndOwnerRadioValidation = {
     }
   },
   failAction: async (request, h, error) => {
+    throwIfPreConditionError(request)
     const pk = request.payload.pk
     const ownerPk = request.payload.ownerPk
 

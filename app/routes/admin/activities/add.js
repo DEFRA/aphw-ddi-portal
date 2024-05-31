@@ -51,6 +51,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: (request, h) => {
+    throwIfPreConditionError(request)
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 
@@ -73,6 +74,8 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
+    throwIfPreConditionError(request)
+
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 

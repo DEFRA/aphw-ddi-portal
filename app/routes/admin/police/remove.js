@@ -50,6 +50,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: async (request, h) => {
+    throwIfPreConditionError(request)
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
@@ -74,6 +75,7 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: async (request, h, error) => {
+    throwIfPreConditionError(request)
     const backLink = routes.removePoliceForce.get
 
     const pk = request.pre.inputField
