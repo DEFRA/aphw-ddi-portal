@@ -133,7 +133,8 @@ describe('Delete Dog', () => {
 
   describe('POST /cdo/delete/dog', () => {
     const payload = {
-      confirm: 'Y'
+      confirm: 'Y',
+      pk: 'ED24957'
     }
 
     test('POST /cdo/delete/dog route returns 200 given admin and Yes payload', async () => {
@@ -164,13 +165,13 @@ describe('Delete Dog', () => {
     test('POST /cdo/delete/dog route returns 302 given no selected', async () => {
       getDogDetails.mockResolvedValue({
         id: 24957,
-        indexNumber: 'ED123',
+        indexNumber: 'ED24957',
         name: 'Kyleigh'
       })
       getCdo.mockResolvedValue({
         dog: {
           id: 1,
-          indexNumber: 'ED123',
+          indexNumber: 'ED24957',
           name: 'Bruno',
           status: { status: 'TEST' },
           dog_breed: { breed: 'breed1' }
