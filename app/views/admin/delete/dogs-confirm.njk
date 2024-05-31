@@ -1,0 +1,51 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form class="form" method="post">
+      <span class="govuk-caption-l">Delete dogs older than 15</span>
+      <h1 class="govuk-heading-l">
+        You are about to delete {{ model.selectedList.length }} dog records
+      </h1>
+
+      <p class="govuk-body">Deleted records no longer appear in search results.</p>
+
+      <p class="govuk-body">You can raise a support ticket if you need to recover a deleted dog record.</p>
+
+      <div class="govuk-button-group">
+        {% if model.selectedList | length > 0 %}
+        {{ govukButton({
+        text: 'Delete dog records'
+        }) }}
+        {% endif %}
+
+        <a class="govuk-link govuk-link--no-visited-state" href="/admin/index">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

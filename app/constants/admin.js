@@ -56,11 +56,20 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
+    deleteDogs1: {
+      get: '/admin/delete/dogs-1',
+      post: '/admin/delete/dogs-1'
+    },
+    deleteDogs2: {
+      get: '/admin/delete/dogs-2',
+      post: '/admin/delete/dogs-2'
+    },
+    deleteDogsConfirm: {
+      get: '/admin/delete/dogs-confirm',
+      post: '/admin/delete/dogs-confirm'
+    },
     regularJobs: {
       get: '/admin/regular-jobs'
-    },
-    processComments: {
-      get: '/admin/process-comments'
     },
     pseudonyms: {
       get: '/admin/pseudonyms',
@@ -75,7 +84,6 @@ const constants = {
     index: 'admin/index',
     activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
-    processComments: 'admin/process-comments',
     pseudonyms: 'admin/pseudonyms',
     insurance: 'admin/insurance',
     confirm: 'common/confirm',
@@ -83,7 +91,10 @@ const constants = {
     addOrRemove: 'common/add-or-remove',
     addAdminRecord: 'common/add-admin-record',
     removeAdminRecord: 'common/remove-admin-record',
-    success: 'admin/success'
+    success: 'admin/success',
+    deleteDogs1: 'admin/delete/dogs-1',
+    deleteDogs2: 'admin/delete/dogs-2',
+    deleteDogsConfirm: 'admin/delete/dogs-confirm'
   },
   breadcrumbs: [
     {
@@ -114,6 +125,9 @@ const constants = {
       messageLabelCapital: 'Police force',
       links: policeLinks
     }
+  },
+  keys: {
+    oldDogs: 'oldDogs'
   }
 }
 

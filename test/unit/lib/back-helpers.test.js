@@ -1,4 +1,4 @@
-const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl } = require('../../../app/lib/back-helpers')
+const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl, getBackLinkToSamePage } = require('../../../app/lib/back-helpers')
 const { getFromSession, setInSession } = require('../../../app/session/session-wrapper')
 jest.mock('../../../app/session/session-wrapper')
 
@@ -10,73 +10,103 @@ describe('BackHelpers', () => {
     uuidv4.mockReturnValue('729b8f6f-e744-42dd-ae97-247eed9fe61c')
   })
 
-  test('extractBackNavParam handles null referer', () => {
-    const backNav = extractBackNavParam(null)
-    expect(backNav).toBe('')
+  describe('extractBackNavParam', () => {
+    test('extractBackNavParam handles null referer', () => {
+      const backNav = extractBackNavParam(null)
+      expect(backNav).toBe('')
+    })
+
+    test('extractBackNavParam handles src', () => {
+      getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
+      const backNav = extractBackNavParam({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } })
+      expect(backNav).toBe('?src=45678')
+    })
+
+    test('extractBackNavParam handles src with removing prefix', () => {
+      getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
+      const backNav = extractBackNavParam({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } }, true)
+      expect(backNav).toBe('45678')
+    })
   })
 
-  test('extractBackNavParam handles src', () => {
-    getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
-    const backNav = extractBackNavParam({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } })
-    expect(backNav).toBe('?src=45678')
+  describe('addBackNavForErrorCondition', () => {
+    test('addBackNavForErrorCondition handles backlink', () => {
+      getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
+      setInSession.mockReturnValue()
+      const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } })
+      expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
+    })
+
+    test('addBackNavForErrorCondition handles backlink when no src param', () => {
+      getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
+      setInSession.mockReturnValue()
+      const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage-no-src-param' } })
+      expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
+    })
   })
 
-  test('extractBackNavParam handles src with removing prefix', () => {
-    getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
-    const backNav = extractBackNavParam({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } }, true)
-    expect(backNav).toBe('45678')
+  describe('getBackLinkToSamePage', () => {
+    test('should return back navigation from same page', () => {
+      const request = {
+        headers: {
+          referer: 'https://testhost.com/somepage2?src=12346'
+        }
+      }
+      const backNavigation = getBackLinkToSamePage(request)
+      expect(backNavigation).toEqual('https://testhost.com/somepage2?src=12346')
+    })
+
+    test('should return back navigation from same page', () => {
+      const request = {
+        headers: undefined
+      }
+      const backNavigation = getBackLinkToSamePage(request)
+      expect(backNavigation).toEqual('')
+    })
   })
 
-  test('addBackNavForErrorCondition handles backlink', () => {
-    getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
-    setInSession.mockReturnValue()
-    const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage2?src=12345' } })
-    expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
+  describe('extractSrcParamFromUrl', () => {
+    test('extractSrcParamFromUrl handles strip false', () => {
+      const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?src=12346', false)
+      expect(srcParam).toBe('?src=12346')
+    })
+
+    test('extractSrcParamFromUrl handles strip true', () => {
+      const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?src=12347', true)
+      expect(srcParam).toBe('12347')
+    })
+
+    test('extractSrcParamFromUrl handles strip true when no src', () => {
+      const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?res=12347', true)
+      expect(srcParam).toBe('')
+    })
   })
 
-  test('addBackNavForErrorCondition handles backlink when no src param', () => {
-    getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
-    setInSession.mockReturnValue()
-    const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage-no-src-param' } })
-    expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
+  describe('addBackNavigation', () => {
+    test('addBackNavigation generates correct details', () => {
+      getFromSession.mockReturnValue('https://testhost.com/prevpage?src=45678')
+      setInSession.mockReturnValue()
+
+      const backNav = addBackNavigation({ url: { href: 'https://testhost.com/newpage' }, headers: { referer: 'https://testhost.com/differentpage?src=789' } })
+
+      expect(backNav.backLink).toBe('https://testhost.com/prevpage?src=45678')
+      expect(backNav.srcHashParam).toBe('?src=729b-8f6f')
+      expect(backNav.srcHashValue).toBe('729b-8f6f')
+      expect(backNav.currentHashParam).toBe('789')
+    })
   })
 
-  test('extractSrcParamFromUrl handles strip false', () => {
-    const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?src=12346', false)
-    expect(srcParam).toBe('?src=12346')
-  })
+  describe('addBackNavForErrorCondition', () => {
+    test('addBackNavForErrorCondition handles backlink when src param', () => {
+      getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
+      setInSession.mockReturnValue()
 
-  test('extractSrcParamFromUrl handles strip true', () => {
-    const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?src=12347', true)
-    expect(srcParam).toBe('12347')
-  })
+      const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage?src=888' } })
 
-  test('extractSrcParamFromUrl handles strip true when no src', () => {
-    const srcParam = extractSrcParamFromUrl('https://testhost.com/somepage2?res=12347', true)
-    expect(srcParam).toBe('')
-  })
-
-  test('addBackNavigation generates correct details', () => {
-    getFromSession.mockReturnValue('https://testhost.com/prevpage?src=45678')
-    setInSession.mockReturnValue()
-
-    const backNav = addBackNavigation({ url: { href: 'https://testhost.com/newpage' }, headers: { referer: 'https://testhost.com/differentpage?src=789' } })
-
-    expect(backNav.backLink).toBe('https://testhost.com/prevpage?src=45678')
-    expect(backNav.srcHashParam).toBe('?src=729b-8f6f')
-    expect(backNav.srcHashValue).toBe('729b-8f6f')
-    expect(backNav.currentHashParam).toBe('789')
-  })
-
-  test('addBackNavForErrorCondition handles backlink when src param', () => {
-    getFromSession.mockReturnValue('https://testhost.com/somepage1?src=45678')
-    setInSession.mockReturnValue()
-
-    const backNav = addBackNavigationForErrorCondition({ headers: { referer: 'https://testhost.com/somepage?src=888' } })
-
-    expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
-    expect(backNav.srcHashParam).toBe('?src=https://testhost.com/somepage1?src=45678')
-    expect(backNav.srcHashValue).toBe('https://testhost.com/somepage1?src=45678')
-    expect(backNav.currentHashParam).toBe('?src=45678')
+      expect(backNav.backLink).toBe('https://testhost.com/somepage1?src=45678')
+      expect(backNav.srcHashParam).toBe('?src=https://testhost.com/somepage1?src=45678')
+      expect(backNav.srcHashValue).toBe('https://testhost.com/somepage1?src=45678')
+      expect(backNav.currentHashParam).toBe('?src=45678')
+    })
   })
 })

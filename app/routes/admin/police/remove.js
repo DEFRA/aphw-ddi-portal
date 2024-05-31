@@ -9,6 +9,7 @@ const { getUser } = require('../../../auth')
 const { PoliceForceRemovedViewModel } = require('../../../models/admin/police/builder')
 const { getPoliceForces } = require('../../../api/ddi-index-api')
 const { removePoliceForce } = require('../../../api/ddi-index-api/police-forces')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeConstants
 
@@ -49,6 +50,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: async (request, h) => {
+    throwIfPreConditionError(request)
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
@@ -73,6 +75,7 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: async (request, h, error) => {
+    throwIfPreConditionError(request)
     const backLink = routes.removePoliceForce.get
 
     const pk = request.pre.inputField
@@ -126,6 +129,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation.confirm) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

@@ -11,6 +11,7 @@ const { addCourt } = require('../../../api/ddi-index-api/courts')
 const { getUser } = require('../../../auth')
 const { CourtAddedViewModel } = require('../../../models/admin/courts/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.courtConstants
 
@@ -42,6 +43,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: (request, h) => {
+    throwIfPreConditionError(request)
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = addRemoveConstants.links.add.get
 
@@ -63,6 +65,7 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
+    throwIfPreConditionError(request)
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = routes.addCourt.get
 
@@ -106,6 +109,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

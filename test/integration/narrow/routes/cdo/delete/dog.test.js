@@ -133,7 +133,8 @@ describe('Delete Dog', () => {
 
   describe('POST /cdo/delete/dog', () => {
     const payload = {
-      confirm: 'Y'
+      confirm: 'Y',
+      pk: 'ED24957'
     }
 
     test('POST /cdo/delete/dog route returns 200 given admin and Yes payload', async () => {
@@ -161,16 +162,16 @@ describe('Delete Dog', () => {
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
     })
 
-    test('POST /cdo/delete/dog route returns 400 given radio returns 302 given no selected', async () => {
+    test('POST /cdo/delete/dog route returns 302 given no selected', async () => {
       getDogDetails.mockResolvedValue({
         id: 24957,
-        indexNumber: 'ED123',
+        indexNumber: 'ED24957',
         name: 'Kyleigh'
       })
       getCdo.mockResolvedValue({
         dog: {
           id: 1,
-          indexNumber: 'ED123',
+          indexNumber: 'ED24957',
           name: 'Bruno',
           status: { status: 'TEST' },
           dog_breed: { breed: 'breed1' }
@@ -301,8 +302,50 @@ describe('Delete Dog', () => {
       })
     })
 
-    /*
-    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload and ownerPk', async () => {
+    test('should return 302 to dog details page given No selected on dog are you sure', async () => {
+      getDogDetails.mockResolvedValue({
+        id: 300006,
+        indexNumber: 'ED300006',
+        name: 'Kyleigh'
+      })
+      getCdo.mockResolvedValue({
+        dog: {
+          id: 1,
+          indexNumber: 'ED300006',
+          name: 'Bruno',
+          status: { status: 'TEST' },
+          dog_breed: { breed: 'breed1' }
+        },
+        person: {
+          firstName: 'John Smith',
+          addresses: [{
+            address: {
+            }
+          }],
+          person_contacts: []
+        },
+        exemption: {
+          exemptionOrder: 2015,
+          insurance: [{
+            company: 'Dogs Trust'
+          }]
+        }
+      })
+      const payload = { confirm: 'N', pk: 'ED300006', ownerPk: 'P-5658-7F92', confirmation: true }
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED300006',
+        auth,
+        payload
+      }
+      const response = await server.inject(options)
+
+      // const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should return 200 given admin and Yes payload and ownerPk', async () => {
       const options = {
         method: 'POST',
         url: '/cdo/delete/dog/ED200011',
@@ -330,7 +373,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('input[name=\'confirm\']').getAttribute('value')).toBe('Y')
     })
 
-    test('POST /cdo/delete/dog route returns 400 given admin and Yes payload and ownerPk without owner confirmation', async () => {
+    test('should return 400 given admin and Yes payload and ownerPk without owner confirmation', async () => {
       const options = {
         method: 'POST',
         url: '/cdo/delete/dog/ED200011',
@@ -352,8 +395,8 @@ describe('Delete Dog', () => {
       expect(document.querySelector('h1').textContent.trim()).toBe('Delete the owner record')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
     })
-    */
-    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload, ownerPk and confirmOwner payload', async () => {
+
+    test('should return 200 given admin and Yes payload, ownerPk and confirmOwner payload', async () => {
       const payload = {
         confirm: 'Y',
         pk: 'ED200011',
@@ -383,7 +426,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover deleted records.')
     })
 
-    test('POST /cdo/delete/dog route returns 200 given admin and Yes payload, ownerPk and confirmOwner N', async () => {
+    test('should return 200 given admin and Yes payload, ownerPk and confirmOwner N', async () => {
       const payload = {
         confirm: 'Y',
         ownerPk: 'P-E516-0334',
