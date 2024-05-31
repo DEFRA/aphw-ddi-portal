@@ -10,6 +10,6 @@ describe('Dogs test', () => {
   test('getOldDogs calls endpoint with valid params when no sort passed', async () => {
     get.mockResolvedValue()
     await getOldDogs()
-    expect(get).toHaveBeenCalledWith('dogs?forPurging=true&sortKey=status&sortOrder=ASC', { json: true })
+    expect(get).toHaveBeenCalledWith('dogs?forPurging=true&stepNum=1&sortKey=status&sortOrder=ASC', { json: true })
   })
 })
