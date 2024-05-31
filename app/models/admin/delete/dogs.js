@@ -57,7 +57,7 @@ const columnLink = (sort, column) => {
  * @param backNav
  * @constructor
  */
-function ViewModel (resultList, sort, backNav) {
+function ViewModel (resultList, selectedList, sort, backNav) {
   const tableHeadings = [
     {
       label: 'Status',
@@ -84,13 +84,13 @@ function ViewModel (resultList, sort, backNav) {
   const rows = resultList.map(row => ({
     ...row,
     humanReadableCdoIssued: formatToGds(row.cdoIssued),
-    humanReadableBirthDate: formatToGds(row.dateOfBirth)
+    humanReadableBirthDate: formatToGds(row.dateOfBirth),
+    selected: selectedList.some(elem => elem === row.indexNumber)
   }))
 
   this.model = {
     breadcrumbs,
-    backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
+    backLink: backNav?.backLink,
     tableHeadings,
     sort: {
       column: 'status',

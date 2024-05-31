@@ -252,6 +252,13 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     line-height: 1.25 !important;
   }
 
+  &-checkbox {
+    position: relative !important;
+    margin: 3px 10px 0 0;
+    float: right;
+    top: -10px;
+  }
+
   &-sortable-table {
 
     th[aria-sort="none"] a,

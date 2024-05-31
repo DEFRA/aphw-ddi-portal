@@ -1,9 +1,12 @@
 const { adminAuth, standardAuth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
-describe('Delete dogs 1', () => {
+describe('Delete dogs 2', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
+
+  jest.mock('../../../../../../app/session/admin/delete-dogs')
+  const { getDogsForDeletion } = require('../../../../../../app/session/admin/delete-dogs')
 
   jest.mock('../../../../../../app/api/ddi-index-api/dogs')
   const { getOldDogs } = require('../../../../../../app/api/ddi-index-api/dogs')
@@ -22,6 +25,8 @@ describe('Delete dogs 1', () => {
     await server.stop()
     jest.clearAllMocks()
   })
+
+  const dogSelections = ['ED0003', 'ED0002', 'ED0001']
 
   const dogRows = [
     {
@@ -44,13 +49,14 @@ describe('Delete dogs 1', () => {
     }
   ]
 
-  describe('GET /admin/delete/dogs-1 route', () => {
+  describe('GET /admin/delete/dogs-2 route', () => {
     test('returns 200', async () => {
       getOldDogs.mockResolvedValue(dogRows)
+      getDogsForDeletion.mockReturnValue(dogSelections)
 
       const options = {
         method: 'GET',
-        url: '/admin/delete/dogs-1',
+        url: '/admin/delete/dogs-2',
         auth: adminAuth
       }
 
@@ -58,9 +64,8 @@ describe('Delete dogs 1', () => {
 
       const { document } = new JSDOM(response.payload).window
 
-      expect(getOldDogs).toHaveBeenCalledTimes(1)
       expect(response.statusCode).toBe(200)
-      expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Unselect the dog records you want to keep')
+      expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check the list and select the dog records you want to delete')
       expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Status')
       expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Index number')
       expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Date of birth')
@@ -83,44 +88,28 @@ describe('Delete dogs 1', () => {
       expect(rows[2].querySelectorAll('.govuk-table__cell')[3].textContent.trim()).toBe('01 February 2024')
     })
 
-    test('initialises when start=true is passed', async () => {
+    test('handles date override', async () => {
       getOldDogs.mockResolvedValue(dogRows)
 
       const options = {
         method: 'GET',
-        url: '/admin/delete/dogs-1?start=true',
+        url: '/admin/delete/dogs-2?today=2050-01-01',
         auth: adminAuth
       }
 
       const response = await server.inject(options)
 
-      expect(getOldDogs).toHaveBeenCalledTimes(1)
-      expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/admin/delete/dogs-1')
-    })
-
-    test('initialises when start=true and date override is passed', async () => {
-      getOldDogs.mockResolvedValue(dogRows)
-
-      const options = {
-        method: 'GET',
-        url: '/admin/delete/dogs-1?start=true&today=2050-01-01',
-        auth: adminAuth
-      }
-
-      const response = await server.inject(options)
-
-      expect(getOldDogs).toHaveBeenCalledWith('Exempt,Inactive,Withdrawn,Failed', { column: 'status', order: 'ASC' }, '2050-01-01')
-      expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/admin/delete/dogs-1?today=2050-01-01')
+      expect(getOldDogs).toHaveBeenCalledWith('In breach,Pre-exempt,Interim exempt', { column: 'status', order: 'ASC' }, '2050-01-01')
+      expect(response.statusCode).toBe(200)
     })
 
     test('returns 302 when not authd', async () => {
       getOldDogs.mockResolvedValue(dogRows)
+      getDogsForDeletion.mockReturnValue(dogSelections)
 
       const options = {
         method: 'GET',
-        url: '/admin/delete/dogs-1'
+        url: '/admin/delete/dogs-2'
       }
 
       const response = await server.inject(options)
@@ -131,10 +120,11 @@ describe('Delete dogs 1', () => {
 
     test('returns 403 when not an admin user', async () => {
       getOldDogs.mockResolvedValue(dogRows)
+      getDogsForDeletion.mockReturnValue(dogSelections)
 
       const options = {
         method: 'GET',
-        url: '/admin/delete/dogs-1',
+        url: '/admin/delete/dogs-2',
         auth: standardAuth
       }
 
@@ -145,11 +135,11 @@ describe('Delete dogs 1', () => {
     })
   })
 
-  describe('POST /admin/delete/dogs-1 route', () => {
+  describe('POST /admin/delete/dogs-2 route', () => {
     test('returns 302', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/delete/dogs-1',
+        url: '/admin/delete/dogs-2',
         auth: adminAuth
       }
 
@@ -161,7 +151,7 @@ describe('Delete dogs 1', () => {
     test('returns 302 when not authd', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/delete/dogs-1'
+        url: '/admin/delete/dogs-2'
       }
 
       const response = await server.inject(options)
@@ -172,7 +162,7 @@ describe('Delete dogs 1', () => {
     test('returns 403 when not admin user', async () => {
       const options = {
         method: 'POST',
-        url: '/admin/delete/dogs-1',
+        url: '/admin/delete/dogs-2',
         auth: standardAuth
       }
 

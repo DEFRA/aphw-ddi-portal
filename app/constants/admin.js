@@ -42,20 +42,6 @@ const policeLinks = {
   }
 }
 
-const deleteDogsLinks1 = {
-  dogs: {
-    get: '/admin/delete/dogs-1',
-    post: '/admin/delete/dogs-1'
-  }
-}
-
-const deleteDogsLinks2 = {
-  dogs: {
-    get: '/admin/delete/dogs-2',
-    post: '/admin/delete/dogs-2'
-  }
-}
-
 const adminIndex = {
   get: '/admin/index'
 }
@@ -70,8 +56,18 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
-    deleteDogs1: deleteDogsLinks1.dogs,
-    deleteDogs2: deleteDogsLinks2.dogs,
+    deleteDogs1: {
+      get: '/admin/delete/dogs-1',
+      post: '/admin/delete/dogs-1'
+    },
+    deleteDogs2: {
+      get: '/admin/delete/dogs-2',
+      post: '/admin/delete/dogs-2'
+    },
+    deleteDogsConfirm: {
+      get: '/admin/delete/dogs-confirm',
+      post: '/admin/delete/dogs-confirm'
+    },
     regularJobs: {
       get: '/admin/regular-jobs'
     },
@@ -96,7 +92,9 @@ const constants = {
     addAdminRecord: 'common/add-admin-record',
     removeAdminRecord: 'common/remove-admin-record',
     success: 'admin/success',
-    deleteDogs: 'admin/delete/dogs'
+    deleteDogs1: 'admin/delete/dogs-1',
+    deleteDogs2: 'admin/delete/dogs-2',
+    deleteDogsConfirm: 'admin/delete/dogs-confirm'
   },
   breadcrumbs: [
     {
@@ -127,6 +125,9 @@ const constants = {
       messageLabelCapital: 'Police force',
       links: policeLinks
     }
+  },
+  keys: {
+    oldDogs: 'oldDogs'
   }
 }
 
