@@ -8,6 +8,7 @@ const { isInputFieldPkInPayload, notFoundSchema, confirmFlowValidFields, areYouS
 const { getCourts, removeCourt } = require('../../../api/ddi-index-api/courts')
 const { getUser } = require('../../../auth')
 const { CourtRemovedViewModel } = require('../../../models/admin/courts/builder')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.courtConstants
 
@@ -125,6 +126,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation.confirm) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

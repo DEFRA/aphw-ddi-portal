@@ -12,6 +12,7 @@ const {
 } = require('../../../schema/portal/common/single-submit')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
 const { ActivityAddedViewModel } = require('../../../models/admin/activities/builder')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const backLink = routes.activities.index.get
 
@@ -115,6 +116,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

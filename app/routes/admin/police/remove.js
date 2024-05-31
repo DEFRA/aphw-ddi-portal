@@ -9,6 +9,7 @@ const { getUser } = require('../../../auth')
 const { PoliceForceRemovedViewModel } = require('../../../models/admin/police/builder')
 const { getPoliceForces } = require('../../../api/ddi-index-api')
 const { removePoliceForce } = require('../../../api/ddi-index-api/police-forces')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeConstants
 
@@ -126,6 +127,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation.confirm) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

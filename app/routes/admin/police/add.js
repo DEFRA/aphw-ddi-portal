@@ -11,6 +11,7 @@ const { addPoliceForce } = require('../../../api/ddi-index-api/police-forces')
 const { getUser } = require('../../../auth')
 const { PoliceForceAddedViewModel } = require('../../../models/admin/police/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeConstants
 
@@ -106,6 +107,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation) {
           return h.redirect(addRemoveConstants.links.index.get)
         }
