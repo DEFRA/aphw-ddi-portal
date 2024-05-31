@@ -10,6 +10,10 @@ const getCombinedSelectedList = (request) => {
   return getDogsForDeletion(request, 1).concat(getDogsForDeletion(request, 2))
 }
 
+const getDateOverrideQueryString = request => {
+  return request.query.today ? `?today=${request.query.today}` : ''
+}
+
 const statusListForStep1 = 'Exempt,Inactive,Withdrawn,Failed'
 const statusListForStep2 = 'In breach,Pre-exempt,Interim exempt'
 
@@ -22,11 +26,11 @@ module.exports = [
       handler: async (request, h) => {
         const sort = { column: 'status', order: 'ASC' }
 
-        const dogs = await getOldDogs(statusListForStep1, sort)
+        const dogs = await getOldDogs(statusListForStep1, sort, request.query.today)
 
         if (request.query.start === 'true') {
           initialiseDogsForDeletion(request, dogs)
-          return h.redirect(routes.deleteDogs1.get)
+          return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}`)
         }
 
         const selectedList = getDogsForDeletion(request, 1)
@@ -45,7 +49,7 @@ module.exports = [
 
         setDogsForDeletion(request, 1, payload?.deleteDog)
 
-        return h.redirect(routes.deleteDogs2.get)
+        return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}`)
       }
     }
   },
@@ -57,7 +61,7 @@ module.exports = [
       handler: async (request, h) => {
         const sort = { column: 'status', order: 'ASC' }
 
-        const dogs = await getOldDogs(statusListForStep2, sort)
+        const dogs = await getOldDogs(statusListForStep2, sort, request.query.today)
 
         const backNav = { backLink: routes.deleteDogs1.get }
 

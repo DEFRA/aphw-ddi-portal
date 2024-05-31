@@ -99,6 +99,22 @@ describe('Delete dogs 1', () => {
       expect(response.headers.location).toBe('/admin/delete/dogs-1')
     })
 
+    test('initialises when start=true and date override is passed', async () => {
+      getOldDogs.mockResolvedValue(dogRows)
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-1?start=true&today=2050-01-01',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOldDogs).toHaveBeenCalledWith('Exempt,Inactive,Withdrawn,Failed', { column: 'status', order: 'ASC' }, '2050-01-01')
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/delete/dogs-1?today=2050-01-01')
+    })
+
     test('returns 302 when not authd', async () => {
       getOldDogs.mockResolvedValue(dogRows)
 

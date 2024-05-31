@@ -88,6 +88,21 @@ describe('Delete dogs 2', () => {
       expect(rows[2].querySelectorAll('.govuk-table__cell')[3].textContent.trim()).toBe('01 February 2024')
     })
 
+    test('handles date override', async () => {
+      getOldDogs.mockResolvedValue(dogRows)
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-2?today=2050-01-01',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOldDogs).toHaveBeenCalledWith('In breach,Pre-exempt,Interim exempt', { column: 'status', order: 'ASC' }, '2050-01-01')
+      expect(response.statusCode).toBe(200)
+    })
+
     test('returns 302 when not authd', async () => {
       getOldDogs.mockResolvedValue(dogRows)
       getDogsForDeletion.mockReturnValue(dogSelections)
