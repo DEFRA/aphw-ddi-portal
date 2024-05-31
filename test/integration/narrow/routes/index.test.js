@@ -8,13 +8,20 @@ describe('Index test', () => {
   const createServer = require('../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   jest.mock('../../../../app/session/cdo')
   const { clearCdo } = require('../../../../app/session/cdo')
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    server = await createServer()
-    await server.initialize()
   })
 
   test('GET / route returns 302 with no auth', async () => {
@@ -58,9 +65,5 @@ describe('Index test', () => {
     expect(document.querySelectorAll('.govuk-card--dashboard')[2].textContent.trim()).toContain('Track applications')
     expect(document.querySelectorAll('.govuk-card--dashboard')[2].textContent.trim()).toContain('Manage CDOs and interim exemptions')
     expect(document.querySelectorAll('.govuk-card--dashboard')[2].querySelector('.govuk-link').getAttribute('href')).toBe('/cdo/manage')
-  })
-
-  afterEach(async () => {
-    await server.stop()
   })
 })

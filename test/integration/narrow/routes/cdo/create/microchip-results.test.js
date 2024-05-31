@@ -17,11 +17,17 @@ describe('Microchip results tests', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeEach(async () => {
-    mockAuth.getUser.mockReturnValue(user)
-
+  beforeAll(async () => {
     server = await createServer()
     await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  beforeEach(async () => {
+    mockAuth.getUser.mockReturnValue(user)
   })
 
   test('GET /cdo/create/microchip-results route returns 200', async () => {
@@ -98,6 +104,5 @@ describe('Microchip results tests', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

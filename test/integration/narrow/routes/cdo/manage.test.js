@@ -15,12 +15,19 @@ describe('Manage Live Cdos test', () => {
   const createServer = require('../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   setInSession.mockReturnValue()
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    server = await createServer()
-    await server.initialize()
   })
 
   test('GET /cdo/manage route returns 200', async () => {
@@ -449,6 +456,5 @@ describe('Manage Live Cdos test', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

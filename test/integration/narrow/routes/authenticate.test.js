@@ -5,9 +5,13 @@ describe('Authenticate test', () => {
   const createServer = require('../../../../app/server')
   let server
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     server = await createServer()
     await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   test('GET /authenticate route returns 302', async () => {
@@ -34,9 +38,5 @@ describe('Authenticate test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(500)
-  })
-
-  afterEach(async () => {
-    await server.stop()
   })
 })

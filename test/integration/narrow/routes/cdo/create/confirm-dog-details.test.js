@@ -18,14 +18,20 @@ describe('Add dog details', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getAddress.mockReturnValue(null)
     getEnforcementDetails.mockReturnValue(null)
     setPoliceForce.mockResolvedValue()
-
-    server = await createServer()
-    await server.initialize()
   })
 
   describe('GET /cdo/create/confirm-dog-details', () => {
@@ -233,6 +239,5 @@ describe('Add dog details', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

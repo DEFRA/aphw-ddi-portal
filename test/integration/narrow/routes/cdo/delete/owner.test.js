@@ -15,11 +15,17 @@ describe('Delete Owner', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeEach(async () => {
-    mockAuth.getUser.mockReturnValue(user)
-
+  beforeAll(async () => {
     server = await createServer()
     await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  beforeEach(async () => {
+    mockAuth.getUser.mockReturnValue(user)
   })
 
   describe('GET /cdo/delete/owner', () => {
@@ -153,6 +159,5 @@ describe('Delete Owner', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

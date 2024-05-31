@@ -14,11 +14,18 @@ describe('Upload results', () => {
   const createServer = require('../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     doImport.mockResolvedValue({})
-    server = await createServer()
-    await server.initialize()
   })
 
   describe('GET /upload/import-results route', () => {
@@ -103,6 +110,5 @@ describe('Upload results', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

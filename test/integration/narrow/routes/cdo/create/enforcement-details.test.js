@@ -13,12 +13,19 @@ describe('EnforcementDetails test', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getCourts.mockResolvedValue([{ id: 1, name: 'Test court' }])
     getPoliceForces.mockResolvedValue([{ id: 1, name: 'Test force' }])
-    server = await createServer()
-    await server.initialize()
   })
 
   test('GET /cdo/create/enforcement-details route returns 200', async () => {
@@ -86,6 +93,5 @@ describe('EnforcementDetails test', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

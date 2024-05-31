@@ -13,15 +13,20 @@ describe('Add activities page', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeEach(async () => {
-    mockAuth.getUser.mockReturnValue(user)
-
+  beforeAll(async () => {
     server = await createServer()
     await server.initialize()
   })
 
-  afterEach(async () => {
+  beforeEach(async () => {
+    mockAuth.getUser.mockReturnValue(user)
+  })
+
+  afterAll(async () => {
     await server.stop()
+  })
+
+  afterEach(async () => {
     jest.clearAllMocks()
   })
 

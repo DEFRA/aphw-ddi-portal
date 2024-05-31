@@ -14,15 +14,20 @@ describe('Delete dogs 2', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeEach(async () => {
-    mockAuth.getUser.mockReturnValue(user)
-
+  beforeAll(async () => {
     server = await createServer()
     await server.initialize()
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     await server.stop()
+  })
+
+  beforeEach(async () => {
+    mockAuth.getUser.mockReturnValue(user)
+  })
+
+  afterEach(async () => {
     jest.clearAllMocks()
   })
 

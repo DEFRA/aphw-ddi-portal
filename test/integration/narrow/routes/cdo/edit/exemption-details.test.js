@@ -18,6 +18,15 @@ describe('Update dog details', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
 
@@ -35,9 +44,6 @@ describe('Update dog details', () => {
       { companyId: '1', companyName: 'company1' },
       { companyId: '2', companyName: 'company2' }
     ])
-
-    server = await createServer()
-    await server.initialize()
   })
 
   test('GET /cdo/edit/exemption-details/ED1234 route returns 200', async () => {
@@ -238,6 +244,5 @@ describe('Update dog details', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })

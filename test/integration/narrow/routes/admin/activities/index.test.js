@@ -11,16 +11,18 @@ describe('Activities admin', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  afterEach(async () => {
+    await server.stop()
+  })
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-
     server = await createServer()
     await server.initialize()
   })
 
   afterEach(async () => {
     await server.stop()
-    jest.clearAllMocks()
   })
 
   const activityRows = {

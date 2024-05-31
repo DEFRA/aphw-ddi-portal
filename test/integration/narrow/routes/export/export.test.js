@@ -4,6 +4,15 @@ describe('Export test', () => {
   const createServer = require('../../../../../app/server')
   let server
 
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   jest.mock('../../../../../app/api/ddi-index-api/export')
   const { exportAudit } = require('../../../../../app/api/ddi-index-api/export')
 
@@ -14,14 +23,12 @@ describe('Export test', () => {
   const { createExportFile } = require('../../../../../app/api/ddi-index-api/export')
 
   beforeEach(async () => {
-    server = await createServer()
     const PassThrough = require('stream').PassThrough
     const stream = new PassThrough()
     downloadBlob.mockResolvedValue({ readableStreamBody: stream })
     stream.push('some dummy file content for testing')
     stream.push(null)
     exportAudit.mockResolvedValue()
-    await server.initialize()
   })
 
   test('GET /export route returns 200', async () => {
@@ -95,9 +102,5 @@ describe('Export test', () => {
       const response = await server.inject(options)
       expect(response.statusCode).toBe(403)
     })
-  })
-
-  afterEach(async () => {
-    await server.stop()
   })
 })

@@ -25,6 +25,15 @@ describe('OwnerResults test', () => {
 
   const createServer = require('../../../../../../app/server')
   let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
   /**
    * @type {import('../../../../../../app/api/ddi-index-api/person').Person}
    */
@@ -79,8 +88,6 @@ describe('OwnerResults test', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     setPoliceForce.mockResolvedValue()
-    server = await createServer()
-    await server.initialize()
   })
 
   test('GET /cdo/create/select-owner route returns 302 given no persons found', async () => {
@@ -380,6 +387,5 @@ describe('OwnerResults test', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
-    await server.stop()
   })
 })
