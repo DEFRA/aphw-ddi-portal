@@ -7,8 +7,8 @@ const options = {
   json: true
 }
 
-const getOldDogs = async (sort, stepNum) => {
-  const payload = await get(`${dogsEndpoint}?forPurging=true&stepNum=${stepNum ?? 1}&sortKey=${sort?.column ?? 'status'}&sortOrder=${sort?.order ?? 'ASC'}`, options)
+const getOldDogs = async (statuses, sort) => {
+  const payload = await get(`${dogsEndpoint}?forPurging=true&statuses=${statuses}&sortKey=${sort?.column ?? 'status'}&sortOrder=${sort?.order ?? 'ASC'}`, options)
   return payload
 }
 

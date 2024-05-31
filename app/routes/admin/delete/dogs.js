@@ -10,6 +10,9 @@ const getCombinedSelectedList = (request) => {
   return getDogsForDeletion(request, 1).concat(getDogsForDeletion(request, 2))
 }
 
+const statusListForStep1 = 'Exempt,Inactive,Withdrawn,Failed'
+const statusListForStep2 = 'In breach,Pre-exempt,Interim exempt'
+
 module.exports = [
   {
     method: 'GET',
@@ -19,7 +22,7 @@ module.exports = [
       handler: async (request, h) => {
         const sort = { column: 'status', order: 'ASC' }
 
-        const dogs = await getOldDogs(sort, 1)
+        const dogs = await getOldDogs(statusListForStep1, sort)
 
         if (request.query.start === 'true') {
           initialiseDogsForDeletion(request, dogs)
@@ -54,7 +57,7 @@ module.exports = [
       handler: async (request, h) => {
         const sort = { column: 'status', order: 'ASC' }
 
-        const dogs = await getOldDogs(sort, 2)
+        const dogs = await getOldDogs(statusListForStep2, sort)
 
         const backNav = { backLink: routes.deleteDogs1.get }
 

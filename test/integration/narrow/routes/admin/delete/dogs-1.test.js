@@ -83,6 +83,22 @@ describe('Delete dogs 1', () => {
       expect(rows[2].querySelectorAll('.govuk-table__cell')[3].textContent.trim()).toBe('01 February 2024')
     })
 
+    test('initialises when start=true is passed', async () => {
+      getOldDogs.mockResolvedValue(dogRows)
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-1?start=true',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOldDogs).toHaveBeenCalledTimes(1)
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/delete/dogs-1')
+    })
+
     test('returns 302 when not authd', async () => {
       getOldDogs.mockResolvedValue(dogRows)
 
