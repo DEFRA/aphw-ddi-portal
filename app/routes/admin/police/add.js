@@ -11,6 +11,7 @@ const { addPoliceForce } = require('../../../api/ddi-index-api/police-forces')
 const { getUser } = require('../../../auth')
 const { PoliceForceAddedViewModel } = require('../../../models/admin/police/builder')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeConstants
 
@@ -42,6 +43,8 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: (request, h) => {
+    throwIfPreConditionError(request)
+
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = addRemoveConstants.links.add.get
 
@@ -63,6 +66,7 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
+    throwIfPreConditionError(request)
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = routes.addPoliceForce.get
 
@@ -106,6 +110,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation) {
           return h.redirect(addRemoveConstants.links.index.get)
         }

@@ -86,10 +86,15 @@ const addBackNavigationForErrorCondition = (request) => {
   }
 }
 
+const getBackLinkToSamePage = (request) => {
+  return request.headers?.referer ?? ''
+}
+
 module.exports = {
   addBackNavigation,
   extractBackNavParam,
   addBackNavigationForErrorCondition,
+  getBackLinkToSamePage,
   extractSrcParamFromUrl,
   getMainReturnPoint
 }

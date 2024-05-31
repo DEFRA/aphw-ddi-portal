@@ -3,12 +3,13 @@ const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/common/confim')
 const DeletedViewModel = require('../../../models/cdo/delete/deleted')
 const ConfirmOwnerDeleteViewModel = require('../../../models/cdo/delete/confimDogAndOwner')
-const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
+const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam, getBackLinkToSamePage } = require('../../../lib/back-helpers')
 const { getDogDetails, deleteDog, getDogOwnerWithDogs } = require('../../../api/ddi-index-api/dog')
 const { validatePayload, confirmOwnerRadioSchema, bypassSchemaForDeleteOnlyDog, completeOwnerSchema, isSingleDogSchema } = require('../../../schema/portal/cdo/confirmDogDelete')
 const { getUser } = require('../../../auth')
 const { deletePerson, getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const dogAndOwnerConfirmation = {
   method: request => {
@@ -23,7 +24,7 @@ const dogAndOwnerConfirmation = {
       return h.redirect(`${routes.viewDogDetails.get}/${pk}${extractBackNavParam(request)}`).takeover()
     }
 
-    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
+    const backLink = getBackLinkToSamePage(request)
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -34,7 +35,7 @@ const dogAndOwnerConfirmation = {
       backLink
     })).code(200).takeover()
   },
-  assign: 'dogPk'
+  assign: 'dogAndOwnerConfirmation'
 }
 
 const dogAndOwnerRadioValidation = {
@@ -49,10 +50,11 @@ const dogAndOwnerRadioValidation = {
     }
   },
   failAction: async (request, h, error) => {
+    throwIfPreConditionError(request)
     const pk = request.payload.pk
     const ownerPk = request.payload.ownerPk
 
-    const backLink = `${routes.deleteDog.get}/${pk}?src=${extractBackNavParam(request)}`
+    const backLink = getBackLinkToSamePage(request)
     const dogOwner = await getPersonByReference(ownerPk)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
@@ -63,7 +65,7 @@ const dogAndOwnerRadioValidation = {
       backLink
     }, undefined, error)).code(400).takeover()
   },
-  assign: 'dogPk'
+  assign: 'dogAndOwnerRadioValidation'
 }
 
 module.exports = [
@@ -102,6 +104,8 @@ module.exports = [
         dogAndOwnerRadioValidation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         const payload = request.payload
         const pk = request.params.indexNumber
         const ownerPk = payload.ownerPk

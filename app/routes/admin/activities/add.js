@@ -12,6 +12,7 @@ const {
 } = require('../../../schema/portal/common/single-submit')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
 const { ActivityAddedViewModel } = require('../../../models/admin/activities/builder')
+const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const backLink = routes.activities.index.get
 
@@ -50,6 +51,7 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: (request, h) => {
+    throwIfPreConditionError(request)
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 
@@ -72,6 +74,8 @@ const stepThreeCheckConfirmation = {
   },
   assign: 'addConfirmation',
   failAction: (request, h, error) => {
+    throwIfPreConditionError(request)
+
     const recordValue = request.payload[addRemoveConstants.inputField]
     const backLink = `${addRemoveConstants.links.add.get}/${request.params.activityType}/${request.params.activitySource}`
 
@@ -115,6 +119,8 @@ module.exports = [
         stepThreeCheckConfirmation
       ],
       handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
         if (!request.pre.addConfirmation) {
           return h.redirect(addRemoveConstants.links.index.get)
         }
