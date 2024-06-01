@@ -19,20 +19,13 @@ describe('Application type', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
     setPoliceForce.mockResolvedValue()
     getMicrochipResults.mockReturnValue()
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/create/application-type route returns 200', async () => {
@@ -433,5 +426,6 @@ describe('Application type', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })

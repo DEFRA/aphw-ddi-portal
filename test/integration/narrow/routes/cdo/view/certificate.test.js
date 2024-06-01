@@ -21,15 +21,6 @@ describe('View certificate', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   const auth = { strategy: 'session-auth', credentials: { scope: [admin] } }
 
   const user = {
@@ -40,6 +31,9 @@ describe('View certificate', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getUser.mockReturnValue(user)
+
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/view/certificate route returns 200', async () => {
@@ -111,5 +105,6 @@ describe('View certificate', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })

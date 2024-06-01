@@ -6,17 +6,10 @@ describe('Logout test', () => {
   const createServer = require('../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /logout route returns 302', async () => {
@@ -30,5 +23,9 @@ describe('Logout test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
+  })
+
+  afterEach(async () => {
+    await server.stop()
   })
 })

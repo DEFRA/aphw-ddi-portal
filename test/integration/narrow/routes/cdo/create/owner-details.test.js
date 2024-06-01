@@ -9,20 +9,13 @@ describe('OwnerDetails test', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   jest.mock('../../../../../../app/session/cdo/owner')
   const { setOwnerDetails, getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/create/owner-details route returns 200', async () => {
@@ -308,5 +301,6 @@ describe('OwnerDetails test', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })

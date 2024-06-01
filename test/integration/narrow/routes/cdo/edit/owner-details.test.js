@@ -1,4 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
+
 const { JSDOM } = require('jsdom')
 
 describe('Update owner details', () => {
@@ -14,15 +15,6 @@ describe('Update owner details', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
 
@@ -31,6 +23,9 @@ describe('Update owner details', () => {
       'Scotland',
       'Wales'
     ])
+
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/edit/owner-details/P-1234-5678 route returns 200', async () => {
@@ -383,5 +378,6 @@ describe('Update owner details', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })

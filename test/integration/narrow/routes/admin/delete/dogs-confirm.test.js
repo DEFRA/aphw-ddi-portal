@@ -14,23 +14,18 @@ describe('Delete dogs 2', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getDogsForDeletion.mockImplementation((req, step) => {
       return step === 1 ? dogSelections1 : dogSelections2
     })
+
+    server = await createServer()
+    await server.initialize()
   })
 
   afterEach(async () => {
+    await server.stop()
     jest.clearAllMocks()
   })
 

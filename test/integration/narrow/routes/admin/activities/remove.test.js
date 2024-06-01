@@ -11,14 +11,6 @@ describe('Remove Activities page', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
 
@@ -28,9 +20,13 @@ describe('Remove Activities page', () => {
       activity_source: { name: 'dog' },
       activity_type: { name: 'sent' }
     })
+
+    server = await createServer()
+    await server.initialize()
   })
 
   afterEach(async () => {
+    await server.stop()
     jest.clearAllMocks()
   })
 

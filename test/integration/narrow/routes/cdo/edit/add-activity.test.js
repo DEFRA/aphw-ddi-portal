@@ -13,17 +13,11 @@ describe('Add activity', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/edit/add-activity route returns 200', async () => {
@@ -156,5 +150,6 @@ describe('Add activity', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })

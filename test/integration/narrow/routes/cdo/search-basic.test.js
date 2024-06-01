@@ -4,8 +4,8 @@ const { setInSession } = require('../../../../../app/session/session-wrapper')
 jest.mock('../../../../../app/session/session-wrapper')
 const { doSearch } = require('../../../../../app/api/ddi-index-api/search')
 const { JSDOM } = require('jsdom')
-jest.mock('../../../../../app/api/ddi-index-api/search')
-
+jest.mock('../../../../../app/api/ddi-index-api/search'
+)
 describe('SearchBasic test', () => {
   jest.mock('../../../../../app/auth')
   const mockAuth = require('../../../../../app/auth')
@@ -13,19 +13,12 @@ describe('SearchBasic test', () => {
   const createServer = require('../../../../../app/server')
   let server
 
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   setInSession.mockReturnValue()
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
+    server = await createServer()
+    await server.initialize()
   })
 
   test('GET /cdo/search/basic route returns 200', async () => {
@@ -163,5 +156,6 @@ describe('SearchBasic test', () => {
 
   afterEach(async () => {
     jest.clearAllMocks()
+    await server.stop()
   })
 })
