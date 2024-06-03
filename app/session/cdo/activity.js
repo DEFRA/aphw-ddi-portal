@@ -19,6 +19,8 @@ const setActivityDetails = (request, value) => {
 }
 
 module.exports = {
+  setActivityBase: set,
+  getActivityBase: get,
   setActivityDetails,
   getActivityDetails
 }

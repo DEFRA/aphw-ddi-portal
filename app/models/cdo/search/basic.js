@@ -44,7 +44,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
       ]
     },
     results: {
-      items: resultList.map(resultObj => ({
+      items: resultList?.map(resultObj => ({
         ...resultObj,
         dogs: resultObj.dogs?.map(dog => ({
           ...dog,
