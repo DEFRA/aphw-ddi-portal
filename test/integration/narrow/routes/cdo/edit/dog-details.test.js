@@ -62,6 +62,42 @@ describe('Update dog details', () => {
 
       expect(response.statusCode).toBe(404)
     })
+
+    test('GET /cdo/edit/dog-details/P-1234-5678 route returns 200 given dog dates exist', async () => {
+      getDogDetails.mockResolvedValue({
+        name: 'Bruno',
+        dog_breed: { breed: 'breed1' },
+        dateOfBirth: '2020-10-05',
+        dateOfDeath: '2024-10-05',
+        dateExported: '2024-11-06',
+        dateStolen: '2024-12-07',
+        dateUntraceable: '2024-12-10'
+      })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/dog-details/P-1234-5678',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('GET /cdo/edit/dog-details/P-1234-5678 route returns 404 when dog not found', async () => {
+      getDogDetails.mockResolvedValue(null)
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/dog-details/P-1234-5678',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
+    })
   })
 
   describe('POST /cdo/edit/dog-details', () => {
@@ -311,6 +347,7 @@ describe('Update dog details', () => {
       expect(document.querySelector('#microchipNumber-error')).toBeNull()
       expect(document.querySelector('#microchipNumber2-error')).not.toBeNull()
     })
+
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 1 & 2', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
@@ -356,6 +393,29 @@ describe('Update dog details', () => {
       expect(document.querySelector('#microchipNumber2-error')).not.toBeNull()
     })
 
+    test('POST /cdo/edit/dog-details with duplicate microchip returns 500 given server error', async () => {
+      updateDogDetails.mockRejectedValue(new Error('server error'))
+
+      const payload = {
+        id: 1,
+        indexNumber: 'ED123',
+        name: 'Bruno',
+        breed: 'breed1',
+        microchipNumber: '875257109325923'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/dog-details',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
+
     test('POST /cdo/edit/dog-details with no change to microchip returns 302 original microchip was old format', async () => {
       updateDogDetails.mockResolvedValue()
       const payload = {
@@ -386,6 +446,7 @@ describe('Update dog details', () => {
       expect(response.statusCode).toBe(302)
     })
   })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()

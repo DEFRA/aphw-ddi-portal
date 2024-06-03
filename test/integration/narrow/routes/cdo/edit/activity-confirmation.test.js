@@ -54,6 +54,101 @@ describe('Confirm activity', () => {
     expect(document.querySelectorAll('.govuk-list .govuk-link')[0].getAttribute('href')).toBe('/main-return-url')
   })
 
+  test('GET /cdo/edit/activity-confirmation route returns 200 given owner record', async () => {
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'owner',
+      activityType: 'sent',
+      activity: 2,
+      activityDate: new Date(),
+      titleReference: 'Dog ED12345'
+    })
+
+    getActivityById.mockResolvedValue({
+      name: 'act1'
+    })
+
+    getMainReturnPoint.mockReturnValue('/main-return-url')
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/activity-confirmation',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/edit/activity-confirmation route returns 200 given alternative return link', async () => {
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'dog',
+      activityType: 'sent',
+      activity: 2,
+      activityDate: new Date(),
+      titleReference: 'Dog ED12345'
+    })
+
+    getActivityById.mockResolvedValue({
+      name: 'act1'
+    })
+
+    getMainReturnPoint.mockReturnValue('/')
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/activity-confirmation',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/edit/activity-confirmation route returns 200 given alternative return link which is not defined', async () => {
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'owner',
+      activityType: 'sent',
+      activity: 2,
+      activityDate: new Date(),
+      titleReference: 'Dog ED12345'
+    })
+
+    getActivityById.mockResolvedValue({
+      name: 'act1'
+    })
+
+    getMainReturnPoint.mockReturnValue('/')
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/activity-confirmation',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /cdo/edit/activity-confirmation route returns 404 given no activity exists', async () => {
+    getActivityDetails.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/activity-confirmation',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()

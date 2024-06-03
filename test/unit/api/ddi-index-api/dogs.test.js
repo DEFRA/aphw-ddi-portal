@@ -15,6 +15,12 @@ describe('Dogs test', () => {
     expect(get).toHaveBeenCalledWith('dogs?forPurging=true&statuses=Exempt,In breach&sortKey=status&sortOrder=ASC', { json: true })
   })
 
+  test('getOldDogs calls endpoint with override', async () => {
+    get.mockResolvedValue()
+    await getOldDogs('Exempt,In breach', {}, '2038-05-01')
+    expect(get).toHaveBeenCalledWith('dogs?forPurging=true&statuses=Exempt,In breach&sortKey=status&sortOrder=ASC&today=2038-05-01', { json: true })
+  })
+
   test('bulkDeleteDogs calls endpoint with valid params', async () => {
     get.mockResolvedValue()
     await bulkDeleteDogs(['ED123', 'ED456'], user)
