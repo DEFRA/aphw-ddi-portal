@@ -1,18 +1,12 @@
 const { routes, views } = require('../../../constants/admin')
 const { admin } = require('../../../auth/permissions')
 const { getUser } = require('../../../auth')
+const { deleteDogsQuerySchema1, deleteDogsQuerySchema2 } = require('../../../schema/portal/admin/delete/dogs')
 const { ConfirmViewModel, DogsRemovedViewModel } = require('../../../models/admin/delete/confirm')
 const { ViewModel: SelectViewModel } = require('../../../models/admin/delete/dogs')
 const { getOldDogs, bulkDeleteDogs } = require('../../../api/ddi-index-api/dogs')
 const { initialiseDogsForDeletion, setDogsForDeletion, getDogsForDeletion } = require('../../../session/admin/delete-dogs')
-
-const getCombinedSelectedList = (request) => {
-  return getDogsForDeletion(request, 1).concat(getDogsForDeletion(request, 2))
-}
-
-const getDateOverrideQueryString = request => {
-  return request.query.today ? `?today=${request.query.today}` : ''
-}
+const { getCombinedSelectedList, getDateOverrideQueryString, getCheckboxSortQueryString, handleCheckboxSort } = require('./dogs-route-helper')
 
 const statusListForStep1 = 'Exempt,Inactive,Withdrawn,Failed'
 const statusListForStep2 = 'In breach,Pre-exempt,Interim exempt'
@@ -23,19 +17,29 @@ module.exports = [
     path: `${routes.deleteDogs1.get}`,
     options: {
       auth: { scope: [admin] },
+      validate: {
+        query: deleteDogsQuerySchema1,
+        failAction: async (_, h) => {
+          return h.response().code(404).takeover()
+        }
+      },
       handler: async (request, h) => {
-        const sort = { column: 'status', order: 'ASC' }
+        const params = request.query
 
-        const dogs = await getOldDogs(statusListForStep1, sort, request.query.today)
+        const sort = { column: params.sortKey, order: params.sortOrder }
 
-        if (request.query.start === 'true') {
+        const dogs = await getOldDogs(statusListForStep1, sort, params.today)
+
+        if (params.start === 'true') {
           initialiseDogsForDeletion(request, dogs)
           return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}`)
         }
 
         const selectedList = getDogsForDeletion(request, 1)
 
-        return h.view(views.deleteDogs1, new SelectViewModel(dogs, selectedList, sort, null))
+        const localSortDogs = handleCheckboxSort(request, dogs, selectedList)
+
+        return h.view(views.deleteDogs1, new SelectViewModel(localSortDogs, selectedList, sort, null))
       }
     }
   },
@@ -49,6 +53,10 @@ module.exports = [
 
         setDogsForDeletion(request, 1, payload?.deleteDog)
 
+        if (payload?.checkboxSortOnly === 'Y') {
+          return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}${getCheckboxSortQueryString(request)}`)
+        }
+
         return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}`)
       }
     }
@@ -58,16 +66,26 @@ module.exports = [
     path: `${routes.deleteDogs2.get}`,
     options: {
       auth: { scope: [admin] },
+      validate: {
+        query: deleteDogsQuerySchema2,
+        failAction: async (_, h) => {
+          return h.response().code(404).takeover()
+        }
+      },
       handler: async (request, h) => {
-        const sort = { column: 'status', order: 'ASC' }
+        const params = request.query
 
-        const dogs = await getOldDogs(statusListForStep2, sort, request.query.today)
+        const sort = { column: params.sortKey, order: params.sortOrder }
+
+        const dogs = await getOldDogs(statusListForStep2, sort, params.today)
 
         const backNav = { backLink: routes.deleteDogs1.get }
 
         const selectedList = getDogsForDeletion(request, 2)
 
-        return h.view(views.deleteDogs2, new SelectViewModel(dogs, selectedList, sort, backNav))
+        const localSortDogs = handleCheckboxSort(request, dogs, selectedList)
+
+        return h.view(views.deleteDogs2, new SelectViewModel(localSortDogs, selectedList, sort, backNav))
       }
     }
   },
@@ -80,6 +98,10 @@ module.exports = [
         const payload = request.payload
 
         setDogsForDeletion(request, 2, payload?.deleteDog)
+
+        if (payload?.checkboxSortOnly === 'Y') {
+          return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}${getCheckboxSortQueryString(request)}`)
+        }
 
         return h.redirect(routes.deleteDogsConfirm.get)
       }
