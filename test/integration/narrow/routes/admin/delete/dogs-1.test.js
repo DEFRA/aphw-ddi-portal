@@ -8,6 +8,9 @@ describe('Delete dogs 1', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/dogs')
   const { getOldDogs } = require('../../../../../../app/api/ddi-index-api/dogs')
 
+  jest.mock('../../../../../../app/session/admin/delete-dogs')
+  const { getDogsForDeletion, setDogsForDeletion } = require('../../../../../../app/session/admin/delete-dogs')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -47,7 +50,7 @@ describe('Delete dogs 1', () => {
   describe('GET /admin/delete/dogs-1 route', () => {
     test('returns 200', async () => {
       getOldDogs.mockResolvedValue(dogRows)
-
+      getDogsForDeletion.mockReturnValue([])
       const options = {
         method: 'GET',
         url: '/admin/delete/dogs-1',
@@ -147,6 +150,8 @@ describe('Delete dogs 1', () => {
 
   describe('POST /admin/delete/dogs-1 route', () => {
     test('returns 302', async () => {
+      setDogsForDeletion.mockReturnValue()
+
       const options = {
         method: 'POST',
         url: '/admin/delete/dogs-1',
@@ -156,6 +161,23 @@ describe('Delete dogs 1', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/delete/dogs-2')
+    })
+
+    test('returns 302 for sorting', async () => {
+      setDogsForDeletion.mockReturnValue()
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/dogs-1',
+        auth: adminAuth,
+        payload: { checkboxSortOnly: 'Y' }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/delete/dogs-1?sortKey=selected&sortOrder=ASC')
     })
 
     test('returns 302 when not authd', async () => {
