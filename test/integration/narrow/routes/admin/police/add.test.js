@@ -213,5 +213,24 @@ describe('Police force page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the police force you want to add?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police force is already in the Index')
     })
+
+    test('POST /admin/police/add police force route returns 500 given server error', async () => {
+      addPoliceForce.mockRejectedValue(new Error('server error'))
+
+      const options = {
+        method: 'POST',
+        url: '/admin/police/add',
+        auth,
+        payload: {
+          police: 'Metropolis Police Department',
+          confirmation: 'true',
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
   })
 })

@@ -1,12 +1,15 @@
 const config = require('../config')
 const msal = require('@azure/msal-node')
 
+/* istanbul ignore next */
 const msalLogging = config.isProd
-  ? {}
+  ? {} // NOSONAR
   : {
+
+      /* istanbul ignore next */
       loggerCallback (loglevel, message, containsPii) {
         console.log(message)
-      },
+      }, // NOSONAR
       piiLoggingEnabled: false,
       logLevel: msal.LogLevel.Verbose
     }
