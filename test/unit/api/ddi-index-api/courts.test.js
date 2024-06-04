@@ -1,13 +1,26 @@
 jest.mock('../../../../app/api/ddi-index-api/base')
-const { post, callDelete } = require('../../../../app/api/ddi-index-api/base')
+const { get, post, callDelete } = require('../../../../app/api/ddi-index-api/base')
 
-const { addCourt, removeCourt } = require('../../../../app/api/ddi-index-api/courts')
+const { addCourt, removeCourt, getCourts } = require('../../../../app/api/ddi-index-api/courts')
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
 describe('DDI API courts', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('getCourts', () => {
+    test('should get courts', async () => {
+      const courts = [{ id: 1, name: 'Test court' }]
+      get.mockResolvedValue({
+        courts
+      })
+
+      const gotCourts = await getCourts()
+      expect(gotCourts).toEqual(courts)
+      expect(get).toHaveBeenCalledWith('courts', { json: true })
+    })
   })
 
   describe('addCourt', () => {

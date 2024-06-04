@@ -1,13 +1,29 @@
 jest.mock('../../../../app/api/ddi-index-api/base')
-const { post, callDelete } = require('../../../../app/api/ddi-index-api/base')
+const { post, callDelete, get } = require('../../../../app/api/ddi-index-api/base')
 
-const { addPoliceForce, removePoliceForce } = require('../../../../app/api/ddi-index-api/police-forces')
+const { addPoliceForce, removePoliceForce, getPoliceForces } = require('../../../../app/api/ddi-index-api/police-forces')
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
 describe('DDI API policeForces', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('getPoliceForces', () => {
+    test('should get courts', async () => {
+      const policeForces = [{
+        id: 1,
+        name: 'Isengard Constabulary'
+      }]
+      get.mockResolvedValue({
+        policeForces
+      })
+
+      const gotPoliceForces = await getPoliceForces()
+      expect(gotPoliceForces).toEqual(policeForces)
+      expect(get).toHaveBeenCalledWith('police-forces', { json: true })
+    })
   })
 
   describe('addPoliceForce', () => {

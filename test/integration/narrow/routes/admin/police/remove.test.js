@@ -240,5 +240,25 @@ describe('Remove Police Forces page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which police force do you want to remove?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Isengard Constabulary does not exist in the index')
     })
+
+    test('POST /admin/police/remove police force route returns 500 given server error', async () => {
+      removePoliceForce.mockRejectedValue(new Error('server error'))
+
+      const options = {
+        method: 'POST',
+        url: '/admin/police/remove',
+        auth,
+        payload: {
+          police: 'Isengard Constabulary',
+          pk: '95',
+          confirmation: 'true',
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
   })
 })

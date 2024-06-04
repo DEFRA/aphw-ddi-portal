@@ -93,5 +93,6 @@ const getPostcodeLongLat = async (postcode) => {
 
 module.exports = {
   getPostcodeAddresses,
-  getPostcodeLongLat
+  getPostcodeLongLat,
+  buildAddressResult
 }

@@ -51,6 +51,23 @@ describe('Cookies test', () => {
     expect(response.statusCode).toBe(200)
   })
 
+  test('POST /cookies completes without error given synchronous call', async () => {
+    const payload = {
+      analytics: true,
+      async: false
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cookies',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+  })
+
   afterEach(async () => {
     await server.stop()
   })

@@ -199,5 +199,24 @@ describe('Courts page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This court name is already in the Index')
     })
+
+    test('POST /admin/courts/add court route returns 500 if there is a server error', async () => {
+      addCourt.mockRejectedValue(new Error('server error'))
+
+      const options = {
+        method: 'POST',
+        url: '/admin/courts/add',
+        auth,
+        payload: {
+          court: 'Metropolis City Court',
+          confirmation: 'true',
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
   })
 })

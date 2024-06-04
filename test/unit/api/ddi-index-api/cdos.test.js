@@ -217,6 +217,34 @@ describe('CDO API endpoints', () => {
       expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
       expect(results).toEqual(expect.any(Array))
     })
+
+    test('should get cdos given no sort arguments', async () => {
+      get.mockResolvedValue({
+        cdos: [
+          {
+            person: {
+              id: 121,
+              firstName: 'Scott',
+              lastName: 'Pilgrim',
+              personReference: 'P-A133-7E4C'
+            },
+            dog: {
+              id: 300162,
+              status: 'Pre-exempt',
+              dogReference: 'ED300162'
+            },
+            exemption: {
+              policeForce: 'Cheshire Constabulary',
+              cdoExpiry: '2024-04-19'
+            }
+          }
+        ]
+      })
+
+      const results = await cdos.getLiveCdos()
+      expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
+      expect(results).toEqual(expect.any(Array))
+    })
   })
 
   describe('getLiveCdosWithinMonth', () => {
@@ -247,6 +275,15 @@ describe('CDO API endpoints', () => {
       const results = await cdos.getLiveCdosWithinMonth(sort)
       expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
       expect(results).toEqual(expect.any(Array))
+    })
+
+    test('should get cdos due within one month with default sort', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+
+      await cdos.getLiveCdosWithinMonth()
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
     })
   })
 
@@ -279,6 +316,24 @@ describe('CDO API endpoints', () => {
       const results = await cdos.getInterimExemptions(sort)
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
       expect(results).toEqual(expect.any(Array))
+    })
+
+    test('should get interim exemptions with default sort', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+
+      await cdos.getInterimExemptions()
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+    })
+
+    test('should get interim exemptions with default sort', async () => {
+      get.mockResolvedValue({
+        cdos: []
+      })
+
+      await cdos.getInterimExemptions({ column: 'joinedExemptionScheme' })
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
     })
 
     test('should get interim exemptions ascending by joinedExemptionScheme when called with descending', async () => {
@@ -335,6 +390,35 @@ describe('CDO API endpoints', () => {
       const sort = {}
 
       const results = await cdos.getExpiredCdos(sort)
+      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', { json: true })
+      expect(results).toEqual(expect.any(Array))
+    })
+
+    test('should get expired cdos given no sort arguments passed', async () => {
+      get.mockResolvedValue({
+        cdos: [
+          {
+            person: {
+              id: 121,
+              firstName: 'Scott',
+              lastName: 'Pilgrim',
+              personReference: 'P-A133-7E4C'
+            },
+            dog: {
+              id: 300162,
+              status: 'Interim exempt',
+              dogReference: 'ED300162'
+            },
+            exemption: {
+              policeForce: 'Cheshire Constabulary',
+              cdoExpiry: null,
+              joinedExemptionScheme: '2020-10-11'
+            }
+          }
+        ]
+      })
+
+      const results = await cdos.getExpiredCdos()
       expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', { json: true })
       expect(results).toEqual(expect.any(Array))
     })

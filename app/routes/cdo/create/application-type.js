@@ -32,9 +32,7 @@ module.exports = [
           dog[keys.interimExemption] = new Date()
         }
 
-        if (dog[keys.interimExemption] !== undefined) {
-          addDateComponents(dog, keys.interimExemption)
-        }
+        addDateComponents(dog, keys.interimExemption)
 
         if (dog[keys.cdoIssued] !== undefined) {
           addDateComponents(dog, keys.cdoIssued)

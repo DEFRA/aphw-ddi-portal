@@ -226,5 +226,25 @@ describe('Remove Courts page', () => {
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which court do you want to remove?')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Isengard City Court does not exist in the index')
     })
+
+    test('POST /admin/courts/remove court route returns 500 given server error exists', async () => {
+      removeCourt.mockRejectedValue(new Error('server error'))
+
+      const options = {
+        method: 'POST',
+        url: '/admin/courts/remove',
+        auth,
+        payload: {
+          court: 'Isengard City Court',
+          pk: '95',
+          confirmation: 'true',
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
   })
 })

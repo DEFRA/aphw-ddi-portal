@@ -82,7 +82,34 @@ describe('Change status', () => {
     expect(updateStatus).toHaveBeenCalledTimes(1)
   })
 
+  test('POST /cdo/edit/change-status route returns 404 given validation failed and no cdo', async () => {
+    getCdo.mockResolvedValue(null)
+
+    updateStatus.mockResolvedValue()
+
+    const payload = {
+      indexNumber: 'ED12345'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/change-status',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(404)
+  })
+
   test('POST /cdo/edit/dog-details route returns 400 when payload is invalid', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        status: 'Exempt',
+        indexNumber: 'ED12345'
+      }
+    })
     updateStatus.mockResolvedValue()
 
     const options = {

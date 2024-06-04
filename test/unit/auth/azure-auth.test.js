@@ -43,11 +43,18 @@ const { authConfig } = require('../../../app/config')
 let mockCookieAuth
 
 describe('azure authentication', () => {
+  const OLD_ENV = process.env
+
   beforeEach(() => {
     jest.clearAllMocks()
+    process.env = { ...OLD_ENV } // Make a copy
     mockCookieAuth = {
       set: jest.fn()
     }
+  })
+
+  afterAll(() => {
+    process.env = OLD_ENV // Restore old environment
   })
 
   test('getAuthenticationUrl should call getAuthCodeUrl once', () => {
@@ -148,5 +155,13 @@ describe('azure authentication', () => {
   test('logout should call removeAccount with account', async () => {
     await azureAuth.logout(mockAccount)
     expect(mockRemoveAccount).toHaveBeenCalledWith(mockAccount)
+  })
+
+  test('logout should call removeAccount with account and not throw given error', async () => {
+    mockGetTokenCache.mockImplementation(() => {
+      throw new Error('unknown error')
+    })
+    await azureAuth.logout(mockAccount)
+    expect(mockRemoveAccount).not.toHaveBeenCalledWith(mockAccount)
   })
 })

@@ -56,6 +56,24 @@ describe('Add dog details', () => {
     expect(document.querySelector('#cdoIssued-year').getAttribute('value')).toBe('2020')
   })
 
+  test('GET /cdo/create/dog-details route returns 200 given interim exception', async () => {
+    getDog.mockReturnValue({
+      breed: 'Breed 1',
+      name: 'Bruce',
+      interimExemption: new UTCDate('2020-10-10T00:00:00.000Z')
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/dog-details',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
   test('GET /cdo/create/dog-details route returns 200 when microchip value', async () => {
     getDog.mockReturnValue({
       breed: 'Breed 1',
@@ -211,6 +229,37 @@ describe('Add dog details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(400)
+    expect(setDog).toHaveBeenCalledTimes(1)
+  })
+
+  test('POST /cdo/create/dog-details route with server error returns 500', async () => {
+    const payload = {
+      breed: 'Breed 1',
+      name: 'Bruce',
+      applicationType: 'cdo',
+      'cdoIssued-day': '10',
+      'cdoIssued-month': '10',
+      'cdoIssued-year': '2020',
+      dogId: 2
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/dog-details',
+      auth,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      payload: querystring.stringify(payload)
+    }
+
+    setDog.mockImplementation(() => {
+      throw new Error('server error')
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
     expect(setDog).toHaveBeenCalledTimes(1)
   })
 

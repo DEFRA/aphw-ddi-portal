@@ -24,6 +24,7 @@ const clearCdo = (request) => {
 }
 
 module.exports = {
+  getCreatedCdoKey: get,
   getCreatedCdo,
   setCreatedCdo,
   clearCdo

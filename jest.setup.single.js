@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 jest.setTimeout(30000)
 process.env.COOKIE_PASSWORD = 'cookiepasswordcookiepasswordcookiepassword'
 process.env.AZURE_STORAGE_ACCOUNT_NAME = 'devstoreaccount1'

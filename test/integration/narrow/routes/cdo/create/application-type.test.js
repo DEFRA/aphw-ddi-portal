@@ -52,6 +52,25 @@ describe('Application type', () => {
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-existing-dog')
   })
 
+  test('GET /cdo/create/application-type route returns 200 with date components', async () => {
+    getDog.mockReturnValue({
+      breed: 'Breed 1',
+      name: 'Bruce',
+      interimExemption: new Date('2020-10-01'),
+      cdoIssued: undefined
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/application-type',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+  })
+
   test('GET /cdo/create/application-type route returns 200 with correct backLink when visited existing microchip', async () => {
     getDog.mockReturnValue({
       breed: 'Breed 1',
@@ -197,6 +216,35 @@ describe('Application type', () => {
 
     expect(response.statusCode).toBe(400)
     expect(setDog).toHaveBeenCalledTimes(1)
+  })
+
+  test('POST /cdo/create/application-type route with server error returns 500', async () => {
+    const payload = {
+      applicationType: 'cdo',
+      'cdoIssued-day': '10',
+      'cdoIssued-month': '10',
+      'cdoIssued-year': '2020',
+      dogId: 2
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/application-type',
+      auth,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      payload: querystring.stringify(payload)
+    }
+
+    setDog.mockImplementation(() => {
+      const error = new Error('server error')
+      throw error
+    })
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
   })
 
   test('POST /cdo/create/application-type route with invalid payload should show errors', async () => {
