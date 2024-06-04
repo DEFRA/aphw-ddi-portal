@@ -10,7 +10,8 @@ const getDateOverrideQueryString = request => {
 
 const getCheckboxSortQueryString = request => {
   const paramStringPrefix = request.query.today ? '&' : '?'
-  const sortOrder = request.query.sortKey === 'selected' ? (request.query.sortOrder === 'ASC' ? 'DESC' : 'ASC') : 'ASC'
+  const toggledSortOrder = request.query.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+  const sortOrder = request.query.sortKey === 'selected' ? toggledSortOrder : 'ASC'
   return `${paramStringPrefix}sortKey=selected&sortOrder=${sortOrder}`
 }
 
