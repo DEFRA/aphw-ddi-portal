@@ -1,6 +1,7 @@
 const { routes, views } = require('../../../constants/admin')
 const { admin } = require('../../../auth/permissions')
 const { getUser } = require('../../../auth')
+const { deleteDogsQuerySchema1, deleteDogsQuerySchema2 } = require('../../../schema/portal/admin/delete/dogs')
 const { ConfirmViewModel, DogsRemovedViewModel } = require('../../../models/admin/delete/confirm')
 const { ViewModel: SelectViewModel } = require('../../../models/admin/delete/dogs')
 const { getOldDogs, bulkDeleteDogs } = require('../../../api/ddi-index-api/dogs')
@@ -16,6 +17,12 @@ module.exports = [
     path: `${routes.deleteDogs1.get}`,
     options: {
       auth: { scope: [admin] },
+      validate: {
+        query: deleteDogsQuerySchema1,
+        failAction: async (_, h) => {
+          return h.response().code(404).takeover()
+        }
+      },
       handler: async (request, h) => {
         const sort = { column: request.query.sortKey ?? 'status', order: request.query.sortOrder ?? 'ASC' }
 
@@ -57,6 +64,12 @@ module.exports = [
     path: `${routes.deleteDogs2.get}`,
     options: {
       auth: { scope: [admin] },
+      validate: {
+        query: deleteDogsQuerySchema2,
+        failAction: async (_, h) => {
+          return h.response().code(404).takeover()
+        }
+      },
       handler: async (request, h) => {
         const sort = { column: request.query.sortKey ?? 'status', order: request.query.sortOrder ?? 'ASC' }
 

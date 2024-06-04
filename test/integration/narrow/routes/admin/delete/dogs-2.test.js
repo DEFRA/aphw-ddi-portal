@@ -103,6 +103,20 @@ describe('Delete dogs 2', () => {
       expect(response.statusCode).toBe(200)
     })
 
+    test('returns 404 when invalid param name', async () => {
+      getOldDogs.mockResolvedValue(dogRows)
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-2?invalid=true',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
+    })
+
     test('returns 302 when not authd', async () => {
       getOldDogs.mockResolvedValue(dogRows)
       getDogsForDeletion.mockReturnValue(dogSelections)

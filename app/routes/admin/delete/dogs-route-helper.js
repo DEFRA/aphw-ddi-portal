@@ -5,23 +5,26 @@ const getCombinedSelectedList = (request) => {
 }
 
 const getDateOverrideQueryString = request => {
-  return request.query.today ? `?today=${request.query.today}` : ''
+  const params = request.query
+  return params.today ? `?today=${params.today}` : ''
 }
 
 const getCheckboxSortQueryString = request => {
-  const paramStringPrefix = request.query.today ? '&' : '?'
-  const toggledSortOrder = request.query.sortOrder === 'ASC' ? 'DESC' : 'ASC'
-  const sortOrder = request.query.sortKey === 'selected' ? toggledSortOrder : 'ASC'
+  const params = request.query
+  const paramStringPrefix = params.today ? '&' : '?'
+  const toggledSortOrder = params.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+  const sortOrder = params.sortKey === 'selected' ? toggledSortOrder : 'ASC'
   return `${paramStringPrefix}sortKey=selected&sortOrder=${sortOrder}`
 }
 
 const handleCheckboxSort = (request, dogs, selectedList) => {
-  if (request.query.sortKey !== 'selected') {
+  const params = request.query
+  if (params.sortKey !== 'selected') {
     return dogs
   }
   const selectedDogs = dogs.filter(dog => selectedList.includes(dog.indexNumber))
   const unselectedDogs = dogs.filter(dog => !selectedList.includes(dog.indexNumber))
-  return request.query.sortOrder === 'ASC' ? selectedDogs.concat(unselectedDogs) : unselectedDogs.concat(selectedDogs)
+  return params.sortOrder === 'ASC' ? selectedDogs.concat(unselectedDogs) : unselectedDogs.concat(selectedDogs)
 }
 
 module.exports = {
