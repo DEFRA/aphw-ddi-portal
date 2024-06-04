@@ -41,55 +41,6 @@
 
     </div>
 
-    <div class="govuk-grid-column-full">
-      <form class="form" method="post">
-
-        {{ govukButton({
-        text: 'Continue'
-        }) }}
-
-        <table class="govuk-table govuk-!-margin-top-6">
-          <caption class="govuk-table__caption govuk-visually-hidden">Dog records to delete</caption>
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              {% for colHeading in model.tableHeadings %}
-                <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
-                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
-                    {{colHeading.label}}
-                  </a>
-                </th>
-              {% endfor %}
-              <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">
-                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="/admin/delete/dogs?sortKey=selected">
-                Delete dog record
-                </a>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-          {% for dog in model.resultList %}
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{dog.status.status}}</td>
-              <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
-              <td class="govuk-table__cell">{{dog.humanReadableBirthDate}}</td>
-              <td class="govuk-table__cell">{{dog.humanReadableCdoIssued}}</td>
-              <td class="govuk-table__cell">
-                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                  <div class="defra-checkbox">
-                    <input class="govuk-checkboxes__input" name="deleteDog" id="dog-index-{{ dog.indexNumber }}" value="{{ dog.indexNumber }}" type="checkbox" {% if dog.selected %} checked="true" {% endif %}>
-                    <label class="govuk-label govuk-checkboxes__label" for="deleteDog">
-                    </label>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </form>
-
-      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
-    </div>
-  </div>
+    {% include "./admin/delete/dogs-list-common.njk" %}
 
 {% endblock %}

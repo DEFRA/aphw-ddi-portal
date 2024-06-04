@@ -78,6 +78,11 @@ function ViewModel (resultList, selectedList, sort, backNav) {
       label: 'CDO issued',
       link: columnLink(sort, 'cdoIssued'),
       ariaSort: getAriaSort(sort, 'cdoIssued')
+    },
+    {
+      label: 'Delete dog record',
+      link: columnLink(sort, 'selected'),
+      ariaSort: getAriaSort(sort, 'selected')
     }
   ]
 
