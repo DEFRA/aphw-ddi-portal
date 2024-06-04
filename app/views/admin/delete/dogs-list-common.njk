@@ -1,0 +1,62 @@
+    <div class="govuk-grid-column-full">
+      <form class="form" method="post" id="dogListForm">
+
+        <input type="hidden" name="checkboxSortOnly" id="checkboxSortOnly" value="" />
+
+        {{ govukButton({
+        text: 'Continue'
+        }) }}
+
+        <table class="govuk-table govuk-!-margin-top-6 defra-sortable-table">
+          <caption class="govuk-table__caption govuk-visually-hidden">Dog records to delete</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              {% for colHeading in model.tableHeadings %}
+                {% if loop.last %}
+                <th scope="col" class="govuk-table__header govuk-table__header--numeric" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortOnly').value = 'Y'; document.getElementById('dogListForm').submit(); return false;">
+                    {{colHeading.label}}
+                  </a>
+                </th>
+                {% else %}
+                <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
+                    {{colHeading.label}}
+                  </a>
+                </th>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+          {% for dog in model.resultList %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{dog.status.status}}</td>
+              <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
+              <td class="govuk-table__cell">{{dog.humanReadableBirthDate}}</td>
+              <td class="govuk-table__cell">{{dog.humanReadableCdoIssued}}</td>
+              <td class="govuk-table__cell">
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="defra-checkbox">
+                    <input class="govuk-checkboxes__input" name="deleteDog" id="dog-index-{{ dog.indexNumber }}" value="{{ dog.indexNumber }}" type="checkbox" {% if dog.selected %} checked="true" {% endif %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="deleteDog">
+                    </label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </form>
+
+      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+    </div>
+  </div>
+
+<script lang="javascript">
+window.onload = function(){
+  const elem = document.getElementById('checkboxColHeader')
+  elem.setAttribute('aria-sort', elem.getAttribute('aria-sort-data'))
+}
+</script>
