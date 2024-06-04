@@ -24,11 +24,13 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const sort = { column: request.query.sortKey ?? 'status', order: request.query.sortOrder ?? 'ASC' }
+        const params = request.query
 
-        const dogs = await getOldDogs(statusListForStep1, sort, request.query.today)
+        const sort = { column: params.sortKey, order: params.sortOrder }
 
-        if (request.query.start === 'true') {
+        const dogs = await getOldDogs(statusListForStep1, sort, params.today)
+
+        if (params.start === 'true') {
           initialiseDogsForDeletion(request, dogs)
           return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}`)
         }
@@ -71,9 +73,11 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const sort = { column: request.query.sortKey ?? 'status', order: request.query.sortOrder ?? 'ASC' }
+        const params = request.query
 
-        const dogs = await getOldDogs(statusListForStep2, sort, request.query.today)
+        const sort = { column: params.sortKey, order: params.sortOrder }
+
+        const dogs = await getOldDogs(statusListForStep2, sort, params.today)
 
         const backNav = { backLink: routes.deleteDogs1.get }
 
