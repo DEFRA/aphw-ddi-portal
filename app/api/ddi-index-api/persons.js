@@ -8,16 +8,19 @@ const options = {
 
 /**
  * @typedef GetPersonsFilterOptions
- * @property {string} firstName
- * @property {string} lastName
- * @property {string} dateOfBirth
+ * @property {string} [firstName]
+ * @property {string} [lastName]
+ * @property {string} [dateOfBirth]
+ * @property {boolean} [orphaned]
+ * @property {number} [limit]
+ * @property {'owner'} [sortKey]
  */
 /**
  * @typedef GetPersonsFilterKeys
- * @type {'firstName'|'lastName'|'dateOfBirth'}
+ * @type {'firstName'|'lastName'|'dateOfBirth'|'orphaned'}
  */
 /**
- * @param {{ firstName: string; lastName: string; dateOfBirth?: string; }} filter
+ * @param {GetPersonsFilterOptions} filter
  * @returns {Promise<import('./person.js').Person[]>}
  */
 const getPersons = async (filter) => {
@@ -33,6 +36,17 @@ const getPersons = async (filter) => {
   return payload.persons
 }
 
+const getOrphanedOwners = async (filter = {}) => {
+  return getPersons({
+    limit: -1,
+    sortKey: 'owner',
+    sortOrder: 'ASC',
+    ...filter,
+    orphaned: true
+  })
+}
+
 module.exports = {
-  getPersons
+  getPersons,
+  getOrphanedOwners
 }

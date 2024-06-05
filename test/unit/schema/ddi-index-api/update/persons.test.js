@@ -51,20 +51,21 @@ describe('Persons details validation', () => {
     })
   })
 
-  // test('should fail validation with invalid payload', () => {
-  //   const payload = {
-  //     personReference: 'P-123',
-  //     firstName: 'John',
-  //     lastName: 'Smith',
-  //     dateOfBirth: new UTCDate('2020-02-01'),
-  //     address: {
-  //       addressLine1: '1 Test Street',
-  //       town: 'Testington'
-  //     }
-  //   }
-  //
-  //   const { error } = schema.validate(payload, { abortEarly: false })
-  //   expect(error).not.toBe(null)
-  //   expect(error.details[0].message).toBe('"address.postcode" is required')
-  // })
+  test('should pass validation when payload with orphaned, sortKey and sortOrder', () => {
+    const payload = {
+      orphaned: 'true',
+      sortKey: 'owner',
+      sortOrder: 'ASC',
+      limit: '-1'
+    }
+
+    const { value } = personsFilter.validate(payload, { abortEarly: false, stripUnknown: true })
+
+    expect(value).toMatchObject({
+      orphaned: true,
+      sortKey: 'owner',
+      sortOrder: 'ASC',
+      limit: -1
+    })
+  })
 })

@@ -1,5 +1,5 @@
 
-const { getPersons } = require('../../../../app/api/ddi-index-api/persons')
+const { getPersons, getOrphanedOwners } = require('../../../../app/api/ddi-index-api/persons')
 const { get } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
@@ -58,7 +58,7 @@ describe('Persons test', () => {
 
     test('should throw an error given empty object', async () => {
       get.mockResolvedValue({ payload: {} })
-      await expect(getPersons({})).rejects.toThrow('ValidationError: "firstName" is required. "lastName" is required')
+      await expect(getPersons({})).rejects.toThrow('ValidationError: "value" must contain at least one of [firstName, orphaned]')
     })
 
     test('should strip invalid query params', async () => {
@@ -69,6 +69,37 @@ describe('Persons test', () => {
         queryParam: '1234'
       }))
       expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+    })
+  })
+
+  describe('getOrphanedOwners', () => {
+    test('should get people filtered by orphaned = true', async () => {
+      get.mockResolvedValue({
+        payload: {
+          persons: [
+            {
+              firstName: 'Abby',
+              lastName: 'Breitenberg',
+              birthDate: '1998-05-10',
+              personReference: 'P-418F-024E',
+              address: {
+                addressLine1: '218 White Knoll',
+                addressLine2: 'Anywhere Estate',
+                town: 'Lake Keatonmouth',
+                postcode: 'S1 1AA',
+                country: 'England'
+              },
+              contacts: {
+                emails: [],
+                primaryTelephones: [],
+                secondaryTelephones: []
+              }
+            }
+          ]
+        }
+      })
+      await getOrphanedOwners()
+      expect(get).toBeCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', expect.anything())
     })
   })
 })
