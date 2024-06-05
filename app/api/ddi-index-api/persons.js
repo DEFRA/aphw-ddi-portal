@@ -33,6 +33,7 @@ const getPersons = async (filter) => {
   const searchParams = new URLSearchParams(Object.entries(value))
 
   const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, options)
+
   return payload.persons
 }
 

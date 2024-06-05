@@ -8,7 +8,7 @@ describe('Delete Owners validation', () => {
 
     expect(value).toMatchObject({
       sortOrder: 'ASC',
-      sortKey: 'name'
+      sortKey: 'owner'
     })
   })
 
@@ -27,7 +27,7 @@ describe('Delete Owners validation', () => {
   })
 
   test.each(
-    ['name', 'indexNumber', 'dateOfBirth', 'address', 'selected']
+    ['owner', 'indexNumber', 'dateOfBirth', 'address', 'selected']
   )('should pass validation when query param is %s', (sortKey) => {
     const params = { sortKey }
 

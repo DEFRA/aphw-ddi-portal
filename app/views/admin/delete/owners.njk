@@ -1,0 +1,101 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-breadcrumbs">
+      <ol class="govuk-breadcrumbs__list">
+        {% for breadcrumb in model.breadcrumbs %}
+        <li class="govuk-breadcrumbs__list-item">
+          <a class="govuk-breadcrumbs__link" href="{{breadcrumb.link}}">
+            {{breadcrumb.label}}
+          </a>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Delete dog owner records without a dog</span>
+      <h1 class="govuk-heading-l">
+        Select dog owner records to delete
+      </h1>
+
+      <p class="govuk-body">Dog owner records with no dogs linked to them have been selected to be deleted.</p>
+      <p class="govuk-body">Unselect any dog owner records you want to keep. </p>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <form class="form" method="post" id="dogListForm">
+
+        <input type="hidden" name="checkboxSortOnly" id="checkboxSortOnly" value="" />
+
+        {{ govukButton({
+          text: 'Continue'
+        }) }}
+
+        <table class="govuk-table govuk-!-margin-top-6 defra-sortable-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              {% for colHeading in model.tableHeadings %}
+              {% if loop.last %}
+              <th scope="col" class="govuk-table__header govuk-table__header--numeric defra-input--width-6" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
+                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortOnly').value = 'Y'; document.getElementById('dogListForm').submit(); return false;">
+                  {{colHeading.label}}
+                </a>
+              </th>
+              {% else %}
+              <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
+                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
+                  {{colHeading.label}}
+                </a>
+              </th>
+              {% endif %}
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for owner in model.resultList %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{ owner.name }}</td>
+              <td class="govuk-table__cell">{{ owner.humanReadableBirthDate }}</td>
+              <td class="govuk-table__cell">{{ owner.address }}</td>
+              <td class="govuk-table__cell defra-table-cell">
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="defra-checkbox">
+                    <input class="govuk-checkboxes__input" name="deleteOwner" id="owner-reference-{{ owner.personReference }}" value="{{ owner.personReference }}" type="checkbox" {% if owner.selected %} checked="true" {% endif %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="deleteOwner">
+                    </label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </form>
+
+      <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+    </div>
+  </div>
+
+<script lang="javascript">
+  window.onload = function(){
+    const elem = document.getElementById('checkboxColHeader')
+    elem.setAttribute('aria-sort', elem.getAttribute('aria-sort-data'))
+  }
+</script>
+
+{% endblock %}

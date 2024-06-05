@@ -8,15 +8,12 @@ const setOrphanedOwnersForDeletion = (request, value) => {
   request.yar.set(`${keys.orphanedOwners}`, typeof value === 'string' ? [value] : value || [])
 }
 
-const consumeOrphanedOwnersForDeletion = (request) => {
-  const orphanedOwnersForDeletion = getOrphanedOwnersForDeletion(request)
-  setOrphanedOwnersForDeletion(request, [])
-
-  return orphanedOwnersForDeletion
+const initialiseOwnersForDeletion = (request, owners) => {
+  setOrphanedOwnersForDeletion(request, owners.map(owner => owner.personReference))
 }
 
 module.exports = {
   getOrphanedOwnersForDeletion,
   setOrphanedOwnersForDeletion,
-  consumeOrphanedOwnersForDeletion
+  initialiseOwnersForDeletion
 }

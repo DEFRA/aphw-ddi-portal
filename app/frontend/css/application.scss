@@ -309,6 +309,32 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       }
     }
   }
+
+  &-table {
+
+    &-cell {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+
+  &-input {
+
+    &--width {
+
+      &-4 {
+        max-width: 4.5em !important;
+      }
+
+      &-6 {
+        max-width: 8em !important;
+      }
+
+      &-8 {
+        max-width: 8.5em !important;
+      }
+    }
+  }
 }
 
 

@@ -44,7 +44,6 @@ const formatAddressSingleLine = (address, simple = false) => {
   }
 
   const updatedAddress = { ...address }
-
   return formatAddress(updatedAddress, options).join(', ')
 }
 

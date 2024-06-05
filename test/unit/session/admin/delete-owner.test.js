@@ -1,4 +1,7 @@
-const { getOrphanedOwnersForDeletion, setOrphanedOwnersForDeletion, consumeOrphanedOwnersForDeletion } = require('../../../../app/session/admin/delete-owners')
+const {
+  getOrphanedOwnersForDeletion, setOrphanedOwnersForDeletion,
+  initialiseOwnersForDeletion
+} = require('../../../../app/session/admin/delete-owners')
 describe('delete-owner', () => {
   const mockRequest = {
     yar: {
@@ -47,16 +50,13 @@ describe('delete-owner', () => {
     })
   })
 
-  describe('consumeOrphanedOwnersForDeletion', () => {
-    test('should get owners and clear the cache', () => {
+  describe('initialiseOwnersForDeletion', () => {
+    test('should set owners', () => {
       const ownerReferenceIds = ['P-418F-024E']
 
-      mockRequest.yar.get.mockReturnValue(ownerReferenceIds)
+      initialiseOwnersForDeletion(mockRequest, [{ personReference: 'P-418F-024E' }])
 
-      const ownerReferences = consumeOrphanedOwnersForDeletion(mockRequest)
-      expect(ownerReferences).toEqual(ownerReferenceIds)
-      expect(mockRequest.yar.get).toHaveBeenCalledWith('orphanedOwners')
-      expect(mockRequest.yar.set).toHaveBeenCalledWith('orphanedOwners', [])
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('orphanedOwners', ownerReferenceIds)
     })
   })
 })

@@ -56,6 +56,14 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
+    deleteOwners: {
+      get: '/admin/delete/owners',
+      post: '/admin/delete/owners'
+    },
+    deleteOwnersConfirm: {
+      get: '/admin/delete/owners-confirm',
+      post: '/admin/delete/owners-confirm'
+    },
     deleteDogs1: {
       get: '/admin/delete/dogs-1',
       post: '/admin/delete/dogs-1'
@@ -94,7 +102,9 @@ const constants = {
     success: 'admin/success',
     deleteDogs1: 'admin/delete/dogs-1',
     deleteDogs2: 'admin/delete/dogs-2',
-    deleteDogsConfirm: 'admin/delete/dogs-confirm'
+    deleteDogsConfirm: 'admin/delete/dogs-confirm',
+    deleteOwners: 'admin/delete/owners',
+    deleteOwnersConfirm: 'admin/delete/owners-confirm'
   },
   breadcrumbs: [
     {
