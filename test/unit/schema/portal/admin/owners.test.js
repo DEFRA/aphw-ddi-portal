@@ -1,10 +1,10 @@
 describe('Delete Owners validation', () => {
-  const { deleteOwnersQuerySchema } = require('../../../../../app/schema/portal/admin/delete/owners')
+  const { orphanedOwnersQuerySchema } = require('../../../../../app/schema/portal/admin/delete/owners')
 
   test('should pass validation when payload valid for type dog', () => {
     const queryParams = {}
 
-    const { value } = deleteOwnersQuerySchema.validate(queryParams)
+    const { value } = orphanedOwnersQuerySchema.validate(queryParams)
 
     expect(value).toMatchObject({
       sortOrder: 'ASC',
@@ -18,7 +18,7 @@ describe('Delete Owners validation', () => {
       sortOrder: 'DESC'
     }
 
-    const { value } = deleteOwnersQuerySchema.validate(queryParams)
+    const { value } = orphanedOwnersQuerySchema.validate(queryParams)
 
     expect(value).toMatchObject({
       sortKey: 'address',
@@ -31,7 +31,7 @@ describe('Delete Owners validation', () => {
   )('should pass validation when query param is %s', (sortKey) => {
     const params = { sortKey }
 
-    const { value, error } = deleteOwnersQuerySchema.validate(params)
+    const { value, error } = orphanedOwnersQuerySchema.validate(params)
 
     expect(value).toMatchObject({ sortKey, sortOrder: 'ASC' })
     expect(error).toBeUndefined()
@@ -42,7 +42,7 @@ describe('Delete Owners validation', () => {
       param: 'unknown'
     }
 
-    const { error } = deleteOwnersQuerySchema.validate(params)
+    const { error } = orphanedOwnersQuerySchema.validate(params)
 
     expect(error).not.toBeUndefined()
   })
@@ -52,7 +52,7 @@ describe('Delete Owners validation', () => {
       sortOrder: 'unknown'
     }
 
-    const { error } = deleteOwnersQuerySchema.validate(params)
+    const { error } = orphanedOwnersQuerySchema.validate(params)
 
     expect(error).not.toBeUndefined()
   })
