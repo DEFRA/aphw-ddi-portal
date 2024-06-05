@@ -127,7 +127,8 @@ const constants = {
     }
   },
   keys: {
-    oldDogs: 'oldDogs'
+    oldDogs: 'oldDogs',
+    orphanedOwners: 'orphanedOwners'
   }
 }
 
