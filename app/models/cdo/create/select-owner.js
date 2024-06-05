@@ -9,7 +9,7 @@ function ViewModel (ownerDetails, ownerResults, errors) {
     lastName: ownerDetails.lastName,
     owners: ownerResults.map(x => ({
       ...x,
-      address: formatAddress(x.address, true)
+      address: formatAddress(x.address, { hideCountry: true })
     })),
     changeAddressLink: routes.address.get,
     address: {

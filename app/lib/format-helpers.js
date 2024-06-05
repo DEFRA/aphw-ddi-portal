@@ -1,32 +1,51 @@
 /**
  *
  * @param {Address} address
- * @param {boolean} hideCountry
+ * @param {{ hideCountry?: boolean; hideAddressLine2?: boolean; joinPostCode?: boolean }} [options]
  * @returns {*[]|null}
  */
-const formatAddress = (address, hideCountry = false) => {
+const formatAddress = (address, options = {}) => {
   if (!address) {
     return null
   }
 
-  const keys = ['addressLine1', 'addressLine2', 'town', 'postcode', 'country']
+  let keys = ['addressLine1', 'addressLine2', 'town', 'postcode', 'country']
+
+  if (options.joinPostCode === true) {
+    keys = ['addressLine1', 'addressLine2', ['town', 'postcode'], 'country']
+  }
 
   return keys.reduce((parts, key) => {
-    if (address[key] && (key !== 'country' || !hideCountry)) {
+    if (Array.isArray(key)) {
+      const subKeys = key.map(k => address[k])
+      return [...parts, subKeys.join(' ')]
+    } else if (
+      address[key] &&
+      (key !== 'country' || !options.hideCountry) &&
+      (key !== 'addressLine2' || !options.hideAddressLine2)
+    ) {
       return [...parts, address[key]]
     }
     return parts
   }, [])
 }
 
-const formatAddressSingleLine = (address) => {
+const formatAddressSingleLine = (address, simple = false) => {
   if (!address) {
     return null
   }
 
+  const options = {
+    hideCountry: true, joinPostCode: true
+  }
+
+  if (simple) {
+    options.hideAddressLine2 = true
+  }
+
   const updatedAddress = { ...address }
 
-  return formatAddress(updatedAddress, true).join(', ')
+  return formatAddress(updatedAddress, options).join(', ')
 }
 
 /**
