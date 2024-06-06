@@ -127,7 +127,7 @@ describe('OwnerResults test', () => {
       addressLine1: 'Bully Green Farm'
     })
     expect(document.querySelector('h1').textContent).toBe('Select the address for John Smith')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
     expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain("The owner's address is not listed")
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('-1')
@@ -153,9 +153,9 @@ describe('OwnerResults test', () => {
 
     expect(setInSession).toBeCalledWith(expect.anything(), 'persons', resolvedPersons)
     expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('5 Station Road, Woofferton, Ludlow, SY8 4NL')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('5 Station Road, Woofferton, Ludlow SY8 4NL')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('1')
     expect(document.querySelectorAll('form .govuk-radios__item label')[2].textContent.trim()).toContain("The owner's address is not listed")
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[2].getAttribute('value')).toBe('-1')
@@ -239,7 +239,7 @@ describe('OwnerResults test', () => {
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
     expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an address')
     expect(document.querySelector('h1').textContent).toBe('Select the address for Jack Jones')
-    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury, CO10 8QX')
+    expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
   })
 
   test('POST /cdo/create/select-owner with valid data and no existing dogs returns 302', async () => {

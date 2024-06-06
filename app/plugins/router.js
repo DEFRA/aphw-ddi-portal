@@ -61,7 +61,8 @@ const routes = [].concat(
   require('../routes/admin/police/index'),
   require('../routes/admin/police/add'),
   require('../routes/admin/police/remove'),
-  require('../routes/admin/delete/dogs')
+  require('../routes/admin/delete/dogs'),
+  require('../routes/admin/delete/owners')
 )
 
 module.exports = {

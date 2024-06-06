@@ -37,5 +37,6 @@ describe('Admin index', () => {
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Courts')
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Police forces')
     expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog insurers')
+    expect(document.querySelector('#main-content').textContent.trim()).toContain('Delete dog owner records without a dog')
   })
 })

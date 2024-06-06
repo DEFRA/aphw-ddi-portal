@@ -27,7 +27,9 @@ describe('format-helpers', () => {
     }
 
     const expectedWithCountry = ['1 Anywhere St', 'Any Estate', 'Chippenham', 'SN15 4JH', 'England']
+    const expectedWithJoinedPostcode = ['1 Anywhere St', 'Any Estate', 'Chippenham SN15 4JH', 'England']
     const expectedWithoutCountryAndAddressLine2 = ['1 Anywhere St', 'Chippenham', 'SN15 4JH', 'England']
+    const expectedWithoutCountryHiddenAddressLine2 = ['1 Anywhere St', 'Chippenham', 'SN15 4JH']
     const expectedWithoutCountry = ['1 Anywhere St', 'Any Estate', 'Chippenham', 'SN15 4JH']
 
     test('should include country by default', () => {
@@ -35,14 +37,24 @@ describe('format-helpers', () => {
       expect(formattedAddress).toEqual(expectedWithCountry)
     })
 
+    test('should return city and postcode as single element given joinPostcode set to true', () => {
+      const formattedAddress = formatAddress(address, { joinPostCode: true })
+      expect(formattedAddress).toEqual(expectedWithJoinedPostcode)
+    })
+
     test('should include country given hideCountry set to false', () => {
-      const formattedAddress = formatAddress(address, false)
+      const formattedAddress = formatAddress(address, { hideCountry: false })
       expect(formattedAddress).toEqual(expectedWithCountry)
     })
 
     test('should not include country given hideCountry set to true', () => {
-      const formattedAddress = formatAddress(address, true)
+      const formattedAddress = formatAddress(address, { hideCountry: true })
       expect(formattedAddress).toEqual(expectedWithoutCountry)
+    })
+
+    test('should not include country and addressLine2 given hide country and addressLine2 set to true', () => {
+      const formattedAddress = formatAddress(address, { hideCountry: true, hideAddressLine2: true })
+      expect(formattedAddress).toEqual(expectedWithoutCountryHiddenAddressLine2)
     })
 
     test('should not include address line 2 given hideCountry set to true', () => {
@@ -51,12 +63,12 @@ describe('format-helpers', () => {
     })
 
     test('should not include country given hideCountry set to false and property order is incorrect', () => {
-      const formattedAddress = formatAddress(addressIncorrectFieldOrder, false)
+      const formattedAddress = formatAddress(addressIncorrectFieldOrder, { hideCountry: false })
       expect(formattedAddress).toEqual(expectedWithCountry)
     })
 
     test('should not include country given hideCountry set to true and property order is incorrect', () => {
-      const formattedAddress = formatAddress(addressIncorrectFieldOrder, true)
+      const formattedAddress = formatAddress(addressIncorrectFieldOrder, { hideCountry: true })
       expect(formattedAddress).toEqual(expectedWithoutCountry)
     })
 
@@ -66,7 +78,7 @@ describe('format-helpers', () => {
     })
   })
 
-  describe('formatAddressJoinTownPostcode', () => {
+  describe('formatAddressSingleLine', () => {
     const address = {
       addressLine1: '5 Station Road',
       addressLine2: 'Woofferton',
@@ -93,17 +105,22 @@ describe('format-helpers', () => {
 
     test('should turn address into a single line without country', () => {
       const formattedAddress = formatAddressSingleLine(address)
-      expect(formattedAddress).toBe('5 Station Road, Woofferton, Ludlow, SY8 4NL')
+      expect(formattedAddress).toBe('5 Station Road, Woofferton, Ludlow SY8 4NL')
     })
 
     test('should turn address into a single line without country and strip empty fields', () => {
       const formattedAddress = formatAddressSingleLine(addressWithoutLine2)
-      expect(formattedAddress).toBe('5 Station Road, Ludlow, SY8 4NL')
+      expect(formattedAddress).toBe('5 Station Road, Ludlow SY8 4NL')
     })
 
     test('should turn address into a single line without country and order correctly', () => {
-      const formattedAddress = formatAddressSingleLine(addressIncorrectFieldOrder, false)
-      expect(formattedAddress).toBe('23 Billson Street, Isle of Dogs, London, E14 3DA')
+      const formattedAddress = formatAddressSingleLine(addressIncorrectFieldOrder)
+      expect(formattedAddress).toBe('23 Billson Street, Isle of Dogs, London E14 3DA')
+    })
+
+    test('should turn address into a single line without country and addressLine2 given simple view', () => {
+      const formattedAddress = formatAddressSingleLine(addressIncorrectFieldOrder, true)
+      expect(formattedAddress).toBe('23 Billson Street, London E14 3DA')
     })
 
     test('should return null given no address', () => {

@@ -9,7 +9,7 @@ function ViewModel (cdo) {
   this.model = {
     owner: {
       name: `${owner.firstName} ${owner.lastName}`,
-      address: formatAddress(owner.address, true),
+      address: formatAddress(owner.address, { hideCountry: true }),
       birthDate: formatToGds(owner.birthDate)
     },
     country: getCountryFromAddress(owner.address),
