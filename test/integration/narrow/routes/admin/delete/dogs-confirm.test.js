@@ -112,6 +112,25 @@ describe('Delete dogs 2', () => {
       expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('4 dog records have been deleted')
     })
 
+    test('returns 200 with single dog', async () => {
+      getDogsForDeletion.mockImplementation((req, step) => {
+        return step === 1 ? [] : dogSelections2
+      })
+      bulkDeleteDogs.mockResolvedValue({ count: { success: 1 } })
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/dogs-confirm',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('1 dog record has been deleted')
+    })
+
     test('returns 302 when not authd', async () => {
       bulkDeleteDogs.mockResolvedValue({})
       const options = {
