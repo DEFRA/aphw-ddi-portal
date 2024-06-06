@@ -14,6 +14,9 @@ describe('Delete dogs 2', () => {
   const createServer = require('../../../../../../app/server')
   let server
 
+  const dogSelections1 = ['ED0003', 'ED0002', 'ED0001']
+  const dogSelections2 = ['ED12345']
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getDogsForDeletion.mockImplementation((req, step) => {
@@ -28,9 +31,6 @@ describe('Delete dogs 2', () => {
     await server.stop()
     jest.clearAllMocks()
   })
-
-  const dogSelections1 = ['ED0003', 'ED0002', 'ED0001']
-  const dogSelections2 = ['ED12345']
 
   describe('GET /admin/delete/dogs-confirm route', () => {
     test('returns 200', async () => {
@@ -47,7 +47,28 @@ describe('Delete dogs 2', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('You are about to delete 4 dog records')
       expect(document.querySelectorAll('form .govuk-body')[0].textContent.trim()).toBe('Deleted records no longer appear in search results.')
-      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can raise a support ticket if you need to recover a deleted dog record.')
+      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
+    })
+
+    test('returns 200 for single dog', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-confirm',
+        auth: adminAuth
+      }
+
+      getDogsForDeletion.mockImplementation((req, step) => {
+        return step === 1 ? [] : dogSelections2
+      })
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('You are about to delete 1 dog record')
+      expect(document.querySelectorAll('form .govuk-body')[0].textContent.trim()).toBe('Deleted records no longer appear in search results.')
+      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
     })
 
     test('returns 302 when not authd', async () => {
@@ -89,6 +110,25 @@ describe('Delete dogs 2', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('4 dog records have been deleted')
+    })
+
+    test('returns 200 with single dog', async () => {
+      getDogsForDeletion.mockImplementation((req, step) => {
+        return step === 1 ? [] : dogSelections2
+      })
+      bulkDeleteDogs.mockResolvedValue({ count: { success: 1 } })
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/dogs-confirm',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('1 dog record has been deleted')
     })
 
     test('returns 302 when not authd', async () => {

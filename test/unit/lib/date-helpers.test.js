@@ -1,4 +1,4 @@
-const { getElapsed, formatToDateTime, getMonthsSince } = require('../../../app/lib/date-helpers')
+const { getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
   describe('getElapsed', () => {
@@ -73,6 +73,18 @@ describe('date-helpers', () => {
       const date = new Date('2024-03-04')
       const result = getMonthsSince(date, sinceMonth)
       expect(result).toBe('Less than 1 month')
+    })
+  })
+
+  describe('dateComponentsToString', () => {
+    test('should construct date from components', () => {
+      const result = dateComponentsToString({ 'pre-year': 2000, 'pre-month': 5, 'pre-day': 15 }, 'pre')
+      expect(result).toBe('2000-5-15')
+    })
+
+    test('should handle undefined dates', () => {
+      const result = dateComponentsToString({ 'missing-year': 2000, 'missing-month': 5, 'missing-day': 15 }, 'pre')
+      expect(result).toBe('undefined-undefined-undefined')
     })
   })
 })

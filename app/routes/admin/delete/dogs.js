@@ -7,6 +7,7 @@ const { ViewModel: SelectViewModel } = require('../../../models/admin/delete/dog
 const { getOldDogs, bulkDeleteDogs } = require('../../../api/ddi-index-api/dogs')
 const { initialiseDogsForDeletion, setDogsForDeletion, getDogsForDeletion } = require('../../../session/admin/delete-dogs')
 const { getCombinedSelectedList, getDateOverrideQueryString, getCheckboxSortQueryString, handleCheckboxSort } = require('./dogs-route-helper')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 const statusListForStep1 = 'Exempt,Inactive,Withdrawn,Failed'
 const statusListForStep2 = 'In breach,Pre-exempt,Interim exempt'
@@ -39,7 +40,10 @@ module.exports = [
 
         const localSortDogs = handleCheckboxSort(request, dogs, selectedList)
 
-        return h.view(views.deleteDogs1, new SelectViewModel(localSortDogs, selectedList, sort, null))
+        const backNav = addBackNavigation(request)
+        backNav.backLink = '/'
+
+        return h.view(views.deleteDogs1, new SelectViewModel(localSortDogs, selectedList, sort, backNav))
       }
     }
   },
@@ -79,7 +83,8 @@ module.exports = [
 
         const dogs = await getOldDogs(statusListForStep2, sort, params.today)
 
-        const backNav = { backLink: routes.deleteDogs1.get }
+        const backNav = addBackNavigation(request)
+        backNav.backLink = routes.deleteDogs1.get
 
         const selectedList = getDogsForDeletion(request, 2)
 
