@@ -1,5 +1,6 @@
 const { adminAuth, standardAuth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { initialiseOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
 
 describe('Delete owners', () => {
   jest.mock('../../../../../../app/auth')
@@ -9,7 +10,7 @@ describe('Delete owners', () => {
   const { getOrphanedOwners } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/admin/delete-owners')
-  const { getOrphanedOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
+  const { getOrphanedOwnersForDeletion, initialiseOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -69,7 +70,7 @@ describe('Delete owners', () => {
   ]
 
   describe('GET /admin/delete/owners route', () => {
-    test('returns 200', async () => {
+    test('returns 200 with start=true', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
       getOrphanedOwnersForDeletion.mockReturnValue(['P-4A91-4A4D', 'P-418F-024E', 'P-585C-C9B5'])
 
@@ -116,6 +117,32 @@ describe('Delete owners', () => {
       expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBe('true')
     })
 
+    test('returns 200', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(getOrphanedOwners).toHaveBeenCalledTimes(1)
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+
+      const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
+      expect(rows.length).toBe(3)
+
+      expect(rows[0].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+      expect(rows[1].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+      expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+    })
+
     test('returns 404 when invalid param name', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
 
@@ -128,6 +155,7 @@ describe('Delete owners', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(404)
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
     })
 
     test('returns 302 when not authd', async () => {
