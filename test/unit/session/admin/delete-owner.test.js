@@ -2,6 +2,7 @@ const {
   getOrphanedOwnersForDeletion, setOrphanedOwnersForDeletion,
   initialiseOwnersForDeletion
 } = require('../../../../app/session/admin/delete-owners')
+
 describe('delete-owner', () => {
   const mockRequest = {
     yar: {

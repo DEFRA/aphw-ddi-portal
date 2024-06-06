@@ -93,7 +93,7 @@ describe('Delete owners', () => {
       expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Name')
       expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Date of birth')
       expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Address')
-      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete dog owner record')
+      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete owner record')
 
       const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
       expect(rows.length).toBe(3)
