@@ -1,6 +1,8 @@
-const { get } = require('./base')
+const { get, post } = require('./base')
 const { personsFilter } = require('../../schema/ddi-index-api/persons/get')
+
 const personsEndpoint = 'persons'
+const bulkDeletePersonsEndpoint = 'persons:batch-delete'
 
 const options = {
   json: true
@@ -47,7 +49,12 @@ const getOrphanedOwners = async (filter = {}) => {
   })
 }
 
+const bulkDeletePersons = async (personReferences, user) => {
+  return post(bulkDeletePersonsEndpoint, { personReferences }, user)
+}
+
 module.exports = {
   getPersons,
-  getOrphanedOwners
+  getOrphanedOwners,
+  bulkDeletePersons
 }

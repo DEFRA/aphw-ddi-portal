@@ -1,9 +1,10 @@
-
-const { getPersons, getOrphanedOwners } = require('../../../../app/api/ddi-index-api/persons')
-const { get } = require('../../../../app/api/ddi-index-api/base')
-jest.mock('../../../../app/api/ddi-index-api/base')
+const { user } = require('../../../mocks/auth')
 
 describe('Persons test', () => {
+  const { getPersons, getOrphanedOwners, bulkDeletePersons } = require('../../../../app/api/ddi-index-api/persons')
+  jest.mock('../../../../app/api/ddi-index-api/base')
+  const { get, post } = require('../../../../app/api/ddi-index-api/base')
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -100,6 +101,40 @@ describe('Persons test', () => {
       })
       await getOrphanedOwners()
       expect(get).toBeCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', expect.anything())
+    })
+  })
+
+  describe('bulkDeleteOrphanedOwners', () => {
+    test('should bulk delete orphaned owners', async () => {
+      post.mockResolvedValue({
+        count: {
+          failed: 0,
+          success: 2
+        },
+        deleted: {
+          success: [
+            'P-EA6B-BEEB',
+            'P-F5C7-1EA6'
+          ],
+          failed: []
+        }
+      })
+      const orphanedOwners = ['P-418F-024E', 'P-4A91-4A4D']
+      const results = await bulkDeletePersons(orphanedOwners, user)
+      expect(post).toHaveBeenCalledWith('persons:batch-delete', { personReferences: orphanedOwners }, user)
+      expect(results).toEqual({
+        count: {
+          failed: 0,
+          success: 2
+        },
+        deleted: {
+          success: [
+            'P-EA6B-BEEB',
+            'P-F5C7-1EA6'
+          ],
+          failed: []
+        }
+      })
     })
   })
 })
