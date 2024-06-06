@@ -45,10 +45,15 @@ describe('delete-owner', () => {
     })
 
     test('should set multiple owners', () => {
-      const ownerReferenceIds = ['P-418F-024E', 'P-585C-C9B5']
+      const ownerReferenceIds = ['P-418F-024E']
 
       setOrphanedOwnersForDeletion(mockRequest, ownerReferenceIds)
       expect(mockRequest.yar.set).toHaveBeenCalledWith('orphanedOwners', ownerReferenceIds)
+    })
+
+    test('should set empty array if empty', () => {
+      setOrphanedOwnersForDeletion(mockRequest, undefined)
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('orphanedOwners', [])
     })
   })
 

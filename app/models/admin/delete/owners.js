@@ -1,6 +1,7 @@
 const { breadcrumbs } = require('../../../constants/admin')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { formatAddressSingleLine } = require('../../../lib/format-helpers')
+const { getAriaSortBuilder, columnLinkBuilder } = require('../../sorting')
 
 /**
  * @param {{
@@ -10,23 +11,7 @@ const { formatAddressSingleLine } = require('../../../lib/format-helpers')
  * @param {string} column
  * @return {string}
  */
-const getAriaSort = (sort, column) => {
-  let calculatedColumn = column
-
-  if (column === undefined) {
-    calculatedColumn = 'owner'
-  }
-
-  if (calculatedColumn === sort.column && sort.order === 'DESC') {
-    return 'descending'
-  }
-
-  if (calculatedColumn === sort.column) {
-    return 'ascending'
-  }
-
-  return 'none'
-}
+const getAriaSort = getAriaSortBuilder('owner')
 
 /**
  * @param {{
@@ -36,21 +21,7 @@ const getAriaSort = (sort, column) => {
  * @param {string} column
  * @return {string}
  */
-const columnLink = (sort, column) => {
-  const queryParams = new URLSearchParams()
-
-  if (column === undefined) {
-    column = 'owner'
-  }
-
-  queryParams.set('sortKey', column)
-
-  queryParams.set('sortOrder', sort.order === 'ASC' && column === sort.column ? 'DESC' : 'ASC')
-
-  const queryParamsStr = queryParams.toString()
-
-  return queryParamsStr.length ? `?${queryParamsStr}` : ''
-}
+const columnLink = columnLinkBuilder('owner')
 
 /**
  * @param {Person[]} resultList
