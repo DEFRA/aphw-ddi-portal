@@ -159,7 +159,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog record deleted')
       expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200010')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
     })
 
     test('POST /cdo/delete/dog route returns 302 given no selected', async () => {
@@ -423,7 +423,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('h1').textContent.trim()).toBe('Records deleted')
       expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200011 and Mark Turner')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover deleted records.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket within the next 90 days if you need to recover deleted records.')
     })
 
     test('should return 200 given admin and Yes payload, ownerPk and confirmOwner N', async () => {
@@ -452,7 +452,7 @@ describe('Delete Dog', () => {
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog record deleted')
       expect(document.querySelector('.govuk-panel .govuk-panel__body').textContent.trim()).toBe('Dog ED200011')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
     })
 
     test('should return 302 given admin and No payload', async () => {
