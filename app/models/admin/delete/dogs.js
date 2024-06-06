@@ -96,6 +96,7 @@ function ViewModel (resultList, selectedList, sort, backNav) {
   this.model = {
     breadcrumbs,
     backLink: backNav?.backLink,
+    srcHashParam: backNav.srcHashParam,
     tableHeadings,
     sort: {
       column: 'status',

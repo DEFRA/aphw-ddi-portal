@@ -27,14 +27,14 @@
   <div class="govuk-grid-column-two-thirds">
 
     <form class="form" method="post">
-      <span class="govuk-caption-l">Delete dogs older than 15</span>
+      <span class="govuk-caption-l">Delete dogs older than 15 years</span>
       <h1 class="govuk-heading-l">
-        You are about to delete {{ model.selectedList.length }} dog records
+        You are about to delete {{ model.selectedList.length }} dog {% if model.selectedList | length == 1 %}record {% else %}records {% endif %}
       </h1>
 
       <p class="govuk-body">Deleted records no longer appear in search results.</p>
 
-      <p class="govuk-body">You can raise a support ticket if you need to recover a deleted dog record.</p>
+      <p class="govuk-body">You can raise a support ticket in the next 90 days if you need to recover a deleted dog record.</p>
 
       <div class="govuk-button-group">
         {% if model.selectedList | length > 0 %}

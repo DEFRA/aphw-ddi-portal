@@ -454,6 +454,28 @@ describe('Delete Dog', () => {
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Raise a support ticket if you need to recover a deleted dog record.')
     })
+
+    test('should return 302 given admin and No payload', async () => {
+      const payload = {
+        confirm: 'N',
+        ownerPk: 'P-E516-0334',
+        pk: 'ED200011',
+        confirmOwner: 'N',
+        ownerConfirmation: 'true'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/delete/dog/ED200011',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/cdo/view/dog-details/ED200011')
+    })
   })
 
   afterEach(async () => {
