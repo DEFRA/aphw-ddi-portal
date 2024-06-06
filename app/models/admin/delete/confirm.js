@@ -17,9 +17,9 @@ function ConfirmViewModel (selectedList, backNav) {
 const DogsRemovedViewModel = (count) => {
   return new ViewModel({
     breadcrumbs,
-    titleHtml: `${count} dog records have been deleted`,
+    titleHtml: count === 1 ? '1 dog record has been deleted' : `${count} dog records have been deleted`,
     bodyContent: [
-      'Raise a support ticket if you need to recover a deleted dog record.'
+      'Raise a support ticket within the next 90 days if you need to recover a deleted dog record.'
     ]
   })
 }
