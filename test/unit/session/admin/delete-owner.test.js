@@ -6,7 +6,8 @@ describe('delete-owner', () => {
   const mockRequest = {
     yar: {
       get: jest.fn(),
-      set: jest.fn()
+      set: jest.fn(),
+      clear: jest.fn()
     }
   }
 

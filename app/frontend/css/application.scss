@@ -265,6 +265,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     th[aria-sort="ascending"] a,
     th[aria-sort="descending"] a {
       position: relative;
+      display: inline-block;
     }
 
     th[aria-sort="none"] a {
@@ -272,7 +273,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       &::before {
         content: " ▼";
         position: absolute;
-        right: -9px;
+        right: -13px;
         top: 9px;
         font-size: .5em;
       }
@@ -280,7 +281,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       &::after {
         content: " ▲";
         position: absolute;
-        right: -9px;
+        right: -13px;
         top: 1px;
         font-size: .5em;
       }
@@ -292,7 +293,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
         content: " ▲";
         font-size: .8em;
         position: absolute;
-        right: -13px;
+        right: -17px;
         top: 2px;
       }
 
@@ -334,6 +335,10 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
         max-width: 8.5em !important;
       }
     }
+  }
+
+  &-no-wrap {
+    white-space: nowrap;
   }
 }
 

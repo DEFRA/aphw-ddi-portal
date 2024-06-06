@@ -14,7 +14,7 @@ const getAriaSort = (sort, column) => {
   let calculatedColumn = column
 
   if (column === undefined) {
-    calculatedColumn = 'name'
+    calculatedColumn = 'owner'
   }
 
   if (calculatedColumn === sort.column && sort.order === 'DESC') {
@@ -40,7 +40,7 @@ const columnLink = (sort, column) => {
   const queryParams = new URLSearchParams()
 
   if (column === undefined) {
-    column = 'name'
+    column = 'owner'
   }
 
   queryParams.set('sortKey', column)
@@ -68,17 +68,20 @@ function SelectOwnersViewModel (resultList, selectedList, sort, backNav) {
     },
     {
       label: 'Date of birth',
-      link: columnLink(sort, 'birthDate'),
+      link: columnLink(sort, undefined),
+      // link: columnLink(sort, 'birthDate'),
       ariaSort: getAriaSort(sort, 'birthDate')
     },
     {
       label: 'Address',
-      link: columnLink(sort, 'address'),
+      link: columnLink(sort, undefined),
+      // link: columnLink(sort, 'address'),
       ariaSort: getAriaSort(sort, 'address')
     },
     {
-      label: 'Delete dog owner record',
-      link: columnLink(sort, 'selected'),
+      label: 'Delete owner record',
+      link: columnLink(sort, undefined),
+      // link: columnLink(sort, 'selected'),
       ariaSort: getAriaSort(sort, 'selected')
     }
   ]
