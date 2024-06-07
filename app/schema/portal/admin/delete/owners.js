@@ -6,6 +6,13 @@ const orphanedOwnersQuerySchema = Joi.object({
   sortKey: Joi.string().valid('owner', 'indexNumber', 'dateOfBirth', 'address', 'selected').default('owner')
 })
 
+const orphanedOwnersPayloadSchema = Joi.object({
+  deleteOwner: Joi.array().items(Joi.string()).required(),
+  confirm: Joi.boolean().truthy('Y').default(false),
+  checkboxSortOnly: Joi.any()
+})
+
 module.exports = {
-  orphanedOwnersQuerySchema
+  orphanedOwnersQuerySchema,
+  orphanedOwnersPayloadSchema
 }

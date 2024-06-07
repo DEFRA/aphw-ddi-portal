@@ -1,6 +1,5 @@
 const { adminAuth, standardAuth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-const { initialiseOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
 
 describe('Delete owners', () => {
   jest.mock('../../../../../../app/auth')
@@ -10,7 +9,7 @@ describe('Delete owners', () => {
   const { getOrphanedOwners } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/admin/delete-owners')
-  const { getOrphanedOwnersForDeletion, initialiseOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
+  const { getOrphanedOwnersForDeletion, initialiseOwnersForDeletion, setOrphanedOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -188,59 +187,69 @@ describe('Delete owners', () => {
     })
   })
 
-  // describe('POST /admin/delete/owners route', () => {
-  //   test('should return 302', async () => {
-  //     setDogsForDeletion.mockReturnValue()
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: adminAuth
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //     expect(response.headers.location).toBe('/admin/delete/dogs-2')
-  //   })
-  //
-  //   test('should return 302 for sorting', async () => {
-  //     setDogsForDeletion.mockReturnValue()
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: adminAuth,
-  //       payload: { checkboxSortOnly: 'Y' }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //     expect(response.headers.location).toBe('/admin/delete/owners?sortKey=selected&sortOrder=ASC')
-  //   })
-  //
-  //   test('should return 302 when not authd', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners'
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //   })
-  //
-  //   test('should return 403 when not admin user', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: standardAuth
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(403)
-  //   })
-  // })
+  describe('POST /admin/delete/owners route', () => {
+    test('should show a confirmation page', async () => {
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds
+        }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), ownerReferenceIds)
+      const { document } = new JSDOM(response.payload).window
+
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Delete dog owner records')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Delete 3 owner records.')
+      const hiddenInputs = document.querySelectorAll('input[name="deleteOwner"]')
+      expect(hiddenInputs.length).toBe(3)
+      expect(hiddenInputs[0].getAttribute('value')).toBe('P-418F-024E')
+      expect(hiddenInputs[1].getAttribute('value')).toBe('P-585C-C9B5')
+      expect(hiddenInputs[2].getAttribute('value')).toBe('P-4A91-4A4D')
+      expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
+    })
+
+    test('should return 400 with invalid payload', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {}
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('should return 302 when not authd', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners'
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should return 403 when not admin user', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(403)
+    })
+  })
 })

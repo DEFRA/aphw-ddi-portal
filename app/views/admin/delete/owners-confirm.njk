@@ -1,0 +1,51 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form class="form" method="post">
+      <h1 class="govuk-heading-l">
+        Delete dog owner records
+      </h1>
+      <p class="govuk-body">Delete {{ model.selectedList.length }} owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}.</p>
+      {% for ownerReference in model.selectedList %}
+      <input type="hidden" name="deleteOwner" value="{{ ownerReference }}" />
+      {% endfor %}
+      <div class="govuk-button-group">
+        {% if model.selectedList | length > 0 %}
+        {{ govukButton({
+          text: 'Delete owner records',
+          name: 'confirm',
+          value: 'Y'
+        }) }}
+        {% endif %}
+
+        <a class="govuk-link govuk-link--no-visited-state" href="/admin/index">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

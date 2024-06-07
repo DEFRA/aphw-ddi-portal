@@ -8,10 +8,12 @@ const { getOrphanedOwners } = require('../../../api/ddi-index-api/persons')
 // const { initialiseDogsForDeletion, setDogsForDeletion, getDogsForDeletion } = require('../../../session/admin/delete-dogs')
 // const { getCombinedSelectedList, getDateOverrideQueryString, getCheckboxSortQueryString, handleCheckboxSort } = require('./dogs-route-helper')
 const { handleCheckboxSort } = require('./dogs-route-helper')
-const { orphanedOwnersQuerySchema } = require('../../../schema/portal/admin/delete/owners')
-const { initialiseOwnersForDeletion, getOrphanedOwnersForDeletion } = require('../../../session/admin/delete-owners')
+const { orphanedOwnersQuerySchema, orphanedOwnersPayloadSchema } = require('../../../schema/portal/admin/delete/owners')
+const { initialiseOwnersForDeletion, getOrphanedOwnersForDeletion, setOrphanedOwnersForDeletion } = require('../../../session/admin/delete-owners')
 // const { DeleteOwnersViewModel, SelectOwnersViewModel } = require('../../../models/admin/delete/owners')
 const { SelectOwnersViewModel } = require('../../../models/admin/delete/owners')
+const { ConfirmViewModel } = require('../../../models/admin/delete/confirm')
+const { addBackNavigation } = require('../../../lib/back-helpers')
 
 module.exports = [
   {
@@ -42,25 +44,34 @@ module.exports = [
         return h.view(views.deleteOwners, new SelectOwnersViewModel(localSortOwners, selectedList, sort, null))
       }
     }
+  },
+  {
+    method: 'POST',
+    path: `${routes.deleteOwners.post}`,
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        payload: orphanedOwnersPayloadSchema,
+        failAction: async (_, h) => {
+          return h.response().code(400).takeover()
+        }
+      },
+      handler: async (request, h) => {
+        const payload = request.payload
+        const ownersForDeletion = payload.deleteOwner
+
+        const backNav = addBackNavigation(request)
+        backNav.backLink = routes.deleteOwners.get
+
+        if (!payload.confirm) {
+          setOrphanedOwnersForDeletion(request, ownersForDeletion)
+          return h.view(views.deleteOwnersConfirm, new ConfirmViewModel(ownersForDeletion, backNav))
+        }
+
+        return h.response().code(200).takeover()
+      }
+    }
   }
-  // {
-  //   method: 'POST',
-  //   path: `${routes.deleteDogs1.post}`,
-  //   options: {
-  //     auth: { scope: [admin] },
-  //     handler: async (request, h) => {
-  //       const payload = request.payload
-  //
-  //       setDogsForDeletion(request, 1, payload?.deleteDog)
-  //
-  //       if (payload?.checkboxSortOnly === 'Y') {
-  //         return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}${getCheckboxSortQueryString(request)}`)
-  //       }
-  //
-  //       return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}`)
-  //     }
-  //   }
-  // },
   // {
   //   method: 'GET',
   //   path: `${routes.deleteDogs2.get}`,
