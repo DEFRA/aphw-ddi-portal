@@ -6,7 +6,7 @@ describe('Delete owners', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/persons')
-  const { getOrphanedOwners } = require('../../../../../../app/api/ddi-index-api/persons')
+  const { getOrphanedOwners, bulkDeletePersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/admin/delete-owners')
   const { getOrphanedOwnersForDeletion, initialiseOwnersForDeletion, setOrphanedOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
@@ -187,8 +187,8 @@ describe('Delete owners', () => {
     })
   })
 
-  describe('POST /admin/delete/owners route', () => {
-    test('should show a confirmation page', async () => {
+  describe('POST /admin/delete/owners confirmation route', () => {
+    test('should return 200 show a confirmation page', async () => {
       const ownerReferenceIds = [
         'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
       ]
@@ -251,6 +251,84 @@ describe('Delete owners', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(403)
+    })
+  })
+
+  describe('POST /admin/delete/owners no confirmation route', () => {
+    test('should return 200 and delete multiple owners', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 3 } })
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceIds)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(bulkDeletePersons).toHaveBeenCalledWith(ownerReferenceIds, user)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), [])
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('3 dog owner records have been deleted')
+    })
+
+    test('should return 200 and delete a single owner', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 1 } })
+      const ownerReferenceId = [
+        'P-418F-024E'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceId)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceId,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(bulkDeletePersons).toHaveBeenCalledWith(ownerReferenceId, user)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), [])
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('1 dog owner record has been deleted')
+    })
+
+    test('throws error if delete fails', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 2, failed: 1 } })
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceIds)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
     })
   })
 })
