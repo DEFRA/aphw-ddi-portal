@@ -266,6 +266,10 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     th[aria-sort="descending"] a {
       position: relative;
       display: inline-block;
+
+      &.govuk-link {
+        margin-right: 11px;
+      }
     }
 
     th[aria-sort="none"] a {
