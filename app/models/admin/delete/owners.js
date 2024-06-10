@@ -50,7 +50,7 @@ function SelectOwnersViewModel (resultList, selectedList, sort, backNav) {
       ariaSort: getAriaSort(sort, 'address')
     },
     {
-      label: 'Delete owner record',
+      label: 'Delete record',
       link: columnLink(sort, undefined),
       // link: columnLink(sort, 'selected'),
       ariaSort: getAriaSort(sort, 'selected')

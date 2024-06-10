@@ -86,14 +86,14 @@ describe('Delete owners', () => {
       expect(getOrphanedOwners).toHaveBeenCalledTimes(1)
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('.govuk-caption-l').textContent.trim()).toBe('Delete dog owner records without a dog')
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Select dog owner records to delete')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog owner records with no dogs linked to them have been selected to be deleted.')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Unselect any dog owner records you want to keep.')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Unselect the dog owner records you want to keep')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('These dog owner records have no dogs linked to them and should be deleted.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('You can unselect any dog owner records you want to keep.')
 
       expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Name')
       expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Date of birth')
       expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Address')
-      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete owner record')
+      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete record')
 
       const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
       expect(rows.length).toBe(3)
@@ -206,8 +206,9 @@ describe('Delete owners', () => {
       expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), ownerReferenceIds)
       const { document } = new JSDOM(response.payload).window
 
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Delete dog owner records')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Delete 3 owner records.')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('You are about to delete 3 dog owner records')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('You have 90 days to raise a support ticket to recover a deleted dog owner record.')
       const hiddenInputs = document.querySelectorAll('input[name="deleteOwner"]')
       expect(hiddenInputs.length).toBe(3)
       expect(hiddenInputs[0].getAttribute('value')).toBe('P-418F-024E')

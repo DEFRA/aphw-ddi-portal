@@ -28,16 +28,17 @@
 
     <form class="form" method="post">
       <h1 class="govuk-heading-l">
-        Delete dog owner records
+        You are about to delete {{ model.selectedList.length }} dog owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}
       </h1>
-      <p class="govuk-body">Delete {{ model.selectedList.length }} owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}.</p>
+      <p class="govuk-body">Deleted records no longer appear in search results.</p>
+      <p class="govuk-body">You have 90 days to raise a support ticket to recover a deleted dog owner record.</p>
       {% for ownerReference in model.selectedList %}
       <input type="hidden" name="deleteOwner" value="{{ ownerReference }}" />
       {% endfor %}
       <div class="govuk-button-group">
         {% if model.selectedList | length > 0 %}
         {{ govukButton({
-          text: 'Delete owner records',
+          text: 'Delete dog owner records',
           name: 'confirm',
           value: 'Y'
         }) }}
