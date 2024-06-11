@@ -24,7 +24,18 @@ const DogsRemovedViewModel = (count) => {
   })
 }
 
+const OwnersRemovedViewModel = (count) => {
+  return new ViewModel({
+    breadcrumbs,
+    titleHtml: count === 1 ? '1 dog owner record has been deleted' : `${count} dog owner records have been deleted`,
+    bodyContent: [
+      'Raise a support ticket if you need to recover a deleted owner record.'
+    ]
+  })
+}
+
 module.exports = {
   ConfirmViewModel,
-  DogsRemovedViewModel
+  DogsRemovedViewModel,
+  OwnersRemovedViewModel
 }

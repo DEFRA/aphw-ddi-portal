@@ -6,10 +6,10 @@ describe('Delete owners', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/persons')
-  const { getOrphanedOwners } = require('../../../../../../app/api/ddi-index-api/persons')
+  const { getOrphanedOwners, bulkDeletePersons } = require('../../../../../../app/api/ddi-index-api/persons')
 
   jest.mock('../../../../../../app/session/admin/delete-owners')
-  const { getOrphanedOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
+  const { getOrphanedOwnersForDeletion, initialiseOwnersForDeletion, setOrphanedOwnersForDeletion } = require('../../../../../../app/session/admin/delete-owners')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -69,7 +69,7 @@ describe('Delete owners', () => {
   ]
 
   describe('GET /admin/delete/owners route', () => {
-    test('returns 200', async () => {
+    test('returns 200 with start=true', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
       getOrphanedOwnersForDeletion.mockReturnValue(['P-4A91-4A4D', 'P-418F-024E', 'P-585C-C9B5'])
 
@@ -86,14 +86,14 @@ describe('Delete owners', () => {
       expect(getOrphanedOwners).toHaveBeenCalledTimes(1)
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('.govuk-caption-l').textContent.trim()).toBe('Delete dog owner records without a dog')
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Select dog owner records to delete')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Dog owner records with no dogs linked to them have been selected to be deleted.')
-      expect(document.querySelector('#main-content').textContent.trim()).toContain('Unselect any dog owner records you want to keep.')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Unselect the dog owner records you want to keep')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('These dog owner records have no dogs linked to them and should be deleted.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('You can unselect any dog owner records you want to keep.')
 
       expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Name')
       expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Date of birth')
       expect(document.querySelectorAll('.govuk-table th')[2].textContent.trim()).toBe('Address')
-      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete owner record')
+      expect(document.querySelectorAll('.govuk-table th')[3].textContent.trim()).toBe('Delete record')
 
       const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
       expect(rows.length).toBe(3)
@@ -116,6 +116,32 @@ describe('Delete owners', () => {
       expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBe('true')
     })
 
+    test('returns 200', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(getOrphanedOwners).toHaveBeenCalledTimes(1)
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+
+      const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
+      expect(rows.length).toBe(3)
+
+      expect(rows[0].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+      expect(rows[1].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+      expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
+    })
+
     test('returns 404 when invalid param name', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
 
@@ -128,6 +154,7 @@ describe('Delete owners', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(404)
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
     })
 
     test('returns 302 when not authd', async () => {
@@ -160,59 +187,148 @@ describe('Delete owners', () => {
     })
   })
 
-  // describe('POST /admin/delete/owners route', () => {
-  //   test('should return 302', async () => {
-  //     setDogsForDeletion.mockReturnValue()
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: adminAuth
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //     expect(response.headers.location).toBe('/admin/delete/dogs-2')
-  //   })
-  //
-  //   test('should return 302 for sorting', async () => {
-  //     setDogsForDeletion.mockReturnValue()
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: adminAuth,
-  //       payload: { checkboxSortOnly: 'Y' }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //     expect(response.headers.location).toBe('/admin/delete/owners?sortKey=selected&sortOrder=ASC')
-  //   })
-  //
-  //   test('should return 302 when not authd', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners'
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //   })
-  //
-  //   test('should return 403 when not admin user', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/delete/owners',
-  //       auth: standardAuth
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(403)
-  //   })
-  // })
+  describe('POST /admin/delete/owners confirmation route', () => {
+    test('should return 200 show a confirmation page', async () => {
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds
+        }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), ownerReferenceIds)
+      const { document } = new JSDOM(response.payload).window
+
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('You are about to delete 3 dog owner records')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleted records no longer appear in search results.')
+      expect(document.querySelector('#main-content').textContent.trim()).toContain('You have 90 days to raise a support ticket to recover a deleted dog owner record.')
+      const hiddenInputs = document.querySelectorAll('input[name="deleteOwner"]')
+      expect(hiddenInputs.length).toBe(3)
+      expect(hiddenInputs[0].getAttribute('value')).toBe('P-418F-024E')
+      expect(hiddenInputs[1].getAttribute('value')).toBe('P-585C-C9B5')
+      expect(hiddenInputs[2].getAttribute('value')).toBe('P-4A91-4A4D')
+      expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
+    })
+
+    test('should return 400 with invalid payload', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {}
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('should return 302 when not authd', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners'
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should return 403 when not admin user', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(403)
+    })
+  })
+
+  describe('POST /admin/delete/owners no confirmation route', () => {
+    test('should return 200 and delete multiple owners', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 3 } })
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceIds)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(bulkDeletePersons).toHaveBeenCalledWith(ownerReferenceIds, user)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), [])
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('3 dog owner records have been deleted')
+    })
+
+    test('should return 200 and delete a single owner', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 1 } })
+      const ownerReferenceId = [
+        'P-418F-024E'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceId)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceId,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(bulkDeletePersons).toHaveBeenCalledWith(ownerReferenceId, user)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), [])
+      expect(document.querySelectorAll('h1.govuk-panel__title')[0].textContent.trim()).toBe('1 dog owner record has been deleted')
+    })
+
+    test('throws error if delete fails', async () => {
+      bulkDeletePersons.mockResolvedValue({ count: { success: 2, failed: 1 } })
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
+      getOrphanedOwnersForDeletion.mockReturnValue(ownerReferenceIds)
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          deleteOwner: ownerReferenceIds,
+          confirm: 'Y'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
+  })
 })

@@ -1,5 +1,6 @@
 const { breadcrumbs } = require('../../../constants/admin')
 const { formatToGds } = require('../../../lib/date-helpers')
+const { getAriaSortBuilder, columnLinkBuilder } = require('../../sorting')
 
 /**
  * @param {{
@@ -9,23 +10,8 @@ const { formatToGds } = require('../../../lib/date-helpers')
  * @param {string} column
  * @return {string}
  */
-const getAriaSort = (sort, column) => {
-  let calculatedColumn = column
+const getAriaSort = getAriaSortBuilder('status')
 
-  if (column === undefined) {
-    calculatedColumn = 'status'
-  }
-
-  if (calculatedColumn === sort.column && sort.order === 'DESC') {
-    return 'descending'
-  }
-
-  if (calculatedColumn === sort.column) {
-    return 'ascending'
-  }
-
-  return 'none'
-}
 /**
  * @param {{
  *  column: 'joinedExemptionScheme'
@@ -34,25 +20,11 @@ const getAriaSort = (sort, column) => {
  * @param {string} column
  * @return {string}
  */
-const columnLink = (sort, column) => {
-  const queryParams = new URLSearchParams()
-
-  if (column === undefined) {
-    column = 'status'
-  }
-
-  queryParams.set('sortKey', column)
-
-  queryParams.set('sortOrder', sort.order === 'ASC' && column === sort.column ? 'DESC' : 'ASC')
-
-  const queryParamsStr = queryParams.toString()
-  const queryParamStrWithQM = queryParamsStr.length ? `?${queryParamsStr}` : ''
-
-  return queryParamStrWithQM
-}
+const columnLink = columnLinkBuilder('status')
 
 /**
  * @param {Dog[]} resultList
+ * @param selectedList
  * @param {{ column: string; order: 'ASC'|'DESC'}} sort
  * @param backNav
  * @constructor
