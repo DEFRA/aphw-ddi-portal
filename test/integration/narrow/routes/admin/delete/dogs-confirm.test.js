@@ -47,7 +47,7 @@ describe('Delete dogs 2', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('You are about to delete 4 dog records')
       expect(document.querySelectorAll('form .govuk-body')[0].textContent.trim()).toBe('Deleted records no longer appear in search results.')
-      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
+      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You have 90 days to raise a support ticket to recover a deleted dog record.')
     })
 
     test('returns 200 for single dog', async () => {
@@ -68,7 +68,7 @@ describe('Delete dogs 2', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('You are about to delete 1 dog record')
       expect(document.querySelectorAll('form .govuk-body')[0].textContent.trim()).toBe('Deleted records no longer appear in search results.')
-      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can raise a support ticket within the next 90 days if you need to recover a deleted dog record.')
+      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You have 90 days to raise a support ticket to recover a deleted dog record.')
     })
 
     test('returns 302 when not authd', async () => {
