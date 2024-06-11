@@ -2,6 +2,7 @@
       <form class="form" method="post" id="dogListForm">
 
         <input type="hidden" name="checkboxSortOnly" id="checkboxSortOnly" value="" />
+        <input type="hidden" name="followLink" id="followLink" value="" />
 
         {{ govukButton({
         text: 'Continue'
@@ -32,7 +33,7 @@
           {% for dog in model.resultList %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">{{ statusTag(dog.status.status, 'govuk-!-font-size-19') }}</td>
-              <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}">{{dog.indexNumber}}</a></td>
+              <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{dog.indexNumber}}{{model.srcHashParam}}" onClick="document.getElementById('followLink').value = '{{dog.indexNumber}}{{model.srcHashParam}}'; document.getElementById('dogListForm').submit(); return false;">{{dog.indexNumber}}</a></td>
               <td class="govuk-table__cell">{{dog.humanReadableBirthDate}}</td>
               <td class="govuk-table__cell">{{dog.humanReadableCdoIssued}}</td>
               <td class="govuk-table__cell">

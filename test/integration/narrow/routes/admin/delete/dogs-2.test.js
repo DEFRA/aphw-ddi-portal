@@ -179,6 +179,22 @@ describe('Delete dogs 2', () => {
       expect(response.headers.location).toBe('/admin/delete/dogs-2?sortKey=selected&sortOrder=ASC')
     })
 
+    test('returns 302 for following link', async () => {
+      setDogsForDeletion.mockReturnValue()
+
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/dogs-2',
+        auth: adminAuth,
+        payload: { followLink: 'some-link?param=123' }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/cdo/view/dog-details/some-link?param=123')
+    })
+
     test('returns 302 when not authd', async () => {
       const options = {
         method: 'POST',
