@@ -62,7 +62,7 @@ module.exports = [
         }
 
         if (payload?.followLink) {
-          return h.redirect(`/cdo/view/dog-details/${payload?.followLink}`)
+          return h.redirect(`/cdo/view/dog-details/${payload?.followLink}?src=${payload?.srcHashParam}`)
         }
 
         return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}`)
@@ -113,7 +113,7 @@ module.exports = [
         }
 
         if (payload?.followLink) {
-          return h.redirect(`/cdo/view/dog-details/${payload?.followLink}`)
+          return h.redirect(`/cdo/view/dog-details/${payload?.followLink}?src=${payload?.srcHashParam}`)
         }
 
         return h.redirect(routes.deleteDogsConfirm.get)

@@ -186,13 +186,13 @@ describe('Delete dogs 2', () => {
         method: 'POST',
         url: '/admin/delete/dogs-2',
         auth: adminAuth,
-        payload: { followLink: 'some-link?param=123' }
+        payload: { followLink: 'some-link', srcHashParam: '123' }
       }
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/cdo/view/dog-details/some-link?param=123')
+      expect(response.headers.location).toBe('/cdo/view/dog-details/some-link?src=123')
     })
 
     test('returns 302 when not authd', async () => {
