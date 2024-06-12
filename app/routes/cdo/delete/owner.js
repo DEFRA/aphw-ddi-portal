@@ -31,7 +31,6 @@ module.exports = [{
       payload: validatePayload,
       failAction: async (request, h, error) => {
         const payload = request.payload
-
         const details = await buildDetails(payload.pk)
 
         const backNav = addBackNavigationForErrorCondition(request)

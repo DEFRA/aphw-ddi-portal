@@ -46,7 +46,8 @@ module.exports = [
       auth: { scope: [admin] },
       validate: {
         payload: orphanedOwnersPayloadSchema,
-        failAction: async (_, h) => {
+        failAction: async (_, h, errors) => {
+          console.error(errors)
           return h.response().code(400).takeover()
         }
       },
