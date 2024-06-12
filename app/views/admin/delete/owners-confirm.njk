@@ -26,7 +26,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <form class="form" method="post" onsubmit="confirmSubmit.disabled = true; return true;">
+    <form class="form" method="post" id="owners-confirm-form" onsubmit="confirmSubmit.disabled = true; return true;">
       <h1 class="govuk-heading-l">
         You are about to delete {{ model.selectedList.length }} dog owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}
       </h1>
@@ -39,11 +39,10 @@
         {% if model.selectedList | length > 0 %}
         {{ govukButton({
           text: 'Delete dog owner records',
-          name: 'confirm',
-          value: 'Y'
+          name: 'confirmSubmit'
         }) }}
         {% endif %}
-
+        <input type="hidden" name="confirm" value="Y" />
         <a class="govuk-link govuk-link--no-visited-state" href="/admin/index">Cancel</a>
       </div>
     </form>

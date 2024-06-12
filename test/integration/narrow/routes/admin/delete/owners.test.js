@@ -248,7 +248,7 @@ describe('Delete owners', () => {
       expect(hiddenInputs[0].getAttribute('value')).toBe('P-418F-024E')
       expect(hiddenInputs[1].getAttribute('value')).toBe('P-585C-C9B5')
       expect(hiddenInputs[2].getAttribute('value')).toBe('P-4A91-4A4D')
-      expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
+      expect(document.querySelector('button[name="confirmSubmit"]')).not.toBeNull()
     })
 
     test('should redirect to selection page given checkboxSortOnly is Y', async () => {
@@ -360,7 +360,8 @@ describe('Delete owners', () => {
         auth: adminAuth,
         payload: {
           deleteOwner: ownerReferenceIds,
-          confirm: 'Y'
+          confirm: 'Y',
+          confirmSubmit: ''
         }
       }
 
