@@ -142,6 +142,40 @@ describe('Delete owners', () => {
       expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
     })
 
+    test('returns 200 with sortKey=selected&sortOrder=DESC', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners?sortKey=selected&sortOrder=DESC',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'DESC' })
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('returns 200 with sortKey=selected&sortOrder=ASC', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners?sortKey=selected&sortOrder=ASC',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'ASC' })
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+    })
+
     test('returns 404 when invalid param name', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
 
@@ -153,7 +187,7 @@ describe('Delete owners', () => {
 
       const response = await server.inject(options)
 
-      expect(response.statusCode).toBe(404)
+      expect(response.statusCode).toBe(400)
       expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
     })
 
@@ -214,9 +248,47 @@ describe('Delete owners', () => {
       expect(hiddenInputs[0].getAttribute('value')).toBe('P-418F-024E')
       expect(hiddenInputs[1].getAttribute('value')).toBe('P-585C-C9B5')
       expect(hiddenInputs[2].getAttribute('value')).toBe('P-4A91-4A4D')
-      expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
+      expect(document.querySelector('button[name="confirmSubmit"]')).not.toBeNull()
     })
 
+    test('should redirect to selection page given checkboxSortOnly is Y', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder ASC', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners?sortOrder=ASC',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder DESC', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners?sortOrder=DESC',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
     test('should return 200 show a confirmation page with 0 results if ', async () => {
       const options = {
         method: 'POST',
@@ -288,7 +360,8 @@ describe('Delete owners', () => {
         auth: adminAuth,
         payload: {
           deleteOwner: ownerReferenceIds,
-          confirm: 'Y'
+          confirm: 'Y',
+          confirmSubmit: ''
         }
       }
 

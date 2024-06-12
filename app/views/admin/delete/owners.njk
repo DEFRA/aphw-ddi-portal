@@ -38,7 +38,7 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <form class="form" method="post" id="ownerListForm" action="owners">
+      <form class="form" method="post" id="ownerListForm">
 
         <input type="hidden" name="checkboxSortOnly" id="checkboxSortOnly" value="" />
 
@@ -52,15 +52,10 @@
               {% for colHeading in model.tableHeadings %}
               {% if loop.last %}
               <th scope="col" class="govuk-table__header govuk-table__header--numeric defra-input--width-6" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
-                <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
-                  {{colHeading.label}}
-                </a>
-              </th>
-              <!-- <th scope="col" class="govuk-table__header govuk-table__header--numeric defra-input--width-6" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
                 <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortOnly').value = 'Y'; document.getElementById('ownerListForm').submit(); return false;">
                   {{colHeading.label}}
                 </a>
-              </th>-->
+              </th>
               {% else %}
               <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
                 <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
