@@ -7,7 +7,7 @@ const orphanedOwnersQuerySchema = Joi.object({
 })
 
 const orphanedOwnersPayloadSchema = Joi.object({
-  deleteOwner: Joi.array().items(Joi.string()).required(),
+  deleteOwner: Joi.array().items(Joi.string()).single(),
   confirm: Joi.boolean().truthy('Y').default(false),
   checkboxSortOnly: Joi.any()
 })

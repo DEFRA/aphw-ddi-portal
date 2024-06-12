@@ -10,7 +10,7 @@ const ViewModel = require('../success')
 function ConfirmViewModel (selectedList, backNav) {
   this.model = {
     backLink: backNav.backLink,
-    selectedList
+    selectedList: selectedList ?? []
   }
 }
 
