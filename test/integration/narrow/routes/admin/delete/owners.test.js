@@ -142,6 +142,23 @@ describe('Delete owners', () => {
       expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
     })
 
+    test('returns 200 with sortKey=selected', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners?sortKey=selected&sortOrder=DESC',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'DESC' })
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+    })
+
     test('returns 404 when invalid param name', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
 
@@ -217,6 +234,18 @@ describe('Delete owners', () => {
       expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
     })
 
+    test('should redirect to selection page given checkboxSortOnly is Y', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
     test('should return 200 show a confirmation page with 0 results if ', async () => {
       const options = {
         method: 'POST',
