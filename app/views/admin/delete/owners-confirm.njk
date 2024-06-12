@@ -26,7 +26,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <form class="form" method="post">
+    <form class="form" method="post" onsubmit="confirmSubmit.disabled = true; return true;">
       <h1 class="govuk-heading-l">
         You are about to delete {{ model.selectedList.length }} dog owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}
       </h1>

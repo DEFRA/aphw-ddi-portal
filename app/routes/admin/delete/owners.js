@@ -19,11 +19,13 @@ module.exports = [
         query: orphanedOwnersQuerySchema
       },
       handler: async (request, h) => {
-        const { sortKey: sortKeyBase, sortOrder, start } = request.query
-        const sortKey = sortKeyBase === 'selected' ? 'owner' : sortKeyBase
+        const { sortKey, sortOrder, start } = request.query
         const sort = { column: sortKey, order: sortOrder }
 
-        const owners = await getOrphanedOwners({ sortKey, sortOrder })
+        const owners = await getOrphanedOwners({
+          sortKey: sortKey === 'selected' ? 'owner' : sortKey,
+          sortOrder
+        })
 
         if (start === true) {
           initialiseOwnersForDeletion(request, owners)
@@ -43,18 +45,16 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       validate: {
-        payload: orphanedOwnersPayloadSchema,
-        failAction: async (request, h) => {
-          if (request.payload.checkboxSortOnly === 'Y') {
-            return h.redirect(`${routes.deleteOwners.get}${getCheckboxSortQueryString(request)}`).takeover()
-          }
-          return h.response().code(400).takeover()
-        }
+        payload: orphanedOwnersPayloadSchema
       }
     },
     handler: async (request, h) => {
       const payload = request.payload
       const ownersForDeletion = payload.deleteOwner
+
+      if (request.payload.checkboxSortOnly === 'Y') {
+        return h.redirect(`${routes.deleteOwners.get}${getCheckboxSortQueryString(request)}`).takeover()
+      }
 
       const backNav = addBackNavigation(request)
       backNav.backLink = routes.deleteOwners.get

@@ -142,7 +142,7 @@ describe('Delete owners', () => {
       expect(rows[2].querySelector('.govuk-table__cell .govuk-checkboxes__input').getAttribute('checked')).toBeNull()
     })
 
-    test('returns 200 with sortKey=selected', async () => {
+    test('returns 200 with sortKey=selected&sortOrder=DESC', async () => {
       getOrphanedOwners.mockResolvedValue(ownerRows)
       getOrphanedOwnersForDeletion.mockReturnValue([])
 
@@ -155,6 +155,23 @@ describe('Delete owners', () => {
       const response = await server.inject(options)
 
       expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'DESC' })
+      expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('returns 200 with sortKey=selected&sortOrder=ASC', async () => {
+      getOrphanedOwners.mockResolvedValue(ownerRows)
+      getOrphanedOwnersForDeletion.mockReturnValue([])
+
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/owners?sortKey=selected&sortOrder=ASC',
+        auth: adminAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'ASC' })
       expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
       expect(response.statusCode).toBe(200)
     })
@@ -238,6 +255,32 @@ describe('Delete owners', () => {
       const options = {
         method: 'POST',
         url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder ASC', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners?sortOrder=ASC',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: 'Y'
+        }
+      }
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder DESC', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners?sortOrder=DESC',
         auth: adminAuth,
         payload: {
           checkboxSortOnly: 'Y'

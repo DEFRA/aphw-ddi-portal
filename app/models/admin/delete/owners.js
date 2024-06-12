@@ -40,7 +40,7 @@ function SelectOwnersViewModel (resultList, selectedList, sort, backNav) {
     {
       label: 'Date of birth',
       link: columnLink(sort, 'birthDate'),
-      ariaSort: getAriaSort(sort, 'dateOfBirth')
+      ariaSort: getAriaSort(sort, 'birthDate')
     },
     {
       label: 'Address',
