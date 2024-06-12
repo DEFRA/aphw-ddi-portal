@@ -153,7 +153,7 @@ describe('Delete owners', () => {
 
       const response = await server.inject(options)
 
-      expect(response.statusCode).toBe(404)
+      expect(response.statusCode).toBe(400)
       expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
     })
 

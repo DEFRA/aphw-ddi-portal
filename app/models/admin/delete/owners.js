@@ -39,20 +39,17 @@ function SelectOwnersViewModel (resultList, selectedList, sort, backNav) {
     },
     {
       label: 'Date of birth',
-      link: columnLink(sort, undefined),
-      // link: columnLink(sort, 'birthDate'),
+      link: columnLink(sort, 'birthDate'),
       ariaSort: getAriaSort(sort, 'dateOfBirth')
     },
     {
       label: 'Address',
-      link: columnLink(sort, undefined),
-      // link: columnLink(sort, 'address'),
+      link: columnLink(sort, 'address'),
       ariaSort: getAriaSort(sort, 'address')
     },
     {
       label: 'Delete record',
-      link: columnLink(sort, undefined),
-      // link: columnLink(sort, 'selected'),
+      link: columnLink(sort, 'selected'),
       ariaSort: getAriaSort(sort, 'selected')
     }
   ]

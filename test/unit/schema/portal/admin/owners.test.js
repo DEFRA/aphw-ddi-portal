@@ -28,7 +28,7 @@ describe('Delete Owners validation', () => {
     })
 
     test.each(
-      ['owner', 'indexNumber', 'dateOfBirth', 'address', 'selected']
+      ['owner', 'indexNumber', 'birthDate', 'address', 'selected']
     )('should pass validation when query param is %s', (sortKey) => {
       const params = { sortKey }
 
