@@ -217,12 +217,32 @@ describe('Delete owners', () => {
       expect(document.querySelector('button[name="confirm"]')).not.toBeNull()
     })
 
+    test('should return 200 show a confirmation page with 0 results if ', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/delete/owners',
+        auth: adminAuth,
+        payload: {
+          checkboxSortOnly: ''
+        }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), undefined)
+      const { document } = new JSDOM(response.payload).window
+
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('You are about to delete 0 dog owner records')
+    })
+
     test('should return 400 with invalid payload', async () => {
       const options = {
         method: 'POST',
         url: '/admin/delete/owners',
         auth: adminAuth,
-        payload: {}
+        payload: {
+          unknown: ''
+        }
       }
 
       const response = await server.inject(options)
