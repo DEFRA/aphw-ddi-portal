@@ -1,4 +1,5 @@
-const { getAriaSort, columnLink } = require('../../../../../app/models/admin/delete/dogs')
+const { getAriaSort, columnLink, ViewModel } = require('../../../../../app/models/admin/delete/dogs')
+
 describe('Dogs model', () => {
   describe('getAriaSort', () => {
     test('no column supplied', () => {
@@ -100,6 +101,30 @@ describe('Dogs model', () => {
       const res = columnLink(sort, 'status')
 
       expect(res).toBe('?sortKey=status&sortOrder=ASC')
+    })
+  })
+
+  describe('srcHashParam', () => {
+    test('strips src= if present', () => {
+      const backNav = {
+        backLink: '',
+        srcHashParam: '?src=abc123'
+      }
+
+      const res = new ViewModel([], [], {}, backNav)
+
+      expect(res.model.srcHashParamStripped).toBe('abc123')
+    })
+
+    test('leaves srcHashParm if not present', () => {
+      const backNav = {
+        backLink: '',
+        srcHashParamInvalid: '456'
+      }
+
+      const res = new ViewModel([], [], {}, backNav)
+
+      expect(res.model.srcHashParamStripped).toBe('')
     })
   })
 })

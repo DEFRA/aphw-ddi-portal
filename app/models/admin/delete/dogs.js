@@ -69,6 +69,7 @@ function ViewModel (resultList, selectedList, sort, backNav) {
     breadcrumbs,
     backLink: backNav?.backLink,
     srcHashParam: backNav.srcHashParam,
+    srcHashParamStripped: backNav.srcHashParam ? backNav.srcHashParam.substr(5) : '',
     tableHeadings,
     sort: {
       column: 'status',
