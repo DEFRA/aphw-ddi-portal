@@ -79,6 +79,9 @@ const constants = {
     regularJobs: {
       get: '/admin/regular-jobs'
     },
+    statistics: {
+      get: '/admin/statistics'
+    },
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'
@@ -92,6 +95,7 @@ const constants = {
     index: 'admin/index',
     activities: 'admin/activities',
     regularJobs: 'admin/regular-jobs',
+    statistics: 'admin/statistics',
     pseudonyms: 'admin/pseudonyms',
     insurance: 'admin/insurance',
     confirm: 'common/confirm',

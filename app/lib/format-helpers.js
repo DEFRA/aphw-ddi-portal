@@ -98,11 +98,16 @@ const containsPossibleInjectedCode = str => {
   return str && (str.indexOf('<') > -1 || str.indexOf('>') > -1)
 }
 
+const formatNumberWithCommas = num => {
+  return typeof num === 'number' ? num.toLocaleString('en-GB') : parseInt(num).toLocaleString('en-GB')
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
   getCountryFromAddress,
   formatAddressSingleLine,
   formatDogRadioAsHtml,
-  containsPossibleInjectedCode
+  containsPossibleInjectedCode,
+  formatNumberWithCommas
 }
