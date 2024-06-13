@@ -52,6 +52,10 @@ module.exports = [
       const payload = request.payload
       const ownersForDeletion = payload.deleteOwner
 
+      if (!payload.confirm) {
+        setOrphanedOwnersForDeletion(request, ownersForDeletion)
+      }
+
       if (request.payload.checkboxSortOnly === 'Y') {
         return h.redirect(`${routes.deleteOwners.get}${getCheckboxSortQueryString(request)}`).takeover()
       }
@@ -60,7 +64,6 @@ module.exports = [
       backNav.backLink = routes.deleteOwners.get
 
       if (!payload.confirm) {
-        setOrphanedOwnersForDeletion(request, ownersForDeletion)
         return h.view(views.deleteOwnersConfirm, new ConfirmViewModel(ownersForDeletion, backNav))
       }
       const totalCount = getOrphanedOwnersForDeletion(request).length
