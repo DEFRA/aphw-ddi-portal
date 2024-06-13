@@ -252,16 +252,21 @@ describe('Delete owners', () => {
     })
 
     test('should redirect to selection page given checkboxSortOnly is Y', async () => {
+      const ownerReferenceIds = [
+        'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
+      ]
       const options = {
         method: 'POST',
         url: '/admin/delete/owners',
         auth: adminAuth,
         payload: {
-          checkboxSortOnly: 'Y'
+          checkboxSortOnly: 'Y',
+          deleteOwner: ownerReferenceIds
         }
       }
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
+      expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), ownerReferenceIds)
     })
 
     test('should redirect to selection page given checkboxSortOnly is Y and sortOrder ASC', async () => {
