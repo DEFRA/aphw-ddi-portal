@@ -1,0 +1,73 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-5">Dogs on the Index</h1>
+        <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-3" aria-hidden="true">Total number of dogs by status</h2>
+
+        <table class="govuk-table govuk-!-width-one-third">
+            <caption class="govuk-table__caption govuk-visually-hidden">Total number of dogs by status</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Status</th>
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Number</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for countRow in model.counts %}
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">
+                        {{ statusTag(countRow.status.name) }}
+                    </th>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">{{ model.formatWithCommas(countRow.total) }}</td>
+                </tr>
+            {% endfor %}
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">Total</th>
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.total) }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <details class="govuk-details govuk-!-width-two-thirds">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">What the dog statuses mean</span>
+        </summary>
+        <div class="govuk-details__text">
+            <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+            <li><span class="govuk-!-font-weight-bold">Interim exempt</span> means a dog has been accepted onto the interim exemption scheme by the DLO and released back to the owner while they await their court date.</li>
+            <li><span class="govuk-!-font-weight-bold">Pre-exempt</span> means dogs that have received a CDO but not yet granted an exemption and the deadline has not yet passed.</li>
+            <li><span class="govuk-!-font-weight-bold">Failed</span> means dogs that have been issued a CDO but the expiry date has passed without a certificate of exemption being issued.</li>
+            <li><span class="govuk-!-font-weight-bold">Exempt</span> means dogs have been issued a certificate of exemption and are compliant with the conditions of the exemption.</li>
+            <li><span class="govuk-!-font-weight-bold">In-breach</span> means dogs that are not compliant with the conditions of the exemption. The insurance renewal date may be in the past or the police may have notified the Index team of a breach.</li>
+            <li><span class="govuk-!-font-weight-bold">Withdrawn</span> means that we have withdrawn the dog’s application from the index because the dog is no longer considered to be a XL Bully.</li>
+            <li><span class="govuk-!-font-weight-bold">Inactive</span> means dogs that are dead, exported or the police have notified the index team that the owner or dog is untraceable.</li>
+            </ul>
+        </div>
+        </details>
+
+    </div>
+</div>
+{% endblock %}

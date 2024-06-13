@@ -1,4 +1,4 @@
-const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode } = require('../../../app/lib/format-helpers')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
@@ -211,6 +211,32 @@ describe('format-helpers', () => {
       const dogHtml = 'name: \'Fido\', breed: \'Breed 1\', indexNumber: \'ED123\', microchipNumber: \'12345\', microchipNumber2: \'23456\''
       const res = containsPossibleInjectedCode(dogHtml)
       expect(res).toBeFalsy()
+    })
+  })
+
+  describe('formatNumberWithCommas', () => {
+    test('should insert commas for thousand', () => {
+      expect(formatNumberWithCommas(1234)).toBe('1,234')
+    })
+
+    test('should insert commas for million', () => {
+      expect(formatNumberWithCommas(1234567)).toBe('1,234,567')
+    })
+
+    test('should not insert commas for units', () => {
+      expect(formatNumberWithCommas(9)).toBe('9')
+    })
+
+    test('should not insert commas for tens', () => {
+      expect(formatNumberWithCommas(19)).toBe('19')
+    })
+
+    test('should not insert commas for hundreds', () => {
+      expect(formatNumberWithCommas(199)).toBe('199')
+    })
+
+    test('should handle string instead of number', () => {
+      expect(formatNumberWithCommas('1234567')).toBe('1,234,567')
     })
   })
 })
