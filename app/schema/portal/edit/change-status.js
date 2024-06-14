@@ -7,6 +7,13 @@ const changeStatusSchema = Joi.object({
   })
 }).required()
 
+const duplicateMicrochipSchema = Joi.object({
+  indexNumber: Joi.string().forbidden().messages({
+    '*': 'The microchip number is in use on another record.'
+  }),
+  newStatus: Joi.any()
+}).required()
+
 const validatePayload = (payload) => {
   const { value, error } = changeStatusSchema.validate(payload, { abortEarly: false })
 
@@ -18,5 +25,6 @@ const validatePayload = (payload) => {
 }
 
 module.exports = {
-  validatePayload
+  validatePayload,
+  duplicateMicrochipSchema
 }

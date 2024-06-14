@@ -1,4 +1,4 @@
-const { get, put, callDelete, boomRequest } = require('./base')
+const { get, callDelete, boomRequest } = require('./base')
 const { ApiErrorFailure } = require('../../errors/api-error-failure')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
 
@@ -86,11 +86,20 @@ const updateStatus = async (payload, user) => {
     throw new Error('Invalid payload')
   }
 
-  const dog = await getDogDetails(payload.indexNumber)
-  dog.dogId = dog.id
-  dog.status = payload.newStatus
+  try {
+    const dog = await getDogDetails(payload.indexNumber)
+    dog.dogId = dog.id
+    dog.status = payload.newStatus
 
-  return await put(dogEndpoint, dog, user)
+    return await boomRequest(dogEndpoint, 'PUT', dog, user)
+  } catch (e) {
+    if (e instanceof ApiErrorFailure) {
+      if (e.boom.statusCode === 409) {
+        throw new ApiConflictError(e)
+      }
+    }
+    throw e
+  }
 }
 
 const deleteDog = async (indexNumber, user) => {

@@ -4,8 +4,30 @@ const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/change-status')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { updateStatus } = require('../../../api/ddi-index-api/dog')
-const { validatePayload } = require('../../../schema/portal/edit/change-status')
+const { validatePayload, duplicateMicrochipSchema } = require('../../../schema/portal/edit/change-status')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
+const { ApiConflictError } = require('../../../errors/api-conflict-error')
+
+const changeStatusPostFailAction = async (request, h, error) => {
+  const payload = request.payload
+
+  const cdo = await getCdo(payload.indexNumber)
+  if (cdo == null) {
+    return h.response().code(404).takeover()
+  }
+
+  const backNav = addBackNavigationForErrorCondition(request)
+
+  const model = {
+    status: cdo.dog.status,
+    indexNumber: cdo.dog.indexNumber,
+    newStatus: payload.newStatus
+  }
+
+  const viewModel = new ViewModel(model, backNav, error)
+
+  return h.view(views.changeStatus, viewModel).code(400).takeover()
+}
 
 module.exports = [
   {
@@ -33,33 +55,22 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       validate: {
         payload: validatePayload,
-        failAction: async (request, h, error) => {
-          const payload = request.payload
-
-          const cdo = await getCdo(payload.indexNumber)
-          if (cdo == null) {
-            return h.response().code(404).takeover()
-          }
-
-          const backNav = addBackNavigationForErrorCondition(request)
-
-          const model = {
-            status: cdo.dog.status,
-            indexNumber: cdo.dog.indexNumber,
-            newStatus: payload.newStatus
-          }
-
-          const viewModel = new ViewModel(model, backNav, error)
-
-          return h.view(views.changeStatus, viewModel).code(400).takeover()
-        }
+        failAction: changeStatusPostFailAction
       },
       handler: async (request, h) => {
         const payload = request.payload
 
-        await updateStatus(payload, getUser(request))
+        try {
+          await updateStatus(payload, getUser(request))
+          return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}`)
+        } catch (e) {
+          if (e instanceof ApiConflictError) {
+            const { error } = duplicateMicrochipSchema.validate(payload)
+            return await changeStatusPostFailAction(request, h, error)
+          }
 
-        return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}`)
+          throw e
+        }
       }
     }
   }
