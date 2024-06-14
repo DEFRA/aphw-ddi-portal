@@ -179,6 +179,10 @@ const getMonthsSince = (date, dateFromOptional) => {
   return 'Less than 1 month'
 }
 
+const getStatsTimestamp = (date) => {
+  return '12am, 14 June 2024'
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -192,5 +196,6 @@ module.exports = {
   stripTimeFromUTC,
   formatToDateTime,
   getElapsed,
-  getMonthsSince
+  getMonthsSince,
+  getStatsTimestamp
 }
