@@ -1,7 +1,7 @@
 const { user, adminUser } = require('../../../mocks/auth')
 const { updateStatus, getDogDetails, updateDogDetails, getDogOwner, deleteDog, getDogOwnerWithDogs } = require('../../../../app/api/ddi-index-api/dog')
 jest.mock('../../../../app/api/ddi-index-api/base')
-const { get, post, put, callDelete, boomRequest } = require('../../../../app/api/ddi-index-api/base')
+const { get, post, callDelete, boomRequest } = require('../../../../app/api/ddi-index-api/base')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
@@ -14,7 +14,8 @@ const validDog = {
 
 const validUpdateStatusPayload = {
   indexNumber: 'ED123',
-  newStatus: 'Exempt'
+  newStatus: 'Exempt',
+  microchipNumber: '875257109325923'
 }
 
 describe('Dog test', () => {
@@ -24,18 +25,56 @@ describe('Dog test', () => {
 
   describe('updateStatus', () => {
     test('updateStatus calls post with valid payload', async () => {
-      put.mockResolvedValue(123)
+      boomRequest.mockResolvedValue({ statusCode: 200, statusMessage: 123, payload: 123 })
       get.mockResolvedValue(validDog)
       const res = await updateStatus(validUpdateStatusPayload, user)
-      expect(res).not.toBe(null)
-      expect(res).toBe(123)
-      expect(put).toHaveBeenCalledWith('dog', { name: 'Bruno', id: 123, dogId: 123, status: 'Exempt' }, user)
+      expect(res).not.toEqual(null)
+      expect(res).toEqual({ statusCode: 200, statusMessage: 123, payload: 123 })
+      expect(boomRequest).toHaveBeenCalledWith('dog', 'PUT', { name: 'Bruno', id: 123, dogId: 123, status: 'Exempt' }, user)
     })
 
-    test('updateStatus doesnt call put with invalid payload', async () => {
+    test('should throw an ApiConflictError given 409 Conflict', async () => {
+      const apiErrorFailure = new ApiErrorFailure('409 Conflict', {
+        statusCode: 409,
+        error: 'Conflict',
+        message: 'The microchip number already exists',
+        microchipNumbers: [
+          '875257109325923'
+        ]
+      })
+      boomRequest.mockRejectedValue(apiErrorFailure)
+      get.mockResolvedValue(validDog)
+
+      const updateStatusCall = updateStatus(validUpdateStatusPayload, user)
+      await expect(updateStatusCall).rejects.toThrow(new ApiConflictError(apiErrorFailure))
+    })
+
+    test('should throw an ApiConflictError given 409 Conflict', async () => {
+      const apiErrorFailure = new ApiErrorFailure('500 Error', {
+        statusCode: 500,
+        error: 'Server error',
+        message: 'Server error'
+      })
+      boomRequest.mockRejectedValue(apiErrorFailure)
+      get.mockResolvedValue(validDog)
+
+      const updateStatusCall = updateStatus(validUpdateStatusPayload, user)
+      await expect(updateStatusCall).rejects.toThrow(new ApiConflictError(apiErrorFailure))
+    })
+
+    test('should throw a standard error given 500 error', async () => {
+      const apiErrorFailure = new Error('server error')
+      boomRequest.mockRejectedValue(apiErrorFailure)
+      get.mockResolvedValue(validDog)
+
+      const updateStatusCall = updateStatus(validUpdateStatusPayload, user)
+      await expect(updateStatusCall).rejects.toThrow(new Error('server error'))
+    })
+
+    test('updateStatus doesnt call boomRequest with invalid payload', async () => {
       post.mockResolvedValue()
       await expect(updateStatus({})).rejects.toThrow()
-      expect(put).not.toHaveBeenCalled()
+      expect(boomRequest).not.toHaveBeenCalled()
     })
   })
 
