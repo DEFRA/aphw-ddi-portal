@@ -1,7 +1,7 @@
     <div class="govuk-grid-column-full">
       <form class="form" method="post" id="dogListForm">
 
-        <input type="hidden" name="checkboxSortOnly" id="checkboxSortOnly" value="" />
+        <input type="hidden" name="checkboxSortCol" id="checkboxSortCol" value="" />
         <input type="hidden" name="followLink" id="followLink" value="" />
         <input type="hidden" name="srcHashParam" id="srcHashParam" value="{{ model.srcHashParamStripped }}" />
 
@@ -16,13 +16,13 @@
               {% for colHeading in model.tableHeadings %}
                 {% if loop.last %}
                 <th scope="col" class="govuk-table__header govuk-table__header--numeric" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
-                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortOnly').value = 'Y'; document.getElementById('dogListForm').submit(); return false;">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortCol').value = '{{ colHeading.name }}'; document.getElementById('dogListForm').submit(); return false;">
                     {{colHeading.label}}
                   </a>
                 </th>
                 {% else %}
                 <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
-                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
+                  <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}" onClick="document.getElementById('checkboxSortCol').value = '{{ colHeading.name }}'; document.getElementById('dogListForm').submit(); return false;">
                     {{colHeading.label}}
                   </a>
                 </th>

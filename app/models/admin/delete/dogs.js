@@ -34,27 +34,32 @@ function ViewModel (resultList, selectedList, sort, backNav) {
     {
       label: 'Status',
       link: columnLink(sort, undefined),
-      ariaSort: getAriaSort(sort, undefined)
+      ariaSort: getAriaSort(sort, undefined),
+      name: 'status'
     },
     {
       label: 'Index number',
       link: columnLink(sort, 'indexNumber'),
-      ariaSort: getAriaSort(sort, 'indexNumber')
+      ariaSort: getAriaSort(sort, 'indexNumber'),
+      name: 'indexNumber'
     },
     {
       label: 'Date of birth',
       link: columnLink(sort, 'dateOfBirth'),
-      ariaSort: getAriaSort(sort, 'dateOfBirth')
+      ariaSort: getAriaSort(sort, 'dateOfBirth'),
+      name: 'dateOfBirth'
     },
     {
       label: 'CDO issued',
       link: columnLink(sort, 'cdoIssued'),
-      ariaSort: getAriaSort(sort, 'cdoIssued')
+      ariaSort: getAriaSort(sort, 'cdoIssued'),
+      name: 'cdoIssued'
     },
     {
       label: 'Delete dog record',
       link: columnLink(sort, 'selected'),
-      ariaSort: getAriaSort(sort, 'selected')
+      ariaSort: getAriaSort(sort, 'selected'),
+      name: 'selected'
     }
   ]
 

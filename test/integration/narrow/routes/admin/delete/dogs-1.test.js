@@ -185,13 +185,13 @@ describe('Delete dogs 1', () => {
         method: 'POST',
         url: '/admin/delete/dogs-1',
         auth: adminAuth,
-        payload: { checkboxSortOnly: 'Y' }
+        payload: { checkboxSortCol: 'indexNumber' }
       }
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(response.headers.location).toBe('/admin/delete/dogs-1?sortKey=selected&sortOrder=ASC')
+      expect(response.headers.location).toBe('/admin/delete/dogs-1?sortKey=indexNumber&sortOrder=ASC')
     })
 
     test('returns 302 for following link', async () => {

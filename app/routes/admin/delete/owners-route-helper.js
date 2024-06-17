@@ -11,7 +11,8 @@ const handleCheckboxSort = (request, owners, selectedList) => {
 const getCheckboxSortQueryString = request => {
   const params = request.query
   const toggledSortOrder = params.sortOrder === 'ASC' ? 'DESC' : 'ASC'
-  return `?sortKey=selected&sortOrder=${toggledSortOrder}`
+  const sortKey = request.payload?.checkboxSortCol ?? (params.sortKey ?? 'selected')
+  return `?sortKey=${sortKey}&sortOrder=${toggledSortOrder}`
 }
 
 module.exports = {

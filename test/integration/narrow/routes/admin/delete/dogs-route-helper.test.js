@@ -105,6 +105,18 @@ describe('Delete dogs helper', () => {
 
       expect(res).toBe('&sortKey=selected&sortOrder=ASC')
     })
+
+    test('toggles sort order to ASC for indexNumber', () => {
+      const res = getCheckboxSortQueryString({ query: { today: '2038-01-01', sortKey: 'indexNumber', sortOrder: 'DESC' } })
+
+      expect(res).toBe('&sortKey=indexNumber&sortOrder=ASC')
+    })
+
+    test('toggles sort order to ASC for dateOfBirth', () => {
+      const res = getCheckboxSortQueryString({ query: { today: '2038-01-01', sortKey: 'dateOfBirth', sortOrder: 'DESC' } })
+
+      expect(res).toBe('&sortKey=dateOfBirth&sortOrder=ASC')
+    })
   })
 
   describe('handleCheckboxSort', () => {
