@@ -197,7 +197,7 @@ const getDateAsReadableString = (dateStr) => {
  * @return {string|Date}
  */
 const getStatsTimestamp = (date = new Date()) => {
-  if (date === null || date === undefined) {
+  if (date === null) {
     return date
   }
   return `${getTimeInAmPm(date)}, ${getDateAsReadableString(date)}`

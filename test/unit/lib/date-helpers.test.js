@@ -140,6 +140,22 @@ describe('date-helpers', () => {
   })
 
   describe('getStatsTimestamp', () => {
+    test('should return now', () => {
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date('2025-12-17T00:00:00.000Z'))
+      expect(getStatsTimestamp()).toBe('12am, 17 December 2025')
+      jest.useRealTimers()
+    })
+
+    test('should handle undefined values', () => {
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date('2024-06-17T09:54:04.769Z'))
+      expect(getStatsTimestamp(undefined)).toBe('10am, 17 June 2024')
+      jest.useRealTimers()
+    })
+
     test('should return the date in a readable format during winter', () => {
       const date = new Date('2025-12-17T00:00:00.000Z')
       expect(getStatsTimestamp(date)).toBe('12am, 17 December 2025')
@@ -152,6 +168,10 @@ describe('date-helpers', () => {
 
     test('should return the date in a readable format', () => {
       expect(getStatsTimestamp(new Date('2025-03-07T13:00:00.000Z'))).toBe('1pm, 7 March 2025')
+    })
+
+    test('should handle null values', () => {
+      expect(getStatsTimestamp(null)).toBe(null)
     })
   })
 })
