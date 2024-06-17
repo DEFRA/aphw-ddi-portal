@@ -1,5 +1,6 @@
 const { UTCDate } = require('@date-fns/utc')
 const { parse, isValid, isFuture, format } = require('date-fns')
+const { formatInTimeZone } = require('date-fns-tz')
 
 const validDateFormats = [
   'yyyy-MM-dd',
@@ -179,8 +180,27 @@ const getMonthsSince = (date, dateFromOptional) => {
   return 'Less than 1 month'
 }
 
-const getStatsTimestamp = (date) => {
-  return '12am, 14 June 2024'
+/**
+ * @param {string} dateStr
+ * @return {string}
+ */
+const getTimeInAmPm = (dateStr) => {
+  return formatInTimeZone(dateStr, 'Europe/London', 'ha').toLowerCase()
+}
+
+const getDateAsReadableString = (dateStr) => {
+  return formatInTimeZone(dateStr, 'Europe/London', 'd LLLL yyyy')
+}
+
+/**
+ * @param {Date} date
+ * @return {string|Date}
+ */
+const getStatsTimestamp = (date = new Date()) => {
+  if (date === null || date === undefined) {
+    return date
+  }
+  return `${getTimeInAmPm(date)}, ${getDateAsReadableString(date)}`
 }
 
 module.exports = {
@@ -197,5 +217,7 @@ module.exports = {
   formatToDateTime,
   getElapsed,
   getMonthsSince,
-  getStatsTimestamp
+  getStatsTimestamp,
+  getTimeInAmPm,
+  getDateAsReadableString
 }

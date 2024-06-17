@@ -6,7 +6,7 @@ function ViewModel (counts) {
     counts,
     total: counts.map(row => row.total).reduce((a, b) => a + b),
     formatWithCommas: formatNumberWithCommas,
-    timestamp: getStatsTimestamp(Date.now())
+    timestamp: getStatsTimestamp()
   }
 }
 
