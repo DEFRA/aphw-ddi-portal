@@ -200,7 +200,7 @@ const getStatsTimestamp = (date = new Date()) => {
   if (date === null) {
     return date
   }
-  return `${getTimeInAmPm(date)}, ${getDateAsReadableString(date)}`
+  return `${getTimeInAmPm(date.toISOString())}, ${getDateAsReadableString(date.toISOString())}`
 }
 
 module.exports = {
