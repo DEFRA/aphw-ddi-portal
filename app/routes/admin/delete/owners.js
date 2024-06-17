@@ -56,8 +56,8 @@ module.exports = [
         setOrphanedOwnersForDeletion(request, ownersForDeletion)
       }
 
-      if (request.payload.checkboxSortOnly === 'Y') {
-        return h.redirect(`${routes.deleteOwners.get}${getCheckboxSortQueryString(request)}`).takeover()
+      if (request.payload.checkboxSortCol) {
+        return h.redirect(`${routes.deleteOwners.get}${getCheckboxSortQueryString(request)}`)
       }
 
       const backNav = addBackNavigation(request)

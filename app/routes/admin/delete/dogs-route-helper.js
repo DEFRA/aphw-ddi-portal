@@ -13,8 +13,9 @@ const getCheckboxSortQueryString = request => {
   const params = request.query
   const paramStringPrefix = params.today ? '&' : '?'
   const toggledSortOrder = params.sortOrder === 'ASC' ? 'DESC' : 'ASC'
-  const sortOrder = params.sortKey === 'selected' ? toggledSortOrder : 'ASC'
-  return `${paramStringPrefix}sortKey=selected&sortOrder=${sortOrder}`
+  const sortKey = request.payload?.checkboxSortCol ?? (params.sortKey ?? 'selected')
+  const sortOrder = toggledSortOrder
+  return `${paramStringPrefix}sortKey=${sortKey}&sortOrder=${sortOrder}`
 }
 
 const handleCheckboxSort = (request, dogs, selectedList) => {

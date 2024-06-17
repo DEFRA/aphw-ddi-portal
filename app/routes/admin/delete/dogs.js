@@ -57,7 +57,7 @@ module.exports = [
 
         setDogsForDeletion(request, 1, payload?.deleteDog)
 
-        if (payload?.checkboxSortOnly === 'Y') {
+        if (payload?.checkboxSortCol) {
           return h.redirect(`${routes.deleteDogs1.get}${getDateOverrideQueryString(request)}${getCheckboxSortQueryString(request)}`)
         }
 
@@ -108,7 +108,7 @@ module.exports = [
 
         setDogsForDeletion(request, 2, payload?.deleteDog)
 
-        if (payload?.checkboxSortOnly === 'Y') {
+        if (payload?.checkboxSortCol) {
           return h.redirect(`${routes.deleteDogs2.get}${getDateOverrideQueryString(request)}${getCheckboxSortQueryString(request)}`)
         }
 
