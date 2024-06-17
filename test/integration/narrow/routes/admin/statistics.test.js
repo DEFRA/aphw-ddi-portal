@@ -8,6 +8,9 @@ describe('Statistics route', () => {
   jest.mock('../../../../../app/api/ddi-index-api/statistics')
   const { getStatistics } = require('../../../../../app/api/ddi-index-api/statistics')
 
+  jest.mock('../../../../../app/lib/date-helpers')
+  const { getStatsTimestamp } = require('../../../../../app/lib/date-helpers')
+
   const createServer = require('../../../../../app/server')
   let server
 
@@ -35,6 +38,7 @@ describe('Statistics route', () => {
 
   test('GET /admin/statistics route returns 200', async () => {
     getStatistics.mockResolvedValue(statsRows)
+    getStatsTimestamp.mockReturnValue('12am, 14 June 2024')
 
     const options = {
       method: 'GET',
@@ -49,6 +53,7 @@ describe('Statistics route', () => {
     expect(getStatistics).toHaveBeenCalledTimes(1)
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Dogs on the Index')
+    expect(document.querySelector('#main-content').textContent).toContain('Data accurate at 12am, 14 June 2024 (today).')
     expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Status')
     expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Number')
 

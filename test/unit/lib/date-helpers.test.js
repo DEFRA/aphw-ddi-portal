@@ -1,4 +1,7 @@
-const { getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString } = require('../../../app/lib/date-helpers')
+const {
+  getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
+  getDateAsReadableString
+} = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
   describe('getElapsed', () => {
@@ -85,6 +88,90 @@ describe('date-helpers', () => {
     test('should handle undefined dates', () => {
       const result = dateComponentsToString({ 'missing-year': 2000, 'missing-month': 5, 'missing-day': 15 }, 'pre')
       expect(result).toBe('undefined-undefined-undefined')
+    })
+  })
+
+  describe('getTimeInAmPm', () => {
+    test('should get winter time 12am GMT', () => {
+      expect(getTimeInAmPm('2025-12-17T00:00:00.000Z')).toBe('12am')
+    })
+    test('should get winter time 12pm GMT', () => {
+      expect(getTimeInAmPm('2025-12-17T12:00:00.000Z')).toBe('12pm')
+    })
+    test('should get winter time 7am GMT', () => {
+      expect(getTimeInAmPm('2025-12-17T07:00:00.000Z')).toBe('7am')
+    })
+    test('should get summer time 8am BST', () => {
+      expect(getTimeInAmPm('2025-07-17T07:00:00.000Z')).toBe('8am')
+    })
+    test('should get summer time 1pm BST', () => {
+      expect(getTimeInAmPm('2025-07-17T12:00:00.000Z')).toBe('1pm')
+    })
+    test('should get summer time 11am BST', () => {
+      expect(getTimeInAmPm('2025-07-17T10:59:59.999Z')).toBe('11am')
+    })
+    test('should get summer time before clocks change Oct 26 2024', () => {
+      expect(getTimeInAmPm('2024-10-26T15:59:59.999Z')).toBe('4pm')
+    })
+    test('should get winter time after clocks change Oct 27 2024', () => {
+      expect(getTimeInAmPm('2024-10-27T09:00:00.000Z')).toBe('9am')
+    })
+  })
+
+  describe('getDateAsReadableString', () => {
+    test('should get winter time 12am GMT', () => {
+      expect(getDateAsReadableString('2025-12-17T00:00:00.000Z')).toBe('17 December 2025')
+    })
+    test('should get winter time 1am GMT', () => {
+      expect(getDateAsReadableString('2025-12-17T01:00:00.000Z')).toBe('17 December 2025')
+    })
+    test('should get winter time 11pm GMT', () => {
+      expect(getDateAsReadableString('2025-12-17T23:59:59.999Z')).toBe('17 December 2025')
+    })
+    test('should get summer time 12am BST', () => {
+      expect(getDateAsReadableString('2025-07-16T23:00:00.000Z')).toBe('17 July 2025')
+    })
+    test('should get summer time 11pm BST', () => {
+      expect(getDateAsReadableString('2025-07-17T22:59:59.999Z')).toBe('17 July 2025')
+    })
+    test('should get summer time 1am BST', () => {
+      expect(getDateAsReadableString('2025-07-17T12:00:00.000Z')).toBe('17 July 2025')
+    })
+  })
+
+  describe('getStatsTimestamp', () => {
+    test('should return now', () => {
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date('2025-12-17T00:00:00.000Z'))
+      expect(getStatsTimestamp()).toBe('12am, 17 December 2025')
+      jest.useRealTimers()
+    })
+
+    test('should handle undefined values', () => {
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date('2024-06-17T09:54:04.769Z'))
+      expect(getStatsTimestamp(undefined)).toBe('10am, 17 June 2024')
+      jest.useRealTimers()
+    })
+
+    test('should return the date in a readable format during winter', () => {
+      const date = new Date('2025-12-17T00:00:00.000Z')
+      expect(getStatsTimestamp(date)).toBe('12am, 17 December 2025')
+    })
+
+    test('should return the date in a readable format during summer', () => {
+      const date = new Date('2025-06-14T00:00:00.000Z')
+      expect(getStatsTimestamp(date)).toBe('1am, 14 June 2025')
+    })
+
+    test('should return the date in a readable format', () => {
+      expect(getStatsTimestamp(new Date('2025-03-07T13:00:00.000Z'))).toBe('1pm, 7 March 2025')
+    })
+
+    test('should handle null values', () => {
+      expect(getStatsTimestamp(null)).toBe(null)
     })
   })
 })
