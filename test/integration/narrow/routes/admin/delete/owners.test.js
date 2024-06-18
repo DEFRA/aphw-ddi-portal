@@ -309,7 +309,7 @@ describe('Delete owners', () => {
       expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), undefined)
       const { document } = new JSDOM(response.payload).window
 
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('You are about to delete 0 dog owner records')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('No records selected')
     })
 
     test('should return 400 with invalid payload', async () => {
