@@ -62,7 +62,7 @@ describe('Delete Owners validation', () => {
   describe('orphanedOwnersPayloadSchema', () => {
     test('should validate with an array of owners of length 1', () => {
       const params = {
-        checkboxSortOnly: '',
+        checkboxSortCol: '',
         deleteOwner: ['P-2F0B-49E0']
       }
 
@@ -75,7 +75,7 @@ describe('Delete Owners validation', () => {
     test('should validate with an array of owners of length >1', () => {
       const expectedOwners = ['P-2F0B-49E0', 'P-2F0B-49E1', 'P-2F0B-49E2']
       const params = {
-        checkboxSortOnly: '',
+        checkboxSortCol: '',
         deleteOwner: expectedOwners
       }
 
@@ -87,7 +87,7 @@ describe('Delete Owners validation', () => {
 
     test('should validate with a single owner', () => {
       const params = {
-        checkboxSortOnly: '',
+        checkboxSortCol: '',
         deleteOwner: 'P-2F0B-49E0'
       }
 

@@ -71,6 +71,27 @@ describe('Delete dogs 2', () => {
       expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You have 90 days to raise a support ticket to recover a deleted dog record.')
     })
 
+    test('returns 200 for no dogs', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/delete/dogs-confirm',
+        auth: adminAuth
+      }
+
+      getDogsForDeletion.mockImplementation((req, step) => {
+        return []
+      })
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('No records selected')
+      expect(document.querySelectorAll('form .govuk-body')[0].textContent.trim()).toBe('You have not selected any records to delete.')
+      expect(document.querySelectorAll('form .govuk-body')[1].textContent.trim()).toBe('You can go back and select records to delete if you need to.')
+    })
+
     test('returns 302 when not authd', async () => {
       const options = {
         method: 'GET',

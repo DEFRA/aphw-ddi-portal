@@ -251,7 +251,7 @@ describe('Delete owners', () => {
       expect(document.querySelector('button[name="confirmSubmit"]')).not.toBeNull()
     })
 
-    test('should redirect to selection page given checkboxSortOnly is Y', async () => {
+    test('should redirect to selection page given checkboxSortCol is owner', async () => {
       const ownerReferenceIds = [
         'P-418F-024E', 'P-585C-C9B5', 'P-4A91-4A4D'
       ]
@@ -260,7 +260,7 @@ describe('Delete owners', () => {
         url: '/admin/delete/owners',
         auth: adminAuth,
         payload: {
-          checkboxSortOnly: 'Y',
+          checkboxSortCol: 'name',
           deleteOwner: ownerReferenceIds
         }
       }
@@ -269,26 +269,26 @@ describe('Delete owners', () => {
       expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), ownerReferenceIds)
     })
 
-    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder ASC', async () => {
+    test('should redirect to selection page given checkboxSortCol is name and sortOrder ASC', async () => {
       const options = {
         method: 'POST',
         url: '/admin/delete/owners?sortOrder=ASC',
         auth: adminAuth,
         payload: {
-          checkboxSortOnly: 'Y'
+          checkboxSortCol: 'name'
         }
       }
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
     })
 
-    test('should redirect to selection page given checkboxSortOnly is Y and sortOrder DESC', async () => {
+    test('should redirect to selection page given checkboxSortCol is name and sortOrder DESC', async () => {
       const options = {
         method: 'POST',
         url: '/admin/delete/owners?sortOrder=DESC',
         auth: adminAuth,
         payload: {
-          checkboxSortOnly: 'Y'
+          checkboxSortCol: 'name'
         }
       }
       const response = await server.inject(options)
@@ -300,7 +300,7 @@ describe('Delete owners', () => {
         url: '/admin/delete/owners',
         auth: adminAuth,
         payload: {
-          checkboxSortOnly: ''
+          checkboxSortCol: ''
         }
       }
 
@@ -309,7 +309,7 @@ describe('Delete owners', () => {
       expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), undefined)
       const { document } = new JSDOM(response.payload).window
 
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('You are about to delete 0 dog owner records')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('No records selected')
     })
 
     test('should return 400 with invalid payload', async () => {
