@@ -27,11 +27,20 @@
   <div class="govuk-grid-column-two-thirds">
 
     <form class="form" method="post" id="owners-confirm-form" onsubmit="confirmSubmit.disabled = true; return true;">
+      {% if model.selectedList | length > 0 %}
       <h1 class="govuk-heading-l">
         You are about to delete {{ model.selectedList.length }} dog owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %}
       </h1>
       <p class="govuk-body">Deleted records no longer appear in search results.</p>
       <p class="govuk-body">You have 90 days to raise a support ticket to recover a deleted dog owner record.</p>
+      {% else %}
+      <h1 class="govuk-heading-l">
+        No records selected
+      </h1>
+      <p class="govuk-body">You have not selected any records to delete.</p>
+      <p class="govuk-body">You can go back and select records to delete if you need to.</p>
+      {% endif %}
+
       {% for ownerReference in model.selectedList %}
       <input type="hidden" name="deleteOwner" value="{{ ownerReference }}" />
       {% endfor %}
