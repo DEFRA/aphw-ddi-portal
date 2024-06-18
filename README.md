@@ -69,7 +69,7 @@ scripts/test -w
 # Running a subset of tests outside of Docker
 In order to run a single test or group of tests, you can use
 ```
-npm run test <path>/<filename>
+npm run test <path>/<filename> 
 ```
 e.g.
 ```
