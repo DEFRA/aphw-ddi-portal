@@ -1,4 +1,4 @@
-const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas } = require('../../../app/lib/format-helpers')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas, titleCase } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
@@ -237,6 +237,28 @@ describe('format-helpers', () => {
 
     test('should handle string instead of number', () => {
       expect(formatNumberWithCommas('1234567')).toBe('1,234,567')
+    })
+  })
+
+  describe('titleCase', () => {
+    test('should handle null', () => {
+      expect(titleCase(null)).toBe(null)
+    })
+
+    test('should handle single word', () => {
+      expect(titleCase('testing')).toBe('Testing')
+    })
+
+    test('should handle multiple words', () => {
+      expect(titleCase('testing with a set of words')).toBe('Testing With A Set Of Words')
+    })
+
+    test('should handle single hyphenated word', () => {
+      expect(titleCase('testing-a-lot')).toBe('Testing-A-Lot')
+    })
+
+    test('should handle multiple hyphenated words', () => {
+      expect(titleCase('testing-a-lot with several-tests and-other things to-be-done')).toBe('Testing-A-Lot With Several-Tests And-Other Things To-Be-Done')
     })
   })
 })
