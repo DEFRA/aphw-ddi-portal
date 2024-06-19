@@ -1,6 +1,6 @@
 const config = require('../config')
 const wreck = require('@hapi/wreck')
-const { mapOsCountryCodeToCountry } = require('../lib/format-helpers')
+const { mapOsCountryCodeToCountry, titleCase } = require('../lib/format-helpers')
 
 const baseUrl = config.osPlacesApi.baseUrl
 const postcodeEndpoint = 'postcode'
@@ -54,9 +54,9 @@ const buildAddressResult = (result) => {
   const addressCountry = mapOsCountryCodeToCountry(result.DPA.COUNTRY_CODE)
 
   return {
-    addressLine1: line1 === '' ? organisationName : line1,
-    addressLine2: result.DPA.DEPENDENT_LOCALITY,
-    town: result.DPA.POST_TOWN,
+    addressLine1: titleCase(line1 === '' ? organisationName : line1),
+    addressLine2: titleCase(result.DPA.DEPENDENT_LOCALITY),
+    town: titleCase(result.DPA.POST_TOWN),
     postcode: result.DPA.POSTCODE,
     country: addressCountry,
     sorting: `${leftPad(result.DPA.BUILDING_NUMBER)} ${leftPad(result.DPA.SUB_BUILDING_NAME)}`

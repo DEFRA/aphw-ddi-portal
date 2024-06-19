@@ -102,6 +102,30 @@ const formatNumberWithCommas = num => {
   return typeof num === 'number' ? num.toLocaleString('en-GB') : parseInt(num).toLocaleString('en-GB')
 }
 
+/**
+ * Converts string of one or more words into a string where the first letter of each word is capitalised.
+ * If a word contains hyphens, each segment is initcapped e.g. Chapel-en-le-frith becomes Chapel-En-Le-Frith
+ *
+ * @param {*} str - word or words as a string
+ * @returns string converted to title case
+ */
+const titleCase = str => {
+  if (!str) {
+    return str
+  }
+
+  const splitStr = str.toLowerCase().split(' ')
+  for (let i = 0; i < splitStr.length; i++) {
+    const splitStrHyphens = splitStr[i].split('-')
+    for (let j = 0; j < splitStrHyphens.length; j++) {
+      splitStrHyphens[j] = splitStrHyphens[j].charAt(0).toUpperCase() + splitStrHyphens[j].substring(1)
+    }
+    const joinedWord = splitStrHyphens.join('-')
+    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + joinedWord.substring(1)
+  }
+  return splitStr.join(' ')
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
@@ -109,5 +133,6 @@ module.exports = {
   formatAddressSingleLine,
   formatDogRadioAsHtml,
   containsPossibleInjectedCode,
-  formatNumberWithCommas
+  formatNumberWithCommas,
+  titleCase
 }

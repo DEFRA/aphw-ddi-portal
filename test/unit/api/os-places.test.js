@@ -131,8 +131,8 @@ describe('OS Places test', () => {
       expect(wreck.get).toHaveBeenCalledWith(expect.stringMatching(/\/postcode\?postcode=AB11 2AB$/), expect.anything())
       expect(res).not.toBe(null)
       expect(res.length).toBe(1)
-      expect(res[0].addressLine1).toBe('1 MAIN STREET')
-      expect(res[0].town).toBe('TESTINGTON')
+      expect(res[0].addressLine1).toBe('1 Main Street')
+      expect(res[0].town).toBe('Testington')
       expect(res[0].postcode).toBe(postcode)
     })
 
@@ -150,8 +150,8 @@ describe('OS Places test', () => {
       expect(wreck.get).toHaveBeenCalledWith(expect.stringMatching(/\/postcode\?postcode=AB11 2AB$/), expect.anything())
       expect(res).not.toBe(null)
       expect(res.length).toBe(1)
-      expect(res[0].addressLine1).toBe('FLAT 2, 1 MAIN STREET')
-      expect(res[0].town).toBe('TESTINGTON')
+      expect(res[0].addressLine1).toBe('Flat 2, 1 Main Street')
+      expect(res[0].town).toBe('Testington')
       expect(res[0].postcode).toBe(postcode)
     })
 
@@ -169,13 +169,13 @@ describe('OS Places test', () => {
       const res = await getPostcodeAddresses(postcode)
       expect(res).not.toBe(null)
       expect(res.length).toBe(5)
-      expect(res[0].addressLine1).toBe('FLAT 1, 1 MAIN STREET')
-      expect(res[0].town).toBe('TESTINGTON')
+      expect(res[0].addressLine1).toBe('Flat 1, 1 Main Street')
+      expect(res[0].town).toBe('Testington')
       expect(res[0].postcode).toBe(postcode)
-      expect(res[1].addressLine1).toBe('FLAT 2, 1 MAIN STREET')
-      expect(res[2].addressLine1).toBe('FLAT 3, 1 MAIN STREET')
-      expect(res[3].addressLine1).toBe('FLAT 3, 1 MAIN STREET')
-      expect(res[4].addressLine1).toBe('FLAT 4, 1 MAIN STREET')
+      expect(res[1].addressLine1).toBe('Flat 2, 1 Main Street')
+      expect(res[2].addressLine1).toBe('Flat 3, 1 Main Street')
+      expect(res[3].addressLine1).toBe('Flat 3, 1 Main Street')
+      expect(res[4].addressLine1).toBe('Flat 4, 1 Main Street')
     })
 
     test('getPostcodeAddresses handles api failure', async () => {
@@ -192,19 +192,19 @@ describe('OS Places test', () => {
           ORGANISATION_NAME: 'HELIX RESTAURANT',
           BUILDING_NAME: 'THE GHERKIN',
           BUILDING_NUMBER: 30,
-          THOROUGHFARE_NAME: 'ST MARY AXE',
+          THOROUGHFARE_NAME: 'ST MARY AVE',
           POST_TOWN: 'LONDON',
           POSTCODE: 'EC3A 8BF'
         }
       }
       const addressResult = buildAddressResult(result)
       expect(addressResult).toEqual({
-        addressLine1: '30 THE GHERKIN, ST MARY AXE',
+        addressLine1: '30 The Gherkin, St Mary Ave',
         addressLine2: undefined,
         country: undefined,
         postcode: 'EC3A 8BF',
         sorting: '0000 0000',
-        town: 'LONDON'
+        town: 'London'
       })
     })
 
@@ -218,12 +218,12 @@ describe('OS Places test', () => {
       }
       const addressResult = buildAddressResult(result)
       expect(addressResult).toEqual({
-        addressLine1: 'HELIX RESTAURANT',
+        addressLine1: 'Helix Restaurant',
         addressLine2: undefined,
         country: undefined,
         postcode: 'EC3A 8BF',
         sorting: '0000 0000',
-        town: 'LONDON'
+        town: 'London'
       })
     })
   })
