@@ -40,6 +40,10 @@
         }
       }) %}
 
+        <div id="address-hint" class="govuk-hint govuk-!-margin-bottom-3">
+            Enter addresses in the correct format. For example, 8 Raspberry Terrace, Leeds, LS56 7MT
+        </div>
+
         <form method="POST" novalidate autocomplete="off">
           {{ govukInput(model.addressLine1) }}
         

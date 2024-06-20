@@ -96,6 +96,49 @@ const dedupeAddresses = items => {
   return [...uniqueAddressMap].map(([_, value]) => value)
 }
 
+const constructDateField = (data, id, labelText, hint = null) => {
+  const fieldMetadata = {
+    type: 'date',
+    id: id,
+    namePrefix: id,
+    fieldset: {
+      legend: {
+        text: labelText,
+        classes: 'govuk-fieldset__legend--s'
+      }
+    },
+    items: [
+      {
+        name: 'day',
+        classes: 'govuk-input--width-2',
+        value: data[`${id}-day`],
+        attributes: { maxlength: '2' }
+      },
+      {
+        name: 'month',
+        classes: 'govuk-input--width-2',
+        value: data[`${id}-month`],
+        attributes: { maxlength: '2' }
+      },
+      {
+        name: 'year',
+        classes: 'govuk-input--width-4',
+        value: data[`${id}-year`],
+        attributes: { maxlength: '4' }
+      }
+    ],
+    classes: 'govuk-!-margin-bottom-5'
+  }
+
+  if (hint) {
+    fieldMetadata.hint = {
+      text: hint
+    }
+  }
+
+  return fieldMetadata
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -106,5 +149,6 @@ module.exports = {
   deepClone,
   cleanUserDisplayName,
   setPoliceForce,
-  dedupeAddresses
+  dedupeAddresses,
+  constructDateField
 }

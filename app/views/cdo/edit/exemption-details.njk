@@ -6,6 +6,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "components/accessibleAutocomplete/macro.njk" import accessibleAutocomplete %}
+{% from "components/statusTag/macro.njk" import statusTag %}
 
 {% extends '_layout.njk' %}
 
@@ -46,13 +47,13 @@
         }
       }) %}
 
-      <p class="govuk-body govuk-!-font-size-16 govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-1">
+      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-3">
         Status
       </p>
-      <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-2">
-            <li class="govuk-summary-list__actions-list-item govuk-body govuk-!-font-size-16">{{ model.status }}</li>
-            <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.indexNumber }}{{ model.srcHashParam }}">Change status</a></li>
-          </ul>
+      {{ statusTag(model.status, 'govuk-!-margin-bottom-8 govuk-!-margin-right-3') }}
+      <span class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.indexNumber }}{{ model.srcHashParam }}">Change status</a>
+      </span>
 
       {{ govukDateInput(model.certificateIssued) }}
 
@@ -62,6 +63,7 @@
       {{ govukDateInput(model.cdoExpiry) }}
       
       {{ accessibleAutocomplete(model.court) }}
+      <div class="govuk-!-padding-bottom-5"></div>
       {% endif %}
 
       {{ govukSelect(model.policeForce) }}

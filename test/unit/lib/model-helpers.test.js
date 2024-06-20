@@ -1,4 +1,4 @@
-const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses } = require('../../../app/lib/model-helpers')
+const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = require('../../../app/session/cdo/owner')
@@ -240,6 +240,97 @@ describe('ModelHelpers', () => {
 
     test('should not clean up displayName given no comma', () => {
       expect(cleanUserDisplayName('Firstname Surname')).toBe('Firstname Surname')
+    })
+  })
+
+  describe('constructDateField', () => {
+    test('should create date field', () => {
+      const data = {
+        'myId-day': '25',
+        'myId-month': '12',
+        'myId-year': '2024'
+      }
+
+      const res = constructDateField(data, 'myId', 'Field label text')
+
+      expect(res).toEqual({
+        type: 'date',
+        id: 'myId',
+        namePrefix: 'myId',
+        fieldset: {
+          legend: {
+            text: 'Field label text',
+            classes: 'govuk-fieldset__legend--s'
+          }
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2',
+            value: '25',
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2',
+            value: '12',
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4',
+            value: '2024',
+            attributes: { maxlength: '4' }
+          }
+        ],
+        classes: 'govuk-!-margin-bottom-5'
+      })
+    })
+
+    test('should create date field with hint', () => {
+      const data = {
+        'myId2-day': '21',
+        'myId2-month': '06',
+        'myId2-year': '2024'
+      }
+
+      const res = constructDateField(data, 'myId2', 'Field label text2', 'hint text')
+
+      expect(res).toEqual({
+        type: 'date',
+        id: 'myId2',
+        namePrefix: 'myId2',
+        fieldset: {
+          legend: {
+            text: 'Field label text2',
+            classes: 'govuk-fieldset__legend--s'
+          }
+        },
+        hint: {
+          text: 'hint text'
+        },
+        items: [
+          {
+            name: 'day',
+            classes: 'govuk-input--width-2',
+            value: '21',
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'month',
+            classes: 'govuk-input--width-2',
+            value: '06',
+            attributes: { maxlength: '2' }
+          },
+          {
+            name: 'year',
+            classes: 'govuk-input--width-4',
+            value: '2024',
+            attributes: { maxlength: '4' }
+          }
+        ],
+        classes: 'govuk-!-margin-bottom-5'
+      })
     })
   })
 })
