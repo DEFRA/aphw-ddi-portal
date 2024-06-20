@@ -1,5 +1,6 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
+const { constructDateField } = require('../../../lib/model-helpers')
 
 function ViewModel (exemption, courts, policeForces, companies, backNav, errors) {
   this.model = {
@@ -26,104 +27,13 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
       ]
     },
     status: exemption.status,
-    certificateIssued: {
-      type: 'date',
-      id: 'certificateIssued',
-      namePrefix: 'certificateIssued',
-      fieldset: {
-        legend: {
-          text: 'First certificate issued',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['certificateIssued-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['certificateIssued-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['certificateIssued-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    cdoIssued: {
-      type: 'date',
-      id: 'cdoIssued',
-      namePrefix: 'cdoIssued',
-      fieldset: {
-        legend: {
-          text: 'CDO issued',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['cdoIssued-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['cdoIssued-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['cdoIssued-year'],
-          attributes: { maxlength: '4' }
-        }
-      ],
-      classes: 'govuk-!-font-size-16'
-    },
-    cdoExpiry: {
-      type: 'date',
-      id: 'cdoExpiry',
-      namePrefix: 'cdoExpiry',
-      fieldset: {
-        legend: {
-          text: 'CDO expiry',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['cdoExpiry-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['cdoExpiry-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['cdoExpiry-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
+    certificateIssued: constructDateField(exemption, 'certificateIssued', 'First certificate issued'),
+    cdoIssued: constructDateField(exemption, 'cdoIssued', 'CDO issued'),
+    cdoExpiry: constructDateField(exemption, 'cdoExpiry', 'CDO expiry'),
     court: {
       label: {
         text: 'Court',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold'
       },
       id: 'court',
       name: 'court',
@@ -133,13 +43,12 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         value: court.name,
         text: court.name
       }))),
-      autocomplete: forms.preventAutocomplete,
-      classes: 'govuk-!-font-size-16'
+      autocomplete: forms.preventAutocomplete
     },
     policeForce: {
       label: {
         text: 'Police force',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold'
       },
       id: 'policeForce',
       name: 'policeForce',
@@ -149,55 +58,25 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         text: force.name
       }))),
       autocomplete: forms.preventAutocomplete,
-      classes: 'govuk-!-font-size-16'
+      classes: 'govuk-!-width-two-thirds govuk-!-margin-bottom-5'
     },
     legislationOfficer: {
       label: {
         text: 'Dog legislation officer',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold'
       },
       id: 'legislationOfficer',
       name: 'legislationOfficer',
-      classes: 'govuk-input--width-20 govuk-!-font-size-16',
+      classes: 'govuk-!-width-two-thirds govuk-!-margin-bottom-5',
       value: exemption.legislationOfficer,
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '64' }
     },
-    applicationFeePaid: {
-      type: 'date',
-      id: 'applicationFeePaid',
-      namePrefix: 'applicationFeePaid',
-      fieldset: {
-        legend: {
-          text: 'Application fee paid',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['applicationFeePaid-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['applicationFeePaid-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['applicationFeePaid-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
+    applicationFeePaid: constructDateField(exemption, 'applicationFeePaid', 'Application fee paid'),
     insuranceCompany: {
       label: {
         text: 'Insurance company',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold'
       },
       id: 'insuranceCompany',
       name: 'insuranceCompany',
@@ -207,262 +86,16 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
         text: company.name
       }))),
       autocomplete: forms.preventAutocomplete,
-      classes: 'govuk-!-font-size-16'
+      classes: 'govuk-!-width-two-thirds govuk-!-margin-bottom-5'
     },
-    insuranceRenewal: {
-      type: 'date',
-      id: 'insuranceRenewal',
-      namePrefix: 'insuranceRenewal',
-      fieldset: {
-        legend: {
-          text: 'Insurance renewal date',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['insuranceRenewal-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['insuranceRenewal-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['insuranceRenewal-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    neuteringConfirmation: {
-      type: 'date',
-      id: 'neuteringConfirmation',
-      namePrefix: 'neuteringConfirmation',
-      fieldset: {
-        legend: {
-          text: 'Neutering confirmed',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['neuteringConfirmation-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['neuteringConfirmation-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['neuteringConfirmation-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    microchipVerification: {
-      type: 'date',
-      id: 'microchipVerification',
-      namePrefix: 'microchipVerification',
-      fieldset: {
-        legend: {
-          text: 'Microchip number verified',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['microchipVerification-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['microchipVerification-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['microchipVerification-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    joinedExemptionScheme: {
-      type: 'date',
-      id: 'joinedExemptionScheme',
-      namePrefix: 'joinedExemptionScheme',
-      fieldset: {
-        legend: {
-          text: 'Joined interim exemption scheme',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['joinedExemptionScheme-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['joinedExemptionScheme-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['joinedExemptionScheme-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    microchipDeadline: {
-      type: 'date',
-      id: 'microchipDeadline',
-      namePrefix: 'microchipDeadline',
-      fieldset: {
-        legend: {
-          text: 'Microchip deadline',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      hint: {
-        text: 'The dog must be microchipped by this date.'
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['microchipDeadline-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['microchipDeadline-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['microchipDeadline-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    typedByDlo: {
-      type: 'date',
-      id: 'typedByDlo',
-      namePrefix: 'typedByDlo',
-      fieldset: {
-        legend: {
-          text: 'Examined by DLO',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['typedByDlo-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['typedByDlo-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['typedByDlo-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    withdrawn: {
-      type: 'date',
-      id: 'withdrawn',
-      namePrefix: 'withdrawn',
-      fieldset: {
-        legend: {
-          text: 'Withdrawn from index',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      hint: {
-        text: 'An owner can ask for their dog be withdrawn from the index. DLOs can ask for a dog to be withdrawn if they do not consider it to be an XL Bully.'
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['withdrawn-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['withdrawn-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['withdrawn-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
-    nonComplianceLetterSent: {
-      type: 'date',
-      id: 'nonComplianceLetterSent',
-      namePrefix: 'nonComplianceLetterSent',
-      fieldset: {
-        legend: {
-          text: 'Non-compliance letter sent',
-          classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
-        }
-      },
-      items: [
-        {
-          name: 'day',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['nonComplianceLetterSent-day'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'month',
-          classes: 'govuk-input--width-2 govuk-!-font-size-16',
-          value: exemption['nonComplianceLetterSent-month'],
-          attributes: { maxlength: '2' }
-        },
-        {
-          name: 'year',
-          classes: 'govuk-input--width-4 govuk-!-font-size-16',
-          value: exemption['nonComplianceLetterSent-year'],
-          attributes: { maxlength: '4' }
-        }
-      ]
-    },
+    insuranceRenewal: constructDateField(exemption, 'insuranceRenewal', 'Insurance renewal date'),
+    neuteringConfirmation: constructDateField(exemption, 'neuteringConfirmation', 'Neutering confirmed'),
+    microchipVerification: constructDateField(exemption, 'microchipVerification', 'Microchip number verified'),
+    joinedExemptionScheme: constructDateField(exemption, 'joinedExemptionScheme', 'Joined interim exemption scheme'),
+    nonComplianceLetterSent: constructDateField(exemption, 'nonComplianceLetterSent', 'Non-compliance letter sent'),
+    microchipDeadline: constructDateField(exemption, 'microchipDeadline', 'Microchip deadline', 'The dog must be microchipped by this date.'),
+    typedByDlo: constructDateField(exemption, 'typedByDlo', 'Examined by DLO'),
+    withdrawn: constructDateField(exemption, 'withdrawn', 'Withdrawn from index', 'An owner can ask for their dog be withdrawn from the index. DLOs can ask for a dog to be withdrawn if they do not consider it to be an XL Bully.'),
     errors: []
   }
 
