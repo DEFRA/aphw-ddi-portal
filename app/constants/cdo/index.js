@@ -6,6 +6,9 @@ const constants = {
     manage: {
       get: '/cdo/manage'
     },
+    manageCdo: {
+      get: '/cdo/manage-cdo'
+    },
     manageExpired: {
       get: '/cdo/manage/expired'
     },
@@ -18,7 +21,8 @@ const constants = {
   },
   views: {
     created: 'cdo/create/record-created',
-    manage: 'cdo/manage/live'
+    manage: 'cdo/manage/live',
+    manageCdo: 'cdo/manage/cdo'
   },
   keys: {
     createdCdo: 'createdCdo'

@@ -1,0 +1,138 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+          {% for breadcrumb in model.breadcrumbs %}
+          <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="{{breadcrumb.link}}">
+              {{breadcrumb.label}}
+            </a>
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <form class="form" method="post">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Dog {{ model.details.dogIndex }}</h1>
+        </div>
+
+        <div class="govuk-grid-column-one-half defra-text-align-right">
+          <div class="govuk-button-group defra-align-right-simple govuk-!-margin-bottom-1">
+            <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+              Dog record
+            </a>
+            <a href="/cdo/view/owner-details/{{ model.details.personReference }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+              Owner record
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <strong class="govuk-tag govuk-!-margin-right-3">Pre-exempt</strong>
+
+      <span class="govuk-body defra-secondary-text">
+        CDO expires on {{ model.details.cdoExpiry }}
+      </span>
+
+      <details class="govuk-details govuk-!-margin-top-7">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            How to use the application task list
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">
+            You need to complete all tasks before you can issue an certificate of exemption to the dog owner.
+            </p>
+
+          <p class="govuk-body">
+            Start by sending the application pack. You can record the insurance renewal date, microchip number and application fee payment in any order. After that, you can send a Form 2.
+            </p>
+
+          <p class="govuk-body">
+            Remember to update the <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}" class="govuk-link govuk-link--no-visited-state">dog record</a> with other information you receive, like colour and sex of the dog.
+            </p>
+        </div>
+      </details>
+
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+        Manage CDO application
+      </h2>
+
+      <ul class="govuk-task-list">
+        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+        <div class="govuk-task-list__name-and-hint">
+          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="application-pack" aria-describedby="task-1-status" onclick="updateLocalStorage('task1Started')">Send application pack</a>
+        </div>
+        <div class="govuk-task-list__status" id="task-1-status">{{ model.details.tasks.applicationPackSent.status }}</div>
+        </li>
+
+        <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+          <div>Record insurance details</div>
+        </div>
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-1-status">
+          Cannot start yet
+        </div>
+        </li>
+
+        <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+          <div>Record microchip number</div>
+        </div>
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-2-status">
+          Cannot start yet
+        </div>
+        </li>
+
+        <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+          <div>Record application fee payment</div>
+        </div>
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-3-status">
+          Cannot start yet
+        </div>
+        </li>
+
+        <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+          <div>Send Form 2</div>
+        </div>
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-4-status">
+          Cannot start yet
+        </div>
+        </li>
+
+        <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+          <div>Record the verification date for microchip and neutering</div>
+        </div>
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-3-status">
+          Cannot start yet
+        </div>
+        </li>
+
+      </ul>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
