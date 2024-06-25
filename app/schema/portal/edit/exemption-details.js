@@ -145,5 +145,6 @@ const validatePayload = (payload) => {
 
 module.exports = {
   exemptionDetailsSchema,
-  validatePayload
+  validatePayload,
+  validateInsurance
 }

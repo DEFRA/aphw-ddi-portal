@@ -25,65 +25,24 @@ const createCdo = async (cdo, user) => {
 }
 
 const getManageCdoDetails = async (indexNumber) => {
-  return {
-    tasks: {
-      applicationPackSent: {
-        key: 'applicationPackSent',
-        available: true,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      insuranceDetailsRecorded: {
-        key: 'insuranceDetailsRecorded',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      microchipNumberRecorded: {
-        key: 'microchipNumberRecorded',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      applicationFeePaid: {
-        key: 'applicationFeePaid',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      form2Sent: {
-        key: 'form2Sent',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      verificationDateRecorded: {
-        key: 'verificationDateRecorded',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      },
-      certificateIssued: {
-        key: 'certificateIssued',
-        available: false,
-        completed: false,
-        editable: true,
-        timestamp: undefined
-      }
-    }
-  }
-  // const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
-  // return payload
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
+  return payload
+}
+
+const getCdoTaskDetails = async (indexNumber, taskName) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage/task/${taskName}`, options)
+  return payload
+}
+
+const saveCdoTaskDetails = async (indexNumber, taskName, payload, user) => {
+  const res = await post(`${cdoEndpoint}/${indexNumber}/manage/task/${taskName}`, payload, user)
+  return res
 }
 
 module.exports = {
   createCdo,
   getCdo,
-  getManageCdoDetails
+  getManageCdoDetails,
+  getCdoTaskDetails,
+  saveCdoTaskDetails
 }

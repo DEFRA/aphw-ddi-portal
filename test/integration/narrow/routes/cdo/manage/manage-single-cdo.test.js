@@ -23,12 +23,12 @@ describe('Manage Cdo test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/manage-cdo/ED123 route returns 200', async () => {
+  test('GET /cdo/manage/cdo/ED123 route returns 200', async () => {
     getCdo.mockResolvedValue({
       dog: {
         indexNumber: 'ED20001'
       },
-      peson: {
+      person: {
         personReference: 'P-A133-7E4C'
       },
       exemption: {
@@ -39,7 +39,7 @@ describe('Manage Cdo test', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/manage-cdo/ED123',
+      url: '/cdo/manage/cdo/ED123',
       auth
     }
 
@@ -47,9 +47,44 @@ describe('Manage Cdo test', () => {
     expect(response.statusCode).toBe(200)
 
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
-    expect(document.querySelector('ul[data-testid="tab-navigation"]')).not.toBeNull()
-    expect(document.querySelectorAll('.govuk-tabs__list-item')[0].textContent.trim()).toBe('Live CDOs')
+    expect(document.querySelector('h1.govuk-heading-xl').textContent.trim()).toBe('Dog ED20001')
+    expect(document.querySelector('span.govuk-body.defra-secondary-text').textContent.trim()).toBe('CDO expires on 19 April 2024')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[0].textContent.trim()).toBe('Send application pack')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[1].textContent.trim()).toBe('Not yet started')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[2].textContent.trim()).toBe('Record insurance details')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[3].textContent.trim()).toBe('Cannot start yet')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[4].textContent.trim()).toBe('Record microchip number')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[6].textContent.trim()).toBe('Cannot start yet')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[7].textContent.trim()).toBe('Record application fee payment')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[9].textContent.trim()).toBe('Cannot start yet')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[10].textContent.trim()).toBe('Send Form 2')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[12].textContent.trim()).toBe('Cannot start yet')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[13].textContent.trim()).toBe('Record the verification date for microchip and neutering')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[15].textContent.trim()).toBe('Cannot start yet')
+  })
+
+  test('GET /cdo/manage/cdo/ED123 route returns 404 when invalid index number', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        indexNumber: 'ED20001'
+      },
+      person: {
+        personReference: 'P-A133-7E4C'
+      },
+      exemption: {
+        cdoExpiry: new Date('2024-04-19')
+      }
+    })
+    getManageCdoDetails.mockResolvedValue(null)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/cdo/ED123',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(404)
   })
 
   afterEach(async () => {

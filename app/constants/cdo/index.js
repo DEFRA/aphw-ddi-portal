@@ -7,7 +7,10 @@ const constants = {
       get: '/cdo/manage'
     },
     manageCdo: {
-      get: '/cdo/manage-cdo'
+      get: '/cdo/manage/cdo'
+    },
+    manageCdoTaskBase: {
+      get: '/cdo/manage/task'
     },
     manageExpired: {
       get: '/cdo/manage/expired'
@@ -19,10 +22,19 @@ const constants = {
       get: '/cdo/manage/interim'
     }
   },
+  tasks: {
+    sendApplicationPack: 'send-application-pack',
+    recordInsuranceDetails: 'record-insurance-details',
+    recordMicrochipNumber: 'record-microchip-number',
+    recordApplicationFeePayment: 'record-application-fee-payment',
+    sendForm2: 'send-form2',
+    recordVerificationDates: 'record-verification-dates'
+  },
   views: {
     created: 'cdo/create/record-created',
     manage: 'cdo/manage/live',
-    manageCdo: 'cdo/manage/cdo'
+    manageCdo: 'cdo/manage/cdo',
+    taskViews: 'cdo/manage/tasks'
   },
   keys: {
     createdCdo: 'createdCdo'

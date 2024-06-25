@@ -79,14 +79,18 @@
       <ul class="govuk-task-list">
         <li class="govuk-task-list__item govuk-task-list__item--with-link">
         <div class="govuk-task-list__name-and-hint">
-          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="application-pack" aria-describedby="task-1-status" onclick="updateLocalStorage('task1Started')">Send application pack</a>
+          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/send-application-pack/{{ model.details.dogIndex }}" aria-describedby="task-1-status">Send application pack</a>
         </div>
         <div class="govuk-task-list__status" id="task-1-status">{{ model.details.tasks.applicationPackSent.status }}</div>
         </li>
 
         <li class="govuk-task-list__item">
         <div class="govuk-task-list__name-and-hint">
+          {% if model.details.tasks.applicationPackSent.status == 'Cannot start yet' %}
           <div>Record insurance details</div>
+          {% else %}
+          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/record-insurance-details/{{ model.details.dogIndex }}" aria-describedby="task-2-status">Record insurance details</a>
+          {% endif %}
         </div>
         <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-1-status">
           Cannot start yet

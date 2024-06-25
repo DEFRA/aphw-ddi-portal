@@ -28,6 +28,7 @@ module.exports = [{
   method: 'POST',
   path: routes.address.post,
   options: {
+    auth: { scope: anyLoggedInUser },
     validate: {
       options: {
         abortEarly: false
