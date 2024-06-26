@@ -30,12 +30,12 @@ const getManageCdoDetails = async (indexNumber) => {
 }
 
 const getCdoTaskDetails = async (indexNumber, taskName) => {
-  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage/task/${taskName}`, options)
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage:${taskName}`, options)
   return payload
 }
 
 const saveCdoTaskDetails = async (indexNumber, taskName, payload, user) => {
-  const res = await post(`${cdoEndpoint}/${indexNumber}/manage/task/${taskName}`, payload, user)
+  const res = await post(`${cdoEndpoint}/${indexNumber}/manage:${taskName}`, payload, user)
   return res
 }
 

@@ -61,7 +61,7 @@ describe('CDO API endpoints', () => {
       get.mockResolvedValue({ task: {} })
       const res = await cdo.getCdoTaskDetails('ED123', 'send-application-pack456')
 
-      expect(get).toHaveBeenCalledWith('cdo/ED123/manage/task/send-application-pack456', { json: true })
+      expect(get).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack456', { json: true })
       expect(res).toEqual({ task: {} })
     })
   })
@@ -70,7 +70,7 @@ describe('CDO API endpoints', () => {
     test('should do POST to API with correct endpoint and payload', async () => {
       await cdo.saveCdoTaskDetails('ED123', 'send-application-pack456', { payload: 'abc' }, user)
 
-      expect(post).toHaveBeenCalledWith('cdo/ED123/manage/task/send-application-pack456', { payload: 'abc' }, user)
+      expect(post).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack456', { payload: 'abc' }, user)
     })
   })
 })
