@@ -23,15 +23,15 @@ const taskNames = [
   { taskName: tasks.recordVerificationDates, Model: ViewModel6, validation: validateVerificationDates }
 ]
 
-const createModel = (taskName, param1, param2 = null, param3 = null, param4 = null) => {
+const createModel = (taskName, data, backNav, errors = null) => {
   const task = taskNames.find(x => x.taskName === taskName)
   if (task === undefined) {
     throw new Error(`Invalid task ${taskName} when getting model`)
   }
 
-  param1.taskName = taskName
+  data.taskName = taskName
 
-  return new task.Model(param1, param2, param3, param4)
+  return new task.Model(data, backNav, errors)
 }
 
 const getValidation = payload => {
@@ -45,13 +45,7 @@ const getValidation = payload => {
 
 const getTaskData = async (dogIndex, taskName) => {
   const savedTask = await getCdoTaskDetails(dogIndex, taskName)
-  const data = { indexNumber: dogIndex, ...savedTask }
-
-  if (taskName === tasks.recordInsuranceDetails) {
-    data.companies = await getCompanies()
-  }
-
-  return data
+  return await getTaskPayloadData(dogIndex, taskName, savedTask)
 }
 
 const getTaskPayloadData = async (dogIndex, taskName, payload) => {
