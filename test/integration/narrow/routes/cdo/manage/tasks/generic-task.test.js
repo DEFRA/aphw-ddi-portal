@@ -1,4 +1,5 @@
-const { auth, user } = require('../../../../../../mocks/auth')
+const FormData = require('form-data')
+const { auth, user, userWithDisplayname } = require('../../../../../../mocks/auth')
 jest.mock('../../../../../../../app/session/session-wrapper')
 const { setInSession } = require('../../../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
@@ -10,7 +11,7 @@ describe('Generic Task test', () => {
   const mockAuth = require('../../../../../../../app/auth')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/cdo')
-  const { getCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-api/cdo')
+  const { getCdoTaskDetails, saveCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-api/cdo')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
   const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
@@ -142,6 +143,61 @@ describe('Generic Task test', () => {
     expect(document.querySelectorAll('form div legend')[0].textContent.trim()).toBe('When was the dog\'s microchip number verified?')
     expect(document.querySelectorAll('form div legend')[1].textContent.trim()).toBe('When was the dog\'s neutering verified?')
     expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+  })
+
+  describe('POST /cdo/manage/task/send-application-pack/ED20001', () => {
+    test('returns 302 if not auth', async () => {
+      const fd = new FormData()
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        headers: fd.getHeaders(),
+        payload: fd.getBuffer()
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('fails param validation if invalid task name', async () => {
+      const fd = new FormData()
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/invalid-task-name/ED20001',
+        auth,
+        payload: fd.getBuffer()
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('fails validation if invalid payload', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('saves if valid payload', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'send-application-pack', options.payload, userWithDisplayname)
+    })
   })
 
   afterEach(async () => {

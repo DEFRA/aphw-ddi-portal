@@ -1,6 +1,8 @@
+const { tasks } = require('../../constants/cdo/index')
 const { formatToGds } = require('../../lib/date-helpers')
+const { getTaskDetails } = require('../../routes/cdo/manage/tasks/generic-task-helper')
 
-const getStatus = task => {
+const getTaskStatus = task => {
   if (!task?.available) {
     return 'Cannot start yet'
   }
@@ -9,16 +11,22 @@ const getStatus = task => {
 }
 
 const mapManageCdoDetails = (details, cdo) => {
-  details.tasks.applicationPackSent.status = getStatus(details.tasks.applicationPackSent)
-  details.tasks.insuranceDetailsRecorded.status = getStatus(details.tasks.insuranceDetailsRecorded)
-  details.tasks.microchipNumberRecorded.status = getStatus(details.tasks.microchipNumberRecorded)
-  details.tasks.applicationFeePaid.status = getStatus(details.tasks.applicationFeePaid)
-  details.tasks.form2Sent.status = getStatus(details.tasks.form2Sent)
-  details.tasks.verificationDateRecorded.status = getStatus(details.tasks.verificationDateRecorded)
-  details.tasks.certificateIssued.status = getStatus(details.tasks.certificateIssued)
+  const taskNames = Object.keys(details.tasks)
+  const taskList = []
+  taskNames.forEach(name => {
+    if (name !== tasks.certificateIssued) {
+      const { key, label } = getTaskDetails(name)
+      taskList.push({
+        label,
+        key,
+        status: getTaskStatus(details.tasks[name])
+      })
+    }
+  })
   details.dogIndex = cdo.dog.indexNumber
   details.personReference = cdo.person.personReference
   details.cdoExpiry = formatToGds(cdo.exemption.cdoExpiry)
+  details.taskList = taskList.filter(task => task.label)
   return details
 }
 

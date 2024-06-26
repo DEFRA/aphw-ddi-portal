@@ -4,7 +4,7 @@ const { getCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-ap
 jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
 const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
 
-const { createModel, getValidation, getTaskData, getTaskPayloadData } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
+const { createModel, getValidation, getTaskData, getTaskPayloadData, getTaskDetails } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
 
 describe('Generic Task Helper test', () => {
   describe('CreateModel', () => {
@@ -59,7 +59,7 @@ describe('Generic Task Helper test', () => {
     })
 
     test('should get correct validation for task 2', () => {
-      const payload = { taskName: 'record-insurance-details' }
+      const payload = { taskName: 'record-insurance-details', insuranceCompany: 'Company 1', 'insuranceRenewal-day': '01', 'insuranceRenewal-month': '01', 'insuranceRenewal-year': '2099' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-insurance-details')
@@ -87,10 +87,16 @@ describe('Generic Task Helper test', () => {
     })
 
     test('should get correct validation for task 6', () => {
-      const payload = { taskName: 'record-verification-dates' }
+      const payload = { taskName: 'record-verification-dates', 'microchipVerified-day': '01', 'microchipVerified-month': '05', 'microchipVerified-year': '2024', 'neuteringVerified-day': '01', 'neuteringVerified-month': '05', 'neuteringVerified-year': '2024' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-verification-dates')
+    })
+  })
+
+  describe('getTaskDetails', () => {
+    test('throws error if invalid task', () => {
+      expect(() => getTaskDetails('invalid')).toThrow('Invalid task invalid when getting details')
     })
   })
 

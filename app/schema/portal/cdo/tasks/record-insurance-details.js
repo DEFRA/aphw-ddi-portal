@@ -1,17 +1,21 @@
 const Joi = require('joi')
 const { validateDate, getDateComponents } = require('../../../../lib/date-helpers')
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
-const { validateInsurance } = require('../../../../schema/portal/edit/exemption-details')
 
 const insuranceSchema = Joi.object({
   taskName: Joi.string().required(),
-  insuranceCompany: Joi.string().trim().allow(''),
+  insuranceCompany: Joi.string().required().messages({
+    'string.empty': 'Select an insurance company'
+  }),
   insuranceRenewal: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).required().custom((value, helper) => validateDate(value, helper, false, false))
-}).custom(validateInsurance).required()
+  }).required().custom((value, helper) => validateDate(value, helper, true, false, true))
+    .messages({
+      'any.required': 'Insuarance renewal date is required'
+    })
+}).required()
 
 const validatePayloadRecordInsuranceDetails = (payload) => {
   payload.insuranceRenewal = getDateComponents(payload, 'insuranceRenewal')

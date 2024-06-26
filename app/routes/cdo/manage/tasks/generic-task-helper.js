@@ -14,17 +14,17 @@ const { validateVerificationDates } = require('../../../../schema/portal/cdo/tas
 const { getCompanies } = require('../../../../api/ddi-index-api/insurance')
 const { getCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
 
-const taskNames = [
-  { taskName: tasks.sendApplicationPack, Model: ViewModel1, validation: validateSendApplicationPack },
-  { taskName: tasks.recordInsuranceDetails, Model: ViewModel2, validation: validatePayloadRecordInsuranceDetails },
-  { taskName: tasks.recordMicrochipNumber, Model: ViewModel3, validation: validateMicrochipNumber },
-  { taskName: tasks.recordApplicationFeePayment, Model: ViewModel4, validation: validateApplicationFeePayment },
-  { taskName: tasks.sendForm2, Model: ViewModel5, validation: validateSendForm2 },
-  { taskName: tasks.recordVerificationDates, Model: ViewModel6, validation: validateVerificationDates }
+const taskList = [
+  { name: tasks.applicationPackSent, Model: ViewModel1, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack' },
+  { name: tasks.insuranceDetailsRecorded, Model: ViewModel2, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details' },
+  { name: tasks.microchipNumberRecorded, Model: ViewModel3, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number' },
+  { name: tasks.applicationFeePaid, Model: ViewModel4, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment' },
+  { name: tasks.form2Sent, Model: ViewModel5, validation: validateSendForm2, key: 'send-form2', label: 'Send Form 2' },
+  { name: tasks.verificationDateRecorded, Model: ViewModel6, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering' }
 ]
 
 const createModel = (taskName, data, backNav, errors = null) => {
-  const task = taskNames.find(x => x.taskName === taskName)
+  const task = taskList.find(x => x.key === taskName)
   if (task === undefined) {
     throw new Error(`Invalid task ${taskName} when getting model`)
   }
@@ -35,12 +35,21 @@ const createModel = (taskName, data, backNav, errors = null) => {
 }
 
 const getValidation = payload => {
-  const task = taskNames.find(x => x.taskName === payload?.taskName)
+  const task = taskList.find(x => x.key === payload?.taskName)
   if (task === undefined) {
     throw new Error(`Invalid task ${payload?.taskName} when getting validation`)
   }
 
   return task.validation(payload)
+}
+
+const getTaskDetails = taskName => {
+  const task = taskList.find(x => x.name === taskName)
+  if (task === undefined) {
+    throw new Error(`Invalid task ${taskName} when getting details`)
+  }
+
+  return { key: task.key, label: task.label }
 }
 
 const getTaskData = async (dogIndex, taskName) => {
@@ -51,7 +60,7 @@ const getTaskData = async (dogIndex, taskName) => {
 const getTaskPayloadData = async (dogIndex, taskName, payload) => {
   const data = { indexNumber: dogIndex, ...payload }
 
-  if (taskName === tasks.recordInsuranceDetails) {
+  if (taskName === 'record-insurance-details') {
     data.companies = await getCompanies()
   }
 
@@ -62,5 +71,6 @@ module.exports = {
   createModel,
   getValidation,
   getTaskData,
-  getTaskPayloadData
+  getTaskPayloadData,
+  getTaskDetails
 }

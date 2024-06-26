@@ -77,63 +77,28 @@
       </h2>
 
       <ul class="govuk-task-list">
-        <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/send-application-pack/{{ model.details.dogIndex }}" aria-describedby="task-1-status">Send application pack</a>
-        </div>
-        <div class="govuk-task-list__status" id="task-1-status">{{ model.details.tasks.applicationPackSent.status }}</div>
-        </li>
-
+        {% for task in model.details.taskList %}
         <li class="govuk-task-list__item">
         <div class="govuk-task-list__name-and-hint">
-          {% if model.details.tasks.applicationPackSent.status == 'Cannot start yet' %}
-          <div>Record insurance details</div>
+          {% if task.status == 'Cannot start yet' %}
+          <div>{{ task.label }}</div>
           {% else %}
-          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/record-insurance-details/{{ model.details.dogIndex }}" aria-describedby="task-2-status">Record insurance details</a>
+          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/{{ task.key }}/{{ model.details.dogIndex }}" aria-describedby="task-2-status">{{ task.label }}</a>
           {% endif %}
         </div>
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-1-status">
-          Cannot start yet
+        <div class="govuk-task-list__status {% if task.status == 'Cannot start yet' %}defra-secondary-text{% endif %}">
+          {{ task.status }}
         </div>
         </li>
-
-        <li class="govuk-task-list__item">
-        <div class="govuk-task-list__name-and-hint">
-          <div>Record microchip number</div>
-        </div>
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-2-status">
-          Cannot start yet
-        </div>
-        </li>
-
-        <li class="govuk-task-list__item">
-        <div class="govuk-task-list__name-and-hint">
-          <div>Record application fee payment</div>
-        </div>
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-3-status">
-          Cannot start yet
-        </div>
-        </li>
-
-        <li class="govuk-task-list__item">
-        <div class="govuk-task-list__name-and-hint">
-          <div>Send Form 2</div>
-        </div>
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-2-4-status">
-          Cannot start yet
-        </div>
-        </li>
-
-        <li class="govuk-task-list__item">
-        <div class="govuk-task-list__name-and-hint">
-          <div>Record the verification date for microchip and neutering</div>
-        </div>
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet" id="cdo-tasks-3-status">
-          Cannot start yet
-        </div>
-        </li>
-
+        {% endfor %}
       </ul>
+
+      {% if model.details.tasks.certificateIssued.available %}
+        {{ govukButton({
+          text: "Issue certificate"
+        }) }}
+      {% endif %}
+
     </form>
 
   </div>

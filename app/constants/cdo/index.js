@@ -23,12 +23,13 @@ const constants = {
     }
   },
   tasks: {
-    sendApplicationPack: 'send-application-pack',
-    recordInsuranceDetails: 'record-insurance-details',
-    recordMicrochipNumber: 'record-microchip-number',
-    recordApplicationFeePayment: 'record-application-fee-payment',
-    sendForm2: 'send-form2',
-    recordVerificationDates: 'record-verification-dates'
+    applicationPackSent: 'applicationPackSent',
+    insuranceDetailsRecorded: 'insuranceDetailsRecorded',
+    microchipNumberRecorded: 'microchipNumberRecorded',
+    applicationFeePaid: 'applicationFeePaid',
+    form2Sent: 'form2Sent',
+    verificationDateRecorded: 'verificationDateRecorded',
+    certificateIssued: 'certificateIssued'
   },
   views: {
     created: 'cdo/create/record-created',
