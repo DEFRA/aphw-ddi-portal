@@ -19,6 +19,7 @@ module.exports = [{
       const dogIndex = request.params.dogIndex
 
       const data = await getTaskData(dogIndex, taskName)
+      console.log('~~~~~~ Chris Debug ~~~~~~ ', 'Data', data)
 
       const backNav = addBackNavigation(request)
 
