@@ -15,7 +15,7 @@ const { getCompanies } = require('../../../../api/ddi-index-api/insurance')
 const { getCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
 
 const taskList = [
-  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack' },
+  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: '' },
   { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details' },
   { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number' },
   { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment' },
@@ -23,13 +23,14 @@ const taskList = [
   { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering' }
 ]
 
-const createModel = (taskName, data, backNav, errors = null) => {
-  const task = taskList.find(x => x.key === taskName)
+const createModel = (taskKey, data, backNav, errors = null) => {
+  const task = taskList.find(x => x.key === taskKey)
+
   if (task === undefined) {
-    throw new Error(`Invalid task ${taskName} when getting model`)
+    throw new Error(`Invalid task ${taskKey} when getting model`)
   }
 
-  data.taskName = taskName
+  data.taskName = taskKey
 
   return new task.Model(data, backNav, errors)
 }
@@ -49,16 +50,28 @@ const getTaskDetails = taskName => {
     throw new Error(`Invalid task ${taskName} when getting details`)
   }
 
-  return { key: task.key, label: task.label }
+  return { key: task.key, label: task.label, apiKey: task.name }
+}
+
+const getTaskDetailsByKey = taskKey => {
+  const task = taskList.find(x => x.key === taskKey)
+  if (task === undefined) {
+    throw new Error(`Invalid task ${taskKey} when getting details`)
+  }
+
+  return { key: task.key, label: task.label, apiKey: task.name }
 }
 
 const getTaskData = async (dogIndex, taskName) => {
   const savedTask = await getCdoTaskDetails(dogIndex, taskName)
-  return await getTaskPayloadData(dogIndex, taskName, savedTask)
+  return getTaskPayloadData(dogIndex, taskName, savedTask)
 }
 
 const getTaskPayloadData = async (dogIndex, taskName, payload) => {
-  const data = { indexNumber: dogIndex, ...payload }
+  const taskData = getTaskDetailsByKey(taskName)
+  const task = payload.tasks[taskData.apiKey]
+
+  const data = { indexNumber: dogIndex, task, ...payload }
 
   if (taskName === 'record-insurance-details') {
     data.companies = await getCompanies()
@@ -72,5 +85,6 @@ module.exports = {
   getValidation,
   getTaskData,
   getTaskPayloadData,
-  getTaskDetails
+  getTaskDetails,
+  getTaskDetailsByKey
 }

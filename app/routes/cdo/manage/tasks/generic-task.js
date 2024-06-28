@@ -2,7 +2,7 @@ const { routes, views } = require('../../../../constants/cdo/index')
 const { cdoTasksGetSchema } = require('../../../../schema/portal/cdo/tasks/generic-task')
 const { anyLoggedInUser } = require('../../../../auth/permissions')
 const getUser = require('../../../../auth/get-user')
-const { createModel, getTaskData, getValidation, getTaskPayloadData } = require('./generic-task-helper')
+const { createModel, getTaskData, getValidation } = require('./generic-task-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../lib/back-helpers')
 const { saveCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
 
@@ -19,7 +19,6 @@ module.exports = [{
       const dogIndex = request.params.dogIndex
 
       const data = await getTaskData(dogIndex, taskName)
-      console.log('~~~~~~ Chris Debug ~~~~~~ ', 'Data', data)
 
       const backNav = addBackNavigation(request)
 
@@ -45,7 +44,7 @@ module.exports = [{
 
         console.log(`Validation error in task ${taskName}:`, error)
 
-        const data = await getTaskPayloadData(request.params.dogIndex, taskName, request.payload)
+        const data = await getTaskData(request.params.dogIndex, taskName)
 
         const backNav = addBackNavigationForErrorCondition(request)
 

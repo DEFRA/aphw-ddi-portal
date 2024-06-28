@@ -4,7 +4,7 @@ jest.mock('../../../../../../../app/session/session-wrapper')
 const { setInSession } = require('../../../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
 jest.mock('../../../../../../../app/api/ddi-index-api/search')
-const { notYetStartedTask } = require('../../../../../../mocks/cdo/manage/tasks/not-yet-started')
+const { notYetStartedTaskList } = require('../../../../../../mocks/cdo/manage/tasks/not-yet-started')
 
 describe('Generic Task test', () => {
   jest.mock('../../../../../../../app/auth')
@@ -28,7 +28,7 @@ describe('Generic Task test', () => {
   })
 
   test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
 
     const options = {
       method: 'GET',
@@ -45,10 +45,38 @@ describe('Generic Task test', () => {
     expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the application pack to the dog owner.')
     expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the application pack')
     expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+    expect(document.querySelector('#taskDone').getAttribute('checked')).toBeNull()
+    expect(document.querySelectorAll('button')[4].getAttribute('disabled')).toBeNull()
+  })
+
+  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200 given application back sent', async () => {
+    getCdoTaskDetails.mockResolvedValue({
+      tasks: {
+        applicationPackSent: {
+          available: true,
+          completed: true,
+          readonly: true
+        }
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/task/send-application-pack/ED20001',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
+    expect(document.querySelector('#taskDone').getAttribute('checked')).not.toBeNull()
+    expect(document.querySelectorAll('button')[4].getAttribute('disabled')).not.toBeNull()
   })
 
   test('GET /cdo/manage/task/record-insurance-details/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
     getCompanies.mockResolvedValue([{ company: 'Insurance Company 1' }])
 
     const options = {
@@ -69,7 +97,7 @@ describe('Generic Task test', () => {
   })
 
   test('GET /cdo/manage/task/record-microchip-number/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
 
     const options = {
       method: 'GET',
@@ -87,7 +115,7 @@ describe('Generic Task test', () => {
   })
 
   test('GET /cdo/manage/task/record-application-fee-payment/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
 
     const options = {
       method: 'GET',
@@ -106,7 +134,7 @@ describe('Generic Task test', () => {
   })
 
   test('GET /cdo/manage/task/send-form2/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
 
     const options = {
       method: 'GET',
@@ -126,7 +154,7 @@ describe('Generic Task test', () => {
   })
 
   test('GET /cdo/manage/task/record-verification-dates/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTask)
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
 
     const options = {
       method: 'GET',

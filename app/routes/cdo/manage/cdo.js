@@ -22,7 +22,6 @@ module.exports = [
         }
 
         const cdo = await getCdo(dogIndex)
-
         return h.view(views.manageCdo, new ViewModel(details, cdo, backNav))
       }
     }
