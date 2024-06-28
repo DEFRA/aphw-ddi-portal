@@ -30,7 +30,7 @@ const getManageCdoDetails = async (indexNumber) => {
 }
 
 const getCdoTaskDetails = async (indexNumber, taskName) => {
-  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage:${taskName}`, options)
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
   return payload
 }
 

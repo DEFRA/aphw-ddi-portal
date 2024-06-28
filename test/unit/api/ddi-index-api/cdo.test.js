@@ -58,11 +58,11 @@ describe('CDO API endpoints', () => {
 
   describe('getCdoTaskDetails', () => {
     test('should do GET to API with correct endpoint', async () => {
-      get.mockResolvedValue({ task: {} })
+      get.mockResolvedValue({ tasks: {} })
       const res = await cdo.getCdoTaskDetails('ED123', 'send-application-pack456')
 
-      expect(get).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack456', { json: true })
-      expect(res).toEqual({ task: {} })
+      expect(get).toHaveBeenCalledWith('cdo/ED123/manage', { json: true })
+      expect(res).toEqual({ tasks: {} })
     })
   })
 
