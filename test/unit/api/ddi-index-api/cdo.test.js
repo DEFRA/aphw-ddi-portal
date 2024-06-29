@@ -68,9 +68,9 @@ describe('CDO API endpoints', () => {
 
   describe('saveCdoTaskDetails', () => {
     test('should do POST to API with correct endpoint and payload', async () => {
-      await cdo.saveCdoTaskDetails('ED123', 'send-application-pack456', { payload: 'abc' }, user)
+      await cdo.saveCdoTaskDetails('ED123', 'send-application-pack', { payload: 'abc' }, user)
 
-      expect(post).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack456', { payload: 'abc' }, user)
+      expect(post).toHaveBeenCalledWith('cdo/ED123/manage:sendApplicationPack', { payload: 'abc' }, user)
     })
   })
 })
