@@ -1,0 +1,60 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <form method="POST" novalidate autocomplete="off">
+      <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
+      <fieldset class="govuk-fieldset" aria-describedby="application-pack-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
+          <h1 class="govuk-fieldset__heading">Record the verification date for microchip and neutering</h1>
+        </legend>
+    
+        {{ govukDateInput(model.microchipVerified) }}
+
+        {{ govukDateInput(model.neuteringVerified) }}
+
+        <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
+
+      </fieldset>
+
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

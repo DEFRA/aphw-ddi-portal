@@ -1,6 +1,6 @@
 const {
   getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
-  getDateAsReadableString
+  getDateAsReadableString, validateDate
 } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
@@ -172,6 +172,36 @@ describe('date-helpers', () => {
 
     test('should handle null values', () => {
       expect(getStatsTimestamp(null)).toBe(null)
+    })
+  })
+
+  describe('validateDate', () => {
+    test('should error when preventFutureDates is true and date is in the future', () => {
+      const value = { day: '01', month: '01', year: '2099' }
+      const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, true)
+      expect(res).toBe('Enter a date that is today or in the past')
+    })
+
+    test('should validate ok when preventFutureDates is true and date is in the past', () => {
+      const value = { day: '01', month: '01', year: '2024' }
+      const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, true)
+      expect(res).toEqual(new Date(2024, 0, 1))
+    })
+
+    test('should error when preventPastDates is true and date is in the past', () => {
+      const value = { day: '01', month: '01', year: '2024' }
+      const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, false, true)
+      expect(res).toBe('Enter a date that is today or in the future')
+    })
+
+    test('should validate ok when preventPastDates is true and date is in the future', () => {
+      const value = { day: '01', month: '01', year: '2099' }
+      const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, false, true)
+      expect(res).toEqual(new Date(2099, 0, 1))
     })
   })
 })

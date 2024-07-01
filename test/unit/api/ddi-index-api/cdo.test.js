@@ -2,6 +2,8 @@ describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
   const { get, post } = require('../../../../app/api/ddi-index-api/base')
 
+  const { user } = require('../../../mocks/auth')
+
   const { cdo } = require('../../../../app/api/ddi-index-api')
 
   const { valid, invalid, validWithCountry, validWithCountryAndPersonReference } = require('../../../mocks/cdo/createPayload')
@@ -41,6 +43,34 @@ describe('CDO API endpoints', () => {
     test('createCdo with invalid payload should not post to API', async () => {
       await expect(cdo.createCdo(invalid)).rejects.toThrow()
       expect(post).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('getManageCdoDetails', () => {
+    test('should do GET to API with correct endpoint', async () => {
+      get.mockResolvedValue({ tasks: {} })
+      const res = await cdo.getManageCdoDetails('ED123')
+
+      expect(get).toHaveBeenCalledWith('cdo/ED123/manage', { json: true })
+      expect(res).toEqual({ tasks: {} })
+    })
+  })
+
+  describe('getCdoTaskDetails', () => {
+    test('should do GET to API with correct endpoint', async () => {
+      get.mockResolvedValue({ tasks: {} })
+      const res = await cdo.getCdoTaskDetails('ED123', 'send-application-pack456')
+
+      expect(get).toHaveBeenCalledWith('cdo/ED123/manage', { json: true })
+      expect(res).toEqual({ tasks: {} })
+    })
+  })
+
+  describe('saveCdoTaskDetails', () => {
+    test('should do POST to API with correct endpoint and payload', async () => {
+      await cdo.saveCdoTaskDetails('ED123', 'send-application-pack', { payload: 'abc' }, user)
+
+      expect(post).toHaveBeenCalledWith('cdo/ED123/manage:sendApplicationPack', { payload: 'abc' }, user)
     })
   })
 })

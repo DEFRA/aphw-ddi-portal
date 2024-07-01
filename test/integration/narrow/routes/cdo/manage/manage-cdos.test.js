@@ -1,18 +1,18 @@
-const { auth, user } = require('../../../../mocks/auth')
+const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
-jest.mock('../../../../../app/session/session-wrapper')
-const { setInSession } = require('../../../../../app/session/session-wrapper')
+jest.mock('../../../../../../app/session/session-wrapper')
+const { setInSession } = require('../../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
-jest.mock('../../../../../app/api/ddi-index-api/search')
+jest.mock('../../../../../../app/api/ddi-index-api/search')
 
 describe('Manage Live Cdos test', () => {
-  jest.mock('../../../../../app/auth')
-  const mockAuth = require('../../../../../app/auth')
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../app/api/ddi-index-api/cdos')
-  const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions, getExpiredCdos } = require('../../../../../app/api/ddi-index-api/cdos')
+  jest.mock('../../../../../../app/api/ddi-index-api/cdos')
+  const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions, getExpiredCdos } = require('../../../../../../app/api/ddi-index-api/cdos')
 
-  const createServer = require('../../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   setInSession.mockReturnValue()
