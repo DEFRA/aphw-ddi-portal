@@ -1,5 +1,6 @@
 const Joi = require('joi')
 
+console.log('~~~~~~ Chris Debug ~~~~~~ auth.js init', '')
 // Define config schema
 const schema = Joi.object({
   enabled: Joi.boolean().default(false),
@@ -40,4 +41,5 @@ if (result.error) {
   throw new Error(`The auth config is invalid. ${result.error.message}`)
 }
 
+console.log('~~~~~~ Chris Debug ~~~~~~ auth.js completed init', '')
 module.exports = result.value
