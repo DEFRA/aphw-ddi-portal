@@ -40,6 +40,12 @@ describe('Base API', () => {
       await post('endpoint2', { val: 123 }, user)
       expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
     })
+
+    test('post should not fail given an empty payload', async () => {
+      wreck.post.mockResolvedValue({ payload: { toString () { return '' } } })
+      await post('endpoint2', { val: 123 }, user)
+      expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com' } })
+    })
   })
 
   describe('PUT', () => {

@@ -48,6 +48,7 @@ module.exports = [{
   method: 'POST',
   path: `${routes.editAddress.post}/{personReference}/{fromSessionOrDb?}`,
   options: {
+    auth: { scope: anyLoggedInUser },
     validate: {
       options: {
         abortEarly: false
