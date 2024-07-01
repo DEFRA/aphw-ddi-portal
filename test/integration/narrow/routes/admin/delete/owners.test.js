@@ -309,6 +309,7 @@ describe('Delete owners', () => {
       expect(setOrphanedOwnersForDeletion).toHaveBeenCalledWith(expect.anything(), undefined)
       const { document } = new JSDOM(response.payload).window
 
+      expect(document.querySelector('.govuk-caption-l').textContent.trim()).toBe('Delete dog owner records without a dog')
       expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('No records selected')
     })
 
