@@ -1,5 +1,5 @@
 const { UTCDate } = require('@date-fns/utc')
-const { parse, isValid, isFuture, format } = require('date-fns')
+const { parse, isValid, isFuture, isToday, format } = require('date-fns')
 const { formatInTimeZone } = require('date-fns-tz')
 
 const validDateFormats = [
@@ -99,7 +99,7 @@ const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
 
-const validateDate = (value, helpers, required = false, preventFutureDates = false) => {
+const validateDate = (value, helpers, required = false, preventFutureDates = false, preventPastDates = false) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -126,6 +126,10 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
 
     if (preventFutureDates && isFuture(date)) {
       return helpers.message('Enter a date that is today or in the past', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
+    if (preventPastDates && !isFuture(date) && !isToday(date)) {
+      return helpers.message('Enter a date that is today or in the future', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     return date

@@ -24,7 +24,29 @@ const createCdo = async (cdo, user) => {
   return res
 }
 
+const getManageCdoDetails = async (indexNumber) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
+  return payload
+}
+
+const getCdoTaskDetails = async (indexNumber, taskName) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
+  return payload
+}
+
+const taskNameMapper = {
+  'send-application-pack': 'sendApplicationPack'
+}
+
+const saveCdoTaskDetails = async (indexNumber, taskName, payload, user) => {
+  const res = await post(`${cdoEndpoint}/${indexNumber}/manage:${taskNameMapper[taskName]}`, payload, user)
+  return res
+}
+
 module.exports = {
   createCdo,
-  getCdo
+  getCdo,
+  getManageCdoDetails,
+  getCdoTaskDetails,
+  saveCdoTaskDetails
 }
