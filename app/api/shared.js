@@ -10,7 +10,7 @@ const buildPostRequest = (baseUrl) => async (endpoint, data, user) => {
 
   const { payload } = await wreck.post(`${baseUrl}/${endpoint}`, options)
 
-  if (!payload.toString().length > 0) {
+  if (payload.toString().length === 0) {
     return
   }
 
