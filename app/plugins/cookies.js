@@ -12,6 +12,8 @@ module.exports = {
       server.ext('onPreResponse', (request, h) => {
         console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies onPreResponse', '')
         const statusCode = request.response.statusCode
+        console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies onPreResponse status', statusCode)
+        console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies onPreResponse variety', request.response.variety)
         if (request.response.variety === 'view' && statusCode !== 404 && statusCode !== 500 && request.response.source.manager._context) {
           console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies getting cookiesPolicy', '')
           const cookiesPolicy = getCurrentPolicy(request, h)
