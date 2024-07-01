@@ -15,7 +15,7 @@ module.exports = {
         if (request.response.variety === 'view' && statusCode !== 404 && statusCode !== 500 && request.response.source.manager._context) {
           console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies getting cookiesPolicy', '')
           const cookiesPolicy = getCurrentPolicy(request, h)
-          console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies success getting cookiesPolicy', '')
+          console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies success getting cookiesPolicy', cookiesPolicy)
           request.response.source.manager._context.cookiesPolicy = cookiesPolicy
         }
         console.log('~~~~~~ Chris Debug ~~~~~~ plugins/cookies returning', '')
