@@ -1,3 +1,4 @@
+const { deepClone } = require('../../../../../../app/lib/model-helpers')
 const { auth, user, standardAuth } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 
@@ -104,5 +105,54 @@ describe('Activities admin', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(403)
+  })
+
+  test('route prevents removal of certain types', async () => {
+    const actRows = deepClone(activityRows)
+    actRows.dogSent[1].label = 'Application pack'
+    actRows.dogReceived[0].label = 'Application pack'
+    actRows.ownerSent[0].label = 'Application pack'
+    actRows.ownerReceived[0].label = 'Application pack'
+    getAllActivities.mockResolvedValue(actRows)
+
+    const options = {
+      method: 'GET',
+      url: '/admin/activities',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(getAllActivities).toHaveBeenCalledTimes(1)
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Manage activity lists')
+    expect(document.querySelectorAll('.govuk-summary-card__title')[0].textContent.trim()).toBe('Send activities')
+    expect(document.querySelectorAll('.govuk-summary-card__title')[1].textContent.trim()).toBe('Receive activities')
+    expect(document.querySelectorAll('.govuk-summary-card__title')[2].textContent.trim()).toBe('Send activities')
+    expect(document.querySelectorAll('.govuk-summary-card__title')[3].textContent.trim()).toBe('Receive activities')
+
+    const rows = document.querySelectorAll('.govuk-summary-list__key')
+    expect(rows.length).toBe(10)
+    expect(rows[0].textContent.trim()).toBe('dog sent 1')
+    expect(rows[1].textContent.trim()).toBe('Application pack')
+    expect(rows[2].textContent.trim()).toBe('dog sent 3')
+    expect(rows[3].textContent.trim()).toBe('Application pack')
+    expect(rows[4].textContent.trim()).toBe('dog received 2')
+    expect(rows[5].textContent.trim()).toBe('Application pack')
+    expect(rows[6].textContent.trim()).toBe('owner sent 2')
+    expect(rows[7].textContent.trim()).toBe('owner sent 3')
+    expect(rows[8].textContent.trim()).toBe('Application pack')
+    expect(rows[9].textContent.trim()).toBe('owner received 2')
+
+    const hrefs = document.querySelectorAll('.govuk-summary-list__actions a')
+    expect(hrefs.length).toBe(6)
+    expect(hrefs[0].getAttribute('href')).toBe('/admin/activities/remove/1')
+    expect(hrefs[1].getAttribute('href')).toBe('/admin/activities/remove/3')
+    expect(hrefs[2].getAttribute('href')).toBe('/admin/activities/remove/5')
+    expect(hrefs[3].getAttribute('href')).toBe('/admin/activities/remove/7')
+    expect(hrefs[4].getAttribute('href')).toBe('/admin/activities/remove/8')
+    expect(hrefs[5].getAttribute('href')).toBe('/admin/activities/remove/10')
   })
 })
