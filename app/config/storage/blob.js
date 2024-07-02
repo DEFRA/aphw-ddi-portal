@@ -1,6 +1,5 @@
 const Joi = require('joi')
 
-console.log('~~~~~~ Chris Debug ~~~~~~ Initialising Blob storage config blob.js')
 // Define config schema
 const schema = Joi.object({
   connectionString: Joi.string().when('useConnectionString', { is: true, then: Joi.required(), otherwise: Joi.allow('').optional() }),
@@ -29,5 +28,4 @@ if (result.error) {
   throw new Error(`The blob storage config is invalid. ${result.error.message}`)
 }
 
-console.log('~~~~~~ Chris Debug ~~~~~~ Blog storage config initialised blob.js', '')
 module.exports = result.value
