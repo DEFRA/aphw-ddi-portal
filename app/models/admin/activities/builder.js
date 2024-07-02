@@ -2,6 +2,15 @@ const { routes, breadcrumbs } = require('../../../constants/admin')
 const { keys } = require('../../../constants/cdo/activity')
 const ViewModel = require('../success')
 
+const disableIfNeeded = (activities) => {
+  if (!activities || activities.length === 0) {
+    return activities
+  }
+  return activities.map(act => ({
+    ...act,
+    canRemove: act.label !== 'Application pack'
+  }))
+}
 /**
  *
  * @param activities
@@ -10,10 +19,10 @@ const ViewModel = require('../success')
 const ActivityListViewModel = (activities) => {
   return {
     model: {
-      dogSent: activities.dogSent,
-      dogReceived: activities.dogReceived,
-      ownerSent: activities.ownerSent,
-      ownerReceived: activities.ownerReceived
+      dogSent: disableIfNeeded(activities.dogSent),
+      dogReceived: disableIfNeeded(activities.dogReceived),
+      ownerSent: disableIfNeeded(activities.ownerSent),
+      ownerReceived: disableIfNeeded(activities.ownerReceived)
     }
   }
 }
@@ -65,5 +74,6 @@ const ActivityRemovedViewModel = (activity) => {
 module.exports = {
   ActivityListViewModel,
   ActivityAddedViewModel,
-  ActivityRemovedViewModel
+  ActivityRemovedViewModel,
+  disableIfNeeded
 }
