@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 
 module.exports = {
-  workerIdleMemoryLimit: '512MB',
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.js',

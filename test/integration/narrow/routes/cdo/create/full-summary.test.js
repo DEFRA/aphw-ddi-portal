@@ -2,8 +2,24 @@ const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { UTCDate } = require('@date-fns/utc')
 const { JSDOM } = require('jsdom')
-const wreck = require('@hapi/wreck')
-jest.mock('@hapi/wreck')
+
+const courtList = [
+  { id: 1, name: 'court1' },
+  { id: 2, name: 'court2' },
+  { id: 3, name: 'court3' },
+  { id: 4, name: 'court4' },
+  { id: 5, name: 'court5' },
+  { id: 6, name: 'court6' }
+]
+
+const policeForceList = [
+  { id: 1, name: 'policeForce1' },
+  { id: 2, name: 'policeForce2' },
+  { id: 3, name: 'policeForce3' },
+  { id: 4, name: 'policeForce4' },
+  { id: 5, name: 'policeForce5' },
+  { id: 6, name: 'policeForce6' }
+]
 
 describe('FullSummary test', () => {
   jest.mock('../../../../../../app/auth')
@@ -20,6 +36,9 @@ describe('FullSummary test', () => {
 
   jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
   const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/cdo')
+  const { createCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -131,6 +150,7 @@ describe('FullSummary test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/login')
   })
 
   test('POST /cdo/create/full-summary route creates CDO', async () => {
@@ -163,8 +183,7 @@ describe('FullSummary test', () => {
       policeForce: 'police-force-5',
       legislationOfficer: 'DLO1'
     })
-
-    wreck.post.mockResolvedValue({ payload: '{"resultCode": 200}' })
+    createCdo.mockResolvedValue({ resultCode: 200 })
 
     const options = {
       method: 'POST',
@@ -175,42 +194,41 @@ describe('FullSummary test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
+    expect(createCdo).toHaveBeenCalledWith(
       {
-        headers: {
-          'ddi-displayname': 'Example Tester',
-          'ddi-username': 'test@example.com'
-        },
-        payload: {
-          dogs: [
-            {
-              applicationType: 'cdo',
-              breed: 'Breed 1',
-              cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
-              cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
-              interimExemption: undefined,
-              name: 'Bruce'
-            }
-          ],
-          enforcementDetails: {
-            court: 'court2',
-            legislationOfficer: 'DLO1',
-            policeForce: 'police-force-5'
-          },
-          owner: {
-            address: {
-              addressLine1: '1 Test Street',
-              addressLine2: 'Testarea',
-              postcode: 'TS1 1TS',
-              town: 'Testington',
-              country: 'Wales'
-            },
-            dateOfBirth: '2000-03-17T00:00:00.000Z',
-            firstName: 'John',
-            lastName: 'Smith',
-            personReference: null
+        dogs: [
+          {
+            applicationType: 'cdo',
+            breed: 'Breed 1',
+            cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
+            cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
+            interimExemption: undefined,
+            name: 'Bruce'
           }
+        ],
+        enforcementDetails: {
+          court: 'court2',
+          legislationOfficer: 'DLO1',
+          policeForce: 'police-force-5'
+        },
+        owner: {
+          address: {
+            addressLine1: '1 Test Street',
+            addressLine2: 'Testarea',
+            postcode: 'TS1 1TS',
+            town: 'Testington',
+            country: 'Wales'
+          },
+          dateOfBirth: '2000-03-17T00:00:00.000Z',
+          firstName: 'John',
+          lastName: 'Smith',
+          personReference: null
         }
+      },
+      {
+        displayname: 'Example Tester',
+        username: 'test@example.com',
+        userId: '1'
       })
   })
 
@@ -245,8 +263,7 @@ describe('FullSummary test', () => {
       policeForce: 'police-force-5',
       legislationOfficer: 'DLO1'
     })
-
-    wreck.post.mockResolvedValue({ payload: '{"resultCode": 200}' })
+    createCdo.mockResolvedValue({ resultCode: 200 })
 
     const options = {
       method: 'POST',
@@ -257,42 +274,41 @@ describe('FullSummary test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(wreck.post).toHaveBeenCalledWith(expect.anything(),
+    expect(createCdo).toHaveBeenCalledWith(
       {
-        headers: {
-          'ddi-displayname': 'Example Tester',
-          'ddi-username': 'test@example.com'
-        },
-        payload: {
-          dogs: [
-            {
-              applicationType: 'cdo',
-              breed: 'Breed 1',
-              cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
-              cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
-              interimExemption: undefined,
-              name: 'Bruce'
-            }
-          ],
-          enforcementDetails: {
-            court: 'court2',
-            legislationOfficer: 'DLO1',
-            policeForce: 'police-force-5'
-          },
-          owner: {
-            address: {
-              addressLine1: '1 Test Street',
-              addressLine2: 'Testarea',
-              postcode: 'TS1 1TS',
-              town: 'Testington',
-              country: 'Wales'
-            },
-            dateOfBirth: '2000-03-17T00:00:00.000Z',
-            firstName: 'John',
-            lastName: 'Smith',
-            personReference: 'P-AE73-43DA'
+        dogs: [
+          {
+            applicationType: 'cdo',
+            breed: 'Breed 1',
+            cdoExpiry: new Date('2020-12-10T00:00:00.000Z'),
+            cdoIssued: new Date('2020-10-10T00:00:00.000Z'),
+            interimExemption: undefined,
+            name: 'Bruce'
           }
+        ],
+        enforcementDetails: {
+          court: 'court2',
+          legislationOfficer: 'DLO1',
+          policeForce: 'police-force-5'
+        },
+        owner: {
+          address: {
+            addressLine1: '1 Test Street',
+            addressLine2: 'Testarea',
+            postcode: 'TS1 1TS',
+            town: 'Testington',
+            country: 'Wales'
+          },
+          dateOfBirth: '2000-03-17T00:00:00.000Z',
+          firstName: 'John',
+          lastName: 'Smith',
+          personReference: 'P-AE73-43DA'
         }
+      },
+      {
+        displayname: 'Example Tester',
+        username: 'test@example.com',
+        userId: '1'
       })
   })
 
@@ -301,21 +317,3 @@ describe('FullSummary test', () => {
     await server.stop()
   })
 })
-
-const courtList = [
-  { id: 1, name: 'court1' },
-  { id: 2, name: 'court2' },
-  { id: 3, name: 'court3' },
-  { id: 4, name: 'court4' },
-  { id: 5, name: 'court5' },
-  { id: 6, name: 'court6' }
-]
-
-const policeForceList = [
-  { id: 1, name: 'policeForce1' },
-  { id: 2, name: 'policeForce2' },
-  { id: 3, name: 'policeForce3' },
-  { id: 4, name: 'policeForce4' },
-  { id: 5, name: 'policeForce5' },
-  { id: 6, name: 'policeForce6' }
-]
