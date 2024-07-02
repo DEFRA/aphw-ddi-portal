@@ -3,6 +3,7 @@ const config = require('./config').cookieOptions
 const getCurrentPolicy = (request, h) => {
   let cookiesPolicy = request.state.cookies_policy
   if (!cookiesPolicy) {
+    console.log('*****creating policy')
     cookiesPolicy = createDefaultPolicy(h)
   }
   return cookiesPolicy

@@ -34,12 +34,8 @@ const getCdoTaskDetails = async (indexNumber, taskName) => {
   return payload
 }
 
-const taskNameMapper = {
-  'send-application-pack': 'sendApplicationPack'
-}
-
-const saveCdoTaskDetails = async (indexNumber, taskName, payload, user) => {
-  const res = await post(`${cdoEndpoint}/${indexNumber}/manage:${taskNameMapper[taskName]}`, payload, user)
+const saveCdoTaskDetails = async (indexNumber, apiKey, payload, user) => {
+  const res = await post(`${cdoEndpoint}/${indexNumber}/manage:${apiKey}`, payload, user)
   return res
 }
 

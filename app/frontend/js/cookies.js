@@ -6,46 +6,48 @@ const questionBanner = document.querySelector('.js-question-banner')
 const cookieBanner = document.querySelector('.js-cookies-banner')
 const cookieContainer = document.querySelector('.js-cookies-container')
 
-cookieContainer.style.display = 'block'
+if (cookieContainer) {
+  cookieContainer.style.display = 'block'
 
-function showBanner (banner) {
-  questionBanner.setAttribute('hidden', 'hidden')
-  banner.removeAttribute('hidden')
-  // Shift focus to the banner
-  banner.setAttribute('tabindex', '-1')
-  banner.focus()
+  function showBanner (banner) {
+    questionBanner.setAttribute('hidden', 'hidden')
+    banner.removeAttribute('hidden')
+    // Shift focus to the banner
+    banner.setAttribute('tabindex', '-1')
+    banner.focus()
 
-  banner.addEventListener('blur', function () {
-    banner.removeAttribute('tabindex')
+    banner.addEventListener('blur', function () {
+      banner.removeAttribute('tabindex')
+    })
+  }
+
+  acceptButton?.addEventListener('click', function (event) {
+    showBanner(acceptedBanner)
+    event.preventDefault()
+    submitPreference(true)
   })
-}
 
-acceptButton.addEventListener('click', function (event) {
-  showBanner(acceptedBanner)
-  event.preventDefault()
-  submitPreference(true)
-})
+  rejectButton?.addEventListener('click', function (event) {
+    showBanner(rejectedBanner)
+    event.preventDefault()
+    submitPreference(false)
+  })
 
-rejectButton.addEventListener('click', function (event) {
-  showBanner(rejectedBanner)
-  event.preventDefault()
-  submitPreference(false)
-})
+  acceptedBanner?.querySelector('.js-hide').addEventListener('click', function () {
+    cookieBanner.setAttribute('hidden', 'hidden')
+  })
 
-acceptedBanner.querySelector('.js-hide').addEventListener('click', function () {
-  cookieBanner.setAttribute('hidden', 'hidden')
-})
+  rejectedBanner?.querySelector('.js-hide').addEventListener('click', function () {
+    cookieBanner.setAttribute('hidden', 'hidden')
+  })
 
-rejectedBanner.querySelector('.js-hide').addEventListener('click', function () {
-  cookieBanner.setAttribute('hidden', 'hidden')
-})
-
-function submitPreference (accepted) {
+  function submitPreference (accepted) {
   const xhr = new XMLHttpRequest() // eslint-disable-line
-  xhr.open('POST', '/cookies', true)
-  xhr.setRequestHeader('Content-Type', 'application/json')
-  xhr.send(JSON.stringify({
-    analytics: accepted,
-    async: true
-  }))
+    xhr.open('POST', '/cookies', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(JSON.stringify({
+      analytics: accepted,
+      async: true
+    }))
+  }
 }
