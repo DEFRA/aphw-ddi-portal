@@ -74,5 +74,6 @@ const ActivityRemovedViewModel = (activity) => {
 module.exports = {
   ActivityListViewModel,
   ActivityAddedViewModel,
-  ActivityRemovedViewModel
+  ActivityRemovedViewModel,
+  disableIfNeeded
 }
