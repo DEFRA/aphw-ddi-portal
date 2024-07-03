@@ -2,9 +2,9 @@ const { routes, views } = require('../../../../constants/cdo/index')
 const { cdoTasksGetSchema } = require('../../../../schema/portal/cdo/tasks/generic-task')
 const { anyLoggedInUser } = require('../../../../auth/permissions')
 const getUser = require('../../../../auth/get-user')
-const { createModel, getTaskData, getValidation } = require('./generic-task-helper')
+const { createModel, getTaskData, getValidation, getTaskDetailsByKey } = require('./generic-task-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../lib/back-helpers')
-const { saveCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
+const { saveCdoTaskDetails, getCdo } = require('../../../../api/ddi-index-api/cdo')
 
 module.exports = [{
   method: 'GET',
@@ -17,6 +17,11 @@ module.exports = [{
     handler: async (request, h) => {
       const taskName = request.params.taskName
       const dogIndex = request.params.dogIndex
+
+      const cdo = await getCdo(dogIndex)
+      if (cdo?.dog?.status !== 'Pre-exempt') {
+        throw new Error(`Dog ${dogIndex} is wrong status for manage-cdo`)
+      }
 
       const data = await getTaskData(dogIndex, taskName)
 
@@ -55,7 +60,10 @@ module.exports = [{
       const dogIndex = request.params.dogIndex
       const taskName = request.params.taskName
 
-      await saveCdoTaskDetails(dogIndex, taskName, request.payload, getUser(request))
+      const { apiKey } = getTaskDetailsByKey(taskName)
+      console.log('taskName', taskName)
+      console.log('apiKey', apiKey)
+      await saveCdoTaskDetails(dogIndex, apiKey, request.payload, getUser(request))
 
       return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
     }

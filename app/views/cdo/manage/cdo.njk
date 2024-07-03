@@ -83,7 +83,7 @@
           {% if task.status == 'Cannot start yet' %}
           <div>{{ task.label }}</div>
           {% else %}
-          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/{{ task.key }}/{{ model.details.dogIndex }}" aria-describedby="task-2-status">{{ task.label }}</a>
+          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/{{ task.key }}/{{ model.details.dogIndex }}{{ model.srcHashParam }}" aria-describedby="task-2-status">{{ task.label }}</a>
           {% endif %}
         </div>
         <div class="govuk-task-list__status {% if task.status == 'Cannot start yet' %}defra-secondary-text{% endif %}">

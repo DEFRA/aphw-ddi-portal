@@ -22,5 +22,15 @@ describe('builder', () => {
       expect(res[1].canRemove).toBeFalsy()
       expect(res[2].canRemove).toBeTruthy()
     })
+
+    test('should handle null', () => {
+      const res = disableIfNeeded(null)
+      expect(res).toBe(null)
+    })
+
+    test('should handle empty array', () => {
+      const res = disableIfNeeded([])
+      expect(res).toEqual([])
+    })
   })
 })
