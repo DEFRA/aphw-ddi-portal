@@ -2,6 +2,7 @@ const { routes, views } = require('../../../../constants/cdo/index')
 const { cdoTasksGetSchema } = require('../../../../schema/portal/cdo/tasks/generic-task')
 const { anyLoggedInUser } = require('../../../../auth/permissions')
 const getUser = require('../../../../auth/get-user')
+const { addDateComponents } = require('../../../../lib/date-helpers')
 const { createModel, getTaskData, getValidation, getTaskDetailsByKey } = require('./generic-task-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../lib/back-helpers')
 const { saveCdoTaskDetails, getCdo } = require('../../../../api/ddi-index-api/cdo')
@@ -27,6 +28,9 @@ module.exports = [{
 
       const backNav = addBackNavigation(request)
 
+      addDateComponents(data, 'insuranceRenewal')
+      addDateComponents(data, 'applicationFeePaid')
+
       return h.view(`${views.taskViews}/${taskName}`, createModel(taskName, data, backNav))
     }
   }
@@ -49,7 +53,7 @@ module.exports = [{
 
         console.log(`Validation error in task ${taskName}:`, error)
 
-        const data = await getTaskData(request.params.dogIndex, taskName)
+        const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
 
         const backNav = addBackNavigationForErrorCondition(request)
 
@@ -59,11 +63,10 @@ module.exports = [{
     handler: async (request, h) => {
       const dogIndex = request.params.dogIndex
       const taskName = request.params.taskName
+      const payload = request.payload
 
       const { apiKey } = getTaskDetailsByKey(taskName)
-      console.log('taskName', taskName)
-      console.log('apiKey', apiKey)
-      await saveCdoTaskDetails(dogIndex, apiKey, request.payload, getUser(request))
+      await saveCdoTaskDetails(dogIndex, apiKey, payload, getUser(request))
 
       return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
     }

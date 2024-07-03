@@ -1,5 +1,6 @@
 const { get, post } = require('./base')
 const createCdoSchema = require('../../schema/ddi-index-api/cdo/create')
+const { removeIndividualDateComponents } = require('../../lib/date-helpers')
 
 const cdoEndpoint = 'cdo'
 
@@ -35,6 +36,8 @@ const getCdoTaskDetails = async (indexNumber, taskName) => {
 }
 
 const saveCdoTaskDetails = async (indexNumber, apiKey, payload, user) => {
+  payload = removeIndividualDateComponents(payload)
+  delete payload.taskName
   const res = await post(`${cdoEndpoint}/${indexNumber}/manage:${apiKey}`, payload, user)
   return res
 }

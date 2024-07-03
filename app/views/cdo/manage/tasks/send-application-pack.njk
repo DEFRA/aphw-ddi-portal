@@ -51,11 +51,16 @@
 
       </fieldset>
 
+      {% if model.disabled %}
       {{ govukButton({
-        text: "Save and continue",
-        disabled: model.disabled
+        text: "Continue",
+        href: model.backLink
       }) }}
-
+      {% else %}
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+      {% endif %}
     </form>
   </div>
 </div>

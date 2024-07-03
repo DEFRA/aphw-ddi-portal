@@ -207,6 +207,16 @@ const getStatsTimestamp = (date = new Date()) => {
   return `${getTimeInAmPm(date.toISOString())}, ${getDateAsReadableString(date.toISOString())}`
 }
 
+const removeIndividualDateComponents = (payload) => {
+  const keys = Object.keys(payload)
+  keys.forEach(key => {
+    if (key.endsWith('-day') || key.endsWith('-month') || key.endsWith('-year')) {
+      delete payload[key]
+    }
+  })
+  return payload
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -223,5 +233,6 @@ module.exports = {
   getMonthsSince,
   getStatsTimestamp,
   getTimeInAmPm,
-  getDateAsReadableString
+  getDateAsReadableString,
+  removeIndividualDateComponents
 }

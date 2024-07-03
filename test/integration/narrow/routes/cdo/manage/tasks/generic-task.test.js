@@ -102,7 +102,6 @@ describe('Generic Task test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
     expect(document.querySelector('#taskDone').getAttribute('checked')).not.toBeNull()
-    expect(document.querySelectorAll('button')[4].getAttribute('disabled')).not.toBeNull()
   })
 
   test('GET /cdo/manage/task/record-insurance-details/ED20001 route returns 200', async () => {
@@ -259,7 +258,7 @@ describe('Generic Task test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
-      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'applicationPackSent', options.payload, userWithDisplayname)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'sendApplicationPack', options.payload, userWithDisplayname)
     })
   })
 
