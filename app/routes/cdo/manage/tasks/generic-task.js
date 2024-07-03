@@ -2,9 +2,10 @@ const { routes, views } = require('../../../../constants/cdo/index')
 const { cdoTasksGetSchema } = require('../../../../schema/portal/cdo/tasks/generic-task')
 const { anyLoggedInUser } = require('../../../../auth/permissions')
 const getUser = require('../../../../auth/get-user')
-const { createModel, getTaskData, getValidation } = require('./generic-task-helper')
+const { addDateComponents } = require('../../../../lib/date-helpers')
+const { createModel, getTaskData, getValidation, getTaskDetailsByKey } = require('./generic-task-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../lib/back-helpers')
-const { saveCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
+const { saveCdoTaskDetails, getCdo } = require('../../../../api/ddi-index-api/cdo')
 
 module.exports = [{
   method: 'GET',
@@ -18,9 +19,17 @@ module.exports = [{
       const taskName = request.params.taskName
       const dogIndex = request.params.dogIndex
 
+      const cdo = await getCdo(dogIndex)
+      if (cdo?.dog?.status !== 'Pre-exempt') {
+        throw new Error(`Dog ${dogIndex} is wrong status for manage-cdo`)
+      }
+
       const data = await getTaskData(dogIndex, taskName)
 
       const backNav = addBackNavigation(request)
+
+      addDateComponents(data, 'insuranceRenewal')
+      addDateComponents(data, 'applicationFeePaid')
 
       return h.view(`${views.taskViews}/${taskName}`, createModel(taskName, data, backNav))
     }
@@ -44,7 +53,7 @@ module.exports = [{
 
         console.log(`Validation error in task ${taskName}:`, error)
 
-        const data = await getTaskData(request.params.dogIndex, taskName)
+        const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
 
         const backNav = addBackNavigationForErrorCondition(request)
 
@@ -54,8 +63,10 @@ module.exports = [{
     handler: async (request, h) => {
       const dogIndex = request.params.dogIndex
       const taskName = request.params.taskName
+      const payload = request.payload
 
-      await saveCdoTaskDetails(dogIndex, taskName, request.payload, getUser(request))
+      const { apiKey } = getTaskDetailsByKey(taskName)
+      await saveCdoTaskDetails(dogIndex, apiKey, payload, getUser(request))
 
       return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
     }

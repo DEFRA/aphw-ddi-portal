@@ -11,7 +11,7 @@ describe('Generic Task test', () => {
   const mockAuth = require('../../../../../../../app/auth')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/cdo')
-  const { getCdoTaskDetails, saveCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-api/cdo')
+  const { getCdoTaskDetails, saveCdoTaskDetails, getCdo } = require('../../../../../../../app/api/ddi-index-api/cdo')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
   const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
@@ -29,6 +29,7 @@ describe('Generic Task test', () => {
 
   test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -49,6 +50,34 @@ describe('Generic Task test', () => {
     expect(document.querySelectorAll('button')[4].getAttribute('disabled')).toBeNull()
   })
 
+  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 500 if invalid dog index', async () => {
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue(null)
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/task/send-application-pack/ED20001',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(500)
+  })
+
+  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 500 if dog at wrong status', async () => {
+    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Exempt' } })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/task/send-application-pack/ED20001',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(500)
+  })
+
   test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200 given application back sent', async () => {
     getCdoTaskDetails.mockResolvedValue({
       tasks: {
@@ -59,6 +88,7 @@ describe('Generic Task test', () => {
         }
       }
     })
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -72,12 +102,12 @@ describe('Generic Task test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
     expect(document.querySelector('#taskDone').getAttribute('checked')).not.toBeNull()
-    expect(document.querySelectorAll('button')[4].getAttribute('disabled')).not.toBeNull()
   })
 
   test('GET /cdo/manage/task/record-insurance-details/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
     getCompanies.mockResolvedValue([{ company: 'Insurance Company 1' }])
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -98,6 +128,7 @@ describe('Generic Task test', () => {
 
   test('GET /cdo/manage/task/record-microchip-number/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -116,6 +147,7 @@ describe('Generic Task test', () => {
 
   test('GET /cdo/manage/task/record-application-fee-payment/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -135,6 +167,7 @@ describe('Generic Task test', () => {
 
   test('GET /cdo/manage/task/send-form2/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -155,6 +188,7 @@ describe('Generic Task test', () => {
 
   test('GET /cdo/manage/task/record-verification-dates/ED20001 route returns 200', async () => {
     getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
     const options = {
       method: 'GET',
@@ -224,7 +258,7 @@ describe('Generic Task test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
-      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'send-application-pack', options.payload, userWithDisplayname)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'sendApplicationPack', options.payload, userWithDisplayname)
     })
   })
 

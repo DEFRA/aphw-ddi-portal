@@ -15,12 +15,12 @@ const { getCompanies } = require('../../../../api/ddi-index-api/insurance')
 const { getCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
 
 const taskList = [
-  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: '' },
-  { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details' },
-  { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number' },
-  { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment' },
-  { name: tasks.form2Sent, Model: ViewModelSendForm2, validation: validateSendForm2, key: 'send-form2', label: 'Send Form 2' },
-  { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering' }
+  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details', apiKey: 'recordInsuranceDetails', stateKey: 'insuranceDetailsRecorded' },
+  { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number', apiKey: 'recordMicrochipNumber', stateKey: 'microchipNumberRecorded' },
+  { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment', apiKey: 'recordApplicationFee', stateKey: 'applicationFeePaid' },
+  { name: tasks.form2Sent, Model: ViewModelSendForm2, validation: validateSendForm2, key: 'send-form2', label: 'Send Form 2', apiKey: 'sendForm2', stateKey: 'form2Sent' },
+  { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering', apiKey: 'verifyDates', stateKey: 'verificationDateRecorded' }
 ]
 
 const createModel = (taskKey, data, backNav, errors = null) => {
@@ -50,7 +50,7 @@ const getTaskDetails = taskName => {
     throw new Error(`Invalid task ${taskName} when getting details`)
   }
 
-  return { key: task.key, label: task.label, apiKey: task.name }
+  return { key: task.key, label: task.label, apiKey: task.apiKey, stateKey: task.stateKey }
 }
 
 const getTaskDetailsByKey = taskKey => {
@@ -59,19 +59,15 @@ const getTaskDetailsByKey = taskKey => {
     throw new Error(`Invalid task ${taskKey} when getting details`)
   }
 
-  return { key: task.key, label: task.label, apiKey: task.name }
+  return { key: task.key, label: task.label, apiKey: task.apiKey, stateKey: task.stateKey }
 }
 
-const getTaskData = async (dogIndex, taskName) => {
-  const savedTask = await getCdoTaskDetails(dogIndex, taskName)
-  return getTaskPayloadData(dogIndex, taskName, savedTask)
-}
-
-const getTaskPayloadData = async (dogIndex, taskName, payload) => {
+const getTaskData = async (dogIndex, taskName, payload = {}) => {
   const taskData = getTaskDetailsByKey(taskName)
-  const task = payload.tasks[taskData.apiKey]
-
-  const data = { indexNumber: dogIndex, task, ...payload }
+  const savedTask = await getCdoTaskDetails(dogIndex, taskName)
+  const taskState = savedTask.tasks[taskData.stateKey]
+  const data = { indexNumber: dogIndex, ...savedTask, task: { ...taskState }, ...payload }
+  delete data.task.tasks
 
   if (taskName === 'record-insurance-details') {
     data.companies = await getCompanies()
@@ -84,7 +80,6 @@ module.exports = {
   createModel,
   getValidation,
   getTaskData,
-  getTaskPayloadData,
   getTaskDetails,
   getTaskDetailsByKey
 }

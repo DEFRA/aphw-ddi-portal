@@ -13,7 +13,7 @@ const insuranceSchema = Joi.object({
     day: Joi.string().allow(null).allow('')
   }).required().custom((value, helper) => validateDate(value, helper, true, false, true))
     .messages({
-      'any.required': 'Insuarance renewal date is required'
+      'any.required': 'Insurance renewal date is required'
     })
 }).required()
 

@@ -4,7 +4,7 @@ const { getCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-ap
 jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
 const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
 
-const { createModel, getValidation, getTaskData, getTaskPayloadData, getTaskDetails, getTaskDetailsByKey } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
+const { createModel, getValidation, getTaskData, getTaskDetails, getTaskDetailsByKey } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
 
 describe('Generic Task Helper test', () => {
   describe('CreateModel', () => {
@@ -156,62 +156,6 @@ describe('Generic Task Helper test', () => {
         completed: true,
         readonly: false,
         timestamp: '2024-06-27T00:00:00.000Z'
-      })
-      expect(res.companies).toEqual([{ company: 'Company 1' }])
-    })
-  })
-
-  describe('getTaskPayloadData', () => {
-    getCompanies.mockResolvedValue([{ company: 'Company 1' }])
-
-    test('adds indexNumber', async () => {
-      const payload = { tasks: { info: '12345' } }
-      const res = await getTaskPayloadData('ED123', 'send-application-pack', payload)
-      expect(res.indexNumber).toBe('ED123')
-      expect(res.companies).toBe(undefined)
-    })
-
-    test('gets applicationPackSent data', async () => {
-      const payload = {
-        tasks: {
-          applicationPackSent: {
-            key: 'applicationPackSent',
-            available: true,
-            completed: true,
-            readonly: true,
-            timestamp: '2024-06-27T00:00:00.000Z'
-          }
-        }
-      }
-      const res = await getTaskPayloadData('ED123', 'send-application-pack', payload)
-      expect(res.task).toEqual({
-        key: 'applicationPackSent',
-        available: true,
-        completed: true,
-        readonly: true,
-        timestamp: '2024-06-27T00:00:00.000Z'
-      })
-    })
-
-    test('adds companies if record-insurance-details', async () => {
-      const payload = {
-        tasks: {
-          insuranceDetailsRecorded: {
-            key: 'insuranceDetailsRecorded',
-            available: true,
-            completed: false,
-            readonly: false
-          }
-        }
-      }
-      getCompanies.mockResolvedValue([{ company: 'Company 1' }])
-      const res = await getTaskPayloadData('ED123', 'record-insurance-details', payload)
-      expect(res.indexNumber).toBe('ED123')
-      expect(res.task).toEqual({
-        key: 'insuranceDetailsRecorded',
-        available: true,
-        completed: false,
-        readonly: false
       })
       expect(res.companies).toEqual([{ company: 'Company 1' }])
     })

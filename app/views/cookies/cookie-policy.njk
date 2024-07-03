@@ -1,3 +1,5 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
 {% extends '_layout.njk' %}
 
 {% set pageHeading = "Cookie Information" %}
@@ -27,9 +29,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <div class="defra-cookie-settings">
-      <div class="js-cookie-page-banner" hidden>
-        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert"
+    {% if updated %}
+      <div class="js-cookie-page-banner">
+        <div class="govuk-notification-banner govuk-notification-banner--success defra-no-focus" role="alert"
           aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
           <div class="govuk-notification-banner__header">
             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
@@ -44,7 +46,9 @@
           </div>
         </div>
       </div>
+    {% endif %}
 
+    <div class="defra-cookie-settings">
       <h1 class="govuk-heading-xl">
         Cookies
       </h1>
@@ -123,8 +127,8 @@
           </tr>
         </tbody>
       </table>
-      <div class="defra-js-hide">
-        <h2 class="govuk-heading-m">Change your cookie settings</h2>
+      <h2 class="govuk-heading-m">Change your cookie settings</h2>
+      <div class="defra-js-hide" id="no-js-text">
         <p>We cannot change your cookie settings at the moment because JavaScript is not running in your browser. To fix
           this, try:</p>
         <ul class="govuk-list govuk-list--bullet">
@@ -133,35 +137,24 @@
         </ul>
       </div>
       <div id="cookie-page-buttons" class="defra-js-show" hidden>
+        <form action="/cookies" method="post" novalidate>
         <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Do you want to accept analytics cookies?</h3>
-            </legend>
-            <div class="govuk-radios govuk-radios--inline">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="accept-analytics-yes" name="accept-analytics" value="Yes"
-                  type="radio">
-                <label class="govuk-label govuk-radios__label" for="accept-analytics-yes">
-                  Yes
-                </label>
-              </div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="accept-analytics-no" name="accept-analytics" value="No"
-                  type="radio" checked>
-                <label class="govuk-label govuk-radios__label" for="accept-analytics-no">
-                  No
-                </label>
-              </div>
-            </div>
-          </fieldset>
+        {{ govukRadios(analytics) }}
         </div>
         <button class="govuk-button govuk-!-margin-top-4 govuk-!-margin-left-0" id="cookies-save"
           data-module="govuk-button">Save cookie settings</button>
+        </form>
       </div>
     </div>
 
   </div>
 </div>
-
+<script lang="javascript">
+const buttons = document.getElementById('cookie-page-buttons')
+const noJsText = document.getElementById('no-js-text')
+if (buttons && noJsText) {
+  buttons.style.display = 'block'
+  noJsText.style.display = 'none'
+}
+</script>
 {% endblock %}

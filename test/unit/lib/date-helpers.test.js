@@ -1,6 +1,6 @@
 const {
   getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
-  getDateAsReadableString, validateDate
+  getDateAsReadableString, validateDate, removeIndividualDateComponents
 } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
@@ -202,6 +202,20 @@ describe('date-helpers', () => {
       const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
       const res = validateDate(value, helpers, false, false, true)
       expect(res).toEqual(new Date(2099, 0, 1))
+    })
+  })
+
+  describe('removeIndividualDateComponents', () => {
+    test('should remove components if exist', () => {
+      const payload = { 'field1-day': '01', 'field1-month': '01', 'field1-year': '2099', anotherField: 123 }
+      const res = removeIndividualDateComponents(payload)
+      expect(res).toEqual({ anotherField: 123 })
+    })
+
+    test('should not remove components if dont exist', () => {
+      const payload = { 'field1-dayx': '01', 'field1-monthx': '01', 'field1-yearx': '2099', anotherField: 123 }
+      const res = removeIndividualDateComponents(payload)
+      expect(res).toEqual({ anotherField: 123, 'field1-dayx': '01', 'field1-monthx': '01', 'field1-yearx': '2099' })
     })
   })
 })
