@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { statsPerStatusRows, statsPerCountryRows } = require('../../../../mocks/statistics')
 
 describe('Statistics route', () => {
   jest.mock('../../../../../app/auth')
@@ -26,18 +27,10 @@ describe('Statistics route', () => {
     jest.clearAllMocks()
   })
 
-  const statsRows = [
-    { total: 20, status: { id: 4, name: 'Interim exempt' } },
-    { total: 30, status: { id: 5, name: 'Pre-exempt' } },
-    { total: 40, status: { id: 6, name: 'Failed' } },
-    { total: 5000, status: { id: 7, name: 'Exempt' } },
-    { total: 60, status: { id: 8, name: 'In breach' } },
-    { total: 70, status: { id: 9, name: 'Withdrawn' } },
-    { total: 1000, status: { id: 10, name: 'Inactive' } }
-  ]
-
   test('GET /admin/statistics route returns 200', async () => {
-    getStatistics.mockResolvedValue(statsRows)
+    getStatistics
+      .mockResolvedValueOnce(statsPerStatusRows)
+      .mockResolvedValueOnce(statsPerCountryRows)
     getStatsTimestamp.mockReturnValue('12am, 14 June 2024')
 
     const options = {
@@ -50,7 +43,7 @@ describe('Statistics route', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getStatistics).toHaveBeenCalledTimes(1)
+    expect(getStatistics).toHaveBeenCalledTimes(2)
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Dogs on the Index')
     expect(document.querySelector('#main-content').textContent).toContain('Data accurate at 12am, 14 June 2024 (today).')
@@ -58,7 +51,7 @@ describe('Statistics route', () => {
     expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Number')
 
     const rows = document.querySelectorAll('.govuk-table__body .govuk-table__row')
-    expect(rows.length).toBe(8)
+    expect(rows.length).toBe(12)
     expect(rows[0].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('Interim exempt')
     expect(rows[0].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('20')
     expect(rows[1].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('Pre-exempt')
@@ -75,5 +68,20 @@ describe('Statistics route', () => {
     expect(rows[6].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('1,000')
     expect(rows[7].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('Total')
     expect(rows[7].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('6,220')
+
+    expect(rows[8].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('XL Bully')
+    expect(rows[8].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('55')
+    expect(rows[8].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('2')
+    expect(rows[8].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Not held')
+
+    expect(rows[9].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('Breed 2')
+    expect(rows[9].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('257')
+    expect(rows[9].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('44')
+    expect(rows[9].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('10')
+
+    expect(rows[10].querySelectorAll('.govuk-table__header')[0].textContent.trim()).toBe('Breed 3')
+    expect(rows[10].querySelectorAll('.govuk-table__cell')[0].textContent.trim()).toBe('128')
+    expect(rows[10].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('15')
+    expect(rows[10].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('33')
   })
 })

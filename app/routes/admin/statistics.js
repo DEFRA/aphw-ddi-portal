@@ -11,9 +11,11 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const stats = await getStatistics(statisticsQueries.countsPerStatus)
+        const statsByStatus = await getStatistics(statisticsQueries.countsPerStatus)
 
-        return h.view(views.statistics, new ViewModel(stats))
+        const statsByCountry = await getStatistics(statisticsQueries.countsPerCountry)
+
+        return h.view(views.statistics, new ViewModel(statsByStatus, statsByCountry))
       }
     }
   }
