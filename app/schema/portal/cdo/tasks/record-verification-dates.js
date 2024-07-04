@@ -4,7 +4,7 @@ const { validatePayloadBuilder } = require('../../../../schema/common/validatePa
 
 const verificationDatesSchema = Joi.object({
   taskName: Joi.string().required(),
-  microchipVerified: Joi.object({
+  microchipVerification: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
@@ -12,7 +12,7 @@ const verificationDatesSchema = Joi.object({
     .messages({
       'any.required': 'Microchip number verified date is required'
     }),
-  neuteringVerified: Joi.object({
+  neuteringConfirmation: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
@@ -23,16 +23,16 @@ const verificationDatesSchema = Joi.object({
 })
 
 const validateVerificationDates = (payload) => {
-  payload.microchipVerified = getDateComponents(payload, 'microchipVerified')
-  payload.neuteringVerified = getDateComponents(payload, 'neuteringVerified')
+  payload.microchipVerification = getDateComponents(payload, 'microchipVerification')
+  payload.neuteringConfirmation = getDateComponents(payload, 'neuteringConfirmation')
 
   const schema = Joi.object({
-    'microchipVerified-year': Joi.number().allow(null).allow(''),
-    'microchipVerified-month': Joi.number().allow(null).allow(''),
-    'microchipVerified-day': Joi.number().allow(null).allow(''),
-    'neuteringVerified-year': Joi.number().allow(null).allow(''),
-    'neuteringVerified-month': Joi.number().allow(null).allow(''),
-    'neuteringVerified-day': Joi.number().allow(null).allow('')
+    'microchipVerification-year': Joi.number().allow(null).allow(''),
+    'microchipVerification-month': Joi.number().allow(null).allow(''),
+    'microchipVerification-day': Joi.number().allow(null).allow(''),
+    'neuteringConfirmation-year': Joi.number().allow(null).allow(''),
+    'neuteringConfirmation-month': Joi.number().allow(null).allow(''),
+    'neuteringConfirmation-day': Joi.number().allow(null).allow('')
   }).concat(verificationDatesSchema)
 
   return validatePayloadBuilder(schema)(payload)

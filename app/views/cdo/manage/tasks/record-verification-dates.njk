@@ -41,9 +41,9 @@
           <h1 class="govuk-fieldset__heading">Record the verification date for microchip and neutering</h1>
         </legend>
     
-        {{ govukDateInput(model.microchipVerified) }}
+        {{ govukDateInput(model.microchipVerification) }}
 
-        {{ govukDateInput(model.neuteringVerified) }}
+        {{ govukDateInput(model.neuteringConfirmation) }}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
 

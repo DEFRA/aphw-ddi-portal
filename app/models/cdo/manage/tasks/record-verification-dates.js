@@ -7,8 +7,8 @@ function ViewModel (data, backNav, errors) {
     srcHashParam: backNav.srcHashParam,
     indexNumber: data.indexNumber,
     taskName: data.taskName,
-    microchipVerified: constructDateField(data, 'microchipVerified', 'When was the dog\'s microchip number verified?', null, ''),
-    neuteringVerified: constructDateField(data, 'neuteringVerified', 'When was the dog\'s neutering verified?', null, ''),
+    microchipVerification: constructDateField(data, 'microchipVerification', 'When was the dog\'s microchip number verified?', null, ''),
+    neuteringConfirmation: constructDateField(data, 'neuteringConfirmation', 'When was the dog\'s neutering verified?', null, ''),
     errors: []
   }
 
