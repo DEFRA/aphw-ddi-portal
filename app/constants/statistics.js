@@ -1,5 +1,6 @@
 const statisticsQueries = {
-  countsPerStatus: 'countsPerStatus'
+  countsPerStatus: 'countsPerStatus',
+  countsPerCountry: 'countsPerCountry'
 }
 
 module.exports = statisticsQueries
