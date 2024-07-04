@@ -6,6 +6,21 @@ const { addDateComponents } = require('../../../../lib/date-helpers')
 const { createModel, getTaskData, getValidation, getTaskDetailsByKey } = require('./generic-task-helper')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../../lib/back-helpers')
 const { saveCdoTaskDetails, getCdo } = require('../../../../api/ddi-index-api/cdo')
+const { ApiErrorFailure } = require('../../../../errors/api-error-failure')
+const { microchipValidation } = require('../../../../schema/portal/cdo/dog-details')
+
+const mapBoomError = (e, request) => {
+  const { microchipNumber, microchipNumber2 } = request.payload
+
+  const disallowedMicrochipIds = e.boom.payload.microchipNumbers
+
+  const validationPayload = {
+    microchipNumber,
+    microchipNumber2
+  }
+  const { error } = microchipValidation(disallowedMicrochipIds).validate(validationPayload, { abortEarly: false })
+  return error
+}
 
 module.exports = [{
   method: 'GET',
@@ -66,9 +81,24 @@ module.exports = [{
       const payload = request.payload
 
       const { apiKey } = getTaskDetailsByKey(taskName)
-      await saveCdoTaskDetails(dogIndex, apiKey, payload, getUser(request))
 
-      return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
+      try {
+        await saveCdoTaskDetails(dogIndex, apiKey, payload, getUser(request))
+
+        return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
+      } catch (e) {
+        if (e instanceof ApiErrorFailure) {
+          const error = mapBoomError(e, request)
+
+          const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
+
+          const backNav = addBackNavigationForErrorCondition(request)
+
+          return h.view(`${views.taskViews}/${taskName}`, createModel(taskName, data, backNav, error)).code(400).takeover()
+        }
+
+        throw e
+      }
     }
   }
 }]

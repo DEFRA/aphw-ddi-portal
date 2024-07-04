@@ -5,6 +5,7 @@ const { setInSession } = require('../../../../../../../app/session/session-wrapp
 const { JSDOM } = require('jsdom')
 jest.mock('../../../../../../../app/api/ddi-index-api/search')
 const { notYetStartedTaskList } = require('../../../../../../mocks/cdo/manage/tasks/not-yet-started')
+const { ApiErrorFailure } = require('../../../../../../../app/errors/api-error-failure')
 
 describe('Generic Task test', () => {
   jest.mock('../../../../../../../app/auth')
@@ -259,6 +260,20 @@ describe('Generic Task test', () => {
       const response = await server.inject(options)
       expect(response.statusCode).toBe(302)
       expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'sendApplicationPack', options.payload, userWithDisplayname)
+    })
+
+    test('handles boom from API', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
+      }
+      saveCdoTaskDetails.mockImplementation(() => {
+        throw new ApiErrorFailure('dummy error', { payload: { microchipNumber: '12345', microchipNumbers: [] } })
+      })
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(400)
     })
   })
 
