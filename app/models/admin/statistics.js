@@ -4,7 +4,7 @@ const { prepareCountryCounts, sumTotals } = require('./statistics-helper')
 
 function ViewModel (countsPerStatus, countsPerCountry) {
   const scotCells = countsPerCountry.filter(row => row.country === 'Scotland' && row.breed === 'XL Bully')
-  if (scotCells && scotCells[0]) {
+  if (scotCells?.[0]) {
     scotCells[0].total = 0
   }
 
