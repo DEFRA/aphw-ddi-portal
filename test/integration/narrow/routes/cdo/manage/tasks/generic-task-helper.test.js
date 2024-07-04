@@ -90,7 +90,7 @@ describe('Generic Task Helper test', () => {
     })
 
     test('should get correct validation for task 6', () => {
-      const payload = { taskName: 'record-verification-dates', 'microchipVerified-day': '01', 'microchipVerified-month': '05', 'microchipVerified-year': '2024', 'neuteringVerified-day': '01', 'neuteringVerified-month': '05', 'neuteringVerified-year': '2024' }
+      const payload = { taskName: 'record-verification-dates', 'microchipVerification-day': '01', 'microchipVerification-month': '05', 'microchipVerification-year': '2024', 'neuteringConfirmation-day': '01', 'neuteringConfirmation-month': '05', 'neuteringConfirmation-year': '2024' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-verification-dates')
