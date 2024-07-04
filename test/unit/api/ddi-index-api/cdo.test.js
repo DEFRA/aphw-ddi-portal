@@ -1,6 +1,6 @@
 describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
-  const { get, post } = require('../../../../app/api/ddi-index-api/base')
+  const { get, post, boomRequest } = require('../../../../app/api/ddi-index-api/base')
 
   const { user } = require('../../../mocks/auth')
 
@@ -70,7 +70,7 @@ describe('CDO API endpoints', () => {
     test('should do POST to API with correct endpoint and payload', async () => {
       await cdo.saveCdoTaskDetails('ED123', 'send-application-pack', { payload: 'abc' }, user)
 
-      expect(post).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack', { payload: 'abc' }, user)
+      expect(boomRequest).toHaveBeenCalledWith('cdo/ED123/manage:send-application-pack', 'POST', { payload: 'abc' }, user)
     })
   })
 })
