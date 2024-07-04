@@ -10,7 +10,7 @@ const applicationFeeSchema = Joi.object({
     day: Joi.string().allow(null).allow('')
   }).optional().custom((value, helper) => validateDate(value, helper, true, true))
     .required().messages({
-      'any.required': 'Application fee paid is required'
+      'any.required': 'Enter an application fee payment date'
     })
 })
 
