@@ -45,6 +45,8 @@ module.exports = [{
 
       addDateComponents(data, 'insuranceRenewal')
       addDateComponents(data, 'applicationFeePaid')
+      addDateComponents(data, 'microchipVerification')
+      addDateComponents(data, 'neuteringConfirmation')
 
       return h.view(`${views.taskViews}/${taskName}`, createModel(taskName, data, backNav))
     }
