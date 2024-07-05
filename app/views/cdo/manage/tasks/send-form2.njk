@@ -50,10 +50,16 @@
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
 
       </fieldset>
-
+      {% if model.disabled %}
+      {{ govukButton({
+        text: "Continue",
+        href: model.backLink
+      }) }}
+      {% else %}
       {{ govukButton({
         text: "Save and continue"
       }) }}
+      {% endif %}
 
     </form>
   </div>
