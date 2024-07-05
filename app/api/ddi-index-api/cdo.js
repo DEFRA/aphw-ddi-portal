@@ -38,6 +38,7 @@ const getCdoTaskDetails = async (indexNumber, taskName) => {
 
 const saveCdoTaskDetails = async (indexNumber, apiKey, payload, user) => {
   payload = removeIndividualDateComponents(payload)
+
   delete payload.taskName
   const res = await boomRequest(`${cdoEndpoint}/${indexNumber}/manage:${apiKey}`, 'POST', payload, user)
   return res

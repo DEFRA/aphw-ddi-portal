@@ -80,6 +80,12 @@ describe('Base API', () => {
       expect(wreck.request).toHaveBeenCalledWith('PUT', 'test/endpoint2', { payload: { val: 123 } })
     })
 
+    test('should not fail given an empty payload', async () => {
+      wreck.read.mockResolvedValue({ toString () { return '' } })
+      const response = await post('endpoint2', { val: 123 }, user)
+      expect(response.payload).toBeUndefined()
+    })
+
     test('postWithBoom should return a valid error object if request failed', async () => {
       wreck.request.mockResolvedValue({ statusCode: 409, statusMessage: 'Conflict', payload: Buffer.from('{"error":"Username already exists","message":"Username already exists","statusCode":409}') })
       wreckReadToString.mockReturnValue(JSON.stringify({ error: 'Username already exists', message: 'Username already exists', statusCode: 409 }))
