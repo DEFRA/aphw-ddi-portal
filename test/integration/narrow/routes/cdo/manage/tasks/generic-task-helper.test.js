@@ -33,19 +33,22 @@ describe('Generic Task Helper test', () => {
 
     test('passes errors', () => {
       const data = {
-        indexNumber: 'ED12345'
+        indexNumber: 'ED12345',
+        task: {
+          completed: false
+        }
       }
       const backNav = {
         backLink: '/back',
         srcHashParam: '?src=abc123'
       }
-      const errors = { details: [{ path: ['taskDone'], message: 'Selection is required' }] }
+      const errors = { details: [{ path: ['taskDone'], message: 'Confirm if you have sent the Form 2 before continuing.' }] }
 
       const res = createModel('send-form2', data, backNav, errors)
 
       expect(res.model.taskName).toBe('send-form2')
       expect(res.model.errors.length).not.toBe(0)
-      expect(res.model.errors[0].text).toBe('Selection is required')
+      expect(res.model.errors[0].text).toBe('Confirm if you have sent the Form 2 before continuing.')
     })
   })
 
