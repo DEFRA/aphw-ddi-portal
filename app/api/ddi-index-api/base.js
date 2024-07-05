@@ -45,8 +45,10 @@ const boomRequest = async (endpoint, method, data, user) => {
 
   const body = await wreck.read(res)
 
+  const payload = body.toString().length > 0 ? JSON.parse(body.toString()) : undefined
+
   const responseData = {
-    payload: JSON.parse(body.toString()),
+    payload,
     statusCode: res.statusCode,
     statusMessage: res.statusMessage
   }
