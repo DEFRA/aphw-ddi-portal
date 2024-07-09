@@ -1,9 +1,13 @@
 const { addDateErrors } = require('../lib/date-helpers')
 
 const errorPusherDefault = (errors, model) => {
+  console.log('errors2', errors)
+  console.log('errors3', errors.details)
   if (errors) {
     for (const error of errors.details) {
+      console.log('error4', error)
       const name = error.path[0] ?? error.context.path[0]
+      console.log('error5 name', name)
       const prop = model[name]
 
       if (prop) {
