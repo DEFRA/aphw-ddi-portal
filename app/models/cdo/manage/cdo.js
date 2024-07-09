@@ -7,7 +7,7 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
  * @param backNav
  * @constructor
  */
-function ViewModel (details, cdo, backNav, error) {
+function ViewModel (details, cdo, backNav, continueLink) {
   const breadcrumbs = [
     {
       label: 'Home',
@@ -24,11 +24,8 @@ function ViewModel (details, cdo, backNav, error) {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     details: mapManageCdoDetails(details, cdo),
-    generalError: {},
-    errors: []
+    continueLink
   }
-
-  errorPusherDefault(error, this.model)
 }
 
 module.exports = ViewModel

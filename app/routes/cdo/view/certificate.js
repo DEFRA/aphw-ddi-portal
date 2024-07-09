@@ -3,6 +3,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/certificate')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
+const { updateStatus } = require('../../../api/ddi-index-api/dog')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { downloadCertificate } = require('../../../storage/repos/certificate')
 const { sendMessage } = require('../../../messaging/outbound/certificate-request')
@@ -41,7 +42,8 @@ module.exports = [
       },
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.payload.indexNumber)
+        const indexNumber = request.payload.indexNumber
+        const cdo = await getCdo(indexNumber)
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()
@@ -50,11 +52,18 @@ module.exports = [
         const certificateId = await sendMessage(cdo, getUser(request))
 
         try {
-          const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
+          const cert = await downloadCertificate(indexNumber, certificateId)
 
           const downloadFilename = cdo.exemption?.exemptionOrder === '2023'
             ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
+
+          const cdoTaskDetails = await getManageCdoDetails(indexNumber)
+
+          if ((cdoTaskDetails.certificateIssued.available || cdoTaskDetails.certificateIssued.completed) && cdo.dog.status !== 'Exempt') {
+            // Pre-exempt and all tasks completed
+            await updateStatus({ indexNumber, newStatus: 'Exempt' }, getUser(request))
+          }
 
           return h.response(cert).type('application/pdf').header('Content-Disposition', `filename="${downloadFilename}"`)
         } catch (err) {
