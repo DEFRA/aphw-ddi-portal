@@ -1,3 +1,5 @@
+const Joi = require('joi')
+const { JSDOM } = require('jsdom')
 const { admin } = require('../../../../../../app/auth/permissions')
 
 describe('View certificate', () => {
@@ -8,7 +10,7 @@ describe('View certificate', () => {
   const getUser = require('../../../../../../app/auth/get-user')
 
   jest.mock('../../../../../../app/api/ddi-index-api/cdo')
-  const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
+  const { getCdo, getManageCdoDetails } = require('../../../../../../app/api/ddi-index-api/cdo')
 
   jest.mock('../../../../../../app/messaging/outbound/certificate-request')
 
@@ -17,6 +19,9 @@ describe('View certificate', () => {
 
   jest.mock('../../../../../../app/messaging/outbound/certificate-request')
   const { sendMessage } = require('../../../../../../app/messaging/outbound/certificate-request')
+
+  jest.mock('../../../../../../app/routes/cdo/manage/tasks/issue-cert')
+  const { issueCertTask } = require('../../../../../../app/routes/cdo/manage/tasks/issue-cert')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -71,6 +76,8 @@ describe('View certificate', () => {
       getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
       downloadCertificate.mockResolvedValue('certificate')
       sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { available: true } } })
 
       const options = {
         method: 'POST',
@@ -96,6 +103,8 @@ describe('View certificate', () => {
       })
       downloadCertificate.mockResolvedValue('certificate')
       sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { available: true } } })
 
       const options = {
         method: 'POST',
@@ -115,6 +124,8 @@ describe('View certificate', () => {
 
     test('POST /cdo/view/certificate route returns 404 given no cdo exists', async () => {
       getCdo.mockResolvedValue(undefined)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { available: true } } })
 
       const options = {
         method: 'POST',
@@ -147,6 +158,8 @@ describe('View certificate', () => {
       getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
       downloadCertificate.mockRejectedValue({ type: 'CertificateNotFound' })
       sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { available: true } } })
 
       const options = {
         method: 'POST',
@@ -166,6 +179,8 @@ describe('View certificate', () => {
       getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
       downloadCertificate.mockRejectedValue(new Error('server error'))
       sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { available: true } } })
 
       const options = {
         method: 'POST',
@@ -179,6 +194,54 @@ describe('View certificate', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(500)
+    })
+
+    test('POST /cdo/view/certificate route returns 200 when calling issueCertTask', async () => {
+      getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
+      downloadCertificate.mockResolvedValue('certificate')
+      sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { completed: true } }, cdo: { dog: { status: 'Pre-exempt' } } })
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/view/certificate',
+        auth,
+        payload: {
+          indexNumber: 'ED123'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['content-type']).toBe('application/pdf')
+    })
+
+    test('POST /cdo/view/certificate route returns errors to page when error occurs in issueCertTask', async () => {
+      const message = 'Test error text'
+      getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123', status: 'Pre-exempt' } })
+      downloadCertificate.mockResolvedValue('certificate')
+      sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue(new Joi.ValidationError(message, [{ message, path: ['generalError'], type: 'custom' }]))
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { completed: true } }, cdo: { dog: { status: 'Pre-exempt' } } })
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/view/certificate',
+        auth,
+        payload: {
+          indexNumber: 'ED123'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      const errorBody = document.querySelector('.govuk-error-summary__body')
+      expect(errorBody.querySelectorAll('ul li')[0].textContent.trim()).toBe('Test error text')
     })
   })
 

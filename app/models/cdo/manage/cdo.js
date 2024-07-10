@@ -1,6 +1,5 @@
 const constants = require('../../../constants/cdo')
 const { mapManageCdoDetails } = require('../../mappers/manage-cdo')
-const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 /**
  * @param {CdoDetails[]} details

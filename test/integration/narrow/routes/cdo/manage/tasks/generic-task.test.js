@@ -275,6 +275,20 @@ describe('Generic Task test', () => {
       const response = await server.inject(options)
       expect(response.statusCode).toBe(400)
     })
+
+    test('handles non-ApiErrorFailure boom from API', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
+      }
+      saveCdoTaskDetails.mockImplementation(() => {
+        throw new Error('dummy error')
+      })
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
   })
 
   afterEach(async () => {
