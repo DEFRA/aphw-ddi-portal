@@ -24,7 +24,7 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/identity": "4.3.0",
-    "@azure/msal-node": "1.14.6",
+    "@azure/msal-node": "2.10.0",
     "@azure/storage-blob": "12.13.0",
     "@date-fns/utc": "^1.1.0",
     "@hapi/catbox-redis": "7.0.2",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@hapi/catbox-memory": "5.0.1",
-    "@pact-foundation/pact": "9.11.1",
+    "@pact-foundation/pact": "9.17.2",
     "@types/node": "^20.11.24",
     "blipp": "4.0.2",
     "clean-webpack-plugin": "3.0.0",
