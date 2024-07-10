@@ -23,7 +23,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
-    "@azure/identity": "2.0.5",
+    "@azure/identity": "4.3.0",
     "@azure/msal-node": "1.14.6",
     "@azure/storage-blob": "12.13.0",
     "@date-fns/utc": "^1.1.0",
