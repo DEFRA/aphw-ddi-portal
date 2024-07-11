@@ -24,7 +24,6 @@ module.exports = [
         setActivityDetails(request, null)
 
         if (cdo.dog.status === statuses.PreExempt && request.query.force !== 'true') {
-          console.log('redirect****** status', cdo.dog.status)
           return h.redirect(`${cdoRoutes.manageCdo.get}/${indexNumber}?src=${request.query.src}`)
         }
 
