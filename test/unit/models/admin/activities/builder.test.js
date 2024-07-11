@@ -12,15 +12,25 @@ describe('builder', () => {
 
     test('should disable as appropriate', () => {
       const rows = [
-        { id: 1, label: 'Label 1' },
-        { id: 2, label: 'Application pack' },
-        { id: 3, label: 'Label 3' }
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Application pack', activity_type: { name: 'sent' } },
+        { id: 3, label: 'Label 3', activity_type: { name: 'sent' } },
+        { id: 4, label: 'Form 2', activity_type: { name: 'sent' } },
+        { id: 5, label: 'Label 1', activity_type: { name: 'received' } },
+        { id: 6, label: 'Application pack', activity_type: { name: 'received' } },
+        { id: 7, label: 'Label 3', activity_type: { name: 'received' } },
+        { id: 8, label: 'Form 2', activity_type: { name: 'received' } }
       ]
       const res = disableIfNeeded(rows)
-      expect(res.length).toBe(3)
+      expect(res.length).toBe(8)
       expect(res[0].canRemove).toBeTruthy()
       expect(res[1].canRemove).toBeFalsy()
       expect(res[2].canRemove).toBeTruthy()
+      expect(res[3].canRemove).toBeFalsy()
+      expect(res[4].canRemove).toBeTruthy()
+      expect(res[5].canRemove).toBeTruthy()
+      expect(res[6].canRemove).toBeTruthy()
+      expect(res[7].canRemove).toBeTruthy()
     })
 
     test('should handle null', () => {

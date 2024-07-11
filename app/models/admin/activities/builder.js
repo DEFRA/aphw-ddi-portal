@@ -2,13 +2,15 @@ const { routes, breadcrumbs } = require('../../../constants/admin')
 const { keys } = require('../../../constants/cdo/activity')
 const ViewModel = require('../success')
 
+const preventRemoveForLabels = ['Application pack', 'Form 2']
+
 const disableIfNeeded = (activities) => {
   if (!activities || activities.length === 0) {
     return activities
   }
   return activities.map(act => ({
     ...act,
-    canRemove: act.label !== 'Application pack'
+    canRemove: !preventRemoveForLabels.includes(act.label) || act.activity_type.name === keys.received
   }))
 }
 /**

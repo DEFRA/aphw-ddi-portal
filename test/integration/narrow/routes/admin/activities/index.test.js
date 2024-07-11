@@ -26,22 +26,22 @@ describe('Activities admin', () => {
 
   const activityRows = {
     dogSent: [
-      { id: 1, label: 'dog sent 1' },
-      { id: 2, label: 'dog sent 2' },
-      { id: 3, label: 'dog sent 3' }
+      { id: 1, label: 'dog sent 1', activity_type: { name: 'sent' } },
+      { id: 2, label: 'dog sent 2', activity_type: { name: 'sent' } },
+      { id: 3, label: 'dog sent 3', activity_type: { name: 'sent' } }
     ],
     dogReceived: [
-      { id: 4, label: 'dog received 1' },
-      { id: 5, label: 'dog received 2' }
+      { id: 4, label: 'dog received 1', activity_type: { name: 'received' } },
+      { id: 5, label: 'dog received 2', activity_type: { name: 'received' } }
     ],
     ownerSent: [
-      { id: 6, label: 'owner sent 1' },
-      { id: 7, label: 'owner sent 2' },
-      { id: 8, label: 'owner sent 3' }
+      { id: 6, label: 'owner sent 1', activity_type: { name: 'sent' } },
+      { id: 7, label: 'owner sent 2', activity_type: { name: 'sent' } },
+      { id: 8, label: 'owner sent 3', activity_type: { name: 'sent' } }
     ],
     ownerReceived: [
-      { id: 9, label: 'owner received 1' },
-      { id: 10, label: 'owner received 2' }
+      { id: 9, label: 'owner received 1', activity_type: { name: 'received' } },
+      { id: 10, label: 'owner received 2', activity_type: { name: 'received' } }
     ]
   }
 
@@ -110,7 +110,9 @@ describe('Activities admin', () => {
   test('route prevents removal of certain types', async () => {
     const actRows = deepClone(activityRows)
     actRows.dogSent[1].label = 'Application pack'
+    actRows.dogSent[2].label = 'Form 2'
     actRows.dogReceived[0].label = 'Application pack'
+    actRows.dogReceived[1].label = 'Form 2'
     actRows.ownerSent[0].label = 'Application pack'
     actRows.ownerReceived[0].label = 'Application pack'
     getAllActivities.mockResolvedValue(actRows)
@@ -137,9 +139,9 @@ describe('Activities admin', () => {
     expect(rows.length).toBe(10)
     expect(rows[0].textContent.trim()).toBe('dog sent 1')
     expect(rows[1].textContent.trim()).toBe('Application pack')
-    expect(rows[2].textContent.trim()).toBe('dog sent 3')
+    expect(rows[2].textContent.trim()).toBe('Form 2')
     expect(rows[3].textContent.trim()).toBe('Application pack')
-    expect(rows[4].textContent.trim()).toBe('dog received 2')
+    expect(rows[4].textContent.trim()).toBe('Form 2')
     expect(rows[5].textContent.trim()).toBe('Application pack')
     expect(rows[6].textContent.trim()).toBe('owner sent 2')
     expect(rows[7].textContent.trim()).toBe('owner sent 3')
@@ -147,12 +149,13 @@ describe('Activities admin', () => {
     expect(rows[9].textContent.trim()).toBe('owner received 2')
 
     const hrefs = document.querySelectorAll('.govuk-summary-list__actions a')
-    expect(hrefs.length).toBe(6)
+    expect(hrefs.length).toBe(7)
     expect(hrefs[0].getAttribute('href')).toBe('/admin/activities/remove/1')
-    expect(hrefs[1].getAttribute('href')).toBe('/admin/activities/remove/3')
+    expect(hrefs[1].getAttribute('href')).toBe('/admin/activities/remove/4')
     expect(hrefs[2].getAttribute('href')).toBe('/admin/activities/remove/5')
     expect(hrefs[3].getAttribute('href')).toBe('/admin/activities/remove/7')
     expect(hrefs[4].getAttribute('href')).toBe('/admin/activities/remove/8')
-    expect(hrefs[5].getAttribute('href')).toBe('/admin/activities/remove/10')
+    expect(hrefs[5].getAttribute('href')).toBe('/admin/activities/remove/9')
+    expect(hrefs[6].getAttribute('href')).toBe('/admin/activities/remove/10')
   })
 })
