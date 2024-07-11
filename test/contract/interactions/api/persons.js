@@ -1,15 +1,16 @@
-const Matchers = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
+const { string, eachLike } = Matchers
 
 const person = {
-  firstName: Matchers.string('Homer'),
-  lastName: Matchers.string('Simpson'),
-  birthDate: Matchers.string('1998-05-10'),
-  personReference: Matchers.string('P-D9E1-22AD'),
+  firstName: string('Homer'),
+  lastName: string('Simpson'),
+  birthDate: string('1998-05-10'),
+  personReference: string('P-D9E1-22AD'),
   address: {
-    addressLine1: Matchers.string('14 Fake Street'),
-    town: Matchers.string('City of London'),
-    postcode: Matchers.string('E1 7AA'),
-    country: Matchers.string('England')
+    addressLine1: string('14 Fake Street'),
+    town: string('City of London'),
+    postcode: string('E1 7AA'),
+    country: string('England')
   }
 }
 
@@ -35,7 +36,7 @@ const getPersonsFirstNameLastNameInteraction = {
       'Content-Type': 'application/json; charset=utf-8'
     },
     body: {
-      persons: Matchers.eachLike(person, null)
+      persons: eachLike(person, null)
     }
   }
 }
@@ -60,7 +61,7 @@ const getPersonsFirstNameLastNameDOBInteraction = {
       'Content-Type': 'application/json; charset=utf-8'
     },
     body: {
-      persons: Matchers.eachLike(person, null)
+      persons: eachLike(person, null)
     }
   }
 }

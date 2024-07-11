@@ -99,7 +99,8 @@
 
       {% if model.details.tasks.certificateIssued.available %}
         {{ govukButton({
-          text: "Issue certificate"
+          text: "Continue",
+          href: model.continueLink
         }) }}
       {% endif %}
 

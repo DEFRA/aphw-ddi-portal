@@ -1,4 +1,6 @@
-const { string, term } = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
+const { string, term } = Matchers
+
 const address = {
   addressLine1: string('14 Fake Street'),
   town: string('City of London'),

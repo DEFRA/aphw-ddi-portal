@@ -7,7 +7,8 @@ const constants = {
       get: '/cdo/manage'
     },
     manageCdo: {
-      get: '/cdo/manage/cdo'
+      get: '/cdo/manage/cdo',
+      post: '/cdo/manage/cdo'
     },
     manageCdoTaskBase: {
       get: '/cdo/manage/task'

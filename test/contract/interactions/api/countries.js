@@ -1,4 +1,4 @@
-const Matchers = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
 
 const getCountriesInteraction = {
   state: 'countries exist',

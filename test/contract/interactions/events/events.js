@@ -1,4 +1,5 @@
-const { eachLike } = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
+const { eachLike } = Matchers
 const {
   SAMPLE_ACTIVITY, SAMPLE_UPDATED_DOG, SAMPLE_CREATED_WITH_DOGS, SAMPLE_CREATED_WITH_DOG, SAMPLE_UPDATED_PERSON,
   SAMPLE_UPDATED_DOG_WITH_NULL, SAMPLE_CREATED_WITH_DOG_V1, SAMPLE_UPDATED_PERSON_NULL
