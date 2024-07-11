@@ -1,11 +1,24 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% extends '_layout.njk' %}
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
+  {% if model.showBreadcrumbNotBackLink %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/cdo/manage">Manage CDOs</a>
+      </li>
+    </ol>
+  </div>
+  {% else %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       {{ govukBackLink({
@@ -18,11 +31,20 @@
       }}
     </div>
   </div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
+      {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: model.errors
+        }) }}
+      {% endif %}
+
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
         <h1 class="govuk-heading-l">Generate a certificate of exemption for Dog {{ model.indexNumber }}</h1>
 

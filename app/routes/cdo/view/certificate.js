@@ -2,10 +2,11 @@ const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/certificate')
-const { getCdo } = require('../../../api/ddi-index-api/cdo')
-const { addBackNavigation } = require('../../../lib/back-helpers')
+const { getCdo, getManageCdoDetails } = require('../../../api/ddi-index-api/cdo')
+const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { downloadCertificate } = require('../../../storage/repos/certificate')
 const { sendMessage } = require('../../../messaging/outbound/certificate-request')
+const { issueCertTask } = require('../manage/tasks/issue-cert')
 const getUser = require('../../../auth/get-user')
 
 module.exports = [
@@ -23,7 +24,7 @@ module.exports = [
 
         const backNav = addBackNavigation(request)
 
-        return h.view(views.certificate, new ViewModel(cdo.dog.indexNumber, backNav))
+        return h.view(views.certificate, new ViewModel(cdo.dog.indexNumber, request.query.origin, backNav))
       }
     }
   },
@@ -41,7 +42,9 @@ module.exports = [
       },
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.payload.indexNumber)
+        const indexNumber = request.payload.indexNumber
+        const cdo = await getCdo(indexNumber)
+        const origin = request.query.origin
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()
@@ -50,11 +53,22 @@ module.exports = [
         const certificateId = await sendMessage(cdo, getUser(request))
 
         try {
-          const cert = await downloadCertificate(request.payload.indexNumber, certificateId)
+          const cert = await downloadCertificate(indexNumber, certificateId)
 
           const downloadFilename = cdo.exemption?.exemptionOrder === '2023'
             ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
+
+          const cdoTaskDetails = await getManageCdoDetails(indexNumber)
+
+          if ((cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed) && cdo.dog.status === 'Pre-exempt') {
+            // Pre-exempt and all tasks completed
+            const error = await issueCertTask(indexNumber, getUser(request))
+            if (error) {
+              const backNav = addBackNavigationForErrorCondition(request)
+              return h.view(views.certificate, new ViewModel(indexNumber, origin, backNav, error))
+            }
+          }
 
           return h.response(cert).type('application/pdf').header('Content-Disposition', `filename="${downloadFilename}"`)
         } catch (err) {

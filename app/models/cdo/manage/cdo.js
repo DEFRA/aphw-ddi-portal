@@ -6,7 +6,7 @@ const { mapManageCdoDetails } = require('../../mappers/manage-cdo')
  * @param backNav
  * @constructor
  */
-function ViewModel (details, cdo, backNav) {
+function ViewModel (details, cdo, backNav, continueLink) {
   const breadcrumbs = [
     {
       label: 'Home',
@@ -22,7 +22,8 @@ function ViewModel (details, cdo, backNav) {
     breadcrumbs,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
-    details: mapManageCdoDetails(details, cdo)
+    details: mapManageCdoDetails(details, cdo),
+    continueLink
   }
 }
 

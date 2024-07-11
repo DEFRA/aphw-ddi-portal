@@ -1,4 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/index')
+const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { getManageCdoDetails } = require('../../../api/ddi-index-api/cdo')
@@ -22,7 +23,8 @@ module.exports = [
         }
 
         const cdo = await getCdo(dogIndex)
-        return h.view(views.manageCdo, new ViewModel(details, cdo, backNav))
+
+        return h.view(views.manageCdo, new ViewModel(details, cdo, backNav, `${dogRoutes.certificate.get}/${dogIndex}${backNav.srcHashParam}&origin=manage-cdo`))
       }
     }
   }
