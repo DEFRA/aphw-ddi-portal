@@ -2,7 +2,7 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (indexNumber, origin, backNav, error) {
   this.model = {
-    backLink: backNav.backLink,
+    backLink: origin === 'manage-cdo' ? '/cdo/manage' : backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     showBreadcrumbNotBackLink: origin === 'manage-cdo',
     indexNumber,
