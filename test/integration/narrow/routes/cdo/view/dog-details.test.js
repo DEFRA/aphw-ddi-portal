@@ -63,6 +63,62 @@ describe('View dog details', () => {
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
+      expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__actions')[1]).toBe(undefined)
+    })
+
+    test('GET /cdo/view/dog-details route returns 200 and allows gen cert if Exempt and cert issued date', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          id: 1,
+          indexNumber: 'ED123',
+          name: 'Bruno',
+          status: 'Exempt',
+          dog_breed: { breed: 'breed1' }
+        },
+        person: {
+          firstName: 'John Smith',
+          addresses: [{
+            address: {}
+          }],
+          person_contacts: []
+        },
+        exemption: {
+          exemptionOrder: 2015,
+          certificateIssued: '2024-01-01',
+          insurance: [{
+            company: 'Dogs Trust'
+          }]
+        }
+      })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/view/dog-details/ED123',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      console.log('html', document.documentElement.outerHTML)
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED123')
+      expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
+      expect(document.querySelectorAll('.govuk-summary-card:nth-child(2) .govuk-summary-list__value')[0].textContent.trim()).toBe('John Smith')
+      expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[6].textContent.trim()).toBe('Dogs Trust')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+      expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
+      const exemptionKeyRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__key')
+      const exemptionValueRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')
+      const exemptionActionRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__actions')
+      expect(exemptionKeyRows[0].textContent.trim()).toBe('Status')
+      expect(exemptionKeyRows[1].textContent.trim()).toBe('First certificate issued')
+      expect(exemptionValueRows[0].textContent.trim()).toBe('Exempt')
+      expect(exemptionValueRows[1].textContent.trim()).toBe('01 January 2024')
+      expect(exemptionActionRows[0].textContent.trim()).toBe('Change status (Exemption details)')
+      expect(exemptionActionRows[1].textContent.trim()).toBe('Generate certificate')
     })
 
     test('GET /cdo/view/dog-details route returns 200 with Not entered values given fields missing', async () => {

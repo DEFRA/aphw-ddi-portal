@@ -26,9 +26,11 @@
               <dt class="govuk-summary-list__key">First certificate issued</dt>
               {% if model.exemption.certificateIssued %}
                 <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
-                <dd class="govuk-summary-list__actions defra-text-align-left">
-                  <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
-                </dd>
+                {% if model.dog.status == 'Exempt' %}
+                  <dd class="govuk-summary-list__actions defra-text-align-left">
+                    <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
+                  </dd>
+                {% endif %}
               {% else %}
                 <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
               {% endif %}
