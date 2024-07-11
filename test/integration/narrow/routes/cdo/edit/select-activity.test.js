@@ -154,6 +154,51 @@ describe('Select activity', () => {
     expect(response.statusCode).toBe(404)
   })
 
+  test('GET /cdo/edit/select-activity route hides certain activities when type is sent', async () => {
+    getActivityDetails.mockReturnValue({
+      pk: 'ED12345',
+      source: 'dog',
+      activityType: 'sent'
+    })
+
+    getCdo.mockResolvedValue({
+      dog: {
+        status: 'Exempt',
+        indexNumber: 'ED12345'
+      }
+    })
+
+    getActivities.mockResolvedValue([
+      { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+      { id: 2, label: 'Application pack', activity_type: { name: 'sent' } },
+      { id: 3, label: 'Label 3', activity_type: { name: 'sent' } },
+      { id: 4, label: 'Form 2', activity_type: { name: 'sent' } },
+      { id: 5, label: 'Label 5', activity_type: { name: 'received' } },
+      { id: 6, label: 'Application pack', activity_type: { name: 'received' } },
+      { id: 7, label: 'Label 7', activity_type: { name: 'received' } },
+      { id: 8, label: 'Form 2', activity_type: { name: 'received' } }
+    ])
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/select-activity',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
+    expect(document.querySelectorAll('.govuk-back-link')[0].href).toBe('/back')
+    const radios = document.querySelector('.govuk-radios')
+    expect(radios.querySelectorAll('label')[0].textContent.trim()).toBe('Label 1')
+    expect(radios.querySelectorAll('label')[1].textContent.trim()).toBe('Label 3')
+    expect(radios.querySelectorAll('label')[2].textContent.trim()).toBe('Label 5')
+    expect(radios.querySelectorAll('label')[3].textContent.trim()).toBe('Application pack')
+    expect(radios.querySelectorAll('label')[4].textContent.trim()).toBe('Label 7')
+    expect(radios.querySelectorAll('label')[5].textContent.trim()).toBe('Form 2')
+  })
+
   test('POST /cdo/edit/select-activity route returns 302', async () => {
     getCdo.mockResolvedValue({
       dog: {
