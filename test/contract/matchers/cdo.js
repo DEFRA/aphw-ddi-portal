@@ -1,4 +1,5 @@
-const { term, string, iso8601Date, eachLike } = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
+const { term, string, iso8601Date, eachLike } = Matchers
 const { address } = require('./global')
 
 const validCdoRequest = {

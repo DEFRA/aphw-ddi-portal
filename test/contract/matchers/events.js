@@ -1,11 +1,5 @@
-const {
-  string,
-  like,
-  iso8601DateTimeWithMillis,
-  term,
-  eachLike,
-  iso8601Date
-} = require('@pact-foundation/pact/dsl/matchers')
+const { Matchers } = require('@pact-foundation/pact')
+const { string, like, iso8601DateTimeWithMillis, term, eachLike, iso8601Date } = Matchers
 
 const ANY_EVENT = {
   operation: string('activity'),
