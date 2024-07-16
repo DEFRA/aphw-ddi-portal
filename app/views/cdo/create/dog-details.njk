@@ -78,6 +78,10 @@
           <input type="hidden" name="microchipNumber" value="{{ model.microchipNumber }}">
         {% endif %}
 
+        {% if model.country is defined %}
+          <input type="hidden" name="country" value="{{ model.country }}">
+        {% endif %}
+
         {{ govukButton({
           text: "Add dog details"
         }) }}

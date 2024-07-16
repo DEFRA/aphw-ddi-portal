@@ -2,10 +2,11 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/microchip-results')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getMicrochipResults, setDog } = require('../../../session/cdo/dog')
-const { getOwnerDetails } = require('../../../session/cdo/owner')
+const { getAddress, getOwnerDetails } = require('../../../session/cdo/owner')
 const { getDogDetails } = require('../../../api/ddi-index-api/dog')
 const { hasAreYouSureRadioBeenSelected } = require('../../../schema/portal/common/single-submit')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
+const { validateBreedForCountryChangingOwner } = require('../../../lib/validation-helpers')
 
 const getCombinedResults = request => {
   const details = getMicrochipResults(request)
@@ -55,6 +56,12 @@ module.exports = [{
 
       if (!request.payload.confirm) {
         return h.redirect(`${routes.microchipResultsStop.get}/${request.params.dogId}`)
+      }
+
+      const error = await validateBreedForCountryChangingOwner(dog, getAddress(request), 'confirm')
+      if (error) {
+        const details = getCombinedResults(request)
+        return h.view(views.microchipResults, new ViewModel(details, error)).code(400).takeover()
       }
 
       return h.redirect(`${routes.applicationType.get}/${request.params.dogId}`)

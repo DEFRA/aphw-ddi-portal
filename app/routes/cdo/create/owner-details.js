@@ -5,6 +5,7 @@ const { validatePayload } = require('../../../schema/portal/owner/owner-details'
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { UTCDate } = require('@date-fns/utc')
 const { addDateComponents } = require('../../../lib/date-helpers')
+const { clearCdo } = require('../../../session/cdo')
 
 module.exports = [{
   method: 'GET',
@@ -12,6 +13,11 @@ module.exports = [{
   options: {
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
+      if (request.query.clear === 'true') {
+        clearCdo(request)
+        return h.redirect(routes.ownerDetails.get)
+      }
+
       const ownerDetails = getOwnerDetails(request) || {}
 
       addDateComponents(ownerDetails, 'dateOfBirth')

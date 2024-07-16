@@ -2,6 +2,7 @@ const { routes, views, keys } = require('../../../constants/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/create/dog-details')
 const { getDog, setDog } = require('../../../session/cdo/dog')
+const { getAddress } = require('../../../session/cdo/owner')
 const { getBreeds } = require('../../../api/ddi-index-api')
 const { validatePayload } = require('../../../schema/portal/cdo/dog-details')
 const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
@@ -33,7 +34,9 @@ module.exports = [
 
         addDateComponents(dog, keys.interimExemption)
 
-        return h.view(views.details, new ViewModel(dog, breeds))
+        const address = getAddress(request)
+
+        return h.view(views.details, new ViewModel(dog, breeds, address))
       }
     }
   },
@@ -47,8 +50,9 @@ module.exports = [
         failAction: async (request, h, error) => {
           const dog = request.payload
           const { breeds } = await getBreeds()
+          const address = getAddress(request)
 
-          return h.view(views.details, new ViewModel(dog, breeds, error)).code(400).takeover()
+          return h.view(views.details, new ViewModel(dog, breeds, address, error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {

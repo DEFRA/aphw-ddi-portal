@@ -49,11 +49,24 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Confirm address</h1>
     <form method="post" novalidate autocomplete="off">
+    {% if model.results.errorMessage %}
+    <div class="govuk-form-group govuk-form-group--error">
+      <p id="address-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span>{{ model.results.errorMessage.text }}
+      </p>
       <p>
       {% for addr in model.results.items[0].text.split(',') %}
       {{ addr}}<br>
       {% endfor %}
       </p>
+    </div>
+    {% else%}
+      <p>
+      {% for addr in model.results.items[0].text.split(',') %}
+      {{ addr}}<br>
+      {% endfor %}
+      </p>
+    {% endif %}
 
       <input type="hidden" name="address" value="0" />
 
