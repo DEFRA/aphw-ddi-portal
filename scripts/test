@@ -45,13 +45,13 @@ done
 
 compose() {
   if [ "${watch}" = "true" ]; then
-    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -p "${service}-test" $@
+    docker compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -p "${service}-test" $@
   elif [ "${debug}" = "true" ]; then
-    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -f docker-compose.test.debug.yaml -p "${service}-test" $@
+    docker compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -f docker-compose.test.debug.yaml -p "${service}-test" $@
   elif [ "${parallel}" = "true" ]; then
-    docker-compose -f docker-compose.yaml -f docker-compose.test.parallel.yaml -p "${service}-test" $@
+    docker compose -f docker-compose.yaml -f docker-compose.test.parallel.yaml -p "${service}-test" $@
   else
-    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
+    docker compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
   fi
 }
 

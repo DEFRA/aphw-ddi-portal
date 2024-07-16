@@ -2,7 +2,7 @@ const { keys } = require('../../../constants/cdo/dog')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
 const { constructDateField } = require('../../../lib/model-helpers')
 
-function ViewModel (dogDetails, breedTypes, backNav, errors) {
+function ViewModel (dogDetails, breedTypes, country, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
@@ -99,6 +99,7 @@ function ViewModel (dogDetails, breedTypes, backNav, errors) {
     dateExported: constructDateField(dogDetails, keys.dateExported, 'Date exported'),
     dateStolen: constructDateField(dogDetails, keys.dateStolen, 'Date stolen'),
     dateUntraceable: constructDateField(dogDetails, keys.dateUntraceable, 'Date untraceable'),
+    country: country ?? dogDetails.country,
     errors: []
   }
 

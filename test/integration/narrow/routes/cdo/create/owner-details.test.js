@@ -12,6 +12,9 @@ describe('OwnerDetails test', () => {
   jest.mock('../../../../../../app/session/cdo/owner')
   const { setOwnerDetails, getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
+  jest.mock('../../../../../../app/session/cdo')
+  const { clearCdo } = require('../../../../../../app/session/cdo')
+
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     server = await createServer()
@@ -27,6 +30,19 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(clearCdo).not.toHaveBeenCalled()
+  })
+
+  test('GET /cdo/create/owner-details route redirects and clears session if param supplied', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/owner-details?clear=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(clearCdo).toHaveBeenCalled()
   })
 
   test('POST /cdo/create/owner-details route returns 302 if not auth', async () => {

@@ -11,7 +11,10 @@ describe('Update dog details', () => {
   const { getBreeds } = require('../../../../../../app/api/ddi-index-api/dog-breeds')
 
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
-  const { getDogDetails, updateDogDetails } = require('../../../../../../app/api/ddi-index-api/dog')
+  const { updateDogDetails } = require('../../../../../../app/api/ddi-index-api/dog')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/cdo')
+  const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -33,9 +36,11 @@ describe('Update dog details', () => {
 
   describe('GET /cdo/edit/dog-details/P-1234-5678', () => {
     test('GET /cdo/edit/dog-details/P-1234-5678 route returns 200', async () => {
-      getDogDetails.mockResolvedValue({
-        name: 'Bruno',
-        dog_breed: { breed: 'breed1' }
+      getCdo.mockResolvedValue({
+        dog: {
+          name: 'Bruno',
+          dog_breed: { breed: 'breed1' }
+        }
       })
 
       const options = {
@@ -50,7 +55,7 @@ describe('Update dog details', () => {
     })
 
     test('GET /cdo/edit/dog-details/P-1234-5678 route returns 404 when dog not found', async () => {
-      getDogDetails.mockResolvedValue(null)
+      getCdo.mockResolvedValue(null)
 
       const options = {
         method: 'GET',
@@ -64,14 +69,16 @@ describe('Update dog details', () => {
     })
 
     test('GET /cdo/edit/dog-details/P-1234-5678 route returns 200 given dog dates exist', async () => {
-      getDogDetails.mockResolvedValue({
-        name: 'Bruno',
-        dog_breed: { breed: 'breed1' },
-        dateOfBirth: '2020-10-05',
-        dateOfDeath: '2024-10-05',
-        dateExported: '2024-11-06',
-        dateStolen: '2024-12-07',
-        dateUntraceable: '2024-12-10'
+      getCdo.mockResolvedValue({
+        dog: {
+          name: 'Bruno',
+          dog_breed: { breed: 'breed1' },
+          dateOfBirth: '2020-10-05',
+          dateOfDeath: '2024-10-05',
+          dateExported: '2024-11-06',
+          dateStolen: '2024-12-07',
+          dateUntraceable: '2024-12-10'
+        }
       })
 
       const options = {
@@ -86,7 +93,7 @@ describe('Update dog details', () => {
     })
 
     test('GET /cdo/edit/dog-details/P-1234-5678 route returns 404 when dog not found', async () => {
-      getDogDetails.mockResolvedValue(null)
+      getCdo.mockResolvedValue(null)
 
       const options = {
         method: 'GET',
@@ -305,6 +312,7 @@ describe('Update dog details', () => {
       expect(messages).toContain('The microchip number already exists')
       expect(document.querySelector('#microchipNumber-error')).not.toBeNull()
     })
+
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 2', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,

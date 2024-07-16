@@ -1,17 +1,18 @@
 const Joi = require('joi')
 const { getDateComponents } = require('../../../lib/date-helpers')
-const { calculateCdoExpiryDate } = require('../../../lib/validation-helpers')
+const { calculateCdoExpiryDate, validateBreedForCountry } = require('../../../lib/validation-helpers')
 const { applicationTypeSchemaElements } = require('../common/components/application-type')
 
 const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
-    '*': 'Breed type is required'
-  }),
+    'any.required': 'Breed type is required'
+  }).custom((value, helper) => validateBreedForCountry(value, helper)),
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   ...applicationTypeSchemaElements,
-  microchipNumber: Joi.string().allow(null).allow('').optional()
+  microchipNumber: Joi.string().allow(null).allow('').optional(),
+  country: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

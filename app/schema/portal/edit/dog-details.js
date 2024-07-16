@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { getDateComponents, validateDate } = require('../../../lib/date-helpers')
-const { validateMicrochip } = require('../../../lib/validation-helpers')
+const { validateMicrochip, validateBreedForCountry } = require('../../../lib/validation-helpers')
 
 const dogDetailsSchema = Joi.object({
   id: Joi.number().required(),
@@ -9,8 +9,8 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   breed: Joi.string().trim().required().messages({
-    '*': 'Breed type is required'
-  }),
+    'any.required': 'Breed type is required'
+  }).custom((value, helper) => validateBreedForCountry(value, helper)),
   colour: Joi.string().trim().max(50).allow('').allow(null).optional().messages({
     'string.max': 'Colour must be no more than {#limit} characters'
   }),
@@ -50,7 +50,8 @@ const dogDetailsSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom((value, helper) => validateDate(value, helper, false, true)).optional()
+  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
+  country: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

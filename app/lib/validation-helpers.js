@@ -1,6 +1,10 @@
+const Joi = require('joi')
 const { isFuture, isWithinInterval, sub, addMonths, startOfDay, differenceInYears } = require('date-fns')
 const { parseDate } = require('./date-helpers')
+const { getPersonAndDogs } = require('../api/ddi-index-api/person')
 const validNewMicrochip = /^\d+$/
+
+const invalidBreedForCountryMessage = 'The address for an XL Bully dog must be in England or Wales'
 
 const validateMicrochip = (value, helpers, compareOrig = false) => {
   let elemName = helpers.state.path[0]
@@ -183,10 +187,38 @@ const validateDob = (date, year) => {
   return null
 }
 
+const validateBreedForCountry = (value, helpers) => {
+  const elemName = 'breed'
+  const country = helpers.state.ancestors[0].country
+
+  if (value === 'XL Bully' && country === 'Scotland') {
+    return helpers.message(invalidBreedForCountryMessage, { path: [elemName] })
+  }
+
+  return value
+}
+
+const validateBreedForCountryChoosingAddress = async (personReference, payload, fieldName = 'address') => {
+  const ownerAndDogs = await getPersonAndDogs(personReference)
+
+  return (ownerAndDogs.dogs.some(dog => dog.breed === 'XL Bully') && payload.address.country === 'Scotland')
+    ? new Joi.ValidationError(invalidBreedForCountryMessage, [{ message: invalidBreedForCountryMessage, path: [fieldName], type: 'custom' }])
+    : null
+}
+
+const validateBreedForCountryChangingOwner = async (dog, address, fieldName) => {
+  return dog.breed === 'XL Bully' && address.country === 'Scotland'
+    ? new Joi.ValidationError(invalidBreedForCountryMessage, [{ message: invalidBreedForCountryMessage, path: [fieldName], type: 'custom' }])
+    : null
+}
+
 module.exports = {
   validateMicrochip,
   validateCdoIssueDate,
   validateInterimExemptionDate,
   calculateCdoExpiryDate,
-  validateOwnerDateOfBirth
+  validateOwnerDateOfBirth,
+  validateBreedForCountry,
+  validateBreedForCountryChoosingAddress,
+  validateBreedForCountryChangingOwner
 }

@@ -20,7 +20,11 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        console.log('here1 appType')
+
         const dog = getDog(request)
+
+        console.log('here2 dog', dog)
 
         if (dog === undefined) {
           return h.response().code(404).takeover()
