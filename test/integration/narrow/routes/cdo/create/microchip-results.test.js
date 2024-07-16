@@ -12,7 +12,7 @@ describe('Microchip results tests', () => {
   const { getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
+  const { getOwnerDetails, getAddress } = require('../../../../../../app/session/cdo/owner')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -71,12 +71,34 @@ describe('Microchip results tests', () => {
         payload
       }
 
-      getDogDetails.mockResolvedValue()
+      getDogDetails.mockResolvedValue({ breed: 'Breed 1' })
+      getAddress.mockReturnValue({ country: 'England' })
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/cdo/create/application-type/1')
+    })
+
+    test('route with Y payload and Scotland XLB shows error', async () => {
+      const payload = { confirm: 'Y' }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/create/microchip-results/1',
+        auth,
+        payload
+      }
+
+      getDogDetails.mockResolvedValue({ breed: 'XL Bully' })
+      getAddress.mockReturnValue({ country: 'Scotland' })
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(400)
+      expect(document.querySelector('#confirm-error').textContent.trim()).toBe('Error: The address for an XL Bully dog must be in England or Wales')
     })
 
     test('route with N payload redirects to microchip-results-stop', async () => {

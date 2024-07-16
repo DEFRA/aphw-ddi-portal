@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
+const { JSDOM } = require('jsdom')
 const { countries: mockCountries } = require('../../../../../mocks/countries')
 
 describe('Address edit test', () => {
@@ -7,7 +8,7 @@ describe('Address edit test', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   jest.mock('../../../../../../app/api/ddi-index-api/countries')
   const { getCountries } = require('../../../../../../app/api/ddi-index-api/countries')
@@ -147,6 +148,8 @@ describe('Address edit test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: Enter the first line of the address')
   })
 
   test('POST /cdo/edit/address with valid data but missing person returns 404', async () => {
@@ -185,12 +188,97 @@ describe('Address edit test', () => {
       }
     })
 
+    getPersonAndDogs.mockResolvedValue({
+      dogs: []
+    })
+
     const payload = {
       personReference: 'P-123',
       addressLine1: '1 Testing Street',
       town: 'Testington',
       postcode: 'AB1 1TT',
       country: 'Wales'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/address/P-123',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/edit/address errors if address is Scotland and owner has one or more XL Bullies', async () => {
+    const nextScreenUrl = '/main-return-point'
+    getMainReturnPoint.mockReturnValue(nextScreenUrl)
+
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'XL Bully'
+      }]
+    })
+
+    const payload = {
+      personReference: 'P-123',
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'AB1 1TT',
+      country: 'Scotland'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/address/P-123',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: The address for an XL Bully dog must be in England or Wales')
+  })
+
+  test('POST /cdo/edit/address forwards to next screen if address is Scotland but owner doesnt have XL Bullies', async () => {
+    const nextScreenUrl = '/main-return-point'
+    getMainReturnPoint.mockReturnValue(nextScreenUrl)
+
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'Breed 1'
+      }]
+    })
+
+    const payload = {
+      personReference: 'P-123',
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'AB1 1TT',
+      country: 'Scotland'
     }
 
     const options = {

@@ -9,6 +9,18 @@ const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoin
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const { updatePerson } = require('../../../api/ddi-index-api/person')
 const { getAddress, setAddress, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
+
+const errorView = async (request, h, error) => {
+  const backNav = addBackNavigationForErrorCondition(request)
+  const person = request.payload
+  const countries = await getCountries()
+  const form = {
+    personReference: person.personReference,
+    source: 'edit'
+  }
+  return h.view(views.address, new ViewModel(person, form, backNav, countries, error)).code(400).takeover()
+}
 
 module.exports = [{
   method: 'GET',
@@ -57,18 +69,7 @@ module.exports = [{
       failAction: async (request, h, error) => {
         console.log('Validation error in address edit:', error)
 
-        const backNav = addBackNavigationForErrorCondition(request)
-
-        const person = request.payload
-
-        const countries = await getCountries()
-
-        const form = {
-          personReference: person.personReference,
-          source: 'edit'
-        }
-
-        return h.view(views.address, new ViewModel(person, form, backNav, countries, error)).code(400).takeover()
+        return await errorView(request, h, error)
       }
     },
     handler: async (request, h) => {
@@ -78,6 +79,11 @@ module.exports = [{
       }
 
       const updatePayload = buildPersonAddressUpdatePayload(person, request.payload)
+
+      const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, updatePayload, 'country')
+      if (error) {
+        return await errorView(request, h, error)
+      }
 
       await updatePerson(updatePayload, getUser(request))
 

@@ -1,5 +1,6 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
+const { JSDOM } = require('jsdom')
 
 describe('SelectAddress edit test', () => {
   jest.mock('../../../../../../app/auth')
@@ -18,7 +19,7 @@ describe('SelectAddress edit test', () => {
   const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { updatePerson, getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
+  const { updatePerson, getPersonByReference, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -89,13 +90,18 @@ describe('SelectAddress edit test', () => {
     const nextScreenUrl = '/main-return-point'
 
     getMainReturnPoint.mockReturnValue('/main-return-point')
-    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'E' }])
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
       address: 0
     }
     updatePerson.mockResolvedValue()
     getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
     getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'Breed 1'
+      }]
+    })
 
     const options = {
       method: 'POST',
@@ -109,8 +115,36 @@ describe('SelectAddress edit test', () => {
     expect(response.headers.location).toBe(nextScreenUrl)
   })
 
+  test('POST /cdo/edit/select-address errors if Scotland and owner has XL Bullies', async () => {
+    getMainReturnPoint.mockReturnValue('/main-return-point')
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'Scotland' }])
+    const payload = {
+      address: 0
+    }
+    updatePerson.mockResolvedValue()
+    getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'XL Bully'
+      }]
+    })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error:The address for an XL Bully dog must be in England or Wales')
+  })
+
   test('POST /cdo/edit/select-address with invalid data returns error', async () => {
-    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'E' }])
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
     }
 
@@ -123,6 +157,8 @@ describe('SelectAddress edit test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error:Select an address.')
   })
 
   test('GET /cdo/edit/select-address route stores address in session when only one address', async () => {

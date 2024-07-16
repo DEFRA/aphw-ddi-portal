@@ -9,6 +9,7 @@ const { setInSession, getFromSession } = require('../../../session/session-wrapp
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const getUser = require('../../../auth/get-user')
+const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
 
 module.exports = [
   {
@@ -44,7 +45,9 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       validate: {
         payload: Joi.object({
-          address: Joi.number().min(0).required()
+          address: Joi.number().min(0).required().messages(
+            { '*': 'Select an address.' }
+          )
         }),
         failAction: async (request, h, error) => {
           const details = getPostcodeLookupDetails(request)
@@ -60,6 +63,13 @@ module.exports = [
         const person = await getPersonByReference(personReference)
 
         const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
+
+        const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload)
+        if (error) {
+          const details = getPostcodeLookupDetails(request)
+          const addresses = getFromSession(request, 'addresses')
+          return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
+        }
 
         await updatePerson(updatePayload, getUser(request))
 

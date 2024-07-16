@@ -3,7 +3,7 @@ const { keys } = require('../../../constants/cdo/dog')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
 const { applicationTypeElements } = require('../common/components/application-type')
 
-function ViewModel (dogDetails, breedTypes, errors) {
+function ViewModel (dogDetails, breedTypes, address, errors) {
   this.model = {
     backLink: routes.microchipSearch.get,
     dogId: dogDetails.dogId,
@@ -33,6 +33,7 @@ function ViewModel (dogDetails, breedTypes, errors) {
     },
     ...applicationTypeElements(dogDetails),
     microchipNumber: dogDetails.microchipNumber,
+    country: address.country,
     errors: []
   }
 

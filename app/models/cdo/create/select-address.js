@@ -22,7 +22,7 @@ function ViewModel (details, addresses = [], error) {
     source: details?.source,
     postcode: details?.postcode,
     results: {
-      id: 'addresses',
+      id: 'address',
       name: 'address',
       items: dedupeAddresses(items),
       classes: 'govuk-radios--small'
@@ -31,7 +31,7 @@ function ViewModel (details, addresses = [], error) {
 
   if (error) {
     this.model.results.errorMessage = {
-      text: 'Select an address.'
+      text: error.details[0].message
     }
   }
 }
