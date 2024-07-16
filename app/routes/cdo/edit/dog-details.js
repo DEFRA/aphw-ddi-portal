@@ -34,32 +34,33 @@ module.exports = [
         const indexNumber = request.params.indexNumber
         const cdo = await getCdo(indexNumber)
 
-        if (cdo?.dog == null) {
+        if (cdo == null) {
           return h.response().code(404).takeover()
         }
 
+        const dog = cdo.dog
         const { breeds } = await getBreeds()
 
-        if (cdo.dog[keys.dateOfBirth]) {
-          addDateComponents(cdo.dog, keys.dateOfBirth)
+        if (dog[keys.dateOfBirth]) {
+          addDateComponents(dog, keys.dateOfBirth)
         }
-        if (cdo.dog[keys.dateOfDeath]) {
-          addDateComponents(cdo.dog, keys.dateOfDeath)
+        if (dog[keys.dateOfDeath]) {
+          addDateComponents(dog, keys.dateOfDeath)
         }
-        if (cdo.dog[keys.dateExported]) {
-          addDateComponents(cdo.dog, keys.dateExported)
+        if (dog[keys.dateExported]) {
+          addDateComponents(dog, keys.dateExported)
         }
-        if (cdo.dog[keys.dateStolen]) {
-          addDateComponents(cdo.dog, keys.dateStolen)
+        if (dog[keys.dateStolen]) {
+          addDateComponents(dog, keys.dateStolen)
         }
-        if (cdo.dog[keys.dateUntraceable]) {
-          addDateComponents(cdo.dog, keys.dateUntraceable)
+        if (dog[keys.dateUntraceable]) {
+          addDateComponents(dog, keys.dateUntraceable)
         }
 
         const backNav = addBackNavigation(request)
 
         const country = cdo.person?.addresses[0]?.address?.country?.country
-        return h.view(views.editDogDetails, new ViewModel(cdo.dog, breeds, country, backNav))
+        return h.view(views.editDogDetails, new ViewModel(dog, breeds, country, backNav))
       }
     }
   },
