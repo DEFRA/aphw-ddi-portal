@@ -41,11 +41,15 @@
           <h1 class="govuk-fieldset__heading">Send application pack</h1>
         </legend>
     
+        {% if model.disabled %}
+        <p class="govuk-body" id="application-pack-sent">The application pack has been sent.</p>
+        {% else %}
         <div id="application-pack-hint" class="govuk-hint">
           Confirm that you have sent the application pack to the dog owner.
         </div>
 
         {{ govukCheckboxes(model.taskDone) }}
+        {% endif %}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
 
