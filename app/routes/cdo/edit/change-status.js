@@ -60,7 +60,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const backNav = addBackNavigation(request, false, true)
+        const backNav = addBackNavigation(request, false)
 
         return h.view(views.changeStatus, new ViewModel(cdo.dog, backNav))
       }
@@ -77,10 +77,10 @@ module.exports = [
       },
       handler: async (request, h) => {
         const payload = request.payload
-        const backNav = addBackNavigation(request, false, true)
+        const backNav = addBackNavigation(request, false)
 
         if (payload.newStatus === 'In breach') {
-          return h.redirect(`${routes.inBreach.get}/${payload.indexNumber}?src=${backNav?.srcHashValue}`)
+          return h.redirect(`${routes.inBreach.get}/${payload.indexNumber}${backNav?.srcHashParam}`)
         }
 
         try {
@@ -108,7 +108,7 @@ module.exports = [
         if (cdo == null) {
           return h.response().code(404).takeover()
         }
-        const backNav = addBackNavigation(request, false, true)
+        const backNav = addBackNavigation(request, false)
 
         const breachCategories = await getBreachCategories()
 

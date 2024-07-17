@@ -5,7 +5,6 @@ function ViewModel (dog, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
-    srcHashValue: backNav.srcHashValue,
     indexNumber: dog.indexNumber,
     status: dog.status,
     newStatus: {

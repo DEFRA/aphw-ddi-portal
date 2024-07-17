@@ -20,8 +20,8 @@ const getBreachCategories = async () => {
   const payload = await get(`${dogBreachesEndpoint}/categories`, options)
 
   return payload.breachCategories.map(breachCategory => {
-    const [head, ...tail] = breachCategory.label
-    const label = head.toUpperCase() + tail.join('')
+    const [firstLetter, ...restOfLetters] = breachCategory.label
+    const label = firstLetter.toUpperCase() + restOfLetters.join('')
 
     return {
       ...breachCategory,
