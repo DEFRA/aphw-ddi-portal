@@ -15,7 +15,7 @@ describe('Change status', () => {
   const { updateStatus } = require('../../../../../../app/api/ddi-index-api/dog')
 
   jest.mock('../../../../../../app/api/ddi-index-api/dog-breaches')
-  const { getBreachCategories } = require('../../../../../../app/api/ddi-index-api/dog-breaches')
+  const { getBreachCategories, setDogBreaches } = require('../../../../../../app/api/ddi-index-api/dog-breaches')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -305,36 +305,54 @@ describe('Change status', () => {
           indexNumber: 'ED12345'
         }
       })
-      getBreachCategories.mockResolvedValue([
-        {
-          id: 1,
-          label: 'Dog not covered by third party insurance',
-          short_name: 'NOT_COVERED_BY_INSURANCE'
+      setDogBreaches.mockResolvedValue({
+        dog: {
+          id: 12345,
+          indexNumber: 'ED12345',
+          status: {
+            id: 8,
+            status: 'In breach'
+          }
         },
-        {
-          id: 2,
-          label: 'Dog not kept on lead or muzzled',
-          short_name: 'NOT_ON_LEAD_OR_MUZZLED'
-        },
-        {
-          id: 3,
-          label: 'Dog kept in insecure place',
-          short_name: 'INSECURE_PLACE'
-        }
-      ])
+        dogBreaches: [
+          {
+            id: 1,
+            label: 'Dog not covered by third party insurance',
+            short_name: 'NOT_COVERED_BY_INSURANCE'
+          },
+          {
+            id: 2,
+            label: 'Dog not kept on lead or muzzled',
+            short_name: 'NOT_ON_LEAD_OR_MUZZLED'
+          },
+          {
+            id: 3,
+            label: 'Dog kept in insecure place',
+            short_name: 'INSECURE_PLACE'
+          }
+        ]
+      })
+
+      const payload = {
+        indexNumber: 'ED12345',
+        dogBreaches: [
+          'NOT_COVERED_BY_INSURANCE',
+          'NOT_ON_LEAD_OR_MUZZLED',
+          'INSECURE_PLACE'
+        ]
+      }
 
       const options = {
         method: 'POST',
         url: '/cdo/edit/change-status/in-breach/ED12345',
         auth,
-        payload: {
-          indexNumber: 'ED12345'
-        }
+        payload
       }
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
+      expect(setDogBreaches).toHaveBeenCalledWith(payload, expect.any(Object))
     })
 
     test('route returns 400 with empty payload', async () => {

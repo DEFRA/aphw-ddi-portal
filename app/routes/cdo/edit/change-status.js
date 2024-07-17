@@ -8,7 +8,7 @@ const { updateStatus } = require('../../../api/ddi-index-api/dog')
 const { validateChangeStatusPayload, duplicateMicrochipSchema, validateBreachReasonPayload } = require('../../../schema/portal/edit/change-status')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { ApiConflictError } = require('../../../errors/api-conflict-error')
-const { getBreachCategories } = require('../../../api/ddi-index-api/dog-breaches')
+const { getBreachCategories, setDogBreaches } = require('../../../api/ddi-index-api/dog-breaches')
 
 const changeStatusPostFailAction = async (request, h, error) => {
   const payload = request.payload
@@ -127,6 +127,8 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const payload = request.payload
+
+        await setDogBreaches(payload, getUser(request))
 
         return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}`)
       }
