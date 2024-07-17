@@ -2,6 +2,7 @@ const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { ApiConflictError } = require('../../../../../../app/errors/api-conflict-error')
 const { ApiErrorFailure } = require('../../../../../../app/errors/api-error-failure')
+const { routes } = require('../../../../../../app/constants/cdo/dog')
 
 describe('Change status', () => {
   jest.mock('../../../../../../app/auth')
@@ -13,6 +14,9 @@ describe('Change status', () => {
   jest.mock('../../../../../../app/api/ddi-index-api/dog')
   const { updateStatus } = require('../../../../../../app/api/ddi-index-api/dog')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/dog-breaches')
+  const { getBreachCategories } = require('../../../../../../app/api/ddi-index-api/dog-breaches')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -23,178 +27,332 @@ describe('Change status', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/edit/change-status route returns 200', async () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        status: 'Exempt',
-        indexNumber: 'ED12345'
+  describe('GET /cdo/edit/change-status', () => {
+    test('GET /cdo/edit/change-status route returns 200', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/change-status/ED12345',
+        auth
       }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
     })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/edit/change-status/ED12345',
-      auth
-    }
+    test('GET /cdo/edit/change-status route returns 404 when dog not found', async () => {
+      getCdo.mockResolvedValue(null)
 
-    const response = await server.inject(options)
-
-    expect(response.statusCode).toBe(200)
-  })
-
-  test('GET /cdo/edit/change-status route returns 404 when dog not found', async () => {
-    getCdo.mockResolvedValue(null)
-
-    const options = {
-      method: 'GET',
-      url: '/cdo/edit/change-status/ED12345',
-      auth
-    }
-
-    const response = await server.inject(options)
-
-    expect(response.statusCode).toBe(404)
-  })
-
-  test('POST /cdo/edit/change-status route returns 302', async () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        status: 'Exempt',
-        indexNumber: 'ED12345'
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/change-status/ED12345',
+        auth
       }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
     })
-
-    updateStatus.mockResolvedValue()
-
-    const payload = {
-      indexNumber: 'ED12345',
-      newStatus: 'Inactive'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/edit/change-status',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-
-    expect(response.statusCode).toBe(302)
-    expect(updateStatus).toHaveBeenCalledTimes(1)
   })
 
-  test('POST /cdo/edit/change-status route returns 404 given validation failed and no cdo', async () => {
-    getCdo.mockResolvedValue(null)
+  describe('POST /cdo/edit/change-status', () => {
+    test('POST /cdo/edit/change-status route returns 302', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
 
-    updateStatus.mockResolvedValue()
+      updateStatus.mockResolvedValue()
 
-    const payload = {
-      indexNumber: 'ED12345'
-    }
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/edit/change-status',
-      auth,
-      payload
-    }
-
-    const response = await server.inject(options)
-
-    expect(response.statusCode).toBe(404)
-  })
-
-  test('POST /cdo/edit/dog-details route returns 400 when payload is invalid', async () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        status: 'Exempt',
-        indexNumber: 'ED12345'
-      }
-    })
-    updateStatus.mockResolvedValue()
-
-    const options = {
-      method: 'POST',
-      url: '/cdo/edit/change-status',
-      auth,
-      payload: {}
-    }
-
-    const response = await server.inject(options)
-
-    const { document } = (new JSDOM(response.payload)).window
-
-    expect(response.statusCode).toBe(400)
-    expect(updateStatus).not.toHaveBeenCalled()
-    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
-  })
-
-  test('POST /cdo/edit/dog-details route returns 400 when update returns a 409 microchip Conflict', async () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        status: 'Exempt',
+      const payload = {
         indexNumber: 'ED12345',
-        microchipNumber: ''
+        newStatus: 'Inactive'
       }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(updateStatus).toHaveBeenCalledTimes(1)
     })
-    updateStatus.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
-      statusCode: 409,
-      statusMessage: 'The microchip number already exists',
-      payload: {
-        statusCode: 409,
-        error: 'Conflict',
-        message: 'The microchip number already exists',
-        microchipNumbers: [
-          '875257109325923'
-        ]
+
+    test('POST /cdo/edit/change-status route returns 302 given status is In breach', async () => {
+      const nextScreenUrl = routes.inBreach.get
+
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+
+      updateStatus.mockResolvedValue()
+
+      const payload = {
+        indexNumber: 'ED12345',
+        newStatus: 'In breach'
       }
-    })))
 
-    const payload = {
-      indexNumber: 'ED12345',
-      newStatus: 'Inactive'
-    }
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload
+      }
 
-    const options = {
-      method: 'POST',
-      url: '/cdo/edit/change-status',
-      auth,
-      payload
-    }
+      const response = await server.inject(options)
 
-    const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toContain(`${nextScreenUrl}/ED12345?src=`)
+      expect(updateStatus).not.toHaveBeenCalled()
+    })
 
-    const { document } = (new JSDOM(response.payload)).window
+    test('POST /cdo/edit/change-status route returns 404 given validation failed and no cdo', async () => {
+      getCdo.mockResolvedValue(null)
 
-    expect(response.statusCode).toBe(400)
-    expect(document.querySelector('.govuk-error-summary').textContent).toContain('The microchip number is in use on another record.')
-  })
+      updateStatus.mockResolvedValue()
 
-  test('POST /cdo/edit/dog-details route returns 500 when payload is invalid', async () => {
-    getCdo.mockResolvedValue({
-      dog: {
-        status: 'Exempt',
+      const payload = {
         indexNumber: 'ED12345'
       }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
     })
-    updateStatus.mockRejectedValue(new Error('server error'))
+  })
 
-    const payload = {
-      indexNumber: 'ED12345',
-      newStatus: 'Inactive'
-    }
+  describe('POST /cdo/edit/dog-details', () => {
+    test('POST /cdo/edit/dog-details route returns 400 when payload is invalid', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      updateStatus.mockResolvedValue()
 
-    const options = {
-      method: 'POST',
-      url: '/cdo/edit/change-status',
-      auth,
-      payload
-    }
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload: {}
+      }
 
-    const response = await server.inject(options)
+      const response = await server.inject(options)
 
-    expect(response.statusCode).toBe(500)
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(400)
+      expect(updateStatus).not.toHaveBeenCalled()
+      expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+    })
+
+    test('POST /cdo/edit/dog-details route returns 400 when update returns a 409 microchip Conflict', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345',
+          microchipNumber: ''
+        }
+      })
+      updateStatus.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
+        statusCode: 409,
+        statusMessage: 'The microchip number already exists',
+        payload: {
+          statusCode: 409,
+          error: 'Conflict',
+          message: 'The microchip number already exists',
+          microchipNumbers: [
+            '875257109325923'
+          ]
+        }
+      })))
+
+      const payload = {
+        indexNumber: 'ED12345',
+        newStatus: 'Inactive'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(400)
+      expect(document.querySelector('.govuk-error-summary').textContent).toContain('The microchip number is in use on another record.')
+    })
+
+    test('POST /cdo/edit/dog-details route returns 500 when payload is invalid', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      updateStatus.mockRejectedValue(new Error('server error'))
+
+      const payload = {
+        indexNumber: 'ED12345',
+        newStatus: 'Inactive'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(500)
+    })
+  })
+
+  describe('GET /cdo/edit/change-status/in-breach', () => {
+    test('route returns 200', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      getBreachCategories.mockResolvedValue([
+        {
+          id: 1,
+          label: 'Dog not covered by third party insurance',
+          short_name: 'NOT_COVERED_BY_INSURANCE'
+        },
+        {
+          id: 2,
+          label: 'Dog not kept on lead or muzzled',
+          short_name: 'NOT_ON_LEAD_OR_MUZZLED'
+        },
+        {
+          id: 3,
+          label: 'Dog kept in insecure place',
+          short_name: 'INSECURE_PLACE'
+        }
+      ])
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
+        auth
+      }
+
+      const response = await server.inject(options)
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(200)
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('What is the reason for the breach?')
+      expect(document.querySelectorAll('.govuk-hint')[0].textContent.trim()).toBe('Select all that apply.')
+      expect(document.querySelectorAll('.govuk-checkboxes__item')[0].textContent.trim()).toBe('Dog not covered by third party insurance')
+      expect(document.querySelectorAll('.govuk-checkboxes__item .govuk-checkboxes__input')[0].getAttribute('value')).toBe('NOT_COVERED_BY_INSURANCE')
+      expect(document.querySelectorAll('.govuk-checkboxes__item')[1].textContent.trim()).toBe('Dog not kept on lead or muzzled')
+      expect(document.querySelectorAll('.govuk-checkboxes__item')[2].textContent.trim()).toBe('Dog kept in insecure place')
+    })
+
+    test('route returns 404 when dog not found', async () => {
+      getCdo.mockResolvedValue(null)
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/change-status/ED12345',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('POST /cdo/edit/change-status/in-breach', () => {
+    test('route returns 400 with empty payload', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      getBreachCategories.mockResolvedValue([
+        {
+          id: 1,
+          label: 'Dog not covered by third party insurance',
+          short_name: 'NOT_COVERED_BY_INSURANCE'
+        },
+        {
+          id: 2,
+          label: 'Dog not kept on lead or muzzled',
+          short_name: 'NOT_ON_LEAD_OR_MUZZLED'
+        },
+        {
+          id: 3,
+          label: 'Dog kept in insecure place',
+          short_name: 'INSECURE_PLACE'
+        }
+      ])
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
+        auth,
+        payload: {
+          indexNumber: 'ED12345'
+        }
+      }
+
+      const response = await server.inject(options)
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(400)
+      expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+      expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select all reasons the dog is in breach')
+    })
+
+    test('route returns 404 when dog not found', async () => {
+      getCdo.mockResolvedValue(null)
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/change-status/ED12345',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
+    })
   })
 
   afterEach(async () => {
