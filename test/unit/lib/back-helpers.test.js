@@ -1,4 +1,4 @@
-const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl, getBackLinkToSamePage } = require('../../../app/lib/back-helpers')
+const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl, getBackLinkToSamePage, forceToHttps } = require('../../../app/lib/back-helpers')
 const { getFromSession, setInSession } = require('../../../app/session/session-wrapper')
 jest.mock('../../../app/session/session-wrapper')
 
@@ -107,6 +107,23 @@ describe('BackHelpers', () => {
       expect(backNav.srcHashParam).toBe('?src=https://testhost.com/somepage1?src=45678')
       expect(backNav.srcHashValue).toBe('https://testhost.com/somepage1?src=45678')
       expect(backNav.currentHashParam).toBe('?src=45678')
+    })
+  })
+
+  describe('forceToHttps', () => {
+    test('handles null', () => {
+      const res = forceToHttps(null)
+      expect(res).toBeNull()
+    })
+
+    test('leaves localhost as non-secure', () => {
+      const res = forceToHttps('http://localhost:3000/123')
+      expect(res).toBe('http://localhost:3000/123')
+    })
+
+    test('changes to secure', () => {
+      const res = forceToHttps('http://some-cloud-host.com/my-page/ED123?src=abc123')
+      expect(res).toBe('https://some-cloud-host.com/my-page/ED123?src=abc123')
     })
   })
 })
