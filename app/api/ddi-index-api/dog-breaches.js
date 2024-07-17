@@ -1,4 +1,4 @@
-const { get } = require('./base')
+const { get, post } = require('./base')
 
 const dogBreachesEndpoint = 'breaches'
 
@@ -19,7 +19,7 @@ const options = {
 const getBreachCategories = async () => {
   const payload = await get(`${dogBreachesEndpoint}/categories`, options)
 
-  const breachCategories = payload.breachCategories.map(breachCategory => {
+  return payload.breachCategories.map(breachCategory => {
     const [head, ...tail] = breachCategory.label
     const label = head.toUpperCase() + tail.join('')
 
@@ -28,9 +28,13 @@ const getBreachCategories = async () => {
       label
     }
   })
-  return breachCategories
+}
+
+const setDogBreaches = async (requestPayload, user) => {
+  const payload = await post(`${dogBreachesEndpoint}/dog:setBreaches`, requestPayload, user)
+  return payload
 }
 
 module.exports = {
-  getBreachCategories
+  getBreachCategories, setDogBreaches
 }
