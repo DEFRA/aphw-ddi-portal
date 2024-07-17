@@ -42,7 +42,7 @@ const breachReasonPostFailAction = async (request, h, error) => {
 
   const backNav = addBackNavigationForErrorCondition(request)
 
-  const viewModel = new InBreachViewModel(cdo.dog, breachCategories, payload.breachReason ?? [], backNav, error)
+  const viewModel = new InBreachViewModel(cdo.dog, breachCategories, payload.dogBreaches ?? [], backNav, error)
 
   return h.view(views.inBreachCategories, viewModel).code(400).takeover()
 }

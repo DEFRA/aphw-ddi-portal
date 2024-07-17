@@ -287,7 +287,7 @@ describe('Change status', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/edit/change-status/ED12345',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
         auth
       }
 
@@ -355,6 +355,50 @@ describe('Change status', () => {
       expect(setDogBreaches).toHaveBeenCalledWith(payload, expect.any(Object))
     })
 
+    test('route returns 400 with missing index number', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      getBreachCategories.mockResolvedValue([
+        {
+          id: 1,
+          label: 'Dog not covered by third party insurance',
+          short_name: 'NOT_COVERED_BY_INSURANCE'
+        },
+        {
+          id: 2,
+          label: 'Dog not kept on lead or muzzled',
+          short_name: 'NOT_ON_LEAD_OR_MUZZLED'
+        },
+        {
+          id: 3,
+          label: 'Dog kept in insecure place',
+          short_name: 'INSECURE_PLACE'
+        }
+      ])
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
+        auth,
+        payload: {
+          dogBreaches: [
+            'NOT_COVERED_BY_INSURANCE',
+            'NOT_ON_LEAD_OR_MUZZLED'
+          ]
+        }
+      }
+
+      const response = await server.inject(options)
+      const { document } = (new JSDOM(response.payload)).window
+
+      expect(response.statusCode).toBe(400)
+      expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+    })
+
     test('route returns 400 with empty payload', async () => {
       getCdo.mockResolvedValue({
         dog: {
@@ -399,11 +443,47 @@ describe('Change status', () => {
 
     test('route returns 404 when dog not found', async () => {
       getCdo.mockResolvedValue(null)
+      setDogBreaches.mockResolvedValue({
+        dog: {
+          id: 12345,
+          indexNumber: 'ED12345',
+          status: {
+            id: 8,
+            status: 'In breach'
+          }
+        },
+        dogBreaches: [
+          {
+            id: 1,
+            label: 'Dog not covered by third party insurance',
+            short_name: 'NOT_COVERED_BY_INSURANCE'
+          },
+          {
+            id: 2,
+            label: 'Dog not kept on lead or muzzled',
+            short_name: 'NOT_ON_LEAD_OR_MUZZLED'
+          },
+          {
+            id: 3,
+            label: 'Dog kept in insecure place',
+            short_name: 'INSECURE_PLACE'
+          }
+        ]
+      })
+
+      const payload = {
+        dogBreaches: [
+          'NOT_COVERED_BY_INSURANCE',
+          'NOT_ON_LEAD_OR_MUZZLED',
+          'INSECURE_PLACE'
+        ]
+      }
 
       const options = {
-        method: 'GET',
-        url: '/cdo/edit/change-status/ED12345',
-        auth
+        method: 'POST',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
+        auth,
+        payload
       }
 
       const response = await server.inject(options)
