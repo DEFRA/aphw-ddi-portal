@@ -55,6 +55,20 @@ describe('View owner details', () => {
     expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim().indexOf('Testington')).toBeGreaterThan(-1)
   })
 
+  test('GET /cdo/view/owner-details throws if server error', async () => {
+    getPersonAndDogs.mockImplementation(() => { throw new Error('dummy server error') })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/owner-details/P-123',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(500)
+  })
+
   test('GET /cdo/view/owner-details route with missing data returns 200 and not entered fields', async () => {
     getPersonAndDogs.mockResolvedValue({
       firstName: 'Wreck it',
