@@ -6,11 +6,19 @@ const validateInsurance = (value, helpers) => {
   const renewalPresent = value.insuranceRenewal
 
   if (companyPresent && !renewalPresent) {
-    return helpers.message('Enter an insurance renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
+    return helpers.message('Enter a renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
   }
 
   if (!companyPresent && renewalPresent) {
     return helpers.message('Select an insurance company', { path: ['insuranceCompany'] })
+  }
+
+  if (value.previousInsuranceCompany && !companyPresent) {
+    return helpers.message('Select an insurance company', { path: ['insuranceCompany'] })
+  }
+
+  if (value.previousInsuranceRenewal && !renewalPresent) {
+    return helpers.message('Enter a renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
   }
 
   return value
