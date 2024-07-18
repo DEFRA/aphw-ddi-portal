@@ -206,7 +206,7 @@ const validateBreedForCountryChoosingAddress = async (personReference, payload, 
     : null
 }
 
-const validateBreedForCountryChangingOwner = async (dog, address, fieldName) => {
+const validateBreedForCountryChangingOwner = (dog, address, fieldName) => {
   return dog.breed === 'XL Bully' && address.country === 'Scotland'
     ? new Joi.ValidationError(invalidBreedForCountryMessage, [{ message: invalidBreedForCountryMessage, path: [fieldName], type: 'custom' }])
     : null

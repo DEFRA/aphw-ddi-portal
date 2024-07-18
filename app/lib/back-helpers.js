@@ -51,10 +51,19 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const getMainReturnPoint = (request) => {
-  const url = getFromSession(request, mainReturnPoint)
+const stripDomain = (url) => {
+  const strUrl = (url ?? '')
+  const slashPos = strUrl.indexOf('/', strUrl.startsWith('https://') ? 8 : 7)
+  if (slashPos > -1) {
+    return url.substring(slashPos)
+  }
+  return '/'
+}
 
-  return url ?? '/'
+const getMainReturnPoint = (request, pathOnly = true) => {
+  const url = getFromSession(request, mainReturnPoint)
+  const retUrl = url ?? '/'
+  return pathOnly ? stripDomain(retUrl) : retUrl
 }
 
 const addBackNavigation = (request, markAsMainReturnPoint = false) => {
@@ -107,5 +116,6 @@ module.exports = {
   getBackLinkToSamePage,
   extractSrcParamFromUrl,
   getMainReturnPoint,
-  forceToHttps
+  forceToHttps,
+  stripDomain
 }
