@@ -143,6 +143,28 @@ describe('SelectAddress edit test', () => {
     expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error:The address for an XL Bully dog must be in England or Wales')
   })
 
+  test('POST /cdo/edit/select-address thorws if server error', async () => {
+    getMainReturnPoint.mockReturnValue('/main-return-point')
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'Scotland' }])
+    const payload = {
+      address: 0
+    }
+    updatePerson.mockImplementation(() => { throw new Error('dummy server error') })
+    getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
+    getPersonAndDogs.mockResolvedValue()
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(500)
+  })
+
   test('POST /cdo/edit/select-address with invalid data returns error', async () => {
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
