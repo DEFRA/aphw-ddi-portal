@@ -16,7 +16,7 @@ const getPostcodeAddresses = async (postcode, houseNumber) => {
   try {
     const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}`, options)
 
-    if (payload.results == null) {
+    if (payload?.results == null) {
       return []
     }
 
