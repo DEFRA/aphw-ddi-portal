@@ -16,18 +16,20 @@ const getPostcodeAddresses = async (postcode, houseNumber) => {
   try {
     const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}`, options)
 
-    const foundAddresses = payload.results.flatMap(result => {
-      if (houseNumber) {
-        if (houseNumber.toLowerCase() === `${result.DPA.BUILDING_NUMBER}`.toLowerCase() ||
-          houseNumber.toLowerCase() === `${result.DPA.SUB_BUILDING_NAME}`.toLowerCase() ||
-          `flat ${houseNumber.toLowerCase()}` === `${result.DPA.SUB_BUILDING_NAME}`.toLowerCase()) {
+    const foundAddresses = payload.results
+      ? payload.results.flatMap(result => {
+          if (houseNumber) {
+            if (houseNumber.toLowerCase() === `${result.DPA.BUILDING_NUMBER}`.toLowerCase() ||
+              houseNumber.toLowerCase() === `${result.DPA.SUB_BUILDING_NAME}`.toLowerCase() ||
+              `flat ${houseNumber.toLowerCase()}` === `${result.DPA.SUB_BUILDING_NAME}`.toLowerCase()) {
+              return buildAddressResult(result)
+            } else {
+              return []
+            }
+          }
           return buildAddressResult(result)
-        } else {
-          return []
-        }
-      }
-      return buildAddressResult(result)
-    })
+        })
+      : []
 
     return foundAddresses.sort((a, b) => {
       // Sort function to cater for 'FLAT' numbers alongside house numbers

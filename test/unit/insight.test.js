@@ -22,21 +22,21 @@ describe('App Insight', () => {
 
   const consoleLogSpy = jest.spyOn(console, 'log')
 
-  const appInsightsConnString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+  const appInsightsConnString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRINGxx
 
   beforeEach(() => {
-    delete process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+    delete process.env.APPLICATIONINSIGHTS_CONNECTION_STRINGxx
     jest.clearAllMocks()
   })
 
   afterAll(() => {
-    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = appInsightsConnString
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRINGxx = appInsightsConnString
   })
 
   test('is started when env var exists', () => {
     const appName = 'test-app'
     process.env.APPINSIGHTS_CLOUDROLE = appName
-    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = 'something'
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRINGxx = 'something'
     const insights = require('../../app/insights')
 
     insights.setup()

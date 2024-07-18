@@ -1,6 +1,5 @@
 const config = require('../config')
 
-console.log('session-cache', config)
 module.exports = {
   plugin: require('@hapi/yar'),
   options: {
