@@ -17,7 +17,6 @@ const forceToHttps = (url) => {
 const generateHashParamForCurrentScreen = (request) => {
   const id = uuidv4()
   const urlHashRef = id.split('-').shift().toLocaleLowerCase('en-GB').match(/.{1,4}/g).join('-')
-  console.log('URL set in session', request.url.href)
   setInSession(request, `${backUrl}${urlHashRef}`, forceToHttps(request.url.href))
 
   return urlHashRef
@@ -34,7 +33,6 @@ const extractSrcParamFromUrl = (url, stripSrcPrefix) => {
 }
 
 const extractSrcParamFromReferer = (request, removPrefix) => {
-  console.log('extractSrcParamFromReferer', request?.headers?.referer)
   return extractSrcParamFromUrl(forceToHttps(request?.headers?.referer), removPrefix)
 }
 
@@ -51,24 +49,13 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const stripDomain = (url) => {
-  const strUrl = (url ?? '')
-  const slashPos = strUrl.indexOf('/', strUrl.startsWith('https://') ? 8 : 7)
-  if (slashPos > -1) {
-    return url.substring(slashPos)
-  }
-  return '/'
-}
-
 const getMainReturnPoint = (request, pathOnly = true) => {
   const url = getFromSession(request, mainReturnPoint)
-  const retUrl = url ?? '/'
-  return pathOnly ? stripDomain(retUrl) : retUrl
+  return url ?? '/'
 }
 
 const addBackNavigation = (request, markAsMainReturnPoint = false) => {
   if (markAsMainReturnPoint) {
-    console.log('URL ReturnPoint set in session', request.url.href)
     setInSession(request, mainReturnPoint, forceToHttps(request.url.href))
   }
 
@@ -116,6 +103,5 @@ module.exports = {
   getBackLinkToSamePage,
   extractSrcParamFromUrl,
   getMainReturnPoint,
-  forceToHttps,
-  stripDomain
+  forceToHttps
 }

@@ -1,4 +1,4 @@
-const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl, getBackLinkToSamePage, forceToHttps, stripDomain } = require('../../../app/lib/back-helpers')
+const { addBackNavigation, extractBackNavParam, addBackNavigationForErrorCondition, extractSrcParamFromUrl, getBackLinkToSamePage, forceToHttps } = require('../../../app/lib/back-helpers')
 const { getFromSession, setInSession } = require('../../../app/session/session-wrapper')
 jest.mock('../../../app/session/session-wrapper')
 
@@ -124,47 +124,6 @@ describe('BackHelpers', () => {
     test('changes to secure', () => {
       const res = forceToHttps('http://some-cloud-host.com/my-page/ED123?src=abc123')
       expect(res).toBe('https://some-cloud-host.com/my-page/ED123?src=abc123')
-    })
-  })
-
-  describe('stripDomain', () => {
-    test('handles null', () => {
-      const res = stripDomain(null)
-      expect(res).toBe('/')
-    })
-
-    describe('non-secure http', () => {
-      test('handles path and query', () => {
-        const res = stripDomain('http://localhost:3000/123/456?abc=789')
-        expect(res).toBe('/123/456?abc=789')
-      })
-
-      test('handles root', () => {
-        const res = stripDomain('http://my-site.com')
-        expect(res).toBe('/')
-      })
-
-      test('handles root with slash', () => {
-        const res = stripDomain('http://my-site.com/')
-        expect(res).toBe('/')
-      })
-    })
-
-    describe('secure https', () => {
-      test('handles path and query', () => {
-        const res = stripDomain('https://localhost:3000/123/456?abc=789')
-        expect(res).toBe('/123/456?abc=789')
-      })
-
-      test('handles root', () => {
-        const res = stripDomain('https://my-site.com')
-        expect(res).toBe('/')
-      })
-
-      test('handles root with slash', () => {
-        const res = stripDomain('https://my-site.com/')
-        expect(res).toBe('/')
-      })
     })
   })
 })

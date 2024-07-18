@@ -1,7 +1,7 @@
 const appInsights = require('applicationinsights')
 
 const setup = () => {
-  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
+  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRINGxx) {
     appInsights.setup().start()
     console.log('App Insights Running')
     const cloudRoleTag = appInsights.defaultClient.context.keys.cloudRole
