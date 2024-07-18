@@ -101,7 +101,6 @@ describe('View dog details', () => {
 
       const { document } = new JSDOM(response.payload).window
 
-      console.log('html', document.documentElement.outerHTML)
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED123')
       expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
