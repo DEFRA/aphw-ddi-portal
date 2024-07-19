@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { validatePayloadBuilder } = require('../common/validate')
 
 const changeStatusSchema = Joi.object({
   indexNumber: Joi.string().required(),
@@ -14,17 +15,19 @@ const duplicateMicrochipSchema = Joi.object({
   newStatus: Joi.any()
 }).required()
 
-const validatePayload = (payload) => {
-  const { value, error } = changeStatusSchema.validate(payload, { abortEarly: false })
+const breachReasonSchema = Joi.object({
+  dogBreaches: Joi.array().items(Joi.string()).min(1).required().messages({
+    '*': 'Select all reasons the dog is in breach'
 
-  if (error) {
-    throw error
-  }
+  }),
+  indexNumber: Joi.string().required()
+}).required()
 
-  return value
-}
+const validateChangeStatusPayload = validatePayloadBuilder(changeStatusSchema)
+const validateBreachReasonPayload = validatePayloadBuilder(breachReasonSchema)
 
 module.exports = {
-  validatePayload,
+  validateChangeStatusPayload,
+  validateBreachReasonPayload,
   duplicateMicrochipSchema
 }
