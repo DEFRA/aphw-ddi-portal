@@ -16,6 +16,10 @@ const getPostcodeAddresses = async (postcode, houseNumber) => {
   try {
     const { payload } = await wreck.get(`${baseUrl}/${postcodeEndpoint}?postcode=${postcode}`, options)
 
+    if (payload?.results == null) {
+      return []
+    }
+
     const foundAddresses = payload.results.flatMap(result => {
       if (houseNumber) {
         if (houseNumber.toLowerCase() === `${result.DPA.BUILDING_NUMBER}`.toLowerCase() ||

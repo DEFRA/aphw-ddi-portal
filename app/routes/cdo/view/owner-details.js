@@ -12,17 +12,27 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const personAndDogs = await getPersonAndDogs(request.params.personReference)
+        try {
+          console.log('view/owner-details1', request.params.personReference)
+          const personAndDogs = await getPersonAndDogs(request.params.personReference)
+          console.log('view/owner-details2')
 
-        if (personAndDogs === undefined) {
-          return h.response().code(404).takeover()
+          if (personAndDogs === undefined) {
+            return h.response().code(404).takeover()
+          }
+
+          console.log('view/owner-details3')
+          setActivityDetails(request, null)
+
+          console.log('view/owner-details4')
+          const backNav = addBackNavigation(request, true)
+
+          console.log('view/owner-details5')
+          return h.view(views.viewOwnerDetails, new ViewModel(personAndDogs, backNav))
+        } catch (err) {
+          console.log('route view/owner-details error', err)
+          throw err
         }
-
-        setActivityDetails(request, null)
-
-        const backNav = addBackNavigation(request, true)
-
-        return h.view(views.viewOwnerDetails, new ViewModel(personAndDogs, backNav))
       }
     }
   }

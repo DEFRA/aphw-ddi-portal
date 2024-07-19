@@ -26,7 +26,49 @@
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-l govuk-!-margin-bottom-5">Dogs on the Index</h1>
         <p class="govuk-body&quot;">Data accurate at {{ model.timestamp }} (today).</p>
-        <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-3" aria-hidden="true">Total number of dogs by status</h2>
+
+        <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-3" aria-hidden="true">Number of dogs in breach or exempt</h2>
+
+        <table class="govuk-table govuk-!-width-two-thirds">
+            <caption class="govuk-table__caption govuk-visually-hidden">Total number of dogs by country</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Breed</th>
+                    {% for country in model.countsPerCountry.countries %}
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">{{ country }}</th>
+                    {% endfor %}
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for breed in model.countsPerCountry.breeds %}
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">
+                        {{ breed }}
+                    </th>
+                    {% for row in model.countsPerCountry.rowsPerBreed[breed] %}
+                      {% if row.country == 'Scotland' and breed == 'XL Bully' %}
+                        <td class="govuk-table__cell govuk-table__cell--numeric">Not held</td>
+                      {% else %}
+                         <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.total }}</td>
+                      {% endif %}
+                    {% endfor %}
+                    <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.totalsPerBreed[breed]) }}</td>
+                </tr>
+            {% endfor %}
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">Total</th>
+                {% for country in model.countsPerCountry.countries %}
+                  <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.totalsPerCountry[country]) }}</td>
+                {% endfor %}
+                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.total) }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p class="govuk-body govuk-!-width-two-thirds">The table shows the number of dangerous dogs managed by Defra. The Scottish Government hold XL Bully numbers for Scotland.</p>
+
+        <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-3" aria-hidden="true">Number of dogs by status</h2>
 
         <table class="govuk-table govuk-!-width-one-third">
             <caption class="govuk-table__caption govuk-visually-hidden">Total number of dogs by status</caption>
@@ -69,46 +111,6 @@
         </div>
         </details>
 
-        <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-3" aria-hidden="true">Total number of dogs by country</h2>
-
-        <table class="govuk-table govuk-!-width-two-thirds">
-            <caption class="govuk-table__caption govuk-visually-hidden">Total number of dogs by country</caption>
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Breed</th>
-                    {% for country in model.countsPerCountry.countries %}
-                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">{{ country }}</th>
-                    {% endfor %}
-                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Total</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            {% for breed in model.countsPerCountry.breeds %}
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">
-                        {{ breed }}
-                    </th>
-                    {% for row in model.countsPerCountry.rowsPerBreed[breed] %}
-                      {% if row.country == 'Scotland' and breed == 'XL Bully' %}
-                        <td class="govuk-table__cell govuk-table__cell--numeric">Not held</td>
-                      {% else %}
-                         <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.total }}</td>
-                      {% endif %}
-                    {% endfor %}
-                    <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.totalsPerBreed[breed]) }}</td>
-                </tr>
-            {% endfor %}
-            <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">Total</th>
-                {% for country in model.countsPerCountry.countries %}
-                  <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.totalsPerCountry[country]) }}</td>
-                {% endfor %}
-                <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{{ model.formatWithCommas(model.countsPerCountry.total) }}</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <p class="govuk-body govuk-!-width-two-thirds">The table shows the number of dangerous dogs managed by Defra. The Scottish Government manage XL Bully numbers for Scotland.</p>
     </div>
 </div>
 {% endblock %}

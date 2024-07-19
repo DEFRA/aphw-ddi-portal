@@ -58,7 +58,7 @@ module.exports = [{
         return h.redirect(`${routes.microchipResultsStop.get}/${request.params.dogId}`)
       }
 
-      const error = await validateBreedForCountryChangingOwner(dog, getAddress(request), 'confirm')
+      const error = validateBreedForCountryChangingOwner(dog, getAddress(request), 'confirm')
       if (error) {
         const details = getCombinedResults(request)
         return h.view(views.microchipResults, new ViewModel(details, error)).code(400).takeover()

@@ -2,12 +2,20 @@ const { routes, views } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/owner-details')
+const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
 const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
 const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
+
+const errorView = async (request, h, error) => {
+  const person = request.payload
+  const countries = await getCountries()
+  const backNav = addBackNavigationForErrorCondition(request)
+  return h.view(views.editDetails, new ViewModel(person, countries, backNav, error)).code(400).takeover()
+}
 
 module.exports = [
   {
@@ -42,18 +50,18 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          const person = request.payload
-          const countries = await getCountries()
-
-          const backNav = addBackNavigationForErrorCondition(request)
-
-          return h.view(views.editDetails, new ViewModel(person, countries, backNav, error)).code(400).takeover()
+          return errorView(request, h, error)
         }
       },
       handler: async (request, h) => {
         const person = request.payload
 
         const payload = buildPersonUpdatePayload(person)
+
+        const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, payload, 'country')
+        if (error) {
+          return errorView(request, h, error)
+        }
 
         await updatePerson(payload, getUser(request))
 

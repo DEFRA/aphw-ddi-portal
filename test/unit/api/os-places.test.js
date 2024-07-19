@@ -163,6 +163,14 @@ describe('OS Places test', () => {
       expect(res.length).toBe(0)
     })
 
+    test('getPostcodeAddresses returns zero results when no payload returned from API', async () => {
+      wreck.get.mockResolvedValue({ payload: null })
+      const postcode = 'TT11 2TT'
+      const res = await getPostcodeAddresses(postcode, 'xxx')
+      expect(res).not.toBe(null)
+      expect(res.length).toBe(0)
+    })
+
     test('getPostcodeAddresses sorts flats', async () => {
       wreck.get.mockResolvedValue(validAddressesWithFlatsForSorting)
       const postcode = 'AB11 2AB'
