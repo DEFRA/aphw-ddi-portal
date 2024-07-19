@@ -10,7 +10,7 @@ describe('Update owner details', () => {
   const { getCountries } = require('../../../../../../app/api/ddi-index-api')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { getPersonByReference, updatePerson } = require('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference, updatePerson, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -23,6 +23,8 @@ describe('Update owner details', () => {
       'Scotland',
       'Wales'
     ])
+
+    getPersonAndDogs.mockResolvedValue({ dogs: [] })
 
     server = await createServer()
     await server.initialize()
@@ -374,6 +376,43 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
     expect(messages).toContain('Enter a real email address')
+  })
+
+  test('POST /cdo/edit/owner-details with invalid breed for country returns 400', async () => {
+    getPersonAndDogs.mockResolvedValue({ dogs: [{ breed: 'XL Bully' }] })
+
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      'dateOfBirth-day': '1',
+      'dateOfBirth-month': '1',
+      'dateOfBirth-year': '2000',
+      personReference: 'P-1234-5678',
+      addressLine1: '1 The Street',
+      addressLine2: 'The Town',
+      town: 'The City',
+      postcode: 'AB12 3CD',
+      country: 'Scotland',
+      email: 'me@here.com'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = (new JSDOM(response.payload)).window
+
+    expect(response.statusCode).toBe(400)
+    expect(updatePerson).not.toHaveBeenCalled()
+    expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
+
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+    expect(messages).toContain('The address for an XL Bully dog must be in England or Wales')
   })
 
   afterEach(async () => {
