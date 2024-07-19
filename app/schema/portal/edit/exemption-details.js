@@ -1,19 +1,38 @@
 const Joi = require('joi')
 const { getDateComponents, validateDate } = require('../../../lib/date-helpers')
 
-const validateInsurance = (value, helpers) => {
-  const companyPresent = value.insuranceCompany
-  const renewalPresent = value.insuranceRenewal
+const validateInsurance = (payload) => {
+  const errors = []
+  const companyPresent = !!payload.insuranceCompany && payload.insuranceCompany !== ''
+  const renewalPresent = payload.insuranceRenewal?.day && payload.insuranceRenewal?.month && payload.insuranceRenewal?.year
+  const prevCompanyPresent = !!payload.previousInsuranceCompany && payload.previousInsuranceCompany !== ''
+  const prevRenewalPresent = !!payload.previousInsuranceRenewal
+
+  if (prevCompanyPresent && !companyPresent) {
+    errors.push({ message: 'Select an insurance company', path: ['insuranceCompany'] })
+  }
+
+  if (prevRenewalPresent && !renewalPresent) {
+    errors.push({ message: 'Enter a renewal date', path: ['insuranceRenewal', ['day', 'month', 'year']] })
+  }
+
+  if (errors.length) {
+    return errors
+  }
 
   if (companyPresent && !renewalPresent) {
-    return helpers.message('Enter an insurance renewal date', { path: ['insuranceRenewal', ['day', 'month', 'year']] })
+    errors.push({ message: 'Enter a renewal date', path: ['insuranceRenewal', ['day', 'month', 'year']] })
   }
 
   if (!companyPresent && renewalPresent) {
-    return helpers.message('Select an insurance company', { path: ['insuranceCompany'] })
+    errors.push({ message: 'Select an insurance company', path: ['insuranceCompany'] })
   }
 
-  return value
+  if (errors.length) {
+    return errors
+  }
+
+  return undefined
 }
 
 const optionalDate = (preventFutureDates) => {
@@ -71,12 +90,14 @@ const exemptionDetailsSchema = Joi.object({
   joinedExemptionScheme: optionalDate(true),
   insuranceCompany: Joi.string().trim().allow(''),
   insuranceRenewal: optionalDate(false),
+  previousInsuranceCompany: Joi.string().allow('').optional(),
+  previousInsuranceRenewal: Joi.string().allow('').optional(),
   exemptionOrder: Joi.number().required(),
   microchipDeadline: optionalDate(false),
   typedByDlo: optionalDate(true),
   withdrawn: optionalDate(true),
   nonComplianceLetterSent: optionalDate(true)
-}).custom(validateInsurance).required()
+}).required()
 
 const validatePayload = (payload) => {
   payload.certificateIssued = getDateComponents(payload, 'certificateIssued')
@@ -135,9 +156,10 @@ const validatePayload = (payload) => {
   }).concat(exemptionDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
-
-  if (error) {
-    throw error
+  const insuranceErrors = validateInsurance(payload)
+  if (error || insuranceErrors) {
+    const temp = [].concat(error?.details ?? []).concat(insuranceErrors ?? [])
+    throw new Joi.ValidationError(temp[0].message, temp)
   }
 
   return value
