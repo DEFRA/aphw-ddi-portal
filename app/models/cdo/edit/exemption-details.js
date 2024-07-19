@@ -88,8 +88,8 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
       autocomplete: forms.preventAutocomplete,
       classes: 'govuk-!-width-two-thirds govuk-!-margin-bottom-5'
     },
-    previousInsuranceCompany: exemption.insuranceCompany,
-    previousInsuranceRenewal: exemption.insuranceRenewal,
+    previousInsuranceCompany: exemption.previousInsuranceCompany ?? exemption.insuranceCompany,
+    previousInsuranceRenewal: exemption.previousInsuranceRenewal ?? exemption.insuranceRenewal,
     insuranceRenewal: constructDateField(exemption, 'insuranceRenewal', 'Insurance renewal date'),
     neuteringConfirmation: constructDateField(exemption, 'neuteringConfirmation', 'Neutering confirmed'),
     microchipVerification: constructDateField(exemption, 'microchipVerification', 'Microchip number verified'),

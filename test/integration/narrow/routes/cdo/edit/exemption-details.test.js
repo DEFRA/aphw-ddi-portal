@@ -236,6 +236,42 @@ describe('Update dog details', () => {
     expect(messages).toContain('Enter a real date')
   })
 
+  test('POST /cdo/edit/exemption-details route displays multiple errors if insurance details blanked', async () => {
+    const payload = {
+      indexNumber: 'ED1234',
+      status: 'DOG_IMPORTED',
+      exemptionOrder: 2015,
+      'cdoIssued-day': '31',
+      'cdoIssued-month': '12',
+      'cdoIssued-year': '9999',
+      court: 'court1',
+      policeForce: 'policeForce1',
+      legislationOfficer: 'Legislation Officer',
+      previousInsuranceCompany: 'Company 1',
+      previousInsuranceRenewal: '2024-01-01T12:00:00.000Z',
+      insuranceCompany: '',
+      'insuranceRenewal-day': '',
+      'insuranceRenewal-month': '',
+      'insuranceRenewal-year': ''
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/exemption-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = (new JSDOM(response.payload)).window
+
+    expect(response.statusCode).toBe(400)
+    expect(updateExemption).not.toHaveBeenCalled()
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+    expect(messages).toContain('Enter a date that is today or in the past')
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()
