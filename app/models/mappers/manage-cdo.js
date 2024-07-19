@@ -3,7 +3,7 @@ const { formatToGds } = require('../../lib/date-helpers')
 const { getTaskDetails } = require('../../routes/cdo/manage/tasks/generic-task-helper')
 
 const getTaskStatus = task => {
-  if (!task?.available) {
+  if (!task?.available && !task.completed) {
     return 'Cannot start yet'
   }
 
