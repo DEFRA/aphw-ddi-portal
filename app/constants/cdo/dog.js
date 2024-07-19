@@ -50,6 +50,10 @@ const constants = {
       get: '/cdo/edit/change-status',
       post: '/cdo/edit/change-status'
     },
+    inBreach: {
+      get: '/cdo/edit/change-status/in-breach',
+      post: '/cdo/edit/change-status/in-breach'
+    },
     changeStatusConfirmation: {
       get: '/cdo/edit/change-status-confirmation'
     },
@@ -86,6 +90,7 @@ const constants = {
     viewDogActivities: 'cdo/view/check-activities',
     editExemptionDetails: 'cdo/edit/exemption-details',
     changeStatus: 'cdo/edit/change-status',
+    inBreachCategories: 'cdo/edit/in-breach',
     changeStatusConfirmation: 'cdo/edit/change-status-confirmation',
     applicationType: 'cdo/create/application-type',
     details: 'cdo/create/dog-details',
