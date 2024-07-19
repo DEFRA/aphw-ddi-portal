@@ -27,7 +27,8 @@ function ViewModel (cdo, backNav) {
       microchipNumber2: cdo.dog.microchipNumber2,
       dateExported: formatToGds(cdo.dog.dateExported),
       dateStolen: formatToGds(cdo.dog.dateStolen),
-      dateUntraceable: formatToGds(cdo.dog.dateUntraceable)
+      dateUntraceable: formatToGds(cdo.dog.dateUntraceable),
+      breaches: cdo.dog.breaches
     },
     person: {
       id: person.id,

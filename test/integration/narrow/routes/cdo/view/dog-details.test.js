@@ -19,29 +19,30 @@ describe('View dog details', () => {
   })
 
   describe('GET /cdo/view/dog-details returns 200', () => {
+    const baseCdo = {
+      dog: {
+        id: 1,
+        indexNumber: 'ED123',
+        name: 'Bruno',
+        status: { status: 'TEST' },
+        dog_breed: { breed: 'breed1' }
+      },
+      person: {
+        firstName: 'John Smith',
+        addresses: [{
+          address: {}
+        }],
+        person_contacts: []
+      },
+      exemption: {
+        exemptionOrder: 2015,
+        insurance: [{
+          company: 'Dogs Trust'
+        }]
+      }
+    }
     beforeEach(() => {
-      getCdo.mockResolvedValue({
-        dog: {
-          id: 1,
-          indexNumber: 'ED123',
-          name: 'Bruno',
-          status: { status: 'TEST' },
-          dog_breed: { breed: 'breed1' }
-        },
-        person: {
-          firstName: 'John Smith',
-          addresses: [{
-            address: {}
-          }],
-          person_contacts: []
-        },
-        exemption: {
-          exemptionOrder: 2015,
-          insurance: [{
-            company: 'Dogs Trust'
-          }]
-        }
-      })
+      getCdo.mockResolvedValue(baseCdo)
     })
 
     test('GET /cdo/view/dog-details route returns 200 given standard', async () => {
@@ -397,6 +398,40 @@ describe('View dog details', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').textContent.trim()).toBe('Delete dog record')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]').getAttribute('href')).toContain('/cdo/delete/dog/ED123?src=')
+    })
+
+    test('GET /cdo/view/dog-details route returns 200 and In breach reasons given In breach', async () => {
+      getCdo.mockResolvedValue({
+        ...baseCdo,
+        dog: {
+          ...baseCdo.dog,
+          status: 'In breach',
+          breaches: [
+            'dog not covered by third party insurance',
+            'dog not kept on lead or muzzled',
+            'dog kept in insecure place'
+          ]
+        }
+      })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/view/dog-details/ED123',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(response.statusCode).toBe(200)
+      const [,, exemptionDetails] = document.querySelectorAll('.govuk-summary-card')
+      const [inBreach] = exemptionDetails.querySelectorAll('.govuk-summary-list__value')
+      expect(inBreach.textContent.trim()).toContain('In breach:')
+      const [first, second, third] = inBreach.querySelectorAll('li')
+      expect(first.textContent.trim()).toEqual('dog not covered by third party insurance')
+      expect(second.textContent.trim()).toEqual('dog not kept on lead or muzzled')
+      expect(third.textContent.trim()).toEqual('dog kept in insecure place')
     })
   })
 
