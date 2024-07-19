@@ -288,8 +288,9 @@ const activityLabels = {
   'contacts/email': 'Email address',
   'contacts/primaryTelephone': 'Telephone 1',
   'contacts/secondaryTelephone': 'Telephone 2',
-  status: 'Status set to'
+  status: 'Dog status set to'
 }
+
 /**
  * @typedef GetActivityLabelFromAuditFieldRecordFn
  * @param {AuditFieldRecord} auditFieldRecord
@@ -300,9 +301,8 @@ const activityLabels = {
  * @param {string} eventType
  * @returns {GetActivityLabelFromAuditFieldRecordFn}
  */
-const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) => {
+const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord, children) => {
   const [fieldValue] = auditFieldRecord
-
   const label = activityLabels[fieldValue]
 
   if (label) {
@@ -323,12 +323,29 @@ const getActivityLabelFromCreatedDog = (createdDogEvent) => {
 }
 
 /**
+ * @param {[string, string][]} breaches
+ * @return {string[]}
+ */
+const mapBreachesToArray = (breaches) => {
+  return breaches.reduce((filteredBreaches, breach) => {
+    const [key, label] = breach
+    const dogBreachRgx = /dog_breaches\/[0-9]+\[]/
+    if (dogBreachRgx.test(key)) {
+      return [...filteredBreaches, [label]]
+    }
+    return filteredBreaches
+  }, [])
+}
+
+/**
  * @param {ChangeEvent} event
  * @returns {ActivityRow[]}
  */
 const mapAuditedChangeEventToCheckActivityRows = (event) => {
   const activityRowInfo = getDateAndTeamMemberFromEvent(event)
+
   const auditedFieldRecords = event.changes.edited
+
   /**
    * @type {ActivityRow[]}
    */
@@ -346,10 +363,12 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
       changeType = ''
     }
 
+    const childList = changeType === 'In breach' ? mapBreachesToArray(event.changes.added) : []
+
     const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
     if (filterNonUpdatedFields(changeRecord) && activityLabel !== 'N/A') {
-      const activityRow = { ...activityRowInfo, activityLabel }
+      const activityRow = { ...activityRowInfo, activityLabel, childList }
       return [...activityRows, activityRow]
     }
 
@@ -492,5 +511,6 @@ module.exports = {
   mapImportEventToCheckActivityRows,
   mapImportManualEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows,
-  mapChangeOwnerEventToCheckActivityRows
+  mapChangeOwnerEventToCheckActivityRows,
+  mapBreachesToArray
 }

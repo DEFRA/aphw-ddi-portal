@@ -9,7 +9,7 @@ const {
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows,
-  mapChangeOwnerEventToCheckActivityRows
+  mapChangeOwnerEventToCheckActivityRows, mapBreachesToArray
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -329,7 +329,7 @@ describe('Check Activity Mappers', () => {
       ['Email address updated', 'contacts/email', 'updated'],
       ['Telephone 1 updated', 'contacts/primaryTelephone', 'updated'],
       ['Telephone 2 updated', 'contacts/secondaryTelephone', 'updated'],
-      ['Status set to In-breach', 'status', 'In-breach']
+      ['Dog status set to In breach', 'status', 'In breach']
     ]
     test.each(tests)('should return %s given event is %s', (expected, label, eventType) => {
       expect(getActivityLabelFromAuditFieldRecord(eventType)([
@@ -337,6 +337,73 @@ describe('Check Activity Mappers', () => {
         '2024-01-15',
         '2024-01-16T00:00:00.000Z'
       ])).toBe(expected)
+    })
+  })
+
+  describe('mapBreachesToArray', () => {
+    test('should map breaches to array', () => {
+      const breaches = [
+        [
+          'dog_breaches/0[]',
+          'dog not covered by third party insurance'
+        ],
+        [
+          'dog_breaches/1[]',
+          'dog away from registered address for over 30 days in one year'
+        ],
+        [
+          'dog_breaches/2[]',
+          'exemption certificate not provided to police'
+        ]
+      ]
+
+      const expectedBreaches = [
+        'dog not covered by third party insurance',
+        'dog away from registered address for over 30 days in one year',
+        'exemption certificate not provided to police'
+      ]
+      expect(mapBreachesToArray(breaches)).toEqual(expectedBreaches)
+    })
+
+    test('should handle non-breaches', () => {
+      const breaches = [
+        [
+          'name',
+          'Jack Sparrow'
+        ],
+        [
+          'dog_breaches/0[]',
+          'dog not covered by third party insurance'
+        ],
+        [
+          'dog_breaches/1[]',
+          'dog away from registered address for over 30 days in one year'
+        ],
+        [
+          'dog_breaches/2[]',
+          'exemption certificate not provided to police'
+        ]
+      ]
+
+      const expectedBreaches = [
+        'dog not covered by third party insurance',
+        'dog away from registered address for over 30 days in one year',
+        'exemption certificate not provided to police'
+      ]
+      expect(mapBreachesToArray(breaches)).toEqual(expectedBreaches)
+    })
+
+    test('should handle given no breaches exist', () => {
+      const breaches = [
+        [
+          'name',
+          'Jack Sparrow'
+        ],
+        ['address', 'Caribbean']
+      ]
+
+      const expectedBreaches = []
+      expect(mapBreachesToArray(breaches)).toEqual(expectedBreaches)
     })
   })
 
@@ -599,11 +666,52 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Status set to Pre-exempt'
+          activityLabel: 'Dog status set to Pre-exempt'
         }
       ]
 
       expect(mapAuditedChangeEventToCheckActivityRows(updatedExemption)).toEqual(expectedActivityRows)
+    })
+    test('should handle In breach categories', () => {
+      const updatedDogEvent = auditedEventBuilder({
+        operation: 'updated dog',
+        changes: {
+          added: [
+            [
+              'dog_breaches/0[]',
+              'dog not covered by third party insurance'
+            ],
+            [
+              'dog_breaches/1[]',
+              'dog away from registered address for over 30 days in one year'
+            ],
+            [
+              'dog_breaches/2[]',
+              'exemption certificate not provided to police'
+            ]
+          ],
+          removed: [],
+          edited: [
+            [
+              'status',
+              'Pre-exempt',
+              'In breach'
+            ],
+            [
+              'dog_breaches',
+              [],
+              []
+            ]
+          ]
+        }
+      })
+      const mappedAuditEvent = mapAuditedChangeEventToCheckActivityRows(updatedDogEvent)[0]
+      expect(mappedAuditEvent.activityLabel).toEqual('Dog status set to In breach')
+      expect(mappedAuditEvent.childList).toEqual([
+        ['dog not covered by third party insurance'],
+        ['dog away from registered address for over 30 days in one year'],
+        ['exemption certificate not provided to police']
+      ])
     })
   })
 
