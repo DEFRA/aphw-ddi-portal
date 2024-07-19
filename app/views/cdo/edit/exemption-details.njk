@@ -50,10 +50,19 @@
       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-3">
         Status
       </p>
-      {{ statusTag(model.status, 'govuk-!-margin-bottom-8 govuk-!-margin-right-3') }}
+      {{ statusTag(model.status, 'govuk-!-margin-bottom-3 govuk-!-margin-right-3') }}
+
       <span class="govuk-body">
         <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.indexNumber }}{{ model.srcHashParam }}">Change status</a>
       </span>
+
+      {% if model.breaches | length > 0 %}
+        <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-8 breach-details">
+          {% for child in model.breaches %}
+          <li>{{child}}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       {{ govukDateInput(model.certificateIssued) }}
 

@@ -45,7 +45,13 @@ describe('Update dog details', () => {
       dog: {
         indexNumber: 'ED1234',
         name: 'Doggo',
-        breed: 'Labrador'
+        breed: 'Labrador',
+        status: 'In breach',
+        breaches: [
+          'dog not covered by third party insurance',
+          'dog not kept on lead or muzzled',
+          'dog kept in insecure place'
+        ]
       },
       exemption: {
         indexNumber: 'ED1234',
@@ -75,8 +81,12 @@ describe('Update dog details', () => {
     }
 
     const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(200)
+    expect(document.querySelector('.breach-details').textContent.trim()).toContain('dog not covered by third party insurance')
+    expect(document.querySelector('.breach-details').textContent.trim()).toContain('dog not kept on lead or muzzled')
+    expect(document.querySelector('.breach-details').textContent.trim()).toContain('dog kept in insecure place')
   })
 
   test('GET /cdo/edit/exemption-details/ED1234 route returns 404 when cdo not found', async () => {
