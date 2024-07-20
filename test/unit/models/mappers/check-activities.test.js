@@ -358,9 +358,9 @@ describe('Check Activity Mappers', () => {
       ]
 
       const expectedBreaches = [
-        'dog not covered by third party insurance',
-        'dog away from registered address for over 30 days in one year',
-        'exemption certificate not provided to police'
+        ['dog not covered by third party insurance'],
+        ['dog away from registered address for over 30 days in one year'],
+        ['exemption certificate not provided to police']
       ]
       expect(mapBreachesToArray(breaches)).toEqual(expectedBreaches)
     })
@@ -386,9 +386,9 @@ describe('Check Activity Mappers', () => {
       ]
 
       const expectedBreaches = [
-        'dog not covered by third party insurance',
-        'dog away from registered address for over 30 days in one year',
-        'exemption certificate not provided to police'
+        ['dog not covered by third party insurance'],
+        ['dog away from registered address for over 30 days in one year'],
+        ['exemption certificate not provided to police']
       ]
       expect(mapBreachesToArray(breaches)).toEqual(expectedBreaches)
     })
@@ -586,87 +586,104 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'CDO issue date updated'
+          activityLabel: 'CDO issue date updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'CDO expiry date updated'
+          activityLabel: 'CDO expiry date updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'First certificate date updated'
+          activityLabel: 'First certificate date updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Application fee paid date updated'
+          activityLabel: 'Application fee paid date updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Neutering confirmed updated'
+          activityLabel: 'Neutering confirmed updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Microchip number verified updated'
+          activityLabel: 'Microchip number verified updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Joined interim exemption scheme updated'
+          activityLabel: 'Joined interim exemption scheme updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Non-compliance letter sent '
+          activityLabel: 'Non-compliance letter sent ',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Non-compliance letter sent '
+          activityLabel: 'Non-compliance letter sent ',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Court updated'
+          activityLabel: 'Court updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Dog legislation officer updated'
+          activityLabel: 'Dog legislation officer updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Police force updated'
+          activityLabel: 'Police force updated',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Date exported added'
+          activityLabel: 'Date exported added',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Date stolen added'
+          activityLabel: 'Date stolen added',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Dog date of death added'
+          activityLabel: 'Dog date of death added',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Date untraceable added'
+          activityLabel: 'Date untraceable added',
+          childList: []
         },
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Dog status set to Pre-exempt'
+          activityLabel: 'Dog status set to Pre-exempt',
+          childList: []
         }
       ]
 
@@ -984,17 +1001,20 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           activityLabel: 'CDO issue date updated',
-          teamMember: 'Robert Developer'
+          teamMember: 'Robert Developer',
+          childList: []
         },
         {
           date: '19 February 2024',
           activityLabel: 'CDO expiry date updated',
-          teamMember: 'Robert Developer'
+          teamMember: 'Robert Developer',
+          childList: []
         },
         {
           date: '19 February 2024',
           activityLabel: 'First certificate date updated',
-          teamMember: 'Robert Developer'
+          teamMember: 'Robert Developer',
+          childList: []
         },
         {
           date: '18 February 2024',
