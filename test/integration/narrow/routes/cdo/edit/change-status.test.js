@@ -355,6 +355,52 @@ describe('Change status', () => {
       expect(setDogBreaches).toHaveBeenCalledWith(payload, expect.any(Object))
     })
 
+    test('route returns 302 when successful with single reason', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Exempt',
+          indexNumber: 'ED12345'
+        }
+      })
+      setDogBreaches.mockResolvedValue({
+        dog: {
+          id: 12345,
+          indexNumber: 'ED12345',
+          status: {
+            id: 8,
+            status: 'In breach'
+          }
+        },
+        dogBreaches: [
+          {
+            id: 1,
+            label: 'Dog not covered by third party insurance',
+            short_name: 'NOT_COVERED_BY_INSURANCE'
+          }
+        ]
+      })
+
+      const expectedPayload = {
+        indexNumber: 'ED12345',
+        dogBreaches: ['NOT_COVERED_BY_INSURANCE']
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/change-status/in-breach/ED12345',
+        auth,
+        payload: {
+          indexNumber: 'ED12345',
+          dogBreaches: 'NOT_COVERED_BY_INSURANCE'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(setDogBreaches).toHaveBeenCalledWith(expectedPayload, expect.any(Object))
+    })
+
     test('route returns 400 with missing index number', async () => {
       getCdo.mockResolvedValue({
         dog: {
