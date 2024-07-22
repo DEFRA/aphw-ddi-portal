@@ -27,6 +27,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
       ]
     },
     status: exemption.status,
+    breaches: exemption.breaches,
     certificateIssued: constructDateField(exemption, 'certificateIssued', 'First certificate issued'),
     cdoIssued: constructDateField(exemption, 'cdoIssued', 'CDO issued'),
     cdoExpiry: constructDateField(exemption, 'cdoExpiry', 'CDO expiry'),

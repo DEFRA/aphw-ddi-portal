@@ -15,7 +15,15 @@
             {% if model.dog.status %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Status</dt>
-              <dd class="govuk-summary-list__value">{{ model.dog.status }}</dd>
+              <dd class="govuk-summary-list__value">
+                {{ model.dog.status }}{% if model.dog.breaches | length > 0 %}:<br />
+                <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16 govuk-!-margin-top-2">
+                  {% for breachReason in model.dog.breaches %}
+                  <li>{{breachReason}}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </dd>
               <dd class="govuk-summary-list__actions defra-text-align-left">
                 <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Change status<span class="govuk-visually-hidden"> (Exemption details)</span></a>
               </dd>

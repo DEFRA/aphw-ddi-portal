@@ -46,7 +46,15 @@
                 {% for eventRow in model.events %}
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">{{ eventRow.date }}</td>
-                    <td class="govuk-table__cell">{{ eventRow.activityLabel }}</td>
+                    <td class="govuk-table__cell">
+                        {{ eventRow.activityLabel }}{% if eventRow.childList | length > 0 %}:<br/>
+                        <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0">
+                            {% for child in eventRow.childList %}
+                                <li>{{child}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">{{ eventRow.teamMember }}</td>
                 </tr>
                 {% endfor %}
