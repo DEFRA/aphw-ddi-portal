@@ -301,7 +301,7 @@ const activityLabels = {
  * @param {string} eventType
  * @returns {GetActivityLabelFromAuditFieldRecordFn}
  */
-const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord, children) => {
+const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) => {
   const [fieldValue] = auditFieldRecord
   const label = activityLabels[fieldValue]
 
@@ -329,7 +329,7 @@ const getActivityLabelFromCreatedDog = (createdDogEvent) => {
 const mapBreachesToArray = (breaches) => {
   return breaches.reduce((filteredBreaches, breach) => {
     const [key, label] = breach
-    const dogBreachRgx = /dog_breaches\/[0-9]+\[]/
+    const dogBreachRgx = /dog_breaches\/\d+\[]/
     if (dogBreachRgx.test(key)) {
       return [...filteredBreaches, [label]]
     }
