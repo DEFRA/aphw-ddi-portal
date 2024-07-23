@@ -4,7 +4,8 @@ const { postcodeValidation, houseNumberValidation, validatePayloadBuilder } = re
 const schema = Joi.object({
   personReference: Joi.string().required(),
   postcode: postcodeValidation,
-  houseNumber: houseNumberValidation
+  houseNumber: houseNumberValidation,
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = validatePayloadBuilder(schema)

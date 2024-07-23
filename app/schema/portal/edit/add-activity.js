@@ -6,7 +6,8 @@ const addActivitySchema = Joi.object({
   activityType: Joi.string().trim().required().messages({
     '*': 'Select an activity type'
   }),
-  titleReference: Joi.string().required()
+  titleReference: Joi.string().required(),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

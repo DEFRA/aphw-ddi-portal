@@ -51,7 +51,8 @@ const dogDetailsSchema = Joi.object({
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
   }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
-  country: Joi.string().allow(null).allow('').optional()
+  country: Joi.string().allow(null).allow('').optional(),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

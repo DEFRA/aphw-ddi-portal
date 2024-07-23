@@ -34,7 +34,8 @@ module.exports = [
     options: {
       validate: {
         payload: Joi.object({
-          indexNumber: Joi.string().required()
+          indexNumber: Joi.string().required(),
+          submitButton: Joi.string().allow(null).allow('').optional()
         }),
         failAction: async (request, h, error) => {
           return h.response().code(400).takeover()

@@ -96,7 +96,8 @@ const exemptionDetailsSchema = Joi.object({
   microchipDeadline: optionalDate(false),
   typedByDlo: optionalDate(true),
   withdrawn: optionalDate(true),
-  nonComplianceLetterSent: optionalDate(true)
+  nonComplianceLetterSent: optionalDate(true),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {
