@@ -5,7 +5,8 @@ const confirmFlowValidFields = (field) => {
     [field]: Joi.any(),
     pk: Joi.any(),
     confirmation: Joi.any(),
-    confirm: Joi.any()
+    confirm: Joi.any(),
+    submitButton: Joi.string().allow(null).allow('').optional()
   })
 }
 
