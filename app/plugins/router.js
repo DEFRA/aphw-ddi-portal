@@ -66,7 +66,7 @@ const routes = [].concat(
   require('../routes/admin/police/remove'),
   require('../routes/admin/delete/dogs'),
   require('../routes/admin/delete/owners'),
-  require('../routes/jobs/purge-soft-delete')
+  require('../routes/jobs')
 )
 
 module.exports = {
