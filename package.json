@@ -49,6 +49,7 @@
     "joi": "^17.10.2",
     "jsdom": "24.1.0",
     "libphonenumber-js": "^1.10.52",
+    "longjohn": "0.2.12",
     "nunjucks": "^3.2.4",
     "uuid": "^9.0.1"
   },
