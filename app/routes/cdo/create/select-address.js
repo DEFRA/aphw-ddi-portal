@@ -41,7 +41,9 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       validate: {
         payload: Joi.object({
-          address: Joi.number().min(0).required()
+          address: Joi.number().min(0).required().messages(
+            { '*': 'Select an address' }
+          )
         }),
         failAction: async (request, h, error) => {
           const details = getOwnerDetails(request) || {}
