@@ -1,4 +1,4 @@
-const { adminAuth, standardAuth } = require('../../../../mocks/auth')
+const { adminAuth, standardAuth, userWithDisplayname } = require('../../../../mocks/auth')
 
 describe('Purge Soft-Delete test', () => {
   const createServer = require('../../../../../app/server')
@@ -10,6 +10,7 @@ describe('Purge Soft-Delete test', () => {
   beforeEach(async () => {
     purgeSoftDelete.mockResolvedValue()
     neuteringDeadline.mockResolvedValue({ response: 'Success Neutering Expiry - updated 0 rows' })
+    jest.clearAllMocks()
     server = await createServer()
     await server.initialize()
   })
@@ -58,6 +59,7 @@ describe('Purge Soft-Delete test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
+      expect(neuteringDeadline).toHaveBeenCalledWith(undefined, userWithDisplayname)
       expect(JSON.parse(response.payload)).toEqual({ response: 'Success Neutering Expiry - updated 0 rows' })
     })
 
@@ -69,6 +71,7 @@ describe('Purge Soft-Delete test', () => {
       }
 
       const response = await server.inject(options)
+      expect(neuteringDeadline).toHaveBeenCalledWith('2024-07-27', userWithDisplayname)
       expect(response.statusCode).toBe(200)
     })
 
