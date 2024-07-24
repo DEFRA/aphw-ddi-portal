@@ -58,33 +58,25 @@ module.exports = [
       },
       handler: async (request, h) => {
         try {
-          console.log('select-address handler - start')
           const details = getPostcodeLookupDetails(request)
           const addresses = getFromSession(request, 'addresses')
           const personReference = details?.personReference
           const selectedAddress = addresses[request.payload.address]
-          console.log('select-address handler - got session info')
 
           const person = await getPersonByReference(personReference)
-          console.log('select-address handler - got person info')
 
           const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
 
           const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload)
-          console.log('select-address handler - validated breed', error)
           if (error) {
             return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
           }
 
           await updatePerson(updatePayload, getUser(request))
-          console.log('select-address handler - updated person')
 
           setPostcodeLookupDetails(request, null)
-          console.log('select-address handler - cleared postcode details')
           setInSession(request, 'addresses', null)
-          console.log('select-address handler - cleared address details')
 
-          console.log('select-address handler - main return url', getMainReturnPoint(request))
           return h.redirect(getMainReturnPoint(request))
         } catch (err) {
           console.log('select-address route error', err)
