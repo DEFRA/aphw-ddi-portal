@@ -123,9 +123,7 @@ value.catboxOptions = {
   partition: value.redisPartition
 }
 
-console.log('env', value.env)
-if (value.isDev) {
-  console.log('Using longjohn')
-  require('longjohn')
-}
+console.log('Using longjohn')
+require('longjohn')
+
 module.exports = value
