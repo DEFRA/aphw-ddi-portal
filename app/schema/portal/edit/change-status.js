@@ -5,7 +5,8 @@ const changeStatusSchema = Joi.object({
   indexNumber: Joi.string().required(),
   newStatus: Joi.string().trim().required().messages({
     '*': 'Select a status'
-  })
+  }),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const duplicateMicrochipSchema = Joi.object({
