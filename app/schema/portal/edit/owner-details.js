@@ -52,7 +52,8 @@ const ownerDetailsSchema = Joi.object({
   }),
   primaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
   secondaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
-  country: Joi.string().trim().optional().allow(null).allow('')
+  country: Joi.string().trim().optional().allow(null).allow(''),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validatePayload = (payload) => {

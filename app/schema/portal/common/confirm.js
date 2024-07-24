@@ -5,7 +5,8 @@ const schema = Joi.object({
   confirm: Joi.string().required().messages({
     '*': 'Select an option'
   }),
-  pk: Joi.string().optional().allow('').allow(null)
+  pk: Joi.string().optional().allow('').allow(null),
+  submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
 const validateSchemaPayload = validatePayloadBuilder(schema)
