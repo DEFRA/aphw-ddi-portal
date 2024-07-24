@@ -1,5 +1,6 @@
 const { purgeSoftDelete, neuteringDeadline } = require('../../../../app/api/ddi-index-api/jobs')
 const { post } = require('../../../../app/api/ddi-index-api/base')
+const { userForAuth } = require('../../../mocks/auth')
 jest.mock('../../../../app/api/ddi-index-api/base')
 
 describe('Jobs tests', () => {
@@ -21,13 +22,13 @@ describe('Jobs tests', () => {
 
   test('neuteringDeadline calls endpoint', async () => {
     post.mockResolvedValue({ payload: {} })
-    await neuteringDeadline()
-    expect(post).toHaveBeenCalledWith('jobs/neutering-deadline')
+    await neuteringDeadline(null, userForAuth)
+    expect(post).toHaveBeenCalledWith('jobs/neutering-deadline', {}, userForAuth)
   })
 
   test('neuteringDeadline calls endpoint with param', async () => {
     post.mockResolvedValue({ payload: {} })
-    await neuteringDeadline('2010-06-20')
-    expect(post).toHaveBeenCalledWith('jobs/neutering-deadline?today=2010-06-20')
+    await neuteringDeadline('2010-06-20', userForAuth)
+    expect(post).toHaveBeenCalledWith('jobs/neutering-deadline?today=2010-06-20', {}, userForAuth)
   })
 })

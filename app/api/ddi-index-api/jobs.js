@@ -9,9 +9,14 @@ const purgeSoftDelete = async (today = null) => {
   return payload
 }
 
-const neuteringDeadline = async (today = null) => {
+/**
+ * @param today
+ * @param user
+ * @return {Promise<*>}
+ */
+const neuteringDeadline = async (today = null, user) => {
   const todayParam = today ? `?today=${today}` : ''
-  const payload = await post(`${neuteringDeadlineEndpoint}${todayParam}`)
+  const payload = await post(`${neuteringDeadlineEndpoint}${todayParam}`, {}, user)
   return payload
 }
 
