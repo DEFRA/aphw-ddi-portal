@@ -21,5 +21,4 @@ data:
   OS_PLACES_API_BASE_URL: {{ quote .Values.container.osPlacesBaseUrl }}
   POLICE_API_BASE_URL: {{ quote .Values.container.policeApiBaseUrl }}
   AZURE_STORAGE_USE_CONNECTION_STRING: {{ quote .Values.container.azureStorageUseConnectionString }}
-  NODE_DEBUG: {{ quote .Values.container.nodeDebug }}
 {{- end -}}
