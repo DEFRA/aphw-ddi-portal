@@ -2,6 +2,11 @@ const { serviceName } = require('../config')
 const { getUser } = require('../auth')
 const mapAuth = require('../auth/map-auth')
 
+const logError = err => {
+  console.log(`view-context err ${new Date()}`, err)
+  throw err
+}
+
 module.exports = {
   plugin: {
     name: 'view-context',
@@ -22,12 +27,13 @@ module.exports = {
 
             response.source.context = ctx
           } catch (err) {
-            console.log(`view-context err ${new Date()}`, err)
+            logError(err)
           }
         }
 
         return h.continue
       })
     }
-  }
+  },
+  logError
 }
