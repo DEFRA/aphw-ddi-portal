@@ -9,7 +9,8 @@ const schema = Joi.object({
   pk: Joi.string().optional().allow('').allow(null),
   confirmOwner: Joi.string().optional().allow('Y', 'N'),
   ownerConfirmation: Joi.boolean().optional(),
-  confirmation: Joi.boolean().optional()
+  confirmation: Joi.boolean().optional(),
+  submitButton: Joi.string().optional().allow('').allow(null)
 }).required()
 
 const confirmOwnerSchema = Joi.object({
