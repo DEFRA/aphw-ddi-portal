@@ -123,7 +123,4 @@ value.catboxOptions = {
   partition: value.redisPartition
 }
 
-console.log('Using longjohn')
-require('longjohn')
-
 module.exports = value

@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.94.87",
+  "version": "0.94.88",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -49,7 +49,6 @@
     "joi": "^17.10.2",
     "jsdom": "24.1.0",
     "libphonenumber-js": "^1.10.52",
-    "longjohn": "0.2.12",
     "nunjucks": "^3.2.4",
     "uuid": "^9.0.1"
   },
