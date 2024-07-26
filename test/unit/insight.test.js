@@ -5,7 +5,11 @@ describe('App Insight', () => {
   const startMock = jest.fn()
   const setupMock = jest.fn(() => {
     return {
-      start: startMock
+      setInternalLogging: jest.fn(() => {
+        return {
+          start: startMock
+        }
+      })
     }
   })
   appInsights.setup = setupMock
