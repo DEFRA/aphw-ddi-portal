@@ -37,6 +37,7 @@ container:
   azureStorageAccountName: dummy
   messageQueueHost: namespace.servicebus.windows.net
   certificateRequestQueue: aphw-ddi-certificate-request
+  nodeDebug: net
 
 livenessProbe:
   path: /healthz
