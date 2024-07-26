@@ -1,55 +1,59 @@
 const config = require('../config')
 
-module.exports = [{
-  method: 'GET',
-  path: '/static/assets/{path*}',
-  options: {
-    auth: false,
-    handler: {
-      directory: {
-        path: [
-          'node_modules/govuk-frontend/dist/govuk/assets'
-        ]
+module.exports = [
+  {
+    method: 'GET',
+    path: '/static/assets/{path*}',
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: [
+            'node_modules/govuk-frontend/dist/govuk/assets'
+          ]
+        }
+      },
+      cache: {
+        expiresIn: config.staticCacheTimeoutMillis,
+        privacy: 'private'
       }
-    },
-    cache: {
-      expiresIn: config.staticCacheTimeoutMillis,
-      privacy: 'private'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/govuk-frontend/dist/govuk/{path*}',
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: [
+            'node_modules/govuk-frontend/dist/govuk'
+          ]
+        }
+      },
+      cache: {
+        expiresIn: config.staticCacheTimeoutMillis,
+        privacy: 'private'
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/static/{path*}',
+    options: {
+      auth: false,
+      handler: {
+        directory: {
+          path: [
+            'app/dist',
+            'node_modules/govuk-frontend/dist/govuk/assets'
+          ]
+        }
+      },
+      cache: {
+        expiresIn: config.staticCacheTimeoutMillis,
+        privacy: 'private'
+      }
     }
   }
-}, {
-  method: 'GET',
-  path: '/govuk-frontend/dist/govuk/{path*}',
-  options: {
-    auth: false,
-    handler: {
-      directory: {
-        path: [
-          'node_modules/govuk-frontend/dist/govuk'
-        ]
-      }
-    },
-    cache: {
-      expiresIn: config.staticCacheTimeoutMillis,
-      privacy: 'private'
-    }
-  }
-}, {
-  method: 'GET',
-  path: '/static/{path*}',
-  options: {
-    auth: false,
-    handler: {
-      directory: {
-        path: [
-          'app/dist',
-          'node_modules/govuk-frontend/dist/govuk/assets'
-        ]
-      }
-    },
-    cache: {
-      expiresIn: config.staticCacheTimeoutMillis,
-      privacy: 'private'
-    }
-  }
-}]
+]
