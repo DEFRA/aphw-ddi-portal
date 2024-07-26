@@ -13,7 +13,7 @@ module.exports = {
     register: (server, _) => {
       server.ext('onPreResponse', function (request, h) {
         const response = request.response
-
+        console.log(`plugins/view-context request.path ${request.path}`)
         if (response.variety === 'view') {
           try {
             const ctx = response.source.context || {}
