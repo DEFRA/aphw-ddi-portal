@@ -108,7 +108,8 @@ const constants = {
     deleteDogs2: 'admin/delete/dogs-2',
     deleteDogsConfirm: 'admin/delete/dogs-confirm',
     deleteOwners: 'admin/delete/owners',
-    deleteOwnersConfirm: 'admin/delete/owners-confirm'
+    deleteOwnersConfirm: 'admin/delete/owners-confirm',
+    documentation: 'swagger'
   },
   breadcrumbs: [
     {
