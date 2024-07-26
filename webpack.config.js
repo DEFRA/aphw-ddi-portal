@@ -74,9 +74,9 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       inject: false,
-      filename: '../views/swagger.njk',
-      template: 'app/views/swagger.template.njk',
-      chunks: ['swagger']
+      filename: '../views/_swagger.njk',
+      template: 'app/views/_swagger.template.njk',
+      chunks: ['core', 'swagger']
     }),
     new HtmlWebpackPlugin({
       inject: false,

@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const authConfig = require('./auth')
 const blobConfig = require('./storage/blob')
+const { getEnvironmentVariable } = require('../lib/environment-helpers')
 
 // Define config schema
 const schema = Joi.object({
@@ -8,6 +9,7 @@ const schema = Joi.object({
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   useRedis: Joi.boolean().default(false),
+  environmentCode: Joi.string().default('prod'),
   ddiIndexApi: {
     baseUrl: Joi.string().required()
   },
@@ -56,6 +58,7 @@ const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   useRedis: process.env.NODE_ENV !== 'test',
+  environmentCode: getEnvironmentVariable('ENVIRONMENT_CODE'),
   cache: {
     options: {
       host: process.env.REDIS_HOSTNAME,

@@ -1,14 +1,8 @@
-{% extends "govuk/template.njk" %}
-{% block head %}
-<!--[if !IE 8]><!-->
+{% extends '_swagger.njk' %}
 
-<link href="/static/css/swagger.4c7f7ad2aeca25a0eb75.css" rel="stylesheet">
+{% block pageTitle %}{{ serviceName }}{% endblock %}
 
-<!--<![endif]-->
-{% endblock %}
-{% block bodyStart %}
-<div id="swagger-ui"></div>
-    
-    <script type="module" src="/static/js/swagger.4c7f7ad2aeca25a0eb75.js"></script>
-    
+{% block content %}
+  <div id="swagger-ui"></div>
+
 {% endblock %}
