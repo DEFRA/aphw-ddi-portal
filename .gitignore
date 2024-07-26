@@ -16,6 +16,7 @@ pact
 *.lock
 # Generated views
 _layout.njk
+_swagger.njk
 _cookie-banner.njk
 _enforcement-details.njk
 .run

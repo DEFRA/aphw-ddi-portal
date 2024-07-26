@@ -48,6 +48,10 @@ docker-compose up
 The tests have been structured into subfolders of `./test` as per the
 [Microservice test approach and repository structure](https://eaflood.atlassian.net/wiki/spaces/FPS/pages/1845396477/Microservice+test+approach+and+repository+structure)
 
+## Swagger
+
+When running locally or in non-production environments, you can view swagger documentation from the api on /documentation.
+
 ### Running tests
 
 A convenience script is provided to run automated tests in a containerised

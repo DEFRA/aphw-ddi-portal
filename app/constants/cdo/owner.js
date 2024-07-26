@@ -79,7 +79,8 @@ const constants = {
     postcodeLookupEdit: 'cdo/edit/postcode-lookup',
     selectAddressFromEdit: 'cdo/edit/select-address',
     delete: 'common/confirm',
-    confirmation: 'common/deleted/owner'
+    confirmation: 'common/deleted/owner',
+    documentation: 'swagger'
   },
   keys: {
     entry: 'owner',

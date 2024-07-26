@@ -108,7 +108,8 @@ const constants = {
     deleteDogs2: 'admin/delete/dogs-2',
     deleteDogsConfirm: 'admin/delete/dogs-confirm',
     deleteOwners: 'admin/delete/owners',
-    deleteOwnersConfirm: 'admin/delete/owners-confirm'
+    deleteOwnersConfirm: 'admin/delete/owners-confirm',
+    documentation: 'swagger'
   },
   breadcrumbs: [
     {
@@ -143,6 +144,9 @@ const constants = {
   keys: {
     oldDogs: 'oldDogs',
     orphanedOwners: 'orphanedOwners'
+  },
+  documentation: {
+    allowedEnvironments: ['dev', 'snd', 'local']
   }
 }
 
