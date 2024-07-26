@@ -1,6 +1,7 @@
 const { getDocumentation } = require('../../api/ddi-index-api/documentation')
 const { getEnvironmentVariable } = require('../../lib/environment-helpers')
 const { admin } = require('../../auth/permissions')
+const { documentation } = require('../../constants/admin')
 
 module.exports = [{
   method: 'GET',
@@ -8,8 +9,7 @@ module.exports = [{
   options: {
     auth: { scope: [admin] },
     handler: async (request, h) => {
-      const allowedEnvironments = ['dev', 'snd', 'local']
-      if (!allowedEnvironments.includes(getEnvironmentVariable('ENVIRONMENT_CODE'))) {
+      if (!documentation.allowedEnvironments.includes(getEnvironmentVariable('ENVIRONMENT_CODE'))) {
         return h.view('404').code(404)
       }
 

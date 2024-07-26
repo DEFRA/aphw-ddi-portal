@@ -144,6 +144,9 @@ const constants = {
   keys: {
     oldDogs: 'oldDogs',
     orphanedOwners: 'orphanedOwners'
+  },
+  documentation: {
+    allowedEnvironments: ['dev', 'snd', 'local']
   }
 }
 
