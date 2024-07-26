@@ -1,0 +1,14 @@
+{% extends "govuk/template.njk" %}
+{% block head %}
+<!--[if !IE 8]><!-->
+<% htmlWebpackPlugin.files.css.forEach(file => { %>
+<link href="<%= file.replace('../dist/', '/static/') %>" rel="stylesheet">
+<% }) %>
+<!--<![endif]-->
+{% endblock %}
+{% block bodyStart %}
+<div id="swagger-ui"></div>
+    <% htmlWebpackPlugin.files.js.forEach(file => { %>
+    <script type="module" src="<%= '/static' + file.substring(file.indexOf('/js/')) %>"></script>
+    <% }) %>
+{% endblock %}

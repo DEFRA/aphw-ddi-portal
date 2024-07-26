@@ -13,7 +13,8 @@ module.exports = {
   entry: {
     core: './app/frontend/css/index.js',
     cookies: './app/frontend/js/cookies.js',
-    accessibleAutocomplete: './app/frontend/accessible-autocomplete/index.js'
+    accessibleAutocomplete: './app/frontend/accessible-autocomplete/index.js',
+    swagger: './app/frontend/swagger/index.js'
   },
   mode: isDev ? 'development' : 'production',
   module: {
@@ -70,6 +71,12 @@ module.exports = {
       filename: '../views/_layout.njk',
       template: 'app/views/_layout.template.njk',
       chunks: ['core', 'accessibleAutocomplete']
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: '../views/swagger.njk',
+      template: 'app/views/swagger.template.njk',
+      chunks: ['swagger']
     }),
     new HtmlWebpackPlugin({
       inject: false,
