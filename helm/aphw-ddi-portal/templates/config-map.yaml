@@ -1,7 +1,6 @@
 {{- include "ffc-helm-library.container-config-map" (list . "aphw-ddi-portal.config-map") -}}
 {{- define "aphw-ddi-portal.config-map" -}}
 data:
-  NODE_DEBUG: {{ quote .Values.container.nodeDebug }}
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}

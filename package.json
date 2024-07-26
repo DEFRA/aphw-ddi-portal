@@ -1,6 +1,6 @@
 {
   "name": "aphw-ddi-portal",
-  "version": "0.94.92",
+  "version": "0.94.93",
   "description": "Web frontend for managing the dogs index",
   "homepage": "https://github.com/DEFRA/aphw-ddi-portal",
   "main": "app/index.js",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/identity": "4.3.0",
-    "@azure/msal-node": "1.14.6",
+    "@azure/msal-node": "2.12.0",
     "@azure/storage-blob": "12.13.0",
     "@date-fns/utc": "^1.1.0",
     "@hapi/catbox-redis": "7.0.2",

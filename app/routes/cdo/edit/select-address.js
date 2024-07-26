@@ -57,31 +57,26 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        try {
-          const details = getPostcodeLookupDetails(request)
-          const addresses = getFromSession(request, 'addresses')
-          const personReference = details?.personReference
-          const selectedAddress = addresses[request.payload.address]
+        const details = getPostcodeLookupDetails(request)
+        const addresses = getFromSession(request, 'addresses')
+        const personReference = details?.personReference
+        const selectedAddress = addresses[request.payload.address]
 
-          const person = await getPersonByReference(personReference)
+        const person = await getPersonByReference(personReference)
 
-          const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
+        const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
 
-          const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload)
-          if (error) {
-            return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
-          }
-
-          await updatePerson(updatePayload, getUser(request))
-
-          setPostcodeLookupDetails(request, null)
-          setInSession(request, 'addresses', null)
-
-          return h.redirect(getMainReturnPoint(request))
-        } catch (err) {
-          console.log('select-address route error', err)
-          throw err
+        const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload)
+        if (error) {
+          return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
+
+        await updatePerson(updatePayload, getUser(request))
+
+        setPostcodeLookupDetails(request, null)
+        setInSession(request, 'addresses', null)
+
+        return h.redirect(getMainReturnPoint(request))
       }
     }
   }
