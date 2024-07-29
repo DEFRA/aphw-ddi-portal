@@ -49,7 +49,7 @@ const addInsuranceCompany = async (insuranceCompany, user) => {
     if (e.isBoom && e.output.statusCode === 409) {
       throw new ApiConflictError({
         ...e,
-        message: 'This insurance company is already in the Index'
+        message: 'This insurance company is already listed'
       })
     }
     throw e

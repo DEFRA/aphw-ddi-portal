@@ -282,8 +282,8 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Breed type is required')
-    expect(messages).toContain('Application type is required')
+    expect(messages).toContain('Enter breed type')
+    expect(messages).toContain('Enter application type')
   })
 
   test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
@@ -311,7 +311,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a real date')
+    expect(messages).toContain('Date entered must be a real date')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
@@ -339,7 +339,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a date that is today or in the past')
+    expect(messages).toContain('Date entered must be today or in the past')
   })
 
   test('POST /cdo/create/dog-details missing day should display error', async () => {
@@ -365,7 +365,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('A CDO issue date must include a day and month')
+    expect(messages).toContain('CDO issue date must include a day and month')
   })
 
   test('POST /cdo/create/dog-details missing day should display error', async () => {
@@ -392,7 +392,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('A CDO issue date must include a day')
+    expect(messages).toContain('CDO issue date must include a day')
   })
 
   test('POST /cdo/create/dog-details missing month should display error', async () => {
@@ -419,7 +419,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('A CDO issue date must include a month')
+    expect(messages).toContain('CDO issue date must include a month')
   })
 
   test('POST /cdo/create/dog-details missing year should display error', async () => {
@@ -446,7 +446,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('A CDO issue date must include a year')
+    expect(messages).toContain('CDO issue date must include a year')
   })
 
   test('POST /cdo/create/dog-details route with year less than 2020 should display error', async () => {
@@ -474,7 +474,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('The CDO issue year must be 2020 or later')
+    expect(messages).toContain('Enter a CDO issue date of 2020 or later')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
@@ -502,7 +502,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a date that is today or in the past')
+    expect(messages).toContain('Date entered must be today or in the past')
   })
 
   test('POST /cdo/create/dog-details route with too long dog name should return 400', async () => {

@@ -181,7 +181,7 @@ describe('Update dog details', () => {
     expect(response.statusCode).toBe(400)
     expect(updateExemption).not.toHaveBeenCalled()
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('Enter a date that is today or in the past')
+    expect(messages).toContain('Date entered must be today or in the past')
   })
 
   test('POST /cdo/edit/exemption-details route displays error if short year', async () => {
@@ -212,7 +212,7 @@ describe('Update dog details', () => {
     expect(response.statusCode).toBe(400)
     expect(updateExemption).not.toHaveBeenCalled()
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('Enter a 4-digit year')
+    expect(messages).toContain('Year must include four numbers')
   })
 
   test('POST /cdo/edit/exemption-details route displays error if invalid date', async () => {
@@ -243,7 +243,7 @@ describe('Update dog details', () => {
     expect(response.statusCode).toBe(400)
     expect(updateExemption).not.toHaveBeenCalled()
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('Enter a real date')
+    expect(messages).toContain('Date entered must be a real date')
   })
 
   test('POST /cdo/edit/exemption-details route displays multiple errors if insurance details blanked', async () => {
@@ -279,7 +279,7 @@ describe('Update dog details', () => {
     expect(response.statusCode).toBe(400)
     expect(updateExemption).not.toHaveBeenCalled()
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('Enter a date that is today or in the past')
+    expect(messages).toContain('Date entered must be today or in the past')
   })
 
   afterEach(async () => {

@@ -10,9 +10,11 @@ const confirmFlowValidFields = (field) => {
 }
 
 const isInputFieldInPayload = (field, fieldText) => {
+  const lowerFieldText = fieldText.toLowerCase()
+  const article = lowerFieldText.startsWith('a') ? 'an' : 'a'
   return Joi.object({
     [field]: Joi.string().required().messages({
-      '*': `${fieldText} is required`
+      '*': `Enter ${article} ${lowerFieldText}`
     })
   }).unknown(true)
 }
@@ -30,7 +32,7 @@ const hasAreYouSureRadioBeenSelected = Joi.object({
 const duplicateEntrySchema = (field, fieldText) => {
   return Joi.object({
     [field]: Joi.any().forbidden().messages({
-      'any.unknown': `This ${fieldText} is already in the Index`
+      'any.unknown': `This ${fieldText} is already listed`
     })
   }).unknown(true)
 }

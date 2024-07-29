@@ -65,8 +65,8 @@ const exemptionDetailsSchema = Joi.object({
   indexNumber: Joi.string().required(),
   status: Joi.string().required(),
   certificateIssued: optionalDate(true),
-  cdoIssued: optionalDateWhenInterimOr2023('Enter a CDO issued date', true),
-  cdoExpiry: optionalDateWhenInterimOr2023('Enter a CDO expiry date', false),
+  cdoIssued: optionalDateWhenInterimOr2023('Enter an issue date', true),
+  cdoExpiry: optionalDateWhenInterimOr2023('Enter an expiry date', false),
   court: Joi.string().when('exemptionOrder', {
     is: 2023,
     then: Joi.optional().allow(null).allow(''),

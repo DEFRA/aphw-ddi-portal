@@ -9,7 +9,7 @@ const { isValidPhoneNumber } = require('libphonenumber-js')
 
 const validatePhoneNumber = (value, helpers) => {
   if (!isValidPhoneNumber(value, 'GB')) {
-    return helpers.message('Enter a real telephone number')
+    return helpers.message('Telephone number must be real')
   }
 
   return value
@@ -39,7 +39,7 @@ const ownerDetailsSchema = Joi.object({
   postcode: Joi.string().trim().required().max(8).regex(postcodeRegex).messages({
     'string.empty': 'Enter a postcode',
     'string.max': 'Postcode must be no more than {#limit} characters',
-    'string.pattern.base': 'Enter a real postcode'
+    'string.pattern.base': 'Postcode must be real'
   }),
   dateOfBirth: Joi.object({
     year: Joi.string().allow(null).allow(''),
@@ -48,7 +48,7 @@ const ownerDetailsSchema = Joi.object({
   }).custom(validateOwnerDateOfBirth),
   email: Joi.string().email({ tlds: { allow: false } }).trim().max(254).optional().allow(null).allow('').messages({
     'string.max': 'Email must be no more than {#limit} characters',
-    'string.email': 'Enter a real email address'
+    'string.email': 'Email address must be real'
   }),
   primaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),
   secondaryTelephone: Joi.string().trim().optional().allow(null).allow('').custom(validatePhoneNumber),

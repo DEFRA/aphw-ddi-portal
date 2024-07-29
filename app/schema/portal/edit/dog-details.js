@@ -9,7 +9,7 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   breed: Joi.string().trim().required().messages({
-    'any.required': 'Breed type is required'
+    'any.required': 'Enter breed type'
   }).custom((value, helper) => validateBreedForCountry(value, helper)),
   colour: Joi.string().trim().max(50).allow('').allow(null).optional().messages({
     'string.max': 'Colour must be no more than {#limit} characters'
@@ -31,10 +31,10 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Tattoo must be no more than {#limit} characters'
   }),
   microchipNumber: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip numbers must be {#limit} numbers long'
+    'string.max': 'Microchip number must be {#limit} digits in length'
   }).custom((value, helper) => validateMicrochip(value, helper, true)),
   microchipNumber2: Joi.string().trim().max(15).allow('').allow(null).optional().messages({
-    'string.max': 'Microchip numbers must be {#limit} numbers long'
+    'string.max': 'Microchip number must be {#limit} digits in length'
   }).custom((value, helper) => validateMicrochip(value, helper, true)),
   dateExported: Joi.object({
     year: Joi.string().allow(null).allow(''),

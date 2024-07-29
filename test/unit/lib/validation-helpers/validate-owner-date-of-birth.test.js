@@ -18,7 +18,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -31,7 +31,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -44,7 +44,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -57,7 +57,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day']]
       },
-      error: 'An owner date of birth must include a day'
+      error: 'Date of birth must include a day'
     })
   })
 
@@ -70,7 +70,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['month']]
       },
-      error: 'An owner date of birth must include a month'
+      error: 'Date of birth must include a month'
     })
   })
 
@@ -83,7 +83,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['year']]
       },
-      error: 'An owner date of birth must include a year'
+      error: 'Date of birth must include a year'
     })
   })
 
@@ -96,7 +96,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'year']]
       },
-      error: 'An owner date of birth must include a day and year'
+      error: 'Date of birth must include a day and year'
     })
   })
 
@@ -109,7 +109,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'The dog owner must be aged 16 or over'
+      error: 'Owner must be 16 or over'
     })
   })
 
@@ -122,7 +122,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Enter a date of birth that is in the past'
+      error: 'Date of birth must be in the past'
     })
   })
 })

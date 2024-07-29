@@ -51,7 +51,16 @@ describe('singleRemove', () => {
       const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
-      expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error).toEqual(new ValidationError('Enter a court'))
+      expect(error.details.length).toBe(1)
+    })
+
+    test('should give correct error message if object starts with an A', () => {
+      const requestPayload = {}
+      const courtSchema = isInputFieldPkInPayload('Activity')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toEqual(new ValidationError('Enter an activity'))
       expect(error.details.length).toBe(1)
     })
 
@@ -62,7 +71,7 @@ describe('singleRemove', () => {
       const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
-      expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error).toEqual(new ValidationError('Enter a court'))
       expect(error.details.length).toBe(1)
     })
   })

@@ -177,7 +177,7 @@ describe('Update dog details', () => {
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-      expect(messages).toContain('Enter a real date')
+      expect(messages).toContain('Date entered must be a real date')
     })
 
     test('POST /cdo/edit/dog-details with missing month and year returns 400', async () => {
@@ -208,7 +208,7 @@ describe('Update dog details', () => {
       expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-      expect(messages).toContain('A date must include a month and year')
+      expect(messages).toContain('Date must include a month and year')
     })
 
     test('POST /cdo/edit/dog-details with short year returns 400', async () => {
@@ -239,7 +239,7 @@ describe('Update dog details', () => {
       expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-      expect(messages).toContain('Enter a 4-digit year')
+      expect(messages).toContain('Year must include four numbers')
     })
 
     test('POST /cdo/edit/dog-details with invalid microchip returns 302 original microchip', async () => {
@@ -275,11 +275,11 @@ describe('Update dog details', () => {
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 1', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
-        statusMessage: 'The microchip number already exists',
+        statusMessage: 'Microchip number already exists',
         payload: {
           statusCode: 409,
           error: 'Conflict',
-          message: 'The microchip number already exists',
+          message: 'Microchip number already exists',
           microchipNumbers: [
             '875257109325923'
           ]
@@ -309,18 +309,18 @@ describe('Update dog details', () => {
       expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-      expect(messages).toContain('The microchip number already exists')
+      expect(messages).toContain('Microchip number already exists')
       expect(document.querySelector('#microchipNumber-error')).not.toBeNull()
     })
 
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 2', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
-        statusMessage: 'The microchip number already exists',
+        statusMessage: 'Microchip number already exists',
         payload: {
           statusCode: 409,
           error: 'Conflict',
-          message: 'The microchip number already exists',
+          message: 'Microchip number already exists',
           microchipNumbers: [
             '875257109325923'
           ]
@@ -351,7 +351,7 @@ describe('Update dog details', () => {
       expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-      expect(messages).toContain('The microchip number already exists')
+      expect(messages).toContain('Microchip number already exists')
       expect(document.querySelector('#microchipNumber-error')).toBeNull()
       expect(document.querySelector('#microchipNumber2-error')).not.toBeNull()
     })
@@ -359,11 +359,11 @@ describe('Update dog details', () => {
     test('POST /cdo/edit/dog-details with duplicate microchip returns 400 given duplicate microchip 1 & 2', async () => {
       updateDogDetails.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
-        statusMessage: 'The microchip number already exists',
+        statusMessage: 'Microchip number already exists',
         payload: {
           statusCode: 409,
           error: 'Conflict',
-          message: 'The microchip number already exists',
+          message: 'Microchip number already exists',
           microchipNumbers: [
             '111111716196581',
             '875257109325923'
@@ -395,7 +395,7 @@ describe('Update dog details', () => {
       expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-      expect(messages).toContain('The microchip number already exists')
+      expect(messages).toContain('Microchip number already exists')
       expect(messages.length).toBe(2)
       expect(document.querySelector('#microchipNumber-error')).not.toBeNull()
       expect(document.querySelector('#microchipNumber2-error')).not.toBeNull()

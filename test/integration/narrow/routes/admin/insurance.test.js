@@ -243,7 +243,7 @@ describe('Insurance', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
       expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-      expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This dog insurer name is already in the Index')
+      expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('The insurer name is already listed')
 
       expect(document.querySelector('#name').getAttribute('value')).toBe('Lloyds of London')
     })

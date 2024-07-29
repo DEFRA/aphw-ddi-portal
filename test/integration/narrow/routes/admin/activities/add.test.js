@@ -88,7 +88,7 @@ describe('Add activities page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Activity name is required')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter an activity name')
     })
 
     test('returns 302 if not auth', async () => {
@@ -219,7 +219,7 @@ describe('Add activities page', () => {
 
       expect(response.statusCode).toBe(409)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This activity name is already in the Index')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This activity name is already listed')
     })
   })
 

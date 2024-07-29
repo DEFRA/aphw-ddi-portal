@@ -58,7 +58,7 @@ describe('DDI API policeForces', () => {
         }
       })
 
-      await expect(addPoliceForce({ name: 'Rivendell Constabulary' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This police force is already in the Index' }))
+      await expect(addPoliceForce({ name: 'Rivendell Constabulary' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This police force is already listed' }))
     })
 
     test('should throw a normal error given there is an error code other than 409', async () => {

@@ -37,7 +37,7 @@ describe('Dog test', () => {
       const apiErrorFailure = new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
         error: 'Conflict',
-        message: 'The microchip number already exists',
+        message: 'Microchip number already exists',
         microchipNumbers: [
           '875257109325923'
         ]
@@ -114,7 +114,7 @@ describe('Dog test', () => {
       const apiErrorFailure = new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
         error: 'Conflict',
-        message: 'The microchip number already exists',
+        message: 'Microchip number already exists',
         microchipNumbers: [
           '875257109325923'
         ]

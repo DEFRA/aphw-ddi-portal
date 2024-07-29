@@ -162,7 +162,7 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a real telephone number')
+    expect(messages).toContain('Telephone number must be real')
   })
 
   test('POST /cdo/edit/owner-details with invalid dob returns 400', async () => {
@@ -198,7 +198,7 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a real date')
+    expect(messages).toContain('Date entered must be a real date')
   })
 
   test('POST /cdo/edit/owner-details with invalid dob (short year) returns 400', async () => {
@@ -234,7 +234,7 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a 4-digit year')
+    expect(messages).toContain('Year must include four numbers')
   })
 
   test('POST /cdo/edit/owner-details with future dob returns 400', async () => {
@@ -270,7 +270,7 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a date of birth that is in the past')
+    expect(messages).toContain('Date of birth must be in the past')
   })
 
   test('POST /cdo/edit/owner-details with missing year returns 400', async () => {
@@ -305,7 +305,7 @@ describe('Update owner details', () => {
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('An owner date of birth must include a year')
+    expect(messages).toContain('Date of birth must include a year')
   })
 
   test('POST /cdo/edit/owner-details with missing month and year returns 400', async () => {
@@ -340,7 +340,7 @@ describe('Update owner details', () => {
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('An owner date of birth must include a month and year')
+    expect(messages).toContain('Date of birth must include a month and year')
   })
 
   test('POST /cdo/edit/owner-details with invalid email returns 400', async () => {
@@ -375,7 +375,7 @@ describe('Update owner details', () => {
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('Enter a real email address')
+    expect(messages).toContain('Email address must be real')
   })
 
   test('POST /cdo/edit/owner-details with invalid breed for country returns 400', async () => {

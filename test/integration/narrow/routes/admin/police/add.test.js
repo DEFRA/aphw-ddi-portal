@@ -82,7 +82,7 @@ describe('Police force page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the police force you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police force')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Police force is required')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police force')
     })
 
     test('POST /admin/police/add route returns 302 if not auth', async () => {
@@ -211,7 +211,7 @@ describe('Police force page', () => {
 
       expect(response.statusCode).toBe(409)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the police force you want to add?')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police force is already in the Index')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police force is already listed')
     })
 
     test('POST /admin/police/add police force route returns 500 given server error', async () => {

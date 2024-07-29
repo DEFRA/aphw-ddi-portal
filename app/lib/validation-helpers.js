@@ -21,11 +21,11 @@ const validateMicrochip = (value, helpers, compareOrig = false) => {
   }
 
   if (value?.length < 15) {
-    return helpers.message('Microchip numbers must be 15 numbers long', { path: [elemName] })
+    return helpers.message('Microchip number must be 15 digits in length', { path: [elemName] })
   }
 
   if (!value.match(validNewMicrochip)) {
-    return helpers.message('Microchip numbers can only contain numbers', { path: [elemName] })
+    return helpers.message('Microchip number must be digits only', { path: [elemName] })
   }
 
   return value
@@ -47,7 +47,7 @@ const validateCdoIssueDate = (value, helpers) => {
   }
 
   if (parseInt(year) < 2020) {
-    return helpers.message('The CDO issue year must be 2020 or later', { path: ['cdoIssued', ['year']] })
+    return helpers.message('Enter a CDO issue date of 2020 or later', { path: ['cdoIssued', ['year']] })
   }
 
   if (invalidComponents.length === 0) {
@@ -55,21 +55,21 @@ const validateCdoIssueDate = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message('Enter a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Date entered must be a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Date entered must be today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     return date
   }
 
   if (invalidComponents.length === 3) {
-    return helpers.message('Enter a CDO issue date', { path: ['cdoIssued', ['day', 'month', 'year']] })
+    return helpers.message('Enter an issue date', { path: ['cdoIssued', ['day', 'month', 'year']] })
   }
 
-  const errorMessage = `A CDO issue date must include a ${invalidComponents.join(' and ')}`
+  const errorMessage = `CDO issue date must include a ${invalidComponents.join(' and ')}`
 
   return helpers.message(errorMessage, { path: ['cdoIssued', invalidComponents] })
 }
@@ -94,23 +94,23 @@ const validateInterimExemptionDate = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message('Enter a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Date entered must be a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Enter a date that is today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Date entered must be today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     const now = new Date()
     if (!isWithinInterval(date, { start: sub(now, { years: 1 }), end: now })) {
-      return helpers.message('Date joined scheme year must be within the last 12 months', { path: ['interimExemption', ['year']] })
+      return helpers.message('Date of joining scheme must be within the last 12 months', { path: ['interimExemption', ['year']] })
     }
 
     return date
   }
 
   if (invalidComponents.length === 3) {
-    return helpers.message('Enter a Date joined scheme', { path: ['interimExemption', ['day', 'month', 'year']] })
+    return helpers.message('Enter the date of joining scheme', { path: ['interimExemption', ['day', 'month', 'year']] })
   }
 
   const errorMessage = `Date joined scheme must include a ${invalidComponents.join(' and ')}`
@@ -155,7 +155,7 @@ const validateOwnerDateOfBirth = (value, helpers) => {
     return null
   }
 
-  const errorMessage = `An owner date of birth must include a ${invalidComponents.join(' and ')}`
+  const errorMessage = `Date of birth must include a ${invalidComponents.join(' and ')}`
 
   return helpers.message(errorMessage, { path: ['birthDate', invalidComponents] })
 }
@@ -170,19 +170,19 @@ const notOldEnough = date => {
 
 const validateDob = (date, year) => {
   if (!date) {
-    return year.length !== 4 ? 'Enter a 4-digit year' : 'Enter a real date'
+    return year.length !== 4 ? 'Year must include four numbers' : 'Date entered must be a real date'
   }
 
   if (year.length !== 4) {
-    return 'Enter a 4-digit year'
+    return 'Year must include four numbers'
   }
 
   if (isFuture(date)) {
-    return 'Enter a date of birth that is in the past'
+    return 'Date of birth must be in the past'
   }
 
   if (notOldEnough(date)) {
-    return 'The dog owner must be aged 16 or over'
+    return 'Owner must be 16 or over'
   }
   return null
 }

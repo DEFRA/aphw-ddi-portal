@@ -180,11 +180,11 @@ describe('Change status', () => {
       })
       updateStatus.mockRejectedValue(new ApiConflictError(new ApiErrorFailure('409 Conflict', {
         statusCode: 409,
-        statusMessage: 'The microchip number already exists',
+        statusMessage: 'Microchip number already exists',
         payload: {
           statusCode: 409,
           error: 'Conflict',
-          message: 'The microchip number already exists',
+          message: 'Microchip number already exists',
           microchipNumbers: [
             '875257109325923'
           ]

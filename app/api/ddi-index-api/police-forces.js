@@ -36,7 +36,7 @@ const addPoliceForce = async (policeForce, user) => {
     if (e.isBoom && e.output.statusCode === 409) {
       throw new ApiConflictError({
         ...e,
-        message: 'This police force is already in the Index'
+        message: 'This police force is already listed'
       })
     }
     throw e

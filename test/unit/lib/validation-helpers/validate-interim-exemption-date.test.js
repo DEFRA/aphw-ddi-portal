@@ -34,7 +34,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -47,7 +47,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -60,7 +60,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Enter a real date'
+      error: 'Date entered must be a real date'
     })
   })
 
@@ -125,7 +125,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Enter a Date joined scheme'
+      error: 'Enter the date of joining scheme'
     })
   })
 
@@ -138,7 +138,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['year']]
       },
-      error: 'Date joined scheme year must be within the last 12 months'
+      error: 'Date of joining scheme must be within the last 12 months'
     })
   })
 
@@ -151,7 +151,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Enter a date that is today or in the past'
+      error: 'Date entered must be today or in the past'
     })
   })
 })

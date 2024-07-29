@@ -71,7 +71,7 @@ describe('DDI API insuranceCompanys', () => {
         }
       })
 
-      await expect(addInsuranceCompany({ name: 'Mario World Pet Insurance' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This insurance company is already in the Index' }))
+      await expect(addInsuranceCompany({ name: 'Mario World Pet Insurance' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This insurance company is already listed' }))
     })
 
     test('should throw a normal error given there is an error code other than 409', async () => {

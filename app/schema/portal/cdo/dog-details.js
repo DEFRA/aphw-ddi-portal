@@ -5,7 +5,7 @@ const { applicationTypeSchemaElements } = require('../common/components/applicat
 
 const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
-    'any.required': 'Breed type is required'
+    'any.required': 'Enter breed type'
   }).custom((value, helper) => validateBreedForCountry(value, helper)),
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
     'string.max': 'Dog name must be no more than {#limit} characters'
@@ -45,10 +45,10 @@ const validatePayload = (payload) => {
  */
 const microchipValidation = (disallowedMicrochipIds) => Joi.object({
   microchipNumber: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
-    '*': 'The microchip number already exists'
+    '*': 'Microchip number already exists'
   }),
   microchipNumber2: Joi.string().optional().allow('').allow(null).disallow(...disallowedMicrochipIds).messages({
-    '*': 'The microchip number already exists'
+    '*': 'Microchip number already exists'
   })
 })
 

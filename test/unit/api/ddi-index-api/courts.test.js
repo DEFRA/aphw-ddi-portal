@@ -55,7 +55,7 @@ describe('DDI API courts', () => {
         }
       })
 
-      await expect(addCourt({ name: 'Rivendell Valley Court' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This court name is already in the Index' }))
+      await expect(addCourt({ name: 'Rivendell Valley Court' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This court name is already listed' }))
     })
 
     test('should throw a normal error given there is an error code other than 409', async () => {

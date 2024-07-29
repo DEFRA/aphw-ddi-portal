@@ -4,7 +4,7 @@ const { validatePayloadBuilder } = require('../../../../schema/common/validatePa
 const schema = Joi.object({
   taskName: Joi.string().required(),
   taskDone: Joi.string().messages({
-    '*': 'Confirm if you have sent the Form 2 before continuing.'
+    '*': 'Confirm the Form 2 has been sent'
   }).required()
 })
 
