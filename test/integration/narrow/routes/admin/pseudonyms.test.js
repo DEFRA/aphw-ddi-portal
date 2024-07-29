@@ -220,7 +220,7 @@ describe('Pseudonyms', () => {
     expect(response.statusCode).toBe(400)
     expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address already has a pseudonym')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address is already associated with another pseudonym')
 
     expect(document.querySelector('#email').getAttribute('value')).toBe('abe.lincon@example.com')
     expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe2')
@@ -255,7 +255,7 @@ describe('Pseudonyms', () => {
     expect(response.statusCode).toBe(400)
     expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This pseudonym is already in use')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Enter a different pseudonym')
   })
 
   test('POST /admin/pseudonyms with duplicate username and pseudonym returns error', async () => {
@@ -287,8 +287,8 @@ describe('Pseudonyms', () => {
     expect(response.statusCode).toBe(400)
     expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(2)
-    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address already has a pseudonym')
-    expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('This pseudonym is already in use')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('This email address is already associated with another pseudonym')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[1].textContent.trim()).toBe('Enter a different pseudonym')
 
     expect(document.querySelector('#email').getAttribute('value')).toBe('abe.lincon@example.com')
     expect(document.querySelector('#pseudonym').getAttribute('value')).toBe('Abe')

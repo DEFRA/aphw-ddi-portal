@@ -16,10 +16,10 @@ const schema = Joi.object({
 
 const duplicateEmailSchema = Joi.object({
   email: Joi.any().forbidden().messages({
-    'any.unknown': 'This email address already has a pseudonym'
+    'any.unknown': 'This email address is already associated with another pseudonym'
   }),
   pseudonym: Joi.any().forbidden().messages({
-    'any.unknown': 'This pseudonym is already in use'
+    'any.unknown': 'Enter a different pseudonym'
   })
 }).required()
 

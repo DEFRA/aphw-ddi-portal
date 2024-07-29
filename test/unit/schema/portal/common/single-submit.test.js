@@ -76,7 +76,7 @@ describe('singleSubmit', () => {
       const courtSchema = isInputFieldInPayload('court', 'Court')
       const { error } = courtSchema.validate(requestPayload)
 
-      expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error).toEqual(new ValidationError('Enter a court'))
     })
   })
 

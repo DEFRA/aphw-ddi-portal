@@ -51,7 +51,7 @@ describe('singleRemove', () => {
       const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
-      expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error).toEqual(new ValidationError('Enter a court'))
       expect(error.details.length).toBe(1)
     })
 
@@ -62,7 +62,7 @@ describe('singleRemove', () => {
       const courtSchema = isInputFieldPkInPayload('Court')
       const { error } = courtSchema.validate(requestPayload)
 
-      expect(error).toEqual(new ValidationError('Court is required'))
+      expect(error).toEqual(new ValidationError('Enter a court'))
       expect(error.details.length).toBe(1)
     })
   })

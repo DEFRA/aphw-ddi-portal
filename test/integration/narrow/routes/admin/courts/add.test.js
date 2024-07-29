@@ -68,7 +68,7 @@ describe('Courts page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add court')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Court name is required')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a court name')
     })
 
     test('POST /admin/courts/add route returns 302 if not auth', async () => {
@@ -197,7 +197,7 @@ describe('Courts page', () => {
 
       expect(response.statusCode).toBe(409)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This court name is already in the Index')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This court name is already listed')
     })
 
     test('POST /admin/courts/add court route returns 500 if there is a server error', async () => {

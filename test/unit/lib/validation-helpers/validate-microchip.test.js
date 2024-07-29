@@ -38,7 +38,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['microchipNumber']
       },
-      error: 'Microchip numbers must be 15 numbers long'
+      error: 'Microchip number must be 15 digits in length'
     })
   })
 
@@ -51,7 +51,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['microchipNumber']
       },
-      error: 'Microchip numbers can only contain numbers'
+      error: 'Microchip number must be digits only'
     })
   })
 
@@ -64,7 +64,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['microchipNumber']
       },
-      error: 'Microchip numbers can only contain numbers'
+      error: 'Microchip number must be digits only'
     })
   })
 
@@ -77,7 +77,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['microchipNumber']
       },
-      error: 'Microchip numbers can only contain numbers'
+      error: 'Microchip number must be digits only'
     })
   })
 
@@ -106,7 +106,7 @@ describe('ValidationHelpers - validateMicrochip', () => {
       elemName: {
         path: ['MicrochipNumber']
       },
-      error: 'Microchip numbers can only contain numbers'
+      error: 'Microchip number must be digits only'
     })
   })
 })

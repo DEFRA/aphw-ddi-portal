@@ -20,7 +20,7 @@ const schema = Joi.object({
     'string.empty': 'Enter a postcode',
     'any.required': 'Enter a postcode',
     'string.max': 'Postcode must be no more than {#limit} characters',
-    'string.pattern.base': 'Enter a real postcode'
+    'string.pattern.base': 'Postcode must be real'
   }),
   personReference: Joi.string().optional().allow(null).allow(''),
   country: Joi.string().trim().required().messages({

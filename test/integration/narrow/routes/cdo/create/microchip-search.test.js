@@ -75,7 +75,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers can only contain numbers')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be digits only')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error blank', async () => {
@@ -115,7 +115,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be 15 digits in length')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error too short', async () => {
@@ -135,7 +135,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers must be 15 numbers long')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be 15 digits in length')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error space', async () => {
@@ -155,7 +155,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers can only contain numbers')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be digits only')
   })
 
   test('POST /cdo/create/microchip-search route with invalid payload returns 400 error letters', async () => {
@@ -175,7 +175,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip numbers can only contain numbers')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Microchip number must be digits only')
   })
 
   test('POST /cdo/create/microchip-search route with duplicate microchip returns 400 error', async () => {

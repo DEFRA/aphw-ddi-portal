@@ -120,7 +120,7 @@ describe('Exemption details validation', () => {
       'insuranceRenewal-year': '2020'
     }
 
-    expect(() => validatePayload(payload)).toThrow('Enter a CDO issued date')
+    expect(() => validatePayload(payload)).toThrow('Enter an issue date')
   })
 
   test('should fail validation when insurance company supplied but no renewal date', () => {

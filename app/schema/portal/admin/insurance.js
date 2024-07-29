@@ -14,7 +14,7 @@ const removeSchema = Joi.object({
 
 const duplicateInsuranceCompanySchema = Joi.object({
   name: Joi.any().forbidden().messages({
-    'any.unknown': 'This dog insurer name is already in the Index '
+    'any.unknown': 'The insurer name is already listed'
   })
 }).required()
 

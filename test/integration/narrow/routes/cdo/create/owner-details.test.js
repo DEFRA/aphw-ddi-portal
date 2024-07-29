@@ -93,7 +93,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('An owner date of birth must include a month and year')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Date of birth must include a month and year')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with invalid date entry returns error 2', async () => {
@@ -114,7 +114,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a real date')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Date entered must be a real date')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with invalid date entry returns error 3 (not 4 digit year)', async () => {
@@ -135,7 +135,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Enter a 4-digit year')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Year must include four numbers')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with valid data forwards to owner results screen', async () => {

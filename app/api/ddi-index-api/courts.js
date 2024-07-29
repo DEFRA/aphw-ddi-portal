@@ -46,7 +46,7 @@ const addCourt = async (court, user) => {
     if (e.isBoom && e.output.statusCode === 409) {
       throw new ApiConflictError({
         ...e,
-        message: 'This court name is already in the Index'
+        message: 'This court name is already listed'
       })
     }
     throw e
