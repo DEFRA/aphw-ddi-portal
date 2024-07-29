@@ -10,7 +10,7 @@ const confirmFlowValidFields = (field) => {
 }
 
 const isInputFieldInPayload = (field, fieldText) => {
-  const lowerFieldText = (fieldText ?? '').toLowerCase()
+  const lowerFieldText = fieldText.toLowerCase()
   const article = lowerFieldText.startsWith('a') ? 'an' : 'a'
   return Joi.object({
     [field]: Joi.string().required().messages({

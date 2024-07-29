@@ -78,6 +78,14 @@ describe('singleSubmit', () => {
 
       expect(error).toEqual(new ValidationError('Enter a court'))
     })
+
+    test('should give correct error message if field starts with an A', () => {
+      const requestPayload = {}
+      const courtSchema = isInputFieldInPayload('court', 'Ant')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toEqual(new ValidationError('Enter an ant'))
+    })
   })
 
   describe('singleSubmitSchemaConfirm', () => {

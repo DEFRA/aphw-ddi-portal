@@ -55,6 +55,15 @@ describe('singleRemove', () => {
       expect(error.details.length).toBe(1)
     })
 
+    test('should give correct error message if object starts with an A', () => {
+      const requestPayload = {}
+      const courtSchema = isInputFieldPkInPayload('Activity')
+      const { error } = courtSchema.validate(requestPayload)
+
+      expect(error).toEqual(new ValidationError('Enter an activity'))
+      expect(error.details.length).toBe(1)
+    })
+
     test('should not validate if court id is empty', () => {
       const requestPayload = {
         pk: ''
