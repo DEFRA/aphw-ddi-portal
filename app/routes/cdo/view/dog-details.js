@@ -24,7 +24,8 @@ module.exports = [
         setActivityDetails(request, null)
 
         if (cdo.dog.status === statuses.PreExempt && request.query.force !== 'true') {
-          return h.redirect(`${cdoRoutes.manageCdo.get}/${indexNumber}?src=${request.query.src}`)
+          const srcParam = request.query.src ? `?src=${request.query.src}` : ''
+          return h.redirect(`${cdoRoutes.manageCdo.get}/${indexNumber}${srcParam}`)
         }
 
         const backNav = addBackNavigation(request, true)

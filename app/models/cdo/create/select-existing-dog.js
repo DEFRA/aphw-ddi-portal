@@ -1,10 +1,9 @@
-const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 const { formatDogRadioAsHtml } = require('../../../lib/format-helpers')
 
-function ViewModel (ownerDetails, dogResults, errors) {
+function ViewModel (ownerDetails, dogResults, backNav, errors) {
   this.model = {
-    backLink: `${ownerRoutes.selectOwner.get}?back=true`,
+    backLink: backNav.backLink,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
     dogs: dogResults,

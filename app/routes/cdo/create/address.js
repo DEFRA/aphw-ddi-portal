@@ -6,9 +6,15 @@ const addressSchema = require('../../../schema/portal/owner/address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
+const { logValidationError } = require('../../../lib/log-helpers')
 
 const form = { formAction: routes.address.post }
-const backNav = { backLink: routes.postcodeLookupCreate.get }
+const backNavStandard = { backLink: routes.postcodeLookupCreate.get }
+const backNavSummary = { backLink: routes.fullSummary.get }
+
+const getBackNav = request => {
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+}
 
 module.exports = [{
   method: 'GET',
@@ -20,7 +26,7 @@ module.exports = [{
 
       const countries = await getCountries()
 
-      return h.view(views.address, new ViewModel(address, form, backNav, countries))
+      return h.view(views.address, new ViewModel(address, form, getBackNav(request), countries))
     }
   }
 },
@@ -35,13 +41,13 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
-        console.log('Validation error in address create:', error)
+        logValidationError(error, routes.address.post)
 
         const address = { ...getAddress(request), ...request.payload }
 
         const countries = await getCountries()
 
-        return h.view(views.address, new ViewModel(address, form, backNav, countries, error)).code(400).takeover()
+        return h.view(views.address, new ViewModel(address, form, getBackNav(request), countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

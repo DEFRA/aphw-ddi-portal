@@ -57,7 +57,8 @@ function ViewModel (owner, address, enforcement, courts, policeForces, dogs, err
         name: formatName(owner),
         dateOfBirth: formatDate(owner?.dateOfBirth),
         address: formatAddress(address),
-        country: getCountry(address)
+        country: getCountry(address),
+        isExisting: owner?.personReference
       },
       court: (courts.find(x => x.id === parseInt(enforcement?.court)) || { name: '' }).name,
       policeForce: (policeForces.find(x => x.id === parseInt(enforcement?.policeForce)) || { name: '' }).name,

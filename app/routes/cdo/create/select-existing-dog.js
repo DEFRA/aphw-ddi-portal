@@ -1,9 +1,16 @@
 const { routes, views } = require('../../../constants/cdo/dog')
+const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-existing-dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setDog, getExistingDogs } = require('../../../session/cdo/dog')
 const Joi = require('joi')
+
+const backNavStandard = { backLink: `${ownerRoutes.selectOwner.get}?back=true` }
+const backNavSummary = { backLink: ownerRoutes.fullSummary.get }
+const getBackNav = request => {
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+}
 
 module.exports = [{
   method: 'GET',
@@ -15,7 +22,7 @@ module.exports = [{
 
       const dogResults = getExistingDogs(request)
 
-      return h.view(views.selectExistingDog, new ViewModel(ownerDetails, dogResults))
+      return h.view(views.selectExistingDog, new ViewModel(ownerDetails, dogResults, getBackNav(request)))
     }
   }
 },
@@ -35,7 +42,7 @@ module.exports = [{
 
         const dogResults = getExistingDogs(request)
 
-        return h.view(views.selectExistingDog, new ViewModel(ownerDetails, dogResults, error)).code(400).takeover()
+        return h.view(views.selectExistingDog, new ViewModel(ownerDetails, dogResults, getBackNav(request), error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

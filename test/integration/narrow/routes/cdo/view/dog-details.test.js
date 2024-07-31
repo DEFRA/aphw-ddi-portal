@@ -470,6 +470,27 @@ describe('View dog details', () => {
     expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243?src=abc123')
   })
 
+  test('GET /cdo/view/dog-details route redirects to Manage CDO when no force param and dog Pre-exempt and no src', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        id: 300243,
+        indexNumber: 'ED300243',
+        status: 'Pre-exempt'
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/dog-details/ED300243',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243')
+  })
+
   afterEach(async () => {
     jest.clearAllMocks()
     await server.stop()

@@ -2,9 +2,9 @@ const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
 
-function ViewModel (ownerDetails, errors) {
+function ViewModel (ownerDetails, backNav, errors) {
   this.model = {
-    backLink: routes.home.get,
+    backLink: backNav.backLink,
     addressRoute: routes.address.get,
     firstName: {
       label: {
