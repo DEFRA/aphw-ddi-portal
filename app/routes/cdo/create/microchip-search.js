@@ -7,7 +7,7 @@ const { validatePayload } = require('../../../schema/portal/cdo/microchip-search
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
 
-const alreadyOwnThisDogMessage = 'This dog is already owned by this owner'
+const alreadyOwnThisDogMessage = 'Dog already registered to this owner'
 
 module.exports = [{
   method: 'GET',

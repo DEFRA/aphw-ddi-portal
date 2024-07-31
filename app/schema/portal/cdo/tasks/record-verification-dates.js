@@ -10,7 +10,7 @@ const verificationDatesSchema = Joi.object({
     day: Joi.string().allow(null).allow('')
   }).required().custom((value, helper) => validateDate(value, helper, true, true))
     .messages({
-      'any.required': 'Microchip number verified date is required'
+      'any.required': 'Enter a microchip number verified date'
     }),
   neuteringConfirmation: Joi.object({
     year: Joi.string().allow(null).allow(''),
@@ -18,7 +18,7 @@ const verificationDatesSchema = Joi.object({
     day: Joi.string().allow(null).allow('')
   }).required().custom((value, helper) => validateDate(value, helper, true, true))
     .messages({
-      'any.required': 'Neutering verified date is required'
+      'any.required': 'Enter a neutering verified date'
     })
 })
 

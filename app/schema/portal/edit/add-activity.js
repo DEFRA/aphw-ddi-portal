@@ -4,7 +4,7 @@ const addActivitySchema = Joi.object({
   pk: Joi.string().required(),
   source: Joi.string().required(),
   activityType: Joi.string().trim().required().messages({
-    '*': 'Select an activity type'
+    '*': 'Select an activity'
   }),
   titleReference: Joi.string().required(),
   submitButton: Joi.string().allow(null).allow('').optional()

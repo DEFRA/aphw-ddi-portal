@@ -26,20 +26,20 @@ const ownerDetailsSchema = Joi.object({
     'string.max': 'Last name must be no more than {#limit} characters'
   }),
   addressLine1: Joi.string().trim().required().max(50).messages({
-    'string.empty': 'Enter the first line of the address',
-    'string.max': 'The first line of the address must be no more than {#limit} characters'
+    'string.empty': 'Enter first line of address',
+    'string.max': 'First line of address must be no more than {#limit} characters'
   }),
   addressLine2: Joi.string().trim().allow(null).allow('').max(50).optional().messages({
-    'string.max': 'The second line of the address must be no more than {#limit} characters'
+    'string.max': 'Second line of address must be no more than {#limit} characters'
   }),
   town: Joi.string().trim().required().max(50).messages({
-    'string.empty': 'Enter the town or city',
-    'string.max': 'The town or city must be no more than {#limit} characters'
+    'string.empty': 'Enter town or city',
+    'string.max': 'Town or city must be no more than {#limit} characters'
   }),
   postcode: Joi.string().trim().required().max(8).regex(postcodeRegex).messages({
     'string.empty': 'Enter a postcode',
     'string.max': 'Postcode must be no more than {#limit} characters',
-    'string.pattern.base': 'Postcode must be real'
+    'string.pattern.base': 'Postcode must be a real postcode'
   }),
   dateOfBirth: Joi.object({
     year: Joi.string().allow(null).allow(''),

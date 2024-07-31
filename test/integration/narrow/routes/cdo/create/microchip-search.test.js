@@ -382,7 +382,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Dog already registered to this owner')
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip2', async () => {
@@ -405,7 +405,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Dog already registered to this owner')
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner doesnt already own returns 302', async () => {

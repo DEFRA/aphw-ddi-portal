@@ -114,7 +114,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('Date entered must be a real date')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Date must be a real date')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/owner-details with invalid date entry returns error 3 (not 4 digit year)', async () => {

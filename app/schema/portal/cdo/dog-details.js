@@ -5,7 +5,7 @@ const { applicationTypeSchemaElements } = require('../common/components/applicat
 
 const dogDetailsSchema = Joi.object({
   breed: Joi.string().trim().required().messages({
-    'any.required': 'Enter breed type'
+    'any.required': 'Select breed type'
   }).custom((value, helper) => validateBreedForCountry(value, helper)),
   name: Joi.string().trim().max(32).allow('').allow(null).optional().messages({
     'string.max': 'Dog name must be no more than {#limit} characters'

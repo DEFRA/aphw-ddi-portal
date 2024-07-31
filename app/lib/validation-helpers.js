@@ -4,7 +4,7 @@ const { parseDate } = require('./date-helpers')
 const { getPersonAndDogs } = require('../api/ddi-index-api/person')
 const validNewMicrochip = /^\d+$/
 
-const invalidBreedForCountryMessage = 'The address for an XL Bully dog must be in England or Wales'
+const invalidBreedForCountryMessage = 'Address for an XL Bully must be in England or Wales'
 
 const validateMicrochip = (value, helpers, compareOrig = false) => {
   let elemName = helpers.state.path[0]
@@ -47,7 +47,7 @@ const validateCdoIssueDate = (value, helpers) => {
   }
 
   if (parseInt(year) < 2020) {
-    return helpers.message('Enter a CDO issue date of 2020 or later', { path: ['cdoIssued', ['year']] })
+    return helpers.message('Enter an issue date of 2020 or later', { path: ['cdoIssued', ['year']] })
   }
 
   if (invalidComponents.length === 0) {
@@ -55,11 +55,11 @@ const validateCdoIssueDate = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message('Date entered must be a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Date must be a real date', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Date entered must be today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
+      return helpers.message('Date must be today or in the past', { path: ['cdoIssued', ['day', 'month', 'year']] })
     }
 
     return date
@@ -94,11 +94,11 @@ const validateInterimExemptionDate = (value, helpers) => {
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message('Date entered must be a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Date must be a real date', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     if (isFuture(date)) {
-      return helpers.message('Date entered must be today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
+      return helpers.message('Date must be today or in the past', { path: ['interimExemption', ['day', 'month', 'year']] })
     }
 
     const now = new Date()
@@ -170,7 +170,7 @@ const notOldEnough = date => {
 
 const validateDob = (date, year) => {
   if (!date) {
-    return year.length !== 4 ? 'Year must include four numbers' : 'Date entered must be a real date'
+    return year.length !== 4 ? 'Year must include four numbers' : 'Date must be a real date'
   }
 
   if (year.length !== 4) {

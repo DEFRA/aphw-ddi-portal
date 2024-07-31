@@ -6,7 +6,7 @@ const schema = Joi.object({
   taskName: Joi.string().required(),
   microchipNumber: Joi.string().trim().max(15).required().messages({
     'string.max': 'Microchip number must be {#limit} digits in length',
-    'string.empty': 'Microchip number is required'
+    'string.empty': 'Enter a microchip number'
   }).custom((value, helper) => validateMicrochip(value, helper, false))
 })
 

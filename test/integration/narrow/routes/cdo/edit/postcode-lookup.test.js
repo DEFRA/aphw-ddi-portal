@@ -98,7 +98,27 @@ describe('PostCode Lookup test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('&quot;postcode&quot; is required')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Enter a postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/edit/postcode-lookup with empty postcode returns error 1', async () => {
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123' })
+
+    const payload = {
+      personReference: 'P-123',
+      postcode: ''
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/postcode-lookup',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a postcode')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/edit/postcode-lookup with invalid data and missing person returns 404', async () => {

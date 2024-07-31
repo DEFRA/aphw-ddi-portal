@@ -198,7 +198,7 @@ describe('Update owner details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be a real date')
+    expect(messages).toContain('Date must be a real date')
   })
 
   test('POST /cdo/edit/owner-details with invalid dob (short year) returns 400', async () => {
@@ -412,7 +412,7 @@ describe('Update owner details', () => {
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
-    expect(messages).toContain('The address for an XL Bully dog must be in England or Wales')
+    expect(messages).toContain('Address for an XL Bully must be in England or Wales')
   })
 
   afterEach(async () => {
