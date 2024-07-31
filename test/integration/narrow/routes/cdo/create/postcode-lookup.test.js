@@ -65,7 +65,25 @@ describe('PostCode Lookup test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
-    expect(response.result.indexOf('&quot;postcode&quot; is required')).toBeGreaterThan(-1)
+    expect(response.result.indexOf('Enter a postcode')).toBeGreaterThan(-1)
+  })
+
+  test('POST /cdo/create/postcode-lookup with empty postcode returns error 1', async () => {
+    const payload = {
+      houseNumber: '1',
+      postcode: ''
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/postcode-lookup',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+    expect(response.result.indexOf('Enter a postcode')).toBeGreaterThan(-1)
   })
 
   test('POST /cdo/create/postcode-lookup with valid data forwards to next screen', async () => {

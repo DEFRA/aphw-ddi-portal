@@ -177,7 +177,7 @@ describe('Update dog details', () => {
 
       const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-      expect(messages).toContain('Date entered must be a real date')
+      expect(messages).toContain('Date must be a real date')
     })
 
     test('POST /cdo/edit/dog-details with missing month and year returns 400', async () => {

@@ -64,7 +64,7 @@ const addActivity = async (activity, user) => {
     if (e.isBoom && e.output.statusCode === 409) {
       throw new ApiConflictError({
         ...e,
-        message: 'This activity name is already listed'
+        message: 'The activity name is already listed'
       })
     }
     throw e

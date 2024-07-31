@@ -180,7 +180,7 @@ describe('date-helpers', () => {
       const value = { day: '01', month: '01', year: '2099' }
       const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
       const res = validateDate(value, helpers, false, true)
-      expect(res).toBe('Date entered must be today or in the past')
+      expect(res).toBe('Date must be today or in the past')
     })
 
     test('should validate ok when preventFutureDates is true and date is in the past', () => {
@@ -194,7 +194,7 @@ describe('date-helpers', () => {
       const value = { day: '01', month: '01', year: '2024' }
       const helpers = { state: { path: ['dateField'] }, message: (txt) => txt }
       const res = validateDate(value, helpers, false, false, true)
-      expect(res).toBe('Date entered must be today or in the future')
+      expect(res).toBe('Date must be today or in the future')
     })
 
     test('should validate ok when preventPastDates is true and date is in the future', () => {

@@ -6,7 +6,7 @@ const schema = Joi.object({
     'string.max': 'Email must be no more than {#limit} characters',
     'string.empty': 'Enter an email address',
     'any.required': 'Enter an email address',
-    'string.email': 'Enter an email address in the correct format, like name@defra.gov.uk'
+    'string.email': 'Enter a valid email address'
   }),
   pseudonym: Joi.string().trim().required().messages({
     'string.empty': 'Enter a pseudonym',

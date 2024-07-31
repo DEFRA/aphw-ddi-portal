@@ -98,7 +98,7 @@ describe('Microchip results tests', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(400)
-      expect(document.querySelector('#confirm-error').textContent.trim()).toBe('Error: The address for an XL Bully dog must be in England or Wales')
+      expect(document.querySelector('#confirm-error').textContent.trim()).toBe('Error: Address for an XL Bully must be in England or Wales')
     })
 
     test('route with N payload redirects to microchip-results-stop', async () => {

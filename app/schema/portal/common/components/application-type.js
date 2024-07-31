@@ -3,7 +3,7 @@ const { validateCdoIssueDate, validateInterimExemptionDate } = require('../../..
 
 const applicationTypeSchemaElements = {
   applicationType: Joi.string().trim().required().messages({
-    '*': 'Enter application type'
+    '*': 'Select application type'
   }),
   cdoIssued: Joi.object({
     year: Joi.string().allow(null).allow(''),

@@ -149,7 +149,7 @@ describe('Address edit test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: Enter the first line of the address')
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: Enter first line of address')
   })
 
   test('POST /cdo/edit/address with valid data but missing person returns 404', async () => {
@@ -250,7 +250,7 @@ describe('Address edit test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: The address for an XL Bully dog must be in England or Wales')
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error: Address for an XL Bully must be in England or Wales')
   })
 
   test('POST /cdo/edit/address forwards to next screen if address is Scotland but owner doesnt have XL Bullies', async () => {

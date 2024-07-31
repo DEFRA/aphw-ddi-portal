@@ -266,7 +266,7 @@ describe('Application type', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter application type')
+    expect(messages).toContain('Select application type')
   })
 
   test('POST /cdo/create/application-type route with invalid date should display error', async () => {
@@ -292,7 +292,7 @@ describe('Application type', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be a real date')
+    expect(messages).toContain('Date must be a real date')
   })
 
   test('POST /cdo/create/application-type route with cdo future date should display error', async () => {
@@ -318,7 +318,7 @@ describe('Application type', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be today or in the past')
+    expect(messages).toContain('Date must be today or in the past')
   })
 
   test('POST /cdo/create/application-type missing day should display error', async () => {
@@ -443,7 +443,7 @@ describe('Application type', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a CDO issue date of 2020 or later')
+    expect(messages).toContain('Enter an issue date of 2020 or later')
   })
 
   test('POST /cdo/create/application-type route with future interim date should display error', async () => {
@@ -469,7 +469,7 @@ describe('Application type', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be today or in the past')
+    expect(messages).toContain('Date must be today or in the past')
   })
 
   afterEach(async () => {
