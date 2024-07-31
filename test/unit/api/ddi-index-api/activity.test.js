@@ -80,7 +80,7 @@ describe('Activity test', () => {
       }
     })
 
-    await expect(addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)).rejects.toThrow(new ApiConflictError({ message: 'The activity name is already listed' }))
+    await expect(addActivity({ label: 'Activity 1', activityType: 'sent', activitySource: 'dog' }, user)).rejects.toThrow(new ApiConflictError({ message: 'This activity name is already listed' }))
   })
 
   test('should throw a normal error given there is an error code other than 409', async () => {

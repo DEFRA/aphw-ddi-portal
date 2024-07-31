@@ -219,7 +219,7 @@ describe('Add activities page', () => {
 
       expect(response.statusCode).toBe(409)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('The activity name is already listed')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This activity name is already listed')
     })
   })
 
