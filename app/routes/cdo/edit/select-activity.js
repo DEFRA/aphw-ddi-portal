@@ -1,6 +1,5 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
-const { keys } = require('../../../constants/cdo/activity')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/select-activity')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
@@ -26,12 +25,6 @@ const getEditLink = details => {
     : `${ownerRoutes.viewOwnerDetails.get}/${details.pk}?src=${details.srcHashParam}`
 }
 
-const hideTheseLabels = ['Application pack', 'Form 2']
-
-const removeUnwanted = activityList => {
-  return activityList.filter(act => !hideTheseLabels.includes(act.label) || act.activity_type.name === keys.received)
-}
-
 module.exports = [
   {
     method: 'GET',
@@ -47,8 +40,7 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const activityList = await getActivities(activityDetails.activityType, activityDetails.source)
-        const activityListFiltered = removeUnwanted(activityList)
+        const activityList = await getActivities(activityDetails.activityType, activityDetails.source, true)
 
         const backNav = addBackNavigation(request)
 
@@ -58,7 +50,7 @@ module.exports = [
 
         const model = {
           activityType: activityDetails?.activityType,
-          activityList: activityListFiltered,
+          activityList,
           pk: activityDetails.pk,
           source: activityDetails.source,
           activityDate: new Date(),
@@ -90,7 +82,7 @@ module.exports = [
             return h.response().code(404).takeover()
           }
 
-          const activityList = await getActivities(activityType, payload.source)
+          const activityList = await getActivities(activityType, payload.source, true)
 
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
           model.editLink = getEditLink(model)

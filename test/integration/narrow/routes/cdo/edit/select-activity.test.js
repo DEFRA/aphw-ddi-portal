@@ -17,11 +17,11 @@ describe('Select activity', () => {
   jest.mock('../../../../../../app/session/cdo/activity')
   const { getActivityDetails } = require('../../../../../../app/session/cdo/activity')
 
-  jest.mock('../../../../../../app/api/ddi-index-api/activities')
-  const { getActivities, getActivityById } = require('../../../../../../app/api/ddi-index-api/activities')
-
   jest.mock('../../../../../../app/api/ddi-index-api/person')
   const { getPersonByReference } = require('../../../../../../app/api/ddi-index-api/person')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/base')
+  const { get } = require('../../../../../../app/api/ddi-index-api/base')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -49,10 +49,12 @@ describe('Select activity', () => {
       }
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const options = {
       method: 'GET',
@@ -83,10 +85,12 @@ describe('Select activity', () => {
       }
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const options = {
       method: 'GET',
@@ -113,10 +117,12 @@ describe('Select activity', () => {
       lastName: 'Smith'
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const options = {
       method: 'GET',
@@ -138,10 +144,12 @@ describe('Select activity', () => {
 
     getCdo.mockResolvedValue(null)
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const options = {
       method: 'GET',
@@ -168,16 +176,18 @@ describe('Select activity', () => {
       }
     })
 
-    getActivities.mockResolvedValue([
-      { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
-      { id: 2, label: 'Application pack', activity_type: { name: 'sent' } },
-      { id: 3, label: 'Label 3', activity_type: { name: 'sent' } },
-      { id: 4, label: 'Form 2', activity_type: { name: 'sent' } },
-      { id: 5, label: 'Label 5', activity_type: { name: 'received' } },
-      { id: 6, label: 'Application pack', activity_type: { name: 'received' } },
-      { id: 7, label: 'Label 7', activity_type: { name: 'received' } },
-      { id: 8, label: 'Form 2', activity_type: { name: 'received' } }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Application pack', activity_type: { name: 'sent' } },
+        { id: 3, label: 'Label 3', activity_type: { name: 'sent' } },
+        { id: 4, label: 'Form 2', activity_type: { name: 'sent' } },
+        { id: 5, label: 'Label 5', activity_type: { name: 'received' } },
+        { id: 6, label: 'Application pack', activity_type: { name: 'received' } },
+        { id: 7, label: 'Label 7', activity_type: { name: 'received' } },
+        { id: 8, label: 'Form 2', activity_type: { name: 'received' } }
+      ]
+    })
 
     const options = {
       method: 'GET',
@@ -213,10 +223,22 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activity: {
+        targetPk: 'owner',
+        source: 'dog',
+        activityType: 'sent',
+        activity_event: {
+          target_primary_key: 'owner'
+        }
+      }
+    })
+
+    getDogOwner.mockResolvedValue({
+      owner: {
+        personReference: 'P-12345'
+      }
+    })
 
     const payload = {
       pk: 'ED12345',
@@ -255,12 +277,14 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivityById.mockReturnValue({
-      targetPk: 'owner',
-      source: 'dog',
-      activityType: 'sent',
-      activity_event: {
-        target_primary_key: 'owner'
+    get.mockReturnValue({
+      activity: {
+        targetPk: 'owner',
+        source: 'dog',
+        activityType: 'sent',
+        activity_event: {
+          target_primary_key: 'owner'
+        }
       }
     })
 
@@ -301,12 +325,14 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivityById.mockReturnValue({
-      targetPk: 'owner',
-      source: 'owner',
-      activityType: 'sent',
-      activity_event: {
-        target_primary_key: 'owner'
+    get.mockReturnValue({
+      activity: {
+        targetPk: 'owner',
+        source: 'owner',
+        activityType: 'sent',
+        activity_event: {
+          target_primary_key: 'owner'
+        }
       }
     })
 
@@ -349,10 +375,12 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const payload = {
       pk: 'ED12345',
@@ -391,10 +419,12 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const payload = {
       pk: 'ED12345',
@@ -426,10 +456,12 @@ describe('Select activity', () => {
       activityType: 'sent'
     })
 
-    getActivities.mockResolvedValue([
-      { text: 'act1', value: 1 },
-      { text: 'act2', value: 2 }
-    ])
+    get.mockResolvedValue({
+      activities: [
+        { id: 1, label: 'Label 1', activity_type: { name: 'sent' } },
+        { id: 2, label: 'Label 2', activity_type: { name: 'sent' } }
+      ]
+    })
 
     const payload = {
       pk: 'ED12345',
