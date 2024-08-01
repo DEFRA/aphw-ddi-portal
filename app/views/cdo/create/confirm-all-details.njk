@@ -27,24 +27,34 @@
       <h1 class="govuk-heading-l">Confirm all details</h1>
 
       <div class="govuk-summary-card">
-        <div class="govuk-summary-card__title-wrapper"><h2 class="govuk-summary-card__title">Owner details</h2></div>
+        <div class="govuk-summary-card__title-wrapper"><h2 class="govuk-summary-card__title">Owner details</h2>
+        {% if model.summary.owner.isExisting %}
+          <div class="govuk-summary-card__actions">
+            <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/owner-details?fromSummary=true">Change<span class="govuk-visually-hidden"> owner details (Owner details)</span></a>
+          </div>
+        {% endif %}
+        </div>
         <div class="govuk-summary-card__content">
           <dl class="govuk-summary-list">
     
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Name</dt>
               <dd class="govuk-summary-list__value">{{ model.summary.owner.name }}</dd>
+              {% if not model.summary.owner.isExisting %}
               <dd class="govuk-summary-list__actions">
-                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details#firstName">Change<span class="govuk-visually-hidden"> name (Owner details)</span></a>
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details?fromSummary=true#firstName">Change<span class="govuk-visually-hidden"> name (Owner details)</span></a>
               </dd>
+              {% endif %}
             </div>
         
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Date of birth</dt>
               <dd class="govuk-summary-list__value">{{ model.summary.owner.dateOfBirth }}</dd>
+              {% if not model.summary.owner.isExisting %}
               <dd class="govuk-summary-list__actions">
-                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details#owner-date-of-birth-dobDay">Change<span class="govuk-visually-hidden"> date of birth (Owner details)</span></a>
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details?fromSummary=true#dateOfBirth-day">Change<span class="govuk-visually-hidden"> date of birth (Owner details)</span></a>
               </dd>
+              {% endif %}
             </div>
         
             <div class="govuk-summary-list__row">
@@ -54,9 +64,11 @@
                 {{ addrLine }}<br>
                 {% endfor %}
               </dd>
+              {% if not model.summary.owner.isExisting %}
               <dd class="govuk-summary-list__actions">
-                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/owner-details#postcode">Change<span class="govuk-visually-hidden"> address (Owner details)</span></a>
+                <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/address?fromSummary=true">Change<span class="govuk-visually-hidden"> address (Owner details)</span></a>
               </dd>
+              {% endif %}
             </div>
             <dt class="govuk-summary-list__key govuk-!-padding-top-0">
               Country
@@ -71,7 +83,7 @@
       <div class="govuk-summary-card">
         <div class="govuk-summary-card__title-wrapper"><h2 class="govuk-summary-card__title">Police and court details</h2>
           <div class="govuk-summary-card__actions">
-            <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/enforcement-details">Change<span class="govuk-visually-hidden"> police and court details (Police and court details)</span></a>
+            <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/enforcement-details?fromSummary=true">Change<span class="govuk-visually-hidden"> police and court details (Police and court details)</span></a>
           </div>
         </div>
 
@@ -104,9 +116,9 @@
             <ul class="govuk-summary-card__actions">
               <li class="govuk-summary-card__action">
                 {% if dog.indexNumber %}
-                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/select-existing-dog"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/select-existing-dog?fromSummary=true"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
                 {% else %}
-                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/microchip-search/{{ dog.id }}"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
+                <a class="govuk-link govuk-!-font-weight-regular govuk-link--no-visited-state" href="/cdo/create/microchip-search/{{ dog.id }}?fromSummary=true"> Change <span class="govuk-visually-hidden"> Dog {{ dog.id }}</span></a>
                 {% endif %}
               </li>
               {% if model.dogs | length > 1 %}

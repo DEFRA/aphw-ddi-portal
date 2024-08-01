@@ -1,11 +1,10 @@
 const { routes } = require('../../../constants/cdo/owner')
-const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
-function ViewModel (enforcementDetails, courts, policeForces, errors) {
+function ViewModel (enforcementDetails, courts, policeForces, backNav, errors) {
   this.model = {
-    backLink: dogRoutes.confirm.get,
+    backLink: backNav.backLink,
     addressRoute: routes.address.get,
     court: {
       label: {

@@ -1,9 +1,8 @@
-const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
-function ViewModel (details, errors) {
+function ViewModel (details, backNav, errors) {
   this.model = {
-    backLink: ownerRoutes.ownerDetails.get,
+    backLink: backNav.backLink,
     dogId: details.dogId,
     microchipNumber: {
       id: 'microchipNumber',

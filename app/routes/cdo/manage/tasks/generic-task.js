@@ -8,6 +8,7 @@ const { addBackNavigation, addBackNavigationForErrorCondition } = require('../..
 const { saveCdoTaskDetails, getCdo } = require('../../../../api/ddi-index-api/cdo')
 const { ApiErrorFailure } = require('../../../../errors/api-error-failure')
 const { microchipValidation } = require('../../../../schema/portal/cdo/dog-details')
+const { logValidationError } = require('../../../../lib/log-helpers')
 
 const mapBoomError = (e, request) => {
   const { microchipNumber, microchipNumber2 } = request.payload
@@ -67,8 +68,7 @@ module.exports = [{
       },
       failAction: async (request, h, error) => {
         const taskName = request.params.taskName
-
-        console.log(`Validation error in task ${taskName}:`, error)
+        logValidationError(error, `${routes.manageCdoTaskBase.get} ${taskName}`)
 
         const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
 
