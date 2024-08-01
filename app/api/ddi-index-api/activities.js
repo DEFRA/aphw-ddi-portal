@@ -6,8 +6,14 @@ const { getDogOwner } = require('./dog')
 const activitiesEndpoint = 'activities'
 const activityEndpoint = 'activity'
 
-const getActivities = async (activityType, activitySource) => {
+const hideTheseLabels = ['Application pack', 'Form 2']
+
+const getActivities = async (activityType, activitySource, hideInternal = false) => {
   const payload = await get(`${activitiesEndpoint}/${activityType}/${activitySource}`)
+
+  if (hideInternal) {
+    return payload.activities.filter(act => !hideTheseLabels.includes(act.label) || act.activity_type.name === keys.received)
+  }
 
   return payload.activities
 }
@@ -29,9 +35,11 @@ const getActivityById = async (activityId) => {
 
 const recordActivity = async (activity, user) => {
   const activityEntity = await getActivityById(activity.activity)
+  console.log('activityEntity', activityEntity)
   activity.targetPk = activityEntity.activity_event?.target_primary_key
 
   if (activity.targetPk !== activity.source && activity.targetPk === 'owner') {
+    console.log('owner', await getDogOwner(activity.pk))
     activity.pk = (await getDogOwner(activity.pk)).personReference
   }
 
