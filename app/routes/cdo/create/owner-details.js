@@ -7,6 +7,12 @@ const { UTCDate } = require('@date-fns/utc')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { clearCdo } = require('../../../session/cdo')
 
+const backNavStandard = { backLink: routes.home.get }
+const backNavSummary = { backLink: routes.fullSummary.get }
+const getBackNav = request => {
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+}
+
 module.exports = [{
   method: 'GET',
   path: routes.ownerDetails.get,
@@ -22,7 +28,7 @@ module.exports = [{
 
       addDateComponents(ownerDetails, 'dateOfBirth')
 
-      return h.view(views.ownerDetails, new ViewModel(ownerDetails))
+      return h.view(views.ownerDetails, new ViewModel(ownerDetails, getBackNav(request)))
     }
   }
 },
@@ -35,7 +41,7 @@ module.exports = [{
       payload: validatePayload,
       failAction: async (request, h, error) => {
         const ownerDetails = { ...getOwnerDetails(request), ...request.payload }
-        return h.view(views.ownerDetails, new ViewModel(ownerDetails, error)).code(400).takeover()
+        return h.view(views.ownerDetails, new ViewModel(ownerDetails, getBackNav(request), error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

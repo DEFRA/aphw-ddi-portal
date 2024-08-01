@@ -1,6 +1,7 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { routes } = require('../../../../../../app/constants/cdo/owner')
+const { JSDOM } = require('jsdom')
 
 describe('EnforcementDetails test', () => {
   jest.mock('../../../../../../app/auth')
@@ -21,7 +22,7 @@ describe('EnforcementDetails test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/enforcement-details route returns 200', async () => {
+  test('GET /cdo/create/enforcement-details route returns 200 - back link standard', async () => {
     const options = {
       method: 'GET',
       url: '/cdo/create/enforcement-details',
@@ -30,6 +31,23 @@ describe('EnforcementDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+
+    const { document } = new JSDOM(response.result).window
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/confirm-dog-details')
+  })
+
+  test('GET /cdo/create/enforcement-details route returns 200 - back link to summary', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/enforcement-details?fromSummary=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+
+    const { document } = new JSDOM(response.result).window
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
   })
 
   test('POST /cdo/create/enforcement-details route returns 302 if not auth', async () => {

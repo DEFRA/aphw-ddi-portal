@@ -31,7 +31,7 @@ describe('Address test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/address route returns 200', async () => {
+  test('GET /cdo/create/address route returns 200 - back link standard', async () => {
     const options = {
       method: 'GET',
       url: '/cdo/create/address',
@@ -47,6 +47,24 @@ describe('Address test', () => {
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
+  })
+
+  test('GET /cdo/create/address route returns 200 - back link to summary', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/address?fromSummary=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+
+    expect(getCountries).toBeCalled()
+
+    expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
   })
 
   test('POST /cdo/create/address route returns 302 if not auth', async () => {

@@ -25,7 +25,7 @@ describe('Microchip search tests', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/microchip-search route returns 200', async () => {
+  test('GET /cdo/create/microchip-search route returns 200 - back link standard', async () => {
     getDog.mockReturnValue({})
     getMicrochipResults.mockReturnValue({})
 
@@ -41,6 +41,26 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(200)
     expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link to summary', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search?fromSummary=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
   })
 
   test('GET /cdo/create/microchip-search route returns 404 when dog not found', async () => {

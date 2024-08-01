@@ -44,7 +44,7 @@ describe('SelectExistingDog test', () => {
   })
 
   describe('GET /cdo/create/select-existing-dog', () => {
-    test('route returns 200', async () => {
+    test('route returns 200 - back link standard', async () => {
       const options = {
         method: 'GET',
         url: '/cdo/create/select-existing-dog',
@@ -73,6 +73,39 @@ describe('SelectExistingDog test', () => {
       expect(document.querySelectorAll('form .govuk-radios__item label')[3].textContent.trim()).toContain('Add a new dog for this owner')
       expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[3].getAttribute('value')).toBe('-1')
       expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Continue')
+      expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-owner?back=true')
+    })
+
+    test('route returns 200 - back link to summary', async () => {
+      const options = {
+        method: 'GET',
+        url: '/cdo/create/select-existing-dog?fromSummary=true',
+        auth
+      }
+
+      getExistingDogs.mockReturnValue(mockDogs)
+      getOwnerDetails.mockReturnValue({
+        firstName: 'John',
+        lastName: 'Smith'
+      })
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = new JSDOM(response.payload).window
+
+      expect(getOwnerDetails).toBeCalledTimes(1)
+      expect(document.querySelector('h1').textContent).toBe('Select the dog for John Smith')
+      expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('FidoBreed: Breed 1Index number: ED123Microchip number: 12345')
+      expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
+      expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('BusterBreed: Breed 2Index number: ED234Microchip number: 67890')
+      expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[1].getAttribute('value')).toBe('1')
+      expect(document.querySelectorAll('form .govuk-radios__item label')[2].textContent.trim()).toContain('BrunoBreed: Breed 3Index number: ED789')
+      expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[2].getAttribute('value')).toBe('2')
+      expect(document.querySelectorAll('form .govuk-radios__item label')[3].textContent.trim()).toContain('Add a new dog for this owner')
+      expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[3].getAttribute('value')).toBe('-1')
+      expect(document.querySelector('.govuk-grid-row form .govuk-button').textContent.trim()).toBe('Continue')
+      expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
     })
   })
 

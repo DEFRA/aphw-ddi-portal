@@ -5,6 +5,7 @@ const { getUsers, createUser, deleteUser } = require('../../api/ddi-events-api/u
 const { getUser } = require('../../auth')
 const { validatePseudonymPayload, duplicateEmailSchema } = require('../../schema/portal/admin/pseudonyms')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
+const { logValidationError } = require('../../lib/log-helpers')
 
 const mapBoomError = (e, request) => {
   const errorPayload = e.boom.payload.error
@@ -57,7 +58,7 @@ module.exports = [
           return validatePseudonymPayload(payload)
         },
         failAction: async (request, h, error) => {
-          console.log('Validation error in add/remove pseudonym:', error)
+          logValidationError(error, routes.pseudonyms.post)
           const actioningUser = getUser(request)
 
           const users = await getUsers(actioningUser)
