@@ -4,7 +4,6 @@ const constants = require('../../../constants/forms')
 const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/cdo/postcode-lookup')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
-const { getQueryString } = require('../../../lib/route-helpers')
 const { isRouteFlagSet } = require('../../../session/routes')
 
 const backNavStandard = { backLink: routes.ownerDetails.get }
@@ -24,8 +23,7 @@ module.exports = [
 
         const data = {
           postcode: details?.postcode,
-          houseNumber: details?.houseNumber,
-          queryString: getQueryString(request)
+          houseNumber: details?.houseNumber
         }
 
         return h.view(views.postcodeLookupCreate, new ViewModel(data, getBackNav(request)))
@@ -44,8 +42,7 @@ module.exports = [
 
           const data = {
             postcode: payload.postcode,
-            houseNumber: payload.houseNumber,
-            queryString: getQueryString(request)
+            houseNumber: payload.houseNumber
           }
 
           return h.view(views.postcodeLookupCreate, new ViewModel(data, getBackNav(request), error)).code(400).takeover()
