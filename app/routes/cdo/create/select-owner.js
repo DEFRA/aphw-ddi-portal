@@ -9,6 +9,8 @@ const { setExistingDogs } = require('../../../session/cdo/dog')
 const Joi = require('joi')
 const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 const { setPoliceForce } = require('../../../lib/model-helpers')
+const { setRouteFlag, clearRouteFlag } = require('../../../session/routes')
+const constants = require('../../../constants/forms')
 
 module.exports = [{
   method: 'GET',
@@ -55,6 +57,7 @@ module.exports = [{
 
       if (ownerChosen === -1) {
         setAddress(request, {})
+        setRouteFlag(request, constants.routeFlags.addOwner)
         return h.redirect(routes.postcodeLookupCreate.get)
       }
 
@@ -70,6 +73,7 @@ module.exports = [{
 
       setOwnerDetails(request, { ...ownerDetails, dateOfBirth, dateOfBirthEntered })
       setAddress(request, ownerDetails.address)
+      clearRouteFlag(request, constants.routeFlags.addOwner)
 
       const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
       if (dogs && dogs.length >= 1) {

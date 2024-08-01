@@ -5,6 +5,7 @@ function ViewModel (data, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
+    queryString: data.queryString,
     personReference: data.personReference,
     postcode: {
       label: {
