@@ -7,7 +7,9 @@ const constants = {
   },
   routeFlags: {
     addDog: 'addDog',
-    addOwner: 'addOwner'
+    addOwner: 'addOwner',
+    postcodeLookup: 'potcodeLookup',
+    manualAddressEntry: 'manualAddressEntry'
   }
 }
 

@@ -8,7 +8,7 @@ const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
 const { logValidationError } = require('../../../lib/log-helpers')
 const constants = require('../../../constants/forms')
-const { isRouteFlagSet } = require('../../../session/routes')
+const { isRouteFlagSet, setRouteFlag, clearRouteFlag } = require('../../../session/routes')
 
 const form = { formAction: routes.address.post }
 const backNavStandard = { backLink: routes.postcodeLookupCreate.get }
@@ -56,6 +56,8 @@ module.exports = [{
     },
     handler: async (request, h) => {
       setAddress(request, request.payload)
+      setRouteFlag(request, constants.routeFlags.manualAddressEntry)
+      clearRouteFlag(request, constants.routeFlags.postcodeLookup)
 
       await setPoliceForce(request, request.payload?.postcode)
 

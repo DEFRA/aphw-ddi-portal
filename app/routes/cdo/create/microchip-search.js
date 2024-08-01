@@ -15,10 +15,18 @@ const alreadyOwnThisDogMessage = 'Dog already registered to this owner'
 
 const backNavStandard = { backLink: ownerRoutes.ownerDetails.get }
 const backNavSummary = { backLink: ownerRoutes.fullSummary.get }
-const backNavSelectDog = { backLink: routes.selectExistingDog.get }
 const getBackNav = request => {
-  const backNavStandardOrSelectDog = isRouteFlagSet(request, constants.routeFlags.addDog) ? backNavSelectDog : backNavStandard
-  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandardOrSelectDog
+  let backNavFromSession
+  if (isRouteFlagSet(request, constants.routeFlags.addDog)) {
+    backNavFromSession = { backLink: routes.selectExistingDog.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.postcodeLookup)) {
+    backNavFromSession = { backLink: ownerRoutes.selectAddress.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.manualAddressEntry)) {
+    backNavFromSession = { backLink: ownerRoutes.address.get }
+  } else {
+    backNavFromSession = backNavStandard
+  }
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavFromSession
 }
 
 module.exports = [{
