@@ -135,12 +135,12 @@ describe('Add dog details', () => {
 
     const enforcementRecord = document.querySelectorAll('.govuk-summary-list')[2]
 
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Court')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Test Court')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Police force')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Test Police Force')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('Dog legislation officer')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('Joe Bloggs')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Police force')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Test Police Force')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Dog legislation officer')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Joe Bloggs')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2].textContent.trim()).toBe('Court')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim()).toBe('Test Court')
   })
 
   test('GET /cdo/record-created route should not show blank officer', async () => {
@@ -196,10 +196,10 @@ describe('Add dog details', () => {
 
     const enforcementRecord = document.querySelectorAll('.govuk-summary-list')[2]
 
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Court')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Test Court')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Police force')
-    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Test Police Force')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[0].textContent.trim()).toBe('Police force')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[0].textContent.trim()).toBe('Test Police Force')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[1].textContent.trim()).toBe('Court')
+    expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[1].textContent.trim()).toBe('Test Court')
     expect(enforcementRecord.querySelectorAll('.govuk-summary-list__row .govuk-summary-list__key')[2]).toBeFalsy()
   })
 

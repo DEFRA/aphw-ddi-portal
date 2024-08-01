@@ -23,11 +23,15 @@
         classes: 'govuk-!-margin-bottom-7'
       }) }}
 
+      <ul class="govuk-list">
       {% for dog in model.dogs %}
-      <p class="govuk-body">
-        <a href="/cdo/view/dog-details/{{ dog.indexNumber }}" class="govuk-link govuk-link--no-visited-state">Dog record {{ dog.indexNumber }}</a>
-      </p>
+      <li>
+        <a href="/cdo/view/dog-details/{{ dog.indexNumber }}" class="govuk-link govuk-link--no-visited-state">Dog {{ dog.indexNumber }}</a>
+      </li>
+      {% endfor %}
+      </ul>
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-7">
+      {% for dog in model.dogs %}
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Dog {{ dog.indexNumber }}</h2>
         {{ statusTag(dog.status, 'govuk-!-margin-bottom-5') }}
         <dl class="govuk-summary-list govuk-!-margin-bottom-7">
@@ -96,12 +100,6 @@
 
       <h2 class="govuk-heading-m">Police and court details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-7">
-        {% if model.enforcementDetails.court %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Court</dt>
-          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
-        </div>
-        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Police force</dt>
           <dd class="govuk-summary-list__value">{{ model.enforcementDetails.policeForce }}</dd>
@@ -111,6 +109,12 @@
             <dt class="govuk-summary-list__key">Dog legislation officer</dt>
             <dd class="govuk-summary-list__value">{{ model.enforcementDetails.legislationOfficer }}</dd>
           </div>
+        {% endif %}
+        {% if model.enforcementDetails.court %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Court</dt>
+          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
+        </div>
         {% endif %}
       </dl>
 

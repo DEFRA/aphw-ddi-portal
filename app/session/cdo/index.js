@@ -1,6 +1,7 @@
 const { keys } = require('../../constants/cdo')
 const { clearAllDogs, setExistingDogs, setMicrochipResults } = require('./dog')
 const { setOwnerDetails, setAddress, setEnforcementDetails } = require('./owner')
+const { clearAllRouteFlags } = require('../routes')
 
 const get = (request, entryKey, key) => {
   return key ? request.yar?.get(entryKey)?.[key] : request.yar?.get(entryKey)
@@ -21,6 +22,7 @@ const clearCdo = (request) => {
   setOwnerDetails(request, null)
   setAddress(request, null)
   setEnforcementDetails(request, null)
+  clearAllRouteFlags(request)
 }
 
 module.exports = {

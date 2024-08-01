@@ -1,11 +1,15 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
+const constants = require('../../../constants/forms')
 const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/cdo/postcode-lookup')
 const { getOwnerDetails, setOwnerDetails } = require('../../../session/cdo/owner')
+const { isRouteFlagSet } = require('../../../session/routes')
 
-const backNav = {
-  backLink: routes.ownerDetails.get
+const backNavStandard = { backLink: routes.ownerDetails.get }
+const backNavAddOwner = { backLink: routes.selectOwner.get }
+const getBackNav = request => {
+  return isRouteFlagSet(request, constants.routeFlags.addOwner) ? backNavAddOwner : backNavStandard
 }
 
 module.exports = [
@@ -22,7 +26,7 @@ module.exports = [
           houseNumber: details?.houseNumber
         }
 
-        return h.view(views.postcodeLookupCreate, new ViewModel(data, backNav))
+        return h.view(views.postcodeLookupCreate, new ViewModel(data, getBackNav(request)))
       }
     }
   },
@@ -41,7 +45,7 @@ module.exports = [
             houseNumber: payload.houseNumber
           }
 
-          return h.view(views.postcodeLookupCreate, new ViewModel(data, backNav, error)).code(400).takeover()
+          return h.view(views.postcodeLookupCreate, new ViewModel(data, getBackNav(request), error)).code(400).takeover()
         }
       },
       handler: async (request, h) => {

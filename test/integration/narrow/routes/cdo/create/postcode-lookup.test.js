@@ -12,6 +12,9 @@ describe('PostCode Lookup test', () => {
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getOwnerDetails, setOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
+  jest.mock('../../../../../../app/session/routes')
+  const { isRouteFlagSet } = require('../../../../../../app/session/routes')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -23,7 +26,7 @@ describe('PostCode Lookup test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/postcode-lookup route returns 200', async () => {
+  test('GET /cdo/create/postcode-lookup route returns 200 - back link standard', async () => {
     const options = {
       method: 'GET',
       url: '/cdo/create/postcode-lookup',
@@ -35,6 +38,22 @@ describe('PostCode Lookup test', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+  })
+
+  test('GET /cdo/create/postcode-lookup route returns 200 - back link to select-owner', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/postcode-lookup',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValue(true)
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-owner')
   })
 
   test('POST /cdo/create/postcode-lookup route returns 302 if not auth', async () => {

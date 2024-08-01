@@ -7,13 +7,17 @@ const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { getCountries } = require('../../../api/ddi-index-api')
 const { logValidationError } = require('../../../lib/log-helpers')
+const constants = require('../../../constants/forms')
+const { isRouteFlagSet, setRouteFlag, clearRouteFlag } = require('../../../session/routes')
 
 const form = { formAction: routes.address.post }
 const backNavStandard = { backLink: routes.postcodeLookupCreate.get }
 const backNavSummary = { backLink: routes.fullSummary.get }
+const backNavAddOwner = { backLink: routes.selectOwner.get }
 
 const getBackNav = request => {
-  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+  const standardOrAdd = isRouteFlagSet(request, constants.routeFlags.addOwner) ? backNavAddOwner : backNavStandard
+  return request?.query?.fromSummary === 'true' ? backNavSummary : standardOrAdd
 }
 
 module.exports = [{
@@ -52,6 +56,8 @@ module.exports = [{
     },
     handler: async (request, h) => {
       setAddress(request, request.payload)
+      setRouteFlag(request, constants.routeFlags.manualAddressEntry)
+      clearRouteFlag(request, constants.routeFlags.postcodeLookup)
 
       await setPoliceForce(request, request.payload?.postcode)
 

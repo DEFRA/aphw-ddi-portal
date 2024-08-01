@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
+const constants = require('../../../constants/forms')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
 const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
@@ -8,13 +9,24 @@ const { validatePayload } = require('../../../schema/portal/cdo/microchip-search
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
 const { logValidationError } = require('../../../lib/log-helpers')
+const { isRouteFlagSet } = require('../../../session/routes')
 
 const alreadyOwnThisDogMessage = 'Dog already registered to this owner'
 
 const backNavStandard = { backLink: ownerRoutes.ownerDetails.get }
 const backNavSummary = { backLink: ownerRoutes.fullSummary.get }
 const getBackNav = request => {
-  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+  let backNavFromSession
+  if (isRouteFlagSet(request, constants.routeFlags.addDog)) {
+    backNavFromSession = { backLink: routes.selectExistingDog.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.postcodeLookup)) {
+    backNavFromSession = { backLink: ownerRoutes.selectAddress.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.manualAddressEntry)) {
+    backNavFromSession = { backLink: ownerRoutes.address.get }
+  } else {
+    backNavFromSession = backNavStandard
+  }
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavFromSession
 }
 
 module.exports = [{

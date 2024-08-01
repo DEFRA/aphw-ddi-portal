@@ -1,9 +1,11 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
+const constants = require('../../../constants/forms')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-existing-dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setDog, getExistingDogs } = require('../../../session/cdo/dog')
+const { setRouteFlag, clearRouteFlag } = require('../../../session/routes')
 const Joi = require('joi')
 
 const backNavStandard = { backLink: `${ownerRoutes.selectOwner.get}?back=true` }
@@ -50,12 +52,14 @@ module.exports = [{
 
       if (dogChosen === -1) {
         setDog(request, {})
+        setRouteFlag(request, constants.routeFlags.addDog)
         return h.redirect(routes.microchipSearch.get)
       }
 
       const dogResults = getExistingDogs(request)
 
       setDog(request, dogResults[dogChosen])
+      clearRouteFlag(request, constants.routeFlags.addDog)
 
       return h.redirect(routes.applicationType.get)
     }

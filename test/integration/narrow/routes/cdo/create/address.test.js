@@ -13,6 +13,9 @@ describe('Address test', () => {
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getAddress, setAddress } = require('../../../../../../app/session/cdo/owner')
 
+  jest.mock('../../../../../../app/session/routes')
+  const { isRouteFlagSet } = require('../../../../../../app/session/routes')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -47,6 +50,26 @@ describe('Address test', () => {
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
+  })
+
+  test('GET /cdo/create/address route returns 200 - back link select owner', async () => {
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/address',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValue(true)
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+
+    expect(getCountries).toBeCalled()
+
+    expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-owner')
   })
 
   test('GET /cdo/create/address route returns 200 - back link to summary', async () => {
