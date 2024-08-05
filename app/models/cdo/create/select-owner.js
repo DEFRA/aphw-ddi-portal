@@ -24,7 +24,10 @@ function ViewModel (ownerDetails, ownerResults, errors) {
         },
         {
           text: "The owner's address is not listed",
-          value: -1
+          value: -1,
+          hint: {
+            html: 'By not selecting a listed address,<br>you will create a new owner record'
+          }
         }
       ])
     },
