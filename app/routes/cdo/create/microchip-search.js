@@ -1,13 +1,33 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/dog')
+const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
+const constants = require('../../../constants/forms')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
 const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
+const { logValidationError } = require('../../../lib/log-helpers')
+const { isRouteFlagSet } = require('../../../session/routes')
 
-const alreadyOwnThisDogMessage = 'This dog is already owned by this owner'
+const alreadyOwnThisDogMessage = 'Dog already registered to this owner'
+
+const backNavStandard = { backLink: ownerRoutes.ownerDetails.get }
+const backNavSummary = { backLink: ownerRoutes.fullSummary.get }
+const getBackNav = request => {
+  let backNavFromSession
+  if (isRouteFlagSet(request, constants.routeFlags.addDog)) {
+    backNavFromSession = { backLink: routes.selectExistingDog.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.postcodeLookup)) {
+    backNavFromSession = { backLink: ownerRoutes.selectAddress.get }
+  } else if (isRouteFlagSet(request, constants.routeFlags.manualAddressEntry)) {
+    backNavFromSession = { backLink: ownerRoutes.address.get }
+  } else {
+    backNavFromSession = backNavStandard
+  }
+  return request?.query?.fromSummary === 'true' ? backNavSummary : backNavFromSession
+}
 
 module.exports = [{
   method: 'GET',
@@ -23,7 +43,7 @@ module.exports = [{
 
       dog.dogId = determineDogId(request, dog)
 
-      return h.view(views.microchipSearch, new ViewModel(dog))
+      return h.view(views.microchipSearch, new ViewModel(dog, getBackNav(request)))
     }
   }
 },
@@ -35,11 +55,12 @@ module.exports = [{
     validate: {
       payload: validatePayload,
       failAction: async (request, h, error) => {
+        logValidationError(error, routes.microchipSearch.post)
         const details = { ...getDog(request), ...request.payload }
 
         details.dogId = determineDogId(request, details)
 
-        return h.view(views.microchipSearch, new ViewModel(details, error)).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
@@ -48,13 +69,13 @@ module.exports = [{
 
       const duplicateMicrochipMessage = duplicateMicrochipsInSession(request, details)
       if (duplicateMicrochipMessage) {
-        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(duplicateMicrochipMessage))).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), generateMicrochipError(duplicateMicrochipMessage))).code(400).takeover()
       }
 
       const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
 
       if (isDogUnderSameOwner(results, details, request)) {
-        return h.view(views.microchipSearch, new ViewModel(details, generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()
+        return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()
       }
 
       const searchResults = { results, microchipNumber: details.microchipNumber }

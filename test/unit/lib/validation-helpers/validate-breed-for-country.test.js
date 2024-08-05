@@ -36,7 +36,7 @@ describe('ValidationHelpers - validaBreedForCountry', () => {
     const value = 'XL Bully'
     mockHelpers.state.ancestors[0].country = 'Scotland'
     const res = validateBreedForCountry(value, mockHelpers)
-    expect(res).toEqual({ elemName: { path: ['breed'] }, error: 'The address for an XL Bully dog must be in England or Wales' })
+    expect(res).toEqual({ elemName: { path: ['breed'] }, error: 'Address for an XL Bully must be in England or Wales' })
   })
 
   test('handles england and XLB', () => {

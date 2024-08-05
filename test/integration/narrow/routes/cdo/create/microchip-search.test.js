@@ -14,6 +14,9 @@ describe('Microchip search tests', () => {
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getOwnerDetails } = require('../../../../../../app/session/cdo/owner')
 
+  jest.mock('../../../../../../app/session/routes')
+  const { isRouteFlagSet } = require('../../../../../../app/session/routes')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -25,7 +28,7 @@ describe('Microchip search tests', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/create/microchip-search route returns 200', async () => {
+  test('GET /cdo/create/microchip-search route returns 200 - back link standard', async () => {
     getDog.mockReturnValue({})
     getMicrochipResults.mockReturnValue({})
 
@@ -41,6 +44,110 @@ describe('Microchip search tests', () => {
 
     expect(response.statusCode).toBe(200)
     expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link to select dog', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValue(true)
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-existing-dog')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link to select address', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValueOnce(false).mockReturnValue(true)
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-address')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link to manual address entry', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValueOnce(false).mockReturnValueOnce(false).mockReturnValue(true)
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/address')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link catch all', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search',
+      auth
+    }
+
+    isRouteFlagSet.mockReturnValue(false)
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - back link to summary', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search?fromSummary=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
   })
 
   test('GET /cdo/create/microchip-search route returns 404 when dog not found', async () => {
@@ -382,7 +489,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Dog already registered to this owner')
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip2', async () => {
@@ -405,7 +512,7 @@ describe('Microchip search tests', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(response.statusCode).toBe(400)
-    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: This dog is already owned by this owner')
+    expect(document.querySelector('#microchipNumber-error').textContent.trim()).toBe('Error: Dog already registered to this owner')
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner doesnt already own returns 302', async () => {

@@ -188,7 +188,7 @@ describe('Pseudonyms', () => {
     expect(response.statusCode).toBe(400)
     expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
-    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Enter an email address in the correct format, like name@defra.gov.uk')
+    expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Enter a valid email address')
   })
 
   test('POST /admin/pseudonyms with duplicate username returns error', async () => {

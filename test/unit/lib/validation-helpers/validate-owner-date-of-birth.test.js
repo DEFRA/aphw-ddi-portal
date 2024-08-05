@@ -18,7 +18,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -31,7 +31,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -44,7 +44,7 @@ describe('ValidationHelpers - validateOwnerDateOfBirth', () => {
       elemName: {
         path: ['birthDate', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 

@@ -117,7 +117,7 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
     const date = parseDate(dateString)
 
     if (!date) {
-      return helpers.message('Date entered must be a real date', { path: [elementPath, ['day', 'month', 'year']] })
+      return helpers.message('Date must be a real date', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     if (year.length !== 4) {
@@ -125,11 +125,11 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
     }
 
     if (preventFutureDates && isFuture(date)) {
-      return helpers.message('Date entered must be today or in the past', { path: [elementPath, ['day', 'month', 'year']] })
+      return helpers.message('Date must be today or in the past', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     if (preventPastDates && !isFuture(date) && !isToday(date)) {
-      return helpers.message('Date entered must be today or in the future', { path: [elementPath, ['day', 'month', 'year']] })
+      return helpers.message('Date must be today or in the future', { path: [elementPath, ['day', 'month', 'year']] })
     }
 
     return date

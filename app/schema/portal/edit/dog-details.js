@@ -9,13 +9,13 @@ const dogDetailsSchema = Joi.object({
     'string.max': 'Dog name must be no more than {#limit} characters'
   }),
   breed: Joi.string().trim().required().messages({
-    'any.required': 'Enter breed type'
+    'any.required': 'Select breed type'
   }).custom((value, helper) => validateBreedForCountry(value, helper)),
   colour: Joi.string().trim().max(50).allow('').allow(null).optional().messages({
     'string.max': 'Colour must be no more than {#limit} characters'
   }),
   sex: Joi.string().trim().optional().allow(null).allow('').messages({
-    '*': 'Sex is required'
+    '*': 'Enter a sex'
   }),
   dateOfBirth: Joi.object({
     year: Joi.string().allow(null).allow(''),

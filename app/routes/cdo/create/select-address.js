@@ -1,12 +1,14 @@
 const Joi = require('joi')
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
+const constants = require('../../../constants/forms')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getOwnerDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { setPoliceForce } = require('../../../lib/model-helpers')
+const { setRouteFlag, clearRouteFlag } = require('../../../session/routes')
 
 const source = 'create'
 
@@ -58,6 +60,8 @@ module.exports = [
         const selectedAddress = getFromSession(request, 'addresses')[request.payload.address]
 
         setAddress(request, selectedAddress)
+        setRouteFlag(request, constants.routeFlags.postcodeLookup)
+        clearRouteFlag(request, constants.routeFlags.manualAddressEntry)
 
         await setPoliceForce(request, selectedAddress.postcode)
 

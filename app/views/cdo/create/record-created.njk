@@ -5,17 +5,36 @@
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
+{% block beforeContent %}
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/">Home</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ govukPanel({
-        titleText: "Record created"
+        titleText: "Record created",
+        classes: 'govuk-!-margin-bottom-7'
       }) }}
 
+      <ul class="govuk-list">
       {% for dog in model.dogs %}
-        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Dog {{ dog.indexNumber }}</h2>
-        {{ statusTag(dog.status, 'govuk-!-font-size-16') }}
-        <dl class="govuk-summary-list">
+      <li>
+        <a href="/cdo/view/dog-details/{{ dog.indexNumber }}" class="govuk-link govuk-link--no-visited-state">Dog {{ dog.indexNumber }}</a>
+      </li>
+      {% endfor %}
+      </ul>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-7">
+      {% for dog in model.dogs %}
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Dog {{ dog.indexNumber }}</h2>
+        {{ statusTag(dog.status, 'govuk-!-margin-bottom-5') }}
+        <dl class="govuk-summary-list govuk-!-margin-bottom-7">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Breed</dt>
             <dd class="govuk-summary-list__value">{{ dog.breed }}</dd>
@@ -50,9 +69,9 @@
         </dl>
       {% endfor %}
 
-      <h2 class="govuk-heading-m">Owner and enforcement details</h2>
+      <h2 class="govuk-heading-m">Owner details</h2>
 
-      <dl class="govuk-summary-list">
+      <dl class="govuk-summary-list govuk-!-margin-bottom-7">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name</dt>
           <dd class="govuk-summary-list__value">{{ model.owner.name }}</dd>
@@ -77,12 +96,10 @@
           <dd class="govuk-summary-list__value">{{ model.country }}</dd>
         </div>
         {% endif %}
-        {% if model.enforcementDetails.court %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Court</dt>
-          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
-        </div>
-        {% endif %}
+      </dl>
+
+      <h2 class="govuk-heading-m">Police and court details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-7">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Police force</dt>
           <dd class="govuk-summary-list__value">{{ model.enforcementDetails.policeForce }}</dd>
@@ -93,11 +110,14 @@
             <dd class="govuk-summary-list__value">{{ model.enforcementDetails.legislationOfficer }}</dd>
           </div>
         {% endif %}
+        {% if model.enforcementDetails.court %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Court</dt>
+          <dd class="govuk-summary-list__value">{{ model.enforcementDetails.court }}</dd>
+        </div>
+        {% endif %}
       </dl>
 
-      <p class="govuk-body">
-        <a href="/" class="govuk-link govuk-link--no-visited-state">Dangerous Dogs Index home</a>
-      </p>
     </div>
   </div>
 {% endblock %}

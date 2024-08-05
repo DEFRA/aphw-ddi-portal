@@ -282,8 +282,8 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter breed type')
-    expect(messages).toContain('Enter application type')
+    expect(messages).toContain('Select breed type')
+    expect(messages).toContain('Select application type')
   })
 
   test('POST /cdo/create/dog-details route with invalid date should display error', async () => {
@@ -311,7 +311,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be a real date')
+    expect(messages).toContain('Date must be a real date')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
@@ -339,7 +339,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be today or in the past')
+    expect(messages).toContain('Date must be today or in the past')
   })
 
   test('POST /cdo/create/dog-details missing day should display error', async () => {
@@ -474,7 +474,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Enter a CDO issue date of 2020 or later')
+    expect(messages).toContain('Enter an issue date of 2020 or later')
   })
 
   test('POST /cdo/create/dog-details route with future date should display error', async () => {
@@ -502,7 +502,7 @@ describe('Add dog details', () => {
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
 
-    expect(messages).toContain('Date entered must be today or in the past')
+    expect(messages).toContain('Date must be today or in the past')
   })
 
   test('POST /cdo/create/dog-details route with too long dog name should return 400', async () => {

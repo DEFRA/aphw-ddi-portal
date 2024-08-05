@@ -47,6 +47,7 @@
         }
       }) %}
 
+      <div class="govuk-form-group">
       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-3">
         Status
       </p>
@@ -63,6 +64,7 @@
           {% endfor %}
         </ul>
       {% endif %}
+      </div>
 
       {{ govukDateInput(model.certificateIssued) }}
 

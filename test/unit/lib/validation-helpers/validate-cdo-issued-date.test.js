@@ -34,7 +34,7 @@ describe('ValidationHelpers - validateCdoIssuedDate', () => {
       elemName: {
         path: ['cdoIssued', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -47,7 +47,7 @@ describe('ValidationHelpers - validateCdoIssuedDate', () => {
       elemName: {
         path: ['cdoIssued', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -60,7 +60,7 @@ describe('ValidationHelpers - validateCdoIssuedDate', () => {
       elemName: {
         path: ['cdoIssued', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -138,7 +138,7 @@ describe('ValidationHelpers - validateCdoIssuedDate', () => {
       elemName: {
         path: ['cdoIssued', ['year']]
       },
-      error: 'Enter a CDO issue date of 2020 or later'
+      error: 'Enter an issue date of 2020 or later'
     })
   })
 
@@ -151,7 +151,7 @@ describe('ValidationHelpers - validateCdoIssuedDate', () => {
       elemName: {
         path: ['cdoIssued', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be today or in the past'
+      error: 'Date must be today or in the past'
     })
   })
 })

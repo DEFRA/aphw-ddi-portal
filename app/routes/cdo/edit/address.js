@@ -10,6 +10,7 @@ const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builde
 const { updatePerson } = require('../../../api/ddi-index-api/person')
 const { getAddress, setAddress, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
+const { logValidationError } = require('../../../lib/log-helpers')
 
 const errorView = async (request, h, error) => {
   const backNav = addBackNavigationForErrorCondition(request)
@@ -67,7 +68,7 @@ module.exports = [{
       },
       payload: addressSchema,
       failAction: async (request, h, error) => {
-        console.log('Validation error in address edit:', error)
+        logValidationError(error, routes.editAddress.post)
 
         return await errorView(request, h, error)
       }

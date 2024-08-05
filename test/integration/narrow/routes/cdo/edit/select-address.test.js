@@ -140,7 +140,7 @@ describe('SelectAddress edit test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(400)
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error:The address for an XL Bully dog must be in England or Wales')
+    expect(document.querySelectorAll('.govuk-error-message')[0].textContent.trim()).toBe('Error:Address for an XL Bully must be in England or Wales')
   })
 
   test('POST /cdo/edit/select-address thorws if server error', async () => {

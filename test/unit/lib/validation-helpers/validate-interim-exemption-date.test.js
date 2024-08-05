@@ -34,7 +34,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -47,7 +47,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -60,7 +60,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be a real date'
+      error: 'Date must be a real date'
     })
   })
 
@@ -151,7 +151,7 @@ describe('ValidationHelpers - validateInterimExemptionDate', () => {
       elemName: {
         path: ['interimExemption', ['day', 'month', 'year']]
       },
-      error: 'Date entered must be today or in the past'
+      error: 'Date must be today or in the past'
     })
   })
 })
