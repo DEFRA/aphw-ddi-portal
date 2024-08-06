@@ -66,35 +66,35 @@ const someTasksCompletedButNotYetAvailable = {
       available: false,
       completed: true,
       readonly: false,
-      timestamp: undefined
+      timestamp: new Date(2024, 1, 1)
     },
     microchipNumberRecorded: {
       key: 'microchipNumberRecorded',
       available: false,
       completed: true,
       readonly: false,
-      timestamp: undefined
+      timestamp: new Date(2024, 2, 3)
     },
     applicationFeePaid: {
       key: 'applicationFeePaid',
       available: false,
       completed: true,
       readonly: false,
-      timestamp: undefined
+      timestamp: new Date(2024, 2, 2)
     },
     form2Sent: {
       key: 'form2Sent',
       available: false,
       completed: true,
       readonly: false,
-      timestamp: undefined
+      timestamp: new Date(2024, 3, 3)
     },
     verificationDateRecorded: {
       key: 'verificationDateRecorded',
       available: false,
       completed: true,
       readonly: false,
-      timestamp: undefined
+      timestamp: new Date(2024, 3, 10)
     },
     certificateIssued: {
       key: 'certificateIssued',
