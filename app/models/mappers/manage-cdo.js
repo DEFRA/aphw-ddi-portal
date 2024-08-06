@@ -10,6 +10,10 @@ const getTaskStatus = task => {
   return task.completed ? 'Completed' : 'Not yet started'
 }
 
+const getTaskCompletedDate = task => {
+  return task.completed ? task.timestamp : undefined
+}
+
 const mapManageCdoDetails = (details, cdo) => {
   const taskNames = Object.keys(details.tasks)
   const taskList = []
@@ -19,7 +23,8 @@ const mapManageCdoDetails = (details, cdo) => {
       taskList.push({
         label,
         key,
-        status: getTaskStatus(details.tasks[name])
+        status: getTaskStatus(details.tasks[name]),
+        completedDate: formatToGds(getTaskCompletedDate(details.tasks[name]))
       })
     }
   })
