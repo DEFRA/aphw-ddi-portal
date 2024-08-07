@@ -87,6 +87,14 @@ const formatToGds = date => {
   return format(new Date(date), 'dd MMMM yyyy')
 }
 
+const formatToGdsShort = date => {
+  if (date === null || date === undefined) {
+    return date
+  }
+
+  return format(new Date(date), 'dd MMM yyyy')
+}
+
 const formatToDateTime = date => {
   if (date === null || date === undefined) {
     return date
@@ -225,6 +233,7 @@ module.exports = {
   removeDateComponents,
   addDateErrors,
   formatToGds,
+  formatToGdsShort,
   isEmptyDate,
   validateDate,
   stripTimeFromUTC,
