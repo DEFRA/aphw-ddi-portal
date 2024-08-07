@@ -1,5 +1,5 @@
 const { tasks } = require('../../constants/cdo/index')
-const { formatToGds } = require('../../lib/date-helpers')
+const { formatToGds, formatToGdsShort } = require('../../lib/date-helpers')
 const { getTaskDetails } = require('../../routes/cdo/manage/tasks/generic-task-helper')
 
 const getTaskStatus = task => {
@@ -24,7 +24,7 @@ const mapManageCdoDetails = (details, cdo) => {
         label,
         key,
         status: getTaskStatus(details.tasks[name]),
-        completedDate: formatToGds(getTaskCompletedDate(details.tasks[name]))
+        completedDate: formatToGdsShort(getTaskCompletedDate(details.tasks[name]))
       })
     }
   })

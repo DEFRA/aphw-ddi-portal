@@ -1,6 +1,6 @@
 const {
   getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
-  getDateAsReadableString, validateDate, removeIndividualDateComponents
+  getDateAsReadableString, validateDate, removeIndividualDateComponents, formatToGdsShort
 } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
@@ -216,6 +216,20 @@ describe('date-helpers', () => {
       const payload = { 'field1-dayx': '01', 'field1-monthx': '01', 'field1-yearx': '2099', anotherField: 123 }
       const res = removeIndividualDateComponents(payload)
       expect(res).toEqual({ anotherField: 123, 'field1-dayx': '01', 'field1-monthx': '01', 'field1-yearx': '2099' })
+    })
+  })
+
+  describe('formatToGdsShort', () => {
+    test('should handle null dates', () => {
+      expect(formatToGdsShort(null)).toBe(null)
+    })
+
+    test('should handle undefined dates', () => {
+      expect(formatToGdsShort(undefined)).toBe(undefined)
+    })
+
+    test('should handle a typical date', () => {
+      expect(formatToGdsShort(new Date(2001, 5, 8))).toBe('08 Jun 2001')
     })
   })
 })
