@@ -90,7 +90,11 @@
           {% if task.status == 'Not yet started' %}
           <strong class="govuk-tag govuk-tag--blue">{{ task.status }}</strong>
           {% elif task.status == 'Completed' %}
-          {{ task.status }} on {{ task.completedDate }}
+            {% if task.completedDate %}
+              {{ task.status }} on {{ task.completedDate }}
+            {% else %}
+              {{ task.status }}
+            {% endif %}
           {% else %}
           {{ task.status }}
           {% endif %}
