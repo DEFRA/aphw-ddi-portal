@@ -94,7 +94,7 @@ describe('Manage Cdo test', () => {
     expect(document.querySelectorAll('ul.govuk-task-list li div')[2].textContent.trim()).toBe('Record insurance details')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[3].textContent.trim()).toBe('Completed on 01 Feb 2024')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[4].textContent.trim()).toBe('Record microchip number')
-    expect(document.querySelectorAll('ul.govuk-task-list li div')[5].textContent.trim()).toBe('Completed on 03 Mar 2024')
+    expect(document.querySelectorAll('ul.govuk-task-list li div')[5].textContent.trim()).toBe('Completed')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[6].textContent.trim()).toBe('Record application fee payment')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[7].textContent.trim()).toBe('Completed on 02 Mar 2024')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[8].textContent.trim()).toBe('Send Form 2')
