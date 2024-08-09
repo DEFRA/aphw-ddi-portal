@@ -72,8 +72,7 @@ const someTasksCompletedButNotYetAvailable = {
       key: 'microchipNumberRecorded',
       available: false,
       completed: true,
-      readonly: false,
-      timestamp: new Date(2024, 2, 3)
+      readonly: false
     },
     applicationFeePaid: {
       key: 'applicationFeePaid',
