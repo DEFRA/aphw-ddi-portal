@@ -8,7 +8,8 @@ const schema = Joi.object({
   }),
   searchType: Joi.string().required().messages({
     '*': 'Select a search type'
-  })
+  }),
+  fuzzy: Joi.string()
 }).required()
 
 module.exports = schema

@@ -43,6 +43,17 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
         }
       ]
     },
+    fuzzy: {
+      id: 'fuzzy',
+      name: 'fuzzy',
+      items: [
+        {
+          value: 'Y',
+          text: 'Include close matches',
+          checked: searchCriteria?.fuzzy
+        }
+      ]
+    },
     results: {
       items: resultList?.map(resultObj => ({
         ...resultObj,
