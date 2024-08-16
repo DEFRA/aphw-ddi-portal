@@ -3,7 +3,7 @@ const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const constants = require('../../../constants/forms')
 const ViewModel = require('../../../models/cdo/create/microchip-search')
-const { getDog, setDog, setMicrochipResults, getDogs } = require('../../../session/cdo/dog')
+const { getDog, setDog, setMicrochipResults, getDogs, clearAllDogs } = require('../../../session/cdo/dog')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { validatePayload } = require('../../../schema/portal/cdo/microchip-search')
 const { doSearch } = require('../../../api/ddi-index-api/search')
@@ -42,6 +42,11 @@ module.exports = [{
       }
 
       dog.dogId = determineDogId(request, dog)
+
+      if (request.query.clear === 'true') {
+        clearAllDogs(request)
+        dog.microchipNumber = null
+      }
 
       return h.view(views.microchipSearch, new ViewModel(dog, getBackNav(request)))
     }
