@@ -1,6 +1,7 @@
 const { routes, views } = require('../../../constants/cdo/owner')
 const { routes: dogRoutes } = require('../../../constants/cdo/dog')
 const { getOwnerDetails, setOwnerDetails, setAddress } = require('../../../session/cdo/owner')
+const { clearAllDogs } = require('../../../session/cdo/dog')
 const ViewModel = require('../../../models/cdo/create/select-owner')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getPersons } = require('../../../api/ddi-index-api/persons')
@@ -57,6 +58,7 @@ module.exports = [{
 
       if (ownerChosen === -1) {
         setAddress(request, {})
+        clearAllDogs(request)
         setRouteFlag(request, constants.routeFlags.addOwner)
         return h.redirect(routes.postcodeLookupCreate.get)
       }
