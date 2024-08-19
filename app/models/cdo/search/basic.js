@@ -9,6 +9,11 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
       hint: {
         text: 'Enter one or more search terms separated by spaces'
       },
+      label: {
+        text: 'Search',
+        classes: 'govuk-label--m',
+        isPageHeading: true
+      },
       id: 'searchTerms',
       name: 'searchTerms',
       formGroup: {
