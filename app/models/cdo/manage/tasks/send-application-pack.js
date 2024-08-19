@@ -1,7 +1,9 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
 function ViewModel (data, backNav, errors) {
+  const backLink = backNav.backLink === '/' ? `/cdo/manage/cdo/${data.indexNumber}` : backNav.backLink
   this.model = {
-    backLink: backNav.backLink === '/' ? `/cdo/manage/cdo/${data.indexNumber}` : backNav.backLink,
+    backLink,
+    continueLink: backLink + '?action=continue',
     srcHashParam: backNav.srcHashParam,
     indexNumber: data.indexNumber,
     taskName: data.taskName,

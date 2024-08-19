@@ -1,5 +1,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 
 {% extends '_layout.njk' %}
 
@@ -51,57 +53,29 @@
         CDO expires on {{ model.details.cdoExpiry }}
       </span>
 
-      <details class="govuk-details govuk-!-margin-top-7">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            How to use the application task list
-          </span>
-        </summary>
-        <div class="govuk-details__text">
-          <p class="govuk-body">
-            You need to complete all tasks before you can issue a certificate of exemption to the dog owner.
-            </p>
+      {{ govukDetails({
+      summaryText: "How to use the application task list",
+      classes: "govuk-!-margin-top-7",
+      html: "
+        <p class=\"govuk-body\">
+          You need to complete all tasks before you can issue a certificate of exemption to the dog owner.
+        </p>
 
-          <p class="govuk-body">
-            Start by sending the application pack. You can record the insurance renewal date, microchip number and application fee payment in any order. After that, you can send a Form 2.
-            </p>
+        <p class=\"govuk-body\">
+          Start by sending the application pack. You can record the insurance renewal date, microchip number and application fee payment in any order. After that, you can send a Form 2.
+        </p>
 
-          <p class="govuk-body">
-            Remember to update the <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}&force=true" class="govuk-link govuk-link--no-visited-state">dog record</a> with other information you receive, like colour and sex of the dog.
-            </p>
-        </div>
-      </details>
+        <p class=\"govuk-body\">
+          Remember to update the <a href=\"/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}&force=true\" class=\"govuk-link govuk-link--no-visited-state\">dog record</a> with other information you receive, like colour and sex of the dog.
+        </p>
+        "
+      }) }}
 
       <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
         Manage CDO application
       </h2>
 
-      <ul class="govuk-task-list">
-        {% for task in model.details.taskList %}
-        <li class="govuk-task-list__item">
-        <div class="govuk-task-list__name-and-hint">
-          {% if task.status == 'Cannot start yet' %}
-          <div>{{ task.label }}</div>
-          {% else %}
-          <a class="govuk-link govuk-task-list__link govuk-link--no-visited-state" href="/cdo/manage/task/{{ task.key }}/{{ model.details.dogIndex }}{{ model.srcHashParam }}" aria-describedby="task-2-status">{{ task.label }}</a>
-          {% endif %}
-        </div>
-        <div class="govuk-task-list__status {% if task.status == 'Cannot start yet' %}defra-secondary-text{% endif %}">
-          {% if task.status == 'Not yet started' %}
-          <strong class="govuk-tag govuk-tag--blue">{{ task.status }}</strong>
-          {% elif task.status == 'Completed' %}
-            {% if task.completedDate %}
-              {{ task.status }} on {{ task.completedDate }}
-            {% else %}
-              {{ task.status }}
-            {% endif %}
-          {% else %}
-          {{ task.status }}
-          {% endif %}
-        </div>
-        </li>
-        {% endfor %}
-      </ul>
+      {{ govukTaskList(model.taskList) }}
 
       {% if model.details.tasks.certificateIssued.available %}
         {{ govukButton({

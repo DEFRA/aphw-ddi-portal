@@ -35,12 +35,11 @@
     {% endif %}
 
     <form method="POST" novalidate autocomplete="off">
-      <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
-      <fieldset class="govuk-fieldset" aria-describedby="application-pack-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
-          <h1 class="govuk-fieldset__heading">Record microchip number</h1>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-0">
+          <span class="govuk-caption-m" >Dog {{ model.indexNumber }}</span>
         </legend>
-    
         {{ govukInput(model.microchipNumber) }}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />

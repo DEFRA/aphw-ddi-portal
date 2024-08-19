@@ -36,7 +36,7 @@
 
     <form method="POST" novalidate autocomplete="off">
       <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
-      <fieldset class="govuk-fieldset" aria-describedby="application-pack-hint">
+      <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
           <h1 class="govuk-fieldset__heading">Send Form 2</h1>
         </legend>
@@ -57,7 +57,7 @@
       {% if model.disabled %}
       {{ govukButton({
         text: "Continue",
-        href: model.backLink
+        href: model.continueLink
       }) }}
       {% else %}
       {{ govukButton({

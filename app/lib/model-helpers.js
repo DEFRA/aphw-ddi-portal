@@ -96,15 +96,17 @@ const dedupeAddresses = items => {
   return [...uniqueAddressMap].map(([_, value]) => value)
 }
 
-const constructDateField = (data, id, labelText, hint = null, labelClass = null) => {
+const constructDateField = (data, id, labelText, hint = null, labelClass = null, options = {}) => {
   const fieldMetadata = {
     type: 'date',
     id: id,
     namePrefix: id,
     fieldset: {
+      ...options.fieldset,
       legend: {
         text: labelText,
-        classes: labelClass || labelClass === '' ? labelClass : 'govuk-fieldset__legend--s'
+        classes: labelClass || labelClass === '' ? labelClass : 'govuk-fieldset__legend--s',
+        ...options.fieldset?.legend
       }
     },
     items: [
