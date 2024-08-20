@@ -39,7 +39,12 @@
 
     <div class="govuk-grid-column-full">
       <form class="form" method="post" id="ownerListForm">
-
+        {% call govukFieldset({
+          legend: {
+            text: "Owner records to delete",
+            classes: "govuk-visually-hidden"
+          }
+        }) %}
         <input type="hidden" name="checkboxSortCol" id="checkboxSortCol" value="" />
 
         {{ govukButton({
@@ -76,7 +81,8 @@
                 <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                   <div class="defra-checkbox">
                     <input class="govuk-checkboxes__input" name="deleteOwner" id="owner-reference-{{ owner.personReference }}" value="{{ owner.personReference }}" type="checkbox" {% if owner.selected %} checked="true" {% endif %}>
-                    <label class="govuk-label govuk-checkboxes__label" for="deleteOwner">
+                    <label class="govuk-label govuk-checkboxes__label" for="owner-reference-{{ owner.personReference }}">
+                      <span class="govuk-visually-hidden">Select owner {{owner.personReference}} for deletion</span>
                     </label>
                   </div>
                 </div>
@@ -85,6 +91,8 @@
             {% endfor %}
           </tbody>
         </table>
+
+        {% endcall %}
       </form>
 
       <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>

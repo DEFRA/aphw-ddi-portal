@@ -23,6 +23,13 @@ function ViewModel (payload, pseudonyms, validationError) {
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '254' }
     },
+    addFieldset: {
+      legend: {
+        text: 'Add a team member pseudonym',
+        classes: pseudonyms.length === 0 ? 'govuk-fieldset__legend--l' : 'govuk-fieldset__legend--m',
+        isPageHeading: pseudonyms.length === 0
+      }
+    },
     pseudonym: {
       id: 'pseudonym',
       name: 'pseudonym',
