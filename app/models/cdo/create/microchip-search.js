@@ -6,6 +6,11 @@ function ViewModel (details, backNav, errors) {
     dogId: details.dogId,
     microchipNumber: {
       id: 'microchipNumber',
+      label: {
+        text: 'What is the microchip number?',
+        classes: 'govuk-label--l',
+        isPageHeading: true
+      },
       name: 'microchipNumber',
       classes: 'govuk-!-width-one-half',
       value: details.microchipNumber,

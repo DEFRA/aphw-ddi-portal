@@ -2,6 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% extends '_layout.njk' %}
 
@@ -32,13 +33,14 @@
         }) }}
       {% endif %}
 
-      <h1 class="govuk-heading-l">Select the dog for {{ model.firstName }} {{ model.lastName }}</h1>
       <form method="post" novalidate autocomplete="off">
+        {% call govukFieldset(model.selectDogFieldset) %}
         {{ govukRadios(model.dog)}}
 
         {{ govukButton({
           text: 'Continue'
         }) }}
+        {% endcall %}
       </form>
 
       </div>

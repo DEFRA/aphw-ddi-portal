@@ -6,7 +6,7 @@ describe('Microchip search tests', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/cdo/dog')
-  const { getDog, getDogs, getMicrochipResults } = require('../../../../../../app/session/cdo/dog')
+  const { getDog, getDogs, getMicrochipResults, clearAllDogs } = require('../../../../../../app/session/cdo/dog')
 
   jest.mock('../../../../../../app/api/ddi-index-api/search')
   const { doSearch } = require('../../../../../../app/api/ddi-index-api/search')
@@ -45,6 +45,26 @@ describe('Microchip search tests', () => {
     expect(response.statusCode).toBe(200)
     expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+  })
+
+  test('GET /cdo/create/microchip-search route returns 200 - clear dogs from session', async () => {
+    getDog.mockReturnValue({})
+    getMicrochipResults.mockReturnValue({})
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/create/microchip-search?clear=true',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('h1').textContent.trim()).toBe('What is the microchip number?')
+    expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/owner-details')
+    expect(clearAllDogs).toHaveBeenCalled()
   })
 
   test('GET /cdo/create/microchip-search route returns 200 - back link to select dog', async () => {

@@ -3,7 +3,7 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 function ViewModel (details, error) {
   this.model = {
-    backLink: `${routes.microchipSearch.get}/${details.id ?? details.dogId}`,
+    backLink: `${routes.microchipSearch.get}/${details.id ?? details.dogId}?clear=true`,
     dogId: details.id ?? details.dogId,
     microchipNumber: details.microchipNumber,
     results: details.results,

@@ -143,7 +143,7 @@ describe('Generic Task test', () => {
 
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record microchip number')
+    expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Record microchip number')
     expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
   })
 
