@@ -4,6 +4,7 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
 function ViewModel (dog, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
+    cancelLink: backNav.backLink + '&action=cancel',
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,
     status: dog.status,

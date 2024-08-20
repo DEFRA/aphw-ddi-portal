@@ -33,9 +33,15 @@
                     errorList: model.errors
                 }) }}
             {% endif %}
-            <h1 class="govuk-heading-l">{{model.title}}</h1>
             {% if model.pseudonyms | length > 0 %}
             <form class="form" method="post" id="pseudonym-remove" action="pseudonyms#pseudonym-body">
+                {% call govukFieldset({
+                    legend: {
+                        text: "Add or remove pseudonyms",
+                        classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6",
+                        isPageHeading: true
+                    }
+                }) %}
                 <p class="govuk-body">
                     <a class="govuk-link govuk-link--no-visited-state" href="#add-a-pseudonym">Add a team member pseudonym</a>
                 </p>
@@ -69,18 +75,15 @@
                         <!-- / Pseudonym List -->
                     </tbody>
                 </table>
+                {% endcall %}
+
             </form>
             {% endif %}
             <form class="form" id="add-a-pseudonym" method="post" action="pseudonyms#pseudonym-body">
-                <fieldset class="govuk-fieldset">
-                    {% if model.pseudonyms | length > 0 %}
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                        <h2 class="govuk-fieldset__heading">Add a team member pseudonym</h2>
-                    </legend>
-                    {% endif %}
+                {% call govukFieldset(model.addFieldset) %}
                     {{ govukInput(model.email) }}
                     {{ govukInput(model.pseudonym) }}
-                </fieldset>
+                {% endcall %}
                 <button type="submit" class="govuk-button" data-module="govuk-button">Add pseudonym</button>
             </form>
         </div>

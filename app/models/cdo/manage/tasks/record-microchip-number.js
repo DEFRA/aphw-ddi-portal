@@ -9,6 +9,11 @@ function ViewModel (data, backNav, errors) {
     microchipNumber: {
       id: 'microchipNumber',
       name: 'microchipNumber',
+      label: {
+        text: 'Record microchip number',
+        isPageHeading: true,
+        classes: 'govuk-label--l govuk-!-margin-bottom-5'
+      },
       classes: 'govuk-input--width-10',
       value: data.microchipNumber,
       attributes: { maxlength: '20' }

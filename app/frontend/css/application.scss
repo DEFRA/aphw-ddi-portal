@@ -111,6 +111,16 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
         margin-bottom: 0;
       }
     }
+
+    a.defra-logo {
+      display: block;
+      text-decoration: none;
+      color: $govuk-text-colour;
+
+      @media (min-width: 48.0625em) {
+        display: table-cell;
+      }
+    }
   }
 
   &-internal-service-name {
@@ -171,6 +181,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       text-decoration: none;
       font-size: 16px;
       font-weight: 400;
+      line-height: 1.35em;
 
       &:link,
       &:visited {
