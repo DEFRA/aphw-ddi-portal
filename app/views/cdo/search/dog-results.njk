@@ -8,7 +8,7 @@
             </a>
         </h2>
         <ul class="govuk-summary-card__actions govuk-!-padding-bottom-1 govuk-!-font-weight-regular">
-          <span class="govuk-label govuk-!-font-size-16">{{ result.rank }}</span> {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
+          <span class="govuk-label govuk-!-font-size-16">{{ result.rank.toFixed(2) }}</span> {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
         </ul>
       </div>
       <div class="govuk-summary-card__content govuk-!-padding-top-1 govuk-!-padding-bottom-0">
