@@ -63,7 +63,7 @@ describe('SelectExistingDog test', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(getOwnerDetails).toBeCalledTimes(1)
-      expect(document.querySelector('h1').textContent).toBe('Select the dog for John Smith')
+      expect(document.querySelector('h1').textContent.trim()).toBe('Select the dog for John Smith')
       expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('FidoBreed: Breed 1Index number: ED123Microchip number: 12345')
       expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
       expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('BusterBreed: Breed 2Index number: ED234Microchip number: 67890')
@@ -95,7 +95,7 @@ describe('SelectExistingDog test', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(getOwnerDetails).toBeCalledTimes(1)
-      expect(document.querySelector('h1').textContent).toBe('Select the dog for John Smith')
+      expect(document.querySelector('h1').textContent.trim()).toBe('Select the dog for John Smith')
       expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('FidoBreed: Breed 1Index number: ED123Microchip number: 12345')
       expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
       expect(document.querySelectorAll('form .govuk-radios__item label')[1].textContent.trim()).toContain('BusterBreed: Breed 2Index number: ED234Microchip number: 67890')
@@ -145,7 +145,7 @@ describe('SelectExistingDog test', () => {
       expect(document.querySelector('.govuk-error-summary__list')).not.toBeNull()
       expect(document.querySelectorAll('.govuk-error-summary__list a').length).toBe(1)
       expect(document.querySelectorAll('.govuk-error-summary__list a')[0].textContent.trim()).toBe('Select an option')
-      expect(document.querySelector('h1').textContent).toBe('Select the dog for John Smith')
+      expect(document.querySelector('h1').textContent.trim()).toBe('Select the dog for John Smith')
     })
 
     test('with valid data and dog selected, forwards to applicationType', async () => {
