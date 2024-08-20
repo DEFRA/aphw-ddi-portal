@@ -34,13 +34,6 @@
     {% endif %}
 
     <form method="POST" novalidate autocomplete="off">
-      {% call govukFieldset({
-        legend: {
-          text: "What is the microchip number?",
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: true
-        }
-      }) %}
 
         {{ govukInput(model.microchipNumber) }}
 
@@ -48,7 +41,6 @@
           <input type="hidden" name="dogId" value="{{ model.dogId }}">
         {% endif %}
 
-      {% endcall %}
 
       {{ govukButton({
         text: "Continue"

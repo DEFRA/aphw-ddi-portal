@@ -7,6 +7,13 @@ function ViewModel (ownerDetails, ownerResults, errors) {
     backLink: routes.ownerDetails.get,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
+    selectAddressFieldset: {
+      legend: {
+        text: `Select the address for ${ownerDetails.firstName} ${ownerDetails.lastName}`,
+        classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6',
+        isPageHeading: true
+      }
+    },
     owners: ownerResults.map(x => ({
       ...x,
       address: formatAddress(x.address, { hideCountry: true })

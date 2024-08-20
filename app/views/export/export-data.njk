@@ -21,30 +21,27 @@
 
 {% block content %}
     <form method="POST" novalidate autocomplete="off">
-      {% call govukFieldset({
-        legend: {
-          text: "Export data",
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: true
-        }
-      }) %}
-
-      {% endcall %}
       <div class="govuk-body">
+        {% call govukFieldset({
+          legend: {
+            text: "Export data",
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6",
+            isPageHeading: true
+          }
+        }) %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">
-              {{ pageHeading }}
-            </h1>
-
             <p>Export all data as a CSV file</p>
             
               {{ govukButton({
                 text: "Export",
                 name: "submitButton"
               }) }}
+
           </div>
+
         </div>
+        {% endcall %}
       </div>
   </form>
 {% endblock %}

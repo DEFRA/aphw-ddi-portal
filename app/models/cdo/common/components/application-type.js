@@ -8,6 +8,13 @@ const applicationTypeElements = (dogDetails) => {
       value: dogDetails[keys.applicationType],
       items: []
     },
+    applicationTypeFieldset: {
+      legend: {
+        text: 'Application type',
+        classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6',
+        isPageHeading: true
+      }
+    },
     cdoIssued: {
       type: 'date',
       id: 'cdoIssued',

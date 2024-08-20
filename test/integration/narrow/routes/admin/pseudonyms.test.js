@@ -47,7 +47,7 @@ describe('Pseudonyms', () => {
     const { document } = new JSDOM(response.payload).window
 
     const pageContent = document.querySelector('#main-content').textContent
-    expect(document.querySelector('h1').textContent).toBe('Add or remove pseudonyms')
+    expect(document.querySelector('h1').textContent.trim()).toBe('Add or remove pseudonyms')
     expect(pageContent).toContain('To change a pseudonym, remove the pseudonym first. Then add the new pseudonym and the team member’s email address.')
     expect(pageContent).toContain('Add a team member pseudonym')
     expect(pageContent).toContain('Pseudonyms delete instantly if you select ‘Remove’ in the list below.')
@@ -59,8 +59,8 @@ describe('Pseudonyms', () => {
     expect(document.querySelectorAll('table.govuk-table th')[1].textContent).toEqual('Pseudonym')
     expect(document.querySelectorAll('table.govuk-table td.govuk-table__cell')[0].textContent).toEqual('internal-user')
     expect(document.querySelectorAll('table.govuk-table td.govuk-table__cell')[1].textContent).toEqual('Hal')
-    expect(document.querySelector('h2.govuk-fieldset__heading').textContent).toBe('Add a team member pseudonym')
-    expect(document.querySelector('#add-a-pseudonym h2').textContent).toBe('Add a team member pseudonym')
+    expect(document.querySelector('fieldset .govuk-fieldset__legend--m').textContent.trim()).toBe('Add a team member pseudonym')
+    expect(document.querySelector('#add-a-pseudonym .govuk-fieldset__legend--m').textContent.trim()).toBe('Add a team member pseudonym')
     expect(document.querySelectorAll('#add-a-pseudonym #email')).not.toBeNull()
     expect(document.querySelectorAll('#add-a-pseudonym #pseudonym')).not.toBeNull()
     expect(document.querySelectorAll('#add-a-pseudonym #pseudonym')).not.toBeNull()
@@ -82,7 +82,7 @@ describe('Pseudonyms', () => {
     expect(getUsers).toHaveBeenCalledWith(user)
 
     const { document } = new JSDOM(response.payload).window
-    expect(document.querySelector('h1').textContent).toBe('Add a team member pseudonym')
+    expect(document.querySelector('h1').textContent.trim()).toBe('Add a team member pseudonym')
     expect(document.querySelector('table.govuk-table')).toBeNull()
     expect(document.querySelector('form#pseudonym-remove')).toBeNull()
   })

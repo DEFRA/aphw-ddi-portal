@@ -6,6 +6,13 @@ function ViewModel (ownerDetails, dogResults, backNav, errors) {
     backLink: backNav.backLink,
     firstName: ownerDetails.firstName,
     lastName: ownerDetails.lastName,
+    selectDogFieldset: {
+      legend: {
+        text: `Select the dog for ${ownerDetails.firstName} ${ownerDetails.lastName}`,
+        classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6',
+        isPageHeading: true
+      }
+    },
     dogs: dogResults,
     dog: {
       id: 'dog',

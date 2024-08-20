@@ -33,9 +33,11 @@
       <p class="govuk-body">{{ paragraph }}</p>
       {% endfor %}
 
+      {% if model.bottomLink.label %}
       <p class="govuk-body">
         <a href="{{ model.bottomLink.link }}" class="govuk-link govuk-link--no-visited-state">{{ model.bottomLink.label }}</a>
       </p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

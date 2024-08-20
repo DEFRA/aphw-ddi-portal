@@ -7,7 +7,7 @@ function ViewModel (data, backNav, errors) {
     srcHashParam: backNav.srcHashParam,
     indexNumber: data.indexNumber,
     taskName: data.taskName,
-    applicationFeePaid: constructDateField(data, 'applicationFeePaid', null, 'When was the application fee paid?'),
+    applicationFeePaid: constructDateField(data, 'applicationFeePaid', 'Record application fee payment', 'When was the application fee paid?', '', { fieldset: { legend: { isPageHeading: true, classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6' } } }),
     errors: []
   }
 

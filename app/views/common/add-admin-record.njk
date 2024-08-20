@@ -38,9 +38,7 @@
     {% endif %}
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
       <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
           {{ govukInput(model.govukInput) }}
-        </fieldset>
       </div>
 
       <div class="govuk-button-group">
