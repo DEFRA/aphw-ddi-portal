@@ -45,9 +45,7 @@ function ViewModel (details, cdo, backNav, continueLink) {
           return taskListAcc
         }
         const { key, label } = getTaskDetails(task)
-        if (!label) {
-          return taskListAcc
-        }
+
         const status = getTaskStatus(details.tasks[task])
         const completedDate = formatToGdsShort(getTaskCompletedDate(details.tasks[task]))
 
