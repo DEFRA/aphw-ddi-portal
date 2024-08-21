@@ -2,15 +2,16 @@ const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { routes } = require('../../../../../../app/constants/cdo/owner')
 const { JSDOM } = require('jsdom')
-const { getDogs } = require('../../../../../../app/session/cdo/dog')
 
 describe('EnforcementDetails test', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
-  const { getCourts } = require('../../../../../../app/api/ddi-index-api/courts')
+
   jest.mock('../../../../../../app/api/ddi-index-api/courts')
-  const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
+  const { getCourts } = require('../../../../../../app/api/ddi-index-api/courts')
+
   jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
+  const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
 
   jest.mock('../../../../../../app/session/cdo/dog')
   const { getDogs } = require('../../../../../../app/session/cdo/dog')
@@ -81,7 +82,8 @@ describe('EnforcementDetails test', () => {
   test('POST /cdo/create/enforcement-details with invalid data returns error', async () => {
     const payload = {
       court: '1',
-      legislationOfficer: 'John Smith'
+      legislationOfficer: 'John Smith',
+      courtRequired: 'false'
     }
 
     const options = {
@@ -95,12 +97,50 @@ describe('EnforcementDetails test', () => {
     expect(response.statusCode).toBe(400)
   })
 
+  test('POST /cdo/create/enforcement-details without court fails for cdo', async () => {
+    const payload = {
+      policeForce: '2',
+      courtRequired: 'true'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/enforcement-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(400)
+  })
+
+  test('POST /cdo/create/enforcement-details without court but with valid data for an interim exempt forwards to next screen', async () => {
+    const nextScreenUrl = routes.fullSummary.get
+
+    const payload = {
+      policeForce: '2',
+      courtRequired: 'false'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/enforcement-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
   test('POST /cdo/create/enforcement-details with valid data forwards to next screen', async () => {
     const nextScreenUrl = routes.fullSummary.get
 
     const payload = {
       court: '1',
-      policeForce: '2'
+      policeForce: '2',
+      courtRequired: 'false'
     }
 
     const options = {
