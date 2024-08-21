@@ -2,13 +2,13 @@ const { routes } = require('../../../constants/cdo/owner')
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
-function ViewModel (enforcementDetails, courts, policeForces, backNav, errors) {
+function ViewModel (enforcementDetails, courts, courtIsMandatory, policeForces, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
     addressRoute: routes.address.get,
     court: {
       label: {
-        text: 'Court (optional)'
+        text: courtIsMandatory ? 'Court' : 'Court (optional)'
       },
       hint: {
         text: 'Only required for new CDOs'

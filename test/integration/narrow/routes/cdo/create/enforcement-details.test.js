@@ -2,6 +2,7 @@ const { auth, user } = require('../../../../../mocks/auth')
 const FormData = require('form-data')
 const { routes } = require('../../../../../../app/constants/cdo/owner')
 const { JSDOM } = require('jsdom')
+const { getDogs } = require('../../../../../../app/session/cdo/dog')
 
 describe('EnforcementDetails test', () => {
   jest.mock('../../../../../../app/auth')
@@ -11,6 +12,9 @@ describe('EnforcementDetails test', () => {
   const { getPoliceForces } = require('../../../../../../app/api/ddi-index-api/police-forces')
   jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
 
+  jest.mock('../../../../../../app/session/cdo/dog')
+  const { getDogs } = require('../../../../../../app/session/cdo/dog')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -18,11 +22,15 @@ describe('EnforcementDetails test', () => {
     mockAuth.getUser.mockReturnValue(user)
     getCourts.mockResolvedValue([{ id: 1, name: 'Test court' }])
     getPoliceForces.mockResolvedValue([{ id: 1, name: 'Test force' }])
+    getDogs.mockReturnValue([{
+      applicationType: 'cdo'
+    }])
+
     server = await createServer()
     await server.initialize()
   })
 
-  test('GET /cdo/create/enforcement-details route returns 200 - back link standard', async () => {
+  test('GET /cdo/create/enforcement-details route returns 200 - back link standard & CDO', async () => {
     const options = {
       method: 'GET',
       url: '/cdo/create/enforcement-details',
@@ -34,9 +42,13 @@ describe('EnforcementDetails test', () => {
 
     const { document } = new JSDOM(response.result).window
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/confirm-dog-details')
+    expect(document.querySelector('label[for="court"]').textContent.trim()).toBe('Court')
   })
 
-  test('GET /cdo/create/enforcement-details route returns 200 - back link to summary', async () => {
+  test('GET /cdo/create/enforcement-details route returns 200 - back link to summary & Interim Exemption', async () => {
+    getDogs.mockReturnValue([{
+      applicationType: 'interim-exempt'
+    }])
     const options = {
       method: 'GET',
       url: '/cdo/create/enforcement-details?fromSummary=true',
@@ -48,6 +60,7 @@ describe('EnforcementDetails test', () => {
 
     const { document } = new JSDOM(response.result).window
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
+    expect(document.querySelector('label[for="court"]').textContent.trim()).toBe('Court (optional)')
   })
 
   test('POST /cdo/create/enforcement-details route returns 302 if not auth', async () => {
