@@ -48,8 +48,7 @@ module.exports = [{
         const courts = await getCourts()
         const policeForces = await getPoliceForces()
         const dogs = getDogs(request)
-        console.log('~~~~~~ Chris Debug ~~~~~~ ', 'PoliceForces', policeForces)
-        console.log('~~~~~~ Chris Debug ~~~~~~ ', 'PoliceForces', policeForces.map(policeForce => policeForce))
+
         return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, courtIsMandatory(dogs), policeForces, getBackNav(request), error)).code(400).takeover()
       }
     },
