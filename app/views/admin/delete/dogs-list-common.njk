@@ -21,13 +21,13 @@
             <tr class="govuk-table__row">
               {% for colHeading in model.tableHeadings %}
                 {% if loop.last %}
-                <th scope="col" class="govuk-table__header govuk-table__header--numeric" id="checkboxColHeader" aria-sort-data="{{colHeading.ariaSort}}">
+                <th scope="col" class="govuk-table__header govuk-table__header--numeric" id="checkboxColHeader" data-aria-sort-data="{{colHeading.ariaSort}}">
                   <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#" onClick="document.getElementById('checkboxSortCol').value = '{{ colHeading.name }}'; document.getElementById('dogListForm').submit(); return false;">
                     {{colHeading.label}}
                   </a>
                 </th>
                 {% else %}
-                <th scope="col" class="govuk-table__header" aria-sort="{{colHeading.ariaSort}}">
+                <th scope="col" class="govuk-table__header" data-aria-sort="{{colHeading.ariaSort}}">
                   <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}" onClick="document.getElementById('checkboxSortCol').value = '{{ colHeading.name }}'; document.getElementById('dogListForm').submit(); return false;">
                     {{colHeading.label}}
                   </a>
@@ -66,6 +66,6 @@
 <script>
 window.onload = function(){
   const elem = document.getElementById('checkboxColHeader')
-  elem.setAttribute('aria-sort', elem.getAttribute('aria-sort-data'))
+  elem.setAttribute('data-aria-sort', elem.getAttribute('data-aria-sort-data'))
 }
 </script>
