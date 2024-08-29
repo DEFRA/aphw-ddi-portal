@@ -25,6 +25,10 @@ const fieldNames = {
   buttonText: `Add ${addRemoveConstants.inputField}`
 }
 
+const hintText = {
+  sent: 'For example, change of address form, death of a dog form.',
+  received: 'For example, application pack, police correspondance.'
+}
 const getConfirmHint = request => {
   return `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`
 }
@@ -34,12 +38,16 @@ const stepOneCheckSubmitted = {
     const activityForm = validatePayloadBuilder(isInputFieldInPayload(addRemoveConstants.inputField, addRemoveConstants.messageLabelCapital))(request.payload)
     return activityForm.activity
   },
-  failAction: (_request, h, error) => {
+  failAction: (request, h, error) => {
     const backLink = addRemoveConstants.links.index.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
+      optionText: 'What activity do you want to add?',
+      hint: {
+        text: hintText[request.params.activityType]
+      },
       backLink,
-      confirmHint: getConfirmHint(_request),
+      confirmHint: getConfirmHint(request),
       ...fieldNames
     }, undefined, error)).code(400).takeover()
   },
@@ -98,6 +106,10 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         return h.view(views.addAdminRecord, new FormViewModel({
+          optionText: 'What activity do you want to add?',
+          hint: {
+            text: hintText[request.params.activityType]
+          },
           confirmHint: getConfirmHint(request),
           backLink,
           ...fieldNames
