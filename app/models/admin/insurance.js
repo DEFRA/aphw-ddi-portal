@@ -18,6 +18,9 @@ function ViewModel (payload, insuranceCompanies, validationError) {
       label: {
         text: 'Name'
       },
+      hint: {
+        html: 'Enter an insurer name using capital letters, for<br>example AXA Insurance, Dogs Trust.'
+      },
       value: payload?.name,
       classes: 'govuk-input govuk-!-width-one-third',
       autocomplete: forms.preventAutocomplete,
