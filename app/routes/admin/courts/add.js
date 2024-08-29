@@ -31,6 +31,9 @@ const stepOneCheckSubmitted = {
     const backLink = addRemoveConstants.links.index.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
+      hint: {
+        text: 'Enter a court in capital letters with spaces, for example: Cardiff Magistrates Court, Gloucester Magistrates Court.'
+      },
       backLink,
       ...fieldNames
     }, undefined, error)).code(400).takeover()
@@ -89,6 +92,9 @@ module.exports = [
         const backLink = addRemoveConstants.links.index.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
+          hint: {
+            text: 'Enter a court in capital letters with spaces, for example: Cardiff Magistrates Court, Gloucester Magistrates Court.'
+          },
           backLink,
           ...fieldNames
         }))
