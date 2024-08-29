@@ -31,6 +31,9 @@ const stepOneCheckSubmitted = {
     const backLink = addRemoveConstants.links.index.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
+      hint: {
+        text: 'Enter a police force with capital letters, for example Northumbria Police.'
+      },
       backLink,
       ...fieldNames
     }, undefined, error)).code(400).takeover()
@@ -90,6 +93,9 @@ module.exports = [
         const backLink = addRemoveConstants.links.index.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
+          hint: {
+            text: 'Enter a police force with capital letters, for example Northumbria Police.'
+          },
           backLink,
           ...fieldNames
         }))
