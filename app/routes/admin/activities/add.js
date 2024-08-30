@@ -27,7 +27,7 @@ const fieldNames = {
 
 const hintText = {
   sent: 'For example, change of address form, death of a dog form.',
-  received: 'For example, application pack, police correspondance.'
+  received: 'For example, application pack, police correspondence.'
 }
 const getConfirmHint = request => {
   return `${request.params.activitySource === sources.dog ? 'Dog' : 'Owner'} record: something we ${request.params.activityType === keys.sent ? 'send' : 'receive'}`

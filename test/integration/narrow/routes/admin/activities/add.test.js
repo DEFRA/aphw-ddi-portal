@@ -57,7 +57,7 @@ describe('Add activities page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('main span').textContent.trim()).toBe('Owner record: something we receive')
-      expect(document.querySelector('main .govuk-hint').textContent.trim()).toContain('For example, application pack, police correspondance.')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toContain('For example, application pack, police correspondence.')
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What activity do you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
     })
