@@ -39,6 +39,7 @@ describe('Police force page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the police force you want to add?')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toBe('Enter a police force with capital letters, for example Northumbria Police.')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police force')
     })
 
@@ -82,6 +83,7 @@ describe('Police force page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the police force you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police force')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toBe('Enter a police force with capital letters, for example Northumbria Police.')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police force')
     })
 
