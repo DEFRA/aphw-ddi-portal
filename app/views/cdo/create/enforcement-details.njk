@@ -47,9 +47,9 @@
       }) %}
 
         {{ govukSelect(model.policeForce) }}
-      
         {{ govukInput(model.legislationOfficer) }}
 
+        <input type="hidden" name="courtRequired" value="{{model.courtRequired}}">
         {{ accessibleAutocomplete(model.court) }}
 
       {% endcall %}

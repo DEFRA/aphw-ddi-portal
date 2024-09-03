@@ -15,6 +15,10 @@ const { throwIfPreConditionError } = require('../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeConstants
 
+const hint = {
+  text: 'Enter a police force with capital letters, for example Northumbria Police.'
+}
+
 const fieldNames = {
   recordTypeText: addRemoveConstants.messageLabel,
   recordType: addRemoveConstants.inputField,
@@ -31,6 +35,7 @@ const stepOneCheckSubmitted = {
     const backLink = addRemoveConstants.links.index.get
 
     return h.view(views.addAdminRecord, new FormViewModel({
+      hint,
       backLink,
       ...fieldNames
     }, undefined, error)).code(400).takeover()
@@ -90,6 +95,7 @@ module.exports = [
         const backLink = addRemoveConstants.links.index.get
 
         return h.view(views.addAdminRecord, new FormViewModel({
+          hint,
           backLink,
           ...fieldNames
         }))

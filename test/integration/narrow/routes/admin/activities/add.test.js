@@ -39,7 +39,8 @@ describe('Add activities page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('main span').textContent.trim()).toBe('Dog record: something we send')
-      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What activity do you want to add?')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toBe('For example, change of address form, death of a dog form.')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
     })
 
@@ -56,7 +57,8 @@ describe('Add activities page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('main span').textContent.trim()).toBe('Owner record: something we receive')
-      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toContain('For example, application pack, police correspondence.')
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What activity do you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
     })
 
@@ -86,8 +88,9 @@ describe('Add activities page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(400)
-      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the activity you want to add?')
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What activity do you want to add?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add activity')
+      expect(document.querySelector('main .govuk-hint').textContent.trim()).toBe('For example, change of address form, death of a dog form.')
       expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter an activity name')
     })
 

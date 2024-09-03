@@ -6,6 +6,7 @@ const { forms } = require('../../constants/forms')
  * @property {string} recordType
  * @property {string} recordTypeText
  * @property {string} buttonText
+ * @property {{ text: string }} [hint]
  * @property {string} [optionText]
  * @property {string} [recordValue]
  * @property {string} [backLink]
@@ -26,6 +27,7 @@ function ViewModel (details, backNav, errors) {
       isPageHeading: true
     },
     id: details.recordType,
+    hint: details.hint ?? {},
     name: details.recordType,
     value: details.recordValue ?? null,
     autocomplete: forms.preventAutocomplete

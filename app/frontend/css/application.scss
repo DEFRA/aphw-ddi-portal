@@ -272,9 +272,9 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 
   &-sortable-table {
 
-    th[aria-sort="none"] a,
-    th[aria-sort="ascending"] a,
-    th[aria-sort="descending"] a {
+    th[data-aria-sort="none"] a,
+    th[data-aria-sort="ascending"] a,
+    th[data-aria-sort="descending"] a {
       position: relative;
       display: inline-block;
 
@@ -283,7 +283,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       }
     }
 
-    th[aria-sort="none"] a {
+    th[data-aria-sort="none"] a {
 
       &::before {
         content: " ▼";
@@ -302,7 +302,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       }
     }
 
-    th[aria-sort="ascending"] a {
+    th[data-aria-sort="ascending"] a {
 
       &::after {
         content: " ▲";
@@ -314,7 +314,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 
     }
 
-    th[aria-sort="descending"] a {
+    th[data-aria-sort="descending"] a {
 
       &::after {
         content: " ▼";
@@ -361,7 +361,9 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
   }
 }
 
-
+.defra-max-width-full {
+  max-width: 100% !important;
+}
 
   
 

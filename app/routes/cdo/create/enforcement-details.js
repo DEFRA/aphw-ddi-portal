@@ -5,11 +5,20 @@ const ViewModel = require('../../../models/cdo/create/enforcement-details')
 const enforcementDetailsSchema = require('../../../schema/portal/owner/enforcement-details')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getCourts, getPoliceForces } = require('../../../api/ddi-index-api')
+const { getDogs } = require('../../../session/cdo/dog')
 
 const backNavStandard = { backLink: dogRoutes.confirm.get }
 const backNavSummary = { backLink: routes.fullSummary.get }
 const getBackNav = request => {
   return request?.query?.fromSummary === 'true' ? backNavSummary : backNavStandard
+}
+
+/**
+ * @param {DogSession[]} dogs
+ * @return {boolean}
+ */
+const courtIsMandatory = (dogs) => {
+  return dogs.some(dog => dog.applicationType === 'cdo')
 }
 
 module.exports = [{
@@ -21,7 +30,9 @@ module.exports = [{
       const enforcementDetails = getEnforcementDetails(request)
       const courts = await getCourts()
       const policeForces = await getPoliceForces()
-      return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, policeForces, getBackNav(request)))
+      const dogs = getDogs(request)
+
+      return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, courtIsMandatory(dogs), policeForces, getBackNav(request)))
     }
   }
 },
@@ -36,7 +47,9 @@ module.exports = [{
         const enforcementDetails = { ...getEnforcementDetails(request), ...request.payload }
         const courts = await getCourts()
         const policeForces = await getPoliceForces()
-        return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, policeForces, getBackNav(request), error)).code(400).takeover()
+        const dogs = getDogs(request)
+
+        return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, courtIsMandatory(dogs), policeForces, getBackNav(request), error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {

@@ -7,8 +7,10 @@
                     {{ result.dogIndex }}
             </a>
         </h2>
-        <ul class="govuk-summary-card__actions govuk-!-padding-bottom-1 govuk-!-font-weight-regular">
-          <span class="govuk-label govuk-!-font-size-16">{% if result.rank %} {{ result.rank.toFixed(2) }} {% endif %}</span> {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
+        <ul class="govuk-summary-card__actions govuk-!-font-weight-regular">
+            <li class="govuk-summary-card__action">
+              <span class="govuk-label govuk-!-font-size-16">{% if result.rank %} {{ result.rank.toFixed(2) }} {% endif %}</span> {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
+            </li>
         </ul>
       </div>
       <div class="govuk-summary-card__content govuk-!-padding-top-1 govuk-!-padding-bottom-0">

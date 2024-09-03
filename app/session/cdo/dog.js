@@ -12,10 +12,29 @@ const get = (request) => {
   return request.yar?.get(keys.entry) || [{}]
 }
 
+/**
+ * @typedef DogSession
+ * @property {string} breed - e.g. 'XL Bully',
+ * @property {string} name - e.g. '',
+ * @property {string} applicationType - e.g. 'cdo',
+ * @property {string} country - e.g. 'England',
+ * @property {string|null} cdoIssued - e.g. '2024-01-01T00:00:00.000Z',
+ * @property {string|null} cdoExpiry - e.g. '2024-03-01T00:00:00.000Z',
+ * @property {string|null} interimExemption - e.g. null
+ */
+
+/**
+ * @param request
+ * @return {DogSession[]}
+ */
 const getDogs = (request) => {
   return get(request)
 }
 
+/**
+ * @param request
+ * @return {DogSession}
+ */
 const getDog = (request) => {
   const entryValue = get(request)
 

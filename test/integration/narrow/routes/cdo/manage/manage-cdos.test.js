@@ -73,16 +73,16 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Interim exemptions')
     expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage/interim')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('CDO expiry')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage?sortOrder=DESC')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
-    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[1].getAttribute('href')).toBe('/cdo/manage?sortKey=indexNumber')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
-    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner')
     expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
-    expect(document.querySelectorAll('.govuk-table thead th')[3].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[3].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[3].getAttribute('href')).toBe('/cdo/manage?sortKey=policeForce')
 
     const cols = document.querySelectorAll('.govuk-table .govuk-table__row td')
@@ -109,7 +109,7 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('descending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('descending')
   })
 
   test('GET /cdo/manage?sortKey=owner route returns 200', async () => {
@@ -130,9 +130,9 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner&sortOrder=DESC')
-    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('ascending')
   })
 
   test('GET /cdo/manage?sortKey=owner&sortOrder=ASC route returns 200', async () => {
@@ -152,7 +152,7 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner&sortOrder=DESC')
-    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('ascending')
   })
 
   test('GET /cdo/manage?sortKey=owner&sortOrder=DESC route returns 200', async () => {
@@ -172,7 +172,7 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner')
-    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('aria-sort')).toBe('descending')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('descending')
   })
 
   test('GET /cdo/manage/due route returns 200', async () => {
@@ -221,10 +221,10 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelector('.govuk-breadcrumbs__link').textContent.trim()).toBe('Home')
     expect(document.querySelector('.govuk-breadcrumbs__link').getAttribute('href')).toBe('/')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('CDO expiry')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/due?sortOrder=DESC')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
-    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
     expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
 
@@ -288,16 +288,16 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/cdo/manage')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('Interim exempt for')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('descending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('descending')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim?sortOrder=ASC')
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
     expect(document.querySelectorAll('.govuk-table thead th a')[1].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=indexNumber')
-    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
-    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=owner')
     expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
-    expect(document.querySelectorAll('.govuk-table thead th')[3].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[3].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[3].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=policeForce')
 
     const cols = document.querySelectorAll('.govuk-table .govuk-table__row td')
@@ -325,7 +325,7 @@ describe('Manage Live Cdos test', () => {
       order: 'ASC'
     })
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim')
   })
 
@@ -346,9 +346,9 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[1].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=indexNumber&sortOrder=DESC')
-    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('ascending')
   })
 
   test('GET /cdo/manage/interim?sortKey=indexNumber&sortOrder=DESC route returns 200', async () => {
@@ -368,9 +368,9 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('none')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[1].getAttribute('href')).toBe('/cdo/manage/interim?sortKey=indexNumber')
-    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('aria-sort')).toBe('descending')
+    expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('descending')
   })
 
   test('GET /cdo/manage/expired route returns 200', async () => {
@@ -416,7 +416,7 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Expired')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/expired?sortOrder=DESC')
-    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('aria-sort')).toBe('ascending')
+    expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelectorAll('.govuk-table__row').length).toBe(3)

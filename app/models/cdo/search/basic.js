@@ -36,14 +36,14 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
           value: 'dog',
           text: 'Dog record',
           label: {
-            classes: 'govuk-!-font-size-16'
+            classes: 'govuk-!-font-size-16 defra-max-width-full'
           }
         },
         {
           value: 'owner',
           text: 'Owner record',
           label: {
-            classes: 'govuk-!-font-size-16'
+            classes: 'govuk-!-font-size-16 defra-max-width-full'
           }
         }
       ]
