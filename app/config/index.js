@@ -68,7 +68,7 @@ const config = {
     }
   },
   ddiIndexApi: {
-    baseUrl: process.env.DDI_API_BASE_URL
+    baseUrl: getEnvironmentVariable('DDI_API_BASE_URL')
   },
   ddiEventsApi: {
     baseUrl: process.env.DDI_EVENTS_BASE_URL
