@@ -9,7 +9,7 @@
         </h2>
         <ul class="govuk-summary-card__actions govuk-!-font-weight-regular">
             <li class="govuk-summary-card__action">
-              <span class="govuk-label govuk-!-font-size-16">{% if result.rank %} {{ result.rank.toFixed(2) }} {% endif %}</span> {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
+              {{ statusTag(result.dogStatus, 'govuk-!-font-size-16') }}
             </li>
         </ul>
       </div>
