@@ -37,6 +37,7 @@ container:
   azureStorageAccountName: dummy
   messageQueueHost: namespace.servicebus.windows.net
   certificateRequestQueue: aphw-ddi-certificate-request
+  jwtPrivateKey: not-a-real-private-key
 
 livenessProbe:
   path: /healthz
