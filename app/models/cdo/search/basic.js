@@ -48,17 +48,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
         }
       ]
     },
-    fuzzy: {
-      id: 'fuzzy',
-      name: 'fuzzy',
-      items: [
-        {
-          value: 'Y',
-          text: 'Include close matches',
-          checked: searchCriteria?.fuzzy
-        }
-      ]
-    },
+    fuzzy: searchCriteria.fuzzy,
     results: {
       items: resultList?.map(resultObj => ({
         ...resultObj,
@@ -70,6 +60,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
         microchipNumberNotEntered: !resultObj.microchipNumber?.length
       })) || []
     },
+    fuzzySearchUrl: searchCriteria.fuzzySearchUrl,
     errors: []
   }
 

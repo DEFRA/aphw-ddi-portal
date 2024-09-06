@@ -33,8 +33,6 @@
           {{ govukInput(model.searchTerms) }}
 
           {{ govukRadios(model.searchType) }}
-
-          {{ govukCheckboxes(model.fuzzy) }}
       </fieldset>
 
       {{ govukButton({
@@ -69,7 +67,13 @@
           {% include "./cdo/search/owner-results.njk" %}
         {% endif %}
       {% endfor %}
-    {% else %}
+      {% if model.fuzzy != "Y" %}
+        <p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a></p>
+      {% endif %}
+    {% elif model.searchTerms.value %}
       <p>No results found</p>
+      {% if model.fuzzy != "Y" %}
+        <p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a> instead</p>
+      {% endif %}
     {% endif %}
 {% endblock %}
