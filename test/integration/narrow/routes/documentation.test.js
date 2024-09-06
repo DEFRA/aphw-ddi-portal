@@ -1,7 +1,6 @@
 const { adminAuth, standardAuth } = require('../../../mocks/auth')
 
 describe('documentation test', () => {
-  let server
   jest.mock('../../../../app/lib/environment-helpers')
   const { getEnvironmentVariable } = require('../../../../app/lib/environment-helpers')
   getEnvironmentVariable.mockImplementation(envVariable => {
@@ -13,6 +12,8 @@ describe('documentation test', () => {
     }
     return process.env[envVariable]
   })
+  let server
+
   const createServer = require('../../../../app/server')
 
   beforeEach(async () => {

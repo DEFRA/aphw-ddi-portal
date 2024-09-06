@@ -38,9 +38,9 @@ describe('DDI API search', () => {
         searchType: 'dog',
         searchTerms: '123456789',
         fuzzy: true
-      })
+      }, user)
 
-      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', { json: true })
+      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', user)
       expect(searchResults).toEqual(expectedResults)
     })
   })
