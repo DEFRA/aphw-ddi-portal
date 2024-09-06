@@ -48,6 +48,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
         }
       ]
     },
+    fuzzy: searchCriteria.fuzzy,
     results: {
       items: resultList?.map(resultObj => ({
         ...resultObj,
@@ -59,6 +60,7 @@ function ViewModel (searchCriteria, resultList, backNav, errors) {
         microchipNumberNotEntered: !resultObj.microchipNumber?.length
       })) || []
     },
+    fuzzySearchUrl: searchCriteria.fuzzySearchUrl,
     errors: []
   }
 

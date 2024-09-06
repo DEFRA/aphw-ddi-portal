@@ -26,5 +26,22 @@ describe('DDI API search', () => {
       expect(get).toHaveBeenCalledWith('search/dog/123456789', user)
       expect(searchResults).toEqual(expectedResults)
     })
+
+    test('should get fuzzy search', async () => {
+      const expectedResults = ([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+
+      get.mockResolvedValue({
+        results: expectedResults
+      })
+
+      const searchResults = await doSearch({
+        searchType: 'dog',
+        searchTerms: '123456789',
+        fuzzy: true
+      })
+
+      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', { json: true })
+      expect(searchResults).toEqual(expectedResults)
+    })
   })
 })

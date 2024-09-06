@@ -3,6 +3,7 @@ const ViewModel = require('../../../models/cdo/search/basic')
 const searchSchema = require('../../../schema/portal/search/basic')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { anyLoggedInUser } = require('../../../auth/permissions')
+const { constructFuzzySearchUrl } = require('../../../lib/search-helpers')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { getUser } = require('../../../auth')
 
@@ -23,6 +24,8 @@ module.exports = [{
       if (searchCriteria.searchTerms === undefined) {
         return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav))
       }
+
+      searchCriteria.fuzzySearchUrl = constructFuzzySearchUrl(request.url.href)
 
       const errors = searchSchema.validate(searchCriteria, { abortEarly: false })
       if (errors.error) {
