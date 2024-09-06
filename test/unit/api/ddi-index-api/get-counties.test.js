@@ -2,6 +2,7 @@ jest.mock('../../../../app/api/ddi-index-api/base')
 const { get } = require('../../../../app/api/ddi-index-api/base')
 
 const { getCounties } = require('../../../../app/api/ddi-index-api/counties')
+const { user } = require('../../../mocks/auth')
 
 describe('DDI API counties', () => {
   beforeEach(() => {
@@ -16,9 +17,10 @@ describe('DDI API counties', () => {
       ]
     })
 
-    const counties = await getCounties()
+    const counties = await getCounties(user)
     expect(counties).toBeInstanceOf(Array)
     expect(counties).toHaveLength(2)
     expect(counties).toEqual(['County 1', 'County 2'])
+    expect(get).toHaveBeenCalledWith('counties', user)
   })
 })

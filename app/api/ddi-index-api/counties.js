@@ -2,12 +2,8 @@ const { get } = require('./base')
 
 const countiesEndpoint = 'counties'
 
-const options = {
-  json: true
-}
-
-const getCounties = async () => {
-  const payload = await get(countiesEndpoint, options)
+const getCounties = async (user) => {
+  const payload = await get(countiesEndpoint, user)
 
   return payload.counties
 }

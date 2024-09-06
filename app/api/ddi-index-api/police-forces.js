@@ -3,17 +3,17 @@ const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const policeForcesEndpoint = 'police-forces'
 
-const options = {
-  json: true
-}
-
 /**
  * @typedef PoliceForceRequest
  * @property {string} name
  */
 
-const getPoliceForces = async () => {
-  const payload = await get(policeForcesEndpoint, options)
+/**
+ * @param user
+ * @return {Promise<[{name: string, id: number}]>}
+ */
+const getPoliceForces = async (user) => {
+  const payload = await get(policeForcesEndpoint, user)
 
   return payload.policeForces
 }

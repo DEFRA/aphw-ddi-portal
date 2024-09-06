@@ -28,10 +28,11 @@ const stepOneCheckSubmitted = {
     const { pk } = validatePayloadBuilder(isInputFieldPkInPayload(addRemoveConstants.messageLabelCapital))(request.payload)
     return pk
   },
-  failAction: async (_request, h, error) => {
+  failAction: async (request, h, error) => {
     const backLink = addRemoveConstants.links.index.get
+    const user = getUser(request)
 
-    const items = (await getPoliceForces()).map(policeForce => ({
+    const items = (await getPoliceForces(user)).map(policeForce => ({
       text: policeForce.name,
       value: policeForce.id
     }))
@@ -50,11 +51,12 @@ const stepTwoCheckConfirmation = {
     return validatePayloadBuilder(hasConfirmationFormBeenSubmitted)(request.payload)
   },
   failAction: async (request, h) => {
+    const user = getUser(request)
     throwIfPreConditionError(request)
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
-    const policeForces = await getPoliceForces()
+    const policeForces = await getPoliceForces(user)
     const recordValue = policeForces.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -79,7 +81,8 @@ const stepThreeCheckConfirmation = {
     const backLink = routes.removePoliceForce.get
 
     const pk = request.pre.inputField
-    const policeForces = await getPoliceForces()
+    const user = getUser(request)
+    const policeForces = await getPoliceForces(user)
     const recordValue = policeForces.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -99,10 +102,11 @@ module.exports = [
     path: `${routes.removePoliceForce.get}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (_request, h) => {
+      handler: async (request, h) => {
         const backLink = addRemoveConstants.links.index.get
+        const user = getUser(request)
 
-        const items = (await getPoliceForces()).map(policeForce => ({
+        const items = (await getPoliceForces(user)).map(policeForce => ({
           text: policeForce.name,
           value: policeForce.id
         }))
@@ -137,9 +141,10 @@ module.exports = [
 
         const policeForce = request.pre.addConfirmation.police
         const pk = request.pre.inputField
+        const user = getUser(request)
 
         try {
-          await removePoliceForce(pk, getUser(request))
+          await removePoliceForce(pk, user)
 
           return h.view(views.success, PoliceForceRemovedViewModel(policeForce))
         } catch (e) {
@@ -147,7 +152,7 @@ module.exports = [
             const { error } = notFoundSchema('pk', policeForce).validate(request.payload)
             const backLink = routes.police.get
 
-            const items = (await getPoliceForces()).map(court => ({
+            const items = (await getPoliceForces(user)).map(court => ({
               text: court.name,
               value: court.id
             }))

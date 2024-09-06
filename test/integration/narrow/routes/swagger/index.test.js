@@ -1,6 +1,18 @@
 const { adminAuth, standardAuth } = require('../../../../mocks/auth')
 
 describe('documentation test', () => {
+  jest.mock('../../../../../app/lib/environment-helpers')
+  const { getEnvironmentVariable } = require('../../../../../app/lib/environment-helpers')
+  getEnvironmentVariable.mockImplementation(envVariable => {
+    if (envVariable === 'ENVIRONMENT_CODE') {
+      return 'dev'
+    }
+    if (envVariable === 'DDI_API_BASE_URL') {
+      return 'test'
+    }
+    return process.env[envVariable]
+  })
+
   const createServer = require('../../../../../app/server')
   let server
 
@@ -9,8 +21,9 @@ describe('documentation test', () => {
     await server.initialize()
   })
 
-  jest.mock('../../../../../app/lib/environment-helpers')
-  const { getEnvironmentVariable } = require('../../../../../app/lib/environment-helpers')
+  afterEach(() => {
+    jest.resetModules()
+  })
 
   jest.mock('../../../../../app/api/ddi-index-api/documentation')
   const { getDocumentation } = require('../../../../../app/api/ddi-index-api/documentation')
@@ -22,8 +35,12 @@ describe('documentation test', () => {
       if (envVariable === 'ENVIRONMENT_CODE') {
         return 'dev'
       }
+      if (envVariable === 'DDI_API_BASE_URL') {
+        return 'test'
+      }
       return process.env[envVariable]
     })
+
     const options = {
       method: 'GET',
       auth: adminAuth,
@@ -38,6 +55,9 @@ describe('documentation test', () => {
     getEnvironmentVariable.mockImplementation(envVariable => {
       if (envVariable === 'ENVIRONMENT_CODE') {
         return 'prod'
+      }
+      if (envVariable === 'DDI_API_BASE_URL') {
+        return 'test'
       }
       return process.env[envVariable]
     })
@@ -56,6 +76,9 @@ describe('documentation test', () => {
     getEnvironmentVariable.mockImplementation(envVariable => {
       if (envVariable === 'ENVIRONMENT_CODE') {
         return 'dev'
+      }
+      if (envVariable === 'DDI_API_BASE_URL') {
+        return 'test'
       }
       return process.env[envVariable]
     })

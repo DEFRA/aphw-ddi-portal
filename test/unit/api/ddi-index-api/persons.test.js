@@ -15,8 +15,8 @@ describe('Persons test', () => {
       await getPersons({
         firstName: 'Homer',
         lastName: 'Simpson'
-      })
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+      }, user)
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
 
     test('should get people filtered by firstName and lastName and filter dobDay, dobMonth, dobYear', async () => {
@@ -27,8 +27,8 @@ describe('Persons test', () => {
         dobDay: '',
         dobMonth: '',
         dobYear: ''
-      })
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+      }, user)
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
 
     test('should get people filtered by firstName and lastName and DOB', async () => {
@@ -40,8 +40,8 @@ describe('Persons test', () => {
         dobDay: '10',
         dobMonth: '05',
         dobYear: '1998'
-      })
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
+      }, user)
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
     })
 
     test('should get people filtered by firstName and lastName and DOB as Date', async () => {
@@ -53,13 +53,13 @@ describe('Persons test', () => {
         dobDay: '10',
         dobMonth: '05',
         dobYear: '1998'
-      })
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', expect.anything())
+      }, user)
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
     })
 
     test('should throw an error given empty object', async () => {
       get.mockResolvedValue({ payload: {} })
-      await expect(getPersons({})).rejects.toThrow('ValidationError: "value" must contain at least one of [firstName, orphaned]')
+      await expect(getPersons({}, user)).rejects.toThrow('ValidationError: "value" must contain at least one of [firstName, orphaned]')
     })
 
     test('should strip invalid query params', async () => {
@@ -68,8 +68,8 @@ describe('Persons test', () => {
         firstName: 'Homer',
         lastName: 'Simpson',
         queryParam: '1234'
-      }))
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', expect.anything())
+      }, user))
+      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
   })
 
@@ -99,8 +99,8 @@ describe('Persons test', () => {
           ]
         }
       })
-      await getOrphanedOwners()
-      expect(get).toBeCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', expect.anything())
+      await getOrphanedOwners(user)
+      expect(get).toBeCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', user)
     })
   })
 

@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken')
+const { keyStubs } = require('../../mocks/auth')
 
 describe('jwt-utils', () => {
   jest.mock('../../../app/lib/environment-helpers')
   const { getEnvironmentVariable } = require('../../../app/lib/environment-helpers')
   getEnvironmentVariable.mockImplementation((envVar) => {
-    if (envVar === 'PRIVATE_KEY') {
-      return 'abcdedfgh'
+    if (envVar === 'JWT_PRIVATE_KEY') {
+      return keyStubs.privateKeyHash
     }
 
     if (envVar === 'DDI_API_BASE_URL') {
@@ -21,7 +22,8 @@ describe('jwt-utils', () => {
     test('should generate a token', () => {
       const token = generateToken({ username: 'bob@builder.com' }, { audience: 'https://example.abc', issuer: 'abc' })
       expect(typeof token).toBe('string')
-      expect(jwt.verify(token, 'abcdedfgh')).toEqual({
+
+      expect(jwt.verify(token, keyStubs.publicKey)).toEqual({
         username: 'bob@builder.com',
         exp: expect.any(Number),
         iat: expect.any(Number),
@@ -47,10 +49,10 @@ describe('jwt-utils', () => {
 
       const decodedToken = jwt.verify(
         token,
-        'abcdedfgh',
+        keyStubs.publicKey,
         {
           audience: 'https://example.abc',
-          algorithms: ['HS256'],
+          algorithms: ['RS256'],
           issuer: 'aphw-ddi-portal'
         })
       expect(typeof token).toBe('string')
@@ -69,28 +71,22 @@ describe('jwt-utils', () => {
         displayname: 'Bob the Builder',
         aud: 'https://example.abc'
       }
-      const request = {
-        auth: {
-          credentials: {
-            scope: ['Dog.Index.Standard']
-          }
-        }
-      }
 
       const user = {
         username: 'bob@builder.com',
-        displayname: 'Bob the Builder'
+        displayname: 'Bob the Builder',
+        scopes: ['Dog.Index.Standard']
       }
-      const { Authorization } = createBearerHeader('https://example.abc')(user, request)
+      const { Authorization } = createBearerHeader('https://example.abc')(user)
 
       const token = Authorization.replace('Bearer ', '')
 
       const decodedToken = jwt.verify(
         token,
-        'abcdedfgh',
+        keyStubs.publicKey,
         {
           audience: 'https://example.abc',
-          algorithms: ['HS256'],
+          algorithms: ['RS256'],
           issuer: 'aphw-ddi-portal'
         })
 

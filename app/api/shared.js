@@ -1,6 +1,11 @@
 const wreck = require('@hapi/wreck')
-const addHeaders = (user) => ({
-  'ddi-username': user?.username, 'ddi-displayname': user?.displayname
+const { createBearerHeader } = require('../auth/jwt-utils')
+
+const { audiences } = require('../constants/auth')
+const addHeaders = (user, _request) => ({
+  'ddi-username': user?.username,
+  'ddi-displayname': user?.displayname,
+  ...createBearerHeader(audiences.api)(user)
 })
 
 const buildPostRequest = (baseUrl) => async (endpoint, data, user) => {

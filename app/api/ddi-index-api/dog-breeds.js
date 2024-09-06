@@ -2,14 +2,12 @@ const { get } = require('./base')
 
 const breedEndpoint = 'dog-breeds'
 
-const options = {
-  json: true
-}
-
-const getBreeds = async () => {
-  const payload = await get(breedEndpoint, options)
-
-  return payload
+/**
+ * @param user
+ * @return {Promise<unknown>}
+ */
+const getBreeds = async (user) => {
+  return get(breedEndpoint, user)
 }
 
 module.exports = {

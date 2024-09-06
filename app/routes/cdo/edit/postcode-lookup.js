@@ -5,6 +5,7 @@ const { validatePayload } = require('../../../schema/portal/edit/postcode-lookup
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { setPostcodeLookupDetails, getPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -13,9 +14,10 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const user = getUser(request)
         const personReference = request.params.personReference
 
-        const person = await getPersonByReference(personReference)
+        const person = await getPersonByReference(personReference, user)
         if (person == null) {
           return h.response().code(404).takeover()
         }
@@ -42,9 +44,10 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
+          const user = getUser(request)
           const payload = request.payload
 
-          const person = await getPersonByReference(payload.personReference)
+          const person = await getPersonByReference(payload.personReference, user)
           if (person == null) {
             return h.response().code(404).takeover()
           }

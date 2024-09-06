@@ -5,12 +5,13 @@ const { boomRequest } = require('../ddi-index-api/base')
 
 const cdoEndpoint = 'cdo'
 
-const options = {
-  json: true
-}
-
-const getCdo = async (indexNumber) => {
-  const payload = await get(`${cdoEndpoint}/${indexNumber}`, options)
+/**
+ * @param indexNumber
+ * @param user
+ * @return {Promise<*>}
+ */
+const getCdo = async (indexNumber, user) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}`, user)
   return payload.cdo
 }
 
@@ -26,13 +27,23 @@ const createCdo = async (cdo, user) => {
   return res
 }
 
-const getManageCdoDetails = async (indexNumber) => {
-  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
+/**
+ * @param indexNumber
+ * @param user
+ * @return {Promise<unknown>}
+ */
+const getManageCdoDetails = async (indexNumber, user) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, user)
   return payload
 }
 
-const getCdoTaskDetails = async (indexNumber, taskName) => {
-  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, options)
+/**
+ * @param indexNumber
+ * @param user
+ * @return {Promise<unknown>}
+ */
+const getCdoTaskDetails = async (indexNumber, user) => {
+  const payload = await get(`${cdoEndpoint}/${indexNumber}/manage`, user)
   return payload
 }
 

@@ -57,21 +57,22 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        const user = getUser(request)
         const details = getPostcodeLookupDetails(request)
         const addresses = getFromSession(request, 'addresses')
         const personReference = details?.personReference
         const selectedAddress = addresses[request.payload.address]
 
-        const person = await getPersonByReference(personReference)
+        const person = await getPersonByReference(personReference, user)
 
         const updatePayload = buildPersonAddressUpdatePayload(person, selectedAddress)
 
-        const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload)
+        const error = await validateBreedForCountryChoosingAddress(personReference, updatePayload, user)
         if (error) {
           return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
 
-        await updatePerson(updatePayload, getUser(request))
+        await updatePerson(updatePayload, user)
 
         setPostcodeLookupDetails(request, null)
         setInSession(request, 'addresses', null)

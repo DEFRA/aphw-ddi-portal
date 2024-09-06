@@ -13,7 +13,7 @@ const schema = Joi.object({
     password: Joi.string().required(),
     ttl: Joi.number().default(60 * 60 * 1000)
   }),
-  secret: Joi.string().allow(''),
+  privateKey: Joi.string().allow(''),
   redirectUrl: Joi.string().default('http://localhost:3002/authenticate')
 })
 
@@ -29,7 +29,7 @@ const config = {
     password: process.env.COOKIE_PASSWORD,
     ttl: process.env.COOKIE_TTL
   },
-  secret: getEnvironmentVariable('PRIVATE_KEY'),
+  privateKey: getEnvironmentVariable('JWT_PRIVATE_KEY'),
   redirectUrl: process.env.REDIRECT_URL?.length > 0 ? process.env.REDIRECT_URL : 'http://localhost:3002/authenticate'
 }
 

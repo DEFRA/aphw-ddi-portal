@@ -57,7 +57,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith({
+    expect(getLiveCdos).toHaveBeenCalledWith(user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })
@@ -123,7 +123,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith({
+    expect(getLiveCdos).toHaveBeenCalledWith(user, {
       column: 'owner',
       order: 'ASC'
     })
@@ -146,7 +146,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith({
+    expect(getLiveCdos).toHaveBeenCalledWith(user, {
       column: 'owner',
       order: 'ASC'
     })
@@ -166,7 +166,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith({
+    expect(getLiveCdos).toHaveBeenCalledWith(user, {
       column: 'owner',
       order: 'DESC'
     })
@@ -209,7 +209,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdosWithinMonth).toHaveBeenCalledWith({
+    expect(getLiveCdosWithinMonth).toHaveBeenCalledWith(user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })
@@ -273,7 +273,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getInterimExemptions).toHaveBeenCalledWith({
+    expect(getInterimExemptions).toHaveBeenCalledWith(user, {
       column: 'interimExemptFor',
       order: 'DESC'
     })
@@ -320,7 +320,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getInterimExemptions).toHaveBeenCalledWith({
+    expect(getInterimExemptions).toHaveBeenCalledWith(user, {
       column: 'interimExemptFor',
       order: 'ASC'
     })
@@ -340,7 +340,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getInterimExemptions).toHaveBeenCalledWith({
+    expect(getInterimExemptions).toHaveBeenCalledWith(user, {
       column: 'indexNumber',
       order: 'ASC'
     })
@@ -362,7 +362,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getInterimExemptions).toHaveBeenCalledWith({
+    expect(getInterimExemptions).toHaveBeenCalledWith(user, {
       column: 'indexNumber',
       order: 'DESC'
     })
@@ -409,7 +409,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getExpiredCdos).toHaveBeenCalledWith({
+    expect(getExpiredCdos).toHaveBeenCalledWith(user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })

@@ -4,6 +4,7 @@ const { addBackNavigation } = require('../../../lib/back-helpers')
 const ViewModel = require('../../../models/cdo/manage/live')
 const { getLiveCdos, getLiveCdosWithinMonth, getInterimExemptions, getExpiredCdos } = require('../../../api/ddi-index-api/cdos')
 const { manageCdosGetschema, manageCdosQueryschema } = require('../../../schema/portal/cdo/manage')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -20,6 +21,8 @@ module.exports = [
       },
       handler: async (request, h) => {
         const backNav = addBackNavigation(request)
+        const user = getUser(request)
+
         const tab = request.params.tab
         let defaultOrder
 
@@ -42,13 +45,13 @@ module.exports = [
         let dogRecords
 
         if (tab === 'due') {
-          dogRecords = await getLiveCdosWithinMonth(sort)
+          dogRecords = await getLiveCdosWithinMonth(user, sort)
         } else if (tab === 'interim') {
-          dogRecords = await getInterimExemptions(sort)
+          dogRecords = await getInterimExemptions(user, sort)
         } else if (tab === 'expired') {
-          dogRecords = await getExpiredCdos(sort)
+          dogRecords = await getExpiredCdos(user, sort)
         } else {
-          dogRecords = await getLiveCdos(sort)
+          dogRecords = await getLiveCdos(user, sort)
         }
 
         return h.view(views.manage, new ViewModel(dogRecords, tab, sort, backNav))

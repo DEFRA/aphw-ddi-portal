@@ -50,7 +50,7 @@ describe('DDI API Dog Breeches', () => {
         breachCategories: mockBreachCategories
       })
 
-      const breachCategories = await getBreachCategories()
+      const breachCategories = await getBreachCategories(user)
       expect(breachCategories).toBeInstanceOf(Array)
       expect(breachCategories).toHaveLength(3)
       expect(breachCategories).toEqual(expectdBreachCategories)

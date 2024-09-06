@@ -5,6 +5,7 @@ const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = requir
 
 jest.mock('../../../app/api/police-area')
 const { lookupPoliceForceByPostcode } = require('../../../app/api/police-area')
+const { user } = require('../../mocks/auth')
 
 describe('ModelHelpers', () => {
   beforeEach(async () => {
@@ -145,7 +146,7 @@ describe('ModelHelpers', () => {
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
 
-    await setPoliceForce({})
+    await setPoliceForce({}, user)
 
     expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
   })
@@ -155,7 +156,7 @@ describe('ModelHelpers', () => {
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
 
-    await setPoliceForce({}, 'TS2 2TS')
+    await setPoliceForce({}, user, 'TS2 2TS')
 
     expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
   })
@@ -165,7 +166,7 @@ describe('ModelHelpers', () => {
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
 
-    await setPoliceForce({}, 'TS2 2TS')
+    await setPoliceForce({}, user, 'TS2 2TS')
 
     expect(setEnforcementDetails).not.toHaveBeenCalled()
   })

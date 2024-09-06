@@ -1,3 +1,4 @@
+const { user } = require('../../../mocks/auth')
 
 describe('DDI API dog breeds', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
@@ -21,9 +22,9 @@ describe('DDI API dog breeds', () => {
 
       get.mockResolvedValue(expectedResults)
 
-      const searchResults = await getBreeds()
+      const searchResults = await getBreeds(user)
 
-      expect(get).toHaveBeenCalledWith('dog-breeds', { json: true })
+      expect(get).toHaveBeenCalledWith('dog-breeds', user)
       expect(searchResults).toEqual(expectedResults)
     })
   })

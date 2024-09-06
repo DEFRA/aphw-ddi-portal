@@ -1,4 +1,5 @@
 const { getCountriesInteraction } = require('../../interactions/api/countries')
+const { user } = require('../../../mocks/auth')
 
 const countriesTests = (ddiIndexApiProvider) => {
   let countriesApi
@@ -10,7 +11,7 @@ const countriesTests = (ddiIndexApiProvider) => {
   test('GET /countries', async () => {
     await ddiIndexApiProvider.addInteraction(getCountriesInteraction)
 
-    const response = await countriesApi.getCountries()
+    const response = await countriesApi.getCountries(user)
     expect(response[0]).toEqual('England')
   })
 }

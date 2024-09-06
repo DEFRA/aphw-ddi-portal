@@ -2,6 +2,7 @@ const { getDocumentation } = require('../../api/ddi-index-api/documentation')
 const { getEnvironmentVariable } = require('../../lib/environment-helpers')
 const { admin } = require('../../auth/permissions')
 const { documentation } = require('../../constants/admin')
+const { getUser } = require('../../auth')
 
 module.exports = [{
   method: 'GET',
@@ -13,7 +14,7 @@ module.exports = [{
         return h.view('404').code(404)
       }
 
-      const payload = await getDocumentation()
+      const payload = await getDocumentation(getUser(request))
       return h.response(payload).code(200)
     }
   }

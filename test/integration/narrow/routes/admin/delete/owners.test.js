@@ -154,7 +154,7 @@ describe('Delete owners', () => {
 
       const response = await server.inject(options)
 
-      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'DESC' })
+      expect(getOrphanedOwners).toHaveBeenCalledWith(user, { sortKey: 'owner', sortOrder: 'DESC' })
       expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
       expect(response.statusCode).toBe(200)
     })
@@ -171,7 +171,7 @@ describe('Delete owners', () => {
 
       const response = await server.inject(options)
 
-      expect(getOrphanedOwners).toHaveBeenCalledWith({ sortKey: 'owner', sortOrder: 'ASC' })
+      expect(getOrphanedOwners).toHaveBeenCalledWith(user, { sortKey: 'owner', sortOrder: 'ASC' })
       expect(initialiseOwnersForDeletion).toHaveBeenCalledTimes(0)
       expect(response.statusCode).toBe(200)
     })

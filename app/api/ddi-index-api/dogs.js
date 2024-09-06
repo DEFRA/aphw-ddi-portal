@@ -3,13 +3,9 @@ const { get, post } = require('./base')
 const dogsEndpoint = 'dogs'
 const bulkDeleteDogsEndpoint = 'dogs:batch-delete'
 
-const options = {
-  json: true
-}
-
-const getOldDogs = async (statuses, sort, overrideToday) => {
+const getOldDogs = async (user, statuses, sort, overrideToday) => {
   const dateOverride = overrideToday ? `&today=${overrideToday}` : ''
-  const payload = await get(`${dogsEndpoint}?forPurging=true&statuses=${statuses}&sortKey=${sort?.column ?? 'status'}&sortOrder=${sort?.order ?? 'ASC'}${dateOverride}`, options)
+  const payload = await get(`${dogsEndpoint}?forPurging=true&statuses=${statuses}&sortKey=${sort?.column ?? 'status'}&sortOrder=${sort?.order ?? 'ASC'}${dateOverride}`, user)
   return payload
 }
 

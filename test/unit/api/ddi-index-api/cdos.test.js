@@ -1,3 +1,4 @@
+const { user } = require('../../../mocks/auth')
 describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
   const { get } = require('../../../../app/api/ddi-index-api/base')
@@ -136,9 +137,9 @@ describe('CDO API endpoints', () => {
         policeForce: 'Cheshire Constabulary'
       }
 
-      const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] })
+      const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] }, user)
 
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
       expect(summaryCdoDtos).toEqual([expectedSummaryCdoDto])
     })
 
@@ -147,9 +148,9 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getSummaryCdos({ status: ['PreExempt'] })
+      await cdos.getSummaryCdos({ status: ['PreExempt'] }, user)
 
-      expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
+      expect(get).toBeCalledWith('cdos?status=PreExempt', user)
     })
 
     test('should call endpoint with multiple statuses', async () => {
@@ -157,18 +158,18 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] })
+      await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] }, user)
 
-      expect(get).toBeCalledWith('cdos?status=PreExempt&status=InterimExempt', { json: true })
+      expect(get).toBeCalledWith('cdos?status=PreExempt&status=InterimExempt', user)
     })
 
     test('should call endpoint with dueWithin', async () => {
       get.mockResolvedValue({
         cdos: []
       })
-      await cdos.getSummaryCdos({ dueWithin: 30 })
+      await cdos.getSummaryCdos({ dueWithin: 30 }, user)
 
-      expect(get).toBeCalledWith('cdos?withinDays=30', { json: true })
+      expect(get).toBeCalledWith('cdos?withinDays=30', user)
     })
 
     test('should call endpoint with a sort order', async () => {
@@ -181,9 +182,9 @@ describe('CDO API endpoints', () => {
         order: 'DESC'
       }
 
-      await cdos.getSummaryCdos({ status: ['InterimExempt'] }, sort)
+      await cdos.getSummaryCdos({ status: ['InterimExempt'] }, user, sort)
 
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', { json: true })
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', user)
     })
   })
 
@@ -213,8 +214,8 @@ describe('CDO API endpoints', () => {
 
       const sort = {}
 
-      const results = await cdos.getLiveCdos(sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
+      const results = await cdos.getLiveCdos(user, sort)
+      expect(get).toBeCalledWith('cdos?status=PreExempt', user)
       expect(results).toEqual(expect.any(Array))
     })
 
@@ -241,8 +242,8 @@ describe('CDO API endpoints', () => {
         ]
       })
 
-      const results = await cdos.getLiveCdos()
-      expect(get).toBeCalledWith('cdos?status=PreExempt', { json: true })
+      const results = await cdos.getLiveCdos(user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt', user)
       expect(results).toEqual(expect.any(Array))
     })
   })
@@ -272,8 +273,8 @@ describe('CDO API endpoints', () => {
       })
       const sort = {}
 
-      const results = await cdos.getLiveCdosWithinMonth(sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
+      const results = await cdos.getLiveCdosWithinMonth(user, sort)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
       expect(results).toEqual(expect.any(Array))
     })
 
@@ -282,8 +283,8 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getLiveCdosWithinMonth()
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', { json: true })
+      await cdos.getLiveCdosWithinMonth(user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
     })
   })
 
@@ -313,8 +314,8 @@ describe('CDO API endpoints', () => {
       })
       const sort = {}
 
-      const results = await cdos.getInterimExemptions(sort)
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+      const results = await cdos.getInterimExemptions(user, sort)
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
       expect(results).toEqual(expect.any(Array))
     })
 
@@ -323,8 +324,8 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getInterimExemptions()
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+      await cdos.getInterimExemptions(user)
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
     })
 
     test('should get interim exemptions with default sort', async () => {
@@ -332,8 +333,8 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getInterimExemptions({ column: 'joinedExemptionScheme' })
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+      await cdos.getInterimExemptions(user, { column: 'joinedExemptionScheme' })
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
     })
 
     test('should get interim exemptions ascending by joinedExemptionScheme when called with descending', async () => {
@@ -344,8 +345,8 @@ describe('CDO API endpoints', () => {
         order: 'DESC'
       }
 
-      const results = await cdos.getInterimExemptions(sort)
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', { json: true })
+      const results = await cdos.getInterimExemptions(user, sort)
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
       expect(results).toEqual(expect.any(Array))
     })
 
@@ -357,8 +358,8 @@ describe('CDO API endpoints', () => {
         order: 'ASC'
       }
 
-      const results = await cdos.getInterimExemptions(sort)
-      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', { json: true })
+      const results = await cdos.getInterimExemptions(user, sort)
+      expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', user)
       expect(results).toEqual(expect.any(Array))
     })
   })
@@ -389,8 +390,8 @@ describe('CDO API endpoints', () => {
       })
       const sort = {}
 
-      const results = await cdos.getExpiredCdos(sort)
-      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', { json: true })
+      const results = await cdos.getExpiredCdos(user, sort)
+      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
       expect(results).toEqual(expect.any(Array))
     })
 
@@ -418,8 +419,8 @@ describe('CDO API endpoints', () => {
         ]
       })
 
-      const results = await cdos.getExpiredCdos()
-      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', { json: true })
+      const results = await cdos.getExpiredCdos(user)
+      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
       expect(results).toEqual(expect.any(Array))
     })
   })

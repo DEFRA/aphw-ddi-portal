@@ -21,8 +21,8 @@ describe('Export API endpoints', () => {
   test('export-create-file should call GET to API', async () => {
     get.mockResolvedValue()
 
-    await createExportFile(100)
+    await createExportFile(100, user)
 
-    expect(get).toHaveBeenCalledWith('export-create-file?batchSize=100')
+    expect(get).toHaveBeenCalledWith('export-create-file?batchSize=100', user)
   })
 })

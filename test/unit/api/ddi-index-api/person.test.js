@@ -36,16 +36,16 @@ describe('Person test', () => {
   describe('getPersonAndDogs', () => {
     test('getPersonAndDogs calls endpoint', async () => {
       get.mockResolvedValue({ payload: {} })
-      await getPersonAndDogs('P-123')
-      expect(get).toHaveBeenCalledWith('person/P-123?includeDogs=true', expect.anything())
+      await getPersonAndDogs('P-123', user)
+      expect(get).toHaveBeenCalledWith('person/P-123?includeDogs=true', user)
     })
   })
 
   describe('getPersonByReference', () => {
     test('getPersonByReference calls endpoint', async () => {
       get.mockResolvedValue({ payload: {} })
-      await getPersonByReference('P-123')
-      expect(get).toHaveBeenCalledWith('person/P-123')
+      await getPersonByReference('P-123', user)
+      expect(get).toHaveBeenCalledWith('person/P-123', user)
     })
   })
 

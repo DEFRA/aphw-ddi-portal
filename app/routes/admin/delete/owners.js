@@ -21,8 +21,9 @@ module.exports = [
       handler: async (request, h) => {
         const { sortKey, sortOrder, start } = request.query
         const sort = { column: sortKey, order: sortOrder }
+        const user = getUser(request)
 
-        const owners = await getOrphanedOwners({
+        const owners = await getOrphanedOwners(user, {
           sortKey: sortKey === 'selected' ? 'owner' : sortKey,
           sortOrder
         })

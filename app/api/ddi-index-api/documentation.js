@@ -1,10 +1,13 @@
 const { get } = require('./base')
 
 const documentationEndpoint = 'swagger.json'
-const getDocumentation = async () => {
-  const payload = await get(documentationEndpoint, {
-    json: true
-  })
+
+/**
+ * @param user
+ * @return {Promise<unknown>}
+ */
+const getDocumentation = async (user) => {
+  const payload = await get(documentationEndpoint, user)
 
   return payload
 }

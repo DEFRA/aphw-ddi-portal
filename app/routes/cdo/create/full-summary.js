@@ -16,12 +16,14 @@ module.exports = [{
   options: {
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
+      const user = getUser(request)
+
       const ownerDetails = getOwnerDetails(request)
       const address = getAddress(request)
       const dogs = getDogs(request)
       const enforcementDetails = getEnforcementDetails(request)
-      const courts = await getCourts()
-      const policeForces = await getPoliceForces()
+      const courts = await getCourts(user)
+      const policeForces = await getPoliceForces(user)
 
       return h.view(views.fullSummary, new ViewModel(ownerDetails, address, enforcementDetails, courts, policeForces, dogs))
     }

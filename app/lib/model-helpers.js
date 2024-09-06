@@ -73,10 +73,16 @@ const cleanUserDisplayName = (displayName) => {
   return displayName
 }
 
-const setPoliceForce = async (request, postcode = null) => {
+/**
+ * @param request
+ * @param user
+ * @param postcode
+ * @return {Promise<void>}
+ */
+const setPoliceForce = async (request, user, postcode = null) => {
   const ownerDetails = postcode ? { address: { postcode } } : getOwnerDetails(request)
   const enforcementDetails = getEnforcementDetails(request) || {}
-  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address?.postcode ?? ownerDetails.postcode)
+  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address?.postcode ?? ownerDetails.postcode, user)
 
   if (policeForce) {
     enforcementDetails.policeForce = policeForce.id

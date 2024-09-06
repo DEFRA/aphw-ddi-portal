@@ -10,6 +10,7 @@ const { doSearch } = require('../../../api/ddi-index-api/search')
 const { getOwnerDetails } = require('../../../session/cdo/owner')
 const { logValidationError } = require('../../../lib/log-helpers')
 const { isRouteFlagSet } = require('../../../session/routes')
+const { getUser } = require('../../../auth')
 
 const alreadyOwnThisDogMessage = 'Dog already registered to this owner'
 
@@ -77,7 +78,8 @@ module.exports = [{
         return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), generateMicrochipError(duplicateMicrochipMessage))).code(400).takeover()
       }
 
-      const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber })
+      const user = getUser(request)
+      const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber }, user)
 
       if (isDogUnderSameOwner(results, details, request)) {
         return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()

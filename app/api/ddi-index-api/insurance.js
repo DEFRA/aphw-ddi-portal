@@ -4,9 +4,6 @@ const { ApiConflictError } = require('../../errors/api-conflict-error')
 const insuranceEndpoint = 'insurance'
 const insuranceCompaniesEndpoint = `${insuranceEndpoint}/companies`
 
-const options = {
-  json: true
-}
 /**
  * @typedef {{ id: number; name: string }} InsuranceCompany
  */
@@ -15,14 +12,22 @@ const options = {
  * @return {Promise<InsuranceCompany[]>}
  */
 
-const getCompanies = async () => {
-  const payload = await get(insuranceCompaniesEndpoint, options)
+/**
+ * @param user
+ * @return {Promise<*|[]>}
+ */
+const getCompanies = async (user) => {
+  const payload = await get(insuranceCompaniesEndpoint, user)
 
   return payload.companies
 }
 
-const getCompaniesNewest = async () => {
-  const payload = await get(`${insuranceCompaniesEndpoint}?sortKey=updatedAt&sortOrder=DESC`, options)
+/**
+ * @param user
+ * @return {Promise<InsuranceCompany[]|[]|*>}
+ */
+const getCompaniesNewest = async (user) => {
+  const payload = await get(`${insuranceCompaniesEndpoint}?sortKey=updatedAt&sortOrder=DESC`, user)
 
   return payload.companies
 }

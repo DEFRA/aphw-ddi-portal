@@ -4,17 +4,23 @@ const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const dogEndpoint = 'dog'
 
-const options = {
-  json: true
-}
-
-const getDogDetails = async (indexNumber) => {
-  const payload = await get(`${dogEndpoint}/${indexNumber}`, options)
+/**
+ * @param indexNumber
+ * @param user
+ * @return {Promise<*>}
+ */
+const getDogDetails = async (indexNumber, user) => {
+  const payload = await get(`${dogEndpoint}/${indexNumber}`, user)
   return payload.dog
 }
 
-const getDogOwner = async (indexNumber) => {
-  const payload = await get(`dog-owner/${indexNumber}`, options)
+/**
+ * @param indexNumber
+ * @param user
+ * @return {Promise<*>}
+ */
+const getDogOwner = async (indexNumber, user) => {
+  const payload = await get(`dog-owner/${indexNumber}`, user)
   return payload.owner
 }
 
@@ -58,18 +64,19 @@ const getDogOwner = async (indexNumber) => {
 
 /**
  * @param indexNumber
+ * @param user
  * @return {Promise<PersonAndDogsDto>}
  */
-const getDogOwnerWithDogs = async (indexNumber) => {
-  const payload = await get(`dog-owner/${indexNumber}?includeDogs=true`, options)
+const getDogOwnerWithDogs = async (indexNumber, user) => {
+  const payload = await get(`dog-owner/${indexNumber}?includeDogs=true`, user)
   return payload.owner
 }
 
-const updateDogDetails = async (dog, username) => {
+const updateDogDetails = async (dog, user) => {
   dog.dogId = dog.id
 
   try {
-    const response = await boomRequest(dogEndpoint, 'PUT', dog, username)
+    const response = await boomRequest(dogEndpoint, 'PUT', dog, user)
     return response.payload
   } catch (e) {
     if (e instanceof ApiErrorFailure) {
@@ -87,7 +94,7 @@ const updateStatus = async (payload, user) => {
   }
 
   try {
-    const dog = await getDogDetails(payload.indexNumber)
+    const dog = await getDogDetails(payload.indexNumber, user)
     dog.dogId = dog.id
     dog.status = payload.newStatus
 

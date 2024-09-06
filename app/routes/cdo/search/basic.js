@@ -4,6 +4,7 @@ const searchSchema = require('../../../schema/portal/search/basic')
 const { doSearch } = require('../../../api/ddi-index-api/search')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation } = require('../../../lib/back-helpers')
+const { getUser } = require('../../../auth')
 
 module.exports = [{
   method: 'GET',
@@ -28,7 +29,7 @@ module.exports = [{
         return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav, errors.error)).code(400).takeover()
       }
 
-      const results = await doSearch(searchCriteria)
+      const results = await doSearch(searchCriteria, getUser(request))
 
       return h.view(views.searchBasic, new ViewModel(searchCriteria, results, backNav))
     }

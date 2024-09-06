@@ -118,7 +118,7 @@ describe('OwnerResults test', () => {
     const { document } = new JSDOM(response.payload).window
 
     expect(setInSession).toBeCalledWith(expect.anything(), 'persons', [resolvedPerson])
-    expect(getPersons).toBeCalledWith({ firstName: 'John', lastName: 'Smith' })
+    expect(getPersons).toBeCalledWith({ firstName: 'John', lastName: 'Smith' }, user)
     expect(setAddress).toBeCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
@@ -182,7 +182,7 @@ describe('OwnerResults test', () => {
       'dateOfBirth-year': null,
       firstName: 'Jack',
       lastName: 'Jones'
-    })
+    }, user)
   })
 
   test('GET /cdo/create/select-owner route returns 200 and doesnt clear DOB if DOB was entered', async () => {
@@ -203,7 +203,7 @@ describe('OwnerResults test', () => {
       dateOfBirthEntered: '2000-01-01',
       firstName: 'Jack',
       lastName: 'Jones'
-    })
+    }, user)
   })
 
   test('POST /cdo/create/select-owner route returns 302 if not auth', async () => {

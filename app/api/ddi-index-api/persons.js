@@ -4,10 +4,6 @@ const { personsFilter } = require('../../schema/ddi-index-api/persons/get')
 const personsEndpoint = 'persons'
 const bulkDeletePersonsEndpoint = 'persons:batch-delete'
 
-const options = {
-  json: true
-}
-
 /**
  * @typedef GetPersonsFilterOptions
  * @property {string} [firstName]
@@ -25,7 +21,7 @@ const options = {
  * @param {GetPersonsFilterOptions} filter
  * @returns {Promise<import('./person.js').Person[]>}
  */
-const getPersons = async (filter) => {
+const getPersons = async (filter, user) => {
   const { value, error } = personsFilter.validate(filter, { abortEarly: false, dateFormat: 'utc', stripUnknown: true })
 
   if (error) {
@@ -34,19 +30,19 @@ const getPersons = async (filter) => {
 
   const searchParams = new URLSearchParams(Object.entries(value))
 
-  const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, options)
+  const payload = await get(`${personsEndpoint}?${searchParams.toString()}`, user)
 
   return payload.persons
 }
 
-const getOrphanedOwners = async (filter = {}) => {
+const getOrphanedOwners = async (user, filter = {}) => {
   return getPersons({
     limit: -1,
     sortKey: 'owner',
     sortOrder: 'ASC',
     ...filter,
     orphaned: true
-  })
+  }, user)
 }
 
 const bulkDeletePersons = async (personReferences, user) => {

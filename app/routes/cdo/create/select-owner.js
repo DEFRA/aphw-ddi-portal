@@ -12,6 +12,7 @@ const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { setRouteFlag, clearRouteFlag } = require('../../../session/routes')
 const constants = require('../../../constants/forms')
+const { getUser } = require('../../../auth')
 
 module.exports = [{
   method: 'GET',
@@ -20,8 +21,9 @@ module.exports = [{
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
       const ownerDetails = getOwnerDetailsWithClear(request)
+      const user = getUser(request)
 
-      const ownerResults = await getPersons(ownerDetails)
+      const ownerResults = await getPersons(ownerDetails, user)
 
       setInSession(request, 'persons', ownerResults)
 
@@ -77,13 +79,15 @@ module.exports = [{
       setAddress(request, ownerDetails.address)
       clearRouteFlag(request, constants.routeFlags.addOwner)
 
-      const { dogs } = await getPersonAndDogs(ownerDetails.personReference)
+      const user = getUser(request)
+      const { dogs } = await getPersonAndDogs(ownerDetails.personReference, user)
+
       if (dogs && dogs.length >= 1) {
         setExistingDogs(request, dogs)
         return h.redirect(dogRoutes.selectExistingDog.get)
       }
 
-      await setPoliceForce(request)
+      await setPoliceForce(request, user)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

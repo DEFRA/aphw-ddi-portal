@@ -25,7 +25,9 @@ const dogAndOwnerConfirmation = {
     }
 
     const backLink = getBackLinkToSamePage(request)
-    const dogOwner = await getPersonByReference(ownerPk)
+
+    const user = getUser(request)
+    const dogOwner = await getPersonByReference(ownerPk, user)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
       firstName: dogOwner.firstName,
@@ -55,7 +57,9 @@ const dogAndOwnerRadioValidation = {
     const ownerPk = request.payload.ownerPk
 
     const backLink = getBackLinkToSamePage(request)
-    const dogOwner = await getPersonByReference(ownerPk)
+
+    const user = getUser(request)
+    const dogOwner = await getPersonByReference(ownerPk, user)
 
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
       firstName: dogOwner.firstName,
@@ -77,7 +81,8 @@ module.exports = [
       handler: async (request, h) => {
         const indexNumber = request.params.indexNumber
 
-        const details = await buildDetails(indexNumber)
+        const user = getUser(request)
+        const details = await buildDetails(indexNumber, user)
         const backNav = addBackNavigation(request)
 
         return h.view(views.confirmDeleteGeneric, new ViewModel(details, backNav))
@@ -92,7 +97,8 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          const details = await buildDetails(request.params.indexNumber)
+          const user = getUser(request)
+          const details = await buildDetails(request.params.indexNumber, user)
 
           const backNav = addBackNavigationForErrorCondition(request)
 
@@ -116,13 +122,13 @@ module.exports = [
 
         const user = getUser(request)
 
-        let details = await buildDetails(pk)
+        let details = await buildDetails(pk, user)
         await deleteDog(pk, user)
 
         const backNav = addBackNavigation(request)
 
         if (payload.confirmOwner === 'Y' && ownerPk) {
-          details = await buildDetailsOwner(pk, ownerPk)
+          details = await buildDetailsOwner(pk, ownerPk, user)
 
           await deletePerson(ownerPk, user)
           return h.view(views.deleteDogAndOwner, new DeletedViewModel(details, backNav))
@@ -140,14 +146,15 @@ module.exports = [
 
 /**
  * @param pk
+ * @param user
  * @returns {Promise<ConfirmDetailsDogAndOwner>}
  */
-const buildDetails = async (pk) => {
+const buildDetails = async (pk, user) => {
   // check if dog exists
-  await getDogDetails(pk)
+  await getDogDetails(pk, user)
 
   const ownerPkValue = {}
-  const dogOwner = await getDogOwnerWithDogs(pk)
+  const dogOwner = await getDogOwnerWithDogs(pk, user)
 
   if (dogOwner.dogs.length === 1) {
     ownerPkValue.inputReference = 'ownerPk'
@@ -168,10 +175,11 @@ const buildDetails = async (pk) => {
 /**
  * @param pk
  * @param ownerPk
+ * @param user
  * @returns {Promise<DeletedDetails>}
  */
-const buildDetailsOwner = async (pk, ownerPk) => {
-  const dogOwner = await getPersonByReference(ownerPk)
+const buildDetailsOwner = async (pk, ownerPk, user) => {
+  const dogOwner = await getPersonByReference(ownerPk, user)
 
   return {
     pk,

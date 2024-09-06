@@ -5,6 +5,7 @@ const ViewModel = require('../../../models/cdo/create/confirm-dog-details')
 const { getDogs, addAnotherDog } = require('../../../session/cdo/dog')
 const { getEnforcementDetails, getAddress } = require('../../../session/cdo/owner')
 const { setPoliceForce } = require('../../../lib/model-helpers')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -43,7 +44,7 @@ module.exports = [
         const enforcementDetails = getEnforcementDetails(request)
         const addressDetails = getAddress(request)
         if (!enforcementDetails?.policeForce && addressDetails?.postcode) {
-          await setPoliceForce(request, addressDetails.postcode)
+          await setPoliceForce(request, getUser(request), addressDetails.postcode)
         }
 
         return h.redirect(ownerRoutes.enforcementDetails.get)

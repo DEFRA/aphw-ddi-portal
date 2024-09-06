@@ -10,7 +10,9 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const res = await purgeSoftDelete(request.query.today)
+        console.log('~~~~~~ Chris Debug ~~~~~~ purge soft delete', '')
+        const user = getUser(request)
+        const res = await purgeSoftDelete(user, request.query.today)
         return h.response(res).code(200)
       }
     }
@@ -21,6 +23,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
+        console.log('~~~~~~ Chris Debug ~~~~~~ neutering deadline', '')
         const res = await neuteringDeadline(request.query.today, getUser(request))
         return h.response(res).code(200)
       }

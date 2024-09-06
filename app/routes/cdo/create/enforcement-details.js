@@ -6,6 +6,7 @@ const enforcementDetailsSchema = require('../../../schema/portal/owner/enforceme
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { getCourts, getPoliceForces } = require('../../../api/ddi-index-api')
 const { getDogs } = require('../../../session/cdo/dog')
+const { getUser } = require('../../../auth')
 
 const backNavStandard = { backLink: dogRoutes.confirm.get }
 const backNavSummary = { backLink: routes.fullSummary.get }
@@ -27,9 +28,11 @@ module.exports = [{
   options: {
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
+      const user = getUser(request)
+
       const enforcementDetails = getEnforcementDetails(request)
-      const courts = await getCourts()
-      const policeForces = await getPoliceForces()
+      const courts = await getCourts(user)
+      const policeForces = await getPoliceForces(user)
       const dogs = getDogs(request)
 
       return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, courtIsMandatory(dogs), policeForces, getBackNav(request)))
@@ -44,9 +47,11 @@ module.exports = [{
     validate: {
       payload: enforcementDetailsSchema,
       failAction: async (request, h, error) => {
+        const user = getUser(request)
+
         const enforcementDetails = { ...getEnforcementDetails(request), ...request.payload }
-        const courts = await getCourts()
-        const policeForces = await getPoliceForces()
+        const courts = await getCourts(user)
+        const policeForces = await getPoliceForces(user)
         const dogs = getDogs(request)
 
         return h.view(views.enforcementDetails, new ViewModel(enforcementDetails, courts, courtIsMandatory(dogs), policeForces, getBackNav(request), error)).code(400).takeover()

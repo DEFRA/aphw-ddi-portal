@@ -364,7 +364,7 @@ describe('Delete Dog', () => {
 
       expect(response.statusCode).toBe(200)
 
-      expect(getPersonByReference).toHaveBeenCalledWith('P-35E5-8264')
+      expect(getPersonByReference).toHaveBeenCalledWith('P-35E5-8264', user)
       expect(document.querySelector('h1').textContent.trim()).toBe('Delete the owner record')
       expect(document.querySelector('#main-content').textContent.trim()).toContain('Deleting dog record ED200011 means the owner record Mark Turner no longer has a dog linked to it.')
       expect(document.querySelector('legend').textContent.trim()).toContain('Delete the owner record for Mark Turner?')

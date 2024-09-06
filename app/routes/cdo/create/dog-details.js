@@ -6,6 +6,7 @@ const { getAddress } = require('../../../session/cdo/owner')
 const { getBreeds } = require('../../../api/ddi-index-api')
 const { validatePayload } = require('../../../schema/portal/cdo/dog-details')
 const { addDateComponents, removeDateComponents } = require('../../../lib/date-helpers')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -22,7 +23,8 @@ module.exports = [
 
         dog.dogId = request.params.dogId
 
-        const { breeds } = await getBreeds()
+        const user = getUser(request)
+        const { breeds } = await getBreeds(user)
 
         if (!dog[keys.interimExemption]) {
           dog[keys.interimExemption] = new Date()
@@ -49,7 +51,9 @@ module.exports = [
         payload: validatePayload,
         failAction: async (request, h, error) => {
           const dog = request.payload
-          const { breeds } = await getBreeds()
+          const user = getUser(request)
+
+          const { breeds } = await getBreeds(user)
           const address = getAddress(request)
 
           return h.view(views.details, new ViewModel(dog, breeds, address, error)).code(400).takeover()

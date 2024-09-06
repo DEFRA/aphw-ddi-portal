@@ -3,9 +3,6 @@ const { formatToGds, getMonthsSince } = require('../../lib/date-helpers')
 
 const cdosEndpoint = 'cdos'
 
-const options = {
-  json: true
-}
 /**
  * @typedef SummaryPersonDto
  * @property {number} id - e.g. 10,
@@ -90,10 +87,11 @@ const summaryCdoMapper = (summaryCdo) => {
  */
 /**
  * @param {CdoFilter} filter
+ * @param user
  * @param {CdoSort} sort
  * @return {Promise<SummaryCdo[]>}
  */
-const getSummaryCdos = async (filter, sort = {}) => {
+const getSummaryCdos = async (filter, user, sort = {}) => {
   const searchParams = new URLSearchParams()
 
   if (filter.status) {
@@ -119,21 +117,31 @@ const getSummaryCdos = async (filter, sort = {}) => {
   }
 
   const queryParams = searchParams.toString()
-  const payload = await get(`${cdosEndpoint}?${queryParams}`, options)
+  const payload = await get(`${cdosEndpoint}?${queryParams}`, user)
   return payload.cdos.map(summaryCdoMapper)
 }
 
-const getLiveCdos = async (sort = {}) => {
+/**
+ * @param user
+ * @param sort
+ * @return {Promise<SummaryCdo[]>}
+ */
+const getLiveCdos = async (user, sort = {}) => {
   const filter = { status: ['PreExempt'] }
-  return getSummaryCdos(filter, sort)
+  return getSummaryCdos(filter, user, sort)
 }
 
-const getLiveCdosWithinMonth = async (sort = {}) => {
+/**
+ * @param user
+ * @param sort
+ * @return {Promise<SummaryCdo[]>}
+ */
+const getLiveCdosWithinMonth = async (user, sort = {}) => {
   /**
    * @type {CdoFilter}
    */
   const filter = { status: ['PreExempt'], dueWithin: 30 }
-  return getSummaryCdos(filter, sort)
+  return getSummaryCdos(filter, user, sort)
 }
 
 /**
@@ -142,10 +150,11 @@ const getLiveCdosWithinMonth = async (sort = {}) => {
  * We need to swap around the sort order as the api sorts on joinedExemptionScheme
  * while the UI sorts on 'interimExemptFor'
  *
+ * @param user
  * @param {CdoSort} [interimExemptForSort]
  * @return {Promise<SummaryCdo[]>}
  */
-const getInterimExemptions = async (interimExemptForSort = {}) => {
+const getInterimExemptions = async (user, interimExemptForSort = {}) => {
   /**
    * @type {Partial<CdoSort>}
    */
@@ -169,19 +178,20 @@ const getInterimExemptions = async (interimExemptForSort = {}) => {
    * @type {CdoFilter}
    */
   const filter = { status: ['InterimExempt'] }
-  return getSummaryCdos(filter, interimSort)
+  return getSummaryCdos(filter, user, interimSort)
 }
 
 /**
+ * @param user
  * @param {CdoSort} [sort]
  * @return {Promise<SummaryCdo[]>}
  */
-const getExpiredCdos = async (sort = {}) => {
+const getExpiredCdos = async (user, sort = {}) => {
   /**
    * @type {CdoFilter}
    */
   const filter = { status: ['Failed'], nonComplianceLetterSent: false }
-  return getSummaryCdos(filter, sort)
+  return getSummaryCdos(filter, user, sort)
 }
 
 module.exports = {

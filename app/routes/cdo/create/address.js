@@ -9,6 +9,7 @@ const { getCountries } = require('../../../api/ddi-index-api')
 const { logValidationError } = require('../../../lib/log-helpers')
 const constants = require('../../../constants/forms')
 const { isRouteFlagSet, setRouteFlag, clearRouteFlag } = require('../../../session/routes')
+const { getUser } = require('../../../auth')
 
 const form = { formAction: routes.address.post }
 const backNavStandard = { backLink: routes.postcodeLookupCreate.get }
@@ -28,7 +29,8 @@ module.exports = [{
     handler: async (request, h) => {
       const address = getAddress(request)
 
-      const countries = await getCountries()
+      const user = getUser(request)
+      const countries = await getCountries(user)
 
       return h.view(views.address, new ViewModel(address, form, getBackNav(request), countries))
     }
@@ -49,17 +51,19 @@ module.exports = [{
 
         const address = { ...getAddress(request), ...request.payload }
 
-        const countries = await getCountries()
+        const user = getUser(request)
+        const countries = await getCountries(user)
 
         return h.view(views.address, new ViewModel(address, form, getBackNav(request), countries, error)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
+      const user = getUser(request)
       setAddress(request, request.payload)
       setRouteFlag(request, constants.routeFlags.manualAddressEntry)
       clearRouteFlag(request, constants.routeFlags.postcodeLookup)
 
-      await setPoliceForce(request, request.payload?.postcode)
+      await setPoliceForce(request, user, request.payload?.postcode)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }

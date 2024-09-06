@@ -6,6 +6,7 @@ const ViewModel = require('../../../models/cdo/view/dog-details')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { setActivityDetails } = require('../../../session/cdo/activity')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -14,8 +15,9 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const user = getUser(request)
         const indexNumber = request.params.indexNumber
-        const cdo = await getCdo(indexNumber)
+        const cdo = await getCdo(indexNumber, user)
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()

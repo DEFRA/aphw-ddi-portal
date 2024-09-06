@@ -99,7 +99,7 @@ describe('Delete dogs 2', () => {
 
       const response = await server.inject(options)
 
-      expect(getOldDogs).toHaveBeenCalledWith('In breach,Pre-exempt,Interim exempt', { column: 'status', order: 'ASC' }, '2050-01-01')
+      expect(getOldDogs).toHaveBeenCalledWith(user, 'In breach,Pre-exempt,Interim exempt', { column: 'status', order: 'ASC' }, '2050-01-01')
       expect(response.statusCode).toBe(200)
     })
 

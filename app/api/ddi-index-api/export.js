@@ -7,8 +7,8 @@ const exportAudit = async (user) => {
   await get(exportAuditEndpoint, user)
 }
 
-const createExportFile = async (batchSize) => {
-  await get(`${createExportFileEndpoint}?batchSize=${batchSize}`)
+const createExportFile = async (batchSize, user) => {
+  await get(`${createExportFileEndpoint}?batchSize=${batchSize}`, user)
 }
 
 module.exports = {

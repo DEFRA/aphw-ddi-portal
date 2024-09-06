@@ -35,12 +35,13 @@ module.exports = [{
       const taskName = request.params.taskName
       const dogIndex = request.params.dogIndex
 
-      const cdo = await getCdo(dogIndex)
+      const user = getUser(request)
+      const cdo = await getCdo(dogIndex, user)
       if (cdo?.dog?.status !== 'Pre-exempt') {
         throw new Error(`Dog ${dogIndex} is wrong status for manage-cdo`)
       }
 
-      const data = await getTaskData(dogIndex, taskName)
+      const data = await getTaskData(dogIndex, taskName, user, request)
 
       const backNav = addBackNavigation(request)
 
@@ -67,10 +68,11 @@ module.exports = [{
         return getValidation(payload)
       },
       failAction: async (request, h, error) => {
+        const user = getUser(request)
         const taskName = request.params.taskName
         logValidationError(error, `${routes.manageCdoTaskBase.get} ${taskName}`)
 
-        const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
+        const data = await getTaskData(request.params.dogIndex, taskName, user, request.payload)
 
         const backNav = addBackNavigationForErrorCondition(request)
 
@@ -81,18 +83,19 @@ module.exports = [{
       const dogIndex = request.params.dogIndex
       const taskName = request.params.taskName
       const payload = request.payload
+      const user = getUser(request)
 
       const { apiKey } = getTaskDetailsByKey(taskName)
 
       try {
-        await saveCdoTaskDetails(dogIndex, apiKey, payload, getUser(request))
+        await saveCdoTaskDetails(dogIndex, apiKey, payload, user)
 
         return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
       } catch (e) {
         if (e instanceof ApiErrorFailure) {
           const error = mapBoomError(e, request)
 
-          const data = await getTaskData(request.params.dogIndex, taskName, request.payload)
+          const data = await getTaskData(request.params.dogIndex, taskName, user, request.payload)
 
           const backNav = addBackNavigationForErrorCondition(request)
 

@@ -20,6 +20,7 @@ services:
       DDI_API_BASE_URL: test
       DDI_EVENTS_BASE_URL: test-events
       NODE_OPTIONS: "--max-old-space-size=3072"
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
 
   aphw-ddi-portal-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0

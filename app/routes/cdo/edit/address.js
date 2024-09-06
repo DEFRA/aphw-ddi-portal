@@ -13,9 +13,11 @@ const { validateBreedForCountryChoosingAddress } = require('../../../lib/validat
 const { logValidationError } = require('../../../lib/log-helpers')
 
 const errorView = async (request, h, error) => {
+  const user = getUser(request)
+
   const backNav = addBackNavigationForErrorCondition(request)
   const person = request.payload
-  const countries = await getCountries()
+  const countries = await getCountries(user)
   const form = {
     personReference: person.personReference,
     source: 'edit'
@@ -29,6 +31,7 @@ module.exports = [{
   options: {
     auth: { scope: anyLoggedInUser },
     handler: async (request, h) => {
+      const user = getUser(request)
       const personReference = request.params.personReference
       const fromSessionOrDb = request.params.fromSessionOrDb
 
@@ -38,7 +41,7 @@ module.exports = [{
           address: getAddress(request)
         }
       } else {
-        person = await getPersonByReference(personReference)
+        person = await getPersonByReference(personReference, user)
         if (person == null) {
           return h.response().code(404).takeover()
         }
@@ -46,7 +49,7 @@ module.exports = [{
 
       const backNav = addBackNavigation(request)
 
-      const countries = await getCountries()
+      const countries = await getCountries(user)
 
       const form = {
         personReference,
@@ -74,19 +77,20 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const person = await getPersonByReference(request.payload.personReference)
+      const user = getUser(request)
+      const person = await getPersonByReference(request.payload.personReference, user)
       if (person == null) {
         return h.response().code(404).takeover()
       }
 
       const updatePayload = buildPersonAddressUpdatePayload(person, request.payload)
 
-      const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, updatePayload, 'country')
+      const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, updatePayload, user, 'country')
       if (error) {
         return await errorView(request, h, error)
       }
 
-      await updatePerson(updatePayload, getUser(request))
+      await updatePerson(updatePayload, user)
 
       setPostcodeLookupDetails(request, null)
 

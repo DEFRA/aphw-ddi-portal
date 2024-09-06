@@ -2,15 +2,17 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 
 const generateToken = (payload, { audience, issuer }) => {
-  const secretKey = config.authConfig.secret
+  const privateKey = Buffer.from(config.authConfig.privateKey, 'base64').toString()
+
   const options = {
     expiresIn: '1h',
-    algorithm: 'HS256',
+    algorithm: 'RS256',
     audience,
-    issuer
+    issuer,
+    keyid: issuer
   }
 
-  return jwt.sign(payload, secretKey, options)
+  return jwt.sign(payload, privateKey, options)
 }
 
 const createJwtToken = (audience) => (username, displayname, scopes) => {
@@ -26,10 +28,10 @@ const createJwtToken = (audience) => (username, displayname, scopes) => {
   }, options)
 }
 
-const createBearerHeader = (audience) => (user, request) => {
+const createBearerHeader = (audience) => (user) => {
   const username = user?.username
   const displayname = user?.displayname
-  const scopes = request.auth?.credentials?.scope
+  const scopes = user?.scopes
   const token = createJwtToken(audience)(username, displayname, scopes)
 
   return {

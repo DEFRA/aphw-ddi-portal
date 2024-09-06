@@ -30,7 +30,8 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const activity = await getActivityById(request.params.activityId)
+        const user = getUser(request)
+        const activity = await getActivityById(request.params.activityId, user)
 
         return h.view(views.confirm, new ViewModel({
           ...getActivityConstants(activity),
@@ -47,7 +48,8 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          const activity = await getActivityById(request.params.activityId)
+          const user = getUser(request)
+          const activity = await getActivityById(request.params.activityId, user)
 
           return h.view(views.confirm, new ViewModel({
             ...getActivityConstants(activity),
@@ -59,11 +61,12 @@ module.exports = [
         if (request.payload.confirm === 'N') {
           return h.redirect(routes.activities.index.get)
         }
+        const user = getUser(request)
 
-        const activity = await getActivityById(request.params.activityId)
+        const activity = await getActivityById(request.params.activityId, user)
 
         try {
-          await deleteActivity(request.params.activityId, getUser(request))
+          await deleteActivity(request.params.activityId, user)
 
           return h.view(views.success, ActivityRemovedViewModel(activity))
         } catch (e) {
