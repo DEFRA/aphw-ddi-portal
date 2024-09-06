@@ -9,7 +9,6 @@ module.exports = {
   options: {
     auth: { scope: [admin] },
     handler: async (_, h) => {
-      console.log('~~~~~~ Chris Debug ~~~~~~ documentation reached', '')
       if (!documentation.allowedEnvironments.includes(getEnvironmentVariable('ENVIRONMENT_CODE'))) {
         return h.view('404').code(404)
       }

@@ -11,7 +11,6 @@ const { ApiConflictError } = require('../../../errors/api-conflict-error')
 const { getBreachCategories, setDogBreaches } = require('../../../api/ddi-index-api/dog-breaches')
 
 const changeStatusPostFailAction = async (request, h, error) => {
-  console.log('~~~~~~ Chris Debug ~~~~~~ changeStatusPostFailAction', '')
   const payload = request.payload
 
   const cdo = await getCdo(payload.indexNumber, getUser(request))
@@ -35,7 +34,6 @@ const changeStatusPostFailAction = async (request, h, error) => {
 const breachReasonPostFailAction = async (request, h, error) => {
   const user = getUser(request)
   const payload = request.payload
-  console.log('~~~~~~ Chris Debug ~~~~~~ 3', '')
 
   const cdo = await getCdo(payload.indexNumber, user)
   if (cdo == null) {
@@ -57,7 +55,6 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        console.log('~~~~~~ Chris Debug ~~~~~~ in breach', '')
         const user = getUser(request)
         const cdo = await getCdo(request.params.indexNumber, user)
 
@@ -81,14 +78,12 @@ module.exports = [
         failAction: changeStatusPostFailAction
       },
       handler: async (request, h) => {
-        console.log('~~~~~~ Chris Debug ~~~~~~ change status', '')
         const payload = request.payload
         const backNav = addBackNavigation(request, false)
 
         if (payload.newStatus === 'In breach') {
           return h.redirect(`${routes.inBreach.get}/${payload.indexNumber}${backNav?.srcHashParam}`)
         }
-        console.log('~~~~~~ Chris Debug ~~~~~~ not in breach', '')
 
         try {
           await updateStatus(payload, getUser(request))
@@ -135,10 +130,8 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const payload = request.payload
-        console.log('~~~~~~ Chris Debug ~~~~~~ 1', '')
 
         await setDogBreaches(payload, getUser(request))
-        console.log('~~~~~~ Chris Debug ~~~~~~ 2', '')
 
         return h.redirect(`${routes.changeStatusConfirmation.get}/${payload.indexNumber}`)
       }
