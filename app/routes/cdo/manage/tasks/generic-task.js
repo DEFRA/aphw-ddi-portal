@@ -41,7 +41,7 @@ module.exports = [{
         throw new Error(`Dog ${dogIndex} is wrong status for manage-cdo`)
       }
 
-      const data = await getTaskData(dogIndex, taskName, user, request)
+      const data = await getTaskData(dogIndex, taskName, user)
 
       const backNav = addBackNavigation(request)
 

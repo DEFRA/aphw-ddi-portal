@@ -9,12 +9,27 @@ const activityEndpoint = 'activity'
 const hideTheseLabels = ['Application pack', 'Form 2']
 
 /**
+ * @typedef Activity
+ * @property {number} id
+ * @property {string} label
+ * @property {number} activity_type_id
+ * @property {number} activity_source_id
+ * @property {number} display_order
+ * @property {string} created_at
+ * @property {string} updated_at
+ * @property {number} activity_event_id
+ * @property {{ id: number; name: string; } activity_type
+ * @property {{ id: number; name: string; }} activity_source
+ * @property {{ id: number; target_primary_key: number; }} activity_event
+ */
+
+/**
  *
  * @param activityType
  * @param activitySource
  * @param user
  * @param hideInternal
- * @return {Promise<T[]|string|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|{activity_type: {name: string}, id: number, label: string}|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|*>}
+ * @return {Promise<Activity[]>}
  */
 const getActivities = async (activityType, activitySource, user, hideInternal = false) => {
   const payload = await get(`${activitiesEndpoint}/${activityType}/${activitySource}`, user)
@@ -29,7 +44,7 @@ const getActivities = async (activityType, activitySource, user, hideInternal = 
 /**
  *
  * @param user
- * @return {Promise<{dogReceived: (*|string|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|{activity_type: {name: string}, id: number, label: string}|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]), ownerReceived: (*|string|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|{activity_type: {name: string}, id: number, label: string}|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]), ownerSent: (*|string|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|{activity_type: {name: string}, id: number, label: string}|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]), dogSent: (*|string|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|{activity_type: {name: string}, id: number, label: string}|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}]|[{activity_type: {name: string}, id: number, label: string},{activity_type: {name: string}, id: number, label: string}])}>}
+ * @return {Promise<{dogSent: Activity[]; dogReceived: Activity[]; ownerSent: Activity[]; ownerReceived: Activity[] }>}
  */
 const getAllActivities = async (user) => {
   return {
@@ -44,7 +59,7 @@ const getAllActivities = async (user) => {
  *
  * @param activityId
  * @param user
- * @return {Promise<*>}
+ * @return {Promise<Activity>}
  */
 const getActivityById = async (activityId, user) => {
   const payload = await get(`${activityEndpoint}/${activityId}`, user)
@@ -66,7 +81,7 @@ const recordActivity = async (activity, user) => {
     activity.pk = (await getDogOwner(activity.pk, user)).personReference
   }
 
-  return await post(activityEndpoint, activity, user)
+  return post(activityEndpoint, activity, user)
 }
 
 /**
