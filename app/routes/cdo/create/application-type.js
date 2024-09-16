@@ -6,6 +6,7 @@ const ViewModel = require('../../../models/cdo/create/application-type')
 const { getDog, setDog, getMicrochipResults } = require('../../../session/cdo/dog')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { validatePayload } = require('../../../schema/portal/cdo/application-type')
+const { getUser } = require('../../../auth')
 
 const determineBackLink = request => {
   const existingDogs = getMicrochipResults(request)
@@ -56,6 +57,7 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        const user = getUser(request)
         const dog = { ...getDog(request), ...request.payload }
 
         removeDateComponents(dog, keys.interimExemption)
@@ -71,7 +73,7 @@ module.exports = [
           throw error
         }
 
-        await setPoliceForce(request)
+        await setPoliceForce(request, user)
 
         return h.redirect(ownerRoutes.enforcementDetails.get)
       }

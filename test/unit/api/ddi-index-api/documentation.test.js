@@ -1,3 +1,4 @@
+const { user } = require('../../../mocks/auth')
 
 describe('DDI API documenation', () => {
   beforeEach(() => {
@@ -13,7 +14,7 @@ describe('DDI API documenation', () => {
       info: 'API Documentation'
     })
 
-    const documentation = await getDocumentation()
+    const documentation = await getDocumentation(user)
     expect(documentation).toEqual({
       info: 'API Documentation'
     })

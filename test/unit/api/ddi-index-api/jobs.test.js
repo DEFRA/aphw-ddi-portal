@@ -10,14 +10,14 @@ describe('Jobs tests', () => {
 
   test('purgeSoftDelete calls endpoint', async () => {
     post.mockResolvedValue({ payload: {} })
-    await purgeSoftDelete()
-    expect(post).toHaveBeenCalledWith('jobs/purge-soft-delete')
+    await purgeSoftDelete(userForAuth)
+    expect(post).toHaveBeenCalledWith('jobs/purge-soft-delete', {}, userForAuth)
   })
 
   test('purgeSoftDelete calls endpoint with param', async () => {
     post.mockResolvedValue({ payload: {} })
-    await purgeSoftDelete('2010-06-20')
-    expect(post).toHaveBeenCalledWith('jobs/purge-soft-delete?today=2010-06-20')
+    await purgeSoftDelete(userForAuth, '2010-06-20')
+    expect(post).toHaveBeenCalledWith('jobs/purge-soft-delete?today=2010-06-20', {}, userForAuth)
   })
 
   test('neuteringDeadline calls endpoint', async () => {

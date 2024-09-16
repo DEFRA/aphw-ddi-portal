@@ -81,24 +81,24 @@ describe('Dog test', () => {
   describe('getDogDetails', () => {
     test('getDogDetails calls endpoint', async () => {
       get.mockResolvedValue({ payload: {} })
-      await getDogDetails('ED12345')
-      expect(get).toHaveBeenCalledWith('dog/ED12345', expect.anything())
+      await getDogDetails('ED12345', user)
+      expect(get).toHaveBeenCalledWith('dog/ED12345', user)
     })
   })
 
   describe('getDogOwner', () => {
     test('getDogOwner calls endpoint', async () => {
       get.mockResolvedValue({ payload: {} })
-      await getDogOwner('ED12345')
-      expect(get).toHaveBeenCalledWith('dog-owner/ED12345', expect.anything())
+      await getDogOwner('ED12345', user)
+      expect(get).toHaveBeenCalledWith('dog-owner/ED12345', user)
     })
   })
 
   describe('getDogOwnerWithDogs', () => {
     test('should calls endpoint', async () => {
       get.mockResolvedValue({ payload: {} })
-      await getDogOwnerWithDogs('ED12345')
-      expect(get).toHaveBeenCalledWith('dog-owner/ED12345?includeDogs=true', expect.anything())
+      await getDogOwnerWithDogs('ED12345', user)
+      expect(get).toHaveBeenCalledWith('dog-owner/ED12345?includeDogs=true', user)
     })
   })
 

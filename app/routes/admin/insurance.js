@@ -13,8 +13,9 @@ module.exports = [
     path: `${routes.insurance.get}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (_request, h) => {
-        const insuranceCompanies = await getCompanies()
+      handler: async (request, h) => {
+        const user = getUser(request)
+        const insuranceCompanies = await getCompanies(user)
         return h.view(views.insurance, new ViewModel({}, insuranceCompanies))
       }
     }
@@ -38,7 +39,8 @@ module.exports = [
           return validateInsurancePayload(payload)
         },
         failAction: async (request, h, error) => {
-          const insuranceCompanies = await getCompanies()
+          const user = getUser(request)
+          const insuranceCompanies = await getCompanies(user)
 
           return h.view(views.insurance, new ViewModel(request.payload, insuranceCompanies, error)).code(400).takeover()
         }
@@ -56,7 +58,7 @@ module.exports = [
           }
           await removeInsuranceCompany(value.remove, actioningUser)
 
-          insuranceCompanies = await getCompanies()
+          insuranceCompanies = await getCompanies(actioningUser)
         } else {
           const payload = {
             name: requestPayload.name
@@ -69,7 +71,7 @@ module.exports = [
             if (e instanceof ApiConflictError) {
               const { error } = duplicateInsuranceCompanySchema.validate(payload, { abortEarly: false })
 
-              const insuranceCompanies = await getCompanies()
+              const insuranceCompanies = await getCompanies(actioningUser)
 
               return h.view(views.insurance, new ViewModel(requestPayload, insuranceCompanies, error)).code(400)
             }
@@ -77,7 +79,7 @@ module.exports = [
             throw e
           }
 
-          insuranceCompanies = await getCompaniesNewest()
+          insuranceCompanies = await getCompaniesNewest(actioningUser)
         }
 
         return h.view(views.insurance, new ViewModel(requestPayload, insuranceCompanies))

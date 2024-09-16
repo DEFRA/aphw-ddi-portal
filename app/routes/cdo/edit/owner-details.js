@@ -11,8 +11,9 @@ const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
 
 const errorView = async (request, h, error) => {
+  const user = getUser(request)
   const person = request.payload
-  const countries = await getCountries()
+  const countries = await getCountries(user)
   const backNav = addBackNavigationForErrorCondition(request)
   return h.view(views.editDetails, new ViewModel(person, countries, backNav, error)).code(400).takeover()
 }
@@ -24,7 +25,8 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const person = await getPersonByReference(request.params.personReference)
+        const user = getUser(request)
+        const person = await getPersonByReference(request.params.personReference, user)
 
         if (person == null) {
           return h.response().code(404).takeover()
@@ -34,7 +36,7 @@ module.exports = [
 
         addDateComponents(person, 'dateOfBirth')
 
-        const countries = await getCountries()
+        const countries = await getCountries(user)
 
         const backNav = addBackNavigation(request)
 
@@ -54,16 +56,17 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        const user = getUser(request)
         const person = request.payload
 
         const payload = buildPersonUpdatePayload(person)
 
-        const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, payload, 'country')
+        const error = await validateBreedForCountryChoosingAddress(request.payload.personReference, payload, user, 'country')
         if (error) {
           return errorView(request, h, error)
         }
 
-        await updatePerson(payload, getUser(request))
+        await updatePerson(payload, user)
 
         return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
       }

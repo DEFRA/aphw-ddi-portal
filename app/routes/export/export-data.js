@@ -31,7 +31,8 @@ module.exports = [{
     handler: async (request, h) => {
       // Deliberately excluding 'await' to trigger back-end process but prevent UI timeout
       const batchSize = request.query.batchSize ?? 0
-      createExportFile(batchSize)
+      const user = getUser(request)
+      createExportFile(batchSize, user)
 
       return h.response(`Triggered export file creation at ${formatToDateTime(new Date())} with batchSize ${batchSize}`)
     }

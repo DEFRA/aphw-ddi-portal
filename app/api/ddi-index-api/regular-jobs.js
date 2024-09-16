@@ -2,12 +2,12 @@ const { get } = require('./base')
 
 const jobsEndpoint = 'regular-jobs'
 
-const options = {
-  json: true
-}
-
-const getRegularJobs = async () => {
-  const payload = await get(jobsEndpoint, options)
+/**
+ * @param user
+ * @return {Promise<*>}
+ */
+const getRegularJobs = async (user) => {
+  const payload = await get(jobsEndpoint, user)
 
   return payload.jobs
 }

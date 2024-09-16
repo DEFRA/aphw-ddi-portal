@@ -3,10 +3,6 @@ const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
 
-const options = {
-  json: true
-}
-
 const addPerson = async person => {
   const data = {
     people: [
@@ -60,27 +56,43 @@ const addPerson = async person => {
  * @property {Contacts} contacts
  */
 
-const getPersonAndDogs = async (personReference) => {
-  const payload = await get(`${personEndpoint}/${personReference}?includeDogs=true`, options)
+/**
+ * @param personReference
+ * @param user
+ * @return {Promise<unknown>}
+ */
+const getPersonAndDogs = async (personReference, user) => {
+  const payload = await get(`${personEndpoint}/${personReference}?includeDogs=true`, user)
   return payload
 }
 
 /**
  * @param reference
+ * @param user
  * @return {Promise<Person>}
  */
-const getPersonByReference = async (reference) => {
-  const res = await get(`${personEndpoint}/${reference}`)
+const getPersonByReference = async (reference, user) => {
+  const res = await get(`${personEndpoint}/${reference}`, user)
 
   return res
 }
 
+/**
+ * @param data
+ * @param user
+ * @return {Promise<any>}
+ */
 const updatePerson = async (data, user) => {
   const res = await put(`${personEndpoint}`, data, user)
 
   return res
 }
 
+/**
+ * @param reference
+ * @param user
+ * @return {Promise<unknown>}
+ */
 const deletePerson = async (reference, user) => {
   const res = await callDelete(`${personEndpoint}/${reference}`, user)
 

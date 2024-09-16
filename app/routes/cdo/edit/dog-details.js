@@ -32,14 +32,15 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const indexNumber = request.params.indexNumber
-        const cdo = await getCdo(indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(indexNumber, user)
 
         if (cdo == null) {
           return h.response().code(404).takeover()
         }
 
         const dog = cdo.dog
-        const { breeds } = await getBreeds()
+        const { breeds } = await getBreeds(user)
 
         if (dog[keys.dateOfBirth]) {
           addDateComponents(dog, keys.dateOfBirth)
@@ -72,7 +73,8 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          const { breeds } = await getBreeds()
+          const user = getUser(request)
+          const { breeds } = await getBreeds(user)
 
           const dog = request.payload
 
@@ -83,17 +85,18 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        const user = getUser(request)
         const dog = request.payload
 
         try {
-          await updateDogDetails(dog, getUser(request))
+          await updateDogDetails(dog, user)
 
           return h.redirect(`${routes.viewDogDetails.get}/${dog.indexNumber}${extractBackNavParam(request)}`)
         } catch (e) {
           if (e instanceof ApiConflictError) {
             const error = mapBoomError(e, request)
 
-            const { breeds } = await getBreeds()
+            const { breeds } = await getBreeds(user)
 
             const dog = request.payload
 

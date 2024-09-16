@@ -9,6 +9,7 @@ const { anyLoggedInUser } = require('../../../auth/permissions')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { setPoliceForce } = require('../../../lib/model-helpers')
 const { setRouteFlag, clearRouteFlag } = require('../../../session/routes')
+const { getUser } = require('../../../auth')
 
 const source = 'create'
 
@@ -63,7 +64,7 @@ module.exports = [
         setRouteFlag(request, constants.routeFlags.postcodeLookup)
         clearRouteFlag(request, constants.routeFlags.manualAddressEntry)
 
-        await setPoliceForce(request, selectedAddress.postcode)
+        await setPoliceForce(request, getUser(request), selectedAddress.postcode)
 
         return h.redirect(dogRoutes.microchipSearch.get)
       }

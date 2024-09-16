@@ -5,6 +5,7 @@ const { addBackNavigation } = require('../../../lib/back-helpers')
 const { getManageCdoDetails } = require('../../../api/ddi-index-api/cdo')
 const ViewModel = require('../../../models/cdo/manage/cdo')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -16,13 +17,14 @@ module.exports = [
         const backNav = addBackNavigation(request)
 
         const dogIndex = request.params.dogIndex
-        const details = await getManageCdoDetails(dogIndex)
+        const user = getUser(request)
+        const details = await getManageCdoDetails(dogIndex, user)
 
         if (details == null) {
           return h.response().code(404).takeover()
         }
 
-        const cdo = await getCdo(dogIndex)
+        const cdo = await getCdo(dogIndex, user)
 
         return h.view(views.manageCdo, new ViewModel(details, cdo, backNav, `${dogRoutes.certificate.get}/${dogIndex}${backNav.srcHashParam}&origin=manage-cdo`))
       }

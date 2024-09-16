@@ -3,10 +3,6 @@ const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const courtsEndpoint = 'courts'
 
-const options = {
-  json: true
-}
-
 /**
  * @typedef Court
  * @return {{
@@ -16,10 +12,12 @@ const options = {
  */
 
 /**
+ *
+ * @param user
  * @return {Promise<Court[]>}
  */
-const getCourts = async () => {
-  const payload = await get(courtsEndpoint, options)
+const getCourts = async (user) => {
+  const payload = await get(courtsEndpoint, user)
 
   return payload.courts
 }
@@ -31,6 +29,7 @@ const getCourts = async () => {
 
 /**
  * @param {CourtRequest} court
+ * @param user
  * @return {Promise<CourtRequest>}
  */
 const addCourt = async (court, user) => {

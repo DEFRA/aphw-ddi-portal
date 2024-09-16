@@ -2,6 +2,7 @@ const { routes, views } = require('../../constants/admin')
 const { admin } = require('../../auth/permissions')
 const ViewModel = require('../../models/admin/regular-jobs')
 const { getRegularJobs } = require('../../api/ddi-index-api/regular-jobs')
+const { getUser } = require('../../auth')
 
 module.exports = [
   {
@@ -10,7 +11,8 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const allJobs = await getRegularJobs()
+        const user = getUser(request)
+        const allJobs = await getRegularJobs(user)
 
         return h.view(views.regularJobs, new ViewModel(allJobs))
       }

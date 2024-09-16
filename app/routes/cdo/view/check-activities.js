@@ -8,20 +8,33 @@ const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { getEvents } = require('../../../api/ddi-events-api/event')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
 const { sortEventsDesc, filterEvents } = require('../../../models/sorting/event')
+const { getUser } = require('../../../auth')
 
-const getSourceEntity = async (pk, source) => {
+/**
+ * @param pk
+ * @param source
+ * @param user
+ * @return {Promise<{firstName: string, lastName: string, birthDate: string, personReference: string, address: Address, contacts: Contacts}|*|null>}
+ */
+const getSourceEntity = async (pk, source, user) => {
   if (source === activitySources.dog) {
-    return await getCdo(pk)
+    return await getCdo(pk, user)
   } else if (source === activitySources.owner) {
-    return await getPersonByReference(pk)
+    return await getPersonByReference(pk, user)
   }
 
   return null
 }
 
-const getEventPkList = async (pk, source) => {
+/**
+ * @param pk
+ * @param source
+ * @param user
+ * @return {Promise<(*)[]|*[]>}
+ */
+const getEventPkList = async (pk, source, user) => {
   if (source === activitySources.dog) {
-    const { personReference } = await getDogOwner(pk)
+    const { personReference } = await getDogOwner(pk, user)
     return [pk, personReference]
   }
   return [pk]
@@ -34,15 +47,16 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const user = getUser(request)
         const pk = request.params.pk
         const source = request.params.source
 
-        const entity = await getSourceEntity(pk, source)
+        const entity = await getSourceEntity(pk, source, user)
         if (entity === null || entity === undefined) {
           return h.response().code(404).takeover()
         }
 
-        const eventPkList = await getEventPkList(pk, source)
+        const eventPkList = await getEventPkList(pk, source, user)
 
         const allEvents = await getEvents(eventPkList)
 

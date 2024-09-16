@@ -5,6 +5,7 @@ const { getPoliceForces } = require('../../../app/api/ddi-index-api/police-force
 jest.mock('../../../app/api/ddi-index-api/police-forces')
 
 const wreck = require('@hapi/wreck')
+const { user } = require('../../mocks/auth')
 jest.mock('@hapi/wreck')
 
 const policeForces = [
@@ -49,21 +50,21 @@ describe('PoliceArea test', () => {
 
   test('matchPoliceForceByName matches correctly 1', async () => {
     getPoliceForces.mockResolvedValue(policeForces)
-    const res = await matchPoliceForceByName('avon-and-somerset')
+    const res = await matchPoliceForceByName('avon-and-somerset', user)
     expect(res).not.toBe(null)
     expect(res.id).toBe(3)
   })
 
   test('matchPoliceForceByName matches correctly 2', async () => {
     getPoliceForces.mockResolvedValue(policeForces)
-    const res = await matchPoliceForceByName('durham')
+    const res = await matchPoliceForceByName('durham', user)
     expect(res).not.toBe(null)
     expect(res.id).toBe(2)
   })
 
   test('matchPoliceForceByName returns null when no name', async () => {
     getPoliceForces.mockResolvedValue(policeForces)
-    const res = await matchPoliceForceByName(null)
+    const res = await matchPoliceForceByName(null, user)
     expect(res).toBe(null)
   })
 })

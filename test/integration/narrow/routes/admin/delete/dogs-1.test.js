@@ -113,7 +113,7 @@ describe('Delete dogs 1', () => {
 
       const response = await server.inject(options)
 
-      expect(getOldDogs).toHaveBeenCalledWith('Exempt,Inactive,Withdrawn,Failed', { column: 'status', order: 'ASC' }, '2050-01-01')
+      expect(getOldDogs).toHaveBeenCalledWith(expect.any(Object), 'Exempt,Inactive,Withdrawn,Failed', { column: 'status', order: 'ASC' }, '2050-01-01')
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/admin/delete/dogs-1?today=2050-01-01')
     })

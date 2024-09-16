@@ -16,7 +16,8 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.params.indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(request.params.indexNumber, user)
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()
@@ -44,14 +45,15 @@ module.exports = [
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
         const indexNumber = request.payload.indexNumber
-        const cdo = await getCdo(indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(indexNumber, user)
         const origin = request.query.origin
 
         if (cdo === undefined) {
           return h.response().code(404).takeover()
         }
 
-        const certificateId = await sendMessage(cdo, getUser(request))
+        const certificateId = await sendMessage(cdo, user)
 
         try {
           const cert = await downloadCertificate(indexNumber, certificateId)
@@ -60,11 +62,11 @@ module.exports = [
             ? `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption XL Bully.pdf`
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
 
-          const cdoTaskDetails = await getManageCdoDetails(indexNumber)
+          const cdoTaskDetails = await getManageCdoDetails(indexNumber, user)
 
           if ((cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed) && cdo.dog.status === 'Pre-exempt') {
             // Pre-exempt and all tasks completed
-            const error = await issueCertTask(indexNumber, getUser(request))
+            const error = await issueCertTask(indexNumber, user)
             if (error) {
               const backNav = addBackNavigationForErrorCondition(request)
               return h.view(views.certificate, new ViewModel(indexNumber, origin, backNav, error))

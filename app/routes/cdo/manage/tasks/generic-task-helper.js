@@ -62,15 +62,22 @@ const getTaskDetailsByKey = taskKey => {
   return { key: task.key, label: task.label, apiKey: task.apiKey, stateKey: task.stateKey }
 }
 
-const getTaskData = async (dogIndex, taskName, payload = {}) => {
+/**
+ * @param dogIndex
+ * @param taskName
+ * @param user
+ * @param payload
+ * @return {Promise<{[p: string]: *}>}
+ */
+const getTaskData = async (dogIndex, taskName, user, payload = {}) => {
   const taskData = getTaskDetailsByKey(taskName)
-  const savedTask = await getCdoTaskDetails(dogIndex, taskName)
+  const savedTask = await getCdoTaskDetails(dogIndex, user)
   const taskState = savedTask.tasks[taskData.stateKey]
   const data = { indexNumber: dogIndex, ...savedTask, task: { ...taskState }, ...payload }
   delete data.task.tasks
 
   if (taskName === 'record-insurance-details') {
-    data.companies = await getCompanies()
+    data.companies = await getCompanies(user)
   }
 
   return data

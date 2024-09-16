@@ -13,7 +13,7 @@ const { getBreachCategories, setDogBreaches } = require('../../../api/ddi-index-
 const changeStatusPostFailAction = async (request, h, error) => {
   const payload = request.payload
 
-  const cdo = await getCdo(payload.indexNumber)
+  const cdo = await getCdo(payload.indexNumber, getUser(request))
   if (cdo == null) {
     return h.response().code(404).takeover()
   }
@@ -32,13 +32,14 @@ const changeStatusPostFailAction = async (request, h, error) => {
 }
 
 const breachReasonPostFailAction = async (request, h, error) => {
+  const user = getUser(request)
   const payload = request.payload
 
-  const cdo = await getCdo(payload.indexNumber)
+  const cdo = await getCdo(payload.indexNumber, user)
   if (cdo == null) {
     return h.response().code(404).takeover()
   }
-  const breachCategories = await getBreachCategories()
+  const breachCategories = await getBreachCategories(user)
 
   const backNav = addBackNavigationForErrorCondition(request)
 
@@ -54,7 +55,8 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.params.indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(request.params.indexNumber, user)
 
         if (cdo == null) {
           return h.response().code(404).takeover()
@@ -103,14 +105,15 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.params.indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(request.params.indexNumber, user)
 
         if (cdo == null) {
           return h.response().code(404).takeover()
         }
         const backNav = addBackNavigation(request, false)
 
-        const breachCategories = await getBreachCategories()
+        const breachCategories = await getBreachCategories(user)
 
         return h.view(views.inBreachCategories, new InBreachViewModel(cdo.dog, breachCategories, [], backNav))
       }

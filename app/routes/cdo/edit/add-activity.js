@@ -8,15 +8,22 @@ const { getMainReturnPoint, addBackNavigation } = require('../../../lib/back-hel
 const { getActivityDetails, setActivityDetails } = require('../../../session/cdo/activity')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
 const { getActivities } = require('../../../api/ddi-index-api/activities')
+const { getUser } = require('../../../auth')
 
 const getBackNav = (request) => ({
   backLink: getMainReturnPoint(request)
 })
 
-const getSourceEntity = async (pk, source) => {
+/**
+ * @param pk
+ * @param source
+ * @param user
+ * @return {Promise<*|{firstName: string, lastName: string, birthDate: string, personReference: string, address: Address, contacts: Contacts}>}
+ */
+const getSourceEntity = async (pk, source, user) => {
   return source === 'dog'
-    ? await getCdo(pk)
-    : await getPersonByReference(pk)
+    ? await getCdo(pk, user)
+    : await getPersonByReference(pk, user)
 }
 
 const getTitleReference = (source, entity) => {
@@ -25,9 +32,17 @@ const getTitleReference = (source, entity) => {
     : `${entity.firstName} ${entity.lastName}`
 }
 
-const handleForwardSkipIfNeeded = async (request, details, h) => {
-  const numSentActivities = (await getActivities(keys.sent, details.source)).length
-  const numReceivedActivities = (await getActivities(keys.received, details.source)).length
+/**
+ *
+ * @param request
+ * @param details
+ * @param user
+ * @param h
+ * @return {Promise<*>}
+ */
+const handleForwardSkipIfNeeded = async (request, details, user, h) => {
+  const numSentActivities = (await getActivities(keys.sent, details.source, user)).length
+  const numReceivedActivities = (await getActivities(keys.received, details.source, user)).length
 
   if (numSentActivities > 0 && numReceivedActivities > 0) {
     const backNav = addBackNavigation(request)
@@ -48,7 +63,8 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const entity = await getSourceEntity(request.params.pk, request.params.source)
+        const user = getUser(request)
+        const entity = await getSourceEntity(request.params.pk, request.params.source, user)
 
         if (entity == null) {
           return h.response().code(404).takeover()
@@ -60,7 +76,7 @@ module.exports = [
         activityDetails.srcHashParam = request.query?.src
         activityDetails.titleReference = getTitleReference(activityDetails.source, entity)
 
-        return await handleForwardSkipIfNeeded(request, activityDetails, h)
+        return await handleForwardSkipIfNeeded(request, activityDetails, user, h)
       }
     }
   },
@@ -72,9 +88,10 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
+          const user = getUser(request)
           const payload = request.payload
 
-          const entity = await getSourceEntity(payload.pk, payload.source)
+          const entity = await getSourceEntity(payload.pk, payload.source, user)
 
           if (entity == null) {
             return h.response().code(404).takeover()

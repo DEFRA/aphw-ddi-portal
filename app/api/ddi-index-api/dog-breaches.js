@@ -2,10 +2,6 @@ const { get, post } = require('./base')
 
 const dogBreachesEndpoint = 'breaches'
 
-const options = {
-  json: true
-}
-
 /**
  * @typedef BreachCategory
  * @property {number} id
@@ -16,8 +12,8 @@ const options = {
 /**
  * @return {Promise<BreachCategory[]>}
  */
-const getBreachCategories = async () => {
-  const payload = await get(`${dogBreachesEndpoint}/categories`, options)
+const getBreachCategories = async (user) => {
+  const payload = await get(`${dogBreachesEndpoint}/categories`, user)
 
   return payload.breachCategories.map(breachCategory => {
     const [firstLetter, ...restOfLetters] = breachCategory.label

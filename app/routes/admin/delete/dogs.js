@@ -26,10 +26,11 @@ module.exports = [
       },
       handler: async (request, h) => {
         const params = request.query
+        const user = getUser(request)
 
         const sort = { column: params.sortKey, order: params.sortOrder }
 
-        const dogs = await getOldDogs(statusListForStep1, sort, params.today)
+        const dogs = await getOldDogs(user, statusListForStep1, sort, params.today)
 
         if (params.start === 'true') {
           initialiseDogsForDeletion(request, dogs)
@@ -82,10 +83,11 @@ module.exports = [
       },
       handler: async (request, h) => {
         const params = request.query
+        const user = getUser(request)
 
         const sort = { column: params.sortKey, order: params.sortOrder }
 
-        const dogs = await getOldDogs(statusListForStep2, sort, params.today)
+        const dogs = await getOldDogs(user, statusListForStep2, sort, params.today)
 
         const backNav = addBackNavigation(request)
         backNav.backLink = routes.deleteDogs1.get

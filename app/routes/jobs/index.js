@@ -10,7 +10,8 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        const res = await purgeSoftDelete(request.query.today)
+        const user = getUser(request)
+        const res = await purgeSoftDelete(user, request.query.today)
         return h.response(res).code(200)
       }
     }

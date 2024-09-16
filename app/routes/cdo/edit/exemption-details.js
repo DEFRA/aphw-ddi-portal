@@ -17,15 +17,16 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const cdo = await getCdo(request.params.indexNumber)
+        const user = getUser(request)
+        const cdo = await getCdo(request.params.indexNumber, user)
 
         if (cdo == null) {
           return h.response().code(404).takeover()
         }
 
-        const courts = await getCourts()
-        const policeForces = await getPoliceForces()
-        const companies = await getCompanies()
+        const courts = await getCourts(user)
+        const policeForces = await getPoliceForces(user)
+        const companies = await getCompanies(user)
 
         const exemption = cdo.exemption
 
@@ -63,9 +64,10 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
-          const courts = await getCourts()
-          const policeForces = await getPoliceForces()
-          const companies = await getCompanies()
+          const user = getUser(request)
+          const courts = await getCourts(user)
+          const policeForces = await getPoliceForces(user)
+          const companies = await getCompanies(user)
 
           const exemption = request.payload
 

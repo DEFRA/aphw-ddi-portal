@@ -27,10 +27,11 @@ const stepOneCheckSubmitted = {
     const { pk } = validatePayloadBuilder(isInputFieldPkInPayload(addRemoveConstants.messageLabelCapital))(request.payload)
     return pk
   },
-  failAction: async (_request, h, error) => {
+  failAction: async (request, h, error) => {
+    const user = getUser(request)
     const backLink = addRemoveConstants.links.index.get
 
-    const items = (await getCourts()).map(court => ({
+    const items = (await getCourts(user)).map(court => ({
       text: court.name,
       value: court.id
     }))
@@ -50,10 +51,11 @@ const stepTwoCheckConfirmation = {
   },
   failAction: async (request, h) => {
     throwIfPreConditionError(request)
+    const user = getUser(request)
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
-    const courts = await getCourts()
+    const courts = await getCourts(user)
     const recordValue = courts.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -75,10 +77,11 @@ const stepThreeCheckConfirmation = {
   assign: 'addConfirmation',
   failAction: async (request, h, error) => {
     throwIfPreConditionError(request)
+    const user = getUser(request)
     const backLink = routes.removeCourt.get
 
     const pk = request.pre.inputField
-    const courts = await getCourts()
+    const courts = await getCourts(user)
     const recordValue = courts.find(court => court.id === pk).name
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -98,10 +101,11 @@ module.exports = [
     path: `${routes.removeCourt.get}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (_request, h) => {
+      handler: async (request, h) => {
         const backLink = addRemoveConstants.links.index.get
+        const user = getUser(request)
 
-        const items = (await getCourts()).map(court => ({
+        const items = (await getCourts(user)).map(court => ({
           text: court.name,
           value: court.id
         }))
@@ -129,6 +133,7 @@ module.exports = [
       ],
       handler: async (request, h) => {
         throwIfPreConditionError(request)
+        const user = getUser(request)
 
         if (!request.pre.addConfirmation.confirm) {
           return h.redirect(addRemoveConstants.links.index.get)
@@ -138,7 +143,7 @@ module.exports = [
         const pk = request.pre.inputField
 
         try {
-          await removeCourt(pk, getUser(request))
+          await removeCourt(pk, user)
 
           return h.view(views.success, CourtRemovedViewModel(court))
         } catch (e) {
@@ -146,7 +151,7 @@ module.exports = [
             const { error } = notFoundSchema('pk', court).validate(request.payload)
             const backLink = routes.courts.get
 
-            const items = (await getCourts()).map(court => ({
+            const items = (await getCourts(user)).map(court => ({
               text: court.name,
               value: court.id
             }))

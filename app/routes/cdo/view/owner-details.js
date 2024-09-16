@@ -4,6 +4,7 @@ const ViewModel = require('../../../models/cdo/view/owner-details')
 const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { setActivityDetails } = require('../../../session/cdo/activity')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -12,7 +13,8 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const personAndDogs = await getPersonAndDogs(request.params.personReference)
+        const user = getUser(request)
+        const personAndDogs = await getPersonAndDogs(request.params.personReference, user)
 
         if (personAndDogs === undefined) {
           return h.response().code(404).takeover()

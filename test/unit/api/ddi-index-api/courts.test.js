@@ -17,9 +17,9 @@ describe('DDI API courts', () => {
         courts
       })
 
-      const gotCourts = await getCourts()
+      const gotCourts = await getCourts(user)
       expect(gotCourts).toEqual(courts)
-      expect(get).toHaveBeenCalledWith('courts', { json: true })
+      expect(get).toHaveBeenCalledWith('courts', user)
     })
   })
 

@@ -7,6 +7,7 @@ const { getDogDetails } = require('../../../api/ddi-index-api/dog')
 const { hasAreYouSureRadioBeenSelected } = require('../../../schema/portal/common/single-submit')
 const { validatePayloadBuilder } = require('../../../schema/common/validatePayload')
 const { validateBreedForCountryChangingOwner } = require('../../../lib/validation-helpers')
+const { getUser } = require('../../../auth')
 
 const getCombinedResults = request => {
   const details = getMicrochipResults(request)
@@ -17,8 +18,8 @@ const getCombinedResults = request => {
   return details
 }
 
-const getDogDetailsFromDB = async results => {
-  const dog = await getDogDetails(results.results[0].dogIndex)
+const getDogDetailsFromDB = async (results, user) => {
+  const dog = await getDogDetails(results.results[0].dogIndex, user)
   return dog
 }
 
@@ -30,7 +31,8 @@ module.exports = [{
     handler: async (request, h) => {
       const details = getCombinedResults(request)
 
-      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
+      const user = getUser(request)
+      const dog = await getDogDetailsFromDB(getMicrochipResults(request), user)
       setDog(request, dog)
 
       return h.view(views.microchipResults, new ViewModel(details))
@@ -51,7 +53,8 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const dog = await getDogDetailsFromDB(getMicrochipResults(request))
+      const user = getUser(request)
+      const dog = await getDogDetailsFromDB(getMicrochipResults(request), user)
       setDog(request, dog)
 
       if (!request.payload.confirm) {

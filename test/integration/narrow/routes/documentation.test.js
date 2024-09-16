@@ -1,24 +1,27 @@
 const { adminAuth, standardAuth } = require('../../../mocks/auth')
 
 describe('documentation test', () => {
-  const createServer = require('../../../../app/server')
+  jest.mock('../../../../app/lib/environment-helpers')
+  const { getEnvironmentVariable } = require('../../../../app/lib/environment-helpers')
+  getEnvironmentVariable.mockImplementation(envVariable => {
+    if (envVariable === 'ENVIRONMENT_CODE') {
+      return 'dev'
+    }
+    if (envVariable === 'DDI_API_BASE_URL') {
+      return 'test'
+    }
+    return process.env[envVariable]
+  })
   let server
+
+  const createServer = require('../../../../app/server')
 
   beforeEach(async () => {
     server = await createServer()
     await server.initialize()
   })
 
-  jest.mock('../../../../app/lib/environment-helpers')
-  const { getEnvironmentVariable } = require('../../../../app/lib/environment-helpers')
-
   test('GET /documentation route returns 200 in local', async () => {
-    getEnvironmentVariable.mockImplementation(envVariable => {
-      if (envVariable === 'ENVIRONMENT_CODE') {
-        return 'dev'
-      }
-      return process.env[envVariable]
-    })
     const options = {
       method: 'GET',
       auth: adminAuth,
@@ -33,6 +36,9 @@ describe('documentation test', () => {
     getEnvironmentVariable.mockImplementation(envVariable => {
       if (envVariable === 'ENVIRONMENT_CODE') {
         return 'prod'
+      }
+      if (envVariable === 'DDI_API_BASE_URL') {
+        return 'test'
       }
       return process.env[envVariable]
     })
@@ -50,6 +56,9 @@ describe('documentation test', () => {
     getEnvironmentVariable.mockImplementation(envVariable => {
       if (envVariable === 'ENVIRONMENT_CODE') {
         return 'dev'
+      }
+      if (envVariable === 'DDI_API_BASE_URL') {
+        return 'test'
       }
       return process.env[envVariable]
     })

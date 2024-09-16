@@ -464,7 +464,7 @@ describe('Microchip search tests', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
+    expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' }, user)
     expect(response.headers.location).toBe('/cdo/create/dog-details/1')
   })
 
@@ -485,7 +485,7 @@ describe('Microchip search tests', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' })
+    expect(doSearch).toHaveBeenCalledWith({ searchType: 'dog', searchTerms: '123456789012345' }, user)
     expect(response.headers.location).toBe('/cdo/create/microchip-results/1')
   })
 

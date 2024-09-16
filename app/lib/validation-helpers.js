@@ -198,8 +198,15 @@ const validateBreedForCountry = (value, helpers) => {
   return value
 }
 
-const validateBreedForCountryChoosingAddress = async (personReference, payload, fieldName = 'address') => {
-  const ownerAndDogs = await getPersonAndDogs(personReference)
+/**
+ * @param personReference
+ * @param payload
+ * @param user
+ * @param fieldName
+ * @return {Promise<Joi.ValidationError|null>}
+ */
+const validateBreedForCountryChoosingAddress = async (personReference, payload, user, fieldName = 'address') => {
+  const ownerAndDogs = await getPersonAndDogs(personReference, user)
 
   return (ownerAndDogs.dogs.some(dog => dog.breed === 'XL Bully') && payload.address.country === 'Scotland')
     ? new Joi.ValidationError(invalidBreedForCountryMessage, [{ message: invalidBreedForCountryMessage, path: [fieldName], type: 'custom' }])

@@ -5,6 +5,7 @@ const { getActivityDetails, setActivityDetails } = require('../../../session/cdo
 const { getActivityById } = require('../../../api/ddi-index-api/activities')
 const { formatToGds } = require('../../../lib/date-helpers')
 const { getMainReturnPoint } = require('../../../lib/back-helpers')
+const { getUser } = require('../../../auth')
 
 const getAlternativeReturnLink = details => {
   return details.source === 'dog' ? `${routes.viewDogDetails.get}/${details.indexNumber}` : 'NOT YET DEFINED'
@@ -27,7 +28,8 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const activity = await getActivityById(details.activity)
+        const user = getUser(request)
+        const activity = await getActivityById(details.activity, user)
 
         const model = {
           message: `${activity.label} ${details.activityType} on ${formatToGds(details.activityDate)}`,

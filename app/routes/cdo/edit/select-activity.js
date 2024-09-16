@@ -13,10 +13,15 @@ const { deepClone } = require('../../../lib/model-helpers.js')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person.js')
 const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 
-const getSourceEntity = async (details) => {
+/**
+ * @param details
+ * @param user
+ * @return {Promise<*|{firstName: string, lastName: string, birthDate: string, personReference: string, address: Address, contacts: Contacts}>}
+ */
+const getSourceEntity = async (details, user) => {
   return details.source === 'dog'
-    ? await getCdo(details.pk)
-    : await getPersonByReference(details.pk)
+    ? await getCdo(details.pk, user)
+    : await getPersonByReference(details.pk, user)
 }
 
 const getEditLink = details => {
@@ -32,15 +37,16 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const user = getUser(request)
         const activityDetails = getActivityDetails(request)
 
-        const entity = await getSourceEntity(activityDetails)
+        const entity = await getSourceEntity(activityDetails, user)
 
         if (entity == null || !activityDetails?.activityType) {
           return h.response().code(404).takeover()
         }
 
-        const activityList = await getActivities(activityDetails.activityType, activityDetails.source, true)
+        const activityList = await getActivities(activityDetails.activityType, activityDetails.source, user, true)
 
         const backNav = addBackNavigation(request)
 
@@ -73,16 +79,17 @@ module.exports = [
       validate: {
         payload: validatePayload,
         failAction: async (request, h, error) => {
+          const user = getUser(request)
           const payload = request.payload
 
           const activityType = payload.activityType
 
-          const entity = await getSourceEntity(payload)
+          const entity = await getSourceEntity(payload, user)
           if (entity == null || !activityType) {
             return h.response().code(404).takeover()
           }
 
-          const activityList = await getActivities(activityType, payload.source, true)
+          const activityList = await getActivities(activityType, payload.source, user, true)
 
           const model = { ...getActivityDetails(request), ...request.payload, activityList }
           model.editLink = getEditLink(model)

@@ -32,19 +32,29 @@ const getPoliceForce = async coords => {
   return null
 }
 
-const matchPoliceForceByName = async (name) => {
+/**
+ * @param name
+ * @param user
+ * @return {Promise<{name: string, id: number}|null>}
+ */
+const matchPoliceForceByName = async (name, user) => {
   if (name == null) {
     return null
   }
-  const policeForces = await getPoliceForces()
+  const policeForces = await getPoliceForces(user)
   // Police Force name may include hyphens to separate the words, so replace all hyphens with spaces
   return policeForces.find(x => x.name.toLowerCase().indexOf(name.replace(/-/g, ' ')) > -1)
 }
 
-const lookupPoliceForceByPostcode = async postcode => {
+/**
+ * @param postcode
+ * @param user
+ * @return {Promise<{name: string, id: number}|null>}
+ */
+const lookupPoliceForceByPostcode = async (postcode, user) => {
   const coords = await getPostcodeLongLat(postcode)
   const policeForceName = await getPoliceForce(coords)
-  return await matchPoliceForceByName(policeForceName)
+  return await matchPoliceForceByName(policeForceName, user)
 }
 
 module.exports = {

@@ -1,3 +1,4 @@
+const { user } = require('../../../mocks/auth')
 
 describe('DDI API search', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
@@ -20,9 +21,9 @@ describe('DDI API search', () => {
       const searchResults = await doSearch({
         searchType: 'dog',
         searchTerms: '123456789'
-      })
+      }, user)
 
-      expect(get).toHaveBeenCalledWith('search/dog/123456789', { json: true })
+      expect(get).toHaveBeenCalledWith('search/dog/123456789', user)
       expect(searchResults).toEqual(expectedResults)
     })
 
@@ -37,9 +38,9 @@ describe('DDI API search', () => {
         searchType: 'dog',
         searchTerms: '123456789',
         fuzzy: true
-      })
+      }, user)
 
-      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', { json: true })
+      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', user)
       expect(searchResults).toEqual(expectedResults)
     })
   })

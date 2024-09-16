@@ -3,10 +3,10 @@ const { post } = require('./base')
 const purgeSoftDeleteEndpoint = 'jobs/purge-soft-delete'
 const neuteringDeadlineEndpoint = 'jobs/neutering-deadline'
 
-const purgeSoftDelete = async (today = null) => {
+const purgeSoftDelete = async (user, today = null) => {
   const todayParam = today ? `?today=${today}` : ''
-  const payload = await post(`${purgeSoftDeleteEndpoint}${todayParam}`)
-  return payload
+
+  return post(`${purgeSoftDeleteEndpoint}${todayParam}`, {}, user)
 }
 
 /**
@@ -16,8 +16,8 @@ const purgeSoftDelete = async (today = null) => {
  */
 const neuteringDeadline = async (today, user) => {
   const todayParam = today ? `?today=${today}` : ''
-  const payload = await post(`${neuteringDeadlineEndpoint}${todayParam}`, {}, user)
-  return payload
+
+  return post(`${neuteringDeadlineEndpoint}${todayParam}`, {}, user)
 }
 
 module.exports = {

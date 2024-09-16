@@ -228,7 +228,8 @@ describe('FullSummary test', () => {
       {
         displayname: 'Example Tester',
         username: 'test@example.com',
-        userId: '1'
+        userId: '1',
+        scopes: expect.any(Array)
       })
   })
 
@@ -308,7 +309,8 @@ describe('FullSummary test', () => {
       {
         displayname: 'Example Tester',
         username: 'test@example.com',
-        userId: '1'
+        userId: '1',
+        scopes: expect.any(Array)
       })
   })
 
