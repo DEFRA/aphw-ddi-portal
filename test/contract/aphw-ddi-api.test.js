@@ -9,13 +9,10 @@ describe('API service contract tests', () => {
     const mockService = ddiIndexApiProvider
     await mockService.setup()
     jest.mock('../../app/config', () => {
-      const { generateKeyStubs } = require('../mocks/auth')
-      const { privateKeyHash } = generateKeyStubs()
-
       return {
         ddiIndexApi: mockService.mockService,
         authConfig: {
-          privateKey: privateKeyHash
+          privateKey: process.env.JWT_PRIVATE_KEY
         }
       }
     })
