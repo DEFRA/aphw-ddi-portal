@@ -1,5 +1,5 @@
-const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails } = require('../session/cdo/owner')
-const { lookupPoliceForceByPostcode } = require('../api/police-area')
+const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails, getAddress } = require('../session/cdo/owner')
+const { lookupPoliceForceByPostcode, matchPoliceForceByName } = require('../api/police-area')
 
 const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
@@ -79,10 +79,15 @@ const cleanUserDisplayName = (displayName) => {
  * @param postcode
  * @return {Promise<void>}
  */
-const setPoliceForce = async (request, user, postcode = null) => {
-  const ownerDetails = postcode ? { address: { postcode } } : getOwnerDetails(request)
+const setPoliceForce = async (request, user) => {
+  const ownerDetails = getOwnerDetails(request)
+  const address = getAddress(request)
   const enforcementDetails = getEnforcementDetails(request) || {}
-  const policeForce = await lookupPoliceForceByPostcode(ownerDetails.address?.postcode ?? ownerDetails.postcode, user)
+  const country = ownerDetails?.address?.country ?? address?.country
+
+  const policeForce = country === 'Scotland'
+    ? await matchPoliceForceByName('police scotland', user)
+    : await lookupPoliceForceByPostcode(ownerDetails?.address?.postcode ?? ownerDetails?.postcode, user)
 
   if (policeForce) {
     enforcementDetails.policeForce = policeForce.id

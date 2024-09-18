@@ -11,10 +11,13 @@ describe('Address test', () => {
   const { getCountries } = require('../../../../../../app/api/ddi-index-api')
 
   jest.mock('../../../../../../app/session/cdo/owner')
-  const { getAddress, setAddress } = require('../../../../../../app/session/cdo/owner')
+  const { getAddress, setAddress, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
 
   jest.mock('../../../../../../app/session/routes')
   const { isRouteFlagSet } = require('../../../../../../app/session/routes')
+
+  jest.mock('../../../../../../app/api/police-area')
+  const { matchPoliceForceByName, lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -28,7 +31,9 @@ describe('Address test', () => {
       'Wales'
     ])
 
-    getAddress.mockReturnValue({})
+    getAddress.mockReturnValue({ country: 'England' })
+    matchPoliceForceByName.mockResolvedValue()
+    lookupPoliceForceByPostcode.mockResolvedValue()
 
     server = await createServer()
     await server.initialize()
@@ -187,6 +192,38 @@ describe('Address test', () => {
       postcode: 'AB1 1TT',
       country: 'England'
     })
+  })
+
+  test('POST /cdo/create/address with Scotland address forwards to next screen', async () => {
+    const nextScreenUrl = routes.microchipSearch.get
+
+    getAddress.mockReturnValue({ country: 'Scotland' })
+    matchPoliceForceByName.mockResolvedValue({ id: 123 })
+
+    const payload = {
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'EH1 1AQ',
+      country: 'Scotland'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+    expect(setAddress).toBeCalledWith(expect.anything(), {
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'EH1 1AQ',
+      country: 'Scotland'
+    })
+    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), { policeForce: 123 })
   })
 
   afterEach(async () => {
