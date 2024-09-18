@@ -44,7 +44,7 @@ module.exports = [
         const enforcementDetails = getEnforcementDetails(request)
         const addressDetails = getAddress(request)
         if (!enforcementDetails?.policeForce && addressDetails?.postcode) {
-          await setPoliceForce(request, getUser(request), addressDetails.postcode)
+          await setPoliceForce(request, getUser(request))
         }
 
         return h.redirect(ownerRoutes.enforcementDetails.get)

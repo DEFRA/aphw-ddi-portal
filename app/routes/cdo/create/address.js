@@ -63,7 +63,7 @@ module.exports = [{
       setRouteFlag(request, constants.routeFlags.manualAddressEntry)
       clearRouteFlag(request, constants.routeFlags.postcodeLookup)
 
-      await setPoliceForce(request, user, request.payload?.postcode)
+      await setPoliceForce(request, user)
 
       return h.redirect(dogRoutes.microchipSearch.get)
     }
