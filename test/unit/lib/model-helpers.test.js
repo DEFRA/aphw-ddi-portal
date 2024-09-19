@@ -1,15 +1,15 @@
 const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
-const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails } = require('../../../app/session/cdo/owner')
+const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails, getAddress } = require('../../../app/session/cdo/owner')
 
 jest.mock('../../../app/api/police-area')
-const { lookupPoliceForceByPostcode } = require('../../../app/api/police-area')
+const { lookupPoliceForceByPostcode, matchPoliceForceByName } = require('../../../app/api/police-area')
 const { user } = require('../../mocks/auth')
 
 describe('ModelHelpers', () => {
   beforeEach(async () => {
-    getOwnerDetails.mockResolvedValue()
+    getOwnerDetails.mockReturnValue()
   })
 
   test('extractEmail handles no emails', () => {
@@ -145,6 +145,19 @@ describe('ModelHelpers', () => {
     lookupPoliceForceByPostcode.mockResolvedValue({ id: 5, name: 'Force 5' })
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+    getAddress.mockReturnValue({ country: 'England' })
+
+    await setPoliceForce({}, user)
+
+    expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
+  })
+
+  test('setPoliceForce sets scoland force when country is scotland', async () => {
+    lookupPoliceForceByPostcode.mockResolvedValue({ id: 52, name: 'Police Scotland' })
+    matchPoliceForceByName.mockResolvedValue({ id: 5, name: 'Force 5' })
+    getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
+    getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+    getAddress.mockReturnValue({ country: 'Scotland' })
 
     await setPoliceForce({}, user)
 
@@ -155,8 +168,9 @@ describe('ModelHelpers', () => {
     lookupPoliceForceByPostcode.mockResolvedValue({ id: 5, name: 'Force 5' })
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+    getAddress.mockReturnValue({ country: 'England' })
 
-    await setPoliceForce({}, user, 'TS2 2TS')
+    await setPoliceForce({}, user)
 
     expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { id: 123, policeForce: 5, legislationOfficer: 'dlo1' })
   })
@@ -165,8 +179,9 @@ describe('ModelHelpers', () => {
     lookupPoliceForceByPostcode.mockResolvedValue(null)
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
+    getAddress.mockReturnValue({ country: 'England' })
 
-    await setPoliceForce({}, user, 'TS2 2TS')
+    await setPoliceForce({}, user)
 
     expect(setEnforcementDetails).not.toHaveBeenCalled()
   })

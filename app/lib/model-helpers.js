@@ -83,11 +83,11 @@ const setPoliceForce = async (request, user) => {
   const ownerDetails = getOwnerDetails(request)
   const address = getAddress(request)
   const enforcementDetails = getEnforcementDetails(request) || {}
-  const country = ownerDetails?.address?.country ?? address?.country
+  const country = address?.country
 
   const policeForce = country === 'Scotland'
     ? await matchPoliceForceByName('police scotland', user)
-    : await lookupPoliceForceByPostcode(ownerDetails?.address?.postcode ?? ownerDetails?.postcode, user)
+    : await lookupPoliceForceByPostcode(address?.postcode ?? ownerDetails?.address?.postcode, user)
 
   if (policeForce) {
     enforcementDetails.policeForce = policeForce.id
