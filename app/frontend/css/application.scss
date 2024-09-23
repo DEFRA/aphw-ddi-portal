@@ -365,7 +365,9 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
   max-width: 100% !important;
 }
 
-  
+.govuk-checkboxes__label-thin {
+  margin-bottom: -40px !important;
+}  
 
 
   
