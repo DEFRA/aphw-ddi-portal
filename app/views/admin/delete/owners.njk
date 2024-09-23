@@ -81,7 +81,7 @@
                 <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                   <div class="defra-checkbox">
                     <input class="govuk-checkboxes__input" name="deleteOwner" id="owner-reference-{{ owner.personReference }}" value="{{ owner.personReference }}" type="checkbox" {% if owner.selected %} checked="true" {% endif %}>
-                    <label class="govuk-label govuk-checkboxes__label" for="owner-reference-{{ owner.personReference }}">
+                    <label class="govuk-label govuk-checkboxes__label govuk-checkboxes__label-thin" for="owner-reference-{{ owner.personReference }}">
                       <span class="govuk-visually-hidden">Select owner {{owner.personReference}} for deletion</span>
                     </label>
                   </div>
