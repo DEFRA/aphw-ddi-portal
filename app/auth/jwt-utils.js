@@ -22,7 +22,7 @@ const createJwtToken = (audience) => (username, displayname, scopes) => {
   }
 
   return generateToken({
-    scopes,
+    scope: scopes,
     username,
     displayname
   }, options)

@@ -39,7 +39,7 @@ describe('jwt-utils', () => {
         exp: expect.any(Number),
         iat: expect.any(Number),
         iss: 'aphw-ddi-portal',
-        scopes: ['abc'],
+        scope: ['abc'],
         username: 'bob@builder.com',
         displayname: 'Bob the Builder',
         aud: 'https://example.abc'
@@ -66,7 +66,7 @@ describe('jwt-utils', () => {
         exp: expect.any(Number),
         iat: expect.any(Number),
         iss: 'aphw-ddi-portal',
-        scopes: ['Dog.Index.Standard'],
+        scope: ['Dog.Index.Standard'],
         username: 'bob@builder.com',
         displayname: 'Bob the Builder',
         aud: 'https://example.abc'
