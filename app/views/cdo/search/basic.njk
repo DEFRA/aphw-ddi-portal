@@ -68,12 +68,12 @@
         {% endif %}
       {% endfor %}
       {% if model.fuzzy != "Y" %}
-        <p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a></p>
+        <!--<p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a></p>-->
       {% endif %}
     {% elif model.searchTerms.value %}
       <p>No results found</p>
       {% if model.fuzzy != "Y" %}
-        <p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a> instead</p>
+        <!--<p>Search for <a href="{{model.fuzzySearchUrl}}">close matches</a> instead</p>-->
       {% endif %}
     {% endif %}
 {% endblock %}
