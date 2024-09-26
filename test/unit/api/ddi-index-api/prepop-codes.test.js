@@ -1,3 +1,5 @@
+const { user } = require('../../../mocks/auth')
+
 describe('PrepopCodes API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
   const { get } = require('../../../../app/api/ddi-index-api/base')
@@ -11,8 +13,8 @@ describe('PrepopCodes API endpoints', () => {
   test('prepop-codes should call GET to API', async () => {
     get.mockResolvedValue()
 
-    await prepopCodes()
+    await prepopCodes(user)
 
-    expect(get).toHaveBeenCalledWith('prepop-codes')
+    expect(get).toHaveBeenCalledWith('prepop-codes', user)
   })
 })
