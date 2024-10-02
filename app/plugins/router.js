@@ -68,8 +68,7 @@ const routes = [].concat(
   require('../routes/admin/delete/owners'),
   require('../routes/jobs'),
   require('../routes/swagger'),
-  require('../routes/documentation'),
-  require('../routes/admin/prepop-codes')
+  require('../routes/documentation')
 )
 
 module.exports = {
