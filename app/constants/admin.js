@@ -42,6 +42,21 @@ const policeLinks = {
   }
 }
 
+const policeUserLinks = {
+  index: {
+    get: '/admin/users/police',
+    post: '/admin/users/police'
+  },
+  add: {
+    get: '/admin/users/police/add',
+    post: '/admin/users/police/add'
+  },
+  remove: {
+    get: '/admin/users/police/remove',
+    post: '/admin/users/police/remove'
+  }
+}
+
 const adminIndex = {
   get: '/admin/index'
 }
@@ -56,6 +71,9 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
+    policeUsers: policeUserLinks.index,
+    addPoliceUser: policeUserLinks.add,
+    removePoliceUser: policeUserLinks.remove,
     deleteOwners: {
       get: '/admin/delete/owners',
       post: '/admin/delete/owners'
@@ -139,6 +157,12 @@ const constants = {
       messageLabel: 'police force',
       messageLabelCapital: 'Police force',
       links: policeLinks
+    },
+    policeUserConstants: {
+      inputField: 'policeUser',
+      messageLabel: 'police officers',
+      messageLabelCapital: 'police officers',
+      links: policeUserLinks
     }
   },
   keys: {
