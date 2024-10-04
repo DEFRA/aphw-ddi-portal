@@ -8,8 +8,8 @@ const submitEmailSchema = Joi.object({
   })
 })
 
-const submitEmailConflictSchema = Joi.object({
-  conflict: Joi.any().forbidden().messages({
+const submitEmailConflictSchema = (field) => Joi.object({
+  [field]: Joi.any().forbidden().messages({
     '*': 'This police officer is already in the allow list'
   })
 }).optional()

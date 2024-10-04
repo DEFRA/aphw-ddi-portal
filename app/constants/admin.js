@@ -160,6 +160,7 @@ const constants = {
     },
     policeUserConstants: {
       inputField: 'policeUser',
+      buttonText: 'police officer',
       messageLabel: 'police officers',
       messageLabelCapital: 'police officers',
       links: policeUserLinks

@@ -6,11 +6,28 @@ const userEndpoint = 'user'
 const usersEndpoint = 'users'
 
 /**
- * @param user
- * @return {Promise<*>}
+ * @typedef UserAccount
+ * @property {number} id
+ * @property {string} username
+ * @property {number} police_force_id
  */
-const getUsers = async (user) => {
-  const payload = await get(usersEndpoint, user)
+
+/**
+ * @param callingUser
+ * @return {Promise<UserAccount[]>}
+ */
+const getUsers = async (callingUser) => {
+  /**
+   * @type {{
+   *   users: {
+   *       id: number,
+   *       username: string,
+   *       active: boolean,
+   *       police_force_id?: number
+   *     }[]
+   * }}
+   */
+  const payload = await get(usersEndpoint, callingUser)
 
   return payload.users.map(user => {
     delete user.active
@@ -19,6 +36,11 @@ const getUsers = async (user) => {
   })
 }
 
+/**
+ * @param {string} username
+ * @param callingUser
+ * @return {Promise<string>}
+ */
 const addUser = async (username, callingUser) => {
   try {
     const payload = await post(userEndpoint, username, callingUser)
@@ -34,6 +56,11 @@ const addUser = async (username, callingUser) => {
   }
 }
 
+/**
+ * @param {string[]} usersDto
+ * @param user
+ * @return {Promise<{users: {failures: string[], success: string[]}}>}
+ */
 const addUsers = async (usersDto, user) => {
   const mappedUsers = {
     users: usersDto.map(username => ({
@@ -63,6 +90,11 @@ const addUsers = async (usersDto, user) => {
   throw new ApiErrorFailure(`${res.statusCode} ${res.statusMessage}`, responseData)
 }
 
+/**
+ * @param {string} username
+ * @param user
+ * @return {Promise<void>}
+ */
 const removeUser = async (username, user) => {
   await callDelete(`${userEndpoint}/${username}`, user)
 }
