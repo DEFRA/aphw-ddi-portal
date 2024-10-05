@@ -51,6 +51,22 @@ const policeUserLinks = {
     get: '/admin/users/police/add',
     post: '/admin/users/police/add'
   },
+  addList: {
+    get: '/admin/users/police/add/list',
+    post: '/admin/users/police/add/list'
+  },
+  addConfirm: {
+    get: '/admin/users/police/add/confirm',
+    post: '/admin/users/police/add/confirm'
+  },
+  addUpdate: {
+    get: '/admin/users/police/add/update',
+    post: '/admin/users/police/add/update'
+  },
+  addRemove: {
+    get: '/admin/users/police/add/remove',
+    post: '/admin/users/police/add/remove'
+  },
   remove: {
     get: '/admin/users/police/remove',
     post: '/admin/users/police/remove'
@@ -73,6 +89,8 @@ const constants = {
     removePoliceForce: policeLinks.remove,
     policeUsers: policeUserLinks.index,
     addPoliceUser: policeUserLinks.add,
+    listPoliceUsersToAdd: policeUserLinks.addList,
+    confirmPoliceUsersToAdd: policeUserLinks.addConfirm,
     removePoliceUser: policeUserLinks.remove,
     deleteOwners: {
       get: '/admin/delete/owners',
@@ -127,7 +145,9 @@ const constants = {
     deleteDogsConfirm: 'admin/delete/dogs-confirm',
     deleteOwners: 'admin/delete/owners',
     deleteOwnersConfirm: 'admin/delete/owners-confirm',
-    documentation: 'swagger'
+    documentation: 'swagger',
+    addPoliceUserList: 'admin/users/add/list',
+    addPoliceUserConfirm: 'admin/users/add/confirm'
   },
   breadcrumbs: [
     {

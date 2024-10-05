@@ -29,18 +29,4 @@ describe('users schema', () => {
       expect(error).toEqual(new ValidationError('Email address must be real'))
     })
   })
-
-  describe('submitEmailConflictSchema', () => {
-    test('should fail with a conflict', () => {
-      const payload = { conflict: true }
-      const { error } = submitEmailConflictSchema.validate(payload)
-      expect(error).toEqual(new ValidationError('This police officer is already in the allow list'))
-    })
-    test('should be valid without a conflict', () => {
-      const payload = {}
-      const { value, error } = submitEmailConflictSchema.validate(payload)
-      expect(value).toEqual(payload)
-      expect(error).toBeUndefined()
-    })
-  })
 })

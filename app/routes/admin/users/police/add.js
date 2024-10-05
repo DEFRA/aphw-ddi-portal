@@ -1,11 +1,14 @@
 const { routes, views, addRemove } = require('../../../../constants/admin')
 const { admin } = require('../../../../auth/permissions')
 const FormViewModel = require('../../../../models/common/single-submit')
+const AddPoliceUsersListFormViewModel = require('../../../../models/admin/users/police/add-list')
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
 const { confirmFlowValidFields } = require('../../../../schema/portal/common/single-submit')
 const { getUser } = require('../../../../auth')
 const { submitEmailSchema, submitEmailConflictSchema } = require('../../../../schema/portal/admin/users')
 const { getUsers } = require('../../../../api/ddi-index-api/users')
+const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd } = require('../../../../session/admin/police-users')
+const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
 
 const addRemoveConstants = addRemove.policeUserConstants
 
@@ -57,7 +60,10 @@ module.exports = [
     path: `${routes.addPoliceUser.get}`,
     options: {
       auth: { scope: [admin] },
-      handler: async (_request, h) => {
+      handler: async (request, h) => {
+        if (request.query.step === 'start') {
+          initialisePoliceUsers(request, [])
+        }
         return h.view(views.addAdminRecord, new FormViewModel(addUserStepConstants))
       }
     }
@@ -74,33 +80,30 @@ module.exports = [
         addUserPostCheck
       ],
       handler: async (request, h) => {
-        console.log('~~~~~~ Chris Debug ~~~~~~ thus far', '')
-        // throwIfPreConditionError(request)
-        return h.response().code(200)
-        // if (!request.pre.addConfirmation) {
-        //   return h.redirect(addRemoveConstants.links.index.get)
-        // }
-        //
-        // const court = request.pre.inputField
-        //
-        // try {
-        //   const courtResponse = await addCourt({ name: court }, getUser(request))
-        //
-        //   return h.view(views.success, CourtAddedViewModel(courtResponse.name))
-        // } catch (e) {
-        //   if (e instanceof ApiConflictError) {
-        //     const { error } = duplicateEntrySchema(addRemoveConstants.inputField, addRemoveConstants.messageLabel).validate(request.payload)
-        //
-        //     const backLink = routes.courts.get
-        //
-        //     return h.view(views.addAdminRecord, new FormViewModel({
-        //       backLink,
-        //       recordValue: court,
-        //       ...fieldNames
-        //     }, undefined, error)).code(409)
-        //   }
-        //   throw e
-        // }
+        throwIfPreConditionError(request)
+
+        appendPoliceUserToAdd(request, request.pre.inputField)
+
+        return h.redirect(addRemoveConstants.links.addList.get)
+      }
+    }
+  },
+  {
+
+    method: 'GET',
+    path: `${routes.listPoliceUsersToAdd.get}`,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const policeUsers = getPoliceUsersToAdd(request)
+        console.log('~~~~~~ Chris Debug ~~~~~~ ', 'PoliceUsers', policeUsers)
+        const backlink = routes.addPoliceUser.get
+        const model = new AddPoliceUsersListFormViewModel({
+          users: policeUsers,
+          backlink
+        })
+
+        return h.view(views.addPoliceUserList, model)
       }
     }
   }
