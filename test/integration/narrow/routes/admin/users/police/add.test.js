@@ -1,6 +1,7 @@
 const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
+const { getPoliceUsersToAdd } = require('../../../../../../../app/session/admin/police-users')
 
 describe('Add police officer page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -28,6 +29,8 @@ describe('Add police officer page', () => {
   })
 
   describe('What is the police officer\'s email page', () => {
+    getPoliceUsersToAdd.mockReturnValue([])
+
     describe('GET /admin/users/police/add', () => {
       test('should return a 200 and clears session when called first time', async () => {
         const options = {
@@ -153,6 +156,25 @@ describe('Add police officer page', () => {
         expect(appendPoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 'nicholas.angel@sandford.police.uk')
         expect(response.statusCode).toBe(302)
         expect(response.headers.location).toContain('/admin/users/police/add/list')
+      })
+
+      test('should not update session and redirect given duplicate email address submitted', async () => {
+        getPoliceUsersToAdd.mockReturnValue(['nicholas.angel@sandford.police.uk'])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add',
+          auth,
+          payload: {
+            policeUser: 'nicholas.angel@sandford.police.uk'
+          }
+        }
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(400)
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer has already been selected')
+        expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
       })
     })
   })

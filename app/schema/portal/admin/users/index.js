@@ -14,7 +14,14 @@ const submitEmailConflictSchema = (field) => Joi.object({
   })
 }).optional()
 
+const submitEmailSessionConflictSchema = (field) => Joi.object({
+  [field]: Joi.any().forbidden().messages({
+    '*': 'This police officer has already been selected'
+  })
+}).optional()
+
 module.exports = {
   submitEmailSchema,
-  submitEmailConflictSchema
+  submitEmailConflictSchema,
+  submitEmailSessionConflictSchema
 }

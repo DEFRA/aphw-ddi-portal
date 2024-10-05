@@ -5,10 +5,11 @@ const AddPoliceUsersListFormViewModel = require('../../../../models/admin/users/
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
 const { confirmFlowValidFields } = require('../../../../schema/portal/common/single-submit')
 const { getUser } = require('../../../../auth')
-const { submitEmailSchema, submitEmailConflictSchema } = require('../../../../schema/portal/admin/users')
+const { submitEmailSchema, submitEmailConflictSchema, submitEmailSessionConflictSchema } = require('../../../../schema/portal/admin/users')
 const { getUsers } = require('../../../../api/ddi-index-api/users')
 const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd } = require('../../../../session/admin/police-users')
 const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
+const Joi = require('joi')
 
 const addRemoveConstants = addRemove.policeUserConstants
 
@@ -29,12 +30,21 @@ const throwConflictError = (payload) => {
   validatePayloadBuilder(submitEmailConflictSchema(fieldNames.recordTypeText))(payload)
 }
 
+const throwSessionConflictError = (payload) => {
+  validatePayloadBuilder(submitEmailSessionConflictSchema(fieldNames.recordTypeText))(payload)
+}
+
 const addUserPostCheck = {
   method: async request => {
     validatePayloadBuilder(submitEmailSchema)(request.payload)
     const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
 
     const policeUsers = await getUsers(getUser(request))
+    const policeUsersInSession = getPoliceUsersToAdd(request)
+
+    if (policeUsersInSession.some(username => username === validatedPayload.policeUser)) {
+      throwSessionConflictError(request.payload)
+    }
 
     if (policeUsers.some(({ username }) => username === validatedPayload.policeUser)) {
       throwConflictError(request.payload)

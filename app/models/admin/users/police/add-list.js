@@ -1,5 +1,6 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
 const { forms } = require('../../../../constants/forms')
+const { user } = require('../../../../../test/mocks/auth')
 
 /**
  * @typedef AddListInputModel
@@ -50,11 +51,12 @@ function ViewModel (details, backNav, errors) {
           },
           value: '',
           actions: {
-            classes: 'govuk-!-width-one-third',
+            classes: 'govuk-!-width-one-third govuk-visually-hidden',
             items: [
               {
                 text: 'Change',
-                visuallyHiddenText: `Change ${user}`
+                visuallyHiddenText: `Change ${user}`,
+                classes: 'govuk-!-hidden'
               },
               {
                 text: 'Remove',
@@ -71,7 +73,7 @@ function ViewModel (details, backNav, errors) {
           text: 'Do you need to add another police offers?',
           classes: 'govuk-fieldset__legend--m'
         },
-        classes: 'govuk-!-margin-top-5'
+        classes: 'govuk-!-margin-top-5 govuk-visually-hidden'
       },
       classes: 'govuk-radios--inline',
       items: [
