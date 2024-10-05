@@ -41,7 +41,7 @@ describe('users schema', () => {
       const { value, error } = submitListSchema.validate(payload)
       expect(value).toEqual({
         continue: '',
-        radio: 'N',
+        radio: false,
         users: ['nicholas.angel@sandford.police.uk']
       })
       expect(error).toBeUndefined()
@@ -58,7 +58,10 @@ describe('users schema', () => {
       }
 
       const { value, error } = submitListSchema.validate(payload)
-      expect(value).toEqual(payload)
+      expect(value).toEqual({
+        ...payload,
+        radio: false
+      })
       expect(error).toBeUndefined()
     })
 
@@ -70,8 +73,11 @@ describe('users schema', () => {
       }
 
       const { value, error } = submitListSchema.validate(payload)
-      expect(error).toEqual(new ValidationError('"users" must contain at least 1 items'))
-      expect(value).toEqual(payload)
+      expect(error).toEqual(new ValidationError('There must be at least one police officer'))
+      expect(value).toEqual({
+        ...payload,
+        radio: false
+      })
     })
 
     test('should fail with empty payload', () => {
