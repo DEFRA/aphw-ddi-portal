@@ -2,13 +2,18 @@ const { routes, views, addRemove } = require('../../../../constants/admin')
 const { admin } = require('../../../../auth/permissions')
 const FormViewModel = require('../../../../models/common/single-submit')
 const AddPoliceUsersListFormViewModel = require('../../../../models/admin/users/police/add-list')
+const ConfirmPoliceUsersListFormViewModel = require('../../../../models/admin/users/police/confirm-list')
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
 const { confirmFlowValidFields } = require('../../../../schema/portal/common/single-submit')
 const { getUser } = require('../../../../auth')
-const { submitEmailSchema, submitEmailConflictSchema, submitEmailSessionConflictSchema, submitListSchema } = require('../../../../schema/portal/admin/users')
-const { getUsers } = require('../../../../api/ddi-index-api/users')
+const {
+  submitEmailSchema, submitEmailConflictSchema, submitEmailSessionConflictSchema, submitListSchema,
+  confirmListSchema
+} = require('../../../../schema/portal/admin/users')
+const { getUsers, addUsers } = require('../../../../api/ddi-index-api/users')
 const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd } = require('../../../../session/admin/police-users')
 const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
+const { PoliceOffersAddedViewModel } = require('../../../../models/admin/courts/builder')
 
 const addRemoveConstants = addRemove.policeUserConstants
 
@@ -125,7 +130,7 @@ module.exports = [
         payload: validatePayloadBuilder(submitListSchema),
         failAction: async (request, h, error) => {
           const policeUsers = getPoliceUsersToAdd(request)
-          console.log('~~~~~~ Chris Debug ~~~~~~ failaction', 'PoliceUsers', policeUsers)
+
           const backlink = routes.addPoliceUser.get
           const model = new AddPoliceUsersListFormViewModel({
             users: policeUsers,
@@ -137,8 +142,55 @@ module.exports = [
       },
       handler: async (request, h) => {
         setPoliceUsersToAdd(request, request.payload.users)
-        console.log('~~~~~~ Chris Debug ~~~~~~ next', '')
+
         return h.redirect(routes.confirmPoliceUsersToAdd.get)
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: `${routes.confirmPoliceUsersToAdd.get}`,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const policeUsers = getPoliceUsersToAdd(request)
+        const backlink = routes.listPoliceUsersToAdd.get
+
+        const model = new ConfirmPoliceUsersListFormViewModel({
+          users: policeUsers,
+          backlink
+        })
+
+        return h.view(views.addPoliceUserConfirm, model)
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: `${routes.confirmPoliceUsersToAdd.post}`,
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        payload: validatePayloadBuilder(confirmListSchema),
+        failAction: async (request, h, error) => {
+          const policeUsers = getPoliceUsersToAdd(request)
+          const backlink = routes.listPoliceUsersToAdd.get
+
+          const model = new ConfirmPoliceUsersListFormViewModel({
+            users: policeUsers,
+            backlink
+          }, undefined, error)
+
+          return h.view(views.addPoliceUserConfirm, model).code(400).takeover()
+        }
+      },
+      handler: async (request, h) => {
+        const policeUsers = await addUsers(request.payload.users, getUser(request))
+        initialisePoliceUsers(request)
+
+        const model = PoliceOffersAddedViewModel(policeUsers.users.success)
+
+        return h.view(views.success, model)
       }
     }
   }

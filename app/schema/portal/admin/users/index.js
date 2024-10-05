@@ -28,9 +28,17 @@ const submitListSchema = Joi.object({
   }).required()
 })
 
+const confirmListSchema = Joi.object({
+  continue: Joi.string().allow('').allow(null).required(),
+  users: Joi.array().single().items(Joi.string().email()).min(1).messages({
+    '*': 'There must be at least one police officer'
+  }).required()
+})
+
 module.exports = {
   submitEmailSchema,
   submitEmailConflictSchema,
   submitEmailSessionConflictSchema,
-  submitListSchema
+  submitListSchema,
+  confirmListSchema
 }

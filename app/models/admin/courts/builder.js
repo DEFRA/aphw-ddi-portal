@@ -33,7 +33,30 @@ const CourtRemovedViewModel = (court) => {
   })
 }
 
+const PoliceOffersAddedViewModel = (officers) => {
+  return new ViewModel({
+    titleHtml: 'You gave police officers access to the Index',
+    html: [
+      {
+        h2: true,
+        text: 'What happens next'
+      },
+      {
+        p: true,
+        text: 'These police officers will receive an email invitation to access the Dangerous Dogs Index:'
+      },
+      {
+        ul: officers.map(policeOfficer => ({
+          text: policeOfficer
+        }))
+      }
+    ],
+    bodyContent: []
+  })
+}
+
 module.exports = {
   CourtAddedViewModel,
-  CourtRemovedViewModel
+  CourtRemovedViewModel,
+  PoliceOffersAddedViewModel
 }

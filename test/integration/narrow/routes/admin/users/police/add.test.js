@@ -231,7 +231,10 @@ describe('Add police officer page', () => {
 
     describe('POST /admin/users/police/add/list', () => {
       test('should redirect to confirmation page', async () => {
-        getPoliceUsersToAdd.mockReturnValue(['name.lastname@police.uk'])
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
 
         const options = {
           method: 'POST',
@@ -257,7 +260,6 @@ describe('Add police officer page', () => {
         ])
       })
 
-      // TODO: need a clean failure route is the session expires
       test('should fail with a 400 if users are empty', async () => {
         getPoliceUsersToAdd.mockReturnValue([])
 
@@ -284,137 +286,94 @@ describe('Add police officer page', () => {
     })
   })
 
-  // describe('Are you sure page', () => {
-  //   test('POST /admin/users/police/add court route returns 200 and confirmation page given court has been submitted', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court'
-  //       }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //     const { document } = new JSDOM(response.payload).window
-  //
-  //     expect(response.statusCode).toBe(200)
-  //     expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to add ‘Metropolis City Court’ to the Index?')
-  //   })
-  //
-  //   test('POST /admin/users/police/add court route returns 400 and confirmation page given confirmation page is submitted without an option', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court',
-  //         confirmation: 'true'
-  //       }
-  //     }
-  //     const response = await server.inject(options)
-  //     const { document } = new JSDOM(response.payload).window
-  //
-  //     expect(response.statusCode).toBe(400)
-  //     expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Are you sure you want to add ‘Metropolis City Court’ to the Index?')
-  //     expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
-  //     expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
-  //   })
-  //
-  //   test('POST /admin/users/police/add court route returns 302 given confirm page is submitted with No', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court',
-  //         confirmation: 'true',
-  //         confirm: 'N'
-  //       }
-  //     }
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(302)
-  //     expect(response.headers.location).toBe('/admin/courts')
-  //   })
-  // })
-  //
-  // describe('Success Page', () => {
-  //   addCourt.mockResolvedValue({
-  //     id: 262,
-  //     name: 'Metropolis City Court'
-  //   })
-  //
-  //   test('POST /admin/users/police/add court route returns 200 and success page given court has been submitted', async () => {
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court',
-  //         confirmation: 'true',
-  //         confirm: 'Y'
-  //       }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //     const { document } = new JSDOM(response.payload).window
-  //
-  //     expect(addCourt).toHaveBeenCalledWith({ name: 'Metropolis City Court' }, user)
-  //     expect(response.statusCode).toBe(200)
-  //     expect(document.querySelector('h1.govuk-panel__title').textContent.trim()).toBe('You added Metropolis City Court')
-  //     expect(document.querySelector('#main-content').textContent.trim()).toContain('Metropolis City Court is available in the Index.')
-  //
-  //     const courtLink = document.querySelector('#main-content .govuk-link')
-  //     expect(courtLink.textContent.trim()).toBe('Add or remove a court')
-  //     expect(courtLink.getAttribute('href')).toBe('/admin/courts')
-  //
-  //     const breadcrumbs = document.querySelectorAll('a.govuk-breadcrumbs__link')
-  //     expect(breadcrumbs[0].textContent.trim()).toBe('Home')
-  //     expect(breadcrumbs[0].getAttribute('href')).toBe('/')
-  //     expect(breadcrumbs[1].textContent.trim()).toBe('Admin')
-  //     expect(breadcrumbs[1].getAttribute('href')).toBe('/admin/index')
-  //   })
-  //
-  //   test('POST /admin/users/police/add court route returns 409 and the enter court name page given duplicate exists', async () => {
-  //     addCourt.mockRejectedValue(new ApiConflictError('conflict'))
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court',
-  //         confirmation: 'true',
-  //         confirm: 'Y'
-  //       }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //     const { document } = new JSDOM(response.payload).window
-  //
-  //     expect(response.statusCode).toBe(409)
-  //     expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the name of the court you want to add?')
-  //     expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This court name is already listed')
-  //   })
-  //
-  //   test('POST /admin/users/police/add court route returns 500 if there is a server error', async () => {
-  //     addCourt.mockRejectedValue(new Error('server error'))
-  //
-  //     const options = {
-  //       method: 'POST',
-  //       url: '/admin/users/police/add',
-  //       auth,
-  //       payload: {
-  //         court: 'Metropolis City Court',
-  //         confirmation: 'true',
-  //         confirm: 'Y'
-  //       }
-  //     }
-  //
-  //     const response = await server.inject(options)
-  //
-  //     expect(response.statusCode).toBe(500)
-  //   })
-  // })
+  describe('Check your answers page', () => {
+    describe('GET /admin/users/police/add/confirm', () => {
+      test('should show the confirmation page', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
+
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/confirm',
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(200)
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Check your answers before giving the police officers access')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('nicholas.angel@sandford.police.uk')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[1].textContent.trim()).toBe('danny.butterman@sandford.police.uk')
+        expect(document.querySelector('#main-content h2.govuk-heading-m').textContent.trim()).toBe('Now give access')
+        expect(document.querySelector('#main-content').textContent.trim()).toContain('Police officers will receive an email inviting them to access the Dangerous Dogs Index.')
+        expect(document.querySelector('#main-content .govuk-grid-column-two-thirds-from-desktop .govuk-button').textContent.trim()).toContain('Give access')
+      })
+    })
+
+    describe('POST /admin/users/police/add/confirm', () => {
+      test('should fail with a 400 given 0 users submitted', async () => {
+        getPoliceUsersToAdd.mockReturnValue([])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/confirm',
+          payload: {
+            continue: '',
+            users: []
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(400)
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Check your answers before giving the police officers access')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('There must be at least one police officer')
+      })
+    })
+  })
+
+  describe('Success page', () => {
+    describe('POST /admin/users/police/add/confirm', () => {
+      test('should show success page', async () => {
+        const users = [
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ]
+        getPoliceUsersToAdd.mockReturnValue(users)
+        addUsers.mockResolvedValue({
+          users: {
+            success: users,
+            failures: []
+          }
+        })
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/confirm',
+          payload: {
+            continue: '',
+            users
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(200)
+        expect(document.querySelector('.govuk-panel__title').textContent.trim()).toBe('You gave police officers access to the Index')
+        expect(document.querySelector('#main-content h2.govuk-heading-m').textContent.trim()).toBe('What happens next')
+        expect(document.querySelector('#main-content').textContent.trim()).toContain('These police officers will receive an email invitation to access the Dangerous Dogs Index:')
+        expect(document.querySelectorAll('.govuk-list li')[0].textContent.trim()).toBe('nicholas.angel@sandford.police.uk')
+        expect(document.querySelectorAll('.govuk-list li')[1].textContent.trim()).toBe('danny.butterman@sandford.police.uk')
+        expect(addUsers).toHaveBeenCalledWith(users, user)
+        expect(initialisePoliceUsers).toHaveBeenCalled()
+      })
+    })
+  })
 })

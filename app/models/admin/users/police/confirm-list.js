@@ -3,23 +3,14 @@ const { forms } = require('../../../../constants/forms')
 
 /**
  * @typedef AddListInputModel
- * @property {string[]} users
+ * @property {string[]} usersList
  * @property {string} backLink
  * @property {import('../../../builders/components').Fieldset} fieldset
  * @property {import('../../../builders/components').GoukSummaryList} summaryList
- * @property {import('../../../builders/components').Fieldset} label
- * @property {import('../../../builders/components').GovukRadios} radios
- * @property {import('../../../builders/components').GovukButton} button
- * @property {*} autocompete
+ * @property {import('../../../builders/components').GovukButton} continue
+ * @property {*} autocomplete
  * @property {*[]} errors
  */
-
-const getPoliceOfficerText = (count) => {
-  if (count === 1) {
-    return 'police officer'
-  }
-  return 'police officers'
-}
 
 /**
  * @param {{ users: string[]; backlink?: string }} details
@@ -29,7 +20,6 @@ const getPoliceOfficerText = (count) => {
  * @constructor
  */
 function ViewModel (details, backNav, errors) {
-  const count = details.users.length
   /**
    * @type {AddListInputModel}
    */
@@ -38,7 +28,7 @@ function ViewModel (details, backNav, errors) {
     backLink: details.backlink,
     fieldset: {
       legend: {
-        text: `You have added ${count} ${getPoliceOfficerText(count)}`,
+        text: 'Check your answers before giving the police officers access',
         classes: 'govuk-fieldset__legend--l',
         isPageHeading: true
       }
@@ -58,43 +48,15 @@ function ViewModel (details, backNav, errors) {
                 text: 'Change',
                 visuallyHiddenText: `Change ${user}`,
                 classes: 'govuk-!-hidden'
-              },
-              {
-                text: 'Remove',
-                visuallyHiddenText: `remove ${user}`
               }
             ]
           }
         }
       })
     },
-    radios: {
-      fieldset: {
-        legend: {
-          text: 'Do you need to add another police offers?',
-          classes: 'govuk-fieldset__legend--m'
-        },
-        classes: 'govuk-!-margin-top-5 govuk-visually-hidden'
-      },
-      classes: 'govuk-radios--inline',
-      items: [
-        {
-          text: 'Yes',
-          value: 'Y',
-          name: 'add-officer',
-          disabled: true
-        },
-        {
-          text: 'No',
-          value: 'N',
-          name: 'add-officer',
-          checked: true
-        }
-      ]
-    },
     continue: {
       preventDoubleClick: true,
-      text: 'Continue',
+      text: 'Give access',
       type: 'submit',
       name: 'continue'
     },
