@@ -5,11 +5,10 @@ const AddPoliceUsersListFormViewModel = require('../../../../models/admin/users/
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
 const { confirmFlowValidFields } = require('../../../../schema/portal/common/single-submit')
 const { getUser } = require('../../../../auth')
-const { submitEmailSchema, submitEmailConflictSchema, submitEmailSessionConflictSchema } = require('../../../../schema/portal/admin/users')
+const { submitEmailSchema, submitEmailConflictSchema, submitEmailSessionConflictSchema, submitListSchema } = require('../../../../schema/portal/admin/users')
 const { getUsers } = require('../../../../api/ddi-index-api/users')
-const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd } = require('../../../../session/admin/police-users')
+const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd } = require('../../../../session/admin/police-users')
 const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
-const Joi = require('joi')
 
 const addRemoveConstants = addRemove.policeUserConstants
 
@@ -106,7 +105,6 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const policeUsers = getPoliceUsersToAdd(request)
-        console.log('~~~~~~ Chris Debug ~~~~~~ ', 'PoliceUsers', policeUsers)
         const backlink = routes.addPoliceUser.get
         const model = new AddPoliceUsersListFormViewModel({
           users: policeUsers,
@@ -114,6 +112,33 @@ module.exports = [
         })
 
         return h.view(views.addPoliceUserList, model)
+      }
+    }
+  },
+  {
+
+    method: 'POST',
+    path: `${routes.listPoliceUsersToAdd.get}`,
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        payload: validatePayloadBuilder(submitListSchema),
+        failAction: async (request, h, error) => {
+          const policeUsers = getPoliceUsersToAdd(request)
+          console.log('~~~~~~ Chris Debug ~~~~~~ failaction', 'PoliceUsers', policeUsers)
+          const backlink = routes.addPoliceUser.get
+          const model = new AddPoliceUsersListFormViewModel({
+            users: policeUsers,
+            backlink
+          }, undefined, error)
+
+          return h.view(views.addPoliceUserList, model).code(400).takeover()
+        }
+      },
+      handler: async (request, h) => {
+        setPoliceUsersToAdd(request, request.payload.users)
+        console.log('~~~~~~ Chris Debug ~~~~~~ next', '')
+        return h.redirect(routes.confirmPoliceUsersToAdd.get)
       }
     }
   }

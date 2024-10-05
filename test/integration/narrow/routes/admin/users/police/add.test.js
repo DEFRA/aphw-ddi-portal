@@ -1,14 +1,18 @@
 const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
-const { getPoliceUsersToAdd } = require('../../../../../../../app/session/admin/police-users')
 
 describe('Add police officer page', () => {
   jest.mock('../../../../../../../app/auth')
   const mockAuth = require('../../../../../../../app/auth')
 
   jest.mock('../../../../../../../app/session/admin/police-users')
-  const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd } = require('../../../../../../../app/session/admin/police-users')
+  const {
+    initialisePoliceUsers,
+    appendPoliceUserToAdd,
+    getPoliceUsersToAdd,
+    setPoliceUsersToAdd
+  } = require('../../../../../../../app/session/admin/police-users')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/users')
   const { addUsers, getUsers } = require('../../../../../../../app/api/ddi-index-api/users')
@@ -180,48 +184,103 @@ describe('Add police officer page', () => {
   })
 
   describe('You have added x police officers page', () => {
-    test('should return a 200 given one users have been submitted', async () => {
-      getPoliceUsersToAdd.mockReturnValue(['name.lastname@police.uk'])
+    describe('GET /admin/users/police/add/list', () => {
+      test('should return a 200 given one users have been submitted', async () => {
+        getPoliceUsersToAdd.mockReturnValue(['name.lastname@police.uk'])
 
-      const options = {
-        method: 'GET',
-        url: '/admin/users/police/add/list',
-        auth
-      }
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/list',
+          auth
+        }
 
-      const response = await server.inject(options)
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
 
-      const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(200)
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 1 police officer')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('name.lastname@police.uk')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+      })
 
-      expect(response.statusCode).toBe(200)
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 1 police officer')
-      expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('name.lastname@police.uk')
-      expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+      test('should return a 200 given three users have been submitted', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk',
+          'axel.foley@beverly-hills.police.gov'
+        ])
+
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/list',
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(200)
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 3 police officers')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('nicholas.angel@sandford.police.uk')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[1].textContent.trim()).toBe('danny.butterman@sandford.police.uk')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[2].textContent.trim()).toBe('axel.foley@beverly-hills.police.gov')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+      })
     })
 
-    test('should return a 200 given three users have been submitted', async () => {
-      getPoliceUsersToAdd.mockReturnValue([
-        'nicholas.angel@sandford.police.uk',
-        'danny.butterman@sandford.police.uk',
-        'axel.foley@beverly-hills.police.gov'
-      ])
+    describe('POST /admin/users/police/add/list', () => {
+      test('should redirect to confirmation page', async () => {
+        getPoliceUsersToAdd.mockReturnValue(['name.lastname@police.uk'])
 
-      const options = {
-        method: 'GET',
-        url: '/admin/users/police/add/list',
-        auth
-      }
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/list',
+          payload: {
+            continue: '',
+            radio: 'N',
+            users: [
+              'nicholas.angel@sandford.police.uk',
+              'danny.butterman@sandford.police.uk'
+            ]
+          },
+          auth
+        }
 
-      const response = await server.inject(options)
+        const response = await server.inject(options)
 
-      const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(302)
+        expect(response.headers.location).toBe('/admin/users/police/add/confirm')
+        expect(setPoliceUsersToAdd).toHaveBeenCalledWith(expect.anything(), [
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
+      })
 
-      expect(response.statusCode).toBe(200)
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 3 police officers')
-      expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('nicholas.angel@sandford.police.uk')
-      expect(document.querySelectorAll('.govuk-summary-list__key')[1].textContent.trim()).toBe('danny.butterman@sandford.police.uk')
-      expect(document.querySelectorAll('.govuk-summary-list__key')[2].textContent.trim()).toBe('axel.foley@beverly-hills.police.gov')
-      expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+      // TODO: need a clean failure route is the session expires
+      test('should fail with a 400 if users are empty', async () => {
+        getPoliceUsersToAdd.mockReturnValue([])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/list',
+          payload: {
+            continue: '',
+            radio: 'N',
+            users: []
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(400)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 0 police officers')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('There must be at least one police officer')
+      })
     })
   })
 

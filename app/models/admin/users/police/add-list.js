@@ -1,9 +1,10 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
 const { forms } = require('../../../../constants/forms')
-const { user } = require('../../../../../test/mocks/auth')
+const { ValidationError } = require('joi')
 
 /**
  * @typedef AddListInputModel
+ * @property {string[]} users
  * @property {string} backLink
  * @property {import('../../../builders/components').Fieldset} fieldset
  * @property {import('../../../builders/components').GoukSummaryList} summaryList
@@ -15,10 +16,10 @@ const { user } = require('../../../../../test/mocks/auth')
  */
 
 const getPoliceOfficerText = (count) => {
-  if (count > 1) {
-    return 'police officers'
+  if (count === 1) {
+    return 'police officer'
   }
-  return 'police officer'
+  return 'police officers'
 }
 
 /**
@@ -34,6 +35,7 @@ function ViewModel (details, backNav, errors) {
    * @type {AddListInputModel}
    */
   const inputModel = {
+    usersList: details.users,
     backLink: details.backlink,
     fieldset: {
       legend: {
@@ -91,7 +93,7 @@ function ViewModel (details, backNav, errors) {
         }
       ]
     },
-    button: {
+    continue: {
       preventDoubleClick: true,
       text: 'Continue',
       type: 'submit',
@@ -104,6 +106,12 @@ function ViewModel (details, backNav, errors) {
   this.model = inputModel
 
   errorPusherDefault(errors, this.model)
+
+  if (!this.model.errors.length && errors?.details.length) {
+    errors.details.forEach(error => {
+      this.model.errors.push({ text: error.message, href: '#' })
+    })
+  }
 }
 
 module.exports = ViewModel
