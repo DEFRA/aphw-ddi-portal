@@ -20,8 +20,14 @@ const submitEmailSessionConflictSchema = (field) => Joi.object({
   })
 }).optional()
 
+const submitListSchema = Joi.object({
+  continue: Joi.string().allow('').allow(null).required(),
+  users: Joi.array().single().items(Joi.string().email()).required().min(1)
+})
+
 module.exports = {
   submitEmailSchema,
   submitEmailConflictSchema,
-  submitEmailSessionConflictSchema
+  submitEmailSessionConflictSchema,
+  submitListSchema
 }
