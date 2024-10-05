@@ -1,4 +1,4 @@
-const { getPoliceUsersToAdd, setPoliceUsersToAdd, appendPoliceUserToAdd } = require('../../../../app/session/admin/police-users')
+const { getPoliceUsersToAdd, setPoliceUsersToAdd, initialisePoliceUsers, appendPoliceUserToAdd } = require('../../../../app/session/admin/police-users')
 
 describe('police-users', () => {
   const mockRequest = {
@@ -54,6 +54,13 @@ describe('police-users', () => {
 
     test('should set empty array if empty', () => {
       setPoliceUsersToAdd(mockRequest, undefined)
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', [])
+    })
+  })
+
+  describe('initialisePoliceUsers', () => {
+    test('should set policeUsers session key to empty array', () => {
+      initialisePoliceUsers(mockRequest)
       expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', [])
     })
   })

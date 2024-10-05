@@ -15,8 +15,13 @@ const appendPoliceUserToAdd = (request, value) => {
   setPoliceUsersToAdd(request, [...currentUsers, ...newUserList])
 }
 
+const initialisePoliceUsers = (request) => {
+  setPoliceUsersToAdd(request, [])
+}
+
 module.exports = {
   getPoliceUsersToAdd,
   setPoliceUsersToAdd,
-  appendPoliceUserToAdd
+  appendPoliceUserToAdd,
+  initialisePoliceUsers
 }
