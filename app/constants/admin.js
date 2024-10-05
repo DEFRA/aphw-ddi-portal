@@ -168,7 +168,8 @@ const constants = {
   },
   keys: {
     oldDogs: 'oldDogs',
-    orphanedOwners: 'orphanedOwners'
+    orphanedOwners: 'orphanedOwners',
+    policeUsers: 'policeUsers'
   },
   documentation: {
     allowedEnvironments: ['dev', 'snd', 'local']
