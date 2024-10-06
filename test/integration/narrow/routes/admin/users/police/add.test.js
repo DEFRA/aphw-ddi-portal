@@ -1,7 +1,6 @@
 const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
-const { removePoliceUserToAdd } = require('../../../../../../../app/session/admin/police-users')
 
 describe('Add police officer page', () => {
   jest.mock('../../../../../../../app/auth')
