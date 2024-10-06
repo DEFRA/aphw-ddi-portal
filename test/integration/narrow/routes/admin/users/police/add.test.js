@@ -1,6 +1,7 @@
 const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
+const { removePoliceUserToAdd } = require('../../../../../../../app/session/admin/police-users')
 
 describe('Add police officer page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -503,7 +504,12 @@ describe('Add police officer page', () => {
     })
 
     describe('GET /admin/users/polices/add/remove/1', () => {
-      test('should remove', async () => {
+      test('should remove user when more than one user', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
+        removePoliceUserToAdd.mockReturnValue(['nicholas.angel@sandford.police.uk'])
         const options = {
           method: 'GET',
           url: '/admin/users/police/add/remove/1',
@@ -515,6 +521,24 @@ describe('Add police officer page', () => {
         expect(response.statusCode).toBe(302)
         expect(response.headers.location).toBe('/admin/users/police/add/list')
         expect(removePoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 1)
+      })
+
+      test('should remove user when only one user', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk'
+        ])
+        removePoliceUserToAdd.mockReturnValue([])
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/remove/0',
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(302)
+        expect(response.headers.location).toBe('/admin/users/police')
+        expect(removePoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 0)
       })
     })
   })

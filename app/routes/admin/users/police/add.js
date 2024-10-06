@@ -207,9 +207,11 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        removePoliceUserToAdd(request, parseInt(request.params.policeUserSessionId))
+        const users = removePoliceUserToAdd(request, parseInt(request.params.policeUserSessionId))
 
-        return h.redirect(addRemoveConstants.links.addList.get)
+        const redirectPath = users.length ? addRemoveConstants.links.addList.get : addRemoveConstants.links.index.get
+
+        return h.redirect(redirectPath)
       }
     }
   },
