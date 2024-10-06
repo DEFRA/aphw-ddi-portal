@@ -143,6 +143,10 @@ module.exports = [
       handler: async (request, h) => {
         setPoliceUsersToAdd(request, request.payload.users)
 
+        if (request.payload.addAnother) {
+          return h.redirect(routes.addPoliceUser.get)
+        }
+
         return h.redirect(routes.confirmPoliceUsersToAdd.get)
       }
     }

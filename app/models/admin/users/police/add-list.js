@@ -45,27 +45,24 @@ function ViewModel (details, backNav, errors) {
       }
     },
     summaryList: summaryList(details.users, true),
-    radios: {
+    addAnother: {
+      name: 'addAnother',
       fieldset: {
         legend: {
-          text: 'Do you need to add another police offers?',
+          text: 'Do you need to add another police officer?',
           classes: 'govuk-fieldset__legend--m'
         },
-        classes: 'govuk-!-margin-top-5 govuk-visually-hidden'
+        classes: 'govuk-!-margin-top-5'
       },
       classes: 'govuk-radios--inline',
       items: [
         {
           text: 'Yes',
-          value: 'Y',
-          name: 'add-officer',
-          disabled: true
+          value: 'Y'
         },
         {
           text: 'No',
-          value: 'N',
-          name: 'add-officer',
-          checked: true
+          value: 'N'
         }
       ]
     },
@@ -75,7 +72,8 @@ function ViewModel (details, backNav, errors) {
       type: 'submit',
       name: 'continue'
     },
-    ...policeListDefaults
+    errors: [],
+    ...policeListDefaults()
   }
 
   this.model = inputModel

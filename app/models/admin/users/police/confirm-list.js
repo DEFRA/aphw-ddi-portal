@@ -41,7 +41,7 @@ function ViewModel (details, backNav, errors) {
       name: 'continue'
     },
     summaryList: summaryList(details.users),
-    ...policeListDefaults
+    ...policeListDefaults()
   }
 
   this.model = inputModel

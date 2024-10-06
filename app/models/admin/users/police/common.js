@@ -32,10 +32,10 @@ const summaryList = (users, remove = false) => {
   }
 }
 
-const policeListDefaults = {
+const policeListDefaults = () => ({
   autocomplete: forms.preventAutocomplete,
   errors: []
-}
+})
 
 module.exports = {
   summaryList,

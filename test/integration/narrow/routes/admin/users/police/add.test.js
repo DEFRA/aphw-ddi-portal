@@ -200,6 +200,10 @@ describe('Add police officer page', () => {
         expect(response.statusCode).toBe(200)
         expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 1 police officer')
         expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('name.lastname@police.uk')
+        expect(document.querySelector('#main-content').textContent.trim()).toContain('Do you need to add another police officer?')
+        expect(document.querySelector('#main-content').textContent.trim()).toContain('Yes')
+        expect(document.querySelector('#main-content').textContent.trim()).toContain('No')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('name.lastname@police.uk')
         expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
       })
 
@@ -230,7 +234,7 @@ describe('Add police officer page', () => {
     })
 
     describe('POST /admin/users/police/add/list', () => {
-      test('should redirect to confirmation page', async () => {
+      test('should redirect to confirmation page if No is selected', async () => {
         getPoliceUsersToAdd.mockReturnValue([
           'nicholas.angel@sandford.police.uk',
           'danny.butterman@sandford.police.uk'
@@ -241,7 +245,7 @@ describe('Add police officer page', () => {
           url: '/admin/users/police/add/list',
           payload: {
             continue: '',
-            radio: 'N',
+            addAnother: 'N',
             users: [
               'nicholas.angel@sandford.police.uk',
               'danny.butterman@sandford.police.uk'
@@ -260,6 +264,62 @@ describe('Add police officer page', () => {
         ])
       })
 
+      test('should redirect to add a user if Yes is selected', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/list',
+          payload: {
+            continue: '',
+            addAnother: 'Y',
+            users: [
+              'nicholas.angel@sandford.police.uk',
+              'danny.butterman@sandford.police.uk'
+            ]
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(302)
+        expect(response.headers.location).toBe('/admin/users/police/add')
+        expect(setPoliceUsersToAdd).toHaveBeenCalledWith(expect.anything(), [
+          'nicholas.angel@sandford.police.uk',
+          'danny.butterman@sandford.police.uk'
+        ])
+      })
+
+      test('should return a 400 given radio has not been selected', async () => {
+        getPoliceUsersToAdd.mockReturnValue(['name.lastname@police.uk'])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/list',
+          payload: {
+            continue: '',
+            users: [
+              'nicholas.angel@sandford.police.uk',
+              'danny.butterman@sandford.police.uk'
+            ]
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(400)
+        expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 1 police officer')
+        expect(document.querySelectorAll('.govuk-summary-list__key')[0].textContent.trim()).toBe('name.lastname@police.uk')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Select an option')
+      })
+
       test('should fail with a 400 if users are empty', async () => {
         getPoliceUsersToAdd.mockReturnValue([])
 
@@ -268,7 +328,7 @@ describe('Add police officer page', () => {
           url: '/admin/users/police/add/list',
           payload: {
             continue: '',
-            radio: 'N',
+            addAnother: 'N',
             users: []
           },
           auth

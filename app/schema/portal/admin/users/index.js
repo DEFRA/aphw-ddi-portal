@@ -22,7 +22,9 @@ const submitEmailSessionConflictSchema = (field) => Joi.object({
 
 const submitListSchema = Joi.object({
   continue: Joi.string().allow('').allow(null).required(),
-  radio: Joi.boolean().truthy('Y').falsy('N').default('N'),
+  addAnother: Joi.boolean().truthy('Y').falsy('N').allow(true).allow(false).messages({
+    '*': 'Select an option'
+  }).required(),
   users: Joi.array().single().items(Joi.string().email()).min(1).messages({
     '*': 'There must be at least one police officer'
   }).required()
