@@ -27,6 +27,8 @@ const removePoliceUserToAdd = (request, id) => {
     }
     return [...userList, user]
   }, []))
+
+  return getPoliceUsersToAdd(request)
 }
 
 const changePoliceUserToAdd = (request, id, newValue) => {

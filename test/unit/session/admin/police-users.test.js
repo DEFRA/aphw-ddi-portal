@@ -131,13 +131,17 @@ describe('police-users', () => {
         'scott.turner@sacramento.police.gov',
         'axel.foley@beverly-hills.police.gov'
       ]
-
-      mockRequest.yar.get.mockReturnValue(policeUsernames)
-      removePoliceUserToAdd(mockRequest, 0)
-      expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', [
+      const expectedPoliceUsernames = [
         'scott.turner@sacramento.police.gov',
         'axel.foley@beverly-hills.police.gov'
-      ])
+      ]
+
+      mockRequest.yar.get.mockReturnValueOnce(policeUsernames)
+      mockRequest.yar.get.mockReturnValueOnce(expectedPoliceUsernames)
+      const list = removePoliceUserToAdd(mockRequest, 0)
+
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', expectedPoliceUsernames)
+      expect(list).toEqual(expectedPoliceUsernames)
     })
   })
 
