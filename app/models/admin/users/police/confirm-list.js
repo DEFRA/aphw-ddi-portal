@@ -24,6 +24,7 @@ function ViewModel (details, backNav, errors) {
    * @type {AddListInputModel}
    */
   const inputModel = {
+    users: details.users,
     usersList: details.users,
     backLink: details.backlink,
     fieldset: {
@@ -46,12 +47,6 @@ function ViewModel (details, backNav, errors) {
   this.model = inputModel
 
   errorPusherDefault(errors, this.model)
-
-  if (!this.model.errors.length && errors?.details.length) {
-    errors.details.forEach(error => {
-      this.model.errors.push({ text: error.message, href: '#' })
-    })
-  }
 }
 
 module.exports = ViewModel

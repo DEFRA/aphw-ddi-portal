@@ -75,6 +75,15 @@ describe('police-users', () => {
       expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', ['nicholas.angel@sandford.police.uk'])
     })
 
+    test('should not add a police user given user is not included', () => {
+      const policeUsernames = ['nicholas.angel@sandford.police.uk']
+      mockRequest.yar.get.mockReturnValue(policeUsernames)
+
+      appendPoliceUserToAdd(mockRequest, undefined)
+
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', ['nicholas.angel@sandford.police.uk'])
+    })
+
     test('should add a list of police users to an empty list of police users', () => {
       const policeUsernames = ['nicholas.angel@sandford.police.uk', 'danny.butterman@sandford.police.uk']
       mockRequest.yar.get.mockReturnValue([])

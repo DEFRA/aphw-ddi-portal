@@ -5,6 +5,7 @@ const { addUser, getUsers, addUsers, removeUser } = require('../../../../app/api
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 const { afterEach } = require('node:test')
+const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
 
 describe('DDI API users', () => {
   afterEach(() => {
@@ -26,8 +27,23 @@ describe('DDI API users', () => {
       expect(post).toHaveBeenCalledWith('user', userDto, user)
     })
 
-    test('should fail with an ApiConflictError if result was a 409', async () => {
+    test('should fail with an ApiConflictError if result was a 500', async () => {
       post.mockRejectedValue(new Error('This user is already in the allow list'))
+
+      const userDto = 'ralph@wreckit.com'
+
+      await expect(addUser(userDto, user)).rejects.toThrowError(new ApiConflictError({
+        message: 'This user is already in the allow list'
+      }))
+    })
+
+    test('should fail with an ApiConflictError if result was a 409', async () => {
+      post.mockRejectedValue({
+        isBoom: true,
+        output: {
+          statusCode: 409
+        }
+      })
 
       const userDto = 'ralph@wreckit.com'
 
@@ -223,6 +239,43 @@ describe('DDI API users', () => {
             },
             {
               username: 'harry.callahan@san-francisco.police.gov'
+            }
+          ]
+        }, user, false)
+    })
+
+    test('should fail with a 500 if all users were conflicts', async () => {
+      const responseData = {
+        statusCode: 500,
+        statusMessage: 'error',
+        payload: {
+          users: [],
+          errors: [
+            {
+              statusCode: 500,
+              error: 'error',
+              message: 'error',
+              username: 'alex.murphy@ocp.police.gov'
+            }
+          ]
+        }
+      }
+      boomRequest.mockResolvedValue(responseData)
+
+      const usersDto = [
+        'alex.murphy@ocp.police.gov'
+      ]
+
+      await expect(addUsers(usersDto, user)).rejects.toThrowError(new ApiErrorFailure('500 error', {
+        message: 'This user is already in the allow list'
+      }))
+
+      expect(boomRequest).toHaveBeenCalledWith(
+        'users',
+        'POST', {
+          users: [
+            {
+              username: 'alex.murphy@ocp.police.gov'
             }
           ]
         }, user, false)
