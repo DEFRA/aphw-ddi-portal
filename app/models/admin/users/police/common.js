@@ -24,7 +24,8 @@ const summaryList = (users, remove = false) => {
           items: [
             {
               text: 'Change',
-              visuallyHiddenText: `Change ${user}`
+              visuallyHiddenText: `Change ${user}`,
+              href: `${routes.addUpdatePoliceUser.get}/${idx}`
             },
             ...removeItems(user, idx)
           ]

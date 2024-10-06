@@ -5,7 +5,8 @@ const submitEmailSchema = Joi.object({
     'string.empty': 'Enter a police officer',
     'any.required': 'Enter a police officer',
     'string.email': 'Email address must be real'
-  })
+  }),
+  policeUserIndex: Joi.number().optional()
 })
 
 const submitEmailConflictSchema = (field) => Joi.object({

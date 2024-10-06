@@ -10,6 +10,9 @@ const { forms } = require('../../constants/forms')
  * @property {string} [optionText]
  * @property {string} [recordValue]
  * @property {string} [backLink]
+ * @property {boolean} [update]
+ * @property {number} [updateId]
+ * @property {string} [updateName]
  * @property {'add'|'remove'} action
  */
 
@@ -41,6 +44,12 @@ function ViewModel (details, backNav, errors) {
     [details.recordType]: inputModel,
     buttonText: details.buttonText,
     confirmHint: details.confirmHint,
+    update: details.update
+      ? {
+          value: details.updateId,
+          name: details.updateName
+        }
+      : false,
     errors: []
   }
 

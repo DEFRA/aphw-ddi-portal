@@ -11,7 +11,10 @@ const {
   confirmListSchema
 } = require('../../../../schema/portal/admin/users')
 const { getUsers, addUsers } = require('../../../../api/ddi-index-api/users')
-const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd, removePoliceUserToAdd } = require('../../../../session/admin/police-users')
+const {
+  initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd, removePoliceUserToAdd,
+  changePoliceUserToAdd
+} = require('../../../../session/admin/police-users')
 const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
 const { PoliceOffersAddedViewModel } = require('../../../../models/admin/courts/builder')
 
@@ -54,7 +57,7 @@ const addUserPostCheck = {
       throwConflictError(request.payload)
     }
 
-    return validatedPayload.policeUser
+    return { username: validatedPayload.policeUser, id: validatedPayload.policeUserIndex }
   },
   failAction: (request, h, error) => {
     const recordValue = request.payload[addRemoveConstants.inputField]
@@ -83,12 +86,35 @@ module.exports = [
     }
   },
   {
+
+    method: 'GET',
+    path: `${routes.addUpdatePoliceUser.get}/{policeUserId}`,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const users = getPoliceUsersToAdd(request)
+        const updateId = parseInt(request.params.policeUserId)
+        const recordValue = users[updateId]
+
+        const model = new FormViewModel({
+          ...addUserStepConstants,
+          recordValue,
+          update: true,
+          updateId,
+          updateName: 'policeUserIndex'
+        })
+
+        return h.view(views.addAdminRecord, model)
+      }
+    }
+  },
+  {
     method: 'POST',
     path: `${routes.addPoliceUser.post}`,
     options: {
       auth: { scope: [admin] },
       validate: {
-        payload: validatePayloadBuilder(confirmFlowValidFields(addRemoveConstants.inputField, ['conflict']))
+        payload: validatePayloadBuilder(confirmFlowValidFields(addRemoveConstants.inputField, ['conflict', 'policeUserIndex']))
       },
       pre: [
         addUserPostCheck
@@ -96,7 +122,31 @@ module.exports = [
       handler: async (request, h) => {
         throwIfPreConditionError(request)
 
-        appendPoliceUserToAdd(request, request.pre.inputField)
+        if (typeof request.pre.inputField.id === 'number') {
+          changePoliceUserToAdd(request, request.pre.inputField.id, request.pre.inputField.username)
+        } else {
+          appendPoliceUserToAdd(request, request.pre.inputField.username)
+        }
+
+        return h.redirect(addRemoveConstants.links.addList.get)
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: `${routes.addUpdatePoliceUser.post}/{policeUserIndex}`,
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        payload: validatePayloadBuilder(submitEmailSchema)
+      },
+      pre: [
+        addUserPostCheck
+      ],
+      handler: async (request, h) => {
+        throwIfPreConditionError(request)
+
+        changePoliceUserToAdd(request, request.pre.inputField.id, request.pre.inputField.username)
 
         return h.redirect(addRemoveConstants.links.addList.get)
       }

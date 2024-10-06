@@ -90,6 +90,7 @@ const constants = {
     policeUsers: policeUserLinks.index,
     addPoliceUser: policeUserLinks.add,
     addRemovePoliceUser: policeUserLinks.addRemove,
+    addUpdatePoliceUser: policeUserLinks.addUpdate,
     listPoliceUsersToAdd: policeUserLinks.addList,
     confirmPoliceUsersToAdd: policeUserLinks.addConfirm,
     removePoliceUser: policeUserLinks.remove,

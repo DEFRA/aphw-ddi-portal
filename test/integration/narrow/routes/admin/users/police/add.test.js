@@ -12,7 +12,8 @@ describe('Add police officer page', () => {
     appendPoliceUserToAdd,
     getPoliceUsersToAdd,
     setPoliceUsersToAdd,
-    removePoliceUserToAdd
+    removePoliceUserToAdd,
+    changePoliceUserToAdd
   } = require('../../../../../../../app/session/admin/police-users')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/users')
@@ -82,6 +83,20 @@ describe('Add police officer page', () => {
 
         expect(response.statusCode).toBe(403)
       })
+
+      test('should return to auth 302 if not auth', async () => {
+        const fd = new FormData()
+
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add',
+          headers: fd.getHeaders(),
+          payload: fd.getBuffer()
+        }
+
+        const response = await server.inject(options)
+        expect(response.statusCode).toBe(302)
+      })
     })
 
     describe('POST /admin/users/police/add', () => {
@@ -131,6 +146,21 @@ describe('Add police officer page', () => {
         expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already in the allow list')
       })
 
+      test('should return a 403 given user is standard user', async () => {
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add',
+          auth: standardAuth,
+          payload: {
+            policeUser: 'nicholas.angel@sandford.police.uk'
+          }
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(403)
+      })
+
       test('should return to auth 302 if not auth', async () => {
         const fd = new FormData()
 
@@ -163,6 +193,26 @@ describe('Add police officer page', () => {
         expect(response.headers.location).toContain('/admin/users/police/add/list')
       })
 
+      test('should update value for session and redirect given valid email address submitted', async () => {
+        getUsers.mockResolvedValue(['ralph@wreckit.com', 'nicholas.angel@sandford.police.uk'])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add',
+          auth,
+          payload: {
+            policeUser: 'ralph@wreck-it.com',
+            policeUserIndex: '0'
+          }
+        }
+        const response = await server.inject(options)
+
+        expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
+        expect(changePoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 0, 'ralph@wreck-it.com')
+        expect(response.statusCode).toBe(302)
+        expect(response.headers.location).toContain('/admin/users/police/add/list')
+      })
+
       test('should not update session and redirect given duplicate email address submitted', async () => {
         getPoliceUsersToAdd.mockReturnValue(['nicholas.angel@sandford.police.uk'])
 
@@ -180,6 +230,112 @@ describe('Add police officer page', () => {
         expect(response.statusCode).toBe(400)
         expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer has already been selected')
         expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('GET /admin/users/police/update/1', () => {
+      test('should return a 200 and clears session when called first time', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/update/1',
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(200)
+        expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the police officer’s email address?')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police officer')
+        expect(document.querySelector('input#hidden-field').getAttribute('value')).toBe('1')
+        expect(document.querySelector('input#hidden-field').getAttribute('name')).toBe('policeUserIndex')
+      })
+
+      test('should return a 403 given user is standard user', async () => {
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/update/1',
+          auth: standardAuth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(403)
+      })
+
+      test('should return a 403 given user is standard user', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/update/1',
+          auth: standardAuth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(403)
+      })
+    })
+
+    describe('POST /admin/users/police/update/1', () => {
+      test('should update user and redirect to list page if user is valid', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'ralph@wreck-it.com',
+            policeUserIndex: '0'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        expect(response.statusCode).toBe(302)
+        expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
+        expect(changePoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 0, 'ralph@wreck-it.com')
+        expect(response.headers.location).toContain('/admin/users/police/add/list')
+      })
+
+      test('should return a 403 given user is standard user', async () => {
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'ralph@wreck-it.com',
+            policeUserIndex: '0'
+          },
+          auth: standardAuth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(403)
+      })
+
+      test('should return to auth 302 if not auth', async () => {
+        const fd = new FormData()
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          headers: fd.getHeaders(),
+          payload: fd.getBuffer()
+        }
+
+        const response = await server.inject(options)
+        expect(response.statusCode).toBe(302)
       })
     })
   })
