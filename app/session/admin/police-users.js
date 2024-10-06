@@ -19,9 +19,20 @@ const initialisePoliceUsers = (request) => {
   setPoliceUsersToAdd(request, [])
 }
 
+const removePoliceUserToAdd = (request, id) => {
+  const users = getPoliceUsersToAdd(request)
+  setPoliceUsersToAdd(request, users.reduce((userList, user, idx) => {
+    if (idx === id) {
+      return userList
+    }
+    return [...userList, user]
+  }, []))
+}
+
 module.exports = {
   getPoliceUsersToAdd,
   setPoliceUsersToAdd,
   appendPoliceUserToAdd,
-  initialisePoliceUsers
+  initialisePoliceUsers,
+  removePoliceUserToAdd
 }

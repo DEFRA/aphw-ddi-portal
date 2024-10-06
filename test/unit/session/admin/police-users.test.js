@@ -1,4 +1,4 @@
-const { getPoliceUsersToAdd, setPoliceUsersToAdd, initialisePoliceUsers, appendPoliceUserToAdd } = require('../../../../app/session/admin/police-users')
+const { getPoliceUsersToAdd, setPoliceUsersToAdd, initialisePoliceUsers, appendPoliceUserToAdd, removePoliceUserToAdd } = require('../../../../app/session/admin/police-users')
 
 describe('police-users', () => {
   const mockRequest = {
@@ -113,6 +113,23 @@ describe('police-users', () => {
         'danny.butterman@sandford.police.uk',
         'axel.foley@beverly-hills.police.gov',
         'scott.turner@sacramento.police.gov'
+      ])
+    })
+  })
+
+  describe('removePoliceUserToAdd', () => {
+    test('should remove a police user from the session', () => {
+      const policeUsernames = [
+        'ralph@wreckit.com',
+        'scott.turner@sacramento.police.gov',
+        'axel.foley@beverly-hills.police.gov'
+      ]
+
+      mockRequest.yar.get.mockReturnValue(policeUsernames)
+      removePoliceUserToAdd(mockRequest, 0)
+      expect(mockRequest.yar.set).toHaveBeenCalledWith('policeUsers', [
+        'scott.turner@sacramento.police.gov',
+        'axel.foley@beverly-hills.police.gov'
       ])
     })
   })
