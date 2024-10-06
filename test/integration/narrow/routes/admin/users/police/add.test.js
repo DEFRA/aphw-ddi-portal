@@ -11,7 +11,8 @@ describe('Add police officer page', () => {
     initialisePoliceUsers,
     appendPoliceUserToAdd,
     getPoliceUsersToAdd,
-    setPoliceUsersToAdd
+    setPoliceUsersToAdd,
+    removePoliceUserToAdd
   } = require('../../../../../../../app/session/admin/police-users')
 
   jest.mock('../../../../../../../app/api/ddi-index-api/users')
@@ -342,6 +343,22 @@ describe('Add police officer page', () => {
         expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('You have added 0 police officers')
         expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Continue')
         expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('There must be at least one police officer')
+      })
+    })
+
+    describe('GET /admin/users/polices/add/remove/1', () => {
+      test('should remove', async () => {
+        const options = {
+          method: 'GET',
+          url: '/admin/users/police/add/remove/1',
+          auth
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).toBe(302)
+        expect(response.headers.location).toBe('/admin/users/police/add/list')
+        expect(removePoliceUserToAdd).toHaveBeenCalledWith(expect.anything(), 1)
       })
     })
   })

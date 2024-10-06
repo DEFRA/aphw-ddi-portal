@@ -1,11 +1,14 @@
 const { forms } = require('../../../../constants/forms')
+const { routes } = require('../../../../constants/admin')
+
 const summaryList = (users, remove = false) => {
-  const removeItems = (user, _idx) => {
+  const removeItems = (user, idx) => {
     return !remove
       ? []
       : [{
           text: 'Remove',
-          visuallyHiddenText: `remove ${user}`
+          visuallyHiddenText: `remove ${user}`,
+          href: `${routes.addRemovePoliceUser.get}/${idx}`
         }]
   }
   return {
@@ -17,12 +20,11 @@ const summaryList = (users, remove = false) => {
         },
         value: '',
         actions: {
-          classes: 'govuk-!-width-one-third govuk-visually-hidden',
+          classes: 'govuk-!-width-one-third',
           items: [
             {
               text: 'Change',
-              visuallyHiddenText: `Change ${user}`,
-              classes: 'govuk-!-hidden'
+              visuallyHiddenText: `Change ${user}`
             },
             ...removeItems(user, idx)
           ]

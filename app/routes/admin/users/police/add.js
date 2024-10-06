@@ -11,7 +11,7 @@ const {
   confirmListSchema
 } = require('../../../../schema/portal/admin/users')
 const { getUsers, addUsers } = require('../../../../api/ddi-index-api/users')
-const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd } = require('../../../../session/admin/police-users')
+const { initialisePoliceUsers, appendPoliceUserToAdd, getPoliceUsersToAdd, setPoliceUsersToAdd, removePoliceUserToAdd } = require('../../../../session/admin/police-users')
 const { throwIfPreConditionError } = require('../../../../lib/route-helpers')
 const { PoliceOffersAddedViewModel } = require('../../../../models/admin/courts/builder')
 
@@ -148,6 +148,18 @@ module.exports = [
         }
 
         return h.redirect(routes.confirmPoliceUsersToAdd.get)
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: `${routes.addRemovePoliceUser.get}/{policeUserSessionId}`,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        removePoliceUserToAdd(request, parseInt(request.params.policeUserSessionId))
+
+        return h.redirect(addRemoveConstants.links.addList.get)
       }
     }
   },
