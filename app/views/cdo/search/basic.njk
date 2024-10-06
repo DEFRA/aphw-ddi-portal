@@ -33,6 +33,10 @@
           {{ govukInput(model.searchTerms) }}
 
           {{ govukRadios(model.searchType) }}
+
+          {% if model.results.items.length > 0 %}
+          {{ govukCheckboxes(model.fuzzy) }}
+          {% endif %}
       </fieldset>
 
       {{ govukButton({
@@ -44,21 +48,16 @@
 
     {% if model.results.items.length > 0 %}
 
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header" colspan="3">
-          {% if model.searchType.value == "dog" %}
-          {{ "1 dog record" if model.results.items.length == 1 else model.results.items.length + " dog records" }}
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-2">
+    <h3 class="govuk-heading-s">
+          {% if model.results.items.length == 1 %}
+          1 matching record for &#x2018{{ model.searchTerms.value }}&#x2019;
+          {% elif model.totalFound <= 25 %}
+          {{ model.results.items.length }} matching records for &#x2018;{{ model.searchTerms.value }}&#x2019;
           {% else %}
-          {{ "1 owner record" if model.results.items.length == 1 else model.results.items.length + " owner records" }}
+          Showing {{ model.results.items.length }} of {{ model.totalFound }} matching records for &#x2018;{{ model.searchTerms.value }}&#x2019;
           {% endif %}
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      </tbody>
-    </table>
+    </h3>
 
       {% for result in model.results.items %}
         {% if model.searchType.value == "dog" %}
