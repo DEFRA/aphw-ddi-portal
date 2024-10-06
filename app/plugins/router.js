@@ -68,6 +68,7 @@ const routes = [].concat(
   require('../routes/admin/delete/owners'),
   require('../routes/admin/users/police/index'),
   require('../routes/admin/users/police/add'),
+  require('../routes/admin/users/police/remove'),
   require('../routes/jobs'),
   require('../routes/swagger'),
   require('../routes/documentation')

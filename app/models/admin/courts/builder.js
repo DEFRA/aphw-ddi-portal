@@ -35,6 +35,7 @@ const CourtRemovedViewModel = (court) => {
 
 const PoliceOffersAddedViewModel = (officers) => {
   return new ViewModel({
+    breadcrumbs,
     titleHtml: 'You gave police officers access to the Index',
     html: [
       {
@@ -55,8 +56,26 @@ const PoliceOffersAddedViewModel = (officers) => {
   })
 }
 
+const PoliceUserRemovedViewModel = (policeUser) => {
+  return new ViewModel({
+    breadcrumbs,
+    titleHtml: 'You removed a police officer from the Index ',
+    html: [
+      {
+        p: true,
+        text: `<span id="police-user" class="govuk-!-font-weight-bold">${policeUser}</span> is removed from the Dangerous Dogs Index and no longer has access. `
+      }
+    ],
+    bottomLink: {
+      link: routes.policeUsers.get,
+      label: 'Add or remove another police officer'
+    }
+  })
+}
+
 module.exports = {
   CourtAddedViewModel,
   CourtRemovedViewModel,
-  PoliceOffersAddedViewModel
+  PoliceOffersAddedViewModel,
+  PoliceUserRemovedViewModel
 }

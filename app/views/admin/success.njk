@@ -41,7 +41,7 @@
                 </h2>
             {% endif %}
             {% if item.p  %}
-                <p class="govuk-body">{{ item.text }}</p>
+                <p class="govuk-body">{{ item.text | safe }}</p>
             {% endif %}
             {% if item.ul  %}
                 <ul class="govuk-list govuk-list--bullet">

@@ -180,6 +180,8 @@ const constants = {
     },
     policeUserConstants: {
       inputField: 'policeUser',
+      single: 'police officer',
+      plural: 'police officers',
       buttonText: 'police officer',
       messageLabel: 'police officers',
       messageLabelCapital: 'police officers',
