@@ -34,14 +34,14 @@ describe('users schema', () => {
     test('should successfully validate with a single user', () => {
       const payload = {
         continue: '',
-        radio: 'N',
+        addAnother: 'N',
         users: 'nicholas.angel@sandford.police.uk'
       }
 
       const { value, error } = submitListSchema.validate(payload)
       expect(value).toEqual({
         continue: '',
-        radio: false,
+        addAnother: false,
         users: ['nicholas.angel@sandford.police.uk']
       })
       expect(error).toBeUndefined()
@@ -50,7 +50,7 @@ describe('users schema', () => {
     test('should successfully validate with an array of users', () => {
       const payload = {
         continue: '',
-        radio: 'N',
+        addAnother: 'N',
         users: [
           'nicholas.angel@sandford.police.uk',
           'danny.butterman@sandford.police.uk'
@@ -60,7 +60,7 @@ describe('users schema', () => {
       const { value, error } = submitListSchema.validate(payload)
       expect(value).toEqual({
         ...payload,
-        radio: false
+        addAnother: false
       })
       expect(error).toBeUndefined()
     })
@@ -68,7 +68,7 @@ describe('users schema', () => {
     test('should fail with no users', () => {
       const payload = {
         continue: '',
-        radio: 'N',
+        addAnother: 'N',
         users: []
       }
 
@@ -76,7 +76,7 @@ describe('users schema', () => {
       expect(error).toEqual(new ValidationError('There must be at least one police officer'))
       expect(value).toEqual({
         ...payload,
-        radio: false
+        addAnother: false
       })
     })
 
