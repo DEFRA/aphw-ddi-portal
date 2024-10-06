@@ -1,5 +1,6 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
 const { forms } = require('../../../../constants/forms')
+const { policeListDefaults, summaryList } = require('./common')
 
 /**
  * @typedef AddListInputModel
@@ -33,35 +34,14 @@ function ViewModel (details, backNav, errors) {
         isPageHeading: true
       }
     },
-    summaryList: {
-      rows: details.users.map((user, idx) => {
-        return {
-          key: {
-            text: user,
-            classes: 'govuk-!-width-two-thirds govuk-!-font-weight-regular'
-          },
-          value: '',
-          actions: {
-            classes: 'govuk-!-width-one-third govuk-visually-hidden',
-            items: [
-              {
-                text: 'Change',
-                visuallyHiddenText: `Change ${user}`,
-                classes: 'govuk-!-hidden'
-              }
-            ]
-          }
-        }
-      })
-    },
     continue: {
       preventDoubleClick: true,
       text: 'Give access',
       type: 'submit',
       name: 'continue'
     },
-    autocomplete: forms.preventAutocomplete,
-    errors: []
+    summaryList: summaryList(details.users),
+    ...policeListDefaults
   }
 
   this.model = inputModel
