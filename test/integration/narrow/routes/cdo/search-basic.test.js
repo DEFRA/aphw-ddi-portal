@@ -47,7 +47,7 @@ describe('SearchBasic test', () => {
   })
 
   test('GET /cdo/search/basic with valid data returns 200', async () => {
-    doSearch.mockResolvedValue([])
+    doSearch.mockResolvedValue({ results: [], totalFound: 0 })
 
     const options = {
       method: 'GET',
@@ -60,26 +60,30 @@ describe('SearchBasic test', () => {
   })
 
   test('GET /cdo/search/basic dog record search with valid data and empty Dog name and Microchip number returns 200', async () => {
-    doSearch.mockResolvedValue([
+    doSearch.mockResolvedValue(
       {
-        address: {
-          town: 'LONDON',
-          postcode: 'W1K 7EB',
-          address_line_1: '47 PARK STREET',
-          address_line_2: null
-        },
-        dogName: '',
-        dogIndex: 'ED300242',
-        lastName: 'Ralph',
-        dogStatus: 'Pre-exempt',
-        firstName: 'Wreck it',
-        personReference: 'P-4813-BF4F',
-        dogId: 300242,
-        personId: 183,
-        distance: 8,
-        rank: 0.0607927
-      }
-    ])
+        results: [
+          {
+            address: {
+              town: 'LONDON',
+              postcode: 'W1K 7EB',
+              address_line_1: '47 PARK STREET',
+              address_line_2: null
+            },
+            dogName: '',
+            dogIndex: 'ED300242',
+            lastName: 'Ralph',
+            dogStatus: 'Pre-exempt',
+            firstName: 'Wreck it',
+            personReference: 'P-4813-BF4F',
+            dogId: 300242,
+            personId: 183,
+            distance: 8,
+            rank: 0.0607927
+          }
+        ],
+        totalFound: 1
+      })
 
     const options = {
       method: 'GET',
@@ -98,25 +102,29 @@ describe('SearchBasic test', () => {
   })
 
   test('GET /cdo/search/basic owner record search with valid data and empty Dog name returns 200', async () => {
-    doSearch.mockResolvedValue([
+    doSearch.mockResolvedValue(
       {
-        personId: 183,
-        personReference: 'P-4813-BF4F',
-        lastName: 'Ralph',
-        firstName: 'Wreck it',
-        rank: 0.0607927,
-        distance: 9,
-        address: '47 PARK STREET, LONDON, W1K 7EB',
-        dogs: [
+        results: [
           {
-            dogId: 300242,
-            dogIndex: 'ED300242',
-            dogName: '',
-            dogStatus: 'Pre-exempt'
+            personId: 183,
+            personReference: 'P-4813-BF4F',
+            lastName: 'Ralph',
+            firstName: 'Wreck it',
+            rank: 0.0607927,
+            distance: 9,
+            address: '47 PARK STREET, LONDON, W1K 7EB',
+            dogs: [
+              {
+                dogId: 300242,
+                dogIndex: 'ED300242',
+                dogName: '',
+                dogStatus: 'Pre-exempt'
+              }
+            ]
           }
-        ]
-      }
-    ])
+        ],
+        totalFound: 1
+      })
 
     const options = {
       method: 'GET',
