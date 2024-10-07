@@ -1,8 +1,16 @@
 const Joi = require('joi')
 
-const confirmFlowValidFields = (field) => {
+const confirmFlowValidFields = (field, fields = []) => {
+  const moreFields = fields.reduce((base, newField) => {
+    return {
+      ...base,
+      [newField]: Joi.any()
+    }
+  }, {})
+
   return Joi.object({
     [field]: Joi.any(),
+    ...moreFields,
     confirmation: Joi.any(),
     confirm: Joi.any(),
     submitButton: Joi.string().allow(null).allow('').optional()

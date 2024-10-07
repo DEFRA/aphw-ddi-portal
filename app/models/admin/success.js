@@ -10,6 +10,7 @@
  * @property {string} [titleHtml]
  * @property {string[]} bodyContent
  * @property {Link[]} breadcrumbs
+ * @property {*[]} [html]
  * @property {Link} bottomLink
  */
 /**
@@ -21,6 +22,7 @@ function ViewModel (details) {
     breadcrumbs: details.breadcrumbs,
     successMessage: details.successMessage,
     titleHtml: details.titleHtml,
+    html: details.html,
     bodyContent: details.bodyContent,
     bottomLink: details.bottomLink
   }

@@ -42,6 +42,37 @@ const policeLinks = {
   }
 }
 
+const policeUserLinks = {
+  index: {
+    get: '/admin/users/police',
+    post: '/admin/users/police'
+  },
+  add: {
+    get: '/admin/users/police/add',
+    post: '/admin/users/police/add'
+  },
+  addList: {
+    get: '/admin/users/police/add/list',
+    post: '/admin/users/police/add/list'
+  },
+  addConfirm: {
+    get: '/admin/users/police/add/confirm',
+    post: '/admin/users/police/add/confirm'
+  },
+  addUpdate: {
+    get: '/admin/users/police/add/update',
+    post: '/admin/users/police/add/update'
+  },
+  addRemove: {
+    get: '/admin/users/police/add/remove',
+    post: '/admin/users/police/add/remove'
+  },
+  remove: {
+    get: '/admin/users/police/remove',
+    post: '/admin/users/police/remove'
+  }
+}
+
 const adminIndex = {
   get: '/admin/index'
 }
@@ -56,6 +87,13 @@ const constants = {
     police: policeLinks.index,
     addPoliceForce: policeLinks.add,
     removePoliceForce: policeLinks.remove,
+    policeUsers: policeUserLinks.index,
+    addPoliceUser: policeUserLinks.add,
+    addRemovePoliceUser: policeUserLinks.addRemove,
+    addUpdatePoliceUser: policeUserLinks.addUpdate,
+    listPoliceUsersToAdd: policeUserLinks.addList,
+    confirmPoliceUsersToAdd: policeUserLinks.addConfirm,
+    removePoliceUser: policeUserLinks.remove,
     deleteOwners: {
       get: '/admin/delete/owners',
       post: '/admin/delete/owners'
@@ -109,7 +147,9 @@ const constants = {
     deleteDogsConfirm: 'admin/delete/dogs-confirm',
     deleteOwners: 'admin/delete/owners',
     deleteOwnersConfirm: 'admin/delete/owners-confirm',
-    documentation: 'swagger'
+    documentation: 'swagger',
+    addPoliceUserList: 'admin/users/add/list',
+    addPoliceUserConfirm: 'admin/users/add/confirm'
   },
   breadcrumbs: [
     {
@@ -139,11 +179,21 @@ const constants = {
       messageLabel: 'police force',
       messageLabelCapital: 'Police force',
       links: policeLinks
+    },
+    policeUserConstants: {
+      inputField: 'policeUser',
+      single: 'police officer',
+      plural: 'police officers',
+      buttonText: 'police officer',
+      messageLabel: 'police officers',
+      messageLabelCapital: 'police officers',
+      links: policeUserLinks
     }
   },
   keys: {
     oldDogs: 'oldDogs',
-    orphanedOwners: 'orphanedOwners'
+    orphanedOwners: 'orphanedOwners',
+    policeUsers: 'policeUsers'
   },
   documentation: {
     allowedEnvironments: ['dev', 'snd', 'local']

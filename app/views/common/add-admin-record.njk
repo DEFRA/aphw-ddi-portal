@@ -41,6 +41,10 @@
           {{ govukInput(model.govukInput) }}
       </div>
 
+      {% if model.update %}
+      <input id="hidden-field" type="hidden" name="{{model.update.name}}" value="{{model.update.value}}" />
+      {% endif %}
+
       <div class="govuk-button-group">
         {{ govukButton({
           text: model.buttonText,

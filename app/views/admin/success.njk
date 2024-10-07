@@ -33,6 +33,27 @@
       <p class="govuk-body">{{ paragraph }}</p>
       {% endfor %}
 
+      {% if model.html %}
+          {% for item in model.html %}
+            {% if item.h2  %}
+                <h2 class="govuk-heading-m {{item.class}}">
+                    {{item.text}}
+                </h2>
+            {% endif %}
+            {% if item.p  %}
+                <p class="govuk-body">{{ item.text | safe }}</p>
+            {% endif %}
+            {% if item.ul  %}
+                <ul class="govuk-list govuk-list--bullet">
+                    {% for item in item.ul %}
+                        <li>{{item.text}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+          {% endfor %}
+      {% endif %}
+
+
       {% if model.bottomLink.label %}
       <p class="govuk-body">
         <a href="{{ model.bottomLink.link }}" class="govuk-link govuk-link--no-visited-state">{{ model.bottomLink.label }}</a>

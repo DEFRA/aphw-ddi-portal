@@ -1,0 +1,56 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "components/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+        {{ govukBackLink({
+            text: "Back",
+            href: model.backLink,
+            attributes: {
+                id: "back"
+            }
+        }) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+        }) }}
+        {% endif %}
+
+        {% call govukFieldset(model.fieldset) %}
+
+        {{ govukSummaryList(model.summaryList) }}
+
+        {% endcall %}
+
+        <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+            <h2 class="govuk-heading-m">Now give access</h2>
+            <p>Police officers will receive an email inviting them to access the Dangerous Dogs Index.</p>
+
+            {% for user in model.usersList %}
+                <input type="hidden" name="users" value="{{user}}">
+            {% endfor %}
+
+            {{ govukButton(model.continue) }}
+        </form>
+
+  </div>
+</div>
+{% endblock %}
