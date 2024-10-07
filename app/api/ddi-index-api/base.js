@@ -33,7 +33,7 @@ const callDelete = async (endpoint, user) => {
   return payload
 }
 
-const boomRequest = async (endpoint, method, data, user) => {
+const boomRequest = async (endpoint, method, data, user, throwError = true) => {
   const options = user?.username
     ? { payload: data, headers: addHeaders(user) }
     : { payload: data }
@@ -52,7 +52,7 @@ const boomRequest = async (endpoint, method, data, user) => {
     statusMessage: res.statusMessage
   }
 
-  if (!res.statusCode.toString().startsWith('2')) {
+  if (throwError && !res.statusCode.toString().startsWith('2')) {
     throw new ApiErrorFailure(`${res.statusCode} ${res.statusMessage}`, responseData)
   }
 

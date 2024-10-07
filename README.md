@@ -49,10 +49,11 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 You will then need to base64 encode the private and public keys to use in env variables:
 
 ```shell
-# copy each of the keys then in OSX:
-pbpaste | base64 | pbcopy
-# add to 
+openssl base64 -in private_key.pem -out private_key.base64
+openssl base64 -in public_key.pem -out public_key.base64
 ```
+
+Copy each of the base64 keys and add to `JWT_PRIVATE_KEY` & `JWT_PUBLIC_KEY` in your environment variables.
 
 ### Start 
 

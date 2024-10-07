@@ -123,7 +123,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       validate: {
-        payload: validatePayloadBuilder(confirmFlowValidFields(addRemoveConstants.inputField, addRemoveConstants.messageLabel))
+        payload: validatePayloadBuilder(confirmFlowValidFields(addRemoveConstants.inputField))
       },
       pre: [
         stepOneCheckSubmitted,

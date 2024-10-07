@@ -38,6 +38,16 @@
  **/
 
 /**
+ * @typedef ErrorMessageComponent
+ * @property {string} text - Required. If html is set, this is not required. Text to use within the error message. If html is provided, the text option will be ignored.
+ * @property {string} html - Required. If text is set, this is not required. HTML to use within the error message. If html is provided, the text option will be ignored.
+ * @property {string} id - ID attribute to add to the error message <p> tag.
+ * @property {string} classes - Classes to add to the error message <p> tag.
+ * @property {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the error message <p> tag.
+ * @property {string} visuallyHiddenText - A visually hidden prefix used before the error message. Defaults to "Error".
+ */
+
+/**
  * @typedef ItemsArrayObject
  * @property {string} [text] - If html is set, this is not required. Text to use within each checkbox item label. If html is provided, the text option will be ignored.
  * @property {string} [html] - If text is set, this is not required. HTML to use within each checkbox item label. If html is provided, the text option will be ignored.
@@ -88,10 +98,131 @@
  * @property {Fieldset} [fieldset] - Can be used to add a fieldset to the checkboxes component. See fieldset.
  * @property {HintComponent} [hint] - Can be used to add a hint to the checkboxes component. See hint.
  * @property {string} [describedBy] - One or more element IDs to add to the input aria-describedby attribute without a fieldset, used to provide additional descriptive information for screenreader users.
- * @property {string} [errorMessage] - Can be used to add an error message to the checkboxes component. The error message component will not display if you use a falsy value for errorMessage, for example false or null. See errorMessage.
+ * @property {ErrorMessageComponent} [errorMessage] - Can be used to add an error message to the checkboxes component. The error message component will not display if you use a falsy value for errorMessage, for example false or null. See errorMessage.
  * @property {Formgroup} [formGroup] - Additional options for the form group containing the checkboxes component. See formGroup.
  * @property {string} [idPrefix] -This is used to prefix the id attribute for each checkbox item input, hint and error message, separated by -. Defaults to the name option value.
  * @property {string[]} [values] -  Array of values for checkboxes which should be checked when the page loads. Use this as an alternative to setting the checked option on each individual item.
  * @property {string} [classes] - Classes to add to the checkboxes container.
  * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the anchor tag.
  **/
+/**
+ * @typedef GovukCardTitle
+ * @property {string} text
+ * @property {string} html
+ * @property {number} headingLevel
+ * @property {string} classes
+ */
+/**
+ * @typedef GovukCardActionsItem
+ * @property {string} href
+ * @property {string} text
+ * @property {string} html
+ * @property {string} visuallyHiddenText
+ * @property {string} classes
+ * @property {HTMLAttributes} attributes
+ */
+/**
+ * @typedef GovukCardActions
+ * @property {GovukCardActionsItem[]} items
+ * @property {string} classes
+ */
+/**
+ * @typedef GovukCard
+ * @property {GovukCardTitle} [title]
+ * @property {GovukCardActions} [actions]
+ * @property {string} [classes]
+ * @property {HTMLAttributes} attributes
+ */
+/**
+ * @typedef GoukSummaryListRowHtmlKey
+ * @property {string} html
+ * @property {string} [classes]
+ * /
+ /**
+ * @typedef GoukSummaryListRowTextKey
+ * @property {string} text
+ * @property {string} [classes]
+ * /
+
+ /**
+ * @typedef {GoukSummaryListRowTextKey|GoukSummaryListRowHtmlKey} GoukSummaryListRowKey
+ * /
+
+/**
+ * @typedef GoukSummaryListRowHtmlValue
+ * @property {string} html
+ * @property {string} [classes]
+ */
+
+/**
+ * @typedef GoukSummaryListRowTextValue
+ * @property {string} text
+ * @property {string} [classes]
+ *
+ */
+/**
+ * @typedef {GoukSummaryListRowHtmlValue|GoukSummaryListRowTextValue} GoukSummaryListRowValue
+ *
+ */
+/**
+ * @typedef GoukSummaryListRowActionItem
+ * @property {string} [classes]
+ * @property {string} href - Required. The value of the link’s href attribute for an action item.
+ * @property {string} text - Required. If html is set, this is not required. Text to use within each action item. If html is provided, the text option will be ignored.
+ * @property {string} html - Required. If text is set, this is not required. HTML to use within each action item. If html is provided, the text option will be ignored.
+ * @property {string} visuallyHiddenText - Actions rely on context from the surrounding content so may require additional accessible text. Text supplied to this option is appended to the end. Use html for more complicated scenarios.
+ * @property {string} classes - Classes to add to the action item.
+ * @property {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the action item.
+ *
+ */
+/**
+ * @typedef GoukSummaryListRowAction
+ * @property {GoukSummaryListRowActionItem[]} [items]
+ * @property {string} [classes]
+ */
+
+/**
+ * @typedef GoukSummaryListRow
+ * @property {string} [classes]
+ * @property {GoukSummaryListRowKey} key
+ * @property {GoukSummaryListRowValue} value
+ * @property {GoukSummaryListRowAction} actions
+ */
+
+/**
+ * @typedef GoukSummaryList
+ * @property {GoukSummaryListRow[]} rows
+ * @property {GovukCard} [card]
+ * @property {string} classes
+ * @property {HTMLAttributes} attributes
+ */
+
+/**
+ * @typedef GovukRadios
+ * @property {string} name - Required. Name attribute for the radio items.
+ * @property {ItemsArrayObject[]} items - Required. The radio items within the radios component. See items.
+ * @property {Fieldset} [fieldset]
+ * @property {HintComponent} [hint]
+ * @property {ErrorMessageComponent} [errorMessage]
+ * @property {FormGroupObject} [formGroup]
+ * @property {string} [idPrefix] - Optional prefix. This is used to prefix the id attribute for each radio input, hint and error message, separated by -. Defaults to the name option value.
+ * @property {string} [value] - The value for the radio which should be checked when the page loads. Use this as an alternative to setting the checked option on each individual item.
+ * @property {string} [classes] - Classes to add to the radio container.
+ * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the radio input tag.
+ */
+
+/**
+ * @typedef GovukButton
+ * @property {string} element - HTML element for the button component – input, button or a. In most cases you will not need to set this as it will be configured automatically if href is provided. This parameter will be removed in the next major version.
+ * @property {string} text - Required. If html is set, this is not required. Text for the input, button or a element. If html is provided, the text option will be ignored and element will be automatically set to "button" unless href is also set, or it has already been defined.
+ * @property {string} html - Required. If text is set, this is not required. HTML for the button or a element only. If html is provided, the text option will be ignored and element will be automatically set to "button" unless href is also set, or it has already been defined. This option has no effect if element is set to "input".
+ * @property {string} name - Name for the input or button. This has no effect on a elements.
+ * @property {string} type - Type for the input or button element – "button", "submit" or "reset". Defaults to "submit". This has no effect on a elements.
+ * @property {string} value - Value for the button element only. This has no effect on a or input elements.
+ * @property {boolean} disabled - Whether the button component should be disabled. For input and button elements, disabled and aria-disabled attributes will be set automatically. This has no effect on a elements.
+ * @property {string} href - The URL that the button component should link to. If this is set, element will be automatically set to "a" if it has not already been defined.
+ * @property {string} classes - Classes to add to the button component.
+ * @property {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the button component.
+ * @property {boolean} preventDoubleClick - Prevent accidental double clicks on submit buttons from submitting forms multiple times.
+ * @property {boolean} isStartButton - Use for the main call to action on your service’s start page.
+ * @property {string} id- */
