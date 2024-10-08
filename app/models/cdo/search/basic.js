@@ -1,6 +1,8 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
+const marginBottom2 = 'govuk-!-margin-bottom-2'
+
 function ViewModel (searchCriteria, results, backNav, errors) {
   this.model = {
     backLink: backNav.backLink,
@@ -14,7 +16,7 @@ function ViewModel (searchCriteria, results, backNav, errors) {
       id: 'searchTerms',
       name: 'searchTerms',
       formGroup: {
-        classes: 'govuk-!-margin-bottom-2'
+        classes: marginBottom2
       },
       value: searchCriteria?.searchTerms,
       autocomplete: forms.preventAutocomplete,
@@ -25,7 +27,7 @@ function ViewModel (searchCriteria, results, backNav, errors) {
       name: 'searchType',
       classes: 'govuk-radios--small govuk-radios--inline',
       formGroup: {
-        classes: 'govuk-!-margin-bottom-2'
+        classes: marginBottom2
       },
       value: searchCriteria?.searchType,
       items: [
@@ -58,7 +60,10 @@ function ViewModel (searchCriteria, results, backNav, errors) {
           }
         }
       ],
-      classes: 'govuk-checkboxes--small'
+      classes: 'govuk-checkboxes--small',
+      formGroup: {
+        classes: marginBottom2
+      }
     },
     results: {
       items: results?.results?.map(resultObj => ({

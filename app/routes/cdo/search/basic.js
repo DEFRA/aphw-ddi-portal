@@ -7,6 +7,11 @@ const { constructFuzzySearchUrl } = require('../../../lib/search-helpers')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { getUser } = require('../../../auth')
 
+const overrideBackLink = (request, backNav) => {
+  backNav.backLink = request?.url?.search === '' ? '/' : routes.searchBasic.get
+  return backNav
+}
+
 module.exports = [{
   method: 'GET',
   path: routes.searchBasic.get,
@@ -19,7 +24,8 @@ module.exports = [{
         searchCriteria.searchType = 'dog'
       }
 
-      const backNav = addBackNavigation(request)
+      let backNav = addBackNavigation(request)
+      backNav = overrideBackLink(request, backNav)
 
       if (searchCriteria.searchTerms === undefined) {
         return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav))
