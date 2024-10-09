@@ -320,6 +320,60 @@ describe('Add police officer page', () => {
         const response = await server.inject(options)
         expect(response.statusCode).toBe(302)
       })
+
+      test('should return 400 when update user who exists in session', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'ralph@wreckit.com',
+            policeUserIndex: '1'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(400)
+        expect(changePoliceUserToAdd).not.toHaveBeenCalled()
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer\'s details have already been entered')
+      })
+
+      test('should return 400 when update user who exists in DB', async () => {
+        getUsers.mockResolvedValue([
+          {
+            id: 1,
+            username: 'james@giantpeach.com'
+          },
+          {
+            id: 2,
+            username: 'danny.butterman@sandford.police.uk'
+          }
+        ])
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'james@giantpeach.com',
+            policeUserIndex: '1'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(400)
+        expect(changePoliceUserToAdd).not.toHaveBeenCalled()
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already on the Allow list')
+      })
     })
   })
 
