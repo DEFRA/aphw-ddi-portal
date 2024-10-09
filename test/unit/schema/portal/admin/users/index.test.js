@@ -17,7 +17,7 @@ describe('users schema', () => {
       }
       const { value, error } = submitEmailSchema.validate(payload)
       expect(value).toEqual(payload)
-      expect(error).toEqual(new ValidationError('Enter a police officer'))
+      expect(error).toEqual(new ValidationError('Enter a police officer\'s email address'))
     })
 
     test('should not validate with a non-email', () => {
@@ -26,7 +26,7 @@ describe('users schema', () => {
       }
       const { value, error } = submitEmailSchema.validate(payload)
       expect(value).toEqual(payload)
-      expect(error).toEqual(new ValidationError('Email address must be real'))
+      expect(error).toEqual(new ValidationError('Enter a police officer\'s email address'))
     })
   })
 

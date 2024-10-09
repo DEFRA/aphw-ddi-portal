@@ -24,7 +24,7 @@ const fieldNames = {
 
 const stepOneCheckSubmitted = {
   method: request => {
-    const { pk } = validatePayloadBuilder(isInputFieldPkInPayload(addRemoveConstants.messageLabelCapital))(request.payload)
+    const { pk } = validatePayloadBuilder(isInputFieldPkInPayload(addRemoveConstants.errorText))(request.payload)
     return pk
   },
   failAction: async (request, h, error) => {

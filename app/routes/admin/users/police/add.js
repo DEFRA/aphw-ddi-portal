@@ -33,6 +33,11 @@ const addUserStepConstants = {
   ...fieldNames
 }
 
+const updateUserStepConstants = {
+  backLink: addRemoveConstants.links.addList.get,
+  ...fieldNames
+}
+
 const throwConflictError = (payload) => {
   validatePayloadBuilder(submitEmailConflictSchema(fieldNames.recordTypeText))(payload)
 }
@@ -70,6 +75,41 @@ const addUserPostCheck = {
   assign: 'inputField'
 }
 
+const updateUserPostCheck = {
+  method: async request => {
+    validatePayloadBuilder(submitEmailSchema)(request.payload)
+    const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
+
+    const policeUsers = await getUsers(getUser(request))
+    const policeUsersInSession = getPoliceUsersToAdd(request)
+    const prevUsername = policeUsersInSession[validatedPayload.policeUserIndex]
+    const newUsername = validatedPayload.policeUser
+    const otherPoliceUsersInSession = policeUsersInSession.filter(username => username !== prevUsername)
+
+    if (otherPoliceUsersInSession.some(username => username === newUsername)) {
+      throwSessionConflictError(request.payload)
+    }
+
+    if (policeUsers.some(({ username }) => username === newUsername)) {
+      throwConflictError(request.payload)
+    }
+
+    return { username: validatedPayload.policeUser, id: validatedPayload.policeUserIndex }
+  },
+  failAction: (request, h, error) => {
+    const recordValue = request.payload[addRemoveConstants.inputField]
+
+    return h.view(views.addAdminRecord, new FormViewModel({
+      ...updateUserStepConstants,
+      recordValue,
+      update: true,
+      updateId: request.payload.policeUserIndex,
+      updateName: 'policeUserIndex'
+    }, undefined, error)).code(400).takeover()
+  },
+  assign: 'inputField'
+}
+
 module.exports = [
   {
 
@@ -78,9 +118,6 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        if (request.query.step === 'start') {
-          initialisePoliceUsers(request, [])
-        }
         return h.view(views.addAdminRecord, new FormViewModel(addUserStepConstants))
       }
     }
@@ -97,7 +134,7 @@ module.exports = [
         const recordValue = users[updateId]
 
         const model = new FormViewModel({
-          ...addUserStepConstants,
+          ...updateUserStepConstants,
           recordValue,
           update: true,
           updateId,
@@ -141,7 +178,7 @@ module.exports = [
         payload: validatePayloadBuilder(submitEmailSchema)
       },
       pre: [
-        addUserPostCheck
+        updateUserPostCheck
       ],
       handler: async (request, h) => {
         throwIfPreConditionError(request)
