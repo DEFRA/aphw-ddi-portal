@@ -8,7 +8,8 @@ const summaryList = (users, remove = false) => {
       : [{
           text: 'Remove',
           visuallyHiddenText: `remove ${user}`,
-          href: `${routes.addRemovePoliceUser.get}/${idx}`
+          href: `${routes.addRemovePoliceUser.get}/${idx}`,
+          classes: 'govuk-link--no-visited-state'
         }]
   }
   return {
@@ -25,7 +26,8 @@ const summaryList = (users, remove = false) => {
             {
               text: 'Change',
               visuallyHiddenText: `Change ${user}`,
-              href: `${routes.addUpdatePoliceUser.get}/${idx}`
+              href: `${routes.addUpdatePoliceUser.get}/${idx}`,
+              classes: 'govuk-link--no-visited-state'
             },
             ...removeItems(user, idx)
           ]

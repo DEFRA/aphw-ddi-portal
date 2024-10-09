@@ -1,23 +1,23 @@
 const Joi = require('joi')
 
 const submitEmailSchema = Joi.object({
-  policeUser: Joi.string().email().required().messages({
-    'string.empty': 'Enter a police officer',
-    'any.required': 'Enter a police officer',
-    'string.email': 'Email address must be real'
+  policeUser: Joi.string().trim().email().required().messages({
+    'string.empty': 'Enter a police officer\'s email address',
+    'any.required': 'Enter a police officer\'s email address',
+    'string.email': 'Enter a police officer\'s email address'
   }),
   policeUserIndex: Joi.number().optional()
 })
 
 const submitEmailConflictSchema = (field) => Joi.object({
   [field]: Joi.any().forbidden().messages({
-    '*': 'This police officer is already in the allow list'
+    '*': 'This police officer is already on the Allow list'
   })
 }).optional()
 
 const submitEmailSessionConflictSchema = (field) => Joi.object({
   [field]: Joi.any().forbidden().messages({
-    '*': 'This police officer has already been selected'
+    '*': 'This police officer\'s details have already been entered'
   })
 }).optional()
 

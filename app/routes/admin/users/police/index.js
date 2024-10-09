@@ -2,6 +2,7 @@ const { routes, views } = require('../../../../constants/admin')
 const { admin } = require('../../../../auth/permissions')
 const ViewModel = require('../../../../models/common/add-or-remove')
 const { validatePayload } = require('../../../../schema/portal/common/do-you-want')
+const { initialisePoliceUsers } = require('../../../../session/admin/police-users')
 
 module.exports = [
   {
@@ -10,6 +11,7 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
+        initialisePoliceUsers(request, [])
         return h.view(views.addOrRemove, new ViewModel({
           optionText: 'Do you want to add or remove police officers?'
         }))

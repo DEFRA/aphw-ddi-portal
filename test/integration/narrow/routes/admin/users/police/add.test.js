@@ -38,23 +38,6 @@ describe('Add police officer page', () => {
     getPoliceUsersToAdd.mockReturnValue([])
 
     describe('GET /admin/users/police/add', () => {
-      test('should return a 200 and clears session when called first time', async () => {
-        const options = {
-          method: 'GET',
-          url: '/admin/users/police/add?step=start',
-          auth
-        }
-
-        const response = await server.inject(options)
-
-        const { document } = new JSDOM(response.payload).window
-
-        expect(response.statusCode).toBe(200)
-        expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the police officer’s email address?')
-        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police officer')
-        expect(initialisePoliceUsers).toHaveBeenCalledWith(expect.anything(), [])
-      })
-
       test('should return a 200', async () => {
         const options = {
           method: 'GET',
@@ -143,7 +126,7 @@ describe('Add police officer page', () => {
         expect(response.statusCode).toBe(400)
         expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the police officer’s email address?')
         expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police officer')
-        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already in the allow list')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already on the Allow list')
       })
 
       test('should return a 403 given user is standard user', async () => {
@@ -228,7 +211,7 @@ describe('Add police officer page', () => {
         const { document } = new JSDOM(response.payload).window
 
         expect(response.statusCode).toBe(400)
-        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer has already been selected')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer\'s details have already been entered')
         expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
       })
     })
@@ -336,6 +319,60 @@ describe('Add police officer page', () => {
 
         const response = await server.inject(options)
         expect(response.statusCode).toBe(302)
+      })
+
+      test('should return 400 when update user who exists in session', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'ralph@wreckit.com',
+            policeUserIndex: '1'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(400)
+        expect(changePoliceUserToAdd).not.toHaveBeenCalled()
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer\'s details have already been entered')
+      })
+
+      test('should return 400 when update user who exists in DB', async () => {
+        getUsers.mockResolvedValue([
+          {
+            id: 1,
+            username: 'james@giantpeach.com'
+          },
+          {
+            id: 2,
+            username: 'danny.butterman@sandford.police.uk'
+          }
+        ])
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: 'james@giantpeach.com',
+            policeUserIndex: '1'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(400)
+        expect(changePoliceUserToAdd).not.toHaveBeenCalled()
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already on the Allow list')
       })
     })
   })

@@ -187,6 +187,7 @@ const constants = {
       buttonText: 'police officer',
       messageLabel: 'police officers',
       messageLabelCapital: 'police officers',
+      errorText: 'police officer\'s email address',
       links: policeUserLinks
     }
   },
