@@ -359,6 +359,11 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
   &-no-focus {
     outline: 0px !important;
   }
+
+  &-tag-nowrap {
+    white-space: nowrap !important;
+    max-width: 800px !important;
+  }
 }
 
 .defra-max-width-full {

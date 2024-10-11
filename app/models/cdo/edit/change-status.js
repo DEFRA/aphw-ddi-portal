@@ -1,5 +1,6 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
+const { getNewStatusLabel } = require('../../../lib/status-helper')
 
 function ViewModel (dog, backNav, errors) {
   this.model = {
@@ -7,7 +8,7 @@ function ViewModel (dog, backNav, errors) {
     cancelLink: backNav.backLink + '&action=cancel',
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,
-    status: dog.status,
+    status: getNewStatusLabel(dog.status),
     newStatus: {
       label: {
         text: 'Status',
@@ -22,11 +23,11 @@ function ViewModel (dog, backNav, errors) {
         },
         {
           value: 'Pre-exempt',
-          text: 'Pre-exempt'
+          text: 'Applying for exemption'
         },
         {
           value: 'Failed',
-          text: 'Failed'
+          text: 'Failed to exempt dog'
         },
         {
           value: 'Exempt',
@@ -38,7 +39,7 @@ function ViewModel (dog, backNav, errors) {
         },
         {
           value: 'Withdrawn',
-          text: 'Withdrawn'
+          text: 'Withdrawn by owner'
         },
         {
           value: 'Inactive',
@@ -52,7 +53,7 @@ function ViewModel (dog, backNav, errors) {
   }
 
   if (this.model.status) {
-    const ind = this.model.newStatus.items.map(x => x.value).indexOf(this.model.status)
+    const ind = this.model.newStatus.items.map(x => x.value).indexOf(dog.status)
     if (ind > -1) {
       this.model.newStatus.items.splice(ind, 1)
     }
