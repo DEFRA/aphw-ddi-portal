@@ -54,11 +54,11 @@ const addUserPostCheck = {
     const policeUsers = await getUsers(getUser(request))
     const policeUsersInSession = getPoliceUsersToAdd(request)
 
-    if (policeUsersInSession.some(username => username === validatedPayload.policeUser)) {
+    if (policeUsersInSession.some(username => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
       throwSessionConflictError(request.payload)
     }
 
-    if (policeUsers.some(({ username }) => username === validatedPayload.policeUser)) {
+    if (policeUsers.some(({ username }) => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
       throwConflictError(request.payload)
     }
 
@@ -86,11 +86,11 @@ const updateUserPostCheck = {
     const newUsername = validatedPayload.policeUser
     const otherPoliceUsersInSession = policeUsersInSession.filter(username => username !== prevUsername)
 
-    if (otherPoliceUsersInSession.some(username => username === newUsername)) {
+    if (otherPoliceUsersInSession.some(username => username?.toLowerCase() === newUsername.toLowerCase())) {
       throwSessionConflictError(request.payload)
     }
 
-    if (policeUsers.some(({ username }) => username === newUsername)) {
+    if (policeUsers.some(({ username }) => username?.toLowerCase() === newUsername.toLowerCase())) {
       throwConflictError(request.payload)
     }
 
