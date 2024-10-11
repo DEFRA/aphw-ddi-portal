@@ -126,7 +126,7 @@ describe('Add police officer page', () => {
         expect(response.statusCode).toBe(400)
         expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the police officer’s email address?')
         expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police officer')
-        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already on the Allow list')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer already has access')
       })
 
       test('should return a 403 given user is standard user', async () => {
@@ -320,6 +320,27 @@ describe('Add police officer page', () => {
         const response = await server.inject(options)
         expect(response.statusCode).toBe(302)
       })
+      test('should return 400 when update user not entered', async () => {
+        getPoliceUsersToAdd.mockReturnValue([
+          'ralph@wreckit.com',
+          'nicholas.angel@sandford.police.uk'
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add/update/1',
+          payload: {
+            policeUser: '',
+            policeUserIndex: '1'
+          },
+          auth
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+        expect(response.statusCode).toBe(400)
+        expect(changePoliceUserToAdd).not.toHaveBeenCalled()
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police officer\'s email address')
+      })
 
       test('should return 400 when update user who exists in session', async () => {
         getPoliceUsersToAdd.mockReturnValue([
@@ -372,7 +393,7 @@ describe('Add police officer page', () => {
         const { document } = new JSDOM(response.payload).window
         expect(response.statusCode).toBe(400)
         expect(changePoliceUserToAdd).not.toHaveBeenCalled()
-        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer is already on the Allow list')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer already has access')
       })
     })
   })
@@ -602,7 +623,7 @@ describe('Add police officer page', () => {
         expect(document.querySelectorAll('.govuk-summary-list__key')[1].textContent.trim()).toBe('danny.butterman@sandford.police.uk')
         expect(document.querySelector('#main-content h2.govuk-heading-m').textContent.trim()).toBe('Now give access')
         expect(document.querySelector('#main-content').textContent.trim()).toContain('Police officers will receive an email inviting them to access the Dangerous Dogs Index.')
-        expect(document.querySelector('#main-content .govuk-grid-column-two-thirds-from-desktop .govuk-button').textContent.trim()).toContain('Give access')
+        expect(document.querySelector('#main-content .govuk-grid-column-three-quarters .govuk-button').textContent.trim()).toContain('Give access')
       })
     })
 

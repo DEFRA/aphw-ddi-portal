@@ -84,7 +84,7 @@ describe('Remove Police user page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which police officer do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove police officer')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police officer')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the police officer\'s email address')
     })
 
     test('POST /admin/users/police/remove route returns 400 with police user id missing', async () => {
@@ -103,7 +103,7 @@ describe('Remove Police user page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which police officer do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove police officer')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police officer')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the police officer\'s email address')
     })
   })
 
