@@ -129,6 +129,35 @@ describe('Add police officer page', () => {
         expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer already has access')
       })
 
+      test('should returns 409 with police conflict with mixed case', async () => {
+        getUsers.mockResolvedValue([
+          {
+            id: 1,
+            username: 'Nicholas.Angel@sandford.Police.uk'
+          },
+          {
+            id: 2,
+            username: 'danny.butterman@sandford.police.uk'
+          }
+        ])
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add',
+          auth,
+          payload: {
+            policeUser: 'nicholas.angel@sandford.police.uk'
+          }
+        }
+
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(400)
+        expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('What is the police officer’s email address?')
+        expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Add police officer')
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer already has access')
+      })
+
       test('should return a 403 given user is standard user', async () => {
         const options = {
           method: 'POST',
@@ -205,6 +234,25 @@ describe('Add police officer page', () => {
           auth,
           payload: {
             policeUser: 'nicholas.angel@sandford.police.uk'
+          }
+        }
+        const response = await server.inject(options)
+        const { document } = new JSDOM(response.payload).window
+
+        expect(response.statusCode).toBe(400)
+        expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('This police officer\'s details have already been entered')
+        expect(appendPoliceUserToAdd).not.toHaveBeenCalled()
+      })
+
+      test('should not update session and redirect given duplicate email address submitted with mixed case', async () => {
+        getPoliceUsersToAdd.mockReturnValue(['nicholas.angel@sandford.police.uk'])
+
+        const options = {
+          method: 'POST',
+          url: '/admin/users/police/add',
+          auth,
+          payload: {
+            policeUser: 'Nicholas.ANGEL@sandford.police.uk'
           }
         }
         const response = await server.inject(options)
