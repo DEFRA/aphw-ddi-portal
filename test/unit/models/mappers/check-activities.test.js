@@ -303,7 +303,7 @@ describe('Check Activity Mappers', () => {
       ['Police force updated', 'police_force', 'updated'],
       ['N/A', 'neutering_deadline', 'updated'],
       ['Microchip deadline updated', 'microchip_deadline', 'updated'],
-      ['Withdrawn from index updated', 'withdrawn', 'updated'],
+      ['Withdrawn by owner from index updated', 'withdrawn', 'updated'],
       ['Dog name updated', 'dog_name', 'updated'],
       ['Breed type updated', 'breed_type', 'updated'],
       ['Dog colour updated', 'colour', 'updated'],
@@ -682,7 +682,7 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Dog status set to Pre-exempt',
+          activityLabel: 'Dog status set to Applying for exemption',
           childList: []
         }
       ]
@@ -744,7 +744,7 @@ describe('Check Activity Mappers', () => {
           status_type: 'STANDARD'
         }
       })
-      expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created (Pre-exempt)')
+      expect(getActivityLabelFromCreatedDog(createdDog)).toBe('Dog record created (Applying for exemption)')
     })
     test('should map a created Dog to an activity row given dog is using legacy event format', () => {
       /**
@@ -1018,7 +1018,7 @@ describe('Check Activity Mappers', () => {
         },
         {
           date: '18 February 2024',
-          activityLabel: 'Dog record created (Pre-exempt)',
+          activityLabel: 'Dog record created (Applying for exemption)',
           teamMember: 'Robert Developer'
         }
       ]

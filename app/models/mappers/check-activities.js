@@ -1,5 +1,6 @@
 const { formatToGds } = require('../../lib/date-helpers')
 const { cleanUserDisplayName } = require('../../lib/model-helpers')
+const { getNewStatusLabel } = require('../../lib/status-helper')
 
 /**
  * @typedef User
@@ -262,7 +263,7 @@ const activityLabels = {
   legislation_officer: 'Dog legislation officer',
   police_force: 'Police force',
   microchip_deadline: 'Microchip deadline',
-  withdrawn: 'Withdrawn from index',
+  withdrawn: 'Withdrawn by owner from index',
   dog_name: 'Dog name',
   breed_type: 'Breed type',
   colour: 'Dog colour',
@@ -318,7 +319,7 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
  * @returns {string}
  */
 const getActivityLabelFromCreatedDog = (createdDogEvent) => {
-  const status = createdDogEvent.status?.status ? ` (${createdDogEvent.status.status})` : ''
+  const status = createdDogEvent.status?.status ? ` (${getNewStatusLabel(createdDogEvent.status.status)})` : ''
   return `Dog record created${status}`
 }
 
@@ -356,7 +357,7 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
 
     if (changeRecord[0] === 'status') {
       const [,, statusName] = changeRecord
-      changeType = statusName
+      changeType = getNewStatusLabel(statusName)
     }
 
     if (activitiesWhereLabelOnly.includes(changeRecord[0])) {
