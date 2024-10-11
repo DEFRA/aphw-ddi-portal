@@ -118,7 +118,11 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
-        return h.view(views.addAdminRecord, new FormViewModel(addUserStepConstants))
+        const details = {
+          ...addUserStepConstants,
+          backLink: getPoliceUsersToAdd(request).length ? addRemoveConstants.links.addList.get : addRemoveConstants.links.index.get
+        }
+        return h.view(views.addAdminRecord, new FormViewModel(details))
       }
     }
   },
@@ -175,7 +179,20 @@ module.exports = [
     options: {
       auth: { scope: [admin] },
       validate: {
-        payload: validatePayloadBuilder(submitEmailSchema)
+        payload: validatePayloadBuilder(submitEmailSchema),
+        failAction: async (request, h, error) => {
+          const backLink = addRemoveConstants.links.addList.get
+          const model = new FormViewModel({
+            ...updateUserStepConstants,
+            recordValue: request.payload.policeUser,
+            update: true,
+            updateId: request.payload.policeUserIndex,
+            updateName: 'policeUserIndex',
+            backLink
+          }, undefined, error)
+
+          return h.view(views.addAdminRecord, model).code(400).takeover()
+        }
       },
       pre: [
         updateUserPostCheck

@@ -12,7 +12,7 @@ const confirmFlowValidFields = (field) => {
 
 const isInputFieldPkInPayload = (fieldText) => {
   const lowerFieldText = fieldText.toLowerCase()
-  const article = lowerFieldText.startsWith('a') ? 'an' : 'a'
+  const article = 'the'
   return Joi.object({
     pk: Joi.number().required().messages({
       '*': `Enter ${article} ${lowerFieldText}`

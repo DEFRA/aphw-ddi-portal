@@ -82,7 +82,7 @@ describe('Remove Courts page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which court do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove court')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a court name')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the court name')
     })
 
     test('POST /admin/courts/remove court route returns 400 with court id missing', async () => {
@@ -101,7 +101,7 @@ describe('Remove Courts page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which court do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove court')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a court name')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the court name')
     })
   })
 

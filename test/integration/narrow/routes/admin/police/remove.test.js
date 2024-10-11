@@ -83,7 +83,7 @@ describe('Remove Police Forces page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which police force do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove police force')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police force')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the police force')
     })
 
     test('POST /admin/police/remove route returns 302 if not auth', async () => {
@@ -115,7 +115,7 @@ describe('Remove Police Forces page', () => {
       expect(response.statusCode).toBe(400)
       expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Which police force do you want to remove?')
       expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toContain('Remove police force')
-      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter a police force')
+      expect(document.querySelector('.govuk-error-summary__list li').textContent.trim()).toContain('Enter the police force')
     })
   })
 
