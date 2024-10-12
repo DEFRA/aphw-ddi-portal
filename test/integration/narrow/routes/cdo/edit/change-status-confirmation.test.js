@@ -1,4 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
+const { JSDOM } = require('jsdom')
 
 describe('Change status confirmation', () => {
   jest.mock('../../../../../../app/auth')
@@ -20,7 +21,7 @@ describe('Change status confirmation', () => {
   test('GET /cdo/edit/change-status-confirmation route returns 200', async () => {
     getCdo.mockResolvedValue({
       dog: {
-        status: 'Exempt',
+        status: 'Pre-exempt',
         indexNumber: 'ED12345'
       }
     })
@@ -32,6 +33,8 @@ describe('Change status confirmation', () => {
     }
 
     const response = await server.inject(options)
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelector('.govuk-panel__body').textContent.trim()).toBe('Applying for exemption')
 
     expect(response.statusCode).toBe(200)
   })

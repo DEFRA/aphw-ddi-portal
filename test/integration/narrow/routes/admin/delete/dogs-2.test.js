@@ -86,6 +86,7 @@ describe('Delete dogs 2', () => {
       expect(rows[2].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('ED0001')
       expect(rows[2].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('08 June 2022')
       expect(rows[2].querySelectorAll('.govuk-table__cell')[3].textContent.trim()).toBe('01 February 2024')
+      expect(document.querySelector('#main-content').textContent).toContain('Applying for exemption')
     })
 
     test('handles date override', async () => {

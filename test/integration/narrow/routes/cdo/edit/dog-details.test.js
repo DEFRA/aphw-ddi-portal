@@ -39,7 +39,8 @@ describe('Update dog details', () => {
       getCdo.mockResolvedValue({
         dog: {
           name: 'Bruno',
-          dog_breed: { breed: 'breed1' }
+          dog_breed: { breed: 'breed1' },
+          status: 'Pre-exempt'
         }
       })
 
