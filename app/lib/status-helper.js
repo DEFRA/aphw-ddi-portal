@@ -6,8 +6,9 @@ const getNewStatusLabel = (status) => {
       return 'Failed to exempt dog'
     case 'Withdrawn':
       return 'Withdrawn by owner'
+    default:
+      return status
   }
-  return status
 }
 
 module.exports = {
