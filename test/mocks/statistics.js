@@ -1,10 +1,10 @@
 const statsPerStatusRows = [
   { total: 20, status: { id: 4, name: 'Interim exempt' } },
-  { total: 30, status: { id: 5, name: 'Pre-exempt' } },
-  { total: 40, status: { id: 6, name: 'Failed' } },
+  { total: 30, status: { id: 5, name: 'Applying for exemption' } },
+  { total: 40, status: { id: 6, name: 'Failed to exempt dog' } },
   { total: 5000, status: { id: 7, name: 'Exempt' } },
   { total: 60, status: { id: 8, name: 'In breach' } },
-  { total: 70, status: { id: 9, name: 'Withdrawn' } },
+  { total: 70, status: { id: 9, name: 'Withdrawn by owner' } },
   { total: 1000, status: { id: 10, name: 'Inactive' } }
 ]
 

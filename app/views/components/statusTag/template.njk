@@ -1,19 +1,19 @@
 {% if status == 'Interim exempt' %}
-  <strong class="govuk-tag govuk-tag--green {{ extraClasses }}">{{ status }}</strong>
-{% elif status == 'Pre-exempt' %}
-  <strong class="govuk-tag govuk-tag--blue  {{ extraClasses }}">{{ status }}</strong>
-{% elif status == 'Failed' %}
-  <strong class="govuk-tag govuk-tag--purple  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--green {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Pre-exempt' or status == 'Applying for exemption' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--blue  {{ extraClasses }}">Applying for exemption</strong>
+{% elif status == 'Failed' or status == 'Failed to exempt dog' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--purple  {{ extraClasses }}">Failed to exempt dog</strong>
 {% elif status == 'Exempt' %}
-  <strong class="govuk-tag govuk-tag--turquoise  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--turquoise  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'In breach' %}
-  <strong class="govuk-tag govuk-tag--red  {{ extraClasses }}">{{ status }}</strong>
-{% elif status == 'Withdrawn' %}
-  <strong class="govuk-tag govuk-tag--pink  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--red  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Withdrawn' or status == 'Withdrawn by owner' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--pink  {{ extraClasses }}">Withdrawn by owner</strong>
 {% elif status == 'Inactive' %}
-  <strong class="govuk-tag govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == undefined %}
   &nbsp;
 {% else %}
-  <strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">Invalid status: {{ status }}</strong>
+  <strong class="govuk-tag govuk-tag--red defra-tag-nowrap govuk-!-font-size-16">Invalid status: {{ status }}</strong>
 {% endif %}

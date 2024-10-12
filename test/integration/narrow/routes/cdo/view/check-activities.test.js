@@ -217,7 +217,7 @@ describe('Check activities', () => {
     expect(rows[0].querySelectorAll('.govuk-table__cell')[2].textContent.trim()).toBe('Mr Developer')
     expect(rows[1].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO issue date updated')
     expect(rows[2].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('CDO expiry date updated')
-    expect(rows[3].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog record created (Pre-exempt)')
+    expect(rows[3].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog record created (Applying for exemption)')
     expect(rows[4].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Address line 1 updated from 93 SILVERDALE AVENUE')
     expect(rows[5].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Email address updated')
     expect(rows[6].querySelectorAll('.govuk-table__cell')[1].textContent.trim()).toBe('Dog colour updated')

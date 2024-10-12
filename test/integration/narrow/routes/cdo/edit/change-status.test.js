@@ -31,7 +31,7 @@ describe('Change status', () => {
     test('GET /cdo/edit/change-status route returns 200', async () => {
       getCdo.mockResolvedValue({
         dog: {
-          status: 'Exempt',
+          status: 'Interim exempt',
           indexNumber: 'ED12345'
         }
       })
@@ -45,6 +45,9 @@ describe('Change status', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toBe('Failed to exempt dog')
     })
 
     test('GET /cdo/edit/change-status route returns 404 when dog not found', async () => {

@@ -26,7 +26,8 @@ describe('Manage Cdo test', () => {
   test('GET /cdo/manage/cdo/ED123 route returns 200', async () => {
     getCdo.mockResolvedValue({
       dog: {
-        indexNumber: 'ED20001'
+        indexNumber: 'ED20001',
+        status: 'Pre-exempt'
       },
       person: {
         personReference: 'P-A133-7E4C'
@@ -61,6 +62,7 @@ describe('Manage Cdo test', () => {
     expect(document.querySelectorAll('ul.govuk-task-list li div')[13].textContent.trim()).toBe('Cannot start yet')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[15].textContent.trim()).toBe('Record the verification date for microchip and neutering')
     expect(document.querySelectorAll('ul.govuk-task-list li div')[16].textContent.trim()).toBe('Cannot start yet')
+    expect(document.querySelector('.govuk-tag').textContent.trim()).toBe('Applying for exemption')
   })
 
   test('GET /cdo/manage/cdo/ED123 route returns 200 with completed tasks overriding "Cannot start yet"', async () => {

@@ -260,7 +260,8 @@ describe('View dog details', () => {
         neuteringConfirmationKey,
         microchipNumberVerifiedKey
       ] = exemptionDetails.querySelectorAll('.govuk-summary-list__key')
-      const [,
+      const [
+        status,
         firstCertificateIssuedValue, ,
         cdoExpiryValue,
         courtValue,
@@ -273,6 +274,7 @@ describe('View dog details', () => {
       ] = exemptionDetails.querySelectorAll('.govuk-summary-list__value')
       const [, firstCertificateIssued] = exemptionDetails.querySelectorAll('.govuk-summary-list__actions')
 
+      expect(status.textContent.trim()).toBe('Applying for exemption')
       expect(firstCertificateIssuedKey.textContent.trim()).toBe('First certificate issued')
       expect(cdoExpiryKey.textContent.trim()).toBe('CDO expiry')
       expect(courtKey.textContent.trim()).toBe('Court')
