@@ -8,7 +8,7 @@ function ViewModel (dog, backNav, errors) {
     cancelLink: backNav.backLink + '&action=cancel',
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,
-    status: getNewStatusLabel(dog.status),
+    status: getNewStatusLabel(dog),
     newStatus: {
       label: {
         text: 'Status',

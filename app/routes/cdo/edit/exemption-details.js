@@ -50,6 +50,7 @@ module.exports = [
         const backNav = addBackNavigation(request)
 
         exemption.status = cdo?.dog?.status
+        exemption.subStatus = cdo?.dog?.subStatus
         exemption.breaches = cdo?.dog?.breaches
 
         return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies, backNav))
