@@ -308,10 +308,10 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
 
   if (label) {
     const [, prevValue] = auditFieldRecord
-    const prevValueTranslated = translateStatusText(prevValue)
-    const postValueTransalated = translateStatusText(eventType)
+    const prevValueTranslated = fieldValue === 'status' ? translateStatusText(prevValue) : prevValue
+    const postValueTranslated = fieldValue === 'status' ? translateStatusText(eventType) : eventType
 
-    return shouldShowPreviousValue(label) ? `${label} ${postValueTransalated} from ${prevValueTranslated}` : `${label} ${postValueTransalated}`
+    return shouldShowPreviousValue(label) ? `${label} ${postValueTranslated} from ${prevValueTranslated}` : `${label} ${postValueTranslated}`
   }
 
   return 'N/A'
@@ -557,5 +557,6 @@ module.exports = {
   mapCertificateEventToCheckActivityRows,
   mapChangeOwnerEventToCheckActivityRows,
   mapBreachesToArray,
-  getInactiveSubStatus
+  getInactiveSubStatus,
+  translateStatusText
 }
