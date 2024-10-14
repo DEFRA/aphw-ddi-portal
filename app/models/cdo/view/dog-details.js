@@ -16,7 +16,7 @@ function ViewModel (cdo, backNav) {
     dog: {
       id: cdo.dog.id,
       indexNumber: cdo.dog.indexNumber,
-      statusKey: cdo.dog.status,
+      internalStatus: cdo.dog.status,
       status: getNewStatusLabel(cdo.dog.status),
       name: cdo.dog.name,
       breed: cdo.dog.breed,
