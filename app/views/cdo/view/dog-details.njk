@@ -30,7 +30,7 @@
         Dog {{ model.dog.indexNumber }}
       </h1>
       {{ statusTag(model.dog.status, 'govuk-!-margin-bottom-6') }}
-      {% if model.dog.status == 'Pre-exempt' %}
+      {% if model.dog.statusKey == 'Pre-exempt' %}
       <span class="govuk-body govuk-!-margin-left-3">
         <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage/cdo/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Manage CDO application</a>
       </span>

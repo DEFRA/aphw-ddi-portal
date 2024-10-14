@@ -199,6 +199,7 @@ describe('View dog details', () => {
 
       expect(response.statusCode).toBe(200)
       const notEntered = 'Not entered'
+      expect(document.querySelector('#main-content').textContent).toContain('Manage CDO application')
       const [dogDetails, ownerDetails, exemptionDetails] = document.querySelectorAll('.govuk-summary-card__content')
 
       const [
