@@ -15,7 +15,10 @@ describe('DDI API search', () => {
       const expectedResults = ([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
 
       get.mockResolvedValue({
-        results: expectedResults
+        results: {
+          totalFound: 2,
+          results: expectedResults
+        }
       })
 
       const searchResults = await doSearch({
@@ -31,7 +34,10 @@ describe('DDI API search', () => {
       const expectedResults = ([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
 
       get.mockResolvedValue({
-        results: expectedResults
+        results: {
+          totalFound: 2,
+          results: expectedResults
+        }
       })
 
       const searchResults = await doSearch({
