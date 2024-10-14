@@ -263,7 +263,7 @@ const activityLabels = {
   legislation_officer: 'Dog legislation officer',
   police_force: 'Police force',
   microchip_deadline: 'Microchip deadline',
-  withdrawn: 'Withdrawn by owner from index',
+  withdrawn: 'Withdrawn from index',
   dog_name: 'Dog name',
   breed_type: 'Breed type',
   colour: 'Dog colour',
