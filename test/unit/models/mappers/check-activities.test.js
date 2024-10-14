@@ -9,7 +9,9 @@ const {
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows,
-  mapChangeOwnerEventToCheckActivityRows, mapBreachesToArray
+  mapChangeOwnerEventToCheckActivityRows,
+  mapBreachesToArray,
+  getInactiveSubStatus
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -1046,6 +1048,13 @@ describe('Check Activity Mappers', () => {
         }
       ]
       expect(mapChangeOwnerEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
+    })
+  })
+
+  describe('getInactiveSubStatus', () => {
+    test('handles no sub status', () => {
+      const res = getInactiveSubStatus([])
+      expect(res).toBe('Dog status set to Inactive')
     })
   })
 })
