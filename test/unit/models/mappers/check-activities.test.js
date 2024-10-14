@@ -303,7 +303,7 @@ describe('Check Activity Mappers', () => {
       ['Police force updated', 'police_force', 'updated'],
       ['N/A', 'neutering_deadline', 'updated'],
       ['Microchip deadline updated', 'microchip_deadline', 'updated'],
-      ['Withdrawn by owner from index updated', 'withdrawn', 'updated'],
+      ['Withdrawn from index updated', 'withdrawn', 'updated'],
       ['Dog name updated', 'dog_name', 'updated'],
       ['Breed type updated', 'breed_type', 'updated'],
       ['Dog colour updated', 'colour', 'updated'],

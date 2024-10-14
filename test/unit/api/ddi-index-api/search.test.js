@@ -12,11 +12,12 @@ describe('DDI API search', () => {
 
   describe('search', () => {
     test('should get search', async () => {
-      const expectedResults = ([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+      const expectedResults = {
+        totalFound: 2,
+        results: [{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }]
+      }
 
-      get.mockResolvedValue({
-        results: expectedResults
-      })
+      get.mockResolvedValue({ results: expectedResults })
 
       const searchResults = await doSearch({
         searchType: 'dog',
@@ -28,11 +29,12 @@ describe('DDI API search', () => {
     })
 
     test('should get fuzzy search', async () => {
-      const expectedResults = ([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+      const expectedResults = {
+        results: [{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }],
+        totalFound: 2
+      }
 
-      get.mockResolvedValue({
-        results: expectedResults
-      })
+      get.mockResolvedValue({ results: expectedResults })
 
       const searchResults = await doSearch({
         searchType: 'dog',
