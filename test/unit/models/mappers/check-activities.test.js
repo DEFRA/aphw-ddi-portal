@@ -733,6 +733,30 @@ describe('Check Activity Mappers', () => {
         ['exemption certificate not provided to police']
       ])
     })
+
+    test('should handle Inactive sub-status', () => {
+      const updatedDogEvent = auditedEventBuilder({
+        operation: 'updated dog',
+        changes: {
+          added: [],
+          removed: [],
+          edited: [
+            [
+              'status',
+              'Exempt',
+              'Inactive'
+            ],
+            [
+              'dog_date_of_death',
+              null,
+              '2024-10-05'
+            ]
+          ]
+        }
+      })
+      const mappedAuditEvent = mapAuditedChangeEventToCheckActivityRows(updatedDogEvent)[0]
+      expect(mappedAuditEvent.activityLabel).toEqual('Dog status set to Dog dead')
+    })
   })
 
   describe('getActivityLabelFromCreateDog', () => {
@@ -1055,6 +1079,11 @@ describe('Check Activity Mappers', () => {
   describe('getInactiveSubStatus', () => {
     test('handles no sub status', () => {
       const res = getInactiveSubStatus([])
+      expect(res).toBe('Dog status set to Inactive')
+    })
+
+    test('handles null', () => {
+      const res = getInactiveSubStatus(null)
       expect(res).toBe('Dog status set to Inactive')
     })
 
