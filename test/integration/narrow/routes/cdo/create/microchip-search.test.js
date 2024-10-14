@@ -22,7 +22,7 @@ describe('Microchip search tests', () => {
 
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
-    doSearch.mockResolvedValue([])
+    doSearch.mockResolvedValue({ results: [] })
     getDog.mockReturnValue({})
     server = await createServer()
     await server.initialize()
@@ -469,7 +469,7 @@ describe('Microchip search tests', () => {
   })
 
   test('POST /cdo/create/microchip-search route with valid payload performs search one or more results', async () => {
-    doSearch.mockResolvedValue([{ id: 1 }, { id: 2 }])
+    doSearch.mockResolvedValue({ results: [{ id: 1 }, { id: 2 }] })
 
     const payload = {
       microchipNumber: '123456789012345'
@@ -490,7 +490,7 @@ describe('Microchip search tests', () => {
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip1', async () => {
-    doSearch.mockResolvedValue([{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }])
+    doSearch.mockResolvedValue({ results: [{ id: 1, microchipNumber: '123456789012345' }, { id: 2 }] })
     getOwnerDetails.mockResolvedValue()
 
     const payload = {
@@ -513,7 +513,7 @@ describe('Microchip search tests', () => {
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner already exists returns 400 error - microchip2', async () => {
-    doSearch.mockResolvedValue([{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111222' }, { id: 2 }])
+    doSearch.mockResolvedValue({ results: [{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111222' }, { id: 2 }] })
     getOwnerDetails.mockReturnValue({ personReference: 'P-111222' })
 
     const payload = {
@@ -536,7 +536,7 @@ describe('Microchip search tests', () => {
   })
 
   test('POST /cdo/create/microchip-search route with existing microchip of dog that owner doesnt already own returns 302', async () => {
-    doSearch.mockResolvedValue([{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111' }, { id: 2 }])
+    doSearch.mockResolvedValue({ results: [{ id: 1, microchipNumber2: '123456789012345', personReference: 'P-111' }, { id: 2 }] })
     getOwnerDetails.mockReturnValue({ personReference: 'P-222' })
 
     const payload = {

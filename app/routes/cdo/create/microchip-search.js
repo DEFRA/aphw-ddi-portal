@@ -79,7 +79,7 @@ module.exports = [{
       }
 
       const user = getUser(request)
-      const results = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber }, user)
+      const { results } = await doSearch({ searchType: 'dog', searchTerms: details.microchipNumber }, user)
 
       if (isDogUnderSameOwner(results, details, request)) {
         return h.view(views.microchipSearch, new ViewModel(details, getBackNav(request), generateMicrochipError(alreadyOwnThisDogMessage))).code(400).takeover()
