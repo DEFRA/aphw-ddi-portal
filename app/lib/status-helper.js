@@ -1,19 +1,14 @@
 const getNewStatusLabel = (status) => {
-  let newStatus = 'unknown'
   switch (status) {
     case 'Pre-exempt':
-      newStatus = 'Applying for exemption'
-      break
+      return 'Applying for exemption'
     case 'Failed':
-      newStatus = 'Failed to exempt dog'
-      break
+      return 'Failed to exempt dog'
     case 'Withdrawn':
-      newStatus = 'Withdrawn by owner'
-      break
+      return 'Withdrawn by owner'
     default:
-      newStatus = status
+      return status
   }
-  return newStatus
 }
 
 module.exports = {
