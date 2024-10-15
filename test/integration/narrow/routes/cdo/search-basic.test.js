@@ -139,6 +139,7 @@ describe('SearchBasic test', () => {
     expect(response.statusCode).toBe(200)
     const [, dogNameResult] = document.querySelectorAll('.govuk-table__body td')
     expect(dogNameResult.textContent.trim()).toBe('Not entered')
+    expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Applying for exemption')
   })
 
   test('GET /cdo/create/select-address with invalid data returns error', async () => {
