@@ -1,6 +1,7 @@
 const routes = [].concat(
   require('../routes/assets'),
   require('../routes/index'),
+  require('../routes/accessibility'),
   require('../routes/cdo/create/owner-details'),
   require('../routes/cdo/create/select-owner'),
   require('../routes/cdo/create/postcode-lookup'),
