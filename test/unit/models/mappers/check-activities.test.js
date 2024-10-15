@@ -9,7 +9,10 @@ const {
   mapCreatedEventToCheckActivityRows,
   mapImportEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows,
-  mapChangeOwnerEventToCheckActivityRows, mapBreachesToArray
+  mapChangeOwnerEventToCheckActivityRows,
+  mapBreachesToArray,
+  getInactiveSubStatus,
+  translateStatusText
 } = require('../../../../app/models/mappers/check-activities')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
@@ -730,6 +733,30 @@ describe('Check Activity Mappers', () => {
         ['exemption certificate not provided to police']
       ])
     })
+
+    test('should handle Inactive sub-status', () => {
+      const updatedDogEvent = auditedEventBuilder({
+        operation: 'updated dog',
+        changes: {
+          added: [],
+          removed: [],
+          edited: [
+            [
+              'status',
+              'Exempt',
+              'Inactive'
+            ],
+            [
+              'dog_date_of_death',
+              null,
+              '2024-10-05'
+            ]
+          ]
+        }
+      })
+      const mappedAuditEvent = mapAuditedChangeEventToCheckActivityRows(updatedDogEvent)[0]
+      expect(mappedAuditEvent.activityLabel).toEqual('Dog status set to Dog dead')
+    })
   })
 
   describe('getActivityLabelFromCreateDog', () => {
@@ -1046,6 +1073,65 @@ describe('Check Activity Mappers', () => {
         }
       ]
       expect(mapChangeOwnerEventToCheckActivityRows(createdEvent)).toEqual(expectedRows)
+    })
+  })
+
+  describe('getInactiveSubStatus', () => {
+    test('handles no sub status', () => {
+      const res = getInactiveSubStatus([])
+      expect(res).toBe('Dog status set to Inactive')
+    })
+
+    test('handles null', () => {
+      const res = getInactiveSubStatus(null)
+      expect(res).toBe('Dog status set to Inactive')
+    })
+
+    test('handles dog dead', () => {
+      const res = getInactiveSubStatus([['dog_date_of_death', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Dog dead')
+    })
+
+    test('handles dog exported', () => {
+      const res = getInactiveSubStatus([['date_exported', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Dog exported')
+    })
+
+    test('handles dog stolen', () => {
+      const res = getInactiveSubStatus([['date_stolen', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Reported stolen')
+    })
+
+    test('handles dog untraceable', () => {
+      const res = getInactiveSubStatus([['date_untraceable', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Owner untraceable')
+    })
+
+    test('handles dog Inactive with invalid sub-status', () => {
+      const res = getInactiveSubStatus([['date_xxx', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Inactive')
+    })
+  })
+
+  describe('translateStatusText', () => {
+    test('handles no translation', () => {
+      const res = translateStatusText('abcdef')
+      expect(res).toBe('abcdef')
+    })
+
+    test('handles failed', () => {
+      const res = translateStatusText('Failed')
+      expect(res).toBe('Failed to exempt dog')
+    })
+
+    test('handles withdrawn', () => {
+      const res = translateStatusText('Withdrawn')
+      expect(res).toBe('Withdrawn by owner')
+    })
+
+    test('handles pre-exempt', () => {
+      const res = translateStatusText('Pre-exempt')
+      expect(res).toBe('Applying for exemption')
     })
   })
 })

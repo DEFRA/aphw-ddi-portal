@@ -51,7 +51,7 @@
       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-top-4 govuk-!-margin-bottom-3">
         Status
       </p>
-      {{ statusTag(model.status, 'govuk-!-margin-bottom-3 govuk-!-margin-right-3') }}
+      {{ statusTag(model.status, model.subStatus, 'govuk-!-margin-bottom-3 govuk-!-margin-right-3') }}
 
       <span class="govuk-body">
         <a class="govuk-link govuk-link--no-visited-state" href="/cdo/edit/change-status/{{ model.indexNumber }}{{ model.srcHashParam }}">Change status</a>

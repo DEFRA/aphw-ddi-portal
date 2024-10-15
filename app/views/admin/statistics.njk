@@ -82,7 +82,7 @@
             {% for countRow in model.countsPerStatus.counts %}
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        {{ statusTag(countRow.status.name) }}
+                        {{ statusTag(countRow.status.name, null) }}
                     </th>
                     <td class="govuk-table__cell govuk-table__cell--numeric">{{ model.formatWithCommas(countRow.total) }}</td>
                 </tr>

@@ -308,7 +308,10 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
 
   if (label) {
     const [, prevValue] = auditFieldRecord
-    return shouldShowPreviousValue(label) ? `${label} ${eventType} from ${prevValue}` : `${label} ${eventType}`
+    const prevValueTranslated = fieldValue === 'status' ? translateStatusText(prevValue) : prevValue
+    const postValueTranslated = fieldValue === 'status' ? translateStatusText(eventType) : eventType
+
+    return shouldShowPreviousValue(label) ? `${label} ${postValueTranslated} from ${prevValueTranslated}` : `${label} ${postValueTranslated}`
   }
 
   return 'N/A'
@@ -319,7 +322,7 @@ const getActivityLabelFromAuditFieldRecord = (eventType) => (auditFieldRecord) =
  * @returns {string}
  */
 const getActivityLabelFromCreatedDog = (createdDogEvent) => {
-  const status = createdDogEvent.status?.status ? ` (${getNewStatusLabel(createdDogEvent.status.status)})` : ''
+  const status = createdDogEvent.status?.status ? ` (${getNewStatusLabel({ status: createdDogEvent.status.status })})` : ''
   return `Dog record created${status}`
 }
 
@@ -336,6 +339,46 @@ const mapBreachesToArray = (breaches) => {
     }
     return filteredBreaches
   }, [])
+}
+
+/**
+ * @param {string[, ,]} edited
+ * @returns {string}
+ */
+const getInactiveSubStatus = (edited) => {
+  const prefix = 'Dog status set to'
+  if (edited) {
+    for (const edit of edited) {
+      const [fieldName, , updatedTo] = edit
+      if (fieldName === 'dog_date_of_death' && updatedTo) {
+        return `${prefix} Dog dead`
+      } else if (fieldName === 'date_exported' && updatedTo) {
+        return `${prefix} Dog exported`
+      } else if (fieldName === 'date_stolen' && updatedTo) {
+        return `${prefix} Reported stolen`
+      } else if (fieldName === 'date_untraceable' && updatedTo) {
+        return `${prefix} Owner untraceable`
+      }
+    }
+  }
+  return `${prefix} Inactive`
+}
+
+/**
+ * @param {string} status
+ * @returns {string}
+ */
+const translateStatusText = (status) => {
+  if (status === 'Failed') {
+    return 'Failed to exempt dog'
+  }
+  if (status === 'Withdrawn') {
+    return 'Withdrawn by owner'
+  }
+  if (status === 'Pre-exempt') {
+    return 'Applying for exemption'
+  }
+  return status
 }
 
 /**
@@ -357,7 +400,7 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
 
     if (changeRecord[0] === 'status') {
       const [,, statusName] = changeRecord
-      changeType = getNewStatusLabel(statusName)
+      changeType = statusName
     }
 
     if (activitiesWhereLabelOnly.includes(changeRecord[0])) {
@@ -366,7 +409,7 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
 
     const childList = changeType === 'In breach' ? mapBreachesToArray(event.changes.added) : []
 
-    const activityLabel = getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
+    const activityLabel = changeType === 'Inactive' ? getInactiveSubStatus(event.changes.edited) : getActivityLabelFromAuditFieldRecord(changeType)(changeRecord)
 
     if (filterNonUpdatedFields(changeRecord) && activityLabel !== 'N/A') {
       const activityRow = { ...activityRowInfo, activityLabel, childList }
@@ -513,5 +556,7 @@ module.exports = {
   mapImportManualEventToCheckActivityRows,
   mapCertificateEventToCheckActivityRows,
   mapChangeOwnerEventToCheckActivityRows,
-  mapBreachesToArray
+  mapBreachesToArray,
+  getInactiveSubStatus,
+  translateStatusText
 }

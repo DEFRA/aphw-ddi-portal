@@ -11,6 +11,24 @@
 {% elif status == 'Withdrawn' or status == 'Withdrawn by owner' %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--pink  {{ extraClasses }}">Withdrawn by owner</strong>
 {% elif status == 'Inactive' %}
+  {% if subStatus == 'dead' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Dog dead</strong>
+  {% elif subStatus == 'exported' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Dog exported</strong>
+  {% elif subStatus == 'stolen' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Reported stolen</strong>
+  {% elif subStatus == 'untraceable' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Owner untraceable</strong>
+  {% else %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+  {% endif %}
+{% elif status == 'Dog dead' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Dog exported' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Reported stolen' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Owner untraceable' %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == undefined %}
   &nbsp;

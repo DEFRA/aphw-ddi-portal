@@ -8,4 +8,14 @@ const statuses = {
   Inactive: 'Inactive'
 }
 
-module.exports = statuses
+const inactiveSubStatuses = {
+  dead: 'Dog dead',
+  exported: 'Dog exported',
+  stolen: 'Reported stolen',
+  untraceable: 'Owner untraceable'
+}
+
+module.exports = {
+  statuses,
+  inactiveSubStatuses
+}

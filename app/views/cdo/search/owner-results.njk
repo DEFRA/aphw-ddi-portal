@@ -46,7 +46,7 @@
                   {% endif %}
               </td>
               <td class="{% if not loop.last %}govuk-table__cell {% endif %}govuk-!-padding-top-2 govuk-!-padding-bottom-10">
-                {{ statusTag(dog.dogStatus, 'govuk-!-font-size-16')}}
+                {{ statusTag(dog.dogStatus, dog.dogSubStatus, 'govuk-!-font-size-16')}}
               </td>
             </tr>
             {% endfor %}

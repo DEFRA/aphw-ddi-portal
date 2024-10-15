@@ -5,7 +5,7 @@ function ViewModel (dog, backNav) {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     indexNumber: dog.indexNumber,
-    status: getNewStatusLabel(dog.status),
+    status: getNewStatusLabel(dog),
     actionLink: backNav.actionLink
   }
 }
