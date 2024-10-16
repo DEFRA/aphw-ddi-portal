@@ -68,4 +68,18 @@ describe('External events', () => {
     expect(response.statusCode).toBe(200)
     expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog')
   })
+
+  test('GET /admin/external-events rshould build all params', async () => {
+    getExternalEvents.mockResolvedValue(eventRows)
+
+    const options = {
+      method: 'GET',
+      url: '/admin/external-events?queryType=dog&pks=123,456&fromDate=2024-10-05&toDate=2024-10-15',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog&pks=123,456&fromDate=2024-10-05&toDate=2024-10-15')
+  })
 })
