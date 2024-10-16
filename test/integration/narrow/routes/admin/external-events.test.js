@@ -66,7 +66,7 @@ describe('External events', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog')
+    expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog', user)
   })
 
   test('GET /admin/external-events rshould build all params', async () => {
@@ -80,6 +80,6 @@ describe('External events', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog&pks=123,456&fromDate=2024-10-05&toDate=2024-10-15')
+    expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog&pks=123,456&fromDate=2024-10-05&toDate=2024-10-15', user)
   })
 })
