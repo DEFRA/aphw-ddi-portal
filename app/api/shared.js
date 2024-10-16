@@ -8,9 +8,15 @@ const addHeaders = (user, _request) => ({
   ...createBearerHeader(audiences.api)(user)
 })
 
-const buildPostRequest = (baseUrl) => async (endpoint, data, user) => {
+const addHeadersEvents = (user) => ({
+  'ddi-username': user?.username,
+  'ddi-displayname': user?.displayname,
+  ...createBearerHeader(audiences.events)(user)
+})
+
+const buildPostRequest = (baseUrl, audience) => async (endpoint, data, user) => {
   const options = user?.username
-    ? { payload: data, headers: addHeaders(user) }
+    ? { payload: data, headers: audience === 'events' ? addHeadersEvents(user) : addHeaders(user) }
     : { payload: data }
 
   const { payload } = await wreck.post(`${baseUrl}/${endpoint}`, options)
@@ -24,5 +30,6 @@ const buildPostRequest = (baseUrl) => async (endpoint, data, user) => {
 
 module.exports = {
   addHeaders,
-  buildPostRequest
+  buildPostRequest,
+  addHeadersEvents
 }

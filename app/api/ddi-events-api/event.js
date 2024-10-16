@@ -1,7 +1,7 @@
 const { get } = require('../ddi-events-api/base')
 
-const getEvents = async (primaryKeys) => {
-  return get(`events?pks=${primaryKeys.join(',')}`)
+const getEvents = async (primaryKeys, user) => {
+  return get(`events?pks=${primaryKeys.join(',')}`, user)
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 const { routes } = require('../../constants/admin')
 const { admin } = require('../../auth/permissions')
 const { getExternalEvents } = require('../../api/ddi-events-api/external-event')
+const { getUser } = require('../../auth')
 
 module.exports = [
   {
@@ -21,7 +22,7 @@ module.exports = [
         if (toDate) {
           queryString += `&toDate=${toDate}`
         }
-        const events = await getExternalEvents(queryString)
+        const events = await getExternalEvents(queryString, getUser(request))
 
         return h.response(events)
       }
