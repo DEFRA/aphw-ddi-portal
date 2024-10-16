@@ -12,22 +12,22 @@
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--pink  {{ extraClasses }}">Withdrawn by owner</strong>
 {% elif status == 'Inactive' %}
   {% if subStatus == 'dead' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Dog dead</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--grey  {{ extraClasses }}">Dog dead</strong>
   {% elif subStatus == 'exported' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Dog exported</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--light-blue  {{ extraClasses }}">Dog exported</strong>
   {% elif subStatus == 'stolen' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Reported stolen</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--orange  {{ extraClasses }}">Reported stolen</strong>
   {% elif subStatus == 'untraceable' %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">Owner untraceable</strong>
   {% else %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
   {% endif %}
 {% elif status == 'Dog dead' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--grey  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'Dog exported' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--light-blue  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'Reported stolen' %}
-  <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--orange  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'Owner untraceable' %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == undefined %}
