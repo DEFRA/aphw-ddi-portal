@@ -120,6 +120,9 @@ const constants = {
     statistics: {
       get: '/admin/statistics'
     },
+    externalEvents: {
+      get: '/admin/external-events'
+    },
     pseudonyms: {
       get: '/admin/pseudonyms',
       post: '/admin/pseudonyms'

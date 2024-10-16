@@ -51,7 +51,7 @@ describe('Base API', () => {
     expect(createBearerHeaderSpy).toHaveBeenCalledWith(audiences.events)
     expect(wreck.read).toBeCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
     expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
-    expect(wreck.request).toHaveBeenCalledWith('POST', 'test-events/endpoint2', { payload: { val: 123 } }, { headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+    expect(wreck.request).toHaveBeenCalledWith('POST', 'test-events/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
   })
 
   test('postWithBoom should return a valid error object if request failed', async () => {
