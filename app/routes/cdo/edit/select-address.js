@@ -6,7 +6,7 @@ const ViewModel = require('../../../models/cdo/create/select-address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
-const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
+const { getPersonByReference, updatePersonAndForce } = require('../../../api/ddi-index-api/person')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const getUser = require('../../../auth/get-user')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
@@ -72,7 +72,8 @@ module.exports = [
           return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
 
-        await updatePerson(updatePayload, user)
+        const res = await updatePersonAndForce(updatePayload, user)
+        console.log('JB res', res)
 
         setPostcodeLookupDetails(request, null)
         setInSession(request, 'addresses', null)
