@@ -72,8 +72,7 @@ module.exports = [
           return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
 
-        const res = await updatePersonAndForce(updatePayload, user)
-        console.log('JB res', res)
+        await updatePersonAndForce(updatePayload, user)
 
         setPostcodeLookupDetails(request, null)
         setInSession(request, 'addresses', null)
