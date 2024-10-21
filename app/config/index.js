@@ -119,11 +119,11 @@ value.isTest = value.env === 'test'
 value.isProd = value.env === 'production'
 
 value.catboxOptions = {
-  host: value.redisHost,
-  port: value.redisPort,
-  password: value.redisPassword,
-  tls: value.isProd ? {} : undefined,
-  partition: value.redisPartition
+  host: value.cache.options.host,
+  port: value.cache.options.port,
+  password: value.cache.options.password,
+  tls: value.cache.options.tls,
+  partition: value.cache.options.partition
 }
 
 module.exports = value
