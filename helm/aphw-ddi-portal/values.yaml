@@ -38,6 +38,9 @@ container:
   messageQueueHost: namespace.servicebus.windows.net
   certificateRequestQueue: aphw-ddi-certificate-request
   jwtPrivateKey: not-a-real-private-key
+  redisHostname: dummy
+  redisPort: 6379
+  redisPassword: dummy
 
 livenessProbe:
   path: /healthz
