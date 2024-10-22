@@ -1,14 +1,15 @@
 const Joi = require('joi')
 const authConfig = require('./auth')
 const blobConfig = require('./storage/blob')
+const cacheConfig = require('./cache')
 const { getEnvironmentVariable } = require('../lib/environment-helpers')
+const { DEVELOPMENT, TEST, PRODUCTION } = require('../constants/environments')
 
 // Define config schema
 const schema = Joi.object({
   serviceName: Joi.string().default('Dangerous Dogs Index'),
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
-  useRedis: Joi.boolean().default(false),
   environmentCode: Joi.string().default('prod'),
   ddiIndexApi: {
     baseUrl: Joi.string().required()
@@ -57,16 +58,7 @@ const config = {
   serviceName: process.env.SERVICE_NAME,
   port: process.env.PORT,
   env: process.env.NODE_ENV,
-  useRedis: process.env.NODE_ENV !== 'test',
   environmentCode: getEnvironmentVariable('ENVIRONMENT_CODE'),
-  cache: {
-    options: {
-      host: process.env.REDIS_HOSTNAME,
-      password: process.env.REDIS_PASSWORD,
-      port: process.env.REDIS_PORT,
-      tls: process.env.NODE_ENV === 'production' ? {} : undefined
-    }
-  },
   ddiIndexApi: {
     baseUrl: process.env.DDI_API_BASE_URL
   },
@@ -113,17 +105,50 @@ const value = result.value
 
 value.authConfig = authConfig
 value.blobConfig = blobConfig
+value.cacheConfig = cacheConfig
 
-value.isDev = value.env === 'development'
-value.isTest = value.env === 'test'
-value.isProd = value.env === 'production'
+value.isDev = process.env.NODE_ENV === DEVELOPMENT
+value.isTest = process.env.NODE_ENV === TEST
+value.isProd = process.env.NODE_ENV === PRODUCTION
 
-value.catboxOptions = {
-  host: value.cache.options.host,
-  port: value.cache.options.port,
-  password: value.cache.options.password,
-  tls: value.cache.options.tls,
-  partition: value.cache.options.partition
-}
-
+/**
+ * @type {{
+ *   cacheConfig: import('./cache');
+ *   blobConfig: import('./storage/blob');
+ *   authConfig: import('./auth');
+ *   serviceName: string;
+ *   port: string;
+ *   env: string;
+ *   environmentCode: string;
+ *   ddiIndexApi: {
+ *     baseUrl: string;
+ *   },
+ *   ddiEventsApi: {
+ *     baseUrl: string;
+ *   },
+ *   osPlacesApi: {
+ *     baseUrl: string;
+ *     token: string;
+ *   },
+ *   policeApi: {
+ *     baseUrl: string;
+ *   },
+ *   cookie: {
+ *     cookieNameCookiePolicy: string;
+ *     cookieNameSession: string;
+ *     isSameSite: string;
+ *     isSecure: boolean;
+ *     password: string;
+ *   },
+ *   cookieOptions: {
+ *     ttl: string;
+ *     isSameSite: string;
+ *     encoding: string;
+ *     isSecure: string;
+ *     isHttpOnly: boolean;
+ *     clearInvalid: boolean;
+ *     strictHeader: boolean;
+ *   }
+ * }}
+ */
 module.exports = value
