@@ -37,7 +37,7 @@ value.isDev = process.env.NODE_ENV === DEVELOPMENT
 value.isTest = process.env.NODE_ENV === TEST
 value.isProd = process.env.NODE_ENV === PRODUCTION
 
-value.useRedis = !(value.host === undefined)
+value.useRedis = value.host !== undefined
 
 if (!value.useRedis) {
   console.info('Redis disabled, using in memory cache')
