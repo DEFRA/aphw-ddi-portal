@@ -2,7 +2,7 @@ const { get, post, put, callDelete } = require('./base')
 const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
-const personAndForceEndpoint = 'person-and-force-change'
+const personAndForceChangeEndpoint = 'person-and-force-change'
 
 const addPerson = async person => {
   const data = {
@@ -95,7 +95,7 @@ const updatePerson = async (data, user) => {
  * @return {Promise<any>}
  */
 const updatePersonAndForce = async (data, user) => {
-  const res = await put(`${personAndForceEndpoint}`, data, user)
+  const res = await put(`${personAndForceChangeEndpoint}`, data, user)
 
   return res
 }

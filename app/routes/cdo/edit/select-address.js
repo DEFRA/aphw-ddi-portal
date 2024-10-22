@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { routes, views } = require('../../../constants/cdo/owner')
+const { routes, views, keys } = require('../../../constants/cdo/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
@@ -72,12 +72,16 @@ module.exports = [
           return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
 
-        await updatePersonAndForce(updatePayload, user)
+        const updatePoliceResult = await updatePersonAndForce(updatePayload, user)
 
-        setPostcodeLookupDetails(request, null)
-        setInSession(request, 'addresses', null)
-
-        return h.redirect(getMainReturnPoint(request))
+        if (updatePoliceResult?.policeForceResult?.changed) {
+          setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
+          return h.redirect(routes.policeForceChanged.get)
+        } else {
+          setPostcodeLookupDetails(request, null)
+          setInSession(request, 'addresses', null)
+          return h.redirect(getMainReturnPoint(request))
+        }
       }
     }
   }
