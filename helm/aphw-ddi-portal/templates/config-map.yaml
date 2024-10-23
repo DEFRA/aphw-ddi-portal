@@ -22,4 +22,6 @@ data:
   POLICE_API_BASE_URL: {{ quote .Values.container.policeApiBaseUrl }}
   AZURE_STORAGE_USE_CONNECTION_STRING: {{ quote .Values.container.azureStorageUseConnectionString }}
   ENVIRONMENT_CODE: {{ quote .Values.environmentCode }}
+  REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
+  REDIS_PORT: {{ quote .Values.container.redisPort }}
 {{- end -}}
