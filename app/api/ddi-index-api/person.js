@@ -2,6 +2,7 @@ const { get, post, put, callDelete } = require('./base')
 const schema = require('../../schema/ddi-index-api/people')
 
 const personEndpoint = 'person'
+const personAndForceChangeEndpoint = 'person-and-force-change'
 
 const addPerson = async person => {
   const data = {
@@ -89,6 +90,17 @@ const updatePerson = async (data, user) => {
 }
 
 /**
+ * @param data
+ * @param user
+ * @return {Promise<any>}
+ */
+const updatePersonAndForce = async (data, user) => {
+  const res = await put(`${personAndForceChangeEndpoint}`, data, user)
+
+  return res
+}
+
+/**
  * @param reference
  * @param user
  * @return {Promise<unknown>}
@@ -104,5 +116,6 @@ module.exports = {
   getPersonAndDogs,
   getPersonByReference,
   updatePerson,
+  updatePersonAndForce,
   deletePerson
 }

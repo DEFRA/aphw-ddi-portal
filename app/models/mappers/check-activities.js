@@ -241,7 +241,7 @@ const shouldShowPreviousValue = (label) => {
   return labelsRequiringPreviousValue.indexOf(label) > -1
 }
 
-const labelsRequiringPreviousValue = ['First name', 'Last name', 'Address line 1', 'Address line 2', 'Town or city', 'Postcode']
+const labelsRequiringPreviousValue = ['First name', 'Last name', 'Address line 1', 'Address line 2', 'Town or city', 'Postcode', 'Police force']
 
 const addedEvents = ['date_exported', 'date_stolen', 'dog_date_of_death', 'date_untraceable']
 

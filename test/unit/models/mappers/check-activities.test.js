@@ -303,7 +303,7 @@ describe('Check Activity Mappers', () => {
       ['Insurance company updated', 'insurance_company', 'updated'],
       ['Insurance renewal date updated', 'insurance_renewal_date', 'updated'],
       ['Dog legislation officer updated', 'legislation_officer', 'updated'],
-      ['Police force updated', 'police_force', 'updated'],
+      ['Police force updated from 2024-01-15', 'police_force', 'updated'],
       ['N/A', 'neutering_deadline', 'updated'],
       ['Microchip deadline updated', 'microchip_deadline', 'updated'],
       ['Withdrawn from index updated', 'withdrawn', 'updated'],
@@ -655,7 +655,7 @@ describe('Check Activity Mappers', () => {
         {
           date: '19 February 2024',
           teamMember: 'Robert Developer',
-          activityLabel: 'Police force updated',
+          activityLabel: 'Police force updated from 46',
           childList: []
         },
         {

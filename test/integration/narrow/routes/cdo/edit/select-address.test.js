@@ -19,7 +19,7 @@ describe('SelectAddress edit test', () => {
   const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { updatePerson, getPersonByReference, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
+  const { updatePerson, updatePersonAndForce, getPersonByReference, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -86,7 +86,7 @@ describe('SelectAddress edit test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /cdo/edit/select-address with valid data returns 302', async () => {
+  test('POST /cdo/edit/select-address with valid data returns 302 continuing to return point', async () => {
     const nextScreenUrl = '/main-return-point'
 
     getMainReturnPoint.mockReturnValue('/main-return-point')
@@ -95,6 +95,7 @@ describe('SelectAddress edit test', () => {
       address: 0
     }
     updatePerson.mockResolvedValue()
+    updatePersonAndForce.mockResolvedValue(null)
     getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
     getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
     getPersonAndDogs.mockResolvedValue({
@@ -113,6 +114,34 @@ describe('SelectAddress edit test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/edit/select-address with valid data returns 302 continuing to police force changed', async () => {
+    getMainReturnPoint.mockReturnValue('/main-return-point')
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
+    const payload = {
+      address: 0
+    }
+    updatePerson.mockResolvedValue()
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: true } })
+    getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'Breed 1'
+      }]
+    })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/edit/police-force-changed')
   })
 
   test('POST /cdo/edit/select-address errors if Scotland and owner has XL Bullies', async () => {

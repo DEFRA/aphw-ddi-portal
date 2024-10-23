@@ -1,12 +1,12 @@
 const Joi = require('joi')
-const { routes, views } = require('../../../constants/cdo/owner')
+const { routes, views, keys } = require('../../../constants/cdo/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
 const { setAddress, getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { setInSession, getFromSession } = require('../../../session/session-wrapper')
-const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
+const { getPersonByReference, updatePersonAndForce } = require('../../../api/ddi-index-api/person')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const getUser = require('../../../auth/get-user')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
@@ -72,12 +72,16 @@ module.exports = [
           return h.view(views.selectAddress, new ViewModel(details, addresses, error)).code(400).takeover()
         }
 
-        await updatePerson(updatePayload, user)
+        const updatePoliceResult = await updatePersonAndForce(updatePayload, user)
 
-        setPostcodeLookupDetails(request, null)
-        setInSession(request, 'addresses', null)
-
-        return h.redirect(getMainReturnPoint(request))
+        if (updatePoliceResult?.policeForceResult?.changed) {
+          setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
+          return h.redirect(routes.policeForceChanged.get)
+        } else {
+          setPostcodeLookupDetails(request, null)
+          setInSession(request, 'addresses', null)
+          return h.redirect(getMainReturnPoint(request))
+        }
       }
     }
   }
