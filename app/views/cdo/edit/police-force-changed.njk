@@ -25,7 +25,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form class="form" method="post">
-      <h1 class="govuk-heading-l">The police force for {% if model.numberOfDogs > 1 %}each{% else %}the{% endif %} dog record has changed</h1>
+      <h1 class="govuk-heading-l">The police force for the dog record{% if model.numberOfDogs > 1 %}s{% endif %} has changed</h1>
       <p class="govuk-body">The police force is now <span class="govuk-!-font-weight-bold">{{ model.policeForceName }}</span>.
       </p>
       <button class="govuk-button" data-module="govuk-button">
