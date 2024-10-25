@@ -15,34 +15,34 @@ describe('main config', () => {
 
   test('should not use redis when host is unset', () => {
     process.env.NODE_ENV = DEVELOPMENT
-    process.env.REDIS_HOST = undefined
+    process.env.REDIS_HOSTNAME = undefined
     const value = require('../../../app/config/cache')
     expect(value.catboxOptions).toEqual({ })
   })
 
   test('should use redis when host is set and in dev', () => {
     process.env.NODE_ENV = DEVELOPMENT
-    process.env.REDIS_HOST = 'redis.host'
+    process.env.REDIS_HOSTNAME = 'redis.host'
     const value = require('../../../app/config/cache')
     expect(value.catboxOptions.host).toBe('redis.host')
   })
 
   test('should not use redis when host is unset', () => {
     process.env.NODE_ENV = DEVELOPMENT
-    process.env.REDIS_HOST = undefined
+    process.env.REDIS_HOSTNAME = undefined
     const value = require('../../../app/config/cache')
     expect(value.catboxOptions).toEqual({ })
   })
 
   test('should not use redis when host is set to dummy', () => {
-    process.env.REDIS_HOST = 'dummy'
+    process.env.REDIS_HOSTNAME = 'dummy'
     const value = require('../../../app/config/cache')
     expect(value.catboxOptions).toEqual({})
   })
 
   test('should use redis in production', () => {
     process.env.NODE_ENV = PRODUCTION
-    process.env.REDIS_HOST = 'redis.host'
+    process.env.REDIS_HOSTNAME = 'redis.host'
     const value = require('../../../app/config/cache')
     expect(value.catboxOptions.host).toBe('redis.host')
   })
