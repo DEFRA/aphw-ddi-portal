@@ -55,7 +55,7 @@ value.catboxOptions = value.useRedis
     }
   : {}
 
-value.catbox = value.useRedis ? require('@hapi/catbox-redis') : require('@hapi/catbox-memory')
+value.catbox = value.useRedis ? require('@hapi/catbox-redis').Engine : require('@hapi/catbox-memory').Engine
 
 /**
  * @type {{
