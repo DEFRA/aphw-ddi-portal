@@ -14,7 +14,7 @@ const schema = Joi.object({
 })
 
 const config = {
-  host: process.env.REDIS_HOST,
+  host: process.env.REDIS_HOSTNAME,
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
   partition: process.env.REDIS_PARTITION ?? process.env.SERVICE_NAME,
@@ -55,7 +55,7 @@ value.catboxOptions = value.useRedis
     }
   : {}
 
-value.catbox = value.useRedis ? require('@hapi/catbox-redis') : require('@hapi/catbox-memory')
+value.catbox = value.useRedis ? require('@hapi/catbox-redis').Engine : require('@hapi/catbox-memory').Engine
 
 /**
  * @type {{
