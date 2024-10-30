@@ -35,6 +35,20 @@ describe('PostCode Lookup test', () => {
     expect(response.statusCode).toBe(200)
   })
 
+  test('GET /cdo/edit/postcode-lookup route returns 302 and clears session', async () => {
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123' })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/postcode-lookup/P-123/clear?src=abc',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/edit/postcode-lookup/P-123?src=abc')
+  })
+
   test('GET /cdo/edit/postcode-lookup route returns 404 when person not found', async () => {
     getPersonByReference.mockResolvedValue(null)
 
