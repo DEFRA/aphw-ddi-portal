@@ -10,7 +10,7 @@ describe('Update owner details', () => {
   const { getCountries } = require('../../../../../../app/api/ddi-index-api')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { getPersonByReference, updatePerson, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference, getPersonAndDogs, updatePersonAndForce } = require('../../../../../../app/api/ddi-index-api/person')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -110,7 +110,7 @@ describe('Update owner details', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(updatePerson).toHaveBeenCalledTimes(1)
+    expect(updatePersonAndForce).toHaveBeenCalledTimes(1)
   })
 
   test('POST /cdo/edit/owner-details route returns 400 when payload is invalid', async () => {
@@ -126,7 +126,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
   })
 
@@ -157,7 +157,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -193,7 +193,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -229,7 +229,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -265,7 +265,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -301,7 +301,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -336,7 +336,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -371,7 +371,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
@@ -408,7 +408,7 @@ describe('Update owner details', () => {
     const { document } = (new JSDOM(response.payload)).window
 
     expect(response.statusCode).toBe(400)
-    expect(updatePerson).not.toHaveBeenCalled()
+    expect(updatePersonAndForce).not.toHaveBeenCalled()
     expect(document.querySelector('.govuk-error-summary')).not.toBeNull()
 
     const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
