@@ -18,6 +18,8 @@ describe('Update owner details', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
 
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: false } })
+
     getCountries.mockResolvedValue([
       'England',
       'Scotland',
@@ -81,7 +83,7 @@ describe('Update owner details', () => {
     expect(response.statusCode).toBe(404)
   })
 
-  test('POST /cdo/edit/owner-details route returns 302', async () => {
+  test('POST /cdo/edit/owner-details route forwards to next screen', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Smith',
@@ -111,6 +113,41 @@ describe('Update owner details', () => {
 
     expect(response.statusCode).toBe(302)
     expect(updatePersonAndForce).toHaveBeenCalledTimes(1)
+    expect(response.headers.location).toBe('/cdo/view/owner-details/P-1234-5678')
+  })
+
+  test('POST /cdo/edit/owner-details route forwards to police change screen', async () => {
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: true } })
+    const payload = {
+      firstName: 'John',
+      lastName: 'Smith',
+      dateOfBirth: '1980-01-01',
+      'dateOfBirth-day': '01',
+      'dateOfBirth-month': '01',
+      'dateOfBirth-year': '1980',
+      personReference: 'P-1234-5678',
+      addressLine1: '1 The Street',
+      addressLine2: 'The Town',
+      town: 'The City',
+      postcode: 'AB12 3CD',
+      country: 'England',
+      email: 'test@example.com',
+      primaryTelephone: '01235678901',
+      secondaryTelephone: '01235678902'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/owner-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(updatePersonAndForce).toHaveBeenCalledTimes(1)
+    expect(response.headers.location).toBe('/cdo/edit/police-force-changed')
   })
 
   test('POST /cdo/edit/owner-details route returns 400 when payload is invalid', async () => {
