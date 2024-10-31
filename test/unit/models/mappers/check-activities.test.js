@@ -949,6 +949,44 @@ describe('Check Activity Mappers', () => {
           rowKey: '0a750a1a-bab9-41fb-beea-8e4ea2d842c1|1707837161937',
           subject: 'DDI Activity Police correspondence'
         },
+        {
+          actioningUser: { displayname: 'Developer' },
+          activity: {
+            activityId: '1989132a-f33f-4ccd-81c8-3c9c472db8c6',
+            activity: '4',
+            activityType: 'received',
+            pk: 'P-DA08-8028',
+            source: 'owner',
+            activityDate: '2024-02-12T00:00:00.000Z',
+            targetPk: 'owner',
+            reportType: 'something-else',
+            activityLabel: 'Police correspondence'
+          },
+          operation: 'activity',
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.activity',
+          rowKey: '704a6867-a612-4304-90b7-c7642742b5ae|1730403760142',
+          subject: 'DDI Activity Police correspondence'
+        },
+        {
+          actioningUser: { displayname: 'Developer' },
+          activity: {
+            activityId: '1989132a-f33f-4ccd-81c8-3c9c472db8c6',
+            activity: '4',
+            activityType: 'received',
+            pk: 'ED300000',
+            source: 'dog',
+            activityDate: '2024-02-12T00:00:00.000Z',
+            targetPk: 'dog',
+            reportType: 'something-else',
+            activityLabel: 'Police correspondence received'
+          },
+          operation: 'activity',
+          timestamp: '2024-02-13T15:12:41.937Z',
+          type: 'uk.gov.defra.ddi.event.activity',
+          rowKey: 'a52e9697-a7af-4baf-a4fb-4a1a9622f9f3|1730403759842',
+          subject: 'DDI Activity Police correspondence received'
+        },
         auditedEventBuilder({
           changes: {
             added: [],
@@ -1019,6 +1057,11 @@ describe('Check Activity Mappers', () => {
           date: '11 February 2024',
           activityLabel: 'Record imported',
           teamMember: 'Import user'
+        },
+        {
+          date: '12 February 2024',
+          activityLabel: 'Police correspondence received',
+          teamMember: 'Developer'
         },
         {
           date: '12 February 2024',
