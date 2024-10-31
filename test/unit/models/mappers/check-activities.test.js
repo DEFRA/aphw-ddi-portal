@@ -23,7 +23,7 @@ describe('Check Activity Mappers', () => {
         event: {
           activity: {
             activityType: 'received',
-            activityLabel: 'Police correspondence'
+            activityLabel: 'Police correspondence received'
           },
           operation: 'activity',
           type: 'uk.gov.defra.ddi.event.activity'

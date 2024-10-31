@@ -177,6 +177,10 @@ const getActivityLabelFromEvent = (event) => {
     return 'NOT YET DEFINED'
   }
 
+  if (event.activity?.activityType === 'received' && event.activity?.activityLabel.toLowerCase().includes('received')) {
+    return `${event.activity?.activityLabel}`
+  }
+
   if (event.activity?.activityType) {
     return `${event.activity?.activityLabel} ${event.activity?.activityType}`
   }
