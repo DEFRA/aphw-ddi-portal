@@ -23,7 +23,7 @@ describe('Check Activity Mappers', () => {
         event: {
           activity: {
             activityType: 'received',
-            activityLabel: 'Police correspondence received'
+            activityLabel: 'Police correspondence'
           },
           operation: 'activity',
           type: 'uk.gov.defra.ddi.event.activity'
@@ -960,13 +960,13 @@ describe('Check Activity Mappers', () => {
             activityDate: '2024-02-12T00:00:00.000Z',
             targetPk: 'owner',
             reportType: 'something-else',
-            activityLabel: 'Police correspondence received'
+            activityLabel: 'Police correspondence'
           },
           operation: 'activity',
           timestamp: '2024-02-13T15:12:41.937Z',
           type: 'uk.gov.defra.ddi.event.activity',
           rowKey: '704a6867-a612-4304-90b7-c7642742b5ae|1730403760142',
-          subject: 'DDI Activity Police correspondence received'
+          subject: 'DDI Activity Police correspondence'
         },
         {
           actioningUser: { displayname: 'Developer' },
