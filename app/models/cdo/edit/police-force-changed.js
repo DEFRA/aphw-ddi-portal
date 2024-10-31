@@ -1,7 +1,6 @@
-function ViewModel (data, backNav) {
+function ViewModel (data, breadcrumbLink) {
   this.model = {
-    backLink: backNav.backLink,
-    srcHashParam: backNav.srcHashParam,
+    breadcrumbLink,
     policeForceName: data?.policeForceName,
     numberOfDogs: data?.numOfDogs
   }

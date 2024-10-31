@@ -8,7 +8,8 @@ const {
   getEnforcementDetails,
   setEnforcementDetails,
   getPostcodeLookupDetails,
-  setPostcodeLookupDetails
+  setPostcodeLookupDetails,
+  clearPostcodeSession
 } = require('../../../../app/session/cdo/owner')
 
 describe('cdo activity session helpers', () => {
@@ -199,6 +200,16 @@ describe('cdo activity session helpers', () => {
       expect(mockRequest.yar.set).toHaveBeenCalledWith('owner', {
         postcodeLookup
       })
+    })
+  })
+
+  describe('clearPostcodeSession', () => {
+    test('should clear sessionr details', () => {
+      mockRequest.yar.set.mockReturnValue(undefined)
+      clearPostcodeSession(mockRequest)
+      expect(mockRequest.yar.set).toHaveBeenCalledTimes(2)
+      expect(mockRequest.yar.set).toHaveBeenNthCalledWith(1, 'owner', { postcodeLookup: null })
+      expect(mockRequest.yar.set).toHaveBeenNthCalledWith(2, 'owner', { address: null })
     })
   })
 })

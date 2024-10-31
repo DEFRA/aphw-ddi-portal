@@ -1,4 +1,4 @@
-const { routes, views } = require('../../../constants/cdo/owner')
+const { routes, views, keys } = require('../../../constants/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/address')
 const addressSchema = require('../../../schema/portal/owner/address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
@@ -7,8 +7,9 @@ const { getPersonByReference } = require('../../../api/ddi-index-api/person')
 const { getCountries } = require('../../../api/ddi-index-api/countries')
 const { addBackNavigation, addBackNavigationForErrorCondition, getMainReturnPoint } = require('../../../lib/back-helpers')
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
-const { updatePerson } = require('../../../api/ddi-index-api/person')
-const { getAddress, setAddress, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { updatePersonAndForce } = require('../../../api/ddi-index-api/person')
+const { getAddress, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { setInSession } = require('../../../session/session-wrapper')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
 const { logValidationError } = require('../../../lib/log-helpers')
 
@@ -90,13 +91,16 @@ module.exports = [{
         return await errorView(request, h, error)
       }
 
-      await updatePerson(updatePayload, user)
+      const updatePoliceResult = await updatePersonAndForce(updatePayload, user)
 
-      setPostcodeLookupDetails(request, null)
-
-      setAddress(request, null)
-
-      return h.redirect(getMainReturnPoint(request))
+      if (updatePoliceResult?.policeForceResult?.changed) {
+        setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
+        return h.redirect(routes.policeForceChanged.get)
+      } else {
+        setPostcodeLookupDetails(request, null)
+        setInSession(request, 'addresses', null)
+        return h.redirect(getMainReturnPoint(request))
+      }
     }
   }
 }]

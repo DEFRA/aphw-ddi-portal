@@ -8,7 +8,7 @@ describe('Address edit test', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/api/ddi-index-api/person')
-  const { getPersonByReference, getPersonAndDogs } = require('../../../../../../app/api/ddi-index-api/person')
+  const { getPersonByReference, getPersonAndDogs, updatePersonAndForce } = require('../../../../../../app/api/ddi-index-api/person')
 
   jest.mock('../../../../../../app/api/ddi-index-api/countries')
   const { getCountries } = require('../../../../../../app/api/ddi-index-api/countries')
@@ -26,6 +26,7 @@ describe('Address edit test', () => {
     mockAuth.getUser.mockReturnValue(user)
     getMainReturnPoint.mockReturnValue('')
     getCountries.mockResolvedValue(mockCountries)
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: false } })
     server = await createServer()
     await server.initialize()
   })
@@ -177,6 +178,45 @@ describe('Address edit test', () => {
   test('POST /cdo/edit/address with valid data forwards to next screen', async () => {
     const nextScreenUrl = '/main-return-point'
     getMainReturnPoint.mockReturnValue(nextScreenUrl)
+
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    getPersonAndDogs.mockResolvedValue({
+      dogs: []
+    })
+
+    const payload = {
+      personReference: 'P-123',
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'AB1 1TT',
+      country: 'Wales'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/address/P-123',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/edit/address with valid data and police change forwards to police changed screen', async () => {
+    const nextScreenUrl = '/cdo/edit/police-force-changed'
+    getMainReturnPoint.mockReturnValue(nextScreenUrl)
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: true } })
 
     getPersonByReference.mockResolvedValue({
       personReference: 'P-123',

@@ -46,6 +46,11 @@ const setPostcodeLookupDetails = (request, value) => {
   set(request, keys.entry, keys.postcodeLookup, value)
 }
 
+const clearPostcodeSession = (request) => {
+  setPostcodeLookupDetails(request, null)
+  setAddress(request, null)
+}
+
 module.exports = {
   getOwnerBase: get,
   setOwnerBase: set,
@@ -56,5 +61,6 @@ module.exports = {
   getEnforcementDetails,
   setEnforcementDetails,
   getPostcodeLookupDetails,
-  setPostcodeLookupDetails
+  setPostcodeLookupDetails,
+  clearPostcodeSession
 }

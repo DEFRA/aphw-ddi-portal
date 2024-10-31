@@ -4,18 +4,24 @@ const ViewModel = require('../../../models/cdo/common/postcode-lookup')
 const { validatePayload } = require('../../../schema/portal/edit/postcode-lookup')
 const { addBackNavigation, addBackNavigationForErrorCondition } = require('../../../lib/back-helpers')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
-const { setPostcodeLookupDetails, getPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { setPostcodeLookupDetails, getPostcodeLookupDetails, clearPostcodeSession } = require('../../../session/cdo/owner')
 const { getUser } = require('../../../auth')
 
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.postcodeLookupEdit.get}/{personReference}`,
+    path: `${routes.postcodeLookupEdit.get}/{personReference}/{clearSession?}`,
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const { personReference, clearSession } = request.params
+
+        if (clearSession === 'clear') {
+          clearPostcodeSession(request)
+          return h.redirect(`${routes.postcodeLookupEdit.get}/${personReference}?src=${request.query.src}`)
+        }
+
         const user = getUser(request)
-        const personReference = request.params.personReference
 
         const person = await getPersonByReference(personReference, user)
         if (person == null) {

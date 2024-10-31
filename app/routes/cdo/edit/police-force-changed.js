@@ -18,9 +18,9 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const backNav = { backLink: routes.selectAddressFromEdit.get }
+        const breadcrumbLink = getMainReturnPoint(request)
 
-        return h.view(views.policeForceChanged, new ViewModel(policeForceResult, backNav))
+        return h.view(views.policeForceChanged, new ViewModel(policeForceResult, breadcrumbLink))
       }
     }
   },

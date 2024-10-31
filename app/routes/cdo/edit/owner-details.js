@@ -1,14 +1,16 @@
-const { routes, views } = require('../../../constants/cdo/owner')
+const { routes, views, keys } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/owner-details')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
-const { getPersonByReference, updatePerson } = require('../../../api/ddi-index-api/person')
+const { getPersonByReference, updatePersonAndForce } = require('../../../api/ddi-index-api/person')
 const { getCountries } = require('../../../api/ddi-index-api')
 const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
+const { setInSession } = require('../../../session/session-wrapper')
+const { setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 
 const errorView = async (request, h, error) => {
   const user = getUser(request)
@@ -66,9 +68,16 @@ module.exports = [
           return errorView(request, h, error)
         }
 
-        await updatePerson(payload, user)
+        const updatePoliceResult = await updatePersonAndForce(payload, user)
 
-        return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
+        if (updatePoliceResult?.policeForceResult?.changed) {
+          setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
+          return h.redirect(routes.policeForceChanged.get)
+        } else {
+          setPostcodeLookupDetails(request, null)
+          setInSession(request, 'addresses', null)
+          return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
+        }
       }
     }
   }
