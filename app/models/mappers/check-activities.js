@@ -50,7 +50,18 @@ const { getNewStatusLabel } = require('../../lib/status-helper')
  * @property {string} activityDate
  * @property {string} activityLabel
  */
-
+/**
+ * @typedef ReportActivity
+ * @property {string} [activityId]
+ * @property {string} activity
+ * @property {string} activityType
+ * @property {string} pk
+ * @property {string} targetPk
+ * @property {string} source
+ * @property {string} activityDate
+ * @property {string} activityLabel
+ * @property {string} reportType
+ */
 /**
  * @typedef ChangeEventBase
  * @property {Changes} changes
@@ -60,7 +71,7 @@ const { getNewStatusLabel } = require('../../lib/status-helper')
  */
 /**
  * @typedef ActivityEventBase
- * @property {Activity} activity
+ * @property {Activity|ReportActivity} activity
  * @property {'uk.gov.defra.ddi.event.activity'} type
  *
  * @typedef {ActivityEventBase & EventBase} ActivityEvent
@@ -509,11 +520,21 @@ const flatMapActivityDtoToCheckActivityRow = (events) => {
    * @type {ActivityRow[]}
    */
   const activityRowsAccumulator = []
+  const duplicateMap = new Map()
+
   return events.reduce((activityRows, event) => {
     /**
      * @type {ActivityRow[]}
      */
     const addedRows = []
+
+    if (event.activity?.activityId) {
+      if (duplicateMap.get(event.activity?.activityId)) {
+        return [...activityRows, ...addedRows]
+      }
+
+      duplicateMap.set(event.activity?.activityId, true)
+    }
 
     if (event.type === 'uk.gov.defra.ddi.event.activity') {
       addedRows.push(mapActivityDtoToCheckActivityRow(event))
