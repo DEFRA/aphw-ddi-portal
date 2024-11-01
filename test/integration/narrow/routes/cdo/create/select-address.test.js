@@ -14,6 +14,9 @@ describe('SelectAddress test', () => {
   jest.mock('../../../../../../app/api/os-places')
   const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
 
+  jest.mock('../../../../../../app/api/ddi-index-api/person')
+  const { updatePersonAndForce } = require('../../../../../../app/api/ddi-index-api/person')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -21,6 +24,7 @@ describe('SelectAddress test', () => {
     mockAuth.getUser.mockReturnValue(user)
     setAddress.mockReturnValue()
     getPostcodeAddresses.mockResolvedValue([{ addressLine1: 'addr1', postcode: 'postcode' }])
+    updatePersonAndForce.mockResolvedValue()
     server = await createServer()
     await server.initialize()
   })
@@ -117,8 +121,48 @@ describe('SelectAddress test', () => {
     expect(response.statusCode).toBe(302)
   })
 
-  test('POST /cdo/create/select-address with valid data returns 302', async () => {
+  test('POST /cdo/create/select-address with valid data forwards to microchip search', async () => {
     const nextScreenUrl = routes.microchipSearch.get
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
+    const payload = {
+      address: 0
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/create/select-address with valid data forwards to police force changed if force changed', async () => {
+    const nextScreenUrl = '/cdo/edit/police-force-changed'
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: true } })
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
+    const payload = {
+      address: 0
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/create/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
+  test('POST /cdo/create/select-address with valid data forwards to police force changed if force changed', async () => {
+    const nextScreenUrl = '/cdo/edit/police-force-not-found'
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: false, reason: 'Not found' } })
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
       address: 0

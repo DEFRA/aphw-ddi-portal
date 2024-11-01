@@ -25,7 +25,9 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
+        console.log('JB personAndDOgs', personAndDogs)
         const firstCdo = await getCdo(personAndDogs.dogs[0].indexNumber, user)
+        console.log('JB firstCdo', firstCdo)
 
         const breadcrumbLink = getMainReturnPoint(request)
 
