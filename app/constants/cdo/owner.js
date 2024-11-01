@@ -63,6 +63,10 @@ const constants = {
       get: '/cdo/edit/police-force-changed',
       post: '/cdo/edit/police-force-changed'
     },
+    policeForceNotFound: {
+      get: '/cdo/edit/police-force-not-found',
+      post: '/cdo/edit/police-force-not-found'
+    },
     delete: {
       get: '/cdo/delete/owner',
       post: '/cdo/delete/owner'
@@ -83,6 +87,7 @@ const constants = {
     postcodeLookupEdit: 'cdo/edit/postcode-lookup',
     selectAddressFromEdit: 'cdo/edit/select-address',
     policeForceChanged: 'cdo/edit/police-force-changed',
+    policeForceNotFound: 'cdo/edit/police-force-not-found',
     delete: 'common/confirm',
     confirmation: 'common/deleted/owner',
     documentation: 'swagger'
