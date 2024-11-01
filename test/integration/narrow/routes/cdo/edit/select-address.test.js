@@ -144,6 +144,34 @@ describe('SelectAddress edit test', () => {
     expect(response.headers.location).toBe('/cdo/edit/police-force-changed')
   })
 
+  test('POST /cdo/edit/select-address with valid data returns 302 continuing to police force not found', async () => {
+    getMainReturnPoint.mockReturnValue('/main-return-point')
+    getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
+    const payload = {
+      address: 0
+    }
+    updatePerson.mockResolvedValue()
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: false, reason: 'Not found' } })
+    getPostcodeLookupDetails.mockReturnValue({ personReference: 'P-123' })
+    getPersonByReference.mockResolvedValue({ personReference: 'P-123', address: { } })
+    getPersonAndDogs.mockResolvedValue({
+      dogs: [{
+        breed: 'Breed 1'
+      }]
+    })
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/select-address',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/edit/police-force-not-found/P-123')
+  })
+
   test('POST /cdo/edit/select-address errors if Scotland and owner has XL Bullies', async () => {
     getMainReturnPoint.mockReturnValue('/main-return-point')
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'Scotland' }])
