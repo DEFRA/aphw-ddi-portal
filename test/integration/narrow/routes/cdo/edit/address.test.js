@@ -252,6 +252,45 @@ describe('Address edit test', () => {
     expect(response.headers.location).toBe(nextScreenUrl)
   })
 
+  test('POST /cdo/edit/address with valid data and police force not found forwards to force-not-found', async () => {
+    const nextScreenUrl = '/cdo/edit/police-force-not-found/P-123'
+    getMainReturnPoint.mockReturnValue(nextScreenUrl)
+    updatePersonAndForce.mockResolvedValue({ policeForceResult: { changed: false, reason: 'Not found' } })
+
+    getPersonByReference.mockResolvedValue({
+      personReference: 'P-123',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        town: '',
+        postcode: ''
+      }
+    })
+
+    getPersonAndDogs.mockResolvedValue({
+      dogs: []
+    })
+
+    const payload = {
+      personReference: 'P-123',
+      addressLine1: '1 Testing Street',
+      town: 'Testington',
+      postcode: 'AB1 1TT',
+      country: 'Wales'
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/address/P-123',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe(nextScreenUrl)
+  })
+
   test('POST /cdo/edit/address errors if address is Scotland and owner has one or more XL Bullies', async () => {
     const nextScreenUrl = '/main-return-point'
     getMainReturnPoint.mockReturnValue(nextScreenUrl)

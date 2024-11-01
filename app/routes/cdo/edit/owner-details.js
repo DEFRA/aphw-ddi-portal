@@ -73,6 +73,10 @@ module.exports = [
         if (updatePoliceResult?.policeForceResult?.changed) {
           setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
           return h.redirect(routes.policeForceChanged.get)
+        } else if (updatePoliceResult?.policeForceResult?.reason === 'Not found') {
+          setPostcodeLookupDetails(request, null)
+          setInSession(request, 'addresses', null)
+          return h.redirect(`${routes.policeForceNotFound.get}/${person.personReference}`)
         } else {
           setPostcodeLookupDetails(request, null)
           setInSession(request, 'addresses', null)
