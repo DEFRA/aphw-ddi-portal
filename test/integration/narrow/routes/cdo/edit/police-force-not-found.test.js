@@ -91,6 +91,25 @@ describe('Police force not found', () => {
       expect(response.headers.location).toBe('/cdo/view/owner/return-point')
     })
 
+    test('route forwards to country changed info', async () => {
+      setInSession.mockReturnValue()
+      getFromSession.mockReturnValue({ countryChanged: true })
+
+      const payload = {}
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/police-force-not-found/P-123',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location.startsWith('/cdo/edit/country-changed-info?src=')).toBeTruthy()
+    })
+
     test('route returns 302 /login when no auth', async () => {
       setInSession.mockReturnValue()
 
