@@ -130,6 +130,14 @@ const constants = {
     insurance: {
       get: '/admin/insurance',
       post: '/admin/insurance'
+    },
+    auditQueryType: {
+      get: '/admin/audit/audit-query-type',
+      post: '/admin/audit/audit-query-type'
+    },
+    auditQueryDetails: {
+      get: '/admin/audit/audit-query-details',
+      post: '/admin/audit/audit-query-details'
     }
   },
   views: {
@@ -152,7 +160,9 @@ const constants = {
     deleteOwnersConfirm: 'admin/delete/owners-confirm',
     documentation: 'swagger',
     addPoliceUserList: 'admin/users/add/list',
-    addPoliceUserConfirm: 'admin/users/add/confirm'
+    addPoliceUserConfirm: 'admin/users/add/confirm',
+    auditQueryType: 'admin/audit/audit-query-type',
+    auditQueryDetails: 'admin/audit/audit-query-details'
   },
   breadcrumbs: [
     {
@@ -197,11 +207,40 @@ const constants = {
   keys: {
     oldDogs: 'oldDogs',
     orphanedOwners: 'orphanedOwners',
-    policeUsers: 'policeUsers'
+    policeUsers: 'policeUsers',
+    fromDate: 'fromDate',
+    toDate: 'toDate',
+    auditQuery: 'auditQuery'
   },
   documentation: {
     allowedEnvironments: ['dev', 'snd', 'local']
-  }
+  },
+  auditQueryTypes: [
+    {
+      text: 'Searches and views (for all users)',
+      value: 'date'
+    },
+    {
+      text: 'Logins (for all users)',
+      value: 'login'
+    },
+    {
+      text: 'Search terms used',
+      value: 'search'
+    },
+    {
+      text: 'Searches and views for a single user',
+      value: 'user'
+    },
+    {
+      text: 'Views for a single dog',
+      value: 'dog'
+    },
+    {
+      text: 'Views for a single owner',
+      value: 'owner'
+    }
+  ]
 }
 
 module.exports = constants
