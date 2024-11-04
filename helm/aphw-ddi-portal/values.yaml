@@ -18,7 +18,12 @@ containerSecret:
   name: aphw-ddi-portal-container-secret
   type: Opaque
 
-deployment: {}
+deployment:
+  replicas: 1
+  minReplicas: 1
+  maxReplicas: 4
+  cpuThreshold: 80
+  memoryThreshold: 80
 
 container:
   requestMemory: 100Mi
