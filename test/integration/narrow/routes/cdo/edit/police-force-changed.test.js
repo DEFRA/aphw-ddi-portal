@@ -21,9 +21,13 @@ describe('Police force changed', () => {
   describe('GET /cdo/edit/police-force-changed', () => {
     test('route returns 200 - single dog', async () => {
       getFromSession.mockReturnValue({
-        changed: true,
-        policeForceName: 'New force',
-        numOfDogs: 1
+        policeResult: {
+          policeForceResult: {
+            changed: true,
+            policeForceName: 'New force',
+            numOfDogs: 1
+          }
+        }
       })
 
       const options = {
@@ -42,9 +46,13 @@ describe('Police force changed', () => {
 
     test('route returns 200 - multiple dogs', async () => {
       getFromSession.mockReturnValue({
-        changed: true,
-        policeForceName: 'New force',
-        numOfDogs: 2
+        policeResult: {
+          policeForceResult: {
+            changed: true,
+            policeForceName: 'New force',
+            numOfDogs: 2
+          }
+        }
       })
 
       const options = {
@@ -77,9 +85,13 @@ describe('Police force changed', () => {
 
     test('returns 302 when no auth', async () => {
       getFromSession.mockReturnValue({
-        changed: true,
-        policeForceName: 'New force',
-        numOfDogs: 1
+        policeResult: {
+          policeForceResult: {
+            changed: true,
+            policeForceName: 'New force',
+            numOfDogs: 1
+          }
+        }
       })
 
       const options = {

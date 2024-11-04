@@ -1,7 +1,7 @@
 const Joi = require('joi')
-const { routes, views, keys } = require('../../../constants/cdo/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { getPostcodeAddresses } = require('../../../api/os-places')
-const { setAddress, getPostcodeLookupDetails, setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { setAddress, getPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const ViewModel = require('../../../models/cdo/create/select-address')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const { addBackNavigation, getMainReturnPoint } = require('../../../lib/back-helpers')
@@ -10,6 +10,7 @@ const { getPersonByReference, updatePersonAndForce } = require('../../../api/ddi
 const { buildPersonAddressUpdatePayload } = require('../../../lib/payload-builders')
 const getUser = require('../../../auth/get-user')
 const { validateBreedForCountryChoosingAddress } = require('../../../lib/validation-helpers')
+const { determineNextScreenAfterAddressChange } = require('../../../lib/route-helpers')
 
 module.exports = [
   {
@@ -74,18 +75,12 @@ module.exports = [
 
         const updatePoliceResult = await updatePersonAndForce(updatePayload, user)
 
-        if (updatePoliceResult?.policeForceResult?.changed) {
-          setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
-          return h.redirect(routes.policeForceChanged.get)
-        } else if (updatePoliceResult?.policeForceResult?.reason === 'Not found') {
-          setPostcodeLookupDetails(request, null)
-          setInSession(request, 'addresses', null)
-          return h.redirect(`${routes.policeForceNotFound.get}/${personReference}`)
-        } else {
-          setPostcodeLookupDetails(request, null)
-          setInSession(request, 'addresses', null)
-          return h.redirect(getMainReturnPoint(request))
-        }
+        const oldCountry = person?.address?.country
+        const newCountry = selectedAddress?.country
+
+        const defaultRoute = getMainReturnPoint(request)
+        const nextScreen = determineNextScreenAfterAddressChange(request, oldCountry, newCountry, updatePoliceResult, personReference, defaultRoute)
+        return h.redirect(nextScreen)
       }
     }
   }

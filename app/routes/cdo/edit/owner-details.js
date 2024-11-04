@@ -1,4 +1,4 @@
-const { routes, views, keys } = require('../../../constants/cdo/owner')
+const { routes, views } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const getUser = require('../../../auth/get-user')
 const ViewModel = require('../../../models/cdo/edit/owner-details')
@@ -9,8 +9,7 @@ const { addDateComponents } = require('../../../lib/date-helpers')
 const { validatePayload } = require('../../../schema/portal/edit/owner-details')
 const { buildPersonUpdatePayload } = require('../../../lib/payload-builders')
 const { addBackNavigation, addBackNavigationForErrorCondition, extractBackNavParam } = require('../../../lib/back-helpers')
-const { setInSession } = require('../../../session/session-wrapper')
-const { setPostcodeLookupDetails } = require('../../../session/cdo/owner')
+const { determineNextScreenAfterAddressChange } = require('../../../lib/route-helpers')
 
 const errorView = async (request, h, error) => {
   const user = getUser(request)
@@ -68,20 +67,16 @@ module.exports = [
           return errorView(request, h, error)
         }
 
+        const origPerson = await getPersonByReference(request.params.personReference, user)
+
         const updatePoliceResult = await updatePersonAndForce(payload, user)
 
-        if (updatePoliceResult?.policeForceResult?.changed) {
-          setInSession(request, keys.policeForceChangedResult, updatePoliceResult.policeForceResult)
-          return h.redirect(routes.policeForceChanged.get)
-        } else if (updatePoliceResult?.policeForceResult?.reason === 'Not found') {
-          setPostcodeLookupDetails(request, null)
-          setInSession(request, 'addresses', null)
-          return h.redirect(`${routes.policeForceNotFound.get}/${person.personReference}`)
-        } else {
-          setPostcodeLookupDetails(request, null)
-          setInSession(request, 'addresses', null)
-          return h.redirect(`${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`)
-        }
+        const oldCountry = person?.address?.country
+        const newCountry = origPerson?.address?.country
+
+        const defaultRoute = `${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`
+        const nextScreen = determineNextScreenAfterAddressChange(request, oldCountry, newCountry, updatePoliceResult, person.personReference, defaultRoute)
+        return h.redirect(nextScreen)
       }
     }
   }

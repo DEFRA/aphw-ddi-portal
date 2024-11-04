@@ -1,32 +1,26 @@
 const { routes, views, keys } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
-const ViewModel = require('../../../models/cdo/edit/police-force-changed')
-const { getMainReturnPoint } = require('../../../lib/back-helpers')
-const { getFromSession, setInSession } = require('../../../session/session-wrapper')
+const ViewModel = require('../../../models/cdo/edit/country-changed-info')
+const { getMainReturnPoint, addBackNavigation } = require('../../../lib/back-helpers')
+const { setInSession } = require('../../../session/session-wrapper')
 const { setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 
 module.exports = [
   {
     method: 'GET',
-    path: routes.policeForceChanged.get,
+    path: routes.countryChangedInfo.get,
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
-        const policeForceResult = getFromSession(request, keys.policeForceChangedResult)
+        const backNav = addBackNavigation(request)
 
-        if (policeForceResult?.policeResult == null) {
-          return h.response().code(404).takeover()
-        }
-
-        const breadcrumbLink = getMainReturnPoint(request)
-
-        return h.view(views.policeForceChanged, new ViewModel(policeForceResult, breadcrumbLink))
+        return h.view(views.countryChangedInfo, new ViewModel(backNav))
       }
     }
   },
   {
     method: 'POST',
-    path: routes.policeForceChanged.post,
+    path: routes.countryChangedInfo.post,
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {

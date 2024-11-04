@@ -1,8 +1,8 @@
 const { routes, views, keys } = require('../../../constants/cdo/owner')
 const { anyLoggedInUser } = require('../../../auth/permissions.js')
 const ViewModel = require('../../../models/cdo/edit/police-force-not-found')
-const { getMainReturnPoint } = require('../../../lib/back-helpers')
-const { setInSession } = require('../../../session/session-wrapper')
+const { getMainReturnPoint, addBackNavigation } = require('../../../lib/back-helpers')
+const { setInSession, getFromSession } = require('../../../session/session-wrapper')
 const { setPostcodeLookupDetails } = require('../../../session/cdo/owner')
 const { getPersonAndDogs } = require('../../../api/ddi-index-api/person')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
@@ -39,6 +39,11 @@ module.exports = [
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
+        const details = getFromSession(request, keys.policeForceChangedResult)
+        if (details?.countryChanged) {
+          const backNav = addBackNavigation(request)
+          return h.redirect(`${routes.countryChangedInfo.get}${backNav.srcHashParam}`)
+        }
         setInSession(request, keys.policeForceChangedResult, null)
         setPostcodeLookupDetails(request, null)
         setInSession(request, 'addresses', null)
