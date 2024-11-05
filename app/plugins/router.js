@@ -36,6 +36,8 @@ const routes = [].concat(
   require('../routes/cdo/edit/address'),
   require('../routes/cdo/edit/police-force-changed'),
   require('../routes/cdo/edit/police-force-not-found'),
+  require('../routes/cdo/edit/country-changed'),
+  require('../routes/cdo/edit/country-changed-info'),
   require('../routes/cdo/delete/owner'),
   require('../routes/cdo/delete/dog'),
   require('../routes/cdo/manage/live'),

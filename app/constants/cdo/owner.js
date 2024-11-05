@@ -67,6 +67,14 @@ const constants = {
       get: '/cdo/edit/police-force-not-found',
       post: '/cdo/edit/police-force-not-found'
     },
+    countryChanged: {
+      get: '/cdo/edit/country-changed',
+      post: '/cdo/edit/country-changed'
+    },
+    countryChangedInfo: {
+      get: '/cdo/edit/country-changed-info',
+      post: '/cdo/edit/country-changed-info'
+    },
     delete: {
       get: '/cdo/delete/owner',
       post: '/cdo/delete/owner'
@@ -88,6 +96,8 @@ const constants = {
     selectAddressFromEdit: 'cdo/edit/select-address',
     policeForceChanged: 'cdo/edit/police-force-changed',
     policeForceNotFound: 'cdo/edit/police-force-not-found',
+    countryChanged: 'cdo/edit/country-changed',
+    countryChangedInfo: 'cdo/edit/country-changed-info',
     delete: 'common/confirm',
     confirmation: 'common/deleted/owner',
     documentation: 'swagger'

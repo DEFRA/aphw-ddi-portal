@@ -1,0 +1,53 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form class="form" method="post">
+      <h1 class="govuk-heading-l">Update the dog status</h1>
+
+      <p class="govuk-body">As the owner has moved country, existing exemptions are no longer valid.</p>
+
+      <p class="govuk-body">This means a new status now applies for these dogs:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Exempt dogs are now ‘In breach’</li>
+        <li>Pre-exempt dogs have now ‘Failed’</li>
+        <li>Interim exempt dogs have now ‘Failed’</li>
+      </ul>
+
+      <h2 class="govuk-heading-m">What you need to do next:</h2>
+
+      <ol class="govuk-list govuk-list--number">
+        <li>Tell the owner any exemptions are no longer valid.</li>
+        <li>Update the status for all the owners’ dogs.</li>
+      </ol>
+
+      <button class="govuk-button" data-module="govuk-button">
+        Continue
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
