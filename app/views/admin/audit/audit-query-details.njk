@@ -25,7 +25,7 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
 
     {% if model.errors | length > 0 %}
         {{ govukErrorSummary({
@@ -43,13 +43,24 @@
           </h1>
         </legend>
 
-        {{ govukDateInput(model.fromDate) }}
-        {{ govukDateInput(model.toDate) }}
-
-        {% if model.queryType != 'date' and model.queryType != 'login' %}
+        {% if model.showPkField %}
         {{ govukInput(model.pk) }}
         {% endif %}
 
+        <details class="govuk-details" {% if model.expandDateDetails %}open{% endif %}>
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              Restrict by date range
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+          {{ govukDateInput(model.fromDate) }}
+          {{ govukDateInput(model.toDate) }}
+          </div>
+        </details>
+
+
+        <input type="hidden" name="queryType" id="queryType" value="{{ model.queryType }}" />
       </fieldset>
 
 
@@ -59,6 +70,32 @@
         }) }}
       </div>
     </form>
+  </div>
+  <div class="govuk-grid-column-full">
+
+    {% if model.results %}
+      <table class="govuk-table govuk-!-margin-bottom-7" id="pseudonym-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">Results ({{ model.numberFoundText }})</caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Timestamp</th>
+            {% for extraColumnName in model.extraColumnNames %}
+            <th scope="col" class="govuk-table__header">{{ extraColumnName }}</span></th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+            {% for res in model.results %}
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell defra-align-table">{{model.formatTimestamp(res.timestamp)}}</td>
+                {% for extraColumnFn in model.extraColumnFns %}
+                <td class="govuk-table__cell defra-align-table">{{extraColumnFn(res)}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
 
   </div>
 </div>

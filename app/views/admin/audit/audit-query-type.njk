@@ -34,17 +34,23 @@
 
     <form method="POST" novalidate autocomplete="off">
 
+      <h1 class="govuk-heading-l">
+        Query the audit events of external users
+      </h1>
+
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h1 class="govuk-fieldset__heading">
-              Query external audit events
-          </h1>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+              What type of query do you want to run?
+          </h2>
         </legend>
 
         {{ govukRadios(model.queryType) }}
 
       </fieldset>
 
+
+      <p class="govuk-body">If you get a '504 gateway timeout' error when performing your query, try setting or reducing the date range of your query so fewer reocrds would be returned. If you are still unable to retrieve the data without a timeout error, you will have to raise a support ticket so that infrastructure technicians can retrieve the data for you.</p>
 
       <div class="govuk-button-group">
         {{ govukButton({

@@ -217,28 +217,46 @@ const constants = {
   },
   auditQueryTypes: [
     {
-      text: 'Searches and views (for all users)',
-      value: 'date'
-    },
-    {
-      text: 'Logins (for all users)',
-      value: 'login'
+      text: 'Everything',
+      value: 'date',
+      hint: {
+        text: 'All audit events for all external users'
+      }
     },
     {
       text: 'Search terms used',
-      value: 'search'
+      value: 'search',
+      hint: {
+        text: 'View all audit search events for a specific search term or terms'
+      }
     },
     {
-      text: 'Searches and views for a single user',
-      value: 'user'
+      text: 'Username',
+      value: 'user',
+      hint: {
+        text: 'View audit event history for a specific external user'
+      }
     },
     {
-      text: 'Views for a single dog',
-      value: 'dog'
+      text: 'Dog',
+      value: 'dog',
+      hint: {
+        text: 'View audit events for a specific dog record'
+      }
     },
     {
-      text: 'Views for a single owner',
-      value: 'owner'
+      text: 'Owner',
+      value: 'owner',
+      hint: {
+        text: 'View audit events for a specific owner record'
+      }
+    },
+    {
+      text: 'Logins',
+      value: 'login',
+      hint: {
+        text: 'When users logged in, including the operating system and browser used'
+      }
     }
   ]
 }

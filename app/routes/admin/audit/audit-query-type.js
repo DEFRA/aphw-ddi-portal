@@ -7,12 +7,12 @@ const { setInSession, getFromSession } = require('../../../session/session-wrapp
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.auditQueryType.get}`,
+    path: routes.auditQueryType.get,
     options: {
       auth: { scope: [admin] },
       handler: async (request, h) => {
         if (request.query.clear === 'true') {
-          setInSession(request, keys.auditQuery)
+          setInSession(request, keys.auditQuery, null)
           return h.redirect(routes.auditQueryType.get)
         }
 
@@ -35,7 +35,7 @@ module.exports = [
       },
       handler: async (request, h) => {
         const details = getFromSession(request, keys.auditQuery)
-        setInSession(request, keys.auditQuery, { ...details, queryType: request.payload.queryType })
+        setInSession(request, keys.auditQuery, { ...details, queryType: request.payload.queryType, results: null })
         return h.redirect(routes.auditQueryDetails.get)
       }
     }

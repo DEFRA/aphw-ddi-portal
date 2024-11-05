@@ -1,9 +1,32 @@
-const { routes, views, keys, auditQueryTypes } = require('../../../constants/admin')
+const { routes, views, keys } = require('../../../constants/admin')
 const { admin } = require('../../../auth/permissions')
-const { getFromSession } = require('../../../session/session-wrapper')
+const { getFromSession, setInSession } = require('../../../session/session-wrapper')
 const ViewModel = require('../../../models/admin/audit/audit-query-details')
 const { validatePayload } = require('../../../schema/portal/admin/audit/audit-query-details')
-const { addDateComponents } = require('../../../lib/date-helpers')
+const { addDateComponents, getEndOfDayTime } = require('../../../lib/date-helpers')
+const { getExternalEvents } = require('../../../api/ddi-events-api/external-event')
+const { getUser } = require('../../../auth')
+
+const runAuditQuery = async (request, payload) => {
+  console.log('JB payload1', payload)
+  const { queryType, pk, fromDate, toDate } = payload
+  let queryString = `?queryType=${queryType}`
+  if (pk) {
+    queryString += `&pks=${pk}`
+  } else {
+    queryString += '&pks=dummy'
+  }
+  if (fromDate) {
+    queryString += `&fromDate=${fromDate.toISOString()}`
+  }
+  if (toDate) {
+    const endOfDay = getEndOfDayTime(toDate)
+    queryString += `&toDate=${endOfDay.toISOString()}`
+  }
+  console.log('JB queryString', queryString)
+  const res = await getExternalEvents(queryString, getUser(request))
+  return res?.results
+}
 
 module.exports = [
   {
@@ -21,9 +44,13 @@ module.exports = [
           addDateComponents(details, keys.toDate)
         }
 
-        const queryType = details?.queryType
-        const queryTypeText = auditQueryTypes.find(x => x.value === queryType)
-        return h.view(views.auditQueryDetails, new ViewModel({ queryType, queryTypeText: queryTypeText?.text }))
+        if (details[`${details.queryType}_pk`]) {
+          details.pk = details[`${details.queryType}_pk`]
+        } else {
+          details.pk = undefined
+        }
+
+        return h.view(views.auditQueryDetails, new ViewModel(details))
       }
     }
   },
@@ -42,7 +69,14 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        console.log('JB here1')
+        console.log('JB request.payload1', request.payload)
+        const details = getFromSession(request, keys.auditQuery)
+        console.log('JB details1', details)
+        const payload = { ...details, ...request.payload }
+        console.log('JB payload1', payload)
+        payload.results = await runAuditQuery(request, payload)
+        payload[`${details.queryType}_pk`] = payload.pk
+        setInSession(request, keys.auditQuery, payload)
         return h.redirect(routes.auditQueryDetails.get)
       }
     }
