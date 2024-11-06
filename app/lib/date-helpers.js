@@ -103,6 +103,14 @@ const formatToDateTime = date => {
   return format(new Date(date), 'dd MMMM yyyy hh:mm:ss')
 }
 
+const formatToDateTimeConcise = date => {
+  if (date === null || date === undefined) {
+    return date
+  }
+
+  return format(new Date(date), 'dd/MM/yyyy hh:mm:ss')
+}
+
 const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
@@ -225,6 +233,12 @@ const removeIndividualDateComponents = (payload) => {
   return payload
 }
 
+const getEndOfDayTime = (inDate) => {
+  const endOfDay = new Date(inDate)
+  endOfDay.setTime(endOfDay.getTime() + (24 * 60 * 60 * 1000) - 1000)
+  return endOfDay
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -238,10 +252,12 @@ module.exports = {
   validateDate,
   stripTimeFromUTC,
   formatToDateTime,
+  formatToDateTimeConcise,
   getElapsed,
   getMonthsSince,
   getStatsTimestamp,
   getTimeInAmPm,
   getDateAsReadableString,
-  removeIndividualDateComponents
+  removeIndividualDateComponents,
+  getEndOfDayTime
 }
