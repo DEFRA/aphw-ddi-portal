@@ -14,7 +14,7 @@ const getFieldLabel = (queryType) => {
 
 const getFieldHint = (queryType) => {
   if (queryType === 'search') {
-    return 'Enter one or more search terms separated by spaces'
+    return 'Enter one or more search terms separated by commas'
   } else if (queryType === 'dog') {
     return 'For example ED012345'
   } else if (queryType === 'owner') {

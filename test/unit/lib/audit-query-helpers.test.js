@@ -4,7 +4,7 @@ describe('audit query helpers', () => {
   describe('getFieldHint', () => {
     test('handles all options', () => {
       expect(getFieldHint('dog')).toBe('For example ED012345')
-      expect(getFieldHint('search')).toBe('Enter one or more search terms separated by spaces')
+      expect(getFieldHint('search')).toBe('Enter one or more search terms separated by commas')
       expect(getFieldHint('owner')).toBe('For example P-1234-5678. This can be found within the URL of a \'view owner details\' page')
       expect(getFieldHint('user')).toBe('The username is the user\'s email address')
       expect(getFieldHint('date')).toBe('')
@@ -98,6 +98,13 @@ describe('audit query helpers', () => {
       const row = { type: 'uk.gov.defra.ddi.event.external.view.owner', username: 'testuser@here.com' }
       expect(func[0](row)).toBe('View owner')
       expect(func[1](row)).toBe('testuser@here.com')
+    })
+
+    test('handles owner with nulls', () => {
+      const func = getExtraColumnFunctions('owner')
+      const row = {}
+      expect(func[0](row)).toBe('Unknown')
+      expect(func[1](row)).toBe(undefined)
     })
 
     test('eitherDateIsPopulated', () => {
