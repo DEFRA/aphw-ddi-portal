@@ -1,0 +1,73 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+    {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: model.errors
+        }) }}
+    {% endif %}
+
+    <form method="POST" novalidate autocomplete="off">
+
+      <h1 class="govuk-heading-l">
+        Query the audit events of external users
+      </h1>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+              What type of query do you want to run?
+          </h2>
+        </legend>
+
+        {{ govukRadios(model.queryType) }}
+
+      </fieldset>
+
+
+        <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">If you get 504 gateway timeout errors</span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">If you attempt a very broad query, you may get a '504 gateway timeout' error. If this happens, add a date range to your query or reduce the existing date range of your query. More specific queries are less likely to give you timeout errors.</p>
+
+          <p class="govuk-body">If you continue to get timeout errors, raise a support ticket. The support team can do the query for you.</p>
+        </div>
+      </details>
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

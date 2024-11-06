@@ -1,6 +1,7 @@
 const {
   getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
-  getDateAsReadableString, validateDate, removeIndividualDateComponents, formatToGdsShort
+  getDateAsReadableString, validateDate, removeIndividualDateComponents, formatToGdsShort, formatToDateTimeConcise,
+  getEndOfDayTime
 } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
@@ -230,6 +231,26 @@ describe('date-helpers', () => {
 
     test('should handle a typical date', () => {
       expect(formatToGdsShort(new Date(2001, 5, 8))).toBe('08 Jun 2001')
+    })
+  })
+
+  describe('formatToDateTimeConcise', () => {
+    test('should handle null dates', () => {
+      expect(formatToDateTimeConcise(null)).toBe(null)
+    })
+
+    test('should handle undefined dates', () => {
+      expect(formatToDateTimeConcise(undefined)).toBe(undefined)
+    })
+
+    test('should handle a typical date', () => {
+      expect(formatToDateTimeConcise(new Date(2001, 5, 8, 11, 47, 12))).toBe('08/06/2001 11:47:12')
+    })
+  })
+
+  describe('getEndOfDayTime', () => {
+    test('should handle a typical date', () => {
+      expect(getEndOfDayTime(new Date(2001, 5, 8))).toEqual(new Date(2001, 5, 8, 23, 59, 59))
     })
   })
 })

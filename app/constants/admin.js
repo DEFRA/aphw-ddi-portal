@@ -130,6 +130,14 @@ const constants = {
     insurance: {
       get: '/admin/insurance',
       post: '/admin/insurance'
+    },
+    auditQueryType: {
+      get: '/admin/audit/audit-query-type',
+      post: '/admin/audit/audit-query-type'
+    },
+    auditQueryDetails: {
+      get: '/admin/audit/audit-query-details',
+      post: '/admin/audit/audit-query-details'
     }
   },
   views: {
@@ -152,7 +160,9 @@ const constants = {
     deleteOwnersConfirm: 'admin/delete/owners-confirm',
     documentation: 'swagger',
     addPoliceUserList: 'admin/users/add/list',
-    addPoliceUserConfirm: 'admin/users/add/confirm'
+    addPoliceUserConfirm: 'admin/users/add/confirm',
+    auditQueryType: 'admin/audit/audit-query-type',
+    auditQueryDetails: 'admin/audit/audit-query-details'
   },
   breadcrumbs: [
     {
@@ -197,11 +207,58 @@ const constants = {
   keys: {
     oldDogs: 'oldDogs',
     orphanedOwners: 'orphanedOwners',
-    policeUsers: 'policeUsers'
+    policeUsers: 'policeUsers',
+    fromDate: 'fromDate',
+    toDate: 'toDate',
+    auditQuery: 'auditQuery'
   },
   documentation: {
     allowedEnvironments: ['dev', 'snd', 'local']
-  }
+  },
+  auditQueryTypes: [
+    {
+      text: 'Everything',
+      value: 'date',
+      hint: {
+        text: 'All audit events for all external users'
+      }
+    },
+    {
+      text: 'Search terms used',
+      value: 'search',
+      hint: {
+        text: 'View all audit search events for a specific search term or terms'
+      }
+    },
+    {
+      text: 'Username',
+      value: 'user',
+      hint: {
+        text: 'View audit event history for a specific external user'
+      }
+    },
+    {
+      text: 'Dog',
+      value: 'dog',
+      hint: {
+        text: 'View audit events for a specific dog record'
+      }
+    },
+    {
+      text: 'Owner',
+      value: 'owner',
+      hint: {
+        text: 'View audit events for a specific owner record'
+      }
+    },
+    {
+      text: 'Logins',
+      value: 'login',
+      hint: {
+        text: 'When users logged in, including the operating system and browser used'
+      }
+    }
+  ]
 }
 
 module.exports = constants
