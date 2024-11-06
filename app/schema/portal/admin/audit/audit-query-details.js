@@ -55,7 +55,6 @@ const validatePayload = (payload) => {
     throw error
   }
 
-  console.log('JB value', value)
   return value
 }
 

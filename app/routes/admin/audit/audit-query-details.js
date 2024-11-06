@@ -8,7 +8,6 @@ const { getExternalEvents } = require('../../../api/ddi-events-api/external-even
 const { getUser } = require('../../../auth')
 
 const runAuditQuery = async (request, payload) => {
-  console.log('JB payload1', payload)
   const { queryType, pk, fromDate, toDate } = payload
   let queryString = `?queryType=${queryType}`
   if (pk) {
@@ -23,7 +22,6 @@ const runAuditQuery = async (request, payload) => {
     const endOfDay = getEndOfDayTime(toDate)
     queryString += `&toDate=${endOfDay.toISOString()}`
   }
-  console.log('JB queryString', queryString)
   const res = await getExternalEvents(queryString, getUser(request))
   return res?.results
 }
@@ -69,11 +67,8 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        console.log('JB request.payload1', request.payload)
         const details = getFromSession(request, keys.auditQuery)
-        console.log('JB details1', details)
         const payload = { ...details, ...request.payload }
-        console.log('JB payload1', payload)
         payload.results = await runAuditQuery(request, payload)
         payload[`${details.queryType}_pk`] = payload.pk
         setInSession(request, keys.auditQuery, payload)
