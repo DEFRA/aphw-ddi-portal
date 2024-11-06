@@ -1,8 +1,8 @@
 function ViewModel (data, breadcrumbLink) {
   this.model = {
     breadcrumbLink,
-    policeForceName: data?.policeForceName,
-    numberOfDogs: data?.numOfDogs
+    policeForceName: data?.policeResult?.policeForceResult?.policeForceName,
+    numberOfDogs: data?.policeResult?.policeForceResult?.numOfDogs
   }
 }
 

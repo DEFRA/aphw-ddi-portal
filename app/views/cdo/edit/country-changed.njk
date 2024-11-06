@@ -1,0 +1,38 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form class="form" method="post">
+      <h1 class="govuk-heading-l">The owner’s country is now {{ model.country }}</h1>
+
+      {% if model.country == 'Scotland' %}
+      <p class="govuk-body">Moving dogs from England or Wales to Scotland means:</p>
+      {% else %}
+      <p class="govuk-body">Moving dogs from Scotland to England or Wales means:</p>
+      {% endif %}
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>existing exemptions are no longer valid</li>
+        <li>the police force for the dogs changes</li>
+      </ul>
+      {% if model.policeForceName %}
+      <p class="govuk-body">The police force is now <span class="govuk-!-font-weight-bold">{{ model.policeForceName }}</span>.</p>
+      {% endif %}
+
+      <button class="govuk-button" data-module="govuk-button">
+        Continue
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
