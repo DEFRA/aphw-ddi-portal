@@ -9,8 +9,8 @@ function ViewModel (ownerDetails, ownerResults, errors) {
     lastName: ownerDetails.lastName,
     selectAddressFieldset: {
       legend: {
-        text: `Select the address for ${ownerDetails.firstName} ${ownerDetails.lastName}`,
-        classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6',
+        text: 'Select the address',
+        classes: 'govuk-fieldset__legend--m',
         isPageHeading: true
       }
     },
@@ -30,11 +30,8 @@ function ViewModel (ownerDetails, ownerResults, errors) {
           divider: 'or'
         },
         {
-          text: "The owner's address is not listed",
-          value: -1,
-          hint: {
-            html: 'By not selecting a listed address,<br>you will create a new owner record'
-          }
+          text: 'Create a new record',
+          value: -1
         }
       ])
     },
