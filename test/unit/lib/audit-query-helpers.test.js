@@ -100,11 +100,11 @@ describe('audit query helpers', () => {
       expect(func[1](row)).toBe('testuser@here.com')
     })
 
-    test('handles owner with nulls', () => {
-      const func = getExtraColumnFunctions('owner')
+    test('handles invalid type', () => {
+      const func = getExtraColumnFunctions('invalid')
       const row = {}
-      expect(func[0](row)).toBe('Unknown')
-      expect(func[1](row)).toBe(undefined)
+      expect(func[0](row)).toBe('')
+      expect(func[1](row)).toBe('')
     })
 
     test('eitherDateIsPopulated', () => {

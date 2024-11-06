@@ -88,6 +88,11 @@ const getExtraColumnFunctions = (queryType) => {
       (row) => mapEventType(row?.type),
       (row) => row?.username]
   }
+  return [
+    () => '',
+    () => '',
+    () => ''
+  ]
 }
 
 const getExtraColumnNames = (queryType) => {
