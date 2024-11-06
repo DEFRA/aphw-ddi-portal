@@ -103,8 +103,9 @@ describe('audit query helpers', () => {
     test('handles invalid type', () => {
       const func = getExtraColumnFunctions('invalid')
       const row = {}
-      expect(func[0](row)).toBe('')
-      expect(func[1](row)).toBe('')
+      expect(func[0](row)).toBe('unknown')
+      expect(func[1](row)).toBe('unknown')
+      expect(func[2](row)).toBe('unknown')
     })
 
     test('eitherDateIsPopulated', () => {

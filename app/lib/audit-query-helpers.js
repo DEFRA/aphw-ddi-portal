@@ -89,9 +89,9 @@ const getExtraColumnFunctions = (queryType) => {
       (row) => row?.username]
   }
   return [
-    () => '',
-    () => '',
-    () => ''
+    () => 'unknown',
+    () => 'unknown',
+    () => 'unknown'
   ]
 }
 
