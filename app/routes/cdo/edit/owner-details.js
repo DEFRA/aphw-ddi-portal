@@ -67,12 +67,12 @@ module.exports = [
           return errorView(request, h, error)
         }
 
-        const origPerson = await getPersonByReference(request.params.personReference, user)
+        const origPerson = await getPersonByReference(request.payload.personReference, user)
 
         const updatePoliceResult = await updatePersonAndForce(payload, user)
 
-        const oldCountry = person?.address?.country
-        const newCountry = origPerson?.address?.country
+        const oldCountry = origPerson?.address?.country
+        const newCountry = person?.country
 
         const defaultRoute = `${routes.viewOwnerDetails.get}/${person.personReference}${extractBackNavParam(request)}`
         const nextScreen = determineNextScreenAfterAddressChange(request, oldCountry, newCountry, updatePoliceResult, person.personReference, defaultRoute)
