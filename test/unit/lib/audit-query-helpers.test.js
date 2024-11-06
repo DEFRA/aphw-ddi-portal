@@ -1,4 +1,4 @@
-const { getFieldHint, getFieldLabel, mapEventType, getNumberFoundText, getExtraColumnFunctions } = require('../../../app/lib/audit-query-helpers')
+const { getFieldHint, getFieldLabel, mapEventType, getNumberFoundText, getExtraColumnFunctions, eitherDateIsPopulated, getExtraColumnNames } = require('../../../app/lib/audit-query-helpers')
 
 describe('audit query helpers', () => {
   describe('getFieldHint', () => {
@@ -46,7 +46,77 @@ describe('audit query helpers', () => {
     test('handles user', () => {
       const func = getExtraColumnFunctions('user')
       const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' } }
-      expect(func(row)).toBe(['Search', 'term1'])
+      expect(func[0](row)).toBe('Search')
+      expect(func[1](row)).toBe('term1')
+    })
+
+    test('handles user alternative value', () => {
+      const func = getExtraColumnFunctions('user')
+      const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
+      expect(func[0](row)).toBe('View dog')
+      expect(func[1](row)).toBe('ED123')
+    })
+
+    test('handles search', () => {
+      const func = getExtraColumnFunctions('search')
+      const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' }, username: 'testuser@here.com' }
+      expect(func[0](row)).toBe('term1')
+      expect(func[1](row)).toBe('testuser@here.com')
+    })
+
+    test('handles date', () => {
+      const func = getExtraColumnFunctions('date')
+      const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' }, username: 'testuser@here.com' }
+      expect(func[0](row)).toBe('Search')
+      expect(func[1](row)).toBe('term1')
+      expect(func[2](row)).toBe('testuser@here.com')
+    })
+
+    test('handles date alternative value', () => {
+      const func = getExtraColumnFunctions('date')
+      const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
+      expect(func[0](row)).toBe('View dog')
+      expect(func[1](row)).toBe('ED123')
+    })
+
+    test('handles login', () => {
+      const func = getExtraColumnFunctions('login')
+      const row = { type: 'uk.gov.defra.ddi.event.external.login', details: { userAgent: 'chrome' }, username: 'testuser@here.com' }
+      expect(func[0](row)).toBe('chrome')
+      expect(func[1](row)).toBe('testuser@here.com')
+    })
+
+    test('handles dog', () => {
+      const func = getExtraColumnFunctions('dog')
+      const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', username: 'testuser@here.com' }
+      expect(func[0](row)).toBe('View dog')
+      expect(func[1](row)).toBe('testuser@here.com')
+    })
+
+    test('handles owner', () => {
+      const func = getExtraColumnFunctions('owner')
+      const row = { type: 'uk.gov.defra.ddi.event.external.view.owner', username: 'testuser@here.com' }
+      expect(func[0](row)).toBe('View owner')
+      expect(func[1](row)).toBe('testuser@here.com')
+    })
+
+    test('eitherDateIsPopulated', () => {
+      expect(eitherDateIsPopulated()).toBeFalsy()
+      expect(eitherDateIsPopulated({})).toBeFalsy()
+      expect(eitherDateIsPopulated({ fromDate: null, toDate: null })).toBeFalsy()
+      expect(eitherDateIsPopulated({ fromDate: undefined, toDate: undefined })).toBeFalsy()
+      expect(eitherDateIsPopulated({ fromDate: new Date(2024, 1, 1), toDate: undefined })).toBeTruthy()
+      expect(eitherDateIsPopulated({ fromDate: null, toDate: new Date(2024, 2, 2) })).toBeTruthy()
+      expect(eitherDateIsPopulated({ fromDate: new Date(2024, 1, 1), toDate: new Date(2024, 2, 2) })).toBeTruthy()
+    })
+
+    test('getExtraColumnNames', () => {
+      expect(getExtraColumnNames('user')).toEqual(['Action', 'Key'])
+      expect(getExtraColumnNames('search')).toEqual(['Search terms', 'Username'])
+      expect(getExtraColumnNames('dog')).toEqual(['Action', 'Username'])
+      expect(getExtraColumnNames('owner')).toEqual(['Action', 'Username'])
+      expect(getExtraColumnNames('login')).toEqual(['Operating system and browser', 'Username'])
+      expect(getExtraColumnNames('date')).toEqual(['Action', 'Key', 'Username'])
     })
   })
 })

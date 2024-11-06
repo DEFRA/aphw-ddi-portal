@@ -50,7 +50,16 @@
       </fieldset>
 
 
-      <p class="govuk-body">If you get a '504 gateway timeout' error when performing your query, try setting or reducing the date range of your query so fewer reocrds would be returned. If you are still unable to retrieve the data without a timeout error, you will have to raise a support ticket so that infrastructure technicians can retrieve the data for you.</p>
+        <details class="govuk-details govuk-!-width-two-thirds">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">If you get 504 gateway timeout errors</span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">If you attempt a very broad query, you may get a '504 gateway timeout' error. If this happens, add a date range to your query or reduce the existing date range of your query. Queries which are more specific and scan a smaller set of data are more likely to succeed.</p>
+
+          <p class="govuk-body">If you to get timeout errors, raise a support ticket. The support team can do the query for you.</p>
+        </div>
+      </details>
 
       <div class="govuk-button-group">
         {{ govukButton({
