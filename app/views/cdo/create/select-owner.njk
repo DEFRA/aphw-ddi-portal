@@ -34,6 +34,9 @@
       {% endif %}
 
       <form method="post" novalidate autocomplete="off">
+        <h1 class="govuk-heading-l">There are existing dog owners named {{ model.firstName }} {{ model.lastName }}</h1>
+        <p class="govuk-body">Select the address for {{ model.firstName }} {{ model.lastName }} to add the new CDO or interim exemption to an existing owner record.</p>
+        <p class="govuk-body">If the address is not listed below, create a new owner record.</p>
         {% call govukFieldset(model.selectAddressFieldset) %}
         {{ govukRadios(model.address)}}
 
