@@ -76,18 +76,34 @@ describe('Audit query details route', () => {
 
     test('POST /admin/audit/audit-query-details forwards to same screen with valid payload', async () => {
       getFromSession.mockReturnValue({ queryType: 'user' })
+      const today = new Date()
       const options = {
         method: 'POST',
         url: '/admin/audit/audit-query-details',
         auth,
-        payload: { queryType: 'user', pk: 'testuser7@here.com', fromDate: new Date(2024, 3, 10) }
+        payload: {
+          queryType: 'user',
+          pk: 'testuser@here.com',
+          'fromDate-year': '2024',
+          'fromDate-month': '3',
+          'fromDate-day': '10',
+          'toDate-year': `${today.getUTCFullYear()}`,
+          'toDate-month': `${today.getUTCMonth() + 1}`,
+          'toDate-day': `${today.getUTCDate()}`
+        }
       }
+
+      const thisEvening = new Date(today)
+      thisEvening.setUTCHours(23)
+      thisEvening.setUTCMinutes(59)
+      thisEvening.setUTCSeconds(59)
+      thisEvening.setUTCMilliseconds(0)
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/admin/audit/audit-query-details')
-      expect(getExternalEvents).toHaveBeenCalledWith('?queryType=user&pks=testuser@here.com', user)
+      expect(getExternalEvents).toHaveBeenCalledWith(`?queryType=user&pks=testuser@here.com&fromDate=2024-03-10T00:00:00.000Z&toDate=${thisEvening.toISOString()}`, user)
     })
   })
 })
