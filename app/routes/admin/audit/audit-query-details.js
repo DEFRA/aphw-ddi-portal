@@ -11,7 +11,11 @@ const runAuditQuery = async (request, payload) => {
   const { queryType, pk, fromDate, toDate } = payload
   let queryString = `?queryType=${queryType}`
   if (pk) {
-    queryString += `&pks=${pk}`
+    if (queryType === 'dog') {
+      queryString += pk.startsWith('ED') ? `&pks=${pk}` : `&pks=ED${pk}`
+    } else {
+      queryString += `&pks=${pk}`
+    }
   } else {
     queryString += '&pks=dummy'
   }

@@ -1,7 +1,7 @@
 const {
   getElapsed, formatToDateTime, getMonthsSince, dateComponentsToString, getStatsTimestamp, getTimeInAmPm,
   getDateAsReadableString, validateDate, removeIndividualDateComponents, formatToGdsShort, formatToDateTimeConcise,
-  getEndOfDayTime
+  getEndOfDayTime, formatToDateConcise
 } = require('../../../app/lib/date-helpers')
 
 describe('date-helpers', () => {
@@ -204,6 +204,20 @@ describe('date-helpers', () => {
       const res = validateDate(value, helpers, false, false, true)
       expect(res).toEqual(new Date(2099, 0, 1))
     })
+
+    test('should error when mustBeAfterDate is set and second date is not after first date', () => {
+      const value = { day: '01', month: '01', year: '2024' }
+      const helpers = { state: { path: ['toDate'], ancestors: [{ fromDate: new Date(2024, 5, 5) }] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, false, false, 'fromDate')
+      expect(res).toBe('Date must be equal to or after 05/06/2024')
+    })
+
+    test('should pass when mustBeAfterDate is set and second date is after first date', () => {
+      const value = { day: '01', month: '07', year: '2024' }
+      const helpers = { state: { path: ['toDate'], ancestors: [{ fromDate: new Date(2024, 5, 5) }] }, message: (txt) => txt }
+      const res = validateDate(value, helpers, false, false, false, 'fromDate')
+      expect(res.toISOString().startsWith('2024-06-')).toBeTruthy()
+    })
   })
 
   describe('removeIndividualDateComponents', () => {
@@ -251,6 +265,20 @@ describe('date-helpers', () => {
   describe('getEndOfDayTime', () => {
     test('should handle a typical date', () => {
       expect(getEndOfDayTime(new Date(2001, 5, 8))).toEqual(new Date(2001, 5, 8, 23, 59, 59))
+    })
+  })
+
+  describe('formatToDateConcise', () => {
+    test('should handle null dates', () => {
+      expect(formatToDateConcise(null)).toBe(null)
+    })
+
+    test('should handle undefined dates', () => {
+      expect(formatToDateConcise(undefined)).toBe(undefined)
+    })
+
+    test('should handle a typical date', () => {
+      expect(formatToDateConcise(new Date(2002, 5, 8, 11, 47, 12))).toBe('08/06/2002')
     })
   })
 })
