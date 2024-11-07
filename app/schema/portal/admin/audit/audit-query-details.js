@@ -6,12 +6,12 @@ const baseSchema = Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom((value, helper) => validateDate(value, helper, false, true)).optional(),
+  }).custom((value, helper) => validateDate(value, helper, false, true, false)).optional(),
   toDate: Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).custom((value, helper) => validateDate(value, helper, false, false, true)).optional(),
+  }).custom((value, helper) => validateDate(value, helper, false, true, false, 'fromDate')).optional(),
   queryType: Joi.string().required(),
   pk: Joi.string()
     .when('queryType',

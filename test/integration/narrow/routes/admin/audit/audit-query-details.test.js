@@ -151,5 +151,43 @@ describe('Audit query details route', () => {
       expect(response.headers.location).toBe('/admin/audit/audit-query-details')
       expect(getExternalEvents).toHaveBeenCalledWith('?queryType=date&pks=dummy', user)
     })
+
+    test('POST /admin/audit/audit-query-details handles dog query', async () => {
+      getFromSession.mockReturnValue({ queryType: 'dog' })
+      const options = {
+        method: 'POST',
+        url: '/admin/audit/audit-query-details',
+        auth,
+        payload: {
+          queryType: 'dog',
+          pk: 'ED12345'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/audit/audit-query-details')
+      expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog&pks=ED12345', user)
+    })
+
+    test('POST /admin/audit/audit-query-details handles dog query where no ED prefix supplied', async () => {
+      getFromSession.mockReturnValue({ queryType: 'dog' })
+      const options = {
+        method: 'POST',
+        url: '/admin/audit/audit-query-details',
+        auth,
+        payload: {
+          queryType: 'dog',
+          pk: '12345'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/admin/audit/audit-query-details')
+      expect(getExternalEvents).toHaveBeenCalledWith('?queryType=dog&pks=ED12345', user)
+    })
   })
 })

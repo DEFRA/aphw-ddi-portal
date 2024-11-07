@@ -1,5 +1,5 @@
 const { UTCDate } = require('@date-fns/utc')
-const { parse, isValid, isFuture, isToday, format } = require('date-fns')
+const { parse, isValid, isFuture, isToday, format, isAfter } = require('date-fns')
 const { formatInTimeZone } = require('date-fns-tz')
 
 const validDateFormats = [
@@ -111,11 +111,19 @@ const formatToDateTimeConcise = date => {
   return format(new Date(date), 'dd/MM/yyyy hh:mm:ss')
 }
 
+const formatToDateConcise = date => {
+  if (date === null || date === undefined) {
+    return date
+  }
+
+  return format(new Date(date), 'dd/MM/yyyy')
+}
+
 const isEmptyDate = date => {
   return date?.year === '' && date?.month === '' && date?.day === ''
 }
 
-const validateDate = (value, helpers, required = false, preventFutureDates = false, preventPastDates = false) => {
+const validateDate = (value, helpers, required = false, preventFutureDates = false, preventPastDates = false, mustBeAfterDate = null) => {
   const { day, month, year } = value
   const dateComponents = { day, month, year }
   const invalidComponents = []
@@ -146,6 +154,13 @@ const validateDate = (value, helpers, required = false, preventFutureDates = fal
 
     if (preventPastDates && !isFuture(date) && !isToday(date)) {
       return helpers.message('Date must be today or in the future', { path: [elementPath, ['day', 'month', 'year']] })
+    }
+
+    if (mustBeAfterDate) {
+      const otherDate = helpers.state.ancestors ? helpers.state.ancestors[0][mustBeAfterDate] : undefined
+      if (otherDate && isAfter(otherDate, date)) {
+        return helpers.message(`Date must be equal to or after ${formatToDateConcise(otherDate)}`, { path: [elementPath, ['day', 'month', 'year']] })
+      }
     }
 
     return date
@@ -259,5 +274,6 @@ module.exports = {
   getTimeInAmPm,
   getDateAsReadableString,
   removeIndividualDateComponents,
-  getEndOfDayTime
+  getEndOfDayTime,
+  formatToDateConcise
 }

@@ -87,9 +87,14 @@
         <tbody>
             {% for res in model.results %}
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell defra-align-table">{{model.formatTimestamp(res.timestamp)}}</td>
+                <td class="govuk-table__cell defra-align-table">{{ model.formatTimestamp(res.timestamp) }}</td>
                 {% for extraColumnFn in model.extraColumnFns %}
-                <td class="govuk-table__cell defra-align-table">{{extraColumnFn(res)}}</td>
+                {% set colRes = extraColumnFn(res) %}
+                {% if colRes.text %}
+                <td class="govuk-table__cell defra-align-table">{{ colRes.text }}</td>
+                {% else %}
+                <td class="govuk-table__cell defra-align-table"><a href="/cdo/view/{{ colRes.linkType }}/{{ colRes.linkPk }}{{ model.srcHashParam }}">{{ colRes.linkPk }}</a></td>
+                {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}

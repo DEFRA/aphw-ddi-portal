@@ -54,44 +54,64 @@ const mapEventType = (eventType) => {
   return 'Unknown'
 }
 
+const mapEventLinkType = (eventType) => {
+  if (eventType === 'uk.gov.defra.ddi.event.external.view.dog') {
+    return 'dog-details'
+  }
+  if (eventType === 'uk.gov.defra.ddi.event.external.view.dog.activity') {
+    return 'dog-details'
+  }
+  if (eventType === 'uk.gov.defra.ddi.event.external.view.owner') {
+    return 'owner-details'
+  }
+  if (eventType === 'uk.gov.defra.ddi.event.external.view.owner.activity') {
+    return 'owner-details'
+  }
+  return 'Other'
+}
+
 const getExtraColumnFunctions = (queryType) => {
   if (queryType === 'user') {
     return [
-      (row) => mapEventType(row?.type),
-      (row) => row?.details?.searchTerms ? row?.details?.searchTerms : row?.details?.pk
+      (row) => ({ text: mapEventType(row?.type) }),
+      (row) => row?.details?.searchTerms ? ({ text: row?.details?.searchTerms }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) })
     ]
   }
   if (queryType === 'search') {
     return [
-      (row) => row?.details?.searchTerms,
-      (row) => row?.username
+      (row) => ({ text: row?.details?.searchTerms }),
+      (row) => ({ text: row?.username })
     ]
   }
   if (queryType === 'date') {
     return [
-      (row) => mapEventType(row?.type),
-      (row) => row?.details?.searchTerms ? row?.details?.searchTerms : row?.details?.pk,
-      (row) => row?.username]
+      (row) => ({ text: mapEventType(row?.type) }),
+      (row) => row?.details?.searchTerms ? ({ text: row.details.searchTerms }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) }),
+      (row) => ({ text: row?.username })
+    ]
   }
   if (queryType === 'login') {
     return [
-      (row) => row?.details?.userAgent,
-      (row) => row?.username]
+      (row) => ({ text: row?.details?.userAgent }),
+      (row) => ({ text: row?.username })
+    ]
   }
   if (queryType === 'dog') {
     return [
-      (row) => mapEventType(row?.type),
-      (row) => row?.username]
+      (row) => ({ text: mapEventType(row?.type) }),
+      (row) => ({ text: row?.username })
+    ]
   }
   if (queryType === 'owner') {
     return [
-      (row) => mapEventType(row?.type),
-      (row) => row?.username]
+      (row) => ({ text: mapEventType(row?.type) }),
+      (row) => ({ text: row?.username })
+    ]
   }
   return [
-    () => 'unknown',
-    () => 'unknown',
-    () => 'unknown'
+    () => ({ text: 'unknown' }),
+    () => ({ text: 'unknown' }),
+    () => ({ text: 'unknown' })
   ]
 }
 
@@ -120,5 +140,6 @@ module.exports = {
   getExtraColumnNames,
   eitherDateIsPopulated,
   getNumberFoundText,
-  mapEventType
+  mapEventType,
+  mapEventLinkType
 }

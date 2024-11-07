@@ -1,4 +1,4 @@
-const { getFieldHint, getFieldLabel, mapEventType, getNumberFoundText, getExtraColumnFunctions, eitherDateIsPopulated, getExtraColumnNames } = require('../../../app/lib/audit-query-helpers')
+const { getFieldHint, getFieldLabel, mapEventType, mapEventLinkType, getNumberFoundText, getExtraColumnFunctions, eitherDateIsPopulated, getExtraColumnNames } = require('../../../app/lib/audit-query-helpers')
 
 describe('audit query helpers', () => {
   describe('getFieldHint', () => {
@@ -32,6 +32,17 @@ describe('audit query helpers', () => {
     })
   })
 
+  describe('mapEventLinkType', () => {
+    test('handles all options', () => {
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.search')).toBe('Other')
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.view.dog')).toBe('dog-details')
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.view.dog.activity')).toBe('dog-details')
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.view.owner')).toBe('owner-details')
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.view.owner.activity')).toBe('owner-details')
+      expect(mapEventLinkType('uk.gov.defra.ddi.event.external.xxx')).toBe('Other')
+    })
+  })
+
   describe('getNumberFoundText', () => {
     test('handles all options', () => {
       expect(getNumberFoundText(null)).toBe('No records found')
@@ -46,66 +57,66 @@ describe('audit query helpers', () => {
     test('handles user', () => {
       const func = getExtraColumnFunctions('user')
       const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' } }
-      expect(func[0](row)).toBe('Search')
-      expect(func[1](row)).toBe('term1')
+      expect(func[0](row)).toEqual({ text: 'Search' })
+      expect(func[1](row)).toEqual({ text: 'term1' })
     })
 
     test('handles user alternative value', () => {
       const func = getExtraColumnFunctions('user')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
-      expect(func[0](row)).toBe('View dog')
-      expect(func[1](row)).toBe('ED123')
+      expect(func[0](row)).toEqual({ text: 'View dog' })
+      expect(func[1](row)).toEqual({ linkPk: 'ED123', linkType: 'dog-details' })
     })
 
     test('handles search', () => {
       const func = getExtraColumnFunctions('search')
       const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' }, username: 'testuser@here.com' }
-      expect(func[0](row)).toBe('term1')
-      expect(func[1](row)).toBe('testuser@here.com')
+      expect(func[0](row)).toEqual({ text: 'term1' })
+      expect(func[1](row)).toEqual({ text: 'testuser@here.com' })
     })
 
     test('handles date', () => {
       const func = getExtraColumnFunctions('date')
       const row = { type: 'uk.gov.defra.ddi.event.external.search', details: { searchTerms: 'term1' }, username: 'testuser@here.com' }
-      expect(func[0](row)).toBe('Search')
-      expect(func[1](row)).toBe('term1')
-      expect(func[2](row)).toBe('testuser@here.com')
+      expect(func[0](row)).toEqual({ text: 'Search' })
+      expect(func[1](row)).toEqual({ text: 'term1' })
+      expect(func[2](row)).toEqual({ text: 'testuser@here.com' })
     })
 
     test('handles date alternative value', () => {
       const func = getExtraColumnFunctions('date')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
-      expect(func[0](row)).toBe('View dog')
-      expect(func[1](row)).toBe('ED123')
+      expect(func[0](row)).toEqual({ text: 'View dog' })
+      expect(func[1](row)).toEqual({ linkPk: 'ED123', linkType: 'dog-details' })
     })
 
     test('handles login', () => {
       const func = getExtraColumnFunctions('login')
       const row = { type: 'uk.gov.defra.ddi.event.external.login', details: { userAgent: 'chrome' }, username: 'testuser@here.com' }
-      expect(func[0](row)).toBe('chrome')
-      expect(func[1](row)).toBe('testuser@here.com')
+      expect(func[0](row)).toEqual({ text: 'chrome' })
+      expect(func[1](row)).toEqual({ text: 'testuser@here.com' })
     })
 
     test('handles dog', () => {
       const func = getExtraColumnFunctions('dog')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', username: 'testuser@here.com' }
-      expect(func[0](row)).toBe('View dog')
-      expect(func[1](row)).toBe('testuser@here.com')
+      expect(func[0](row)).toEqual({ text: 'View dog' })
+      expect(func[1](row)).toEqual({ text: 'testuser@here.com' })
     })
 
     test('handles owner', () => {
       const func = getExtraColumnFunctions('owner')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.owner', username: 'testuser@here.com' }
-      expect(func[0](row)).toBe('View owner')
-      expect(func[1](row)).toBe('testuser@here.com')
+      expect(func[0](row)).toEqual({ text: 'View owner' })
+      expect(func[1](row)).toEqual({ text: 'testuser@here.com' })
     })
 
     test('handles invalid type', () => {
       const func = getExtraColumnFunctions('invalid')
       const row = {}
-      expect(func[0](row)).toBe('unknown')
-      expect(func[1](row)).toBe('unknown')
-      expect(func[2](row)).toBe('unknown')
+      expect(func[0](row)).toEqual({ text: 'unknown' })
+      expect(func[1](row)).toEqual({ text: 'unknown' })
+      expect(func[2](row)).toEqual({ text: 'unknown' })
     })
 
     test('eitherDateIsPopulated', () => {
