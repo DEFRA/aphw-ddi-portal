@@ -6,9 +6,10 @@ const { getFieldHint, getFieldLabel, getExtraColumnFunctions, getExtraColumnName
 
 const showPkFieldForTypes = ['dog', 'owner', 'user', 'search']
 
-function ViewModel (details, errors) {
+function ViewModel (details, srcHashParam, errors) {
   this.model = {
     backLink: routes.auditQueryType.get,
+    srcHashParam,
     queryType: details.queryType,
     queryTypeText: auditQueryTypes.find(x => x.value === details?.queryType)?.text,
     numberFoundText: getNumberFoundText(details?.results),
