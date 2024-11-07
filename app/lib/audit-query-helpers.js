@@ -140,5 +140,6 @@ module.exports = {
   getExtraColumnNames,
   eitherDateIsPopulated,
   getNumberFoundText,
-  mapEventType
+  mapEventType,
+  mapEventLinkType
 }

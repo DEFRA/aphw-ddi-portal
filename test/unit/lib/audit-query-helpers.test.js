@@ -65,7 +65,7 @@ describe('audit query helpers', () => {
       const func = getExtraColumnFunctions('user')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
       expect(func[0](row)).toEqual({ text: 'View dog' })
-      expect(func[1](row)).toEqual({ link: 'ED123' })
+      expect(func[1](row)).toEqual({ linkPk: 'ED123', linkType: 'dog-details' })
     })
 
     test('handles search', () => {
@@ -87,7 +87,7 @@ describe('audit query helpers', () => {
       const func = getExtraColumnFunctions('date')
       const row = { type: 'uk.gov.defra.ddi.event.external.view.dog', details: { pk: 'ED123' } }
       expect(func[0](row)).toEqual({ text: 'View dog' })
-      expect(func[1](row)).toEqual({ link: 'ED123' })
+      expect(func[1](row)).toEqual({ linkPk: 'ED123', linkType: 'dog-details' })
     })
 
     test('handles login', () => {
