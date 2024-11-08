@@ -42,6 +42,11 @@ describe('date-helpers', () => {
       const result = formatToDateTime(new Date(2024, 5, 5, 10, 4, 1))
       expect(result).toBe('05 June 2024 10:04:01')
     })
+
+    test('should handle normal dates and 24 hour clock', () => {
+      const result = formatToDateTime(new Date(2024, 5, 5, 22, 4, 1))
+      expect(result).toBe('05 June 2024 22:04:01')
+    })
   })
 
   describe('getMonthsSince', () => {
@@ -259,6 +264,10 @@ describe('date-helpers', () => {
 
     test('should handle a typical date', () => {
       expect(formatToDateTimeConcise(new Date(2001, 5, 8, 11, 47, 12))).toBe('08/06/2001 11:47:12')
+    })
+
+    test('should handle a typical date with 24 hour clocl', () => {
+      expect(formatToDateTimeConcise(new Date(2001, 5, 8, 15, 47, 12))).toBe('08/06/2001 15:47:12')
     })
   })
 
