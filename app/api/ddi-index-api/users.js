@@ -44,6 +44,7 @@ const getUsers = async (callingUser) => {
 const addUser = async (username, callingUser) => {
   try {
     const payload = await post(userEndpoint, username, callingUser)
+
     return payload.username
   } catch (e) {
     if (e.isBoom && e.output.statusCode === 409) {
@@ -73,6 +74,7 @@ const addUsers = async (usersDto, user) => {
   const res = await boomRequest(usersEndpoint, 'POST', mappedUsers, user, false)
 
   const failures = res.payload.errors?.map(mapUsersToUsernames)
+
   const responseData = {
     users: {
       success: res.payload.users.map(mapUsersToUsernames),

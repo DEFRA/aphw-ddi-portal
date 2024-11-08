@@ -4,6 +4,7 @@ const blobConfig = require('./storage/blob')
 const cacheConfig = require('./cache')
 const { getEnvironmentVariable } = require('../lib/environment-helpers')
 const { DEVELOPMENT, TEST, PRODUCTION } = require('../constants/environments')
+const { server } = require('../constants/server')
 
 // Define config schema
 const schema = Joi.object({
@@ -11,6 +12,7 @@ const schema = Joi.object({
   port: Joi.number().default(3001),
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   environmentCode: Joi.string().default('prod'),
+  staticCacheTimeoutMillis: Joi.number().default(server.staticCacheTimeoutMillis),
   ddiIndexApi: {
     baseUrl: Joi.string().required()
   },

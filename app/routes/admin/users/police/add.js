@@ -308,6 +308,7 @@ module.exports = [
       },
       handler: async (request, h) => {
         const policeUsers = await addUsers(request.payload.users, getUser(request))
+
         initialisePoliceUsers(request)
 
         const model = PoliceOffersAddedViewModel(policeUsers.users.success)
