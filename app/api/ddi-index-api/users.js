@@ -81,7 +81,6 @@ const addUsers = async (usersDto, user) => {
       failures
     }
   }
-  console.log('~~~~~~ Chris Debug ~~~~~~ ', 'ResponseData', responseData)
 
   if (res.payload.users.length) {
     return responseData
