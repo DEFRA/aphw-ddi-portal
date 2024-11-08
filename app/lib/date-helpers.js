@@ -100,7 +100,7 @@ const formatToDateTime = date => {
     return date
   }
 
-  return format(new Date(date), 'dd MMMM yyyy hh:mm:ss')
+  return format(new Date(date), 'dd MMMM yyyy HH:mm:ss')
 }
 
 const formatToDateTimeConcise = date => {
@@ -108,7 +108,7 @@ const formatToDateTimeConcise = date => {
     return date
   }
 
-  return format(new Date(date), 'dd/MM/yyyy hh:mm:ss')
+  return format(new Date(date), 'dd/MM/yyyy HH:mm:ss')
 }
 
 const formatToDateConcise = date => {
