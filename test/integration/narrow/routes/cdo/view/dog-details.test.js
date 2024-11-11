@@ -282,7 +282,7 @@ describe('View dog details', () => {
       expect(policeForceKey.textContent.trim()).toBe('Police force')
       expect(applicationFeePaidKey.textContent.trim()).toBe('Application fee paid')
       expect(insuranceCompanyKey.textContent.trim()).toBe('Insurance company')
-      expect(insuranceRenewalKey.textContent.trim()).toBe('Insurance renewal date')
+      expect(insuranceRenewalKey.textContent.trim()).toBe('Last known insurance renewal date')
       expect(neuteringConfirmationKey.textContent.trim()).toBe('Neutering confirmed')
       expect(microchipNumberVerifiedKey.textContent.trim()).toBe('Microchip number verified')
       expect(firstCertificateIssuedValue.textContent.trim()).toBe(notEntered)

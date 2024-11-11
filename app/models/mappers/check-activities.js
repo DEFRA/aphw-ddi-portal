@@ -264,7 +264,7 @@ const activityLabels = {
   certificate_issued: 'First certificate date',
   application_fee_paid: 'Application fee paid date',
   insurance_company: 'Insurance company',
-  insurance_renewal_date: 'Insurance renewal date',
+  insurance_renewal_date: 'Last known insurance renewal date',
   neutering_confirmation: 'Neutering confirmed',
   microchip_verification: 'Microchip number verified',
   joined_exemption_scheme: 'Joined interim exemption scheme',

@@ -92,7 +92,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
     },
     previousInsuranceCompany: exemption.previousInsuranceCompany ?? exemption.insuranceCompany,
     previousInsuranceRenewal: exemption.previousInsuranceRenewal ?? exemption.insuranceRenewal,
-    insuranceRenewal: constructDateField(exemption, 'insuranceRenewal', 'Insurance renewal date'),
+    insuranceRenewal: constructDateField(exemption, 'insuranceRenewal', 'Last known insurance renewal date'),
     neuteringConfirmation: constructDateField(exemption, 'neuteringConfirmation', 'Neutering confirmed'),
     microchipVerification: constructDateField(exemption, 'microchipVerification', 'Microchip number verified'),
     joinedExemptionScheme: constructDateField(exemption, 'joinedExemptionScheme', 'Joined interim exemption scheme'),
