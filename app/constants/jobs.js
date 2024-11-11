@@ -5,6 +5,9 @@ const jobs = {
     },
     neuteringDeadline: {
       get: '/jobs/neutering-deadline'
+    },
+    expiredInsurance: {
+      get: '/jobs/expired-insurance'
     }
   }
 }
