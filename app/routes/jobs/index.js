@@ -1,6 +1,6 @@
 const jobsConstants = require('../../constants/jobs')
 const { admin } = require('../../auth/permissions')
-const { purgeSoftDelete, neuteringDeadline } = require('../../api/ddi-index-api/jobs')
+const { purgeSoftDelete, neuteringDeadline, expiredInsurance } = require('../../api/ddi-index-api/jobs')
 const getUser = require('../../auth/get-user')
 
 module.exports = [
@@ -23,6 +23,17 @@ module.exports = [
       auth: { scope: [admin] },
       handler: async (request, h) => {
         const res = await neuteringDeadline(request.query.today, getUser(request))
+        return h.response(res).code(200)
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: jobsConstants.routes.expiredInsurance.get,
+    options: {
+      auth: { scope: [admin] },
+      handler: async (request, h) => {
+        const res = await expiredInsurance(request.query.today, getUser(request))
         return h.response(res).code(200)
       }
     }
