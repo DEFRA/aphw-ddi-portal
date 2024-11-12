@@ -301,7 +301,7 @@ describe('Check Activity Mappers', () => {
       ['Non-compliance letter sent updated', 'non_compliance_letter_sent', 'updated'],
       ['Court updated', 'court', 'updated'],
       ['Insurance company updated', 'insurance_company', 'updated'],
-      ['Insurance renewal date updated', 'insurance_renewal_date', 'updated'],
+      ['Last known insurance renewal date updated', 'insurance_renewal_date', 'updated'],
       ['Dog legislation officer updated', 'legislation_officer', 'updated'],
       ['Police force updated from 2024-01-15', 'police_force', 'updated'],
       ['N/A', 'neutering_deadline', 'updated'],
