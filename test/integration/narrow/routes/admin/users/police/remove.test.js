@@ -23,22 +23,25 @@ describe('Remove Police user page', () => {
     jest.clearAllMocks()
   })
 
-  getUsers.mockResolvedValue([
-    {
-      id: 1,
-      username: 'nicholas.angel@sandford.police.uk',
-      police_force_id: 1
-    },
-    {
-      id: 2,
-      username: 'danny.butterman@sandford.police.uk',
-      police_force_id: 1
-    },
-    {
-      id: 3,
-      username: 'joe.bloggs@example.com'
-    }
-  ])
+  getUsers.mockResolvedValue({
+    users: [
+      {
+        id: 1,
+        username: 'nicholas.angel@sandford.police.uk',
+        police_force_id: 1
+      },
+      {
+        id: 2,
+        username: 'danny.butterman@sandford.police.uk',
+        police_force_id: 1
+      },
+      {
+        id: 3,
+        username: 'joe.bloggs@example.com'
+      }
+    ],
+    count: 3
+  })
 
   describe('Which police officer do you want to remove page', () => {
     test('GET /admin/users/police/remove returns a 200', async () => {
@@ -109,22 +112,25 @@ describe('Remove Police user page', () => {
 
   describe('Are you sure page', () => {
     test('POST /admin/users/police/remove court route returns 200 and confirmation page given court has been submitted', async () => {
-      getUsers.mockResolvedValue([
-        {
-          id: 1,
-          username: 'nicholas.angel@sandford.police.uk',
-          police_force_id: 1
-        },
-        {
-          id: 2,
-          username: 'danny.butterman@sandford.police.uk',
-          police_force_id: 1
-        },
-        {
-          id: 3,
-          username: 'joe.bloggs@example.com'
-        }
-      ])
+      getUsers.mockResolvedValue({
+        users: [
+          {
+            id: 1,
+            username: 'nicholas.angel@sandford.police.uk',
+            police_force_id: 1
+          },
+          {
+            id: 2,
+            username: 'danny.butterman@sandford.police.uk',
+            police_force_id: 1
+          },
+          {
+            id: 3,
+            username: 'joe.bloggs@example.com'
+          }
+        ],
+        count: 3
+      })
 
       const options = {
         method: 'POST',
