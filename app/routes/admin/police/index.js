@@ -1,7 +1,10 @@
 const { routes, views } = require('../../../constants/admin')
 const { admin } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/common/add-or-remove')
+const UserListModel = require('../../../models/admin/users/police/user-list')
 const { validatePayload } = require('../../../schema/portal/common/do-you-want')
+const { getUsers } = require('../../../api/ddi-index-api/users')
+const { getUser } = require('../../../auth')
 
 module.exports = [
   {
@@ -43,6 +46,18 @@ module.exports = [
 
         return h.redirect(redirectUrl)
       }
+    }
+  },
+  {
+    method: 'GET',
+    path: `${routes.policeUserList.get}`,
+    options: { auth: { scope: [admin] } },
+    handler: async (request, h) => {
+      const backLink = routes.index
+
+      const { users, count } = await getUsers(getUser(request))
+
+      return h.view(views.userList, new UserListModel({ users, count }, {}, backLink))
     }
   }
 ]

@@ -9,12 +9,18 @@ const usersEndpoint = 'users'
  * @typedef UserAccount
  * @property {number} id
  * @property {string} username
- * @property {number} police_force_id
+ * @property {number} policeForceId
+ * @property {string} policeForce
+ * @property {boolean} active
+ * @property {boolean|Date} accepted
+ * @property {boolean|Date} activated
+ * @property {boolean|Date} lastLogin
+ * @property {boolean|Date} createdAt
  */
 
 /**
  * @param callingUser
- * @return {Promise<UserAccount[]>}
+ * @return {Promise<{ users: UserAccount[], count: number }>}
  */
 const getUsers = async (callingUser) => {
   /**
@@ -29,11 +35,14 @@ const getUsers = async (callingUser) => {
    */
   const payload = await get(usersEndpoint, callingUser)
 
-  return payload.users.map(user => {
-    delete user.active
+  return {
+    users: payload.users.map(user => {
+      delete user.active
 
-    return user
-  })
+      return user
+    }),
+    count: payload.count
+  }
 }
 
 /**
