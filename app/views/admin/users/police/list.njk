@@ -1,0 +1,68 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+        {{ govukBackLink({
+            text: "Back",
+            href: model.backLink,
+            attributes: {
+                id: "back"
+            }
+        }) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        {% if model.errors | length > 0 %}
+        {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+        }) }}
+        {% endif %}
+
+        {% call govukFieldset(model.fieldset) %}
+
+        {% endcall %}
+
+
+        <h2 class="govuk-heading-m">
+            {{ model.count }} police officers
+        </h2>
+        <table class="govuk-table defra-sortable-table">
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                {% for colHeading in model.tableHeadings %}
+<!--                <th scope="col" class="govuk-table__header govuk-input&#45;&#45;width-10" data-aria-sort="{{colHeading.ariaSort}}">-->
+                <th scope="col" class="govuk-table__header govuk-input--width-10">
+<!--                    <a class="govuk-link govuk-link&#45;&#45;no-visited-state govuk-link&#45;&#45;no-underline" href="{{colHeading.link}}">-->
+                    <a class="govuk-link govuk-link&#45;&#45;no-visited-state govuk-link&#45;&#45;no-underline">
+                        {{colHeading.label}}
+                    </a>
+                </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for policeOfficer in model.policeOfficers %}
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{policeOfficer.email}}</td>
+                <td class="govuk-table__cell">{{policeOfficer.policeForce}}</td>
+                <td class="govuk-table__cell">{{policeOfficer.indexAccess}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+  </div>
+</div>
+{% endblock %}
