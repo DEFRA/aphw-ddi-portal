@@ -6,9 +6,10 @@ const { ApiErrorFailure } = require('../../errors/api-error-failure')
 
 const baseUrl = config.ddiIndexApi.baseUrl
 
-const get = async (endpoint, user) => {
+const get = async (endpointOrUrl, user) => {
+  const url = endpointOrUrl instanceof URL ? endpointOrUrl.toString() : `${baseUrl}/${endpointOrUrl}`
   const options = user?.username ? { json: true, headers: addHeaders(user) } : { json: true }
-  const { payload } = await wreck.get(`${baseUrl}/${endpoint}`, options)
+  const { payload } = await wreck.get(url, options)
 
   return payload
 }

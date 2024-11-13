@@ -1,6 +1,7 @@
 const { user, keyStubs } = require('../../../mocks/auth')
 const wreck = require('@hapi/wreck')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
+const { get } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('@hapi/wreck')
 
 describe('Base API', () => {
@@ -41,6 +42,12 @@ describe('Base API', () => {
     test('get should call GET with username in header', async () => {
       await get('endpoint1', user)
       expect(wreck.get).toHaveBeenCalledWith('test/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+    })
+
+    test('should handle URL objects', async () => {
+      const url = new URL('http://example.com/endpoint1')
+      await get(url, user)
+      expect(wreck.get).toHaveBeenCalledWith('http://example.com/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
   })
 
