@@ -3,6 +3,8 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "components/accessibleAutocomplete/macro.njk" import accessibleAutocomplete %}
+
 {% extends '_layout.njk' %}
 
 {% block pageTitle %}{{ serviceName }}
@@ -32,9 +34,14 @@
         }) }}
         {% endif %}
 
+        <form method="GET" novalidate autocomplete="off">
         {% call govukFieldset(model.fieldset) %}
-
+            <div class="govuk-form-group">
+                {{ accessibleAutocomplete(model.policeForce) }}
+            </div>
         {% endcall %}
+            {{ govukButton(model.submit) }}
+        </form>
 
 
         <h2 class="govuk-heading-m">

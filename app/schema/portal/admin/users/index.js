@@ -38,10 +38,15 @@ const confirmListSchema = Joi.object({
   }).required()
 })
 
+const policeOfficerListQuerySchema = Joi.object({
+  policeForce: Joi.number().allow('').optional()
+})
+
 module.exports = {
   submitEmailSchema,
   submitEmailConflictSchema,
   submitEmailSessionConflictSchema,
   submitListSchema,
-  confirmListSchema
+  confirmListSchema,
+  policeOfficerListQuerySchema
 }

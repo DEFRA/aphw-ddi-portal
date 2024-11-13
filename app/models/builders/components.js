@@ -8,7 +8,11 @@
  * @properties {string} [text] - Text to add after all checkbox items. If html is provided, the text option will be ignored.
  * @properties {string} [html] - HTML to add after all checkbox items. If html is provided, the text option will be ignored.
  **/
-
+/**
+ * @typedef StandardComponent
+ * @property {string} [classes]
+ * @property {HTMLAttributes} [attributes]
+ */
 /**
  * @typedef FormGroupObject
  * @property {string} classes - Classes to add to the form group (for example to show error state for the whole group).
@@ -28,8 +32,12 @@
 
 /**
  * @typedef LabelComponent
- * @properties {string} classes - Classes to add to the label tag.
- * @properties {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the label tag.
+ * @properties {string} [text] - Required. If html is set, this is not required. Text to use within the hint. If html is provided, the text option will be ignored.
+ * @properties {string} [html] - Required. If text is set, this is not required. HTML to use within the hint. If html is provided, the text option will be ignored.
+ * @property {string} [for]
+ * @property {boolean} [isPageHeading]
+ * @properties {string} [classes] - Classes to add to the label tag.
+ * @properties {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the label tag.
  **/
 
 /**
@@ -226,3 +234,64 @@
  * @property {boolean} preventDoubleClick - Prevent accidental double clicks on submit buttons from submitting forms multiple times.
  * @property {boolean} isStartButton - Use for the main call to action on your service’s start page.
  * @property {string} id- */
+
+/**
+ * @typedef PrefixComponent
+ * @property {string} [text]
+ * @property {string} [html]
+ * @property {string} [classes]
+ * @property {string} [attributes]
+ */
+
+/**
+ * @typedef GovukInput
+ * @property {string} id
+ * @property {string} name
+ * @property {LabelComponent} label
+ * @property {HintComponent} [hint]
+ * @property {ErrorMessageComponent} [errorMessage]
+ * @property {string} [value]
+ * @property {string} [type] - default "text"
+ * @property {string} [inputmode]
+ * @property {boolean} [disabled]
+ * @property {string} [describedBy] - aria-describedby
+ * @property {PrefixComponent} [prefix]
+ * @property {PrefixComponent} [suffix]
+ * @property {FormGroupObject} [formGroup]
+ * @property {string} [classes]
+ * @property {string} [autocomplete]
+ * @property {string} [pattern] - Regex
+ * @property {boolean} [spellcheck]
+ * @property {string} [autocapitalize]
+ * @property {StandardComponent} [inputWrapper]
+ * @property {string} [attributes]
+ */
+/**
+ * @typedef AccessibleAutocompleteItem
+ * @property {string} text
+ * @property {string} value
+ */
+/**
+ * @typedef AccessibleAutocomplete
+ * @property {string} id
+ * @property {string} name
+ * @property {LabelComponent} label
+ * @property {AccessibleAutocompleteItem[]} items
+ * @property {HintComponent} [hint]
+ * @property {ErrorMessageComponent} [errorMessage]
+ * @property {string} [value]
+ * @property {string} [type] - default "text"
+ * @property {string} [inputmode]
+ * @property {boolean} [disabled]
+ * @property {string} [describedBy] - aria-describedby
+ * @property {PrefixComponent} [prefix]
+ * @property {PrefixComponent} [suffix]
+ * @property {FormGroupObject} [formGroup]
+ * @property {string} [classes]
+ * @property {string} [autocomplete]
+ * @property {string} [pattern] - Regex
+ * @property {boolean} [spellcheck]
+ * @property {string} [autocapitalize]
+ * @property {StandardComponent} [inputWrapper]
+ * @property {string} [attributes]
+ */

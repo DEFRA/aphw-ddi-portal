@@ -5,6 +5,8 @@ const UserListModel = require('../../../models/admin/users/police/user-list')
 const { validatePayload } = require('../../../schema/portal/common/do-you-want')
 const { getUsers } = require('../../../api/ddi-index-api/users')
 const { getUser } = require('../../../auth')
+const { getPoliceForces } = require('../../../api/ddi-index-api/police-forces')
+const { policeOfficerListQuerySchema } = require('../../../schema/portal/admin/users')
 
 module.exports = [
   {
@@ -51,13 +53,22 @@ module.exports = [
   {
     method: 'GET',
     path: `${routes.policeUserList.get}`,
-    options: { auth: { scope: [admin] } },
+    options: {
+      auth: { scope: [admin] },
+      validate: {
+        query: policeOfficerListQuerySchema
+      }
+    },
     handler: async (request, h) => {
       const backLink = routes.index
+      const policeForce = request.query.policeForce
 
-      const { users, count } = await getUsers(getUser(request))
+      const user = getUser(request)
+      const { users, count } = await getUsers(user)
 
-      return h.view(views.userList, new UserListModel({ users, count }, {}, backLink))
+      const policeForces = await getPoliceForces(user)
+
+      return h.view(views.userList, new UserListModel({ users, count, policeForces, policeForce }, {}, backLink))
     }
   }
 ]

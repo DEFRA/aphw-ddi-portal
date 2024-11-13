@@ -2,6 +2,7 @@ const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { buildUser } = require('../../../../../../mocks/users')
+const { buildPoliceForce } = require('../../../../../../mocks/policeForces')
 
 describe('Police users page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -9,6 +10,9 @@ describe('Police users page', () => {
 
   jest.mock('../../../../../../../app/api/ddi-index-api/users')
   const { getUsers } = require('../../../../../../../app/api/ddi-index-api/users')
+
+  jest.mock('../../../../../../../app/api/ddi-index-api/police-forces')
+  const { getPoliceForces } = require('../../../../../../../app/api/ddi-index-api/police-forces')
 
   const createServer = require('../../../../../../../app/server')
   let server
@@ -119,40 +123,44 @@ describe('Police users page', () => {
   })
 
   describe('/admin/police/list', () => {
+    const userList = {
+      users: [
+        buildUser({
+          id: 1,
+          username: 'robocop@dallas.police.gov',
+          policeForceId: 1,
+          policeForce: 'Dallas Police Department',
+          accepted: new Date('2024-11-12T00:00:00.000Z'),
+          active: true,
+          createdAt: new Date('2024-11-12T00:00:00.000Z'),
+          lastLogin: new Date('2024-11-12T00:00:00.000Z'),
+          activated: new Date('2024-11-12T00:00:00.000Z')
+        }),
+        buildUser({
+          id: 2,
+          username: 'unactivated.user@anytown.police.uk',
+          policeForce: 'Anytown Police Department',
+          policeForceId: 2
+        }),
+        buildUser({
+          id: 3,
+          username: 'internal@example.com',
+          policeForceId: undefined,
+          policeForce: undefined,
+          accepted: new Date('2024-11-12T00:00:00.000Z'),
+          active: true,
+          createdAt: new Date('2024-11-12T00:00:00.000Z'),
+          lastLogin: new Date('2024-11-12T00:00:00.000Z'),
+          activated: new Date('2024-11-12T00:00:00.000Z')
+        })
+      ],
+      count: 3
+    }
+
+    getPoliceForces.mockResolvedValue([buildPoliceForce({})])
+
     test('should get unfiltered list of police users', async () => {
-      getUsers.mockResolvedValue({
-        users: [
-          buildUser({
-            id: 1,
-            username: 'robocop@dallas.police.gov',
-            policeForceId: 1,
-            policeForce: 'Dallas Police Department',
-            accepted: new Date('2024-11-12T00:00:00.000Z'),
-            active: true,
-            createdAt: new Date('2024-11-12T00:00:00.000Z'),
-            lastLogin: new Date('2024-11-12T00:00:00.000Z'),
-            activated: new Date('2024-11-12T00:00:00.000Z')
-          }),
-          buildUser({
-            id: 2,
-            username: 'unactivated.user@anytown.police.uk',
-            policeForce: 'Anytown Police Department',
-            policeForceId: 2
-          }),
-          buildUser({
-            id: 3,
-            username: 'internal@example.com',
-            policeForceId: undefined,
-            policeForce: undefined,
-            accepted: new Date('2024-11-12T00:00:00.000Z'),
-            active: true,
-            createdAt: new Date('2024-11-12T00:00:00.000Z'),
-            lastLogin: new Date('2024-11-12T00:00:00.000Z'),
-            activated: new Date('2024-11-12T00:00:00.000Z')
-          })
-        ],
-        count: 3
-      })
+      getUsers.mockResolvedValue(userList)
       const options = {
         method: 'GET',
         url: '/admin/users/police/list',
@@ -165,7 +173,9 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officers with access to the Index')
-
+      const mainContent = document.querySelector('#main-content')
+      expect(mainContent.textContent).toContain('Officers by police force')
+      expect(mainContent.querySelector('.govuk-button').textContent.trim()).toBe('Select police force')
       const table = document.querySelector('.govuk-table')
       expect(table.textContent).toContain('Email address')
       expect(table.textContent).toContain('Police force')
@@ -185,6 +195,7 @@ describe('Police users page', () => {
       expect(indexAccess1.textContent.trim()).toBe('Yes')
       expect(indexAccess2.textContent.trim()).toBe('Invite sent')
       expect(indexAccess3.textContent.trim()).toBe('Yes')
+      expect(getPoliceForces).toHaveBeenCalled()
     })
   })
 })

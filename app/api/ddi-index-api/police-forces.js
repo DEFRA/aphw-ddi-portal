@@ -7,10 +7,14 @@ const policeForcesEndpoint = 'police-forces'
  * @typedef PoliceForceRequest
  * @property {string} name
  */
-
+/**
+ * @typedef PoliceForceDto
+ * @property {number} id
+ * @property {string} name
+ */
 /**
  * @param user
- * @return {Promise<[{name: string, id: number}]>}
+ * @return {Promise<PoliceForceDto[]>}
  */
 const getPoliceForces = async (user) => {
   const payload = await get(policeForcesEndpoint, user)
