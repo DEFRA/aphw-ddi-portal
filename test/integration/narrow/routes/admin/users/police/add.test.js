@@ -101,16 +101,19 @@ describe('Add police officer page', () => {
       })
 
       test('should returns 409 with police conflict', async () => {
-        getUsers.mockResolvedValue([
-          {
-            id: 1,
-            username: 'nicholas.angel@sandford.police.uk'
-          },
-          {
-            id: 2,
-            username: 'danny.butterman@sandford.police.uk'
-          }
-        ])
+        getUsers.mockResolvedValue({
+          users: [
+            {
+              id: 1,
+              username: 'nicholas.angel@sandford.police.uk'
+            },
+            {
+              id: 2,
+              username: 'danny.butterman@sandford.police.uk'
+            }
+          ],
+          count: 2
+        })
         const options = {
           method: 'POST',
           url: '/admin/users/police/add',
@@ -130,16 +133,19 @@ describe('Add police officer page', () => {
       })
 
       test('should returns 409 with police conflict with mixed case', async () => {
-        getUsers.mockResolvedValue([
-          {
-            id: 1,
-            username: 'Nicholas.Angel@sandford.Police.uk'
-          },
-          {
-            id: 2,
-            username: 'danny.butterman@sandford.police.uk'
-          }
-        ])
+        getUsers.mockResolvedValue({
+          users: [
+            {
+              id: 1,
+              username: 'Nicholas.Angel@sandford.Police.uk'
+            },
+            {
+              id: 2,
+              username: 'danny.butterman@sandford.police.uk'
+            }
+          ],
+          count: 2
+        })
         const options = {
           method: 'POST',
           url: '/admin/users/police/add',
@@ -188,7 +194,7 @@ describe('Add police officer page', () => {
       })
 
       test('should update session and redirect given valid email address submitted', async () => {
-        getUsers.mockResolvedValue([])
+        getUsers.mockResolvedValue({ users: [], count: 0 })
 
         const options = {
           method: 'POST',
@@ -206,7 +212,17 @@ describe('Add police officer page', () => {
       })
 
       test('should update value for session and redirect given valid email address submitted', async () => {
-        getUsers.mockResolvedValue(['ralph@wreckit.com', 'nicholas.angel@sandford.police.uk'])
+        getUsers.mockResolvedValue({
+          users: [
+            {
+              username: 'ralph@wreckit.com'
+            },
+            {
+              username: 'ralph@wreckit.com'
+            }
+          ],
+          count: 2
+        })
 
         const options = {
           method: 'POST',
@@ -413,16 +429,19 @@ describe('Add police officer page', () => {
       })
 
       test('should return 400 when update user who exists in DB', async () => {
-        getUsers.mockResolvedValue([
-          {
-            id: 1,
-            username: 'james@giantpeach.com'
-          },
-          {
-            id: 2,
-            username: 'danny.butterman@sandford.police.uk'
-          }
-        ])
+        getUsers.mockResolvedValue({
+          users: [
+            {
+              id: 1,
+              username: 'james@giantpeach.com'
+            },
+            {
+              id: 2,
+              username: 'danny.butterman@sandford.police.uk'
+            }
+          ],
+          count: 2
+        })
         getPoliceUsersToAdd.mockReturnValue([
           'ralph@wreckit.com',
           'nicholas.angel@sandford.police.uk'

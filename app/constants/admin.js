@@ -70,6 +70,9 @@ const policeUserLinks = {
   remove: {
     get: '/admin/users/police/remove',
     post: '/admin/users/police/remove'
+  },
+  list: {
+    get: '/admin/users/police/list'
   }
 }
 
@@ -94,6 +97,7 @@ const constants = {
     listPoliceUsersToAdd: policeUserLinks.addList,
     confirmPoliceUsersToAdd: policeUserLinks.addConfirm,
     removePoliceUser: policeUserLinks.remove,
+    policeUserList: policeUserLinks.list,
     deleteOwners: {
       get: '/admin/delete/owners',
       post: '/admin/delete/owners'
@@ -161,6 +165,7 @@ const constants = {
     documentation: 'swagger',
     addPoliceUserList: 'admin/users/add/list',
     addPoliceUserConfirm: 'admin/users/add/confirm',
+    userList: 'admin/users/police/list',
     auditQueryType: 'admin/audit/audit-query-type',
     auditQueryDetails: 'admin/audit/audit-query-details'
   },

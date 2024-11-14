@@ -51,14 +51,14 @@ const addUserPostCheck = {
     validatePayloadBuilder(submitEmailSchema)(request.payload)
     const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
 
-    const policeUsers = await getUsers(getUser(request))
+    const { users } = await getUsers(getUser(request))
     const policeUsersInSession = getPoliceUsersToAdd(request)
 
     if (policeUsersInSession.some(username => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
       throwSessionConflictError(request.payload)
     }
 
-    if (policeUsers.some(({ username }) => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
+    if (users.some(({ username }) => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
       throwConflictError(request.payload)
     }
 
@@ -80,7 +80,7 @@ const updateUserPostCheck = {
     validatePayloadBuilder(submitEmailSchema)(request.payload)
     const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
 
-    const policeUsers = await getUsers(getUser(request))
+    const { users } = await getUsers(getUser(request))
     const policeUsersInSession = getPoliceUsersToAdd(request)
     const prevUsername = policeUsersInSession[validatedPayload.policeUserIndex]
     const newUsername = validatedPayload.policeUser
@@ -90,7 +90,7 @@ const updateUserPostCheck = {
       throwSessionConflictError(request.payload)
     }
 
-    if (policeUsers.some(({ username }) => username?.toLowerCase() === newUsername.toLowerCase())) {
+    if (users.some(({ username }) => username?.toLowerCase() === newUsername.toLowerCase())) {
       throwConflictError(request.payload)
     }
 

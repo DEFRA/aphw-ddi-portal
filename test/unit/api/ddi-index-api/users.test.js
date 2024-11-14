@@ -303,12 +303,13 @@ describe('DDI API users', () => {
             username: 'axel.foley@beverly-hills.police.gov',
             active: true
           }
-        ]
+        ],
+        count: 3
       })
 
-      const users = await getUsers(user)
+      const { users, count } = await getUsers(user)
       expect(users).toBeInstanceOf(Array)
-      expect(users).toHaveLength(3)
+      expect(count).toBe(3)
       expect(users).toEqual([
         {
           id: 1,
