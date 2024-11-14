@@ -69,6 +69,21 @@ describe('Police force not found', () => {
       const response = await server.inject(options)
       expect(response.statusCode).toBe(404)
     })
+
+    test('route handles orphaned owner', async () => {
+      getFromSession.mockReturnValue('/cdo/view/owner/return-point')
+      getPersonAndDogs.mockResolvedValue({ dogs: [] })
+      getCdo.mockResolvedValue()
+      const options = {
+        method: 'GET',
+        url: '/cdo/edit/police-force-not-found/P-123',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/cdo/view/owner/return-point')
+    })
   })
 
   describe('POST /cdo/edit/police-force-not-found', () => {

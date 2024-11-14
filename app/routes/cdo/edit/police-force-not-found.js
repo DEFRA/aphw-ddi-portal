@@ -25,6 +25,11 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
+        if (personAndDogs.dogs.length === 0) {
+          // Orphaned owner
+          return h.redirect(getMainReturnPoint(request))
+        }
+
         const firstCdo = await getCdo(personAndDogs.dogs[0].indexNumber, user)
 
         const breadcrumbLink = getMainReturnPoint(request)
