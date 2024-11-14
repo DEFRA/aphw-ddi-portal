@@ -63,8 +63,22 @@ module.exports = [
       const backLink = routes.index
       const policeForce = request.query.policeForce
 
+      /**
+       * @type {GetUserOptions}
+       */
+      const getUserOptions = {}
+
+      /**
+       * Only filter by policeForceId if policeForce is a natural number
+       */
+      if (!isNaN(parseInt(policeForce)) && policeForce > 0) {
+        getUserOptions.filter = {
+          policeForceId: policeForce
+        }
+      }
+
       const user = getUser(request)
-      const { users, count } = await getUsers({}, user)
+      const { users, count } = await getUsers(getUserOptions, user)
 
       const policeForces = await getPoliceForces(user)
 

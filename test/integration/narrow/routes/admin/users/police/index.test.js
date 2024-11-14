@@ -3,6 +3,8 @@ const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { buildUser } = require('../../../../../../mocks/users')
 const { buildPoliceForce } = require('../../../../../../mocks/policeForces')
+const { getUsers } = require('../../../../../../../app/api/ddi-index-api/users')
+const { getPoliceForces } = require('../../../../../../../app/api/ddi-index-api/police-forces')
 
 describe('Police users page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -172,6 +174,7 @@ describe('Police users page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
       expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officers with access to the Index')
       const mainContent = document.querySelector('#main-content')
       expect(mainContent.textContent).toContain('Officers by police force')
@@ -196,6 +199,51 @@ describe('Police users page', () => {
       expect(indexAccess2.textContent.trim()).toBe('Invite sent')
       expect(indexAccess3.textContent.trim()).toBe('Yes')
       expect(getPoliceForces).toHaveBeenCalled()
+    })
+
+    test('should filter police users', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=3',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ filter: { policeForceId: 3 } }, expect.anything())
+    })
+
+    test('should not filter police users if empty', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
+    })
+
+    test('should not filter police users if search all', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=-1',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
     })
   })
 })

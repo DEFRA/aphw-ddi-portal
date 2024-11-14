@@ -73,7 +73,7 @@ function ViewModel (details, options, backNav, errors) {
     name: 'policeForce',
     value: details.policeForce ?? '',
     placeholder: 'Start typing to select a police force',
-    items: [{ text: '', value: null }, ...items],
+    items: [{ text: '', value: null }, { text: 'All police forces', value: -1 }, ...items],
     autocomplete: forms.preventAutocomplete
   }
 
