@@ -3,8 +3,7 @@ const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { buildUser } = require('../../../../../../mocks/users')
 const { buildPoliceForce } = require('../../../../../../mocks/policeForces')
-const { getUsers } = require('../../../../../../../app/api/ddi-index-api/users')
-const { getPoliceForces } = require('../../../../../../../app/api/ddi-index-api/police-forces')
+const { sort } = require('../../../../../../../app/constants/api')
 
 describe('Police users page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -244,6 +243,120 @@ describe('Police users page', () => {
       expect(response.statusCode).toBe(200)
 
       expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
+    })
+
+    test('should sort by email ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=email',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { username: sort.ASC } }, expect.anything())
+    })
+
+    test('should sort by email descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=email&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { username: sort.DESC } }, expect.anything())
+    })
+
+    test('should sort by policeForce ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=policeForce&sortOrder=ASC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { policeForce: sort.ASC } }, expect.anything())
+    })
+
+    test('should sort by policeForce descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=policeForce&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { policeForce: sort.DESC } }, expect.anything())
+    })
+
+    test('should sort by indexAccess ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=indexAccess&sortOrder=ASC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
+    })
+
+    test('should sort by indexAccess descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=indexAccess&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
+    })
+
+    test('should not permit invalid query strings', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=unknown',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('should not succeed for standard users', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(403)
     })
   })
 })

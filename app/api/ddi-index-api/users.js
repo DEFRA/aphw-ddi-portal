@@ -58,21 +58,16 @@ const getUsers = async (options, callingUser) => {
 
   if (options.sort?.username !== undefined) {
     url.searchParams.append('sortKey', 'username')
-    sortOrder = options.sort?.username
+    sortOrder = options.sort.username
   } else if (options.sort?.policeForce !== undefined) {
     url.searchParams.append('sortKey', 'policeForce')
-    sortOrder = options.sort?.policeForce
+    sortOrder = options.sort.policeForce
   } else if (options.sort?.indexAccess !== undefined) {
     url.searchParams.append('sortKey', 'activated')
+    url.searchParams.append('activated', `${options.sort.indexAccess}`)
   }
 
-  if (options.sort?.indexAccess === true) {
-    url.searchParams.append('activated', 'Y')
-  } else if (options.sort?.indexAccess === false) {
-    url.searchParams.append('activated', 'N')
-  }
-
-  if (sortOrder === sort.ASC || sortOrder === sort.DESC) {
+  if ([sort.ASC, sort.DESC].includes(sortOrder)) {
     url.searchParams.append('sortOrder', sortOrder)
   }
   /**

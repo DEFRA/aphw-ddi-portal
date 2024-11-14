@@ -362,7 +362,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { indexAccess: true } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=Y' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=true' }), user)
     })
 
     test('should return a list of users sorted by indexAccess No', async () => {
@@ -370,7 +370,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { indexAccess: false } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=N' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=false' }), user)
     })
 
     test('should return a list of users called with multiple options', async () => {

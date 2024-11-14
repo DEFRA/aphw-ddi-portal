@@ -1,7 +1,27 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
 const { routes } = require('../../../../constants/admin')
 const { forms } = require('../../../../constants/forms')
+const { getAriaSortBuilder, columnLinkBuilder } = require('../../../sorting')
 
+/**
+ * @param {{
+ *  column: 'status'
+ *  order: 'ASC'|'DESC'
+ * }} sort
+ * @param {string} column
+ * @return {string}
+ */
+const getAriaSort = getAriaSortBuilder('email')
+
+/**
+ * @param {{
+ *  column: 'joinedExemptionScheme'
+ *  order: 'ASC'|'DESC'
+ * }} sort
+ * @param {string} column
+ * @return {string}
+ */
+const columnLink = columnLinkBuilder('email')
 /**
  * @typedef AddOrRemoveDetails
  * @property {string} [optionText]
@@ -10,7 +30,16 @@ const { forms } = require('../../../../constants/forms')
  */
 
 /**
- * @param {{ users: UserAccount[], count: number, policeForce?: string; policeForces: PoliceForceDto[]  }} details
+ * @param {{
+ *     users: UserAccount[];
+ *     count: number;
+ *     policeForce?: string;
+ *     policeForces: PoliceForceDto[];
+ *     sort: {
+ *         order: string;
+ *         column: string;
+ *     }
+ * }} details
  * @param {{ policeForce?: string; sort?: unknown }} options
  * @param [backNav]
  * @param [errors]
@@ -20,20 +49,20 @@ function ViewModel (details, options, backNav, errors) {
   const tableHeadings = [
     {
       label: 'Email address',
-      // link: columnLink(sort, undefined),
-      // ariaSort: getAriaSort(sort, undefined),
-      name: 'emailAddress'
+      link: columnLink(details.sort, undefined),
+      ariaSort: getAriaSort(details.sort, undefined),
+      name: 'email'
     },
     {
       label: 'Police force',
-      // link: columnLink(sort, 'indexNumber'),
-      // ariaSort: getAriaSort(sort, 'indexNumber'),
+      link: columnLink(details.sort, 'policeForce'),
+      ariaSort: getAriaSort(details.sort, 'policeForce'),
       name: 'policeForce'
     },
     {
       label: 'Index access',
-      // link: columnLink(sort, 'dateOfBirth'),
-      // ariaSort: getAriaSort(sort, 'dateOfBirth'),
+      link: columnLink(details.sort, 'indexAccess'),
+      ariaSort: getAriaSort(details.sort, 'indexAccess'),
       name: 'indexAccess'
     }
   ]
