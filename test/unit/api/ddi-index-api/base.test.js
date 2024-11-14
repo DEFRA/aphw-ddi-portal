@@ -1,7 +1,6 @@
 const { user, keyStubs } = require('../../../mocks/auth')
 const wreck = require('@hapi/wreck')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
-const { get } = require('../../../../app/api/ddi-index-api/base')
 jest.mock('@hapi/wreck')
 
 describe('Base API', () => {

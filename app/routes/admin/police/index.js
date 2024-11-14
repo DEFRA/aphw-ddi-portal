@@ -64,7 +64,7 @@ module.exports = [
       const policeForce = request.query.policeForce
 
       const user = getUser(request)
-      const { users, count } = await getUsers(user)
+      const { users, count } = await getUsers({}, user)
 
       const policeForces = await getPoliceForces(user)
 

@@ -51,7 +51,7 @@ const addUserPostCheck = {
     validatePayloadBuilder(submitEmailSchema)(request.payload)
     const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
 
-    const { users } = await getUsers(getUser(request))
+    const { users } = await getUsers({}, getUser(request))
     const policeUsersInSession = getPoliceUsersToAdd(request)
 
     if (policeUsersInSession.some(username => username?.toLowerCase() === validatedPayload.policeUser.toLowerCase())) {
@@ -80,7 +80,7 @@ const updateUserPostCheck = {
     validatePayloadBuilder(submitEmailSchema)(request.payload)
     const validatedPayload = validatePayloadBuilder(submitEmailSchema)(request.payload)
 
-    const { users } = await getUsers(getUser(request))
+    const { users } = await getUsers({}, getUser(request))
     const policeUsersInSession = getPoliceUsersToAdd(request)
     const prevUsername = policeUsersInSession[validatedPayload.policeUserIndex]
     const newUsername = validatedPayload.policeUser
