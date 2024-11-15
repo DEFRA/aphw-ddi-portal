@@ -4,12 +4,20 @@ const { get, boomRequest, callDelete, post } = require('../../../../app/api/ddi-
 const { addUser, getUsers, addUsers, removeUser } = require('../../../../app/api/ddi-index-api/users')
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
-const { afterEach } = require('node:test')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
 const { buildUser } = require('../../../mocks/users')
 const { sort } = require('../../../../app/constants/api')
 
 describe('DDI API users', () => {
+  jest.mock('../../../../app/lib/environment-helpers', () => ({
+    getEnvironmentVariable: value => {
+      if (value === 'DDI_API_BASE_URL') {
+        return 'http://localhost'
+      }
+      return process.env[value]
+    }
+  }))
+
   afterEach(() => {
     jest.clearAllMocks()
   })
