@@ -13,7 +13,7 @@ describe('Base API', () => {
     }
 
     if (envVar === 'DDI_API_BASE_URL') {
-      return 'test'
+      return 'http://test.com'
     }
 
     return process.env[envVar]
@@ -35,12 +35,12 @@ describe('Base API', () => {
   describe('GET', () => {
     test('get should call GET', async () => {
       await get('endpoint1')
-      expect(wreck.get).toHaveBeenCalledWith('test/endpoint1', { json: true })
+      expect(wreck.get).toHaveBeenCalledWith('http://test.com/endpoint1', { json: true })
     })
 
     test('get should call GET with username in header', async () => {
       await get('endpoint1', user)
-      expect(wreck.get).toHaveBeenCalledWith('test/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.get).toHaveBeenCalledWith('http://test.com/endpoint1', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
 
     test('should handle URL objects', async () => {
@@ -53,42 +53,42 @@ describe('Base API', () => {
   describe('POST', () => {
     test('post should call POST', async () => {
       await post('endpoint2', { val: 123 })
-      expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 } })
+      expect(wreck.post).toHaveBeenCalledWith('http://test.com/endpoint2', { payload: { val: 123 } })
     })
 
     test('post should call POST with username in header', async () => {
       await post('endpoint2', { val: 123 }, user)
-      expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.post).toHaveBeenCalledWith('http://test.com/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
 
     test('post should not fail given an empty payload', async () => {
       wreck.post.mockResolvedValue({ payload: { toString () { return '' } } })
       await post('endpoint2', { val: 123 }, user)
-      expect(wreck.post).toHaveBeenCalledWith('test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.post).toHaveBeenCalledWith('http://test.com/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
   })
 
   describe('PUT', () => {
     test('put should call PUT', async () => {
       await put('endpoint3', { val: 456 })
-      expect(wreck.put).toHaveBeenCalledWith('test/endpoint3', { payload: { val: 456 } })
+      expect(wreck.put).toHaveBeenCalledWith('http://test.com/endpoint3', { payload: { val: 456 } })
     })
 
     test('put should call PUT with username in header', async () => {
       await put('endpoint3', { val: 456 }, user)
-      expect(wreck.put).toHaveBeenCalledWith('test/endpoint3', { payload: { val: 456 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.put).toHaveBeenCalledWith('http://test.com/endpoint3', { payload: { val: 456 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
   })
 
   describe('DELETE', () => {
     test('delete should call DELETE', async () => {
       await callDelete('endpoint3')
-      expect(wreck.delete).toHaveBeenCalledWith('test/endpoint3', { json: true })
+      expect(wreck.delete).toHaveBeenCalledWith('http://test.com/endpoint3', { json: true })
     })
 
     test('delete should call DELETE with username in header', async () => {
       await callDelete('endpoint3', user)
-      expect(wreck.delete).toHaveBeenCalledWith('test/endpoint3', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.delete).toHaveBeenCalledWith('http://test.com/endpoint3', { json: true, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
   })
 
@@ -97,7 +97,7 @@ describe('Base API', () => {
       const res = await boomRequest('endpoint2', 'PUT', { val: 123 })
       expect(wreck.read).toBeCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
       expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
-      expect(wreck.request).toHaveBeenCalledWith('PUT', 'test/endpoint2', { payload: { val: 123 } })
+      expect(wreck.request).toHaveBeenCalledWith('PUT', 'http://test.com/endpoint2', { payload: { val: 123 } })
     })
 
     test('should not fail given an empty payload', async () => {
@@ -116,7 +116,7 @@ describe('Base API', () => {
     test('postWithBoom should call request PUT with username in header', async () => {
       const res = await boomRequest('endpoint2', 'PUT', { val: 123 }, user)
       expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
-      expect(wreck.request).toHaveBeenCalledWith('PUT', 'test/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
+      expect(wreck.request).toHaveBeenCalledWith('PUT', 'http://test.com/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
     })
   })
 })

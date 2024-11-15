@@ -17,7 +17,7 @@ services:
       - aphw-ddi-portal-azurite
     environment:
       AZURE_STORAGE_CONNECTION_STRING: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://aphw-ddi-portal-azurite:10000/devstoreaccount1;TableEndpoint=http://aphw-ddi-portal-azurite:10002/devstoreaccount1;"
-      DDI_API_BASE_URL: test
+      DDI_API_BASE_URL: http://test.com
       DDI_EVENTS_BASE_URL: test-events
       NODE_OPTIONS: "--max-old-space-size=3072"
       # This is a fake private key used purely for testing

@@ -9,15 +9,6 @@ const { buildUser } = require('../../../mocks/users')
 const { sort } = require('../../../../app/constants/api')
 
 describe('DDI API users', () => {
-  jest.mock('../../../../app/lib/environment-helpers', () => ({
-    getEnvironmentVariable: value => {
-      if (value === 'DDI_API_BASE_URL') {
-        return 'http://localhost'
-      }
-      return process.env[value]
-    }
-  }))
-
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -322,7 +313,7 @@ describe('DDI API users', () => {
       expect(users).toBeInstanceOf(Array)
       expect(count).toBe(3)
       expect(users).toEqual(usersResponse.users)
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users' }), user)
     })
 
     test('should return a list of users filtered by police force', async () => {
@@ -330,7 +321,7 @@ describe('DDI API users', () => {
 
       await getUsers({ filter: { policeForceId: 2 } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?policeForceId=2' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?policeForceId=2' }), user)
     })
 
     test('should return a list of users filtered by police force', async () => {
@@ -338,7 +329,7 @@ describe('DDI API users', () => {
 
       await getUsers({ filter: { policeForceId: undefined } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users' }), user)
     })
 
     test('should return a list of users sorted by police force ASC', async () => {
@@ -346,7 +337,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { policeForce: sort.ASC } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=policeForce&sortOrder=ASC' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=policeForce&sortOrder=ASC' }), user)
     })
 
     test('should return a list of users sorted by police force DESC', async () => {
@@ -354,7 +345,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { policeForce: sort.DESC } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=policeForce&sortOrder=DESC' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=policeForce&sortOrder=DESC' }), user)
     })
 
     test('should return a list of users sorted by username ASC', async () => {
@@ -362,7 +353,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { username: sort.ASC } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=username&sortOrder=ASC' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=username&sortOrder=ASC' }), user)
     })
 
     test('should return a list of users sorted by indexAccess Yes', async () => {
@@ -370,7 +361,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { indexAccess: true } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=true' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=activated&activated=true' }), user)
     })
 
     test('should return a list of users sorted by indexAccess No', async () => {
@@ -378,7 +369,7 @@ describe('DDI API users', () => {
 
       await getUsers({ sort: { indexAccess: false } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?sortKey=activated&activated=false' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=activated&activated=false' }), user)
     })
 
     test('should return a list of users called with multiple options', async () => {
@@ -386,7 +377,7 @@ describe('DDI API users', () => {
 
       await getUsers({ filter: { policeForceId: 2 }, sort: { username: sort.DESC } }, user)
 
-      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://localhost/users?policeForceId=2&sortKey=username&sortOrder=DESC' }), user)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?policeForceId=2&sortKey=username&sortOrder=DESC' }), user)
     })
   })
 
