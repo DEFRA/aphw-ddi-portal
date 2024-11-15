@@ -158,6 +158,23 @@ describe('Police users page', () => {
       count: 3
     }
 
+    const userListSingle = {
+      users: [
+        buildUser({
+          id: 1,
+          username: 'robocop@dallas.police.gov',
+          policeForceId: 1,
+          policeForce: 'Dallas Police Department',
+          accepted: new Date('2024-11-12T00:00:00.000Z'),
+          active: true,
+          createdAt: new Date('2024-11-12T00:00:00.000Z'),
+          lastLogin: new Date('2024-11-12T00:00:00.000Z'),
+          activated: new Date('2024-11-12T00:00:00.000Z')
+        })
+      ],
+      count: 1
+    }
+
     getPoliceForces.mockResolvedValue([buildPoliceForce({})])
 
     test('should get unfiltered list of police users', async () => {
@@ -174,7 +191,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
-      expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officers with access to the Index')
+      expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officer access to the Index')
       const mainContent = document.querySelector('#main-content')
       expect(mainContent.textContent).toContain('Officers by police force')
       expect(mainContent.querySelector('.govuk-button').textContent.trim()).toBe('Select police force')
@@ -200,8 +217,8 @@ describe('Police users page', () => {
       expect(getPoliceForces).toHaveBeenCalled()
     })
 
-    test('should filter police users', async () => {
-      getUsers.mockResolvedValue(userList)
+    test('should filter police users and show single user correctly', async () => {
+      getUsers.mockResolvedValue(userListSingle)
       const options = {
         method: 'GET',
         url: '/admin/users/police/list?policeForce=3',
@@ -209,10 +226,12 @@ describe('Police users page', () => {
       }
 
       const response = await server.inject(options)
+      const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
-
       expect(getUsers).toHaveBeenCalledWith({ filter: { policeForceId: 3 } }, expect.anything())
+
+      expect(document.querySelector('#main-content h2.govuk-heading-m').textContent.trim()).toBe('1 police officer')
     })
 
     test('should not filter police users if empty', async () => {
@@ -317,7 +336,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
 
-      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
     })
 
     test('should sort by indexAccess descending', async () => {
@@ -332,7 +351,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
 
-      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
     })
 
     test('should not permit invalid query strings', async () => {

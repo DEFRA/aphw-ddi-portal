@@ -7,11 +7,12 @@ const { getPoliceForces } = require('../../../../api/ddi-index-api/police-forces
 const { policeOfficerListQuerySchema } = require('../../../../schema/portal/admin/users')
 const { sort } = require('../../../../constants/api')
 
+/**
+ * @param {'indexAccess'|'username'|'policeForce'} key
+ * @param {'ASC'|'DESC'} order
+ * @return {'ASC'|'DESC'}
+ */
 const getSortOrder = (key, order) => {
-  if (key === 'indexAccess') {
-    return order !== sort.DESC
-  }
-
   if (order === sort.DESC) {
     return sort.DESC
   }
@@ -30,6 +31,13 @@ const getSortOptions = (key, order) => {
       username: getSortOrder('username', order)
     }
   }
+
+  if (key === 'indexAccess') {
+    return {
+      indexAccess: order !== sort.ASC
+    }
+  }
+
   return {
     [key]: getSortOrder(key, order)
   }
