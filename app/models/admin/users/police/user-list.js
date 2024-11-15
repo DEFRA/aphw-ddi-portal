@@ -108,6 +108,7 @@ function ViewModel (details, options, backNav, errors) {
 
   this.model = {
     backLink: backNav?.backLink || routes.index.get,
+    userCount: `${details.count} police officer${details.count > 1 ? 's' : ''}`,
     fieldset: {
       legend: {
         text: 'Police officer access to the Index',
