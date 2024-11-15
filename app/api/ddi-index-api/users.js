@@ -63,8 +63,8 @@ const getUsers = async (options, callingUser) => {
     url.searchParams.append('sortKey', 'policeForce')
     sortOrder = options.sort.policeForce
   } else if (options.sort?.indexAccess !== undefined) {
-    url.searchParams.append('sortKey', 'activated')
-    url.searchParams.append('activated', `${options.sort.indexAccess}`)
+    url.searchParams.append('sortKey', 'indexAccess')
+    url.searchParams.append('indexAccessSortOrder', `${options.sort.indexAccess ? 'Y' : 'N'}`)
   }
 
   if ([sort.ASC, sort.DESC].includes(sortOrder)) {
