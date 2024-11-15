@@ -54,9 +54,7 @@ module.exports = [
     },
     handler: async (request, h) => {
       const backLink = routes.index
-      const policeForce = request.query.policeForce
-      const sortKey = request.query.sortKey
-      const sortOrder = request.query.sortOrder
+      const { policeForce, sortKey, sortOrder } = request.query.policeForce
       /**
        * @type {GetUserOptions}
        */
