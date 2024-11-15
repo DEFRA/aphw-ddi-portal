@@ -174,7 +174,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
       expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
-      expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officers with access to the Index')
+      expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officer access to the Index')
       const mainContent = document.querySelector('#main-content')
       expect(mainContent.textContent).toContain('Officers by police force')
       expect(mainContent.querySelector('.govuk-button').textContent.trim()).toBe('Select police force')

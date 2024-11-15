@@ -110,7 +110,7 @@ function ViewModel (details, options, backNav, errors) {
     backLink: backNav?.backLink || routes.index.get,
     fieldset: {
       legend: {
-        text: 'Police officers with access to the Index',
+        text: 'Police officer access to the Index',
         isPageHeading: true,
         classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-5'
       }
