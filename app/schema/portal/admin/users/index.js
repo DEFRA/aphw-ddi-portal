@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { sort } = require('../../../../constants/api')
 
 const submitEmailSchema = Joi.object({
   policeUser: Joi.string().trim().email().required().messages({
@@ -38,10 +39,17 @@ const confirmListSchema = Joi.object({
   }).required()
 })
 
+const policeOfficerListQuerySchema = Joi.object({
+  policeForce: Joi.number().allow('').optional(),
+  sortKey: Joi.string().valid('email', 'policeForce', 'indexAccess').optional(),
+  sortOrder: Joi.string().valid(sort.ASC, sort.DESC).optional()
+})
+
 module.exports = {
   submitEmailSchema,
   submitEmailConflictSchema,
   submitEmailSessionConflictSchema,
   submitListSchema,
-  confirmListSchema
+  confirmListSchema,
+  policeOfficerListQuerySchema
 }

@@ -2,6 +2,8 @@ const { auth, user, standardAuth } = require('../../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const FormData = require('form-data')
 const { buildUser } = require('../../../../../../mocks/users')
+const { buildPoliceForce } = require('../../../../../../mocks/policeForces')
+const { sort } = require('../../../../../../../app/constants/api')
 
 describe('Police users page', () => {
   jest.mock('../../../../../../../app/auth')
@@ -9,6 +11,9 @@ describe('Police users page', () => {
 
   jest.mock('../../../../../../../app/api/ddi-index-api/users')
   const { getUsers } = require('../../../../../../../app/api/ddi-index-api/users')
+
+  jest.mock('../../../../../../../app/api/ddi-index-api/police-forces')
+  const { getPoliceForces } = require('../../../../../../../app/api/ddi-index-api/police-forces')
 
   const createServer = require('../../../../../../../app/server')
   let server
@@ -119,40 +124,44 @@ describe('Police users page', () => {
   })
 
   describe('/admin/police/list', () => {
+    const userList = {
+      users: [
+        buildUser({
+          id: 1,
+          username: 'robocop@dallas.police.gov',
+          policeForceId: 1,
+          policeForce: 'Dallas Police Department',
+          accepted: new Date('2024-11-12T00:00:00.000Z'),
+          active: true,
+          createdAt: new Date('2024-11-12T00:00:00.000Z'),
+          lastLogin: new Date('2024-11-12T00:00:00.000Z'),
+          activated: new Date('2024-11-12T00:00:00.000Z')
+        }),
+        buildUser({
+          id: 2,
+          username: 'unactivated.user@anytown.police.uk',
+          policeForce: 'Anytown Police Department',
+          policeForceId: 2
+        }),
+        buildUser({
+          id: 3,
+          username: 'internal@example.com',
+          policeForceId: undefined,
+          policeForce: undefined,
+          accepted: new Date('2024-11-12T00:00:00.000Z'),
+          active: true,
+          createdAt: new Date('2024-11-12T00:00:00.000Z'),
+          lastLogin: new Date('2024-11-12T00:00:00.000Z'),
+          activated: new Date('2024-11-12T00:00:00.000Z')
+        })
+      ],
+      count: 3
+    }
+
+    getPoliceForces.mockResolvedValue([buildPoliceForce({})])
+
     test('should get unfiltered list of police users', async () => {
-      getUsers.mockResolvedValue({
-        users: [
-          buildUser({
-            id: 1,
-            username: 'robocop@dallas.police.gov',
-            policeForceId: 1,
-            policeForce: 'Dallas Police Department',
-            accepted: new Date('2024-11-12T00:00:00.000Z'),
-            active: true,
-            createdAt: new Date('2024-11-12T00:00:00.000Z'),
-            lastLogin: new Date('2024-11-12T00:00:00.000Z'),
-            activated: new Date('2024-11-12T00:00:00.000Z')
-          }),
-          buildUser({
-            id: 2,
-            username: 'unactivated.user@anytown.police.uk',
-            policeForce: 'Anytown Police Department',
-            policeForceId: 2
-          }),
-          buildUser({
-            id: 3,
-            username: 'internal@example.com',
-            policeForceId: undefined,
-            policeForce: undefined,
-            accepted: new Date('2024-11-12T00:00:00.000Z'),
-            active: true,
-            createdAt: new Date('2024-11-12T00:00:00.000Z'),
-            lastLogin: new Date('2024-11-12T00:00:00.000Z'),
-            activated: new Date('2024-11-12T00:00:00.000Z')
-          })
-        ],
-        count: 3
-      })
+      getUsers.mockResolvedValue(userList)
       const options = {
         method: 'GET',
         url: '/admin/users/police/list',
@@ -164,8 +173,11 @@ describe('Police users page', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
       expect(document.querySelector('.govuk-fieldset__legend--l').textContent.trim()).toBe('Police officers with access to the Index')
-
+      const mainContent = document.querySelector('#main-content')
+      expect(mainContent.textContent).toContain('Officers by police force')
+      expect(mainContent.querySelector('.govuk-button').textContent.trim()).toBe('Select police force')
       const table = document.querySelector('.govuk-table')
       expect(table.textContent).toContain('Email address')
       expect(table.textContent).toContain('Police force')
@@ -185,6 +197,166 @@ describe('Police users page', () => {
       expect(indexAccess1.textContent.trim()).toBe('Yes')
       expect(indexAccess2.textContent.trim()).toBe('Invite sent')
       expect(indexAccess3.textContent.trim()).toBe('Yes')
+      expect(getPoliceForces).toHaveBeenCalled()
+    })
+
+    test('should filter police users', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=3',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ filter: { policeForceId: 3 } }, expect.anything())
+    })
+
+    test('should not filter police users if empty', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
+    })
+
+    test('should not filter police users if search all', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?policeForce=-1',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({}, expect.anything())
+    })
+
+    test('should sort by email ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=email',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { username: sort.ASC } }, expect.anything())
+    })
+
+    test('should sort by email descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=email&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { username: sort.DESC } }, expect.anything())
+    })
+
+    test('should sort by policeForce ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=policeForce&sortOrder=ASC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { policeForce: sort.ASC } }, expect.anything())
+    })
+
+    test('should sort by policeForce descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=policeForce&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { policeForce: sort.DESC } }, expect.anything())
+    })
+
+    test('should sort by indexAccess ascending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=indexAccess&sortOrder=ASC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
+    })
+
+    test('should sort by indexAccess descending', async () => {
+      getUsers.mockResolvedValue(userList)
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=indexAccess&sortOrder=DESC',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
+    })
+
+    test('should not permit invalid query strings', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list?sortKey=unknown',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('should not succeed for standard users', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/users/police/list',
+        auth: standardAuth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(403)
     })
   })
 })

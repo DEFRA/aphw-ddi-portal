@@ -55,6 +55,8 @@ const schema = Joi.object({
   })
 })
 
+const ddiApiBaseUrl = process.env.DDI_EVENTS_BASE_URL
+
 // Build config
 const config = {
   serviceName: process.env.SERVICE_NAME,
@@ -65,7 +67,7 @@ const config = {
     baseUrl: process.env.DDI_API_BASE_URL
   },
   ddiEventsApi: {
-    baseUrl: process.env.DDI_EVENTS_BASE_URL
+    baseUrl: ddiApiBaseUrl
   },
   osPlacesApi: {
     baseUrl: process.env.OS_PLACES_API_BASE_URL,

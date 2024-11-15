@@ -31,7 +31,7 @@ const stepOneCheckSubmitted = {
     const user = getUser(request)
     const backLink = addRemoveConstants.links.index.get
 
-    const items = (await getUsers(user)).users.map(policeUser => ({
+    const items = (await getUsers({}, user)).users.map(policeUser => ({
       text: policeUser.username,
       value: policeUser.id
     }))
@@ -55,7 +55,7 @@ const stepTwoCheckConfirmation = {
     const backLink = addRemoveConstants.links.remove.get
 
     const pk = request.pre.inputField
-    const { users } = await getUsers(user)
+    const { users } = await getUsers({}, user)
     const recordValue = users.find(policeUser => policeUser.id === pk).username
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -81,7 +81,7 @@ const stepThreeCheckConfirmation = {
     const backLink = routes.removePoliceUser.get
 
     const pk = request.pre.inputField
-    const { users } = await getUsers(user)
+    const { users } = await getUsers({}, user)
     const recordValue = users.find(policeUser => policeUser.id === pk).username
 
     return h.view(views.confirm, new ConfirmViewModel({
@@ -105,7 +105,7 @@ module.exports = [
         const backLink = addRemoveConstants.links.index.get
         const user = getUser(request)
 
-        const items = (await getUsers(user)).users.map(policeUser => ({
+        const items = (await getUsers({}, user)).users.map(policeUser => ({
           text: policeUser.username,
           value: policeUser.id
         }))
@@ -151,7 +151,7 @@ module.exports = [
             const { error } = notFoundSchema('pk', policeUser).validate(request.payload)
             const backLink = routes.policeUsers.get
 
-            const items = (await getUsers(user)).users.map(policeUser => ({
+            const items = (await getUsers({}, user)).users.map(policeUser => ({
               text: policeUser.username,
               value: policeUser.id
             }))

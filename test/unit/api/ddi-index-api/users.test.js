@@ -4,12 +4,13 @@ const { get, boomRequest, callDelete, post } = require('../../../../app/api/ddi-
 const { addUser, getUsers, addUsers, removeUser } = require('../../../../app/api/ddi-index-api/users')
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
-const { afterEach } = require('node:test')
 const { ApiErrorFailure } = require('../../../../app/errors/api-error-failure')
+const { buildUser } = require('../../../mocks/users')
+const { sort } = require('../../../../app/constants/api')
 
 describe('DDI API users', () => {
   afterEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
   })
 
   describe('addUser', () => {
@@ -283,50 +284,100 @@ describe('DDI API users', () => {
   })
 
   describe('getUsers', () => {
-    test('should return a list of users', async () => {
-      get.mockResolvedValue({
-        users: [
-          {
-            id: 1,
-            username: 'ralph@wreckit.com',
-            active: true
-          },
-          {
-            id: 2,
-            police_force_id: 57,
-            username: 'scott.turner@sacramento.police.gov',
-            active: true
-          },
-          {
-            id: 3,
-            police_force_id: 1,
-            username: 'axel.foley@beverly-hills.police.gov',
-            active: true
-          }
-        ],
-        count: 3
-      })
-
-      const { users, count } = await getUsers(user)
-      expect(users).toBeInstanceOf(Array)
-      expect(count).toBe(3)
-      expect(users).toEqual([
-        {
+    const usersResponse = {
+      users: [
+        buildUser({
           id: 1,
-          username: 'ralph@wreckit.com'
-        },
-        {
+          username: 'ralph@wreckit.com',
+          active: true
+        }),
+        buildUser({
           id: 2,
           police_force_id: 57,
-          username: 'scott.turner@sacramento.police.gov'
-        },
-        {
+          username: 'scott.turner@sacramento.police.gov',
+          active: true
+        }),
+        buildUser({
           id: 3,
           police_force_id: 1,
-          username: 'axel.foley@beverly-hills.police.gov'
-        }
-      ])
-      expect(get).toHaveBeenCalledWith('users', user)
+          username: 'axel.foley@beverly-hills.police.gov',
+          active: true
+        })
+      ],
+      count: 3
+    }
+    test('should return a list of users', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      const { users, count } = await getUsers({}, user)
+      expect(users).toBeInstanceOf(Array)
+      expect(count).toBe(3)
+      expect(users).toEqual(usersResponse.users)
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users' }), user)
+    })
+
+    test('should return a list of users filtered by police force', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ filter: { policeForceId: 2 } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?policeForceId=2' }), user)
+    })
+
+    test('should return a list of users filtered by police force', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ filter: { policeForceId: undefined } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users' }), user)
+    })
+
+    test('should return a list of users sorted by police force ASC', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ sort: { policeForce: sort.ASC } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=policeForce&sortOrder=ASC' }), user)
+    })
+
+    test('should return a list of users sorted by police force DESC', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ sort: { policeForce: sort.DESC } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=policeForce&sortOrder=DESC' }), user)
+    })
+
+    test('should return a list of users sorted by username ASC', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ sort: { username: sort.ASC } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=username&sortOrder=ASC' }), user)
+    })
+
+    test('should return a list of users sorted by indexAccess Yes', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ sort: { indexAccess: true } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=activated&activated=true' }), user)
+    })
+
+    test('should return a list of users sorted by indexAccess No', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ sort: { indexAccess: false } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?sortKey=activated&activated=false' }), user)
+    })
+
+    test('should return a list of users called with multiple options', async () => {
+      get.mockResolvedValue(usersResponse)
+
+      await getUsers({ filter: { policeForceId: 2 }, sort: { username: sort.DESC } }, user)
+
+      expect(get).toHaveBeenCalledWith(expect.objectContaining({ href: 'http://test.com/users?policeForceId=2&sortKey=username&sortOrder=DESC' }), user)
     })
   })
 
