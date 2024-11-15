@@ -336,7 +336,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
 
-      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
     })
 
     test('should sort by indexAccess descending', async () => {
@@ -351,7 +351,7 @@ describe('Police users page', () => {
 
       expect(response.statusCode).toBe(200)
 
-      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: false } }, expect.anything())
+      expect(getUsers).toHaveBeenCalledWith({ sort: { indexAccess: true } }, expect.anything())
     })
 
     test('should not permit invalid query strings', async () => {
