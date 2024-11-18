@@ -12,7 +12,8 @@ module.exports = [
       handler: async (request, h) => {
         return h.view(views.addOrRemove, new ViewModel({
           recordTypeText: 'court',
-          recordType: 'court'
+          recordType: 'court',
+          showAdminBreadcrumb: true
         }))
       }
     }

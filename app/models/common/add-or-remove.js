@@ -17,6 +17,7 @@ const { routes } = require('../../constants/admin')
 function ViewModel (details, backNav, errors) {
   this.model = {
     backLink: backNav?.backLink || routes.index.get,
+    showAdminBreadcrumb: details?.showAdminBreadcrumb,
     addOrRemove: {
       id: 'addOrRemove',
       name: 'addOrRemove',
