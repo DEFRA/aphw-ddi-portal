@@ -13,7 +13,8 @@ module.exports = [
       handler: async (request, h) => {
         initialisePoliceUsers(request, [])
         return h.view(views.addOrRemove, new ViewModel({
-          optionText: 'Do you want to add or remove police officers?'
+          optionText: 'Do you want to add or remove police officers?',
+          showAdminBreadcrumb: true
         }))
       }
     }

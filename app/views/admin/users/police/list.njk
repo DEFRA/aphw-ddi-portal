@@ -11,22 +11,21 @@
 {% endblock %}
 
 {% block beforeContent %}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-        {{ govukBackLink({
-            text: "Back",
-            href: model.backLink,
-            attributes: {
-                id: "back"
-            }
-        }) }}
-    </div>
-</div>
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full-width">
+    <div class="govuk-grid-column-full">
         {% if model.errors | length > 0 %}
         {{ govukErrorSummary({
         titleText: "There is a problem",
