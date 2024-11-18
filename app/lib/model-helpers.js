@@ -160,10 +160,7 @@ const isNeuteringDeadlineVisibleInView = cdo => {
   if (cdo.exemption.exemptionOrder === '2023') {
     return true
   }
-  if (cdo.exemption.exemptionOrder === '2015' && cdo.dog.breed === 'XL Bully') {
-    return true
-  }
-  return false
+  return cdo.exemption.exemptionOrder === '2015' && cdo.dog.breed === 'XL Bully'
 }
 
 const isMicrochipDeadlineVisibleInEditNearTop = exemption => {
