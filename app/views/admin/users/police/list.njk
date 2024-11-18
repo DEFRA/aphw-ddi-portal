@@ -1,7 +1,10 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "components/accessibleAutocomplete/macro.njk" import accessibleAutocomplete %}
+
 {% extends '_layout.njk' %}
 
 {% block pageTitle %}{{ serviceName }}
@@ -23,7 +26,7 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-column-full-width">
         {% if model.errors | length > 0 %}
         {{ govukErrorSummary({
         titleText: "There is a problem",
@@ -31,22 +34,25 @@
         }) }}
         {% endif %}
 
+        <form method="GET" novalidate autocomplete="off">
         {% call govukFieldset(model.fieldset) %}
-
+            <div class="govuk-form-group">
+                {{ accessibleAutocomplete(model.policeForce) }}
+            </div>
         {% endcall %}
+            {{ govukButton(model.submit) }}
+        </form>
 
 
         <h2 class="govuk-heading-m">
-            {{ model.count }} police officers
+            {{ model.userCount }}
         </h2>
         <table class="govuk-table defra-sortable-table">
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
                 {% for colHeading in model.tableHeadings %}
-<!--                <th scope="col" class="govuk-table__header govuk-input&#45;&#45;width-10" data-aria-sort="{{colHeading.ariaSort}}">-->
-                <th scope="col" class="govuk-table__header govuk-input--width-10">
-<!--                    <a class="govuk-link govuk-link&#45;&#45;no-visited-state govuk-link&#45;&#45;no-underline" href="{{colHeading.link}}">-->
-                    <a class="govuk-link govuk-link&#45;&#45;no-visited-state govuk-link&#45;&#45;no-underline">
+                <th scope="col" class="govuk-table__header govuk-input--width-10" data-aria-sort="{{colHeading.ariaSort}}">
+                    <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
                         {{colHeading.label}}
                     </a>
                 </th>

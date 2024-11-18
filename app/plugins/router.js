@@ -74,6 +74,7 @@ const routes = [].concat(
   require('../routes/admin/users/police/index'),
   require('../routes/admin/users/police/add'),
   require('../routes/admin/users/police/remove'),
+  require('../routes/admin/users/police/list.js'),
   require('../routes/admin/external-events'),
   require('../routes/admin/audit/audit-query-type'),
   require('../routes/admin/audit/audit-query-details'),

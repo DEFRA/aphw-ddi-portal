@@ -1,12 +1,14 @@
 const { get, boomRequest, callDelete, post } = require('./base')
 const { ApiErrorFailure } = require('../../errors/api-error-failure')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
+const config = require('../../config')
+const { sort } = require('../../constants/api')
 
 const userEndpoint = 'user'
 const usersEndpoint = 'users'
 
 /**
- * @typedef UserAccount
+ * @typedef UserAccountDto
  * @property {number} id
  * @property {string} username
  * @property {number} policeForceId
@@ -19,21 +21,62 @@ const usersEndpoint = 'users'
  */
 
 /**
- * @param callingUser
- * @return {Promise<{ users: UserAccount[], count: number }>}
+ * @typedef UserAccount
+ * @property {number} id
+ * @property {string} username
+ * @property {number} policeForceId
+ * @property {string} policeForce
+ * @property {boolean|Date} accepted
+ * @property {boolean|Date} activated
+ * @property {boolean|Date} lastLogin
+ * @property {boolean|Date} createdAt
  */
-const getUsers = async (callingUser) => {
+
+/**
+ * @typedef GetUserOptions
+ * @property {{ policeForceId?: number }} [filter]
+ * @property {{
+ *    username?: 'ASC'|'DESC';
+ *    policeForce?: 'ASC'|'DESC';
+ *    indexAccess?: boolean;
+ * }} [sort]
+ */
+
+/**
+ * @param {GetUserOptions} options
+ * @param callingUser
+ * @return {Promise<{ users: UserAccount[]; count: number }>}
+ */
+const getUsers = async (options, callingUser) => {
+  const url = new URL(`${usersEndpoint}`, config.ddiIndexApi.baseUrl)
+
+  if (!isNaN(options.filter?.policeForceId)) {
+    url.searchParams.append('policeForceId', `${options.filter.policeForceId}`)
+  }
+
+  let sortOrder
+
+  if (options.sort?.username !== undefined) {
+    url.searchParams.append('sortKey', 'username')
+    sortOrder = options.sort.username
+  } else if (options.sort?.policeForce !== undefined) {
+    url.searchParams.append('sortKey', 'policeForce')
+    sortOrder = options.sort.policeForce
+  } else if (options.sort?.indexAccess !== undefined) {
+    url.searchParams.append('sortKey', 'indexAccess')
+    url.searchParams.append('indexAccessSortOrder', `${options.sort.indexAccess ? 'Y' : 'N'}`)
+  }
+
+  if ([sort.ASC, sort.DESC].includes(sortOrder)) {
+    url.searchParams.append('sortOrder', sortOrder)
+  }
   /**
    * @type {{
-   *   users: {
-   *       id: number,
-   *       username: string,
-   *       active: boolean,
-   *       police_force_id?: number
-   *     }[]
+   *   users: UserAccountDto[];
+   *   count: number;
    * }}
    */
-  const payload = await get(usersEndpoint, callingUser)
+  const payload = await get(url, callingUser)
 
   return {
     users: payload.users.map(user => {
