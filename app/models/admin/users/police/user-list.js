@@ -46,22 +46,23 @@ const columnLink = columnLinkBuilder('email')
  * @constructor
  */
 function ViewModel (details, options, backNav, errors) {
+  const filterParams = details.policeForce ? `&policeForce=${details.policeForce}` : ''
   const tableHeadings = [
     {
       label: 'Email address',
-      link: columnLink(details.sort, undefined),
+      link: `${columnLink(details.sort, undefined)}${filterParams}`,
       ariaSort: getAriaSort(details.sort, undefined),
       name: 'email'
     },
     {
       label: 'Police force',
-      link: columnLink(details.sort, 'policeForce'),
+      link: `${columnLink(details.sort, 'policeForce')}${filterParams}`,
       ariaSort: getAriaSort(details.sort, 'policeForce'),
       name: 'policeForce'
     },
     {
       label: 'Index access',
-      link: columnLink(details.sort, 'indexAccess'),
+      link: `${columnLink(details.sort, 'indexAccess')}${filterParams}`,
       ariaSort: getAriaSort(details.sort, 'indexAccess'),
       name: 'indexAccess'
     }
