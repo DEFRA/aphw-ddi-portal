@@ -73,6 +73,14 @@
 
       {{ govukDateInput(model.cdoExpiry) }}
       
+      {% if model.showNeuteringDeadlineNearTop %}
+      {{ govukDateInput(model.neuteringDeadline) }}
+      {% endif %}
+
+      {% if model.showMicrochipDeadlineNearTop %}
+      {{ govukDateInput(model.microchipDeadline) }}
+      {% endif %}
+
       {{ accessibleAutocomplete(model.court) }}
       <div class="govuk-!-padding-bottom-5"></div>
       {% endif %}
@@ -110,6 +118,8 @@
       <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}" />
 
       <input type="hidden" name="status" value="{{ model.status }}" />
+
+      <input type="hidden" name="dogBreed" value="{{ model.dogBreed }}" />
 
       <input type="hidden" name="previousInsuranceCompany" value="{{ model.previousInsuranceCompany }}" />
 
