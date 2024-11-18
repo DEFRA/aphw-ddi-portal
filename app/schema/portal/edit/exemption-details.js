@@ -35,12 +35,28 @@ const validateInsurance = (payload) => {
   return undefined
 }
 
-const optionalDate = (preventFutureDates) => {
+const optionalDate = () => {
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
     day: Joi.string().allow(null).allow('')
-  }).optional().custom((value, helper) => validateDate(value, helper, false, preventFutureDates))
+  }).optional().custom((value, helper) => validateDate(value, helper, false, false))
+}
+
+const optionalDatePreventFuture = () => {
+  return Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom((value, helper) => validateDate(value, helper, false, true))
+}
+
+const optionalDatePreventPast = () => {
+  return Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).optional().custom((value, helper) => validateDate(value, helper, false, false, true))
 }
 
 const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
@@ -64,7 +80,7 @@ const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
 const exemptionDetailsSchema = Joi.object({
   indexNumber: Joi.string().required(),
   status: Joi.string().required(),
-  certificateIssued: optionalDate(true),
+  certificateIssued: optionalDatePreventFuture(),
   cdoIssued: optionalDateWhenInterimOr2023('Enter an issue date', true),
   cdoExpiry: optionalDateWhenInterimOr2023('Enter an expiry date', false),
   court: Joi.string().when('exemptionOrder', {
@@ -84,19 +100,21 @@ const exemptionDetailsSchema = Joi.object({
   legislationOfficer: Joi.string().trim().allow('').optional().max(64).messages({
     'string.max': 'Dog legislation officer must be no more than {#limit} characters'
   }),
-  applicationFeePaid: optionalDate(true),
-  neuteringConfirmation: optionalDate(true),
-  microchipVerification: optionalDate(true),
-  joinedExemptionScheme: optionalDate(true),
+  applicationFeePaid: optionalDatePreventFuture(),
+  neuteringConfirmation: optionalDatePreventFuture(),
+  microchipVerification: optionalDatePreventFuture(),
+  joinedExemptionScheme: optionalDatePreventFuture(),
   insuranceCompany: Joi.string().trim().allow(''),
-  insuranceRenewal: optionalDate(false),
+  insuranceRenewal: optionalDate(),
   previousInsuranceCompany: Joi.string().allow('').optional(),
   previousInsuranceRenewal: Joi.string().allow('').optional(),
   exemptionOrder: Joi.number().required(),
-  microchipDeadline: optionalDate(false),
-  typedByDlo: optionalDate(true),
-  withdrawn: optionalDate(true),
-  nonComplianceLetterSent: optionalDate(true),
+  microchipDeadline: optionalDatePreventPast(),
+  neuteringDeadline: optionalDatePreventPast(),
+  typedByDlo: optionalDatePreventFuture(),
+  withdrawn: optionalDatePreventFuture(),
+  nonComplianceLetterSent: optionalDatePreventFuture(),
+  dogBreed: Joi.string().allow(null).allow('').optional(),
   submitButton: Joi.string().allow(null).allow('').optional()
 }).required()
 
@@ -107,6 +125,7 @@ const validatePayload = (payload) => {
   payload.microchipVerification = getDateComponents(payload, 'microchipVerification')
   payload.joinedExemptionScheme = getDateComponents(payload, 'joinedExemptionScheme')
   payload.insuranceRenewal = getDateComponents(payload, 'insuranceRenewal')
+  payload.neuteringDeadline = getDateComponents(payload, 'neuteringDeadline')
   payload.microchipDeadline = getDateComponents(payload, 'microchipDeadline')
   payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
   payload.withdrawn = getDateComponents(payload, 'withdrawn')
@@ -142,6 +161,9 @@ const validatePayload = (payload) => {
     'insuranceRenewal-year': Joi.number().allow(null).allow(''),
     'insuranceRenewal-month': Joi.number().allow(null).allow(''),
     'insuranceRenewal-day': Joi.number().allow(null).allow(''),
+    'neuteringDeadline-year': Joi.number().allow(null).allow(''),
+    'neuteringDeadline-month': Joi.number().allow(null).allow(''),
+    'neuteringDeadline-day': Joi.number().allow(null).allow(''),
     'microchipDeadline-year': Joi.number().allow(null).allow(''),
     'microchipDeadline-month': Joi.number().allow(null).allow(''),
     'microchipDeadline-day': Joi.number().allow(null).allow(''),

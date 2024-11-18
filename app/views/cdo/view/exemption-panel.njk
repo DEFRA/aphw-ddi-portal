@@ -44,6 +44,11 @@
               {% endif %}
             </div>
 
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+              <dt class="govuk-summary-list__key">Order</dt>
+              <dd class="govuk-summary-list__value">{{ model.exemption.exemptionOrder }}</dd>
+            </div>
+
             {% if model.exemption.cdoIssued %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">CDO issued</dt>
@@ -62,24 +67,21 @@
             </div>
             {% endif %}
 
-            {% if model.exemption.exemptionOrder != '2015' %}
+            {% if model.showNeuteringDeadline %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-              <dt class="govuk-summary-list__key">Order</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.exemptionOrder }}</dd>
+              <dt class="govuk-summary-list__key">Neutering deadline</dt>
+              {% if model.exemption.neuteringDeadline %}
+              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringDeadline }}</dd>
+              {% else %}
+              <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+              {% endif %}
             </div>
             {% endif %}
 
-            {% if model.exemption.microchipDeadline %}
+            {% if model.showMicrochipDeadline and model.exemption.microchipDeadline %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Microchip deadline</dt>
               <dd class="govuk-summary-list__value">{{ model.exemption.microchipDeadline }}</dd>
-            </div>
-            {% endif %}
-
-            {% if model.exemption.neuteringDeadline %}
-            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-              <dt class="govuk-summary-list__key">Neutering deadline</dt>
-              <dd class="govuk-summary-list__value">{{ model.exemption.neuteringDeadline }}</dd>
             </div>
             {% endif %}
 

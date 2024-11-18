@@ -42,6 +42,7 @@ module.exports = [
         addDateComponents(exemption, 'microchipVerification')
         addDateComponents(exemption, 'joinedExemptionScheme')
         addDateComponents(exemption, 'insuranceRenewal')
+        addDateComponents(exemption, 'neuteringDeadline')
         addDateComponents(exemption, 'microchipDeadline')
         addDateComponents(exemption, 'typedByDlo')
         addDateComponents(exemption, 'withdrawn')
@@ -52,6 +53,7 @@ module.exports = [
         exemption.status = cdo?.dog?.status
         exemption.subStatus = cdo?.dog?.subStatus
         exemption.breaches = cdo?.dog?.breaches
+        exemption.dogBreed = cdo?.dog?.breed
 
         return h.view(views.editExemptionDetails, new ViewModel(exemption, courts, policeForces, companies, backNav))
       }

@@ -152,6 +152,25 @@ const constructDateField = (data, id, labelText, hint = null, labelClass = null,
   return fieldMetadata
 }
 
+const isMicrochipDeadlineVisibleInView = cdo => {
+  return cdo.exemption.exemptionOrder === '2015' || cdo.exemption.exemptionOrder === '2023'
+}
+
+const isNeuteringDeadlineVisibleInView = cdo => {
+  if (cdo.exemption.exemptionOrder === '2023') {
+    return true
+  }
+  return cdo.exemption.exemptionOrder === '2015' && cdo.dog.breed === 'XL Bully'
+}
+
+const isMicrochipDeadlineVisibleInEditNearTop = exemption => {
+  return exemption.exemptionOrder === '2015'
+}
+
+const isNeuteringDeadlineVisibleInEditNearTop = exemption => {
+  return exemption.exemptionOrder === '2015' && exemption.dogBreed === 'XL Bully'
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -163,5 +182,9 @@ module.exports = {
   cleanUserDisplayName,
   setPoliceForce,
   dedupeAddresses,
-  constructDateField
+  constructDateField,
+  isMicrochipDeadlineVisibleInView,
+  isNeuteringDeadlineVisibleInView,
+  isMicrochipDeadlineVisibleInEditNearTop,
+  isNeuteringDeadlineVisibleInEditNearTop
 }

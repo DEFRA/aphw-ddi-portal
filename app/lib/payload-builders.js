@@ -83,6 +83,7 @@ const buildExemptionDetailsUpdatePayload = (exemptionDetails) => {
     microchipVerification: exemptionDetails.microchipVerification ?? undefined,
     joinedExemptionScheme: exemptionDetails.joinedExemptionScheme ?? undefined,
     exemptionOrder: exemptionDetails.exemptionOrder ?? undefined,
+    neuteringDeadline: exemptionDetails.neuteringDeadline ?? undefined,
     microchipDeadline: exemptionDetails.microchipDeadline ?? undefined,
     typedByDlo: exemptionDetails.typedByDlo ?? undefined,
     withdrawn: exemptionDetails.withdrawn ?? undefined,
