@@ -34,7 +34,6 @@ module.exports = [{
 
       const results = await doSearch(searchCriteria, getUser(request))
 
-      console.log('JB results.address', results.results[0].address)
       return h.view(views.searchBasic, new ViewModel(searchCriteria, results, backNav))
     }
   }
