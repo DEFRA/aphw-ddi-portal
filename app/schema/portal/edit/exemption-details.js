@@ -51,14 +51,6 @@ const optionalDatePreventFuture = () => {
   }).optional().custom((value, helper) => validateDate(value, helper, false, true))
 }
 
-const optionalDatePreventPast = () => {
-  return Joi.object({
-    year: Joi.string().allow(null).allow(''),
-    month: Joi.string().allow(null).allow(''),
-    day: Joi.string().allow(null).allow('')
-  }).optional().custom((value, helper) => validateDate(value, helper, false, false, true))
-}
-
 const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
@@ -109,8 +101,8 @@ const exemptionDetailsSchema = Joi.object({
   previousInsuranceCompany: Joi.string().allow('').optional(),
   previousInsuranceRenewal: Joi.string().allow('').optional(),
   exemptionOrder: Joi.number().required(),
-  microchipDeadline: optionalDatePreventPast(),
-  neuteringDeadline: optionalDatePreventPast(),
+  microchipDeadline: optionalDate(),
+  neuteringDeadline: optionalDate(),
   typedByDlo: optionalDatePreventFuture(),
   withdrawn: optionalDatePreventFuture(),
   nonComplianceLetterSent: optionalDatePreventFuture(),
