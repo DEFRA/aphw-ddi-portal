@@ -135,8 +135,10 @@ describe('View owner details', () => {
     expect(emailValue.textContent.trim()).toBe(notEntered)
     expect(telValue.textContent.trim()).toBe(notEntered)
 
-    const [dogName, microchipNumber] = dogDetailsCard.querySelectorAll('td')
+    const [status, dogName, breedType, microchipNumber] = dogDetailsCard.querySelectorAll('.govuk-summary-list__value')
+    expect(status.textContent.trim()).toBe('Applying for exemption')
     expect(dogName.textContent.trim()).toBe(notEntered)
+    expect(breedType.textContent.trim()).toBe('Pit Bull Terrier')
     expect(microchipNumber.textContent.trim()).toBe(notEntered)
   })
 
