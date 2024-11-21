@@ -1,6 +1,7 @@
 {% from "components/statusTag/macro.njk" import statusTag %}
 
     <div class="govuk-summary-card">
+    {% if result.dogIndex %}
       <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-1 govuk-!-padding-bottom-1">
         <h2 class="govuk-summary-card__title">
             <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ result.dogIndex }}{{ model.srcHashParam }}">
@@ -58,4 +59,23 @@
           </div>
         </dl>
       </div>
+      {% else %}
+      <div class="govuk-summary-card__title-wrapper govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <h2 class="govuk-summary-card__title">
+            <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/owner-details/{{ result.personReference }}{{ model.srcHashParam }}">
+                  {{ result.firstName }} {{ result.lastName }}
+            </a>
+        </h2>
+      </div>
+      <div class="govuk-summary-card__content">
+        <dl class="govuk-summary-list govuk-!-font-size-16">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Address</dt>
+            <dd class="govuk-summary-list__value">
+              {% if result.address %} {{ result.address }} {% endif %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+      {% endif %}
     </div>
