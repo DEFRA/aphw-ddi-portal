@@ -47,17 +47,14 @@
             <dt class="govuk-summary-list__key">
               Microchip number
             </dt>
-            {% if result.microchipNumberNotEntered %}
-            <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
-            {% else %}
+            {% if result.microchipNumber or result.microchipNumber2 %}
             <dd class="govuk-summary-list__value">
-            {{ result.microchipNumber }}
-              {% if result.microchipNumber2 %}
-              <br/>
-              {{ result.microchipNumber2 }}
-              {% endif %}
-              {% endif %}
+            {% if result.microchipNumber %}{{ result.microchipNumber }}<br/>{% endif %}
+            {% if result.microchipNumber2 %}{{ result.microchipNumber2 }}{% endif %}
             </dd>
+            {% else %}
+            <dd class="govuk-summary-list__value defra-secondary-text">Not entered</dd>
+            {% endif %}
           </div>
         </dl>
       </div>
