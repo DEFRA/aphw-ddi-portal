@@ -21,20 +21,22 @@ module.exports = [{
 
       const backNav = addBackNavigation(request)
 
+      const url = request.url.href
+
       if (searchCriteria.searchTerms === undefined) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav))
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], url, backNav))
       }
 
-      searchCriteria.fuzzySearchUrl = constructFuzzySearchUrl(request.url.href)
+      searchCriteria.fuzzySearchUrl = constructFuzzySearchUrl(url)
 
       const errors = searchSchema.validate(searchCriteria, { abortEarly: false })
       if (errors.error) {
-        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], backNav, errors.error)).code(400).takeover()
+        return h.view(views.searchBasic, new ViewModel(searchCriteria, [], url, backNav, errors.error)).code(400).takeover()
       }
 
       const results = await doSearch(searchCriteria, getUser(request))
 
-      return h.view(views.searchBasic, new ViewModel(searchCriteria, results, backNav))
+      return h.view(views.searchBasic, new ViewModel(searchCriteria, results, url, backNav))
     }
   }
 }]

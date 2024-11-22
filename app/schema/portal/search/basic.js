@@ -10,7 +10,8 @@ const schema = Joi.object({
     '*': 'Select a search type'
   }),
   fuzzy: Joi.string(),
-  fuzzySearchUrl: Joi.string()
+  fuzzySearchUrl: Joi.string(),
+  page: Joi.number().optional()
 }).required()
 
 module.exports = schema

@@ -11,6 +11,9 @@ const constants = {
     entry: 'basicSearch',
     searchTerms: 'searchTerms',
     searchResults: 'searchResults'
+  },
+  pagination: {
+    resultsPerPage: 20
   }
 }
 
