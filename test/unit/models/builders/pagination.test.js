@@ -1,4 +1,4 @@
-const { buildPagination, buildRecordRangeText } = require('../../../../app/models/builders/pagination')
+const { buildPagination, buildRecordRangeText, buildTitle } = require('../../../../app/models/builders/pagination')
 
 describe('paginator test', () => {
   describe('buildPagination', () => {
@@ -435,6 +435,57 @@ describe('paginator test', () => {
         }
       })
     })
+
+    test('should handle ten pages of results on page five', () => {
+      const baseUrl = '/search?searchTerms=rex'
+      const results = {
+        totalFound: 195,
+        results: [],
+        page: 5
+      }
+      const res = buildPagination(results, baseUrl)
+      expect(res).toEqual({
+        items: [
+          {
+            current: false,
+            href: '/search?searchTerms=rex&page=1',
+            number: 1
+          },
+          {
+            ellipsis: true
+          },
+          {
+            current: false,
+            href: '/search?searchTerms=rex&page=4',
+            number: 4
+          },
+          {
+            current: true,
+            href: '/search?searchTerms=rex&page=5',
+            number: 5
+          },
+          {
+            current: false,
+            href: '/search?searchTerms=rex&page=6',
+            number: 6
+          },
+          {
+            ellipsis: true
+          },
+          {
+            current: false,
+            href: '/search?searchTerms=rex&page=10',
+            number: 10
+          }
+        ],
+        next: {
+          href: '/search?searchTerms=rex&page=6'
+        },
+        previous: {
+          href: '/search?searchTerms=rex&page=4'
+        }
+      })
+    })
   })
 
   describe('buildRecordRangeText', () => {
@@ -449,6 +500,28 @@ describe('paginator test', () => {
 
     test('should handle being on fifth page', () => {
       expect(buildRecordRangeText(5, 105)).toBe('81 to 100')
+    })
+  })
+
+  describe('buildTitle', () => {
+    test('should return blank string if not pagination - test 1', () => {
+      const results = { totalFound: 10 }
+      expect(buildTitle(results)).toBe('')
+    })
+
+    test('should return blank string if not pagination - test 2', () => {
+      const results = { totalFound: 20 }
+      expect(buildTitle(results)).toBe('')
+    })
+
+    test('should return page title if pagination and on page 1', () => {
+      const results = { totalFound: 35, page: 1 }
+      expect(buildTitle(results)).toBe('page 1 of 2')
+    })
+
+    test('should return page title if pagination and on page 2', () => {
+      const results = { totalFound: 35, page: 2 }
+      expect(buildTitle(results)).toBe('page 2 of 2')
     })
   })
 })

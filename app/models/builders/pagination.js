@@ -83,7 +83,17 @@ const buildRecordRangeText = (pageNum, totalFound) => {
   return `${((pageNum - 1) * pagination.resultsPerPage) + 1} to ${Math.min(totalFound, pageNum * pagination.resultsPerPage)}`
 }
 
+const buildTitle = (results) => {
+  const numOfPages = Math.ceil(results.totalFound / pagination.resultsPerPage)
+  if (numOfPages <= 1) {
+    return ''
+  }
+  const currentPage = results?.page
+  return `page ${currentPage} of ${numOfPages}`
+}
+
 module.exports = {
   buildPagination,
-  buildRecordRangeText
+  buildRecordRangeText,
+  buildTitle
 }

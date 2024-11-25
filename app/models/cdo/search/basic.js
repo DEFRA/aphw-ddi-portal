@@ -1,5 +1,5 @@
 const { forms } = require('../../../constants/forms')
-const { buildPagination, buildRecordRangeText } = require('../../builders/pagination')
+const { buildPagination, buildRecordRangeText, buildTitle } = require('../../builders/pagination')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 
 const marginBottom2 = 'govuk-!-margin-bottom-2'
@@ -81,6 +81,7 @@ function ViewModel (searchCriteria, results, url, backNav, errors) {
     fuzzySearchUrl: searchCriteria.fuzzySearchUrl,
     pagination: buildPagination(results, url),
     recordRangeText: buildRecordRangeText(results?.page, results?.totalFound),
+    title: buildTitle(results),
     currentPage: results?.page,
     errors: []
   }
