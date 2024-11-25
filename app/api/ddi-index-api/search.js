@@ -2,6 +2,17 @@ const { get } = require('./base')
 
 const searchEndpoint = 'search'
 
+const buildExtraParams = (criteria) => {
+  const extraParamList = []
+  if (criteria.fuzzy) {
+    extraParamList.push('fuzzy=true')
+  }
+  if (criteria.page) {
+    extraParamList.push(`page=${criteria.page}`)
+  }
+  return extraParamList.length === 0 ? '' : `?${extraParamList.join('&')}`
+}
+
 /**
  * @typedef DogFromSearch
  * @property {number} dogId
@@ -44,14 +55,15 @@ const searchEndpoint = 'search'
  * @return {Promise<SearchObject>}
  */
 const doSearch = async (criteria, user) => {
-  const fuzzy = criteria.fuzzy ? '?fuzzy=true' : ''
+  const extraParams = buildExtraParams(criteria)
   /**
    * @type {{ results: SearchObject }}
    */
-  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${encodeURIComponent(criteria.searchTerms.trim())}${fuzzy}`, user)
+  const payload = await get(`${searchEndpoint}/${criteria.searchType}/${encodeURIComponent(criteria.searchTerms.trim())}${extraParams}`, user)
   return payload.results
 }
 
 module.exports = {
-  doSearch
+  doSearch,
+  buildExtraParams
 }
