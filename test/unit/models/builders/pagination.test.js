@@ -504,24 +504,19 @@ describe('paginator test', () => {
   })
 
   describe('buildTitle', () => {
-    test('should return blank string if not pagination - test 1', () => {
+    test('should return number of records if not pagination', () => {
       const results = { totalFound: 10 }
-      expect(buildTitle(results)).toBe('')
+      expect(buildTitle(results)).toBe('Search results - 10 records found')
     })
 
-    test('should return blank string if not pagination - test 2', () => {
-      const results = { totalFound: 20 }
-      expect(buildTitle(results)).toBe('')
-    })
-
-    test('should return page title if pagination and on page 1', () => {
+    test('should return record range if pagination and on page 1', () => {
       const results = { totalFound: 35, page: 1 }
-      expect(buildTitle(results)).toBe('page 1 of 2')
+      expect(buildTitle(results)).toBe('Search results - Showing 1 to 20')
     })
 
-    test('should return page title if pagination and on page 2', () => {
+    test('should return record range if pagination and on page 2', () => {
       const results = { totalFound: 35, page: 2 }
-      expect(buildTitle(results)).toBe('page 2 of 2')
+      expect(buildTitle(results)).toBe('Search results - Showing 21 to 35')
     })
   })
 })
