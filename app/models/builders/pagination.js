@@ -80,7 +80,9 @@ const buildRecordRangeText = (pageNum, totalFound) => {
   if (!pageNum || isNaN(pageNum)) {
     return `1 to ${Math.min(totalFound, pagination.resultsPerPage)}`
   }
-  return `${((pageNum - 1) * pagination.resultsPerPage) + 1} to ${Math.min(totalFound, pageNum * pagination.resultsPerPage)}`
+  const rangeStart = ((pageNum - 1) * pagination.resultsPerPage) + 1
+  const rangeEnd = Math.min(totalFound, pageNum * pagination.resultsPerPage)
+  return rangeStart !== rangeEnd ? `${rangeStart} to ${rangeEnd}` : `record ${rangeEnd}`
 }
 
 const buildTitle = (results) => {

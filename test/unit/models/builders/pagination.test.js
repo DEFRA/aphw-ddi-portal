@@ -495,7 +495,15 @@ describe('paginator test', () => {
     })
 
     test('should handle being on page one', () => {
-      expect(buildRecordRangeText(1, 25)).toBe('1 to 20')
+      expect(buildRecordRangeText(1, 41)).toBe('1 to 20')
+    })
+
+    test('should handle being on page two', () => {
+      expect(buildRecordRangeText(2, 41)).toBe('21 to 40')
+    })
+
+    test('should handle being on last page', () => {
+      expect(buildRecordRangeText(3, 41)).toBe('record 41')
     })
 
     test('should handle being on fifth page', () => {
