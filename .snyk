@@ -4,11 +4,11 @@ ignore:
   SNYK-JS-AZUREMSALNODE-7246761:
     - '*':
         reason: Causes 502 errors if upgraded
-        expires: 2024-11-26T12:02:33.654Z
+        expires: 2024-12-25T12:02:33.654Z
         created: 2024-07-26T12:02:33.660Z
   SNYK-JS-COOKIE-8163060:
     - '*':
         reason: Only used for testing and swagger
-        expires: 2024-11-26T08:02:33.654Z
+        expires: 2024-12-25T08:02:33.654Z
         created: 2024-10-07T08:02:33.660Z
 patch: {}
