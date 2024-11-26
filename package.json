@@ -53,7 +53,7 @@
     "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.10.52",
     "nunjucks": "^3.2.4",
-    "swagger-ui": "^5.17.14",
+    "swagger-ui": "^5.18.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
