@@ -503,7 +503,7 @@ describe('paginator test', () => {
     })
 
     test('should handle being on last page', () => {
-      expect(buildRecordRangeText(3, 41)).toBe('41 to 41')
+      expect(buildRecordRangeText(3, 41)).toBe('record 41')
     })
 
     test('should handle being on fifth page', () => {
