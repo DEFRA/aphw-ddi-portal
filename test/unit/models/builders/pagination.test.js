@@ -526,5 +526,10 @@ describe('paginator test', () => {
       const results = { totalFound: 35, page: 2 }
       expect(buildTitle(results)).toBe('Search results - Showing 21 to 35')
     })
+
+    test('should return standard title if no results', () => {
+      const results = { totalFound: 0, page: 1 }
+      expect(buildTitle(results)).toBe('Search')
+    })
   })
 })

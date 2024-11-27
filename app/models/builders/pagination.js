@@ -86,12 +86,16 @@ const buildRecordRangeText = (pageNum, totalFound) => {
 }
 
 const buildTitle = (results) => {
-  const numOfPages = Math.ceil(results.totalFound / pagination.resultsPerPage)
-  if (numOfPages <= 1) {
-    return `Search results - ${results.totalFound} records found`
+  if (results?.totalFound) {
+    const numOfPages = Math.ceil(results.totalFound / pagination.resultsPerPage)
+    if (numOfPages <= 1) {
+      return `Search results - ${results.totalFound} records found`
+    }
+    const rangeText = buildRecordRangeText(results?.page, results.totalFound)
+    return `Search results - Showing ${rangeText}`
+  } else {
+    return 'Search'
   }
-  const rangeText = buildRecordRangeText(results?.page, results.totalFound)
-  return `Search results - Showing ${rangeText}`
 }
 
 module.exports = {
