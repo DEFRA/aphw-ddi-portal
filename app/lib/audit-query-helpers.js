@@ -70,21 +70,38 @@ const mapEventLinkType = (eventType) => {
   return 'Other'
 }
 
-const displaySearchCriteria = (row) => {
-  const keys = Object.keys(row?.details ?? {})
-  const flags = []
-  keys.forEach(key => {
-    if (key === 'fuzzy' && !!row.details.fuzzy) {
-      flags.push('fuzzy')
-    } else if (key === 'national') {
-      flags.push(row.details.national ? 'national' : 'local')
-    }
-  })
-  if (flags.length) {
-    return `${row?.details?.searchTerms} (${flags.join(', ')})`
-  } else {
-    return row?.details?.searchTerms ?? ''
+/**
+ * @param {{
+ *    details?: {
+ *      searchTerms: string;
+ *      national?: boolean;
+ *      fuzzy?: boolean;
+ *    }
+ * }} row
+ * @return {string|*|string}
+ */
+const displaySearchCriteria = row => {
+  if (row?.details === undefined) {
+    return ''
   }
+
+  const { fuzzy, national, searchTerms } = row.details
+
+  const flags = []
+
+  if (fuzzy === true) {
+    flags.push('fuzzy')
+  }
+
+  if (national !== undefined) {
+    flags.push(national ? 'national' : 'local')
+  }
+
+  if (flags.length) {
+    return `${searchTerms} (${flags.join(', ')})`
+  }
+
+  return searchTerms ?? ''
 }
 
 const getExtraColumnFunctions = (queryType) => {
