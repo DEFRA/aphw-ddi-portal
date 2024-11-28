@@ -5,7 +5,7 @@ const { policeListDefaults, summaryList } = require('./common')
  * @typedef AddListInputModel
  * @property {string[]} usersList
  * @property {string} backLink
- * @property {import('../../../builders/components').Fieldset} fieldset
+ * @property {import('../../../builders/components').GovukFieldset} fieldset
  * @property {import('../../../builders/components').GoukSummaryList} summaryList
  * @property {import('../../../builders/components').GovukButton} continue
  * @property {*} autocomplete
