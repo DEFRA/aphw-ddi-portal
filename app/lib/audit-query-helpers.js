@@ -70,6 +70,40 @@ const mapEventLinkType = (eventType) => {
   return 'Other'
 }
 
+/**
+ * @param {{
+ *    details?: {
+ *      searchTerms: string;
+ *      national?: boolean;
+ *      fuzzy?: boolean;
+ *    }
+ * }} row
+ * @return {string|*|string}
+ */
+const displaySearchCriteria = row => {
+  if (row?.details === undefined) {
+    return ''
+  }
+
+  const { fuzzy, national, searchTerms } = row.details
+
+  const flags = []
+
+  if (fuzzy === true) {
+    flags.push('fuzzy')
+  }
+
+  if (national !== undefined) {
+    flags.push(national ? 'national' : 'local')
+  }
+
+  if (flags.length) {
+    return `${searchTerms} (${flags.join(', ')})`
+  }
+
+  return searchTerms ?? ''
+}
+
 const getExtraColumnFunctions = (queryType) => {
   if (queryType === 'user') {
     return [
@@ -79,14 +113,14 @@ const getExtraColumnFunctions = (queryType) => {
   }
   if (queryType === 'search') {
     return [
-      (row) => ({ text: row?.details?.searchTerms }),
+      (row) => ({ text: displaySearchCriteria(row) }),
       (row) => ({ text: row?.username })
     ]
   }
   if (queryType === 'date') {
     return [
       (row) => ({ text: mapEventType(row?.type) }),
-      (row) => row?.details?.searchTerms ? ({ text: row.details.searchTerms }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) }),
+      (row) => row?.details?.searchTerms ? ({ text: displaySearchCriteria(row) }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) }),
       (row) => ({ text: row?.username })
     ]
   }
@@ -141,5 +175,6 @@ module.exports = {
   eitherDateIsPopulated,
   getNumberFoundText,
   mapEventType,
-  mapEventLinkType
+  mapEventLinkType,
+  displaySearchCriteria
 }

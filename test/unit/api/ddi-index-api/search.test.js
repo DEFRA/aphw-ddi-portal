@@ -24,7 +24,7 @@ describe('DDI API search', () => {
         searchTerms: '123456789'
       }, user)
 
-      expect(get).toHaveBeenCalledWith('search/dog/123456789', user)
+      expect(get).toHaveBeenCalledWith('search/dog/123456789?national=true', user)
       expect(searchResults).toEqual(expectedResults)
     })
 
@@ -42,26 +42,26 @@ describe('DDI API search', () => {
         fuzzy: true
       }, user)
 
-      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true', user)
+      expect(get).toHaveBeenCalledWith('search/dog/123456789?fuzzy=true&national=true', user)
       expect(searchResults).toEqual(expectedResults)
     })
   })
 
   describe('buildExtraParams', () => {
     test('should handle zero extra params', () => {
-      expect(buildExtraParams({})).toEqual('')
+      expect(buildExtraParams({})).toEqual('?national=true')
     })
 
     test('should handle fuzzy match param', () => {
-      expect(buildExtraParams({ fuzzy: true })).toEqual('?fuzzy=true')
+      expect(buildExtraParams({ fuzzy: true })).toEqual('?fuzzy=true&national=true')
     })
 
     test('should handle page param', () => {
-      expect(buildExtraParams({ page: 7 })).toEqual('?page=7')
+      expect(buildExtraParams({ page: 7 })).toEqual('?national=true&page=7')
     })
 
     test('should handle fuzzy and page params together', () => {
-      expect(buildExtraParams({ page: 7, fuzzy: true })).toEqual('?fuzzy=true&page=7')
+      expect(buildExtraParams({ page: 7, fuzzy: true })).toEqual('?fuzzy=true&national=true&page=7')
     })
   })
 })
