@@ -70,6 +70,23 @@ const mapEventLinkType = (eventType) => {
   return 'Other'
 }
 
+const displaySearchCriteria = (row) => {
+  const keys = Object.keys(row?.details)
+  const flags = []
+  keys.forEach(key => {
+    if (key === 'fuzzy' && !!row.details.fuzzy) {
+      flags.push('fuzzy')
+    } else if (key === 'national') {
+      flags.push(row.details.national ? 'national' : 'local')
+    }
+  })
+  if (flags.length) {
+    return `${row?.details?.searchTerms} (${flags.join(', ')})`
+  } else {
+    return row?.details?.searchTerms
+  }
+}
+
 const getExtraColumnFunctions = (queryType) => {
   if (queryType === 'user') {
     return [
@@ -79,14 +96,14 @@ const getExtraColumnFunctions = (queryType) => {
   }
   if (queryType === 'search') {
     return [
-      (row) => ({ text: row?.details?.searchTerms }),
+      (row) => ({ text: displaySearchCriteria(row) }),
       (row) => ({ text: row?.username })
     ]
   }
   if (queryType === 'date') {
     return [
       (row) => ({ text: mapEventType(row?.type) }),
-      (row) => row?.details?.searchTerms ? ({ text: row.details.searchTerms }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) }),
+      (row) => row?.details?.searchTerms ? ({ text: displaySearchCriteria(row) }) : ({ linkPk: row?.details?.pk, linkType: mapEventLinkType(row?.type) }),
       (row) => ({ text: row?.username })
     ]
   }
