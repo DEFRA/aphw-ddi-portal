@@ -71,7 +71,7 @@ const mapEventLinkType = (eventType) => {
 }
 
 const displaySearchCriteria = (row) => {
-  const keys = Object.keys(row?.details)
+  const keys = Object.keys(row?.details ?? {})
   const flags = []
   keys.forEach(key => {
     if (key === 'fuzzy' && !!row.details.fuzzy) {
@@ -83,7 +83,7 @@ const displaySearchCriteria = (row) => {
   if (flags.length) {
     return `${row?.details?.searchTerms} (${flags.join(', ')})`
   } else {
-    return row?.details?.searchTerms
+    return row?.details?.searchTerms ?? ''
   }
 }
 
@@ -158,5 +158,6 @@ module.exports = {
   eitherDateIsPopulated,
   getNumberFoundText,
   mapEventType,
-  mapEventLinkType
+  mapEventLinkType,
+  displaySearchCriteria
 }

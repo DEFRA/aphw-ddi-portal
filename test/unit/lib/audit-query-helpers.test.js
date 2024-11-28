@@ -1,4 +1,4 @@
-const { getFieldHint, getFieldLabel, mapEventType, mapEventLinkType, getNumberFoundText, getExtraColumnFunctions, eitherDateIsPopulated, getExtraColumnNames } = require('../../../app/lib/audit-query-helpers')
+const { getFieldHint, getFieldLabel, mapEventType, mapEventLinkType, getNumberFoundText, getExtraColumnFunctions, eitherDateIsPopulated, getExtraColumnNames, displaySearchCriteria } = require('../../../app/lib/audit-query-helpers')
 
 describe('audit query helpers', () => {
   describe('getFieldHint', () => {
@@ -136,6 +136,36 @@ describe('audit query helpers', () => {
       expect(getExtraColumnNames('owner')).toEqual(['Action', 'Username'])
       expect(getExtraColumnNames('login')).toEqual(['Operating system and browser', 'Username'])
       expect(getExtraColumnNames('date')).toEqual(['Action', 'Key', 'Username'])
+    })
+  })
+
+  describe('displaySearchCriteria', () => {
+    test('handles no details', () => {
+      expect(displaySearchCriteria(null)).toBe('')
+    })
+
+    test('handles search term only', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2' } })).toBe('term1 term2')
+    })
+
+    test('handles search term and fuzzy true', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2', fuzzy: true } })).toBe('term1 term2 (fuzzy)')
+    })
+
+    test('handles search term and fuzzy false', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2', fuzzy: false } })).toBe('term1 term2')
+    })
+
+    test('handles search term and national true', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2', national: true } })).toBe('term1 term2 (national)')
+    })
+
+    test('handles search term and national false', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2', national: false } })).toBe('term1 term2 (local)')
+    })
+
+    test('handles search term and fuzzy and national', () => {
+      expect(displaySearchCriteria({ details: { searchTerms: 'term1 term2', fuzzy: true, national: true } })).toBe('term1 term2 (fuzzy, national)')
     })
   })
 })
