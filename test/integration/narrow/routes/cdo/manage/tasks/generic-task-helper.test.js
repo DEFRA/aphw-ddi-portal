@@ -57,46 +57,86 @@ describe('Generic Task Helper test', () => {
       expect(() => getValidation({ taskName: 'invalid' })).toThrow('Invalid task invalid when getting validation')
     })
 
-    test('should get correct validation for task 1', () => {
+    test('should get correct validation for task 1 (Send application pack)', () => {
       const payload = { taskName: 'send-application-pack', taskDone: 'Y' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('send-application-pack')
     })
 
-    test('should get correct validation for task 2', () => {
+    test('should get correct validation for task 2 (Record insurance details)', () => {
       const payload = { taskName: 'record-insurance-details', insuranceCompany: 'Company 1', 'insuranceRenewal-day': '01', 'insuranceRenewal-month': '01', 'insuranceRenewal-year': '2099' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-insurance-details')
     })
 
-    test('should get correct validation for task 3', () => {
+    test('should get correct validation for task 3 (Record microchip number)', () => {
       const payload = { taskName: 'record-microchip-number', microchipNumber: '123451234512345' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-microchip-number')
     })
 
-    test('should get correct validation for task 4', () => {
+    test('should get correct validation for task 4 (Record application fee payment)', () => {
       const payload = { taskName: 'record-application-fee-payment', 'applicationFeePaid-day': '01', 'applicationFeePaid-month': '05', 'applicationFeePaid-year': '2024' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('record-application-fee-payment')
     })
 
-    test('should get correct validation for task 5', () => {
+    test('should get correct validation for task 5 (Send Form 2)', () => {
       const payload = { taskName: 'send-form2', taskDone: 'Y' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('send-form2')
     })
 
-    test('should get correct validation for task 6', () => {
-      const payload = { taskName: 'record-verification-dates', 'microchipVerification-day': '01', 'microchipVerification-month': '05', 'microchipVerification-year': '2024', 'neuteringConfirmation-day': '01', 'neuteringConfirmation-month': '05', 'neuteringConfirmation-year': '2024' }
-      expect(() => getValidation(payload)).not.toThrow()
-      const res = getValidation(payload)
-      expect(res.taskName).toBe('record-verification-dates')
+    describe('verification dates', () => {
+      test('should get correct validation for task 6 (Verification Dates)', () => {
+        const payload = { taskName: 'record-verification-dates', 'microchipVerification-day': '01', 'microchipVerification-month': '05', 'microchipVerification-year': '2024', 'neuteringConfirmation-day': '01', 'neuteringConfirmation-month': '05', 'neuteringConfirmation-year': '2024' }
+        expect(() => getValidation(payload)).not.toThrow()
+        const res = getValidation(payload)
+        expect(res.taskName).toBe('record-verification-dates')
+      })
+
+      test('should get correct validation for Verification Dates with optional fields', () => {
+        const payload = {
+          'microchipVerification-day': '',
+          'microchipVerification-month': '',
+          'microchipVerification-year': '',
+          dogNotFitForMicrochip: '',
+          'neuteringConfirmation-day': '',
+          'neuteringConfirmation-month': '',
+          'neuteringConfirmation-year': '',
+          dogNotNeutered: '',
+          taskName: 'record-verification-dates',
+          microchipVerification: { year: '', month: '', day: '' },
+          neuteringConfirmation: { year: '', month: '', day: '' }
+        }
+
+        expect(() => getValidation(payload)).not.toThrow()
+        const res = getValidation(payload)
+        expect(res.taskName).toBe('record-verification-dates')
+      })
+
+      test('should fail if dogNotNeutered & neuteringConfirmation set', () => {
+        const payload = {
+          'microchipVerification-day': '',
+          'microchipVerification-month': '',
+          'microchipVerification-year': '',
+          dogNotFitForMicrochip: '',
+          'neuteringConfirmation-day': '01',
+          'neuteringConfirmation-month': '05',
+          'neuteringConfirmation-year': '2024',
+          dogNotNeutered: '',
+          taskName: 'record-verification-dates',
+          microchipVerification: { year: '', month: '', day: '' },
+          neuteringConfirmation: { year: '', month: '', day: '' }
+        }
+
+        expect(() => getValidation(payload)).toThrow()
+      })
     })
   })
 
