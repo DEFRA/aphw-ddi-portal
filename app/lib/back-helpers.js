@@ -65,7 +65,7 @@ const addBackNavigation = (request, markAsMainReturnPoint = false) => {
   setInSession(request, lastHashParam, newHashParam)
 
   return {
-    backLink: backLinkUrl.replace('&clear=true', ''),
+    backLink: backLinkUrl,
     srcHashParam: `${srcPrefix}${newHashParam}`,
     srcHashValue: newHashParam,
     currentHashParam: extractSrcParamFromUrl(request?.headers?.referer, true)
