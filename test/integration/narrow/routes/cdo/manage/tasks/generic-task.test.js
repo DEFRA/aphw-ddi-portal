@@ -216,7 +216,7 @@ describe('Generic Task test', () => {
       expect(document.querySelectorAll('.govuk-fieldset__legend--s')[1].textContent.trim()).toBe('When was the dog\'s neutering verified?')
       expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
       expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog aged under 16 months and not neutered')
-      expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog unfit for a microchip')
+      expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog declared unfit for microchipping by vet')
       expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog not neutered as under 16 months old')
     })
 
@@ -256,7 +256,7 @@ describe('Generic Task test', () => {
       const { document } = (new JSDOM(response.payload)).window
       const fieldsetContent = document.querySelector('.govuk-fieldset').textContent.trim()
       expect(fieldsetContent).toContain('Dog aged under 16 months and not neutered')
-      // expect(fieldsetContent).toContain('Dog unfit for a microchip')
+      expect(fieldsetContent).toContain('Dog declared unfit for microchipping by vet')
       expect(fieldsetContent).not.toContain('Dog not neutered as under 16 months old')
       expect(clearVerificationPayload).not.toHaveBeenCalled()
     })
@@ -310,7 +310,7 @@ describe('Generic Task test', () => {
       const { document } = (new JSDOM(response.payload)).window
       const fieldsetContent = document.querySelector('.govuk-fieldset').textContent.trim()
       expect(fieldsetContent).not.toContain('Dog aged under 16 months and not neutered')
-      // expect(fieldsetContent).toContain('Dog unfit for a microchip')
+      expect(fieldsetContent).toContain('Dog declared unfit for microchipping by vet')
       expect(fieldsetContent).toContain('Dog not neutered as under 16 months old')
     })
   })

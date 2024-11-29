@@ -44,14 +44,14 @@ const verificationDatesSchema = Joi.object({
   microchipVerification: Joi.alternatives().conditional('dogNotFitForMicrochip', {
     is: true,
     then: emptyDate.messages({
-      '*': 'Error: microchipping date entered'
+      '*': 'Microchipping date entered'
     }),
     otherwise: microchipVerification
   }),
   neuteringConfirmation: Joi.alternatives().conditional('dogNotNeutered', {
     is: true,
     then: emptyDate.messages({
-      '*': 'Error: neutering date entered'
+      '*': 'Neutering date entered'
     }),
     otherwise: neuteringConfirmation
   })

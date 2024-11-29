@@ -24,7 +24,7 @@ const microchipDeadlineSchema = Joi.object({
     day: Joi.string().allow(null).allow('')
   }).required().custom((value, helper) => validateDate(value, helper, true, false, true))
     .messages({
-      'any.required': 'Enter a microchip deadline date'
+      'any.required': 'Enter the date the dog will be fit to be microchipped'
     }),
   microchipVerification: emptyDate,
   neuteringConfirmation: Joi.alternatives().conditional('dogNotNeutered', {
