@@ -4,7 +4,11 @@ const { getCdoTaskDetails } = require('../../../../../../../app/api/ddi-index-ap
 jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
 const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
 
+jest.mock('../../../../../../../app/session/cdo/manage')
+const { getVerificationPayload } = require('../../../../../../../app/session/cdo/manage')
+
 const { createModel, getValidation, getTaskData, getTaskDetails, getTaskDetailsByKey } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
+const { buildTaskListFromComplete, buildTaskListTasks } = require('../../../../../../mocks/cdo/manage/tasks/builder')
 
 describe('Generic Task Helper test', () => {
   describe('CreateModel', () => {
@@ -154,8 +158,8 @@ describe('Generic Task Helper test', () => {
 
   describe('getTaskData', () => {
     test('adds indexNumber', async () => {
-      getCdoTaskDetails.mockResolvedValue({
-        tasks: {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        tasks: buildTaskListTasks({
           applicationPackSent: {
             key: 'applicationPackSent',
             available: true,
@@ -163,10 +167,10 @@ describe('Generic Task Helper test', () => {
             readonly: true,
             timestamp: '2024-06-27T00:00:00.000Z'
           }
-        }
-      })
+        })
+      }))
       getCompanies.mockResolvedValue([{ company: 'Company 1' }])
-      const res = await getTaskData('ED123', 'send-application-pack')
+      const res = await getTaskData('ED123', 'send-application-pack', {}, {})
       expect(res.indexNumber).toBe('ED123')
       expect(res.task).toEqual({
         key: 'applicationPackSent',
@@ -175,7 +179,7 @@ describe('Generic Task Helper test', () => {
         readonly: true,
         timestamp: '2024-06-27T00:00:00.000Z'
       })
-      expect(res.companies).toBe(undefined)
+      expect(res.companies).toBeUndefined()
     })
 
     test('adds companies if record-insurance-details', async () => {
@@ -191,7 +195,7 @@ describe('Generic Task Helper test', () => {
         }
       })
       getCompanies.mockResolvedValue([{ company: 'Company 1' }])
-      const res = await getTaskData('ED123', 'record-insurance-details')
+      const res = await getTaskData('ED123', 'record-insurance-details', {}, {})
       expect(res.indexNumber).toBe('ED123')
       expect(res.task).toEqual({
         key: 'insuranceDetailsRecorded',
@@ -201,6 +205,97 @@ describe('Generic Task Helper test', () => {
         timestamp: '2024-06-27T00:00:00.000Z'
       })
       expect(res.companies).toEqual([{ company: 'Company 1' }])
+    })
+
+    test('should set dogDeclaredUnfit and neuteringBypassedUnder16 from api', async () => {
+      const verificationOptions = {
+        dogDeclaredUnfit: true,
+        allowNeuteringBypass: true,
+        neuteringBypassedUnder16: true,
+        showNeuteringBypass: true,
+        allowDogDeclaredUnfit: true
+      }
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        verificationOptions
+      }))
+      const res = await getTaskData('ED123', 'record-verification-dates', {}, {})
+
+      expect(res.verificationOptions).toEqual(verificationOptions)
+    })
+
+    test('should set dogDeclaredUnfit and neuteringBypassedUnder16 from payload', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        verificationOptions: {
+          dogDeclaredUnfit: true,
+          allowNeuteringBypass: true,
+          neuteringBypassedUnder16: true,
+          showNeuteringBypass: true,
+          allowDogDeclaredUnfit: true
+        }
+      }))
+      const res = await getTaskData('ED123', 'record-verification-dates', {}, {}, { test: true })
+
+      expect(res.verificationOptions).toEqual({
+        dogDeclaredUnfit: false,
+        neuteringBypassedUnder16: false,
+        allowNeuteringBypass: true,
+        showNeuteringBypass: true,
+        allowDogDeclaredUnfit: true
+      })
+    })
+
+    test('should set dogDeclaredUnfit and neuteringBypassedUnder16 from payload even if session exists', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        verificationOptions: {
+          dogDeclaredUnfit: true,
+          allowNeuteringBypass: true,
+          neuteringBypassedUnder16: true,
+          showNeuteringBypass: true,
+          allowDogDeclaredUnfit: true
+        }
+      }))
+      getVerificationPayload.mockReturnValue({
+        neuteringConfirmation: { year: '', month: '', day: '' },
+        microchipVerification: { year: '', month: '', day: '' },
+        dogNotFitForMicrochip: true,
+        dogNotNeutered: true
+      })
+      const res = await getTaskData('ED123', 'record-verification-dates', {}, {}, { test: true })
+
+      expect(res.verificationOptions).toEqual({
+        dogDeclaredUnfit: false,
+        neuteringBypassedUnder16: false,
+        allowNeuteringBypass: true,
+        showNeuteringBypass: true,
+        allowDogDeclaredUnfit: true
+      })
+    })
+
+    test('should set dogDeclaredUnfit and neuteringBypassedUnder16 from session if no payload exists', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        verificationOptions: {
+          dogDeclaredUnfit: false,
+          neuteringBypassedUnder16: false,
+          allowNeuteringBypass: true,
+          showNeuteringBypass: true,
+          allowDogDeclaredUnfit: true
+        }
+      }))
+      getVerificationPayload.mockReturnValue({
+        neuteringConfirmation: { year: '', month: '', day: '' },
+        microchipVerification: { year: '', month: '', day: '' },
+        dogNotFitForMicrochip: true,
+        dogNotNeutered: true
+      })
+      const res = await getTaskData('ED123', 'record-verification-dates', {}, {})
+
+      expect(res.verificationOptions).toEqual({
+        dogDeclaredUnfit: true,
+        neuteringBypassedUnder16: true,
+        allowNeuteringBypass: true,
+        showNeuteringBypass: true,
+        allowDogDeclaredUnfit: true
+      })
     })
   })
 

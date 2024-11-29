@@ -1,0 +1,74 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}When will the dog be fit to be microchipped? - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {{ govukBackLink({
+        text: "Back",
+        href: model.backLink,
+        attributes: {
+          id: "back"
+        }
+        }) 
+      }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.errors | length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errors
+      }) }}
+    {% endif %}
+
+    <form method="POST" novalidate autocomplete="off">
+      <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
+          <h1 class="govuk-fieldset__heading">When will the dog be fit to be microchipped?</h1>
+        </legend>
+
+        {{ govukDateInput(model.microchipDeadline) }}
+
+        <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
+        {% if model.hidden.dogNotFitForMicrochip %}
+        <input type="hidden" name="dogNotFitForMicrochip" id="dogNotFitForMicrochip" value="" />
+        {% endif %}
+        {% if model.hidden.dogNotNeutered %}
+        <input type="hidden" name="dogNotNeutered" id="dogNotNeutered" value="" />
+        {% endif %}
+
+        <input type="hidden" name="microchipVerification-day" id="microchipVerification-day" value="">
+        <input type="hidden" name="microchipVerification-month" id="microchipVerification-month" value="">
+        <input type="hidden" name="microchipVerification-year" id="microchipVerification-year" value="">
+        <input type="hidden" name="neuteringConfirmation-day" id="neuteringConfirmation-day" value="{{ model.hidden['neuteringConfirmation-day'] }}">
+        <input type="hidden" name="neuteringConfirmation-month" id="neuteringConfirmation-month" value="{{ model.hidden['neuteringConfirmation-month'] }}">
+        <input type="hidden" name="neuteringConfirmation-year" id="neuteringConfirmation-year" value="{{ model.hidden['neuteringConfirmation-year'] }}">
+
+
+      </fieldset>
+
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

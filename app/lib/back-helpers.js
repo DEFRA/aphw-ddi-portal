@@ -49,7 +49,7 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const getMainReturnPoint = (request, pathOnly = true) => {
+const getMainReturnPoint = (request, _pathOnly = true) => {
   const url = getFromSession(request, mainReturnPoint)
   return url ?? '/'
 }

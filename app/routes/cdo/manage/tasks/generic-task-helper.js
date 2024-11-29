@@ -5,6 +5,7 @@ const ViewModelRecordMicrochipNumber = require('../../../../models/cdo/manage/ta
 const ViewModelRecordApplicationFeePayment = require('../../../../models/cdo/manage/tasks/record-application-fee-payment')
 const ViewModelSendForm2 = require('../../../../models/cdo/manage/tasks/send-form2')
 const ViewModelRecordVerificationDates = require('../../../../models/cdo/manage/tasks/record-verification-dates')
+const ViewModelRecordMicrochipDeadline = require('../../../../models/cdo/manage/tasks/record-microchip-deadline')
 const { validateSendApplicationPack } = require('../../../../schema/portal/cdo/tasks/send-application-pack')
 const { validatePayloadRecordInsuranceDetails } = require('../../../../schema/portal/cdo/tasks/record-insurance-details')
 const { validateMicrochipNumber } = require('../../../../schema/portal/cdo/tasks/record-microchip-number')
@@ -13,6 +14,8 @@ const { validateSendForm2 } = require('../../../../schema/portal/cdo/tasks/send-
 const { validateVerificationDates } = require('../../../../schema/portal/cdo/tasks/record-verification-dates')
 const { getCompanies } = require('../../../../api/ddi-index-api/insurance')
 const { getCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
+const { validateMicrochipDeadlineDates } = require('../../../../schema/portal/cdo/tasks/record-microchip-deadline')
+const { getVerificationPayload } = require('../../../../session/cdo/manage')
 
 const taskList = [
   { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
@@ -20,7 +23,8 @@ const taskList = [
   { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number', apiKey: 'recordMicrochipNumber', stateKey: 'microchipNumberRecorded' },
   { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment', apiKey: 'recordApplicationFee', stateKey: 'applicationFeePaid' },
   { name: tasks.form2Sent, Model: ViewModelSendForm2, validation: validateSendForm2, key: 'send-form2', label: 'Send Form 2', apiKey: 'sendForm2', stateKey: 'form2Sent' },
-  { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering', apiKey: 'verifyDates', stateKey: 'verificationDateRecorded' }
+  { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering', apiKey: 'verifyDates', stateKey: 'verificationDateRecorded' },
+  { name: tasks.microchipDeadlineRecorded, Model: ViewModelRecordMicrochipDeadline, validation: validateMicrochipDeadlineDates, key: 'record-microchip-deadline', label: 'When will the dog be fit to be microchipped?', apiKey: 'verifyDates', stateKey: 'verificationDateRecorded' }
 ]
 
 /**
@@ -69,9 +73,22 @@ const getTaskDetailsByKey = taskKey => {
   return { key: task.key, label: task.label, apiKey: task.apiKey, stateKey: task.stateKey }
 }
 
-const verificationData = (verificationOptions, payload) => {
+const verificationData = ({ verificationOptions, ...data }, request, payload) => {
   let dogDeclaredUnfit = verificationOptions.dogDeclaredUnfit
   let neuteringBypassedUnder16 = verificationOptions.neuteringBypassedUnder16
+
+  const sessionData = getVerificationPayload(request)
+
+  if (sessionData && Object.keys(sessionData).length) {
+    dogDeclaredUnfit = sessionData.dogNotFitForMicrochip ?? false
+    neuteringBypassedUnder16 = sessionData.dogNotNeutered ?? false
+
+    data['neuteringConfirmation-day'] = sessionData['neuteringConfirmation-day']
+    data['neuteringConfirmation-month'] = sessionData['neuteringConfirmation-month']
+    data['neuteringConfirmation-year'] = sessionData['neuteringConfirmation-year']
+
+    data.neuteringConfirmation = neuteringBypassedUnder16 ? undefined : sessionData.neuteringConfirmation
+  }
 
   if (Object.keys(payload).length) {
     dogDeclaredUnfit = payload.dogNotFitForMicrochip !== undefined
@@ -79,30 +96,36 @@ const verificationData = (verificationOptions, payload) => {
   }
 
   return {
-    ...verificationOptions,
-    dogDeclaredUnfit,
-    neuteringBypassedUnder16
-
+    ...data,
+    verificationOptions: {
+      ...verificationOptions,
+      dogDeclaredUnfit,
+      neuteringBypassedUnder16
+    }
   }
 }
+
 /**
  * @param dogIndex
  * @param taskName
  * @param user
- * @param payload
+ * @param request
+ * @param [payload]
  * @return {Promise<{[p: string]: *}>}
  */
-const getTaskData = async (dogIndex, taskName, user, payload = {}) => {
+const getTaskData = async (dogIndex, taskName, user, request, payload = {}) => {
   const taskData = getTaskDetailsByKey(taskName)
   const savedTask = await getCdoTaskDetails(dogIndex, user)
   const taskState = savedTask.tasks[taskData.stateKey]
-  const data = { indexNumber: dogIndex, ...savedTask, task: { ...taskState }, ...payload }
+  let data = { indexNumber: dogIndex, ...savedTask, task: { ...taskState }, ...payload }
   delete data.task.tasks
 
   if (taskName === 'record-insurance-details') {
     data.companies = await getCompanies(user)
   } else if (taskName === 'record-verification-dates') {
-    data.verificationOptions = verificationData(data.verificationOptions, payload)
+    data = verificationData(data, request, payload)
+  } else if (taskName === 'record-microchip-deadline') {
+    data.hidden = getVerificationPayload(request)
   }
 
   return data

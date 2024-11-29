@@ -6,6 +6,7 @@ const cdoTasksGetSchema = Joi.object({
     'send-application-pack',
     'record-insurance-details',
     'record-microchip-number',
+    'record-microchip-deadline',
     'record-application-fee-payment',
     'send-form2',
     'record-verification-dates').required()
