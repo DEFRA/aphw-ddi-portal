@@ -4,8 +4,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}
-{% endblock %}
+{% block pageTitle %}You are about to delete {{ model.selectedList.length }} dog owner {% if model.selectedList | length == 1 %}record {% else %}records{% endif %} - Admin - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-grid-row">

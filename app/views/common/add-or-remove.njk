@@ -6,7 +6,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}{% endblock %}
+{% block pageTitle %}{{ model.optionText }} - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   {% if model.showAdminBreadcrumb %}
