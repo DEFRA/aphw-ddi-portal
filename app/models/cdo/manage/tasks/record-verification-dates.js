@@ -43,7 +43,7 @@ function ViewModel (data, backNav, errors) {
         name: 'dogNotFitForMicrochip',
         items: [
           {
-            text: 'Dog unfit for a microchip',
+            text: 'Dog declared unfit for microchipping by vet',
             checked: data.verificationOptions.dogDeclaredUnfit
           }
         ],
