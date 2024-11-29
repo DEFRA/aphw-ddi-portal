@@ -105,7 +105,7 @@ describe('RecordVerificationDates Model', () => {
     const errors = {
       details: [
         {
-          message: 'Error: microchipping date entered',
+          message: 'Microchipping date entered',
           path: ['microchipVerification'],
           type: 'custom',
           context: {
@@ -115,7 +115,7 @@ describe('RecordVerificationDates Model', () => {
             key: 'microchipVerification'
           }
         }, {
-          message: 'Error: neutering date entered',
+          message: 'Neutering date entered',
           path: ['neuteringConfirmation'],
           type: 'custom',
           context: {
