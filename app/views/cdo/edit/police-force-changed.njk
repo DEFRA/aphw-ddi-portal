@@ -4,7 +4,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}{% endblock %}
+{% block pageTitle %}The police force for the dog record{% if model.numberOfDogs > 1 %}s{% endif %} has changed - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">

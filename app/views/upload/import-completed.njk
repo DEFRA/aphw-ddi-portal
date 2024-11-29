@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
-{% set pageHeading = "Upload XLB data" %}
+{% block pageTitle %}Import completed - Admin - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
 <div class="govuk-breadcrumbs">
