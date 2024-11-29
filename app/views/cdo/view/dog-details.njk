@@ -5,8 +5,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}
-{% endblock %}
+{% block pageTitle %}Dog {{ model.dog.indexNumber }} - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-grid-row">

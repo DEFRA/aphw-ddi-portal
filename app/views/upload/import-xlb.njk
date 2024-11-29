@@ -6,6 +6,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set pageHeading = "Upload XLB data" %}
+{% block pageTitle %}{{ pageHeading }} - Admin - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-breadcrumbs">
