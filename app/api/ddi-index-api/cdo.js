@@ -155,6 +155,12 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {boolean} showNeuteringBypass
  */
 /**
+ * @typedef CdoSummary
+ * @property {{ name: string }} dog
+ * @property {{ cdoExpiry: Date|undefined }} exemption
+ * @property {{ firstName: string; lastName: string }} person
+ */
+/**
  * @typedef CdoTaskListDto
  * @property {CdoTaskListTasksDto} tasks
  * @property {Date|undefined} applicationPackSent
@@ -165,8 +171,10 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {Date|undefined} form2Sent
  * @property {Date|undefined} neuteringConfirmation
  * @property {Date|undefined} microchipVerification
+ * @property {Date|undefined} microchipDeadline
  * @property {Date|undefined} certificateIssued
  * @property {CdoVerificationOptions} verificationOptions
+ * @property {CdoSummary} cdoSummary
  */
 
 /**

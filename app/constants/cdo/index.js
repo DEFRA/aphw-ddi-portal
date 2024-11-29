@@ -30,6 +30,7 @@ const constants = {
     applicationFeePaid: 'applicationFeePaid',
     form2Sent: 'form2Sent',
     verificationDateRecorded: 'verificationDateRecorded',
+    microchipDeadlineRecorded: 'microchipDeadlineRecorded',
     certificateIssued: 'certificateIssued'
   },
   views: {

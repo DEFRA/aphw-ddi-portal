@@ -5,8 +5,8 @@ const unavailableTask = {
 }
 
 /**
- * @param {Partial<TaskItem> & { key: string }} taskListPartial
- * @return {TaskItem}
+ * @param {Partial<CdoTaskDto> & { key: string }} taskListPartial
+ * @return {CdoTaskDto}
  */
 const buildTask = taskListPartial => ({
   ...unavailableTask,
@@ -14,8 +14,8 @@ const buildTask = taskListPartial => ({
 })
 
 /**
- * @param {Partial<TasklistTasks>} tasksPartial
- * @return {TasklistTasks}
+ * @param {Partial<CdoTaskListTasksDto>} tasksPartial
+ * @return {CdoTaskListTasksDto}
  */
 const buildTaskListTasks = (tasksPartial = {}) => ({
   applicationPackSent: buildTask({
@@ -44,8 +44,26 @@ const buildTaskListTasks = (tasksPartial = {}) => ({
 })
 
 /**
- * @param {Partial<TaskListVerificationOptions>} verificationOptionsPartial
- * @return {TaskListVerificationOptions}
+ * @param {Partial<CdoSummary>} cdoSummaryPartial
+ * @return {CdoSummary}
+ */
+const buildCdoSummary = (cdoSummaryPartial = {}) => ({
+  dog: {
+    name: 'Rex300'
+  },
+  person: {
+    firstName: 'Alex',
+    lastName: 'Carter'
+  },
+  exemption: {
+    cdoExpiry: new Date('2023-12-10')
+  },
+  ...cdoSummaryPartial
+})
+
+/**
+ * @param {Partial<CdoVerificationOptions>} verificationOptionsPartial
+ * @return {CdoVerificationOptions}
  */
 const buildVerificationOptions = (verificationOptionsPartial = {}) => ({
   dogDeclaredUnfit: false,
@@ -57,16 +75,17 @@ const buildVerificationOptions = (verificationOptionsPartial = {}) => ({
 })
 
 /**
- * @type {Partial<TaskList>}
+ * @type {Partial<CdoTaskListDto>}
  */
 const initialTaskList = {
   tasks: buildTaskListTasks(),
-  verificationOptions: buildVerificationOptions()
+  verificationOptions: buildVerificationOptions(),
+  cdoSummary: buildCdoSummary()
 }
 
 /**
- * @param {Partial<TaskList>} [buildTaskListPartial]
- * @return {TaskList}
+ * @param {Partial<CdoTaskListDto>} [buildTaskListPartial]
+ * @return {CdoTaskListDto}
  */
 const buildTaskListFromInitial = (buildTaskListPartial = {}) => ({
   ...initialTaskList,
@@ -74,8 +93,8 @@ const buildTaskListFromInitial = (buildTaskListPartial = {}) => ({
 })
 
 /**
- * @param {Partial<TasklistTasks>} [tasksPartial]
- * @return {TasklistTasks}
+ * @param {Partial<CdoTaskListTasksDto>} [tasksPartial]
+ * @return {CdoTaskListTasksDto}
  */
 const buildTaskListTasksFromComplete = (tasksPartial = {}) => ({
   applicationPackSent: {
@@ -131,7 +150,7 @@ const buildTaskListTasksFromComplete = (tasksPartial = {}) => ({
 })
 
 /**
- * @type {TaskList}
+ * @type {CdoTaskListDto}
  */
 const completeTasklist = {
   tasks: buildTaskListTasksFromComplete(),
@@ -141,16 +160,25 @@ const completeTasklist = {
   insuranceRenewal: '2025-01-01T00:00:00.000Z',
   microchipNumber: '123456789012354',
   applicationFeePaid: '2024-01-01T00:00:00.000Z',
-  form2Sent: '2024-11-27T00:00:00.000Z'
+  form2Sent: '2024-11-27T00:00:00.000Z',
+  cdoSummary: buildCdoSummary()
 }
 
 /**
- * @param {Partial<TaskList>} tasklistPartial
- * @return {TaskList}
+ * @param {Partial<CdoTaskListDto>} tasklistPartial
+ * @return {CdoTaskListDto}
  */
 const buildTaskListFromComplete = tasklistPartial => ({
   ...completeTasklist,
   ...tasklistPartial
+})
+
+const buildVerificationPayload = verificationPayloadPartial => ({
+  neuteringConfirmation: { year: '', month: '', date: '' },
+  microchipVerification: { year: '', month: '', date: '' },
+  dogNotNeutered: false,
+  dogNotFitForMicrochip: false,
+  ...verificationPayloadPartial
 })
 
 module.exports = {
@@ -159,5 +187,6 @@ module.exports = {
   buildTaskListFromComplete,
   buildTaskListTasks,
   buildTaskListTasksFromComplete,
-  buildVerificationOptions
+  buildVerificationOptions,
+  buildVerificationPayload
 }

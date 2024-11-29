@@ -8,7 +8,7 @@ const { notYetStartedTaskList } = require('../../../../../../mocks/cdo/manage/ta
 const { ApiErrorFailure } = require('../../../../../../../app/errors/api-error-failure')
 const {
   buildTaskListFromComplete, buildTaskListTasksFromComplete, buildTask, buildVerificationOptions,
-  buildTaskListFromInitial
+  buildTaskListFromInitial, buildVerificationPayload
 } = require('../../../../../../mocks/cdo/manage/tasks/builder')
 
 describe('Generic Task test', () => {
@@ -20,6 +20,9 @@ describe('Generic Task test', () => {
 
   jest.mock('../../../../../../../app/api/ddi-index-api/insurance')
   const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/insurance')
+
+  jest.mock('../../../../../../../app/session/cdo/manage')
+  const { getVerificationPayload } = require('../../../../../../../app/session/cdo/manage')
 
   const createServer = require('../../../../../../../app/server')
   let server
@@ -298,6 +301,36 @@ describe('Generic Task test', () => {
     })
   })
 
+  describe('POST /cdo/manage/task/record-verification-dates/ED20001', () => {
+    test('GET /cdo/manage/task/record-verification-dates/ED20001 route returns 302 given microchip call', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromInitial())
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/record-verification-dates/ED20001',
+        auth,
+        payload: {
+          'microchipVerification-day': '',
+          'microchipVerification-month': '',
+          'microchipVerification-year': '',
+          dogNotFitForMicrochip: true,
+          'neuteringConfirmation-day': '',
+          'neuteringConfirmation-month': '',
+          'neuteringConfirmation-year': '',
+          dogNotNeutered: true,
+          taskName: 'record-verification-dates',
+          microchipVerification: { year: '', month: '', day: '' },
+          neuteringConfirmation: { year: '', month: '', day: '' }
+        }
+
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+  })
+
   describe('POST /cdo/manage/task/send-application-pack/ED20001', () => {
     test('returns 302 if not auth', async () => {
       const fd = new FormData()
@@ -378,6 +411,33 @@ describe('Generic Task test', () => {
       })
       const response = await server.inject(options)
       expect(response.statusCode).toBe(500)
+    })
+  })
+
+  describe('GET /cdo/manage/task/record-microchip-deadline', () => {
+    test('saves if valid payload', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        microchipDeadline: '2025-11-29T00:00:00.000Z'
+      }))
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+      getVerificationPayload.mockReturnValue(buildVerificationPayload({
+        neuteringConfirmation: new Date('2026-01-01T00:00:00.000Z'),
+        microchipVerification: undefined,
+        dogNotFitForMicrochip: true
+      }))
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-microchip-deadline/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('#main-content .govuk-fieldset__heading').textContent.trim()).toBe('When will the dog be fit to be microchipped?')
+      expect(document.querySelector('#main-content .govuk-hint').textContent.trim()).toBe('Enter the date provided by the vet.')
+      expect(document.querySelector('#main-content .govuk-button').textContent.trim()).toBe('Enter the date provided by the vet.')
     })
   })
 

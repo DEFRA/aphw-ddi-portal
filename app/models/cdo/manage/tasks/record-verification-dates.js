@@ -35,8 +35,6 @@ function ViewModel (data, backNav, errors) {
     }
   }
 
-  data.verificationOptions.allowDogDeclaredUnfit = false
-
   /**
    * @type {GovukCheckBox|false}
    */
