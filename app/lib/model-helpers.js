@@ -76,7 +76,6 @@ const cleanUserDisplayName = (displayName) => {
 /**
  * @param request
  * @param user
- * @param postcode
  * @return {Promise<void>}
  */
 const setPoliceForce = async (request, user) => {
@@ -108,18 +107,24 @@ const dedupeAddresses = items => {
 }
 
 const constructDateField = (data, id, labelText, hint = null, labelClass = null, options = {}) => {
+  const fieldset = options.hideFieldset
+    ? {}
+    : {
+        fieldset: {
+          ...options.fieldset,
+          legend: {
+            text: labelText,
+            classes: labelClass || labelClass === '' ? labelClass : 'govuk-fieldset__legend--s',
+            ...options.fieldset?.legend
+          }
+        }
+      }
+
   const fieldMetadata = {
     type: 'date',
     id: id,
     namePrefix: id,
-    fieldset: {
-      ...options.fieldset,
-      legend: {
-        text: labelText,
-        classes: labelClass || labelClass === '' ? labelClass : 'govuk-fieldset__legend--s',
-        ...options.fieldset?.legend
-      }
-    },
+    ...fieldset,
     items: [
       {
         name: 'day',
@@ -140,7 +145,8 @@ const constructDateField = (data, id, labelText, hint = null, labelClass = null,
         attributes: { maxlength: '4' }
       }
     ],
-    classes: 'govuk-!-margin-bottom-5'
+    classes: options.hideMargin ? '' : 'govuk-!-margin-bottom-5',
+    ...options.date
   }
 
   if (hint) {

@@ -1,9 +1,11 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% extends '_layout.njk' %}
 
@@ -36,18 +38,35 @@
 
     <form method="POST" novalidate autocomplete="off">
       <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
-          <h1 class="govuk-fieldset__heading">Record the verification date for microchip and neutering</h1>
-        </legend>
-    
-        {{ govukDateInput(model.microchipVerification) }}
+      {% call govukFieldset(model.verificationFieldset) %}
+      <div class="govuk-form-group {{model.microchipGroupClass}}">
+        {% call govukFieldset(model.microchipFieldGroup) %}
 
-        {{ govukDateInput(model.neuteringConfirmation) }}
+              {{ govukDateInput(model.microchipVerification) }}
+
+              {% if model.dogNotNeutered %}
+              {{ govukCheckboxes(model.dogNotFitForMicrochip) }}
+              {% endif %}
+        {% endcall %}
+        </div>
+        <div class="govuk-form-group {{model.neuteringGroupClass}}">
+          {% call govukFieldset(model.neuteringFieldGroup) %}
+
+                {{ govukDateInput(model.neuteringConfirmation) }}
+
+                {% if model.dogNotNeutered %}
+                  {{ govukCheckboxes(model.dogNotNeutered) }}
+                {% endif %}
+
+          {% endcall %}
+        </div>
+        {% if model.detailsComponent %}
+          {{ govukDetails(model.detailsComponent) }}
+        {% endif %}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
 
-      </fieldset>
+      {% endcall %}
 
       {{ govukButton({
         text: "Save and continue"

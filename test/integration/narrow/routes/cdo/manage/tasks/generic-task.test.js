@@ -6,6 +6,10 @@ const { JSDOM } = require('jsdom')
 jest.mock('../../../../../../../app/api/ddi-index-api/search')
 const { notYetStartedTaskList } = require('../../../../../../mocks/cdo/manage/tasks/not-yet-started')
 const { ApiErrorFailure } = require('../../../../../../../app/errors/api-error-failure')
+const {
+  buildTaskListFromComplete, buildTaskListTasksFromComplete, buildTask, buildVerificationOptions,
+  buildTaskListFromInitial
+} = require('../../../../../../mocks/cdo/manage/tasks/builder')
 
 describe('Generic Task test', () => {
   jest.mock('../../../../../../../app/auth')
@@ -188,25 +192,110 @@ describe('Generic Task test', () => {
     expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
   })
 
-  test('GET /cdo/manage/task/record-verification-dates/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/record-verification-dates/ED20001', () => {
+    test('GET /cdo/manage/task/record-verification-dates/ED20001 route returns 200', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromInitial())
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/record-verification-dates/ED20001',
-      auth
-    }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-verification-dates/ED20001',
+        auth
+      }
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record the verification date for microchip and neutering')
-    expect(document.querySelectorAll('form div legend')[0].textContent.trim()).toBe('When was the dog\'s microchip number verified?')
-    expect(document.querySelectorAll('form div legend')[1].textContent.trim()).toBe('When was the dog\'s neutering verified?')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record the verification date for microchip and neutering')
+      expect(document.querySelectorAll('.govuk-fieldset__legend--s')[0].textContent.trim()).toBe('When was the dog\'s microchip number verified?')
+      expect(document.querySelectorAll('.govuk-fieldset__legend--s')[1].textContent.trim()).toBe('When was the dog\'s neutering verified?')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog aged under 16 months and not neutered')
+      expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog unfit for a microchip')
+      expect(document.querySelector('.govuk-fieldset').textContent.trim()).not.toContain('Dog not neutered as under 16 months old')
+    })
+
+    test('GET /cdo/manage/task/record-verification-dates/ED20001 route shows 6th Si rules if 2015 Dog is under 16 months', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        tasks: buildTaskListTasksFromComplete({
+          verificationDateRecorded: buildTask({
+            key: 'verificationDateRecorded',
+            available: true,
+            completed: false,
+            readonly: false
+          }),
+          certificateIssued: buildTask({
+            key: 'certificateIssued',
+            available: false,
+            completed: false,
+            readonly: false
+          })
+        }),
+        verificationOptions: buildVerificationOptions({
+          allowDogDeclaredUnfit: true,
+          allowNeuteringBypass: true,
+          showNeuteringBypass: true
+        })
+      }))
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-verification-dates/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      const fieldsetContent = document.querySelector('.govuk-fieldset').textContent.trim()
+      expect(fieldsetContent).toContain('Dog aged under 16 months and not neutered')
+      // expect(fieldsetContent).toContain('Dog unfit for a microchip')
+      expect(fieldsetContent).not.toContain('Dog not neutered as under 16 months old')
+    })
+
+    test('GET /cdo/manage/task/record-verification-dates/ED20001 route shows 6th Si rules if no Dog DOB', async () => {
+      getCdoTaskDetails.mockResolvedValue(buildTaskListFromComplete({
+        tasks: buildTaskListTasksFromComplete({
+          verificationDateRecorded: buildTask({
+            key: 'verificationDateRecorded',
+            available: true,
+            completed: false,
+            readonly: false
+          }),
+          certificateIssued: buildTask({
+            key: 'certificateIssued',
+            available: false,
+            completed: false,
+            readonly: false
+          })
+        }),
+        verificationOptions: buildVerificationOptions({
+          allowDogDeclaredUnfit: true,
+          allowNeuteringBypass: false,
+          showNeuteringBypass: true
+        })
+      }))
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-verification-dates/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      const fieldsetContent = document.querySelector('.govuk-fieldset').textContent.trim()
+      expect(fieldsetContent).not.toContain('Dog aged under 16 months and not neutered')
+      // expect(fieldsetContent).toContain('Dog unfit for a microchip')
+      expect(fieldsetContent).toContain('Dog not neutered as under 16 months old')
+    })
   })
 
   describe('POST /cdo/manage/task/send-application-pack/ED20001', () => {
