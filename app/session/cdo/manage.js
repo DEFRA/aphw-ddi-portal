@@ -8,7 +8,12 @@ const setVerificationPayload = (request, verificationPayloadData) => {
   request.yar.set(entryKey, verificationPayloadData)
 }
 
+const clearVerificationPayload = request => {
+  setVerificationPayload(request, {})
+}
+
 module.exports = {
   getVerificationPayload,
-  setVerificationPayload
+  setVerificationPayload,
+  clearVerificationPayload
 }

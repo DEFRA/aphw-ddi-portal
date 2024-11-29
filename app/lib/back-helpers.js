@@ -49,7 +49,7 @@ const getPreviousUrl = (request) => {
   return url ?? '/'
 }
 
-const getMainReturnPoint = (request, pathOnly = true) => {
+const getMainReturnPoint = (request, _pathOnly = true) => {
   const url = getFromSession(request, mainReturnPoint)
   return url ?? '/'
 }
@@ -65,7 +65,7 @@ const addBackNavigation = (request, markAsMainReturnPoint = false) => {
   setInSession(request, lastHashParam, newHashParam)
 
   return {
-    backLink: backLinkUrl,
+    backLink: backLinkUrl.replace('&clear=true', ''),
     srcHashParam: `${srcPrefix}${newHashParam}`,
     srcHashValue: newHashParam,
     currentHashParam: extractSrcParamFromUrl(request?.headers?.referer, true)

@@ -17,7 +17,9 @@ const getTaskCompletedDate = task => {
 }
 /**
  * @param {CdoDetails[]} details
+ * @param cdo
  * @param backNav
+ * @param continueLink
  * @constructor
  */
 function ViewModel (details, cdo, backNav, continueLink) {
@@ -62,8 +64,13 @@ function ViewModel (details, cdo, backNav, continueLink) {
           }
         }
 
+        let queryParams = ''
+        if (task === tasks.verificationDateRecorded) {
+          queryParams += '&clear=true'
+        }
+
         if (status !== 'Cannot start yet') {
-          taskProperties.href = `/cdo/manage/task/${key}/${modelDetails.dogIndex}${backNav.srcHashParam}`
+          taskProperties.href = `/cdo/manage/task/${key}/${modelDetails.dogIndex}${backNav.srcHashParam}${queryParams}`
         }
 
         if (notYetStarted) {

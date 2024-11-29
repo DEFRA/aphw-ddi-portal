@@ -13,6 +13,10 @@ const constants = {
     manageCdoTaskBase: {
       get: '/cdo/manage/task'
     },
+    manageCdoRecordMicrochipDeadline: {
+      get: '/cdo/manage/task/record-microchip-deadline',
+      post: '/cdo/manage/task/record-microchip-deadline'
+    },
     manageExpired: {
       get: '/cdo/manage/expired'
     },
