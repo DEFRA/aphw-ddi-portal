@@ -44,8 +44,8 @@
 
               {{ govukDateInput(model.microchipVerification) }}
 
-              {% if model.dogNotNeutered %}
-              {{ govukCheckboxes(model.dogNotFitForMicrochip) }}
+              {% if model.dogNotFitForMicrochip %}
+                {{ govukCheckboxes(model.dogNotFitForMicrochip) }}
               {% endif %}
         {% endcall %}
         </div>
