@@ -1,12 +1,12 @@
 /**
  * @typedef FormgroupBeforeInputs
- * @properties {string} [text] - Text to add before all checkbox items. If html is provided, the text option will be ignored.
- * @properties {string} [html] - HTML to add before all checkbox items. If html is provided, the text option will be ignored.
+ * @property {string} [text] - Text to add before all checkbox items. If html is provided, the text option will be ignored.
+ * @property {string} [html] - HTML to add before all checkbox items. If html is provided, the text option will be ignored.
  **/
 /**
  * @typedef FormgroupAfterInputs
- * @properties {string} [text] - Text to add after all checkbox items. If html is provided, the text option will be ignored.
- * @properties {string} [html] - HTML to add after all checkbox items. If html is provided, the text option will be ignored.
+ * @property {string} [text] - Text to add after all checkbox items. If html is provided, the text option will be ignored.
+ * @property {string} [html] - HTML to add after all checkbox items. If html is provided, the text option will be ignored.
  **/
 /**
  * @typedef StandardComponent
@@ -22,27 +22,27 @@
  */
 
 /**
- * @typedef HintComponent
- * @properties {string} [text] - Required. If html is set, this is not required. Text to use within the hint. If html is provided, the text option will be ignored.
- * @properties {string} [html] - Required. If text is set, this is not required. HTML to use within the hint. If html is provided, the text option will be ignored.
- * @properties {string} [id] - Optional ID attribute to add to the hint span tag.
- * @properties {string} [classes] - Classes to add to the hint span tag.
- * @properties {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the hint span tag.
+ * @typedef GovukHintComponent
+ * @property {string} [text] - Required. If html is set, this is not required. Text to use within the hint. If html is provided, the text option will be ignored.
+ * @property {string} [html] - Required. If text is set, this is not required. HTML to use within the hint. If html is provided, the text option will be ignored.
+ * @property {string} [id] - Optional ID attribute to add to the hint span tag.
+ * @property {string} [classes] - Classes to add to the hint span tag.
+ * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the hint span tag.
  */
 
 /**
  * @typedef LabelComponent
- * @properties {string} [text] - Required. If html is set, this is not required. Text to use within the hint. If html is provided, the text option will be ignored.
- * @properties {string} [html] - Required. If text is set, this is not required. HTML to use within the hint. If html is provided, the text option will be ignored.
+ * @property {string} [text] - Required. If html is set, this is not required. Text to use within the hint. If html is provided, the text option will be ignored.
+ * @property {string} [html] - Required. If text is set, this is not required. HTML to use within the hint. If html is provided, the text option will be ignored.
  * @property {string} [for]
  * @property {boolean} [isPageHeading]
- * @properties {string} [classes] - Classes to add to the label tag.
- * @properties {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the label tag.
+ * @property {string} [classes] - Classes to add to the label tag.
+ * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the label tag.
  **/
 
 /**
  * @typedef Conditional
- * @properties {string} html - The HTML to reveal when the checkbox is checked.
+ * @property {string} html - The HTML to reveal when the checkbox is checked.
  **/
 
 /**
@@ -63,7 +63,7 @@
  * @property {string} [id] - Specific ID attribute for the checkbox item. If omitted, then component global idPrefix option will be applied.
  * @property {string} [name] - Specific name for the checkbox item. If omitted, then component global name string will be applied.
  * @property {LabelComponent} [label] - Subset of options for the label used by each checkbox item within the checkboxes component. See items label.
- * @property {HintComponent} [hint] - Can be used to add a hint to each checkbox item within the checkboxes component. See hint.
+ * @property {GovukHintComponent} [hint] - Can be used to add a hint to each checkbox item within the checkboxes component. See hint.
  * @property {string} [divider] - Divider text to separate checkbox items, for example the text "or".
  * @property {boolean} [checked] - Whether the checkbox should be checked when the page loads. Takes precedence over the top-level values option.
  * @property {Conditional} [conditional] - Provide additional content to reveal when the checkbox is checked. See items conditional.
@@ -74,10 +74,10 @@
 
 /**
  * @typedef {string} Formgroup
- * @properties {string} classes - Classes to add to the form group (for example to show error state for the whole group).
- * @properties {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the form group.
- * @properties {FormgroupBeforeInputs} [beforeInputs] - Content to add before all checkbox items within the checkboxes component. See formGroup beforeInputs.
- * @properties {FormgroupAfterInputs} [afterInputs] - Content to add after all checkbox items within the checkboxes component. See formGroup afterInputs.
+ * @property {string} classes - Classes to add to the form group (for example to show error state for the whole group).
+ * @property {HTMLAttributes} attributes - HTML attributes (for example data attributes) to add to the form group.
+ * @property {FormgroupBeforeInputs} [beforeInputs] - Content to add before all checkbox items within the checkboxes component. See formGroup beforeInputs.
+ * @property {FormgroupAfterInputs} [afterInputs] - Content to add after all checkbox items within the checkboxes component. See formGroup afterInputs.
  **/
 
 /**
@@ -89,7 +89,7 @@
  */
 
 /**
- * @typedef Fieldset
+ * @typedef GovukFieldset
  * @property {FieldsetLegend} legend - The legend for the fieldset component. See legend.
  * @property {string} [describedBy] - One or more element IDs to add to the aria-describedby attribute, used to provide additional descriptive information for screenreader users.
  * @property {string} [classes] - Classes to add to the fieldset container.
@@ -103,8 +103,8 @@
  * @typedef GovukCheckBox
  * @property {string} name - Name attribute for all checkbox items.
  * @property {ItemsArrayObject[]} items - The checkbox items within the checkboxes component. See items.
- * @property {Fieldset} [fieldset] - Can be used to add a fieldset to the checkboxes component. See fieldset.
- * @property {HintComponent} [hint] - Can be used to add a hint to the checkboxes component. See hint.
+ * @property {GovukFieldset} [fieldset] - Can be used to add a fieldset to the checkboxes component. See fieldset.
+ * @property {GovukHintComponent} [hint] - Can be used to add a hint to the checkboxes component. See hint.
  * @property {string} [describedBy] - One or more element IDs to add to the input aria-describedby attribute without a fieldset, used to provide additional descriptive information for screenreader users.
  * @property {ErrorMessageComponent} [errorMessage] - Can be used to add an error message to the checkboxes component. The error message component will not display if you use a falsy value for errorMessage, for example false or null. See errorMessage.
  * @property {Formgroup} [formGroup] - Additional options for the form group containing the checkboxes component. See formGroup.
@@ -113,6 +113,19 @@
  * @property {string} [classes] - Classes to add to the checkboxes container.
  * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the anchor tag.
  **/
+
+/**
+ * @typedef GovukDetailsComponent
+ * @property {string} summaryText - Required. If summmaryHtml is set, this is not required. Text to use within the summary element (the visible part of the details element). If summaryHtml is provided, the summaryText option will be ignored.
+ * @property {string} [summaryHtml] - Required. If summmaryText is set, this is not required. HTML to use within the summary element (the visible part of the details element). If summaryHtml is provided, the summaryText option will be ignored.
+ * @property {string} [text] - Required. If html is set, this is not required. Text to use within the disclosed part of the details element. If html is provided, the text option will be ignored.
+ * @property {string} html - Required. If text is set, this is not required. HTML to use within the disclosed part of the details element. If html is provided, the text option will be ignored.
+ * @property {string} [caller] - nunjucks-block - Not strictly a parameter but Nunjucks code convention. Using a call block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire details component in a call block.
+ * @property {string} [id] - ID to add to the details element.
+ * @property {boolean} [open] - If true, details element will be expanded.
+ * @property {string} [classes] - Classes to add to the <details> element.
+ * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the <details> element.
+ */
 /**
  * @typedef GovukCardTitle
  * @property {string} text
@@ -209,8 +222,8 @@
  * @typedef GovukRadios
  * @property {string} name - Required. Name attribute for the radio items.
  * @property {ItemsArrayObject[]} items - Required. The radio items within the radios component. See items.
- * @property {Fieldset} [fieldset]
- * @property {HintComponent} [hint]
+ * @property {GovukFieldset} [fieldset]
+ * @property {GovukHintComponent} [hint]
  * @property {ErrorMessageComponent} [errorMessage]
  * @property {FormGroupObject} [formGroup]
  * @property {string} [idPrefix] - Optional prefix. This is used to prefix the id attribute for each radio input, hint and error message, separated by -. Defaults to the name option value.
@@ -248,7 +261,7 @@
  * @property {string} id
  * @property {string} name
  * @property {LabelComponent} label
- * @property {HintComponent} [hint]
+ * @property {GovukHintComponent} [hint]
  * @property {ErrorMessageComponent} [errorMessage]
  * @property {string} [value]
  * @property {string} [type] - default "text"
@@ -277,7 +290,7 @@
  * @property {string} name
  * @property {LabelComponent} label
  * @property {AccessibleAutocompleteItem[]} items
- * @property {HintComponent} [hint]
+ * @property {GovukHintComponent} [hint]
  * @property {ErrorMessageComponent} [errorMessage]
  * @property {string} [value]
  * @property {string} [type] - default "text"

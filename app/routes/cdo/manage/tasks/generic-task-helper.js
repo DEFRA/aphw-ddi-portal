@@ -23,6 +23,13 @@ const taskList = [
   { name: tasks.verificationDateRecorded, Model: ViewModelRecordVerificationDates, validation: validateVerificationDates, key: 'record-verification-dates', label: 'Record the verification date for microchip and neutering', apiKey: 'verifyDates', stateKey: 'verificationDateRecorded' }
 ]
 
+/**
+ * @param taskKey
+ * @param data
+ * @param backNav
+ * @param errors
+ * @return {*}
+ */
 const createModel = (taskKey, data, backNav, errors = null) => {
   const task = taskList.find(x => x.key === taskKey)
 
@@ -62,6 +69,22 @@ const getTaskDetailsByKey = taskKey => {
   return { key: task.key, label: task.label, apiKey: task.apiKey, stateKey: task.stateKey }
 }
 
+const verificationData = (verificationOptions, payload) => {
+  let dogDeclaredUnfit = verificationOptions.dogDeclaredUnfit
+  let neuteringBypassedUnder16 = verificationOptions.neuteringBypassedUnder16
+
+  if (Object.keys(payload).length) {
+    dogDeclaredUnfit = payload.dogNotFitForMicrochip !== undefined
+    neuteringBypassedUnder16 = payload.dogNotNeutered !== undefined
+  }
+
+  return {
+    ...verificationOptions,
+    dogDeclaredUnfit,
+    neuteringBypassedUnder16
+
+  }
+}
 /**
  * @param dogIndex
  * @param taskName
@@ -78,6 +101,8 @@ const getTaskData = async (dogIndex, taskName, user, payload = {}) => {
 
   if (taskName === 'record-insurance-details') {
     data.companies = await getCompanies(user)
+  } else if (taskName === 'record-verification-dates') {
+    data.verificationOptions = verificationData(data.verificationOptions, payload)
   }
 
   return data
