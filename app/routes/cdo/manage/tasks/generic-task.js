@@ -40,6 +40,7 @@ module.exports = [
 
         if (queryParams.clear) {
           clearVerificationPayload(request)
+          return h.redirect(`${routes.manageCdoTaskBase.get}/${taskName}/${dogIndex}?src=${queryParams.src}`)
         }
 
         const user = getUser(request)

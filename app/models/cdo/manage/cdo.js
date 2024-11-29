@@ -65,8 +65,10 @@ function ViewModel (details, cdo, backNav, continueLink) {
         }
 
         let queryParams = ''
+
         if (task === tasks.verificationDateRecorded) {
-          queryParams += '&clear=true'
+          const params = backNav.srcHashParam ? '&clear=true' : '?clear=true'
+          queryParams += params
         }
 
         if (status !== 'Cannot start yet') {

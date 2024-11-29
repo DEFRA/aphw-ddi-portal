@@ -246,7 +246,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/record-verification-dates/ED20001?clear=true',
+        url: '/cdo/manage/task/record-verification-dates/ED20001',
         auth
       }
 
@@ -258,7 +258,20 @@ describe('Generic Task test', () => {
       expect(fieldsetContent).toContain('Dog aged under 16 months and not neutered')
       // expect(fieldsetContent).toContain('Dog unfit for a microchip')
       expect(fieldsetContent).not.toContain('Dog not neutered as under 16 months old')
-      expect(clearVerificationPayload).toHaveBeenCalled()
+      expect(clearVerificationPayload).not.toHaveBeenCalled()
+    })
+
+    test('GET /cdo/manage/task/record-verification-dates/ED20001 with clear should redirect', async () => {
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-verification-dates/ED20001?clear=true',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
     })
 
     test('GET /cdo/manage/task/record-verification-dates/ED20001 route shows 6th Si rules if no Dog DOB', async () => {
