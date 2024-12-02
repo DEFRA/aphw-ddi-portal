@@ -105,7 +105,7 @@ describe('RecordVerificationDates Model', () => {
     const errors = {
       details: [
         {
-          message: 'Enter the date the dog’s microchip number was verified, or select ‘Dog unfit for a microchip’',
+          message: 'Enter the date the dog’s microchip number was verified, or select ‘Dog declared unfit for microchipping by vet’',
           path: ['microchipVerification'],
           type: 'custom',
           context: {
@@ -115,7 +115,7 @@ describe('RecordVerificationDates Model', () => {
             key: 'microchipVerification'
           }
         }, {
-          message: 'Enter the neutering date entered was verified, or select ‘Dog aged under 16 months and not neutered’',
+          message: 'Enter the date the dog’s neutering was verified, or select ‘Dog aged under 16 months and not neutered’',
           path: ['neuteringConfirmation'],
           type: 'custom',
           context: {
