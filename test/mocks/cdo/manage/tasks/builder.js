@@ -182,6 +182,7 @@ const buildVerificationPayload = verificationPayloadPartial => ({
 })
 
 module.exports = {
+  buildCdoSummary,
   buildTask,
   buildTaskListFromInitial,
   buildTaskListFromComplete,

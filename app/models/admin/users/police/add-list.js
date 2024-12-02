@@ -6,7 +6,7 @@ const { summaryList, policeListDefaults } = require('./common')
  * @property {string[]} users
  * @property {string} backLink
  * @property {import('../../../builders/components').GovukFieldset} fieldset
- * @property {import('../../../builders/components').GoukSummaryList} summaryList
+ * @property {import('../../../builders/components').GovukSummaryList} summaryList
  * @property {import('../../../builders/components').GovukFieldset} label
  * @property {import('../../../builders/components').GovukRadios} radios
  * @property {import('../../../builders/components').GovukButton} button

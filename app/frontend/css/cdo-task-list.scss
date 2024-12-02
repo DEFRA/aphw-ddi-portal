@@ -1,0 +1,56 @@
+.defra {
+
+  &-summary-width {
+    width: 37.5% !important;
+  }
+
+  &-actions-header {
+    font-size: 0;
+    min-height: 40px;
+    text-align: justify;
+
+    &:after {
+      content: "";
+      display: inline-block;
+      width: 100%;
+    }
+
+    &__title,
+    &__actions {
+      
+      @media screen and (min-width: 40.0625em) {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    &__title {
+      margin-bottom: 0;
+
+      h1[class^="govuk-heading-"] {
+        margin-bottom: 10px;
+      }
+    }
+    
+    &__actions {
+      font-size: 0;
+      text-align: justify;
+      display: inline-block;
+    }
+
+    &__wrapper {
+      font-size: 0;
+    }
+
+    &__action-item {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      width: auto;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

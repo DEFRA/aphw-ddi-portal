@@ -6,7 +6,7 @@ const { policeListDefaults, summaryList } = require('./common')
  * @property {string[]} usersList
  * @property {string} backLink
  * @property {import('../../../builders/components').GovukFieldset} fieldset
- * @property {import('../../../builders/components').GoukSummaryList} summaryList
+ * @property {import('../../../builders/components').GovukSummaryList} summaryList
  * @property {import('../../../builders/components').GovukButton} continue
  * @property {*} autocomplete
  * @property {*[]} errors
