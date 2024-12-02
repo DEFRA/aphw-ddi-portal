@@ -70,7 +70,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
             classes: 'govuk-!-width-one-half'
           },
           value: {
-            html: modelDetails.summary.microchipNumber ?? 'Not entered',
+            html: [modelDetails.summary.microchipNumber ?? 'Not entered', modelDetails.summary.microchipNumber2].join('<br>'),
             classes: 'govuk-!-width-one-half'
           }
         },

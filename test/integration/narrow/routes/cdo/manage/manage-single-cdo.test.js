@@ -40,6 +40,7 @@ describe('Manage Cdo test', () => {
 
     getManageCdoDetails.mockResolvedValue(buildTaskListFromInitial({
       microchipNumber: '673827549000083',
+      microchipNumber2: '673827549000084',
       cdoSummary: buildCdoSummary({
         exemption: {
           cdoExpiry: '2024-04-19T00:00:00.000Z'
@@ -88,7 +89,7 @@ describe('Manage Cdo test', () => {
     expect(cdoExpiryKey.textContent.trim()).toBe('CDO expiry')
     expect(dogName.textContent.trim()).toBe('Kilo')
     expect(ownerName.textContent.trim()).toBe('Garry McFadyen')
-    expect(microchipNumber.textContent.trim()).toBe('673827549000083')
+    expect(microchipNumber.textContent.trim()).toBe('673827549000083673827549000084')
     expect(cdoExpiry.textContent.trim()).toBe('19 Apr 2024')
   })
 

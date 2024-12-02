@@ -17,7 +17,7 @@ const getTaskCompletedDate = task => {
 /**
  * @param {CdoTaskListDto} details
  * @param cdo
- * @return {{summary: {microchipNumber, ownerName: string, dogName: string, cdoExpiry: (Date|undefined)}, dogIndex: *, taskList: *[], personReference: *, cdoExpiry: (*|string)}}
+ * @return {{summary: {microchipNumber, microchipNumber2, ownerName: string, dogName: string, cdoExpiry: (Date|undefined)}, dogIndex: *, taskList: *[], personReference: *, cdoExpiry: (*|string)}}
  */
 const mapManageCdoDetails = (details, cdo) => {
   const taskNames = Object.keys(details.tasks)
@@ -40,6 +40,7 @@ const mapManageCdoDetails = (details, cdo) => {
     dogName: details.cdoSummary.dog.name,
     ownerName: [details.cdoSummary.person.firstName, details.cdoSummary.person.lastName].join(' '),
     microchipNumber: details.microchipNumber,
+    microchipNumber2: details.microchipNumber2,
     cdoExpiry: details.cdoSummary.exemption.cdoExpiry
   }
 
