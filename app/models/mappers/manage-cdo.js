@@ -38,7 +38,7 @@ const mapManageCdoDetails = (details, cdo) => {
   const cdoExpiry = formatToGds(cdo.exemption.cdoExpiry)
   const summary = {
     dogName: details.cdoSummary.dog.name,
-    ownerName: [details.cdoSummary.person.firstName, details.cdoSummary.person.lastName].join(' '),
+    ownerName: [details.cdoSummary.person.firstName, details.cdoSummary.person.lastName].filter(Boolean).join(' '),
     microchipNumber: details.microchipNumber,
     microchipNumber2: details.microchipNumber2,
     cdoExpiry: details.cdoSummary.exemption.cdoExpiry
