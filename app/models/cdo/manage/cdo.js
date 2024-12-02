@@ -16,13 +16,13 @@ const getTaskCompletedDate = task => {
   return task.completed ? task.timestamp : undefined
 }
 /**
- * @param {CdoDetails[]} details
+ * @param {CdoTaskListDto} tasklist
  * @param cdo
  * @param backNav
  * @param continueLink
  * @constructor
  */
-function ViewModel (details, cdo, backNav, continueLink) {
+function ViewModel (tasklist, cdo, backNav, continueLink) {
   const breadcrumbs = [
     {
       label: 'Home',
@@ -34,22 +34,75 @@ function ViewModel (details, cdo, backNav, continueLink) {
     }
   ]
 
-  const modelDetails = mapManageCdoDetails(details, cdo)
+  const modelDetails = mapManageCdoDetails(tasklist, cdo)
+
+  /**
+   * @type {GovukSummaryList[]}
+   */
+  const summaries = [
+    {
+      classes: 'govuk-!-font-size-16',
+      rows: [
+        {
+          key: {
+            text: 'Dog name',
+            classes: 'govuk-!-width-one-half'
+          },
+          value: {
+            text: modelDetails.summary.dogName
+          }
+        },
+        {
+          key: {
+            text: 'Owner name',
+            classes: 'govuk-!-width-one-half'
+          },
+          value: { text: modelDetails.summary.ownerName }
+        }
+      ]
+    },
+    {
+      classes: 'govuk-!-font-size-16',
+      rows: [
+        {
+          key: {
+            text: 'Microchip number',
+            classes: 'govuk-!-width-one-half'
+          },
+          value: {
+            html: modelDetails.summary.microchipNumber ?? 'Not entered',
+            classes: 'govuk-!-width-one-half'
+          }
+        },
+        {
+          key: {
+            text: 'CDO expiry',
+            classes: 'govuk-!-width-one-half'
+          },
+          value: {
+            text: formatToGdsShort(modelDetails.summary.cdoExpiry),
+            classes: 'govuk-!-width-one-half'
+          }
+        }
+      ]
+    }
+  ]
 
   this.model = {
     breadcrumbs,
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     details: modelDetails,
+    summaries,
     taskList:
-      Object.keys(details.tasks).reduce((taskListAcc, task) => {
+      Object.keys(tasklist.tasks).reduce((taskListAcc, task) => {
         if (task === tasks.certificateIssued) {
           return taskListAcc
         }
         const { key, label } = getTaskDetails(task)
 
-        const status = getTaskStatus(details.tasks[task])
-        const completedDate = formatToGdsShort(getTaskCompletedDate(details.tasks[task]))
+        const status = getTaskStatus(tasklist.tasks[task])
+        const completedDate = formatToGdsShort(getTaskCompletedDate(tasklist.tasks[task]))
 
         const cannotStart = status === 'Cannot start yet'
         const notYetStarted = status === 'Not yet started'

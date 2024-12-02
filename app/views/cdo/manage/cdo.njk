@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% extends '_layout.njk' %}
 
@@ -27,34 +28,37 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-three-quarters">
     <form class="form" method="post">
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-          <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Dog {{ model.details.dogIndex }}</h1>
-        </div>
-
-        <div class="govuk-grid-column-one-half defra-text-align-right">
-          <div class="govuk-button-group defra-align-right-simple govuk-!-margin-bottom-1">
-            <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}&force=true" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-              Dog record
-            </a>
-            <a href="/cdo/view/owner-details/{{ model.details.personReference }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-              Owner record
-            </a>
+      <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-2">
+        <div class="defra-actions-header govuk-!-margin-bottom-2">
+          <div class="defra-actions-header__title">
+            <h1 class="govuk-heading-xl">Dog {{ model.details.dogIndex }}</h1>
+          </div>
+          <div class="defra-actions-header__actions">
+            <div class="defra-actions-header__wrapper">
+              <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}&force=true" role="button" draggable="false" class="govuk-button govuk-button--secondary defra-actions-header__action-item" data-module="govuk-button">
+                Dog record
+              </a>
+              <a href="/cdo/view/owner-details/{{ model.details.personReference }}{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary defra-actions-header__action-item" data-module="govuk-button">
+                Owner record
+              </a>
+            </div>
           </div>
         </div>
+        <strong class="govuk-tag defra-tag-nowrap govuk-!-margin-right-3">Applying for exemption</strong>
       </div>
 
-      <strong class="govuk-tag defra-tag-nowrap govuk-!-margin-right-3">Applying for exemption</strong>
+      {% for summary in model.summaries %}
+      <div class="govuk-grid-column-one-third defra-summary-width govuk-!-margin-top-4">
+        {{ govukSummaryList(summary) }}
+      </div>
+      {% endfor %}
 
-      <span class="govuk-body defra-secondary-text">
-        CDO expires on {{ model.details.cdoExpiry }}
-      </span>
 
+      <div class="govuk-grid-column-three-quarters">
       {{ govukDetails({
       summaryText: "How to use the application task list",
-      classes: "govuk-!-margin-top-7",
+      classes: "govuk-!-margin-top-4",
       html: "
         <p class=\"govuk-body\">
           You need to complete all tasks before you can issue a certificate of exemption to the dog owner.
@@ -85,10 +89,9 @@
           href: model.continueLink
         }) }}
       {% endif %}
-
+      </div>
     </form>
 
   </div>
-</div>
 
 {% endblock %}
