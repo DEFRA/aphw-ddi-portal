@@ -21,7 +21,7 @@ function ViewModel (details, backNav, errors) {
     addOrRemove: {
       id: 'addOrRemove',
       name: 'addOrRemove',
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       items: [
         {
           text: 'Add',

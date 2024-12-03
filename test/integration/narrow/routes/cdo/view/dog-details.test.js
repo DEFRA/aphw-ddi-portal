@@ -63,7 +63,7 @@ describe('View dog details', () => {
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Exempt')
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[7].textContent.trim()).toBe('Dogs Trust')
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check history')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__actions')[1]).toBe(undefined)
     })
@@ -109,7 +109,7 @@ describe('View dog details', () => {
       expect(document.querySelectorAll('.govuk-summary-card:nth-child(2) .govuk-summary-list__value')[0].textContent.trim()).toBe('John Smith')
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[7].textContent.trim()).toBe('Dogs Trust')
       expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check activity')
+      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check history')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
       const exemptionKeyRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__key')
       const exemptionValueRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')
@@ -474,6 +474,48 @@ describe('View dog details', () => {
 
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243?src=abc123')
+  })
+
+  test('GET /cdo/view/dog-details route redirects to Manage CDO when no force param and dog Failed', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        id: 300243,
+        indexNumber: 'ED300243',
+        status: 'Failed'
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/dog-details/ED300243?src=abc123',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243?src=abc123')
+  })
+
+  test('GET /cdo/view/dog-details route redirects to Manage CDO when no force param and dog Pre-exempt and no src', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        id: 300243,
+        indexNumber: 'ED300243',
+        status: 'Pre-exempt'
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/dog-details/ED300243',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243')
   })
 
   test('GET /cdo/view/dog-details route redirects to Manage CDO when no force param and dog Pre-exempt and no src', async () => {
@@ -893,7 +935,7 @@ describe('View dog details', () => {
 
     const options = {
       method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
+      url: '/cdo/view/dog-details/ED123?force=true',
       auth: standardAuth
     }
 
@@ -905,6 +947,7 @@ describe('View dog details', () => {
     expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED300242')
     expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Fido')
     expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Failed to exempt dog')
+    expect(document.querySelector('#main-content').textContent).toContain('Manage CDO application')
   })
 
   afterEach(async () => {

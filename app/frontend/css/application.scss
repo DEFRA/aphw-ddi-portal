@@ -88,14 +88,25 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
     }
   }
 
-//defra header
 .defra {
 
+  &-responsive {
+
+    &-\!-font-size-16 {
+
+      @media all and (min-width: $tablet-min) {
+        font-size: 1rem !important;
+        line-height: 1.25 !important;
+      }
+    }
+  }
+
+  //defra header
   &-internal-header {
     padding: 20px 0;
     border-bottom: 8px solid $defra-brand-colour;
 
-    @media (min-width: 48.0625em) {
+    @media (min-width: $desktop-min) {
       display: table;
       width: 100%;
       min-height: 35px;
@@ -105,7 +116,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       min-width: 275px;
       margin-bottom: 15px;
 
-      @media (min-width: 48.0625em) {
+      @media (min-width: $desktop-min) {
         display: table-cell;
         width: 33.33%;
         margin-bottom: 0;
@@ -117,7 +128,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
       text-decoration: none;
       color: $govuk-text-colour;
 
-      @media (min-width: 48.0625em) {
+      @media (min-width: $desktop-min) {
         display: table-cell;
       }
     }
@@ -125,7 +136,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 
   &-internal-service-name {
 
-    @media (min-width: 48.0625em) {
+    @media (min-width: $desktop-min) {
       display: table-cell;
       vertical-align: middle;
       padding-left: 2em;
@@ -141,7 +152,7 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
         color: $govuk-text-colour
       }
 
-      @media (min-width: 48.0625em) {
+      @media (min-width: $desktop-min) {
         font-size: 24px;
       }
     }

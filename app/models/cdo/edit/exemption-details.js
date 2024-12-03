@@ -10,7 +10,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
     exemptionOrder: {
       label: {
         text: 'Order',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold defra-responsive-!-font-size-16'
       },
       name: 'exemptionOrder',
       id: 'exemptionOrder',

@@ -3,6 +3,7 @@ const { formatToGds } = require('../../../lib/date-helpers')
 const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
 const { getNewStatusLabel } = require('../../../lib/status-helper')
 const { isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView } = require('../../../lib/model-helpers')
+const { useManageCdo } = require('../../../lib/route-helpers')
 
 function ViewModel (cdo, backNav) {
   const person = cdo.person
@@ -14,6 +15,7 @@ function ViewModel (cdo, backNav) {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     showChangeAddressLink: false,
+    showManageCdo: useManageCdo(cdo),
     dog: {
       id: cdo.dog.id,
       indexNumber: cdo.dog.indexNumber,

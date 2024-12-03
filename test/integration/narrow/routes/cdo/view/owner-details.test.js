@@ -53,6 +53,7 @@ describe('View owner details', () => {
     expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim().indexOf('1 Test Street')).toBeGreaterThan(-1)
     expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim().indexOf('Testarea')).toBeGreaterThan(-1)
     expect(cards[0].querySelectorAll('.govuk-summary-list__row .govuk-summary-list__value')[2].textContent.trim().indexOf('Testington')).toBeGreaterThan(-1)
+    expect(document.querySelectorAll('.govuk-grid-column-full .govuk-button')[1].textContent.trim()).toBe('Check owner history')
   })
 
   test('GET /cdo/view/owner-details throws if server error', async () => {
