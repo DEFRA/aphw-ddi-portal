@@ -6,7 +6,7 @@ const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { setActivityDetails } = require('../../../session/cdo/activity')
 const { getUser } = require('../../../auth')
-const { redirectManageCdo } = require('../../../lib/manage-cdo-helpers')
+const { redirectManageCdo } = require('../../../lib/route-helpers')
 
 module.exports = [
   {
