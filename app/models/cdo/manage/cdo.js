@@ -41,7 +41,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
    */
   const summaries = [
     {
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       rows: [
         {
           key: {
@@ -62,7 +62,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
       ]
     },
     {
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       rows: [
         {
           key: {
