@@ -10,6 +10,7 @@ const { ApiErrorFailure } = require('../../../../errors/api-error-failure')
 const { microchipValidation } = require('../../../../schema/portal/cdo/dog-details')
 const { logValidationError } = require('../../../../lib/log-helpers')
 const { setVerificationPayload, clearVerificationPayload } = require('../../../../session/cdo/manage')
+const { useManageCdo } = require('../../../../lib/manage-cdo-helpers')
 
 const mapBoomError = (e, request) => {
   const { microchipNumber, microchipNumber2 } = request.payload
@@ -45,7 +46,7 @@ module.exports = [
 
         const user = getUser(request)
         const cdo = await getCdo(dogIndex, user)
-        if (cdo?.dog?.status !== 'Pre-exempt') {
+        if (!useManageCdo(cdo)) {
           throw new Error(`Dog ${dogIndex} is wrong status for manage-cdo`)
         }
 
