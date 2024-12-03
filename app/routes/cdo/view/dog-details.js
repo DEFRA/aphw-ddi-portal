@@ -25,7 +25,7 @@ module.exports = [
 
         setActivityDetails(request, null)
 
-        if (cdo.dog.status === statuses.PreExempt && request.query.force !== 'true') {
+        if ([statuses.PreExempt, statuses.Failed].includes(cdo.dog.status) && request.query.force !== 'true') {
           const srcParam = request.query.src ? `?src=${request.query.src}` : ''
           return h.redirect(`${cdoRoutes.manageCdo.get}/${indexNumber}${srcParam}`)
         }
