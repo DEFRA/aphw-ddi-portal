@@ -36,14 +36,14 @@ function ViewModel (searchCriteria, results, url, backNav, errors) {
           value: 'dog',
           text: 'Dog record',
           label: {
-            classes: 'govuk-!-font-size-16 defra-max-width-full'
+            classes: 'defra-responsive-!-font-size-16 defra-max-width-full'
           }
         },
         {
           value: 'owner',
           text: 'Owner record',
           label: {
-            classes: 'govuk-!-font-size-16 defra-max-width-full'
+            classes: 'defra-responsive-!-font-size-16 defra-max-width-full'
           }
         }
       ]
@@ -57,7 +57,7 @@ function ViewModel (searchCriteria, results, url, backNav, errors) {
           text: 'Include close matches',
           checked: searchCriteria?.fuzzy,
           label: {
-            classes: 'govuk-!-font-size-16'
+            classes: 'defra-responsive-!-font-size-16'
           }
         }
       ],

@@ -10,7 +10,7 @@ function ViewModel (details, error) {
     confirm: {
       id: 'confirm',
       name: 'confirm',
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       items: [
         {
           text: 'Yes',

@@ -28,7 +28,7 @@ function ViewModel (details, backNav, errors) {
       },
       id: 'confirmOwner',
       name: 'confirmOwner',
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       items: [
         {
           text: 'Yes',

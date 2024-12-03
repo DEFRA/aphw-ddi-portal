@@ -35,164 +35,188 @@ describe('Generic Task test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/send-application-pack/:index-number', () => {
+    test('should return a 200 if Pre-exempt', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/send-application-pack/ED20001',
-      auth
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
-
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
-    expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the application pack to the dog owner.')
-    expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the application pack')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
-    expect(document.querySelector('#taskDone').getAttribute('checked')).toBeNull()
-    expect(document.querySelectorAll('button')[4].getAttribute('disabled')).toBeNull()
-  })
-
-  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 500 if invalid dog index', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue(null)
-
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/send-application-pack/ED20001',
-      auth
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(500)
-  })
-
-  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 500 if dog at wrong status', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Exempt' } })
-
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/send-application-pack/ED20001',
-      auth
-    }
-
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(500)
-  })
-
-  test('GET /cdo/manage/task/send-application-pack/ED20001 route returns 200 given application back sent', async () => {
-    getCdoTaskDetails.mockResolvedValue({
-      tasks: {
-        applicationPackSent: {
-          available: true,
-          completed: true,
-          readonly: true
-        }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth
       }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
+      expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the application pack to the dog owner.')
+      expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the application pack')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      expect(document.querySelector('#taskDone').getAttribute('checked')).toBeNull()
+      expect(document.querySelectorAll('button')[4].getAttribute('disabled')).toBeNull()
     })
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/send-application-pack/ED20001',
-      auth
-    }
+    test('should return 200 if Dog is failed', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Failed' } })
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth
+      }
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
-    expect(document.querySelector('#taskDone')).toBeNull()
-    expect(document.querySelector('#application-pack-sent').textContent.trim()).toBe('The application pack has been sent.')
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('should return 500 if invalid dog index', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue(null)
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
+
+    test('should return 500 if dog at wrong status', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
+
+    test('should return 200 given application back sent', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        tasks: {
+          applicationPackSent: {
+            available: true,
+            completed: true,
+            readonly: true
+          }
+        }
+      })
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
+      expect(document.querySelector('#taskDone')).toBeNull()
+      expect(document.querySelector('#application-pack-sent').textContent.trim()).toBe('The application pack has been sent.')
+    })
   })
 
-  test('GET /cdo/manage/task/record-insurance-details/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCompanies.mockResolvedValue([{ company: 'Insurance Company 1' }])
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/record-insurance-details/:index-number', () => {
+    test('should route return 200', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCompanies.mockResolvedValue([{ company: 'Insurance Company 1' }])
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/record-insurance-details/ED20001',
-      auth
-    }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-insurance-details/ED20001',
+        auth
+      }
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record insurance details')
-    expect(document.querySelectorAll('form div label')[0].textContent.trim()).toBe('What company insures the dog?')
-    expect(document.querySelectorAll('form div legend')[0].textContent.trim()).toBe('What is the insurance renewal date?')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record insurance details')
+      expect(document.querySelectorAll('form div label')[0].textContent.trim()).toBe('What company insures the dog?')
+      expect(document.querySelectorAll('form div legend')[0].textContent.trim()).toBe('What is the insurance renewal date?')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+    })
   })
 
-  test('GET /cdo/manage/task/record-microchip-number/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/record-microchip-number/:index-number', () => {
+    test('should return 200', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/record-microchip-number/ED20001',
-      auth
-    }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-microchip-number/ED20001',
+        auth
+      }
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Record microchip number')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1 .govuk-label--l').textContent.trim()).toBe('Record microchip number')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+    })
   })
 
-  test('GET /cdo/manage/task/record-application-fee-payment/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/record-application-fee-payment/:index-number', () => {
+    test('should return 200', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/record-application-fee-payment/ED20001',
-      auth
-    }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/record-application-fee-payment/ED20001',
+        auth
+      }
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record application fee payment')
-    expect(document.querySelector('div#applicationFeePaid-hint').textContent.trim()).toBe('When was the application fee paid?')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Record application fee payment')
+      expect(document.querySelector('div#applicationFeePaid-hint').textContent.trim()).toBe('When was the application fee paid?')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+    })
   })
 
-  test('GET /cdo/manage/task/send-form2/ED20001 route returns 200', async () => {
-    getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-    getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+  describe('GET /cdo/manage/task/send-form2/:index-number', () => {
+    test('should returns 200', async () => {
+      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
 
-    const options = {
-      method: 'GET',
-      url: '/cdo/manage/task/send-form2/ED20001',
-      auth
-    }
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-form2/ED20001',
+        auth
+      }
 
-    const response = await server.inject(options)
-    expect(response.statusCode).toBe(200)
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
 
-    const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-    expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send Form 2')
-    expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the Form 2 to the dog owner.')
-    expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the Form 2')
-    expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send Form 2')
+      expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the Form 2 to the dog owner.')
+      expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the Form 2')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
+    })
   })
 
   describe('GET /cdo/manage/task/record-verification-dates/ED20001', () => {

@@ -93,6 +93,50 @@ describe('Manage Cdo test', () => {
     expect(cdoExpiry.textContent.trim()).toBe('19 Apr 2024')
   })
 
+  test('GET /cdo/manage/cdo/ED123 route returns 200 given Failed status', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        indexNumber: 'ED20001',
+        status: 'Failed'
+      },
+      person: {
+        personReference: 'P-A133-7E4C'
+      },
+      exemption: {
+        cdoExpiry: new Date('2024-01-20')
+      }
+    })
+
+    getManageCdoDetails.mockResolvedValue(buildTaskListFromInitial({
+      microchipNumber: '673827549000083',
+      microchipNumber2: '673827549000084',
+      cdoSummary: buildCdoSummary({
+        exemption: {
+          cdoExpiry: '2024-04-19T00:00:00.000Z'
+        },
+        person: {
+          lastName: 'McFadyen',
+          firstName: 'Garry'
+        },
+        dog: {
+          name: 'Kilo'
+        }
+      })
+    }))
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage/cdo/ED123',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelector('.govuk-tag').textContent.trim()).toBe('Failed to exempt dog')
+  })
+
   test('GET /cdo/manage/cdo/ED123 route returns 200 with completed tasks overriding "Cannot start yet"', async () => {
     getCdo.mockResolvedValue({
       dog: {

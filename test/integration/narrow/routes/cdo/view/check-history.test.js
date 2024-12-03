@@ -2,7 +2,7 @@ const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
 const { manualActivityEventBuilder, auditedEventBuilder, createdEventBuilder } = require('../../../../../mocks/activity')
 
-describe('Check activities', () => {
+describe('Check history', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
@@ -203,8 +203,7 @@ describe('Check activities', () => {
     expect(cleanUserDisplayName).toBeCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED123')
-    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
-    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check history')
     expect(document.querySelectorAll('caption.govuk-visually-hidden')[0].textContent.trim()).toBe('All activity')
     expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Date')
     expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Activity')
@@ -253,8 +252,7 @@ describe('Check activities', () => {
     expect(cleanUserDisplayName).toBeCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('John Smith')
-    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
-    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check activity')
+    expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check owner history')
     expect(document.querySelectorAll('caption.govuk-visually-hidden')[0].textContent.trim()).toBe('All activity')
     expect(document.querySelectorAll('.govuk-table th')[0].textContent.trim()).toBe('Date')
     expect(document.querySelectorAll('.govuk-table th')[1].textContent.trim()).toBe('Activity')
