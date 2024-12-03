@@ -1,12 +1,12 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { routes: cdoRoutes } = require('../../../constants/cdo/index')
-const { statuses } = require('../../../constants/cdo/status')
 const { anyLoggedInUser } = require('../../../auth/permissions')
 const ViewModel = require('../../../models/cdo/view/dog-details')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { addBackNavigation } = require('../../../lib/back-helpers')
 const { setActivityDetails } = require('../../../session/cdo/activity')
 const { getUser } = require('../../../auth')
+const { redirectManageCdo } = require('../../../lib/manage-cdo-helpers')
 
 module.exports = [
   {
@@ -25,7 +25,7 @@ module.exports = [
 
         setActivityDetails(request, null)
 
-        if ([statuses.PreExempt, statuses.Failed].includes(cdo.dog.status) && request.query.force !== 'true') {
+        if (redirectManageCdo(cdo, request.query.force)) {
           const srcParam = request.query.src ? `?src=${request.query.src}` : ''
           return h.redirect(`${cdoRoutes.manageCdo.get}/${indexNumber}${srcParam}`)
         }
