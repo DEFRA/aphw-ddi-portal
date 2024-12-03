@@ -93,6 +93,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     details: modelDetails,
+    dog: cdo.dog,
     summaries,
     taskList:
       Object.keys(tasklist.tasks).reduce((taskListAcc, task) => {

@@ -518,6 +518,27 @@ describe('View dog details', () => {
     expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243')
   })
 
+  test('GET /cdo/view/dog-details route redirects to Manage CDO when no force param and dog Pre-exempt and no src', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        id: 300243,
+        indexNumber: 'ED300243',
+        status: 'Pre-exempt'
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/view/dog-details/ED300243',
+      auth
+    }
+
+    const response = await server.inject(options)
+
+    expect(response.statusCode).toBe(302)
+    expect(response.headers.location).toBe('/cdo/manage/cdo/ED300243')
+  })
+
   test('GET /cdo/view/dog-details shows status translations - withdrawn', async () => {
     getCdo.mockResolvedValue({
       person: {
@@ -926,6 +947,7 @@ describe('View dog details', () => {
     expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED300242')
     expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Fido')
     expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Failed to exempt dog')
+    expect(document.querySelector('#main-content').textContent).toContain('Manage CDO application')
   })
 
   afterEach(async () => {

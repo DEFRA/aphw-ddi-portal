@@ -3,6 +3,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "components/statusTag/macro.njk" import statusTag %}
 
 {% extends '_layout.njk' %}
 
@@ -45,7 +46,7 @@
             </div>
           </div>
         </div>
-        <strong class="govuk-tag defra-tag-nowrap govuk-!-margin-right-3">Applying for exemption</strong>
+        {{ statusTag(model.dog.status, model.dog.subStatus, 'defra-tag-nowrap govuk-!-margin-right-3') }}
       </div>
 
       {% for summary in model.summaries %}
