@@ -4,7 +4,7 @@ const {
   createdDogWithOwnerV1, updatedPersonExists, updatedDogExistsWithNullValues, createdDogWithOwnerV2,
   updatedPersonExistsFromNull, createdDogWithOwnerV3
 } = require('../../interactions/events/events')
-const { flatMapActivityDtoToCheckActivityRow } = require('../../../../app/models/mappers/check-activities')
+const { flatMapActivityDtoToCheckActivityRow } = require('../../../../app/models/mappers/check-history')
 const { user } = require('../../../mocks/auth')
 
 const eventsTests = (ddiEventsApiProvider) => {

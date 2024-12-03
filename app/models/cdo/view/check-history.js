@@ -1,4 +1,4 @@
-const { flatMapActivityDtoToCheckActivityRow } = require('../../mappers/check-activities')
+const { flatMapActivityDtoToCheckActivityRow } = require('../../mappers/check-history')
 
 function ViewModel (entity, activities, backNav) {
   const mappedActivities = flatMapActivityDtoToCheckActivityRow(activities)
@@ -9,6 +9,7 @@ function ViewModel (entity, activities, backNav) {
     pk: entity.pk,
     source: entity.source,
     entityTitle: entity.title,
+    pageTitle: entity.pageTitle,
     events: mappedActivities
   }
 }
