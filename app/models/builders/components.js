@@ -126,6 +126,7 @@
  * @property {string} [classes] - Classes to add to the <details> element.
  * @property {HTMLAttributes} [attributes] - HTML attributes (for example data attributes) to add to the <details> element.
  */
+
 /**
  * @typedef GovukCardTitle
  * @property {string} text
@@ -155,38 +156,38 @@
  * @property {HTMLAttributes} attributes
  */
 /**
- * @typedef GoukSummaryListRowHtmlKey
+ * @typedef GovukSummaryListRowHtmlKey
  * @property {string} html
  * @property {string} [classes]
  * /
  /**
- * @typedef GoukSummaryListRowTextKey
+ * @typedef GovukSummaryListRowTextKey
  * @property {string} text
  * @property {string} [classes]
  * /
 
  /**
- * @typedef {GoukSummaryListRowTextKey|GoukSummaryListRowHtmlKey} GoukSummaryListRowKey
+ * @typedef {GovukSummaryListRowTextKey|GovukSummaryListRowHtmlKey} GovukSummaryListRowKey
  * /
 
 /**
- * @typedef GoukSummaryListRowHtmlValue
+ * @typedef GovukSummaryListRowHtmlValue
  * @property {string} html
  * @property {string} [classes]
  */
 
 /**
- * @typedef GoukSummaryListRowTextValue
+ * @typedef GovukSummaryListRowTextValue
  * @property {string} text
  * @property {string} [classes]
  *
  */
 /**
- * @typedef {GoukSummaryListRowHtmlValue|GoukSummaryListRowTextValue} GoukSummaryListRowValue
+ * @typedef {GovukSummaryListRowHtmlValue|GovukSummaryListRowTextValue} GovukSummaryListRowValue
  *
  */
 /**
- * @typedef GoukSummaryListRowActionItem
+ * @typedef GovukSummaryListRowActionItem
  * @property {string} [classes]
  * @property {string} href - Required. The value of the link’s href attribute for an action item.
  * @property {string} text - Required. If html is set, this is not required. Text to use within each action item. If html is provided, the text option will be ignored.
@@ -197,22 +198,22 @@
  *
  */
 /**
- * @typedef GoukSummaryListRowAction
- * @property {GoukSummaryListRowActionItem[]} [items]
+ * @typedef GovukSummaryListRowAction
+ * @property {GovukSummaryListRowActionItem[]} [items]
  * @property {string} [classes]
  */
 
 /**
- * @typedef GoukSummaryListRow
+ * @typedef GovukSummaryListRow
  * @property {string} [classes]
- * @property {GoukSummaryListRowKey} key
- * @property {GoukSummaryListRowValue} value
- * @property {GoukSummaryListRowAction} actions
+ * @property {GovukSummaryListRowKey} key
+ * @property {GovukSummaryListRowValue} value
+ * @property {GovukSummaryListRowAction} actions
  */
 
 /**
- * @typedef GoukSummaryList
- * @property {GoukSummaryListRow[]} rows
+ * @typedef GovukSummaryList
+ * @property {GovukSummaryListRow[]} rows
  * @property {GovukCard} [card]
  * @property {string} classes
  * @property {HTMLAttributes} attributes

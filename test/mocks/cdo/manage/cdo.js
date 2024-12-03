@@ -1,4 +1,6 @@
-const noTasksStartedYet = {
+const { buildTaskListFromInitial, buildCdoSummary } = require('./tasks/builder')
+
+const noTasksStartedYet = buildTaskListFromInitial({
   tasks: {
     applicationPackSent: {
       key: 'applicationPackSent',
@@ -50,9 +52,17 @@ const noTasksStartedYet = {
       timestamp: undefined
     }
   }
-}
+})
 
-const someTasksCompletedButNotYetAvailable = {
+const someTasksCompletedButNotYetAvailable = buildTaskListFromInitial({
+  cdoSummary: buildCdoSummary({
+    dog: {},
+    person: {},
+    exemption: {
+      cdoExpiry: '2024-04-19T00:00:00.000Z'
+    }
+  }),
+  microchipNumber: undefined,
   tasks: {
     applicationPackSent: {
       key: 'applicationPackSent',
@@ -103,7 +113,7 @@ const someTasksCompletedButNotYetAvailable = {
       timestamp: undefined
     }
   }
-}
+})
 
 module.exports = {
   noTasksStartedYet,

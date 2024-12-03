@@ -3,21 +3,21 @@
         <div class="govuk-summary-card__title-wrapper">
           <h2 class="govuk-summary-card__title defra-summary-header">Exemption details</h2>
           <div class="govuk-summary-card__actions">
-            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/edit/exemption-details/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">
+            <a class="govuk-link defra-summary-header defra-responsive-!-font-size-16 govuk-link--no-visited-state" href="/cdo/edit/exemption-details/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">
             Edit details<span class="govuk-visually-hidden"> for exemption</span>
             </a>
           </div>
         </div>
 
         <div class="govuk-summary-card__content">
-          <dl class="govuk-summary-list govuk-!-font-size-16">
+          <dl class="govuk-summary-list defra-responsive-!-font-size-16">
 
             {% if model.dog.status %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Status</dt>
               <dd class="govuk-summary-list__value">
                 {{ model.dog.status }}{% if model.dog.breaches | length > 0 %}:<br />
-                <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16 govuk-!-margin-top-2">
+                <ul class="govuk-list govuk-list--bullet defra-responsive-!-font-size-16 govuk-!-margin-top-2">
                   {% for breachReason in model.dog.breaches %}
                   <li>{{breachReason}}</li>
                   {% endfor %}
@@ -36,7 +36,7 @@
                 <dd class="govuk-summary-list__value">{{ model.exemption.certificateIssued }}</dd>
                 {% if model.dog.status == 'Exempt' %}
                   <dd class="govuk-summary-list__actions defra-text-align-left">
-                    <a class="govuk-link  govuk-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
+                    <a class="govuk-link  defra-responsive-!-font-size-16 govuk-link--no-visited-state" href="/cdo/view/certificate/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Generate certificate</a>
                   </dd>
                 {% endif %}
               {% else %}

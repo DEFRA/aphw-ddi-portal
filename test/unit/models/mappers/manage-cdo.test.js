@@ -1,6 +1,7 @@
 const { mapManageCdoDetails } = require('../../../../app/models/mappers/manage-cdo')
+const { buildTaskListFromInitial } = require('../../../mocks/cdo/manage/tasks/builder')
 
-const details = {
+const details = buildTaskListFromInitial({
   tasks: {
     applicationPackSent: {
       key: 'applicationPackSent',
@@ -46,7 +47,7 @@ const details = {
       readonly: false
     }
   }
-}
+})
 
 const cdo = {
   person: {

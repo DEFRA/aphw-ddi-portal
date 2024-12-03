@@ -7,10 +7,13 @@
   $defra-brand-bg-colour: #F3F3F3;
   
   
-   $green: #00a33b;
-   $white: #FFFFFF;
-   $base-grey-light: #f3f2f1; 
-   $base-grey-medium: #F1F1F1;
-   $border-grey: darken( $base-grey-medium, 15% );
-   $dark-grey: #3B3B3B;
-   $app-light-grey: #f8f8f8;
+  $green: #00a33b;
+  $white: #FFFFFF;
+  $base-grey-light: #f3f2f1;
+  $base-grey-medium: #F1F1F1;
+  $border-grey: darken( $base-grey-medium, 15% );
+  $dark-grey: #3B3B3B;
+  $app-light-grey: #f8f8f8;
+  $desktop-min: 48.0625em;
+  $tablet-min: 40.0625em;
+

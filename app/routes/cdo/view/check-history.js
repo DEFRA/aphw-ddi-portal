@@ -1,7 +1,7 @@
 const { routes, views } = require('../../../constants/cdo/dog')
 const { sources: activitySources } = require('../../../constants/cdo/activity')
 const { anyLoggedInUser } = require('../../../auth/permissions')
-const ViewModel = require('../../../models/cdo/view/check-activities')
+const ViewModel = require('../../../models/cdo/view/check-history')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { getDogOwner } = require('../../../api/ddi-index-api/dog')
 const { getPersonByReference } = require('../../../api/ddi-index-api/person')
@@ -63,7 +63,8 @@ module.exports = [
         const sourceEntity = {
           pk,
           source: request.params.source,
-          title: source === activitySources.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`
+          title: source === activitySources.dog ? `Dog ${pk}` : `${entity.firstName} ${entity.lastName}`,
+          pageTitle: source === activitySources.dog ? 'Check history' : 'Check owner history'
         }
 
         const filteredEvents = filterEvents(allEvents, sourceEntity)

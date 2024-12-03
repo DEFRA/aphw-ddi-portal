@@ -87,7 +87,7 @@ const constants = {
     microchipResults: 'cdo/create/microchip-results',
     microchipResultsStop: 'cdo/create/microchip-results-stop',
     viewDogDetails: 'cdo/view/dog-details',
-    viewDogActivities: 'cdo/view/check-activities',
+    viewDogActivities: 'cdo/view/check-history',
     editExemptionDetails: 'cdo/edit/exemption-details',
     changeStatus: 'cdo/edit/change-status',
     inBreachCategories: 'cdo/edit/in-breach',

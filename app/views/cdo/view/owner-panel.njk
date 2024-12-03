@@ -3,14 +3,14 @@
         <div class="govuk-summary-card__title-wrapper">
           <h2 class="govuk-summary-card__title defra-summary-header">Owner details</h2>
           <div class="govuk-summary-card__actions">
-            <a class="govuk-link defra-summary-header govuk-!-font-size-16 govuk-link--no-visited-state"
+            <a class="govuk-link defra-summary-header defra-responsive-!-font-size-16 govuk-link--no-visited-state"
             href="{{ model.person.navlink.url }}/{{ model.person.personReference }}{{ model.srcHashParam }}">{{ model.person.navlink.text}}<span class="govuk-visually-hidden"> for owner</span>
             </a>
           </div>
         </div>
 
         <div class="govuk-summary-card__content">
-          <dl class="govuk-summary-list govuk-!-font-size-16">
+          <dl class="govuk-summary-list defra-responsive-!-font-size-16">
 
             {% if model.person.organisationName %}
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions govuk-!-width-one-third">
