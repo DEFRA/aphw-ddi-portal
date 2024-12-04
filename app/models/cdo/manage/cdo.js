@@ -15,6 +15,10 @@ const getTaskStatus = task => {
 const getTaskCompletedDate = task => {
   return task.completed ? task.timestamp : undefined
 }
+
+const NOT_ENTERED_TAG = '<span class="defra-secondary-text">Not entered</span>'
+
+const showValOrNotEnteredObj = val => val ? ({ text: val }) : ({ html: NOT_ENTERED_TAG })
 /**
  * @param {CdoTaskListDto} tasklist
  * @param cdo
@@ -48,16 +52,14 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
             text: 'Dog name',
             classes: 'govuk-!-width-one-half'
           },
-          value: {
-            text: modelDetails.summary.dogName
-          }
+          value: showValOrNotEnteredObj(modelDetails.summary.dogName)
         },
         {
           key: {
             text: 'Owner name',
             classes: 'govuk-!-width-one-half'
           },
-          value: { text: modelDetails.summary.ownerName }
+          value: showValOrNotEnteredObj(modelDetails.summary.ownerName)
         }
       ]
     },
@@ -70,7 +72,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
             classes: 'govuk-!-width-one-half'
           },
           value: {
-            html: [modelDetails.summary.microchipNumber ?? '<span class="defra-secondary-text">Not entered</span>', modelDetails.summary.microchipNumber2].join('<br>'),
+            html: [modelDetails.summary.microchipNumber || NOT_ENTERED_TAG, modelDetails.summary.microchipNumber2].join('<br>'),
             classes: 'govuk-!-width-one-half'
           }
         },

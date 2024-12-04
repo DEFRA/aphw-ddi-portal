@@ -7,7 +7,7 @@ const { getCompanies } = require('../../../../../../../app/api/ddi-index-api/ins
 jest.mock('../../../../../../../app/session/cdo/manage')
 const { getVerificationPayload } = require('../../../../../../../app/session/cdo/manage')
 
-const { createModel, getValidation, getTaskData, getTaskDetails, getTaskDetailsByKey } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
+const { createModel, getValidation, getTaskData, getTaskDetails, getTaskDetailsByKey, verificationData } = require('../../../../../../../app/routes/cdo/manage/tasks/generic-task-helper')
 const { buildTaskListFromComplete, buildTaskListTasks } = require('../../../../../../mocks/cdo/manage/tasks/builder')
 
 describe('Generic Task Helper test', () => {
@@ -295,6 +295,38 @@ describe('Generic Task Helper test', () => {
         allowNeuteringBypass: true,
         showNeuteringBypass: true,
         allowDogDeclaredUnfit: true
+      })
+    })
+  })
+
+  describe('verificationData', () => {
+    test('should use defaults if missing', () => {
+      getVerificationPayload.mockReturnValue({
+        dogNotFitForMicrochip: undefined,
+        dogNotNeutered: undefined,
+        neuteringConfirmation: new Date('2024-11-12')
+      })
+
+      const data = verificationData({
+        verificationOptions: {
+          dogNotFitForMicrochip: false,
+          dogNotNeutered: false
+        }
+      }, {}, {
+        neuteringConfirmation: new Date('2024-11-12')
+      })
+
+      expect(data).toEqual({
+        neuteringConfirmation: new Date('2024-11-12T00:00:00.000Z'),
+        'neuteringConfirmation-day': undefined,
+        'neuteringConfirmation-month': undefined,
+        'neuteringConfirmation-year': undefined,
+        verificationOptions: {
+          dogDeclaredUnfit: false,
+          dogNotFitForMicrochip: false,
+          dogNotNeutered: false,
+          neuteringBypassedUnder16: false
+        }
       })
     })
   })
