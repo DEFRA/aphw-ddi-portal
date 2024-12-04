@@ -17,7 +17,6 @@ const getTaskCompletedDate = task => {
 }
 
 const NOT_ENTERED_TAG = '<span class="defra-secondary-text">Not entered</span>'
-const showValOrNotEntered = val => val || NOT_ENTERED_TAG
 
 const showValOrNotEnteredObj = val => val ? ({ text: val }) : ({ html: NOT_ENTERED_TAG })
 /**
@@ -73,7 +72,7 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
             classes: 'govuk-!-width-one-half'
           },
           value: {
-            html: [showValOrNotEntered(modelDetails.summary.microchipNumber), modelDetails.summary.microchipNumber2].join('<br>'),
+            html: [modelDetails.summary.microchipNumber || NOT_ENTERED_TAG, modelDetails.summary.microchipNumber2].join('<br>'),
             classes: 'govuk-!-width-one-half'
           }
         },
