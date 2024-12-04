@@ -2,7 +2,7 @@ const { get, post, callDelete } = require('./base')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
 
 const policeForcesEndpoint = 'police-forces'
-const policeForceShortNameEndpoint = 'police-force-by-short-name'
+const policeForceApiCodeEndpoint = 'police-force-by-api-code'
 
 /**
  * @typedef PoliceForceRequest
@@ -24,14 +24,13 @@ const getPoliceForces = async (user) => {
 }
 
 /**
- * @param shortName
+ * @param apiCode
  * @param user
  * @return {Promise<PoliceForceDto>}
  */
-const getPoliceForceByShortName = async (shortName, user) => {
-  const payload = await get(`${policeForceShortNameEndpoint}/${shortName}`, user)
-
-  return payload.policeForce
+const getPoliceForceByApiCode = async (apiCode, user) => {
+  const payload = await get(`${policeForceApiCodeEndpoint}/${apiCode}`, user)
+  return payload?.policeForce
 }
 
 /**
@@ -65,7 +64,7 @@ const removePoliceForce = async (policeForceId, user) => {
 
 module.exports = {
   getPoliceForces,
-  getPoliceForceByShortName,
+  getPoliceForceByApiCode,
   addPoliceForce,
   removePoliceForce
 }

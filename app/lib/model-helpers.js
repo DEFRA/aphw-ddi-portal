@@ -1,5 +1,6 @@
 const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails, getAddress } = require('../session/cdo/owner')
-const { lookupPoliceForceByPostcode, matchPoliceForceByName } = require('../api/police-area')
+const { lookupPoliceForceByPostcode } = require('../api/police-area')
+const { getPoliceForceByApiCode } = require('../api/ddi-index-api/police-forces')
 
 const extractEmail = (contacts) => {
   if (!contacts || contacts.length === 0) {
@@ -85,7 +86,7 @@ const setPoliceForce = async (request, user) => {
   const country = address?.country
 
   const policeForce = country === 'Scotland'
-    ? await matchPoliceForceByName('police scotland', user)
+    ? await getPoliceForceByApiCode('scotland', user)
     : await lookupPoliceForceByPostcode(address?.postcode ?? ownerDetails?.address?.postcode, user)
 
   if (policeForce) {

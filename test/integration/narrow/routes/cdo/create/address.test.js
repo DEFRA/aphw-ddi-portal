@@ -7,8 +7,11 @@ describe('Address test', () => {
   jest.mock('../../../../../../app/auth')
   const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../../app/api/ddi-index-api')
-  const { getCountries } = require('../../../../../../app/api/ddi-index-api')
+  jest.mock('../../../../../../app/api/ddi-index-api/countries')
+  const { getCountries } = require('../../../../../../app/api/ddi-index-api/countries')
+
+  jest.mock('../../../../../../app/api/ddi-index-api/police-forces')
+  const { getPoliceForceByApiCode } = require('../../../../../../app/api/ddi-index-api/police-forces')
 
   jest.mock('../../../../../../app/session/cdo/owner')
   const { getAddress, setAddress, setEnforcementDetails } = require('../../../../../../app/session/cdo/owner')
@@ -17,7 +20,7 @@ describe('Address test', () => {
   const { isRouteFlagSet } = require('../../../../../../app/session/routes')
 
   jest.mock('../../../../../../app/api/police-area')
-  const { matchPoliceForceByName, lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
+  const { lookupPoliceForceByPostcode } = require('../../../../../../app/api/police-area')
 
   const createServer = require('../../../../../../app/server')
   let server
@@ -32,7 +35,7 @@ describe('Address test', () => {
     ])
 
     getAddress.mockReturnValue({ country: 'England' })
-    matchPoliceForceByName.mockResolvedValue()
+    getPoliceForceByApiCode.mockResolvedValue()
     lookupPoliceForceByPostcode.mockResolvedValue()
 
     server = await createServer()
@@ -198,7 +201,7 @@ describe('Address test', () => {
     const nextScreenUrl = routes.microchipSearch.get
 
     getAddress.mockReturnValue({ country: 'Scotland' })
-    matchPoliceForceByName.mockResolvedValue({ id: 123 })
+    getPoliceForceByApiCode.mockResolvedValue({ id: 123 })
 
     const payload = {
       addressLine1: '1 Testing Street',

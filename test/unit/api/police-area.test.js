@@ -1,11 +1,8 @@
 const Boom = require('@hapi/boom')
-const { getPoliceForce, matchPoliceForceByName } = require('../../../app/api/police-area')
+const { getPoliceForce } = require('../../../app/api/police-area')
 
 const wreck = require('@hapi/wreck')
-const { user } = require('../../mocks/auth')
 jest.mock('@hapi/wreck')
-
-const { getPoliceForceByShortName } = require('../../../app/api/ddi-index-api/police-forces')
 
 describe('PoliceArea test', () => {
   beforeEach(() => {
@@ -38,24 +35,5 @@ describe('PoliceArea test', () => {
     const res = await getPoliceForce(coords)
     expect(res).toBe(null)
     expect(wreck.get).toHaveBeenCalledTimes(3)
-  })
-
-  test('getPoliceForceByShortName calls correctly', async () => {
-    wreck.get.mockResolvedValue({ payload: { policeForce: { id: 123, name: 'Test Force' } } })
-    const res = await getPoliceForceByShortName('avon-and-somerset', user)
-    expect(res).toEqual({ id: 123, name: 'Test Force' })
-    expect(wreck.get).toHaveBeenCalledWith('http://test.com/police-force-by-short-name/avon-and-somerset', expect.anything())
-  })
-
-  test('matchPoliceForceByName handles null', async () => {
-    const res = await matchPoliceForceByName(null, user)
-    expect(res).toBe(null)
-  })
-
-  test('matchPoliceForceByName calls getPoliceForceByShortName', async () => {
-    wreck.get.mockResolvedValue({ payload: { policeForce: { id: 123, name: 'Test Force' } } })
-    const res = await matchPoliceForceByName('test-force', user)
-    expect(res).toEqual({ id: 123, name: 'Test Force' })
-    expect(wreck.get).toHaveBeenCalledWith('http://test.com/police-force-by-short-name/test-force', expect.anything())
   })
 })

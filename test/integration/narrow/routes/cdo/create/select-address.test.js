@@ -14,6 +14,9 @@ describe('SelectAddress test', () => {
   jest.mock('../../../../../../app/api/os-places')
   const { getPostcodeAddresses } = require('../../../../../../app/api/os-places')
 
+  jest.mock('../../../../../../app/lib/model-helpers')
+  const { setPoliceForce } = require('../../../../../../app/lib/model-helpers')
+
   const createServer = require('../../../../../../app/server')
   let server
 
@@ -119,6 +122,7 @@ describe('SelectAddress test', () => {
 
   test('POST /cdo/create/select-address with valid data returns 302', async () => {
     const nextScreenUrl = routes.microchipSearch.get
+    setPoliceForce.mockResolvedValue()
     getFromSession.mockReturnValue([{ addressLine1: 'addr1', addressLine2: 'addr2', town: 'town', postcode: 'AB1 1TT', country: 'England' }])
     const payload = {
       address: 0

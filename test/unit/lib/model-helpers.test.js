@@ -4,7 +4,11 @@ jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails, getAddress } = require('../../../app/session/cdo/owner')
 
 jest.mock('../../../app/api/police-area')
-const { lookupPoliceForceByPostcode, matchPoliceForceByName } = require('../../../app/api/police-area')
+const { lookupPoliceForceByPostcode } = require('../../../app/api/police-area')
+
+jest.mock('../../../app/api/ddi-index-api/police-forces')
+const { getPoliceForceByApiCode } = require('../../../app/api/ddi-index-api/police-forces')
+
 const { user } = require('../../mocks/auth')
 
 describe('ModelHelpers', () => {
@@ -154,7 +158,7 @@ describe('ModelHelpers', () => {
 
   test('setPoliceForce sets scoland force when country is scotland', async () => {
     lookupPoliceForceByPostcode.mockResolvedValue({ id: 52, name: 'Police Scotland' })
-    matchPoliceForceByName.mockResolvedValue({ id: 5, name: 'Force 5' })
+    getPoliceForceByApiCode.mockResolvedValue({ id: 5, name: 'Force 5' })
     getEnforcementDetails.mockReturnValue({ id: 123, legislationOfficer: 'dlo1' })
     getOwnerDetails.mockReturnValue({ address: { postcode: 'TS1 1TS' } })
     getAddress.mockReturnValue({ country: 'Scotland' })
