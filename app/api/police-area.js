@@ -41,7 +41,7 @@ const matchPoliceForceByName = async (name, user) => {
   if (name == null) {
     return null
   }
-  return await getPoliceForceByShortName(name, user)
+  return getPoliceForceByShortName(name, user)
 }
 
 /**
@@ -52,7 +52,7 @@ const matchPoliceForceByName = async (name, user) => {
 const lookupPoliceForceByPostcode = async (postcode, user) => {
   const coords = await getPostcodeLongLat(postcode)
   const policeForceName = await getPoliceForce(coords)
-  return await matchPoliceForceByName(policeForceName, user)
+  return matchPoliceForceByName(policeForceName, user)
 }
 
 module.exports = {
