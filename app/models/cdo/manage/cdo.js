@@ -16,8 +16,10 @@ const getTaskCompletedDate = task => {
   return task.completed ? task.timestamp : undefined
 }
 
-const showValOrNotEntered = val => val || '<span class="defra-secondary-text">Not entered</span>'
-const showValOrNotEnteredObj = val => val ? ({ text: val }) : ({ html: showValOrNotEntered(val) })
+const NOT_ENTERED_TAG = '<span class="defra-secondary-text">Not entered</span>'
+const showValOrNotEntered = val => val || NOT_ENTERED_TAG
+
+const showValOrNotEnteredObj = val => val ? ({ text: val }) : ({ html: NOT_ENTERED_TAG })
 /**
  * @param {CdoTaskListDto} tasklist
  * @param cdo
