@@ -13,10 +13,10 @@ const {
   mapBreachesToArray,
   getInactiveSubStatus,
   translateStatusText
-} = require('../../../../app/models/mappers/check-activities')
+} = require('../../../../app/models/mappers/check-history')
 const { auditedEventBuilder, createdEventBuilder, createdOwnerEventBuilder, createdDogEventBuilder } = require('../../../mocks/activity')
 
-describe('Check Activity Mappers', () => {
+describe('Check History Mappers', () => {
   describe('getActivityLabelFromEvent', () => {
     const activities = [
       {

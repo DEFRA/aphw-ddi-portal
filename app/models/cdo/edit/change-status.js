@@ -12,7 +12,7 @@ function ViewModel (dog, backNav, errors) {
     newStatus: {
       label: {
         text: 'Status',
-        classes: 'govuk-!-font-weight-bold govuk-!-font-size-16'
+        classes: 'govuk-!-font-weight-bold defra-responsive-!-font-size-16'
       },
       id: 'newStatus',
       name: 'newStatus',
@@ -47,7 +47,7 @@ function ViewModel (dog, backNav, errors) {
         }
       ],
       autocomplete: forms.preventAutocomplete,
-      classes: 'govuk-!-font-size-16'
+      classes: 'defra-responsive-!-font-size-16'
     },
     errors: []
   }

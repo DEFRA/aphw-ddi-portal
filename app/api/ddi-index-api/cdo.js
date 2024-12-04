@@ -167,6 +167,7 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {string|undefined} insuranceCompany
  * @property {Date|undefined} insuranceRenewal
  * @property {string|undefined} microchipNumber
+ * @property {string|undefined} microchipNumber2
  * @property {Date|undefined} applicationFeePaid
  * @property {Date|undefined} form2Sent
  * @property {Date|undefined} neuteringConfirmation

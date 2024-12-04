@@ -8,7 +8,7 @@ const microchipVerification = Joi.object({
   day: Joi.string().allow(null).allow('')
 }).required().custom((value, helper) => validateDate(value, helper, true, true))
   .messages({
-    'any.required': 'Enter a microchip number verified date'
+    'any.required': 'Enter the date the dog’s microchip number was verified'
   })
 
 const neuteringConfirmation = Joi.object({
@@ -17,7 +17,7 @@ const neuteringConfirmation = Joi.object({
   day: Joi.string().allow(null).allow('')
 }).required().custom((value, helper) => validateDate(value, helper, true, true))
   .messages({
-    'any.required': 'Enter a neutering verified date'
+    'any.required': 'Enter the date the dog’s neutering was verified'
   })
 
 const emptyDate = Joi.object({
@@ -44,14 +44,14 @@ const verificationDatesSchema = Joi.object({
   microchipVerification: Joi.alternatives().conditional('dogNotFitForMicrochip', {
     is: true,
     then: emptyDate.messages({
-      '*': 'Microchipping date entered'
+      '*': 'Enter the date the dog’s microchip number was verified, or select ‘Dog declared unfit for microchipping by vet’'
     }),
     otherwise: microchipVerification
   }),
   neuteringConfirmation: Joi.alternatives().conditional('dogNotNeutered', {
     is: true,
     then: emptyDate.messages({
-      '*': 'Neutering date entered'
+      '*': 'Enter the date the dog’s neutering was verified, or select ‘Dog aged under 16 months and not neutered’'
     }),
     otherwise: neuteringConfirmation
   })
@@ -76,5 +76,9 @@ const validateVerificationDates = (payload) => {
 }
 
 module.exports = {
-  validateVerificationDates
+  validateVerificationDates,
+  microchipVerification,
+  neuteringConfirmation,
+  emptyDate,
+  verificationDatesSchema
 }

@@ -10,7 +10,7 @@ function ViewModel (activity, backNav, errors) {
     activityType: {
       id: 'activityType',
       name: 'activityType',
-      classes: 'govuk-!-font-size-16',
+      classes: 'defra-responsive-!-font-size-16',
       value: activity.activityType,
       items: [
         {

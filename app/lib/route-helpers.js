@@ -2,6 +2,11 @@ const { setPostcodeLookupDetails } = require('../session/cdo/owner')
 const { setInSession } = require('../session/session-wrapper')
 const { routes, keys } = require('../constants/cdo/owner')
 const { addBackNavigation } = require('./back-helpers')
+const { statuses } = require('../constants/cdo/status')
+
+const useManageCdo = cdo => [statuses.PreExempt, statuses.Failed].includes(cdo?.dog?.status)
+
+const redirectManageCdo = (cdo, force) => useManageCdo(cdo) && force !== 'true'
 
 const throwIfPreConditionError = (request) => {
   for (const [key, value] of Object.entries(request.pre ?? {})) {
@@ -55,5 +60,7 @@ const determineNextScreenAfterAddressChange = (request, oldCountry, newCountry, 
 
 module.exports = {
   throwIfPreConditionError,
-  determineNextScreenAfterAddressChange
+  determineNextScreenAfterAddressChange,
+  redirectManageCdo,
+  useManageCdo
 }
