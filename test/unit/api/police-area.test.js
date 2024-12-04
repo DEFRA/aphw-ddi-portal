@@ -1,19 +1,11 @@
 const Boom = require('@hapi/boom')
 const { getPoliceForce, matchPoliceForceByName } = require('../../../app/api/police-area')
 
-const { getPoliceForces } = require('../../../app/api/ddi-index-api/police-forces')
-jest.mock('../../../app/api/ddi-index-api/police-forces')
-
 const wreck = require('@hapi/wreck')
 const { user } = require('../../mocks/auth')
 jest.mock('@hapi/wreck')
 
-const policeForces = [
-  { id: 1, name: 'North Yorkshire Constabulary' },
-  { id: 2, name: 'Durham Police' },
-  { id: 3, name: 'Avon and Somerset Police' },
-  { id: 4, name: 'Berkshire Constabulary' }
-]
+const { getPoliceForceByShortName } = require('../../../app/api/ddi-index-api/police-forces')
 
 describe('PoliceArea test', () => {
   beforeEach(() => {
@@ -48,23 +40,22 @@ describe('PoliceArea test', () => {
     expect(wreck.get).toHaveBeenCalledTimes(3)
   })
 
-  test('matchPoliceForceByName matches correctly 1', async () => {
-    getPoliceForces.mockResolvedValue(policeForces)
-    const res = await matchPoliceForceByName('avon-and-somerset', user)
-    expect(res).not.toBe(null)
-    expect(res.id).toBe(3)
+  test('getPoliceForceByShortName calls correctly', async () => {
+    wreck.get.mockResolvedValue({ payload: { policeForce: { id: 123, name: 'Test Force' } } })
+    const res = await getPoliceForceByShortName('avon-and-somerset', user)
+    expect(res).toEqual({ id: 123, name: 'Test Force' })
+    expect(wreck.get).toHaveBeenCalledWith('http://test.com/police-force-by-short-name/avon-and-somerset', expect.anything())
   })
 
-  test('matchPoliceForceByName matches correctly 2', async () => {
-    getPoliceForces.mockResolvedValue(policeForces)
-    const res = await matchPoliceForceByName('durham', user)
-    expect(res).not.toBe(null)
-    expect(res.id).toBe(2)
-  })
-
-  test('matchPoliceForceByName returns null when no name', async () => {
-    getPoliceForces.mockResolvedValue(policeForces)
+  test('matchPoliceForceByName handles null', async () => {
     const res = await matchPoliceForceByName(null, user)
     expect(res).toBe(null)
+  })
+
+  test('matchPoliceForceByName calls getPoliceForceByShortName', async () => {
+    wreck.get.mockResolvedValue({ payload: { policeForce: { id: 123, name: 'Test Force' } } })
+    const res = await matchPoliceForceByName('test-force', user)
+    expect(res).toEqual({ id: 123, name: 'Test Force' })
+    expect(wreck.get).toHaveBeenCalledWith('http://test.com/police-force-by-short-name/test-force', expect.anything())
   })
 })
