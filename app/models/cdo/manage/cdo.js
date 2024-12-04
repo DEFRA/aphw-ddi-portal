@@ -17,6 +17,7 @@ const getTaskCompletedDate = task => {
 }
 
 const showValOrNotEntered = val => val || '<span class="defra-secondary-text">Not entered</span>'
+const showValOrNotEnteredObj = val => val ? ({ text: val }) : ({ html: showValOrNotEntered(val) })
 /**
  * @param {CdoTaskListDto} tasklist
  * @param cdo
@@ -50,14 +51,14 @@ function ViewModel (tasklist, cdo, backNav, continueLink) {
             text: 'Dog name',
             classes: 'govuk-!-width-one-half'
           },
-          value: { html: showValOrNotEntered(modelDetails.summary.dogName) }
+          value: showValOrNotEnteredObj(modelDetails.summary.dogName)
         },
         {
           key: {
             text: 'Owner name',
             classes: 'govuk-!-width-one-half'
           },
-          value: { html: showValOrNotEntered(modelDetails.summary.ownerName) }
+          value: showValOrNotEnteredObj(modelDetails.summary.ownerName)
         }
       ]
     },
