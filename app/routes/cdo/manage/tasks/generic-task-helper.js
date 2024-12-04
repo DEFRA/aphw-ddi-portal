@@ -136,5 +136,6 @@ module.exports = {
   getValidation,
   getTaskData,
   getTaskDetails,
-  getTaskDetailsByKey
+  getTaskDetailsByKey,
+  verificationData
 }
