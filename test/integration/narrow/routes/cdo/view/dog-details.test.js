@@ -62,8 +62,8 @@ describe('View dog details', () => {
       expect(document.querySelectorAll('.govuk-summary-card:nth-child(2) .govuk-summary-list__value')[0].textContent.trim()).toBe('John Smith')
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Exempt')
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[7].textContent.trim()).toBe('Dogs Trust')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check history')
+      expect(document.querySelectorAll('.defra-actions-header__actions .govuk-button')[0].textContent.trim()).toBe('Add an activity')
+      expect(document.querySelectorAll('.defra-actions-header__actions .govuk-button')[1].textContent.trim()).toBe('Check history')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__actions')[1]).toBe(undefined)
     })
@@ -108,8 +108,8 @@ describe('View dog details', () => {
       expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Bruno')
       expect(document.querySelectorAll('.govuk-summary-card:nth-child(2) .govuk-summary-list__value')[0].textContent.trim()).toBe('John Smith')
       expect(document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')[7].textContent.trim()).toBe('Dogs Trust')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[0].textContent.trim()).toBe('Add an activity')
-      expect(document.querySelectorAll('.govuk-grid-column-one-half .govuk-button')[1].textContent.trim()).toBe('Check history')
+      expect(document.querySelectorAll('.defra-actions-header__actions .govuk-button')[0].textContent.trim()).toBe('Add an activity')
+      expect(document.querySelectorAll('.defra-actions-header__actions .govuk-button')[1].textContent.trim()).toBe('Check history')
       expect(document.querySelector('.govuk-button[data-testid="delete-dog-record-btn"]')).toBeNull()
       const exemptionKeyRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__key')
       const exemptionValueRows = document.querySelectorAll('.govuk-summary-card')[2].querySelectorAll('.govuk-summary-list__value')
@@ -621,89 +621,7 @@ describe('View dog details', () => {
     expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Withdrawn by owner')
   })
 
-  test('GET /cdo/view/dog-details shows status translations - withdrawn', async () => {
-    getCdo.mockResolvedValue({
-      person: {
-        id: 183,
-        personReference: 'P-4813-BF4F',
-        firstName: 'Wreck it',
-        lastName: 'Ralph',
-        dateOfBirth: null,
-        addresses: [{
-          id: 197,
-          person_id: 183,
-          address_id: 197,
-          created_at: '2024-05-08T07:25:58.625Z',
-          deleted_at: null,
-          updated_at: '2024-05-08T07:25:58.668Z',
-          address: {
-            id: 197,
-            address_line_1: '47 PARK STREET',
-            address_line_2: null,
-            town: 'LONDON',
-            postcode: 'W1K 7EB',
-            county: null,
-            country_id: 1,
-            created_at: '2024-05-08T07:25:58.625Z',
-            deleted_at: null,
-            updated_at: '2024-05-08T07:25:58.657Z',
-            country: { id: 1, country: 'England' }
-          }
-        }],
-        person_contacts: [],
-        organisationName: null
-      },
-      dog: {
-        id: 300242,
-        dogReference: '7f241e8f-1960-4375-92ff-cb40b172e4be',
-        indexNumber: 'ED300242',
-        name: 'Fido',
-        breed: 'Pit Bull Terrier',
-        status: 'Withdrawn',
-        dateOfBirth: null,
-        dateOfDeath: null,
-        tattoo: null,
-        colour: null,
-        sex: null,
-        dateExported: null,
-        dateStolen: null,
-        dateUntraceable: null,
-        microchipNumber: null,
-        microchipNumber2: null
-      },
-      exemption: {
-        exemptionOrder: '2015',
-        cdoIssued: '2024-01-01',
-        cdoExpiry: null,
-        policeForce: null,
-        legislationOfficer: '',
-        certificateIssued: null,
-        applicationFeePaid: null,
-        insurance: [],
-        neuteringConfirmation: null,
-        microchipVerification: null,
-        joinedExemptionScheme: null,
-        nonComplianceLetterSent: null
-      }
-    })
-
-    const options = {
-      method: 'GET',
-      url: '/cdo/view/dog-details/ED123',
-      auth: standardAuth
-    }
-
-    const response = await server.inject(options)
-
-    const { document } = new JSDOM(response.payload).window
-
-    expect(response.statusCode).toBe(200)
-    expect(document.querySelector('h1').textContent.trim()).toBe('Dog ED300242')
-    expect(document.querySelectorAll('.govuk-summary-list__value')[0].textContent.trim()).toBe('Fido')
-    expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Withdrawn by owner')
-  })
-
-  test('GET /cdo/view/dog-details shows status translations - withdrawn', async () => {
+  test('GET /cdo/view/dog-details shows status translations - pre-exempt', async () => {
     getCdo.mockResolvedValue({
       person: {
         id: 183,
@@ -785,7 +703,7 @@ describe('View dog details', () => {
     expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Applying for exemption')
   })
 
-  test('GET /cdo/view/dog-details shows status translations - withdrawn', async () => {
+  test('GET /cdo/view/dog-details shows status translations - inactive', async () => {
     getCdo.mockResolvedValue({
       person: {
         id: 183,
@@ -867,7 +785,7 @@ describe('View dog details', () => {
     expect(document.querySelectorAll('.govuk-tag')[0].textContent.trim()).toBe('Dog dead')
   })
 
-  test('GET /cdo/view/dog-details shows status translations - withdrawn', async () => {
+  test('GET /cdo/view/dog-details shows status translations - failed', async () => {
     getCdo.mockResolvedValue({
       person: {
         id: 183,

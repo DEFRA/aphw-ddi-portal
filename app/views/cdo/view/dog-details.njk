@@ -24,25 +24,27 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-        Dog {{ model.dog.indexNumber }}
-      </h1>
-      {{ statusTag(model.dog.status, model.dog.subStatus, 'govuk-!-margin-bottom-6') }}
-      {% if model.showManageCdo %}
-        <span class="govuk-body govuk-!-margin-left-3">
-          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage/cdo/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Manage CDO application</a>
-        </span>
-      {% endif %}
-    </div>
-    <div class="govuk-grid-column-one-half">
-      <div class="govuk-button-group defra-align-right-simple">
-        <a href="/cdo/edit/add-activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-          Add an activity
-        </a>
-        <a href="/cdo/view/activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-          Check history
-        </a>
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
+      <div class="defra-actions-header govuk-!-margin-bottom-2">
+        <div class="defra-actions-header__title">
+          <h1 class="govuk-heading-xl">Dog {{ model.dog.indexNumber }}</h1>
+          {{ statusTag(model.dog.status, model.dog.subStatus, 'govuk-!-margin-bottom-1') }}
+          {% if model.showManageCdo %}
+          <span class="govuk-body govuk-!-margin-left-3">
+            <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage/cdo/{{ model.dog.indexNumber }}{{ model.srcHashParam }}">Manage CDO application</a>
+          </span>
+          {% endif %}
+        </div>
+        <div class="defra-actions-header__actions">
+          <div class="defra-actions-header__wrapper govuk-!-margin-top-2">
+            <a href="/cdo/edit/add-activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary defra-actions-header__action-item" data-module="govuk-button">
+              Add an activity
+            </a>
+            <a href="/cdo/view/activity/{{ model.dog.indexNumber }}/dog{{ model.srcHashParam }}" role="button" draggable="false" class="govuk-button govuk-button--secondary defra-actions-header__action-item" data-module="govuk-button">
+              Check history
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
