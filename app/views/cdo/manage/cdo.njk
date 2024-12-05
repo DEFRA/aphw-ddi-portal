@@ -32,11 +32,12 @@
     <form class="form" method="post">
       <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-2">
         <div class="defra-actions-header govuk-!-margin-bottom-2">
-          <div class="defra-actions-header__title">
+          <div class="defra-actions-header__title govuk-!-margin-bottom-2">
             <h1 class="govuk-heading-xl">Dog {{ model.details.dogIndex }}</h1>
+            {{ statusTag(model.dog.status, model.dog.subStatus, 'defra-tag-nowrap govuk-!-margin-right-3') }}
           </div>
           <div class="defra-actions-header__actions">
-            <div class="defra-actions-header__wrapper">
+            <div class="defra-actions-header__wrapper govuk-!-margin-top-2">
               <a href="/cdo/view/dog-details/{{ model.details.dogIndex }}{{ model.srcHashParam }}&force=true" role="button" draggable="false" class="govuk-button govuk-button--secondary defra-actions-header__action-item" data-module="govuk-button">
                 Dog record
               </a>
@@ -46,7 +47,6 @@
             </div>
           </div>
         </div>
-        {{ statusTag(model.dog.status, model.dog.subStatus, 'defra-tag-nowrap govuk-!-margin-right-3') }}
       </div>
 
       {% for summary in model.summaries %}
