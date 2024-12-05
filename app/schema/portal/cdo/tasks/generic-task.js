@@ -4,6 +4,7 @@ const cdoTasksGetSchema = Joi.object({
   dogIndex: Joi.string().required(),
   taskName: Joi.string().valid(
     'send-application-pack',
+    'process-application-pack',
     'record-insurance-details',
     'record-microchip-number',
     'record-microchip-deadline',
