@@ -64,7 +64,8 @@ module.exports = [
 
           const cdoTaskDetails = await getManageCdoDetails(indexNumber, user)
 
-          if ((cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed) && cdo.dog.status === 'Pre-exempt') {
+          if ((cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed) &&
+          (cdo.dog.status === 'Pre-exempt' || cdo.dog.status === 'Failed')) {
             // Pre-exempt and all tasks completed
             const error = await issueCertTask(indexNumber, user)
             if (error) {

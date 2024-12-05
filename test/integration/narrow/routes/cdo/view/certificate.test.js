@@ -196,7 +196,7 @@ describe('View certificate', () => {
       expect(response.statusCode).toBe(500)
     })
 
-    test('POST /cdo/view/certificate route returns 200 when calling issueCertTask', async () => {
+    test('POST /cdo/view/certificate route returns 200 when calling issueCertTask for pre-exempt', async () => {
       getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
       downloadCertificate.mockResolvedValue('certificate')
       sendMessage.mockResolvedValue(12345)
@@ -215,6 +215,30 @@ describe('View certificate', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(200)
+      expect(issueCertTask).toHaveBeenCalled()
+      expect(response.headers['content-type']).toBe('application/pdf')
+    })
+
+    test('POST /cdo/view/certificate route returns 200 when calling issueCertTask for failed', async () => {
+      getCdo.mockResolvedValue({ dog: { indexNumber: 'ED123' } })
+      downloadCertificate.mockResolvedValue('certificate')
+      sendMessage.mockResolvedValue(12345)
+      issueCertTask.mockResolvedValue()
+      getManageCdoDetails.mockResolvedValue({ tasks: { certificateIssued: { completed: true } }, cdo: { dog: { status: 'Failed' } } })
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/view/certificate',
+        auth,
+        payload: {
+          indexNumber: 'ED123'
+        }
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(200)
+      expect(issueCertTask).toHaveBeenCalled()
       expect(response.headers['content-type']).toBe('application/pdf')
     })
 
