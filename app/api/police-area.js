@@ -1,6 +1,6 @@
 const config = require('../config')
 const wreck = require('@hapi/wreck')
-const { getPoliceForceByShortName } = require('../api/ddi-index-api/police-forces')
+const { getPoliceForceByApiCode } = require('../api/ddi-index-api/police-forces')
 const { getPostcodeLongLat } = require('../api/os-places')
 
 const policeBaseUrl = config.policeApi.baseUrl
@@ -33,18 +33,6 @@ const getPoliceForce = async coords => {
 }
 
 /**
- * @param name
- * @param user
- * @return {Promise<{name: string, id: number}|null>}
- */
-const matchPoliceForceByName = async (name, user) => {
-  if (name == null) {
-    return null
-  }
-  return getPoliceForceByShortName(name, user)
-}
-
-/**
  * @param postcode
  * @param user
  * @return {Promise<{name: string, id: number}|null>}
@@ -52,11 +40,10 @@ const matchPoliceForceByName = async (name, user) => {
 const lookupPoliceForceByPostcode = async (postcode, user) => {
   const coords = await getPostcodeLongLat(postcode)
   const policeForceName = await getPoliceForce(coords)
-  return matchPoliceForceByName(policeForceName, user)
+  return getPoliceForceByApiCode(policeForceName, user)
 }
 
 module.exports = {
   lookupPoliceForceByPostcode,
-  matchPoliceForceByName,
   getPoliceForce
 }

@@ -1,7 +1,7 @@
 jest.mock('../../../../app/api/ddi-index-api/base')
 const { post, callDelete, get } = require('../../../../app/api/ddi-index-api/base')
 
-const { addPoliceForce, removePoliceForce, getPoliceForces } = require('../../../../app/api/ddi-index-api/police-forces')
+const { addPoliceForce, removePoliceForce, getPoliceForces, getPoliceForceByApiCode } = require('../../../../app/api/ddi-index-api/police-forces')
 const { user } = require('../../../mocks/auth')
 const { ApiConflictError } = require('../../../../app/errors/api-conflict-error')
 
@@ -77,6 +77,22 @@ describe('DDI API policeForces', () => {
       await removePoliceForce(policeForceId, user)
 
       expect(callDelete).toHaveBeenCalledWith('police-forces/29', user)
+    })
+  })
+
+  describe('getPoliceForceByApiCode', () => {
+    test('getPoliceForceByShortName calls correctly', async () => {
+      get.mockResolvedValue({ policeForce: { id: 123, name: 'Test Force' } })
+      const res = await getPoliceForceByApiCode('avon-and-somerset', user)
+      expect(res).toEqual({ id: 123, name: 'Test Force' })
+      expect(get).toHaveBeenCalledWith('police-force-by-api-code/avon-and-somerset', expect.anything())
+    })
+
+    test('calls getPoliceForceByShortName', async () => {
+      get.mockResolvedValue({ policeForce: { id: 123, name: 'Test Force' } })
+      const res = await getPoliceForceByApiCode('test-force', user)
+      expect(res).toEqual({ id: 123, name: 'Test Force' })
+      expect(get).toHaveBeenCalledWith('police-force-by-api-code/test-force', expect.anything())
     })
   })
 })
