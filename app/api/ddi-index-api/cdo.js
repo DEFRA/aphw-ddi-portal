@@ -41,7 +41,7 @@ const cdoEndpoint = 'cdo'
  *  country_id: number;
  *  country: {
  *    id: number;
- *    country: 'string'
+ *    country: string
  *  }
  * }} address
  */
@@ -54,16 +54,16 @@ const cdoEndpoint = 'cdo'
  * @property {string} dateOfBirth: '2024-11-28'
  * @property {CdoAddress[]} addresses
  * @property {{
- *    id: 0,
- *    person_id: 0,
- *    contact_id: 0,
+ *    id: number,
+ *    person_id: number,
+ *    contact_id: number,
  *    contact: {
- *      id: 0,
- *      contact: 'string',
- *      contact_type_id: 0,
+ *      id: number,
+ *      contact: string,
+ *      contact_type_id: number,
  *      contact_type: {
- *        id: 0,
- *        contact_type: 'string'
+ *        id: number,
+ *        contact_type: string
  *      }
  *    }
  * }[]} person_contacts
