@@ -71,6 +71,13 @@ const someTasksCompletedButNotYetAvailable = buildTaskListFromInitial({
       readonly: false,
       timestamp: undefined
     },
+    applicationPackProcessed: {
+      key: 'applicationPackProcessed',
+      available: true,
+      completed: false,
+      readonly: false,
+      timestamp: undefined
+    },
     insuranceDetailsRecorded: {
       key: 'insuranceDetailsRecorded',
       available: false,

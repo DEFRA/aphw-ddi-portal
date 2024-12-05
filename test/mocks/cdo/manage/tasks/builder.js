@@ -22,6 +22,9 @@ const buildTaskListTasks = (tasksPartial = {}) => ({
     key: 'applicationPackSent',
     available: true
   }),
+  applicationPackProcessed: buildTask({
+    key: 'applicationPackProcessed'
+  }),
   insuranceDetailsRecorded: buildTask({
     key: 'insuranceDetailsRecorded'
   }),
@@ -104,6 +107,13 @@ const buildTaskListTasksFromComplete = (tasksPartial = {}) => ({
     readonly: true,
     timestamp: '2024-11-27T00:00:00.000Z'
   },
+  applicationPackProcessed: {
+    key: 'applicationPackProcessed',
+    available: true,
+    completed: true,
+    readonly: true,
+    timestamp: '2024-11-27T00:00:00.000Z'
+  },
   insuranceDetailsRecorded: {
     key: 'insuranceDetailsRecorded',
     available: true,
@@ -156,6 +166,7 @@ const completeTasklist = {
   tasks: buildTaskListTasksFromComplete(),
   verificationOptions: buildVerificationOptions(),
   applicationPackSent: '2024-11-27T00:00:00.000Z',
+  applicationPackProcessed: '2024-11-27T00:00:00.000Z',
   insuranceCompany: 'Dog\'s Trust',
   insuranceRenewal: '2025-01-01T00:00:00.000Z',
   microchipNumber: '123456789012354',

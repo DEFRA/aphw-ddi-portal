@@ -19,6 +19,7 @@ const { getVerificationPayload } = require('../../../../session/cdo/manage')
 
 const taskList = [
   { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.applicationPackProcessed, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'process-application-pack', label: 'Process application', apiKey: 'processApplicationPack', stateKey: 'applicationPackProcessed' },
   { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details', apiKey: 'recordInsuranceDetails', stateKey: 'insuranceDetailsRecorded' },
   { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number', apiKey: 'recordMicrochipNumber', stateKey: 'microchipNumberRecorded' },
   { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment', apiKey: 'recordApplicationFee', stateKey: 'applicationFeePaid' },
