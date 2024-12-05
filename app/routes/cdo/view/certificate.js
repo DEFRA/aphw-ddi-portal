@@ -8,6 +8,7 @@ const { downloadCertificate } = require('../../../storage/repos/certificate')
 const { sendMessage } = require('../../../messaging/outbound/certificate-request')
 const { issueCertTask } = require('../manage/tasks/issue-cert')
 const getUser = require('../../../auth/get-user')
+const { useManageCdo } = require('../../../lib/route-helpers')
 
 module.exports = [
   {
@@ -63,9 +64,9 @@ module.exports = [
             : `${cdo.dog.id} - ${cdo.dog.name} - Certificate of Exemption.pdf`
 
           const cdoTaskDetails = await getManageCdoDetails(indexNumber, user)
+          const certificateIsAvailable = cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed
 
-          if ((cdoTaskDetails.tasks.certificateIssued.available || cdoTaskDetails.tasks.certificateIssued.completed) &&
-          (cdo.dog.status === 'Pre-exempt' || cdo.dog.status === 'Failed')) {
+          if (certificateIsAvailable && useManageCdo(cdo)) {
             // Pre-exempt and all tasks completed
             const error = await issueCertTask(indexNumber, user)
             if (error) {
