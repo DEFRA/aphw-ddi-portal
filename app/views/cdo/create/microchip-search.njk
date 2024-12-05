@@ -46,7 +46,7 @@
         text: "Continue"
       }) }}
       <p class="govuk-body">
-        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/dog-details">I don’t have a microchip number</a>
+        <a class="govuk-link govuk-link--no-visited-state" href="/cdo/create/dog-details{%if model.dogId %}/{{ model.dogId }}{% endif %}">I don’t have a microchip number</a>
       </p>
     </div>
   </form>
