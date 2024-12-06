@@ -1,5 +1,6 @@
 const { tasks } = require('../../../../constants/cdo/index')
 const ViewModelSendApplicationPack = require('../../../../models/cdo/manage/tasks/send-application-pack')
+const ViewModelProcessApplicationPack = require('../../../../models/cdo/manage/tasks/process-application-pack')
 const ViewModelRecordInsuranceDetails = require('../../../../models/cdo/manage/tasks/record-insurance-details')
 const ViewModelRecordMicrochipNumber = require('../../../../models/cdo/manage/tasks/record-microchip-number')
 const ViewModelRecordApplicationFeePayment = require('../../../../models/cdo/manage/tasks/record-application-fee-payment')
@@ -16,9 +17,11 @@ const { getCompanies } = require('../../../../api/ddi-index-api/insurance')
 const { getCdoTaskDetails } = require('../../../../api/ddi-index-api/cdo')
 const { validateMicrochipDeadlineDates } = require('../../../../schema/portal/cdo/tasks/record-microchip-deadline')
 const { getVerificationPayload } = require('../../../../session/cdo/manage')
+const { validateProcessApplicationPack } = require('../../../../schema/portal/cdo/tasks/process-application-pack')
 
 const taskList = [
   { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.applicationPackProcessed, Model: ViewModelProcessApplicationPack, validation: validateProcessApplicationPack, key: 'process-application-pack', label: 'Process application', apiKey: 'processApplicationPack', stateKey: 'applicationPackProcessed' },
   { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details', apiKey: 'recordInsuranceDetails', stateKey: 'insuranceDetailsRecorded' },
   { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number', apiKey: 'recordMicrochipNumber', stateKey: 'microchipNumberRecorded' },
   { name: tasks.applicationFeePaid, Model: ViewModelRecordApplicationFeePayment, validation: validateApplicationFeePayment, key: 'record-application-fee-payment', label: 'Record application fee payment', apiKey: 'recordApplicationFee', stateKey: 'applicationFeePaid' },
