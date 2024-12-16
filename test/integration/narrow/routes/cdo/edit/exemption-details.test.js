@@ -89,6 +89,49 @@ describe('Update dog details', () => {
     expect(document.querySelector('.breach-details').textContent.trim()).toContain('dog kept in insecure place')
   })
 
+  test('GET /cdo/edit/exemption-details/ED1234 route returns 200 and specific hint text for field of 2015', async () => {
+    getCdo.mockResolvedValue({
+      dog: {
+        indexNumber: 'ED1234',
+        name: 'Doggo',
+        breed: 'XL Bully',
+        status: 'Exempt'
+      },
+      exemption: {
+        indexNumber: 'ED1234',
+        cdoIssued: '2020-01-01',
+        cdoExpiry: '2020-02-01',
+        court: 'court1',
+        policeForce: 'policeForce1',
+        legislationOfficer: 'Legislation Officer',
+        certificateIssued: '2020-01-01',
+        applicationFeePaid: '2020-01-01',
+        neuteringConfirmation: '2020-01-01',
+        microchipVerification: '2020-01-01',
+        joinedExemptionScheme: '2020-01-01',
+        insurance: [
+          {
+            company: 'company1',
+            renewalDate: '2020-01-01'
+          }
+        ],
+        exemptionOrder: '2015'
+      }
+    })
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/edit/exemption-details/ED1234',
+      auth
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(200)
+    expect(document.querySelector('#neuteringDeadline-hint').textContent.trim()).toBe('The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.')
+  })
+
   test('GET /cdo/edit/exemption-details/ED1234 route returns 404 when cdo not found', async () => {
     getCdo.mockResolvedValue(null)
 
