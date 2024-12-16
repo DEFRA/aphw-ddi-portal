@@ -72,6 +72,12 @@ const summaryCdoMapper = (summaryCdo) => {
   }
 }
 /**
+ * @typedef ManageCdoCounts
+ * @property {{ total: number; within30: number }} preExempt
+ * @property {{ nonComplianceLetterNotSent: number }} failed
+ */
+
+/**
  * @typedef {'InterimExempt'|'PreExempt'|'Exempt'|'Failed'|'InBreach'|'Withdrawn'|'Inactive'} CdoStatusShort
  */
 /**
@@ -89,7 +95,7 @@ const summaryCdoMapper = (summaryCdo) => {
  * @param {CdoFilter} filter
  * @param user
  * @param {CdoSort} sort
- * @return {Promise<SummaryCdo[]>}
+ * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
 const getSummaryCdos = async (filter, user, sort = {}) => {
   const searchParams = new URLSearchParams()
@@ -118,13 +124,18 @@ const getSummaryCdos = async (filter, user, sort = {}) => {
 
   const queryParams = searchParams.toString()
   const payload = await get(`${cdosEndpoint}?${queryParams}`, user)
-  return payload.cdos.map(summaryCdoMapper)
+  const cdos = payload.cdos.map(summaryCdoMapper)
+
+  return {
+    cdos,
+    counts: payload.counts
+  }
 }
 
 /**
  * @param user
  * @param sort
- * @return {Promise<SummaryCdo[]>}
+ * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
 const getLiveCdos = async (user, sort = {}) => {
   const filter = { status: ['PreExempt'] }
@@ -152,7 +163,7 @@ const getLiveCdosWithinMonth = async (user, sort = {}) => {
  *
  * @param user
  * @param {CdoSort} [interimExemptForSort]
- * @return {Promise<SummaryCdo[]>}
+ * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
 const getInterimExemptions = async (user, interimExemptForSort = {}) => {
   /**
@@ -184,7 +195,7 @@ const getInterimExemptions = async (user, interimExemptForSort = {}) => {
 /**
  * @param user
  * @param {CdoSort} [sort]
- * @return {Promise<SummaryCdo[]>}
+ * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
 const getExpiredCdos = async (user, sort = {}) => {
   /**
