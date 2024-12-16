@@ -3,6 +3,7 @@ const FormData = require('form-data')
 jest.mock('../../../../../../app/session/session-wrapper')
 const { setInSession } = require('../../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
+const { buildSummaryCdoResponse, buildCdoCounts } = require('../../../../../mocks/cdo/cdos')
 jest.mock('../../../../../../app/api/ddi-index-api/search')
 
 describe('Manage Live Cdos test', () => {
@@ -24,30 +25,33 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage route returns 200', async () => {
-    getLiveCdos.mockResolvedValue([
-      {
-        id: 20001,
-        index: 'ED20001',
-        status: 'Pre-exempt',
-        owner: 'Scott Pilgrim',
-        personReference: 'P-A133-7E4C',
-        cdoExpiry: new Date('2024-04-19'),
-        humanReadableCdoExpiry: '19 April 2024',
-        joinedExemptionScheme: null,
-        policeForce: 'Cheshire Constabulary'
-      },
-      {
-        id: 20002,
-        index: 'ED20002',
-        status: 'Pre-exempt ',
-        owner: 'Ramona Flowers ',
-        personReference: 'P-A133-7E5C',
-        cdoExpiry: new Date('2024-04-20'),
-        humanReadableCdoExpiry: '20 April 2024',
-        joinedExemptionScheme: null,
-        policeForce: null
-      }
-    ])
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({
+      cdos: [
+        {
+          id: 20001,
+          index: 'ED20001',
+          status: 'Pre-exempt',
+          owner: 'Scott Pilgrim',
+          personReference: 'P-A133-7E4C',
+          cdoExpiry: new Date('2024-04-19'),
+          humanReadableCdoExpiry: '19 April 2024',
+          joinedExemptionScheme: null,
+          policeForce: 'Cheshire Constabulary'
+        },
+        {
+          id: 20002,
+          index: 'ED20002',
+          status: 'Pre-exempt ',
+          owner: 'Ramona Flowers ',
+          personReference: 'P-A133-7E5C',
+          cdoExpiry: new Date('2024-04-20'),
+          humanReadableCdoExpiry: '20 April 2024',
+          joinedExemptionScheme: null,
+          policeForce: null
+        }
+      ],
+      counts: buildCdoCounts({ total: 2, within30: 1, nonComplianceLetterNotSent: 4 })
+    }))
 
     const options = {
       method: 'GET',
@@ -64,10 +68,11 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelector('ul[data-testid="tab-navigation"]')).not.toBeNull()
-    expect(document.querySelectorAll('.govuk-tabs__list-item')[0].textContent.trim()).toBe('Live CDOs')
-    expect(document.querySelectorAll('.govuk-tabs__list-item')[1].textContent.trim()).toBe('Expired')
-    expect(document.querySelectorAll('.govuk-tabs__list-item')[2].textContent.trim()).toBe('Due within 30 days')
-    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Live CDOs')
+    const LIVE_CDO_TEXT = 'Live CDOs (2)'
+    expect(document.querySelectorAll('.govuk-tabs__list-item')[0].textContent.trim()).toBe(LIVE_CDO_TEXT)
+    expect(document.querySelectorAll('.govuk-tabs__list-item')[1].textContent.trim()).toBe('Expired CDOs (4)')
+    expect(document.querySelectorAll('.govuk-tabs__list-item')[2].textContent.trim()).toBe('CDOs due within 30 days (1)')
+    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe(LIVE_CDO_TEXT)
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Interim exemptions')
@@ -95,7 +100,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage?sortOrder=DESC route returns 200', async () => {
-    getLiveCdos.mockResolvedValue([])
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -113,7 +118,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage?sortKey=owner route returns 200', async () => {
-    getLiveCdos.mockResolvedValue([])
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -136,7 +141,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage?sortKey=owner&sortOrder=ASC route returns 200', async () => {
-    getLiveCdos.mockResolvedValue([])
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -156,7 +161,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage?sortKey=owner&sortOrder=DESC route returns 200', async () => {
-    getLiveCdos.mockResolvedValue([])
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -176,30 +181,33 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/due route returns 200', async () => {
-    getLiveCdosWithinMonth.mockResolvedValue([
-      {
-        id: 20001,
-        index: 'ED20001',
-        status: 'Pre-exempt',
-        owner: 'Scott Pilgrim',
-        personReference: 'P-A133-7E4C',
-        cdoExpiry: new Date('2024-04-19'),
-        humanReadableCdoExpiry: '19 April 2024',
-        joinedExemptionScheme: null,
-        policeForce: 'Cheshire Constabulary'
-      },
-      {
-        id: 20002,
-        index: 'ED20002',
-        status: 'Pre-exempt ',
-        owner: 'Ramona Flowers ',
-        personReference: 'P-A133-7E5C',
-        cdoExpiry: new Date('2024-04-20'),
-        humanReadableCdoExpiry: '20 April 2024',
-        joinedExemptionScheme: null,
-        policeForce: 'Kent Police '
-      }
-    ])
+    getLiveCdosWithinMonth.mockResolvedValue(buildSummaryCdoResponse({
+      cdos: [
+        {
+          id: 20001,
+          index: 'ED20001',
+          status: 'Pre-exempt',
+          owner: 'Scott Pilgrim',
+          personReference: 'P-A133-7E4C',
+          cdoExpiry: new Date('2024-04-19'),
+          humanReadableCdoExpiry: '19 April 2024',
+          joinedExemptionScheme: null,
+          policeForce: 'Cheshire Constabulary'
+        },
+        {
+          id: 20002,
+          index: 'ED20002',
+          status: 'Pre-exempt ',
+          owner: 'Ramona Flowers ',
+          personReference: 'P-A133-7E5C',
+          cdoExpiry: new Date('2024-04-20'),
+          humanReadableCdoExpiry: '20 April 2024',
+          joinedExemptionScheme: null,
+          policeForce: 'Kent Police '
+        }
+      ],
+      counts: buildCdoCounts({ within30: 2 })
+    }))
 
     const options = {
       method: 'GET',
@@ -215,7 +223,7 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
-    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Due within 30 days')
+    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('CDOs due within 30 days (2)')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelector('.govuk-breadcrumbs__link').textContent.trim()).toBe('Home')
@@ -238,32 +246,34 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/interim route returns 200', async () => {
-    getInterimExemptions.mockResolvedValue([
-      {
-        id: 20001,
-        index: 'ED20001',
-        status: 'Pre-exempt',
-        owner: 'Scott Pilgrim',
-        personReference: 'P-A133-7E4C',
-        cdoExpiry: null,
-        humanReadableCdoExpiry: '',
-        joinedExemptionScheme: new Date('2023-10-19'),
-        interimExemptFor: '6 months',
-        policeForce: 'Cheshire Constabulary'
-      },
-      {
-        id: 20002,
-        index: 'ED20002',
-        status: 'Pre-exempt ',
-        owner: 'Ramona Flowers ',
-        personReference: 'P-A133-7E5C',
-        cdoExpiry: null,
-        humanReadableCdoExpiry: '',
-        joinedExemptionScheme: new Date('2024-04-20'),
-        interimExemptFor: '1 month',
-        policeForce: 'Kent Police '
-      }
-    ])
+    getInterimExemptions.mockResolvedValue(buildSummaryCdoResponse({
+      cdos: [
+        {
+          id: 20001,
+          index: 'ED20001',
+          status: 'Pre-exempt',
+          owner: 'Scott Pilgrim',
+          personReference: 'P-A133-7E4C',
+          cdoExpiry: null,
+          humanReadableCdoExpiry: '',
+          joinedExemptionScheme: new Date('2023-10-19'),
+          interimExemptFor: '6 months',
+          policeForce: 'Cheshire Constabulary'
+        },
+        {
+          id: 20002,
+          index: 'ED20002',
+          status: 'Pre-exempt ',
+          owner: 'Ramona Flowers ',
+          personReference: 'P-A133-7E5C',
+          cdoExpiry: null,
+          humanReadableCdoExpiry: '',
+          joinedExemptionScheme: new Date('2024-04-20'),
+          interimExemptFor: '1 month',
+          policeForce: 'Kent Police '
+        }
+      ]
+    }))
 
     const options = {
       method: 'GET',
@@ -310,7 +320,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/interim?sortOrder=ASC route returns 200', async () => {
-    getInterimExemptions.mockResolvedValue([])
+    getInterimExemptions.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -330,7 +340,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/interim?sortKey=indexNumber route returns 200', async () => {
-    getInterimExemptions.mockResolvedValue([])
+    getInterimExemptions.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -352,7 +362,7 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/interim?sortKey=indexNumber&sortOrder=DESC route returns 200', async () => {
-    getInterimExemptions.mockResolvedValue([])
+    getInterimExemptions.mockResolvedValue(buildSummaryCdoResponse({}))
 
     const options = {
       method: 'GET',
@@ -374,32 +384,35 @@ describe('Manage Live Cdos test', () => {
   })
 
   test('GET /cdo/manage/expired route returns 200', async () => {
-    getExpiredCdos.mockResolvedValue([
-      {
-        id: 20001,
-        index: 'ED20001',
-        status: 'Pre-exempt',
-        owner: 'Scott Pilgrim',
-        personReference: 'P-A133-7E4C',
-        cdoExpiry: null,
-        humanReadableCdoExpiry: '',
-        joinedExemptionScheme: new Date('2023-10-19'),
-        interimExemptFor: '6 months',
-        policeForce: 'Cheshire Constabulary'
-      },
-      {
-        id: 20002,
-        index: 'ED20002',
-        status: 'Pre-exempt ',
-        owner: 'Ramona Flowers ',
-        personReference: 'P-A133-7E5C',
-        cdoExpiry: null,
-        humanReadableCdoExpiry: '',
-        joinedExemptionScheme: new Date('2024-04-20'),
-        interimExemptFor: '1 month',
-        policeForce: 'Kent Police '
-      }
-    ])
+    getExpiredCdos.mockResolvedValue(buildSummaryCdoResponse({
+      cdos: [
+        {
+          id: 20001,
+          index: 'ED20001',
+          status: 'Pre-exempt',
+          owner: 'Scott Pilgrim',
+          personReference: 'P-A133-7E4C',
+          cdoExpiry: null,
+          humanReadableCdoExpiry: '',
+          joinedExemptionScheme: new Date('2023-10-19'),
+          interimExemptFor: '6 months',
+          policeForce: 'Cheshire Constabulary'
+        },
+        {
+          id: 20002,
+          index: 'ED20002',
+          status: 'Pre-exempt ',
+          owner: 'Ramona Flowers ',
+          personReference: 'P-A133-7E5C',
+          cdoExpiry: null,
+          humanReadableCdoExpiry: '',
+          joinedExemptionScheme: new Date('2024-04-20'),
+          interimExemptFor: '1 month',
+          policeForce: 'Kent Police '
+        }
+      ],
+      counts: buildCdoCounts({ nonComplianceLetterNotSent: 2 })
+    }))
 
     const options = {
       method: 'GET',
@@ -414,7 +427,7 @@ describe('Manage Live Cdos test', () => {
       order: 'ASC'
     })
     const { document } = (new JSDOM(response.payload)).window
-    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Expired')
+    expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Expired CDOs (2)')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/expired?sortOrder=DESC')
     expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)

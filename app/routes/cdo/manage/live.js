@@ -42,19 +42,19 @@ module.exports = [
           order
         }
 
-        let dogRecords
+        let cdos, counts
 
         if (tab === 'due') {
-          dogRecords = await getLiveCdosWithinMonth(user, sort)
+          ({ cdos, counts } = await getLiveCdosWithinMonth(user, sort))
         } else if (tab === 'interim') {
-          dogRecords = await getInterimExemptions(user, sort)
+          ({ cdos, counts } = await getInterimExemptions(user, sort))
         } else if (tab === 'expired') {
-          dogRecords = await getExpiredCdos(user, sort)
+          ({ cdos, counts } = await getExpiredCdos(user, sort))
         } else {
-          dogRecords = await getLiveCdos(user, sort)
+          ({ cdos, counts } = await getLiveCdos(user, sort))
         }
 
-        return h.view(views.manage, new ViewModel(dogRecords, tab, sort, backNav))
+        return h.view(views.manage, new ViewModel(cdos, counts, tab, sort, backNav))
       }
     }
   }

@@ -67,30 +67,31 @@ const columnLink = (tab, sort, column) => {
 }
 /**
  * @param {SummaryCdo[]} resultList
+ * @param {ManageCdoCounts} counts
  * @param {string} tab
  * @param {{ column: string; order: 'ASC'|'DESC'}} sort
  * @param backNav
  * @constructor
  */
-function ViewModel (resultList, tab, sort, backNav) {
+function ViewModel (resultList, counts, tab, sort, backNav) {
   const tabs = [
     {
       visible: true,
       active: tab === 'live',
       href: '/cdo/manage',
-      label: 'Live CDOs'
+      label: `Live CDOs (${counts.preExempt.total})`
     },
     {
       visible: true,
       active: tab === 'expired',
       href: '/cdo/manage/expired',
-      label: 'Expired'
+      label: `Expired CDOs (${counts.failed.nonComplianceLetterNotSent})`
     },
     {
       visible: true,
       active: tab === 'due',
       href: '/cdo/manage/due',
-      label: 'Due within 30 days'
+      label: `CDOs due within 30 days (${counts.preExempt.within30})`
     }
   ]
 

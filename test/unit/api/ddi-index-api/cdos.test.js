@@ -1,4 +1,5 @@
 const { user } = require('../../../mocks/auth')
+const { buildSummaryCdosApiResponse, buildCdoCounts } = require('../../../mocks/cdo/cdos')
 describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
   const { get } = require('../../../../app/api/ddi-index-api/base')
@@ -98,7 +99,7 @@ describe('CDO API endpoints', () => {
       jest.useFakeTimers()
       jest.setSystemTime(new Date('2024-04-25'))
 
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -118,8 +119,9 @@ describe('CDO API endpoints', () => {
               joinedExemptionScheme: '2024-04-19'
             }
           }
-        ]
-      })
+        ],
+        counts: buildCdoCounts({ total: 1 })
+      }))
 
       /**
        * @type {SummaryCdo}
@@ -140,13 +142,11 @@ describe('CDO API endpoints', () => {
       const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] }, user)
 
       expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
-      expect(summaryCdoDtos).toEqual([expectedSummaryCdoDto])
+      expect(summaryCdoDtos).toEqual({ cdos: [expectedSummaryCdoDto], counts: buildCdoCounts({ total: 1 }) })
     })
 
     test('should call endpoint with a single status', async () => {
-      get.mockResolvedValue({
-        cdos: []
-      })
+      get.mockResolvedValue(buildSummaryCdosApiResponse({}))
 
       await cdos.getSummaryCdos({ status: ['PreExempt'] }, user)
 
@@ -154,9 +154,9 @@ describe('CDO API endpoints', () => {
     })
 
     test('should call endpoint with multiple statuses', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
 
       await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] }, user)
 
@@ -164,18 +164,18 @@ describe('CDO API endpoints', () => {
     })
 
     test('should call endpoint with dueWithin', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
       await cdos.getSummaryCdos({ dueWithin: 30 }, user)
 
       expect(get).toBeCalledWith('cdos?withinDays=30', user)
     })
 
     test('should call endpoint with a sort order', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
 
       const sort = {
         column: 'joinedExemptionScheme',
@@ -190,7 +190,7 @@ describe('CDO API endpoints', () => {
 
   describe('getLiveCdos', () => {
     test('should get cdos', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -209,18 +209,27 @@ describe('CDO API endpoints', () => {
               cdoExpiry: '2024-04-19'
             }
           }
-        ]
-      })
+        ],
+        counts: {
+          preExempt: {
+            total: 1,
+            within30: 0
+          },
+          failed: {
+            nonComplianceLetterNotSent: 0
+          }
+        }
+      }))
 
       const sort = {}
 
       const results = await cdos.getLiveCdos(user, sort)
       expect(get).toBeCalledWith('cdos?status=PreExempt', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
 
     test('should get cdos given no sort arguments', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -239,18 +248,19 @@ describe('CDO API endpoints', () => {
               cdoExpiry: '2024-04-19'
             }
           }
-        ]
-      })
+        ],
+        counts: buildCdoCounts({ total: 1 })
+      }))
 
       const results = await cdos.getLiveCdos(user)
       expect(get).toBeCalledWith('cdos?status=PreExempt', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
   })
 
   describe('getLiveCdosWithinMonth', () => {
     test('should get cdos due within one month', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -269,13 +279,14 @@ describe('CDO API endpoints', () => {
               cdoExpiry: '2024-04-19'
             }
           }
-        ]
-      })
+        ],
+        counts: buildCdoCounts({ within30: 1 })
+      }))
       const sort = {}
 
       const results = await cdos.getLiveCdosWithinMonth(user, sort)
       expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ within30: 1 }) })
     })
 
     test('should get cdos due within one month with default sort', async () => {
@@ -290,7 +301,7 @@ describe('CDO API endpoints', () => {
 
   describe('getInterimExemptions', () => {
     test('should get interim exemptions defaulting to ASC', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -311,62 +322,60 @@ describe('CDO API endpoints', () => {
             }
           }
         ]
-      })
+      }))
       const sort = {}
 
       const results = await cdos.getInterimExemptions(user, sort)
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: expect.anything() })
     })
 
     test('should get interim exemptions with default sort', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
 
       await cdos.getInterimExemptions(user)
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
     })
 
     test('should get interim exemptions with default sort', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
 
       await cdos.getInterimExemptions(user, { column: 'joinedExemptionScheme' })
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
     })
 
     test('should get interim exemptions ascending by joinedExemptionScheme when called with descending', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
       const sort = {
         order: 'DESC'
       }
 
-      const results = await cdos.getInterimExemptions(user, sort)
+      await cdos.getInterimExemptions(user, sort)
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme', user)
-      expect(results).toEqual(expect.any(Array))
     })
 
     test('should get interim exemptions descending by joinedExemptionScheme when called with ascending', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
-      })
+      }))
       const sort = {
         order: 'ASC'
       }
 
-      const results = await cdos.getInterimExemptions(user, sort)
+      await cdos.getInterimExemptions(user, sort)
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', user)
-      expect(results).toEqual(expect.any(Array))
     })
   })
 
   describe('getExpiredCdos', () => {
     test('should get expired cdos', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -386,17 +395,18 @@ describe('CDO API endpoints', () => {
               joinedExemptionScheme: '2020-10-11'
             }
           }
-        ]
-      })
+        ],
+        counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 })
+      }))
       const sort = {}
 
       const results = await cdos.getExpiredCdos(user, sort)
       expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 }) })
     })
 
     test('should get expired cdos given no sort arguments passed', async () => {
-      get.mockResolvedValue({
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
             person: {
@@ -416,12 +426,13 @@ describe('CDO API endpoints', () => {
               joinedExemptionScheme: '2020-10-11'
             }
           }
-        ]
-      })
+        ],
+        counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 })
+      }))
 
       const results = await cdos.getExpiredCdos(user)
       expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
-      expect(results).toEqual(expect.any(Array))
+      expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 }) })
     })
   })
 })
