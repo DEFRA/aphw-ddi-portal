@@ -443,7 +443,6 @@ const mapAuditedChangeEventToCheckActivityRows = (event) => {
  * @returns {ActivityRow}
  */
 const mapActivityDtoToCheckActivityRow = (event) => {
-  console.log('JB event', event)
   return {
     activityLabel: getActivityLabelFromEvent(event),
     ...getDateAndTeamMemberFromEvent(event)
