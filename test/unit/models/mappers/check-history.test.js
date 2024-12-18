@@ -84,6 +84,17 @@ describe('Check History Mappers', () => {
           type: 'uk.gov.defra.ddi.event.activity'
         },
         expected: 'Judicial review notice received'
+      },
+      {
+        event: {
+          activity: {
+            activityType: 'sent',
+            activityLabel: 'Form 2 from West Yorkshire Police'
+          },
+          operation: 'activity',
+          type: 'uk.gov.defra.ddi.event.activity'
+        },
+        expected: 'Form 2 from West Yorkshire Police requested'
       }
     ]
 
@@ -1152,6 +1163,11 @@ describe('Check History Mappers', () => {
 
     test('handles dog Inactive with invalid sub-status', () => {
       const res = getInactiveSubStatus([['date_xxx', null, '2024-05-15']])
+      expect(res).toBe('Dog status set to Inactive')
+    })
+
+    test('handles dog Inactive with invalid sub-status null', () => {
+      const res = getInactiveSubStatus([['date_xxx', null, null]])
       expect(res).toBe('Dog status set to Inactive')
     })
   })
