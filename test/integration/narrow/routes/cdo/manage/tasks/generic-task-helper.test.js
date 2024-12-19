@@ -89,7 +89,7 @@ describe('Generic Task Helper test', () => {
       expect(res.taskName).toBe('record-application-fee-payment')
     })
 
-    test('should get correct validation for task 5 (Send Form 2)', () => {
+    test('should get correct validation for task 5 (Request Form 2)', () => {
       const payload = { taskName: 'send-form2', taskDone: 'Y' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)

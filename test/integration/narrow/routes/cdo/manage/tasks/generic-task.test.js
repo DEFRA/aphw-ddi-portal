@@ -306,9 +306,9 @@ describe('Generic Task test', () => {
 
       const { document } = (new JSDOM(response.payload)).window
       expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send Form 2')
-      expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the Form 2 to the dog owner.')
-      expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the Form 2')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Request Form 2')
+      expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have requested the Form 2 from the police force.')
+      expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have requested the Form 2')
       expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
     })
   })
