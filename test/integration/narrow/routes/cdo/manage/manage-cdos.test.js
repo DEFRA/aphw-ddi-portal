@@ -61,7 +61,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith(user, {
+    expect(getLiveCdos).toHaveBeenCalledWith(false, user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })
@@ -128,7 +128,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith(user, {
+    expect(getLiveCdos).toHaveBeenCalledWith(false, user, {
       column: 'owner',
       order: 'ASC'
     })
@@ -138,6 +138,23 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner&sortOrder=DESC')
     expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('ascending')
+  })
+
+  test('GET /cdo/manage?noCache=Y route returns 200', async () => {
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage?noCache=Y',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getLiveCdos).toHaveBeenCalledWith(true, user, {
+      column: 'cdoExpiry',
+      order: 'ASC'
+    })
   })
 
   test('GET /cdo/manage?sortKey=owner&sortOrder=ASC route returns 200', async () => {
@@ -151,7 +168,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith(user, {
+    expect(getLiveCdos).toHaveBeenCalledWith(false, user, {
       column: 'owner',
       order: 'ASC'
     })
@@ -171,7 +188,27 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdos).toHaveBeenCalledWith(user, {
+    expect(getLiveCdos).toHaveBeenCalledWith(false, user, {
+      column: 'owner',
+      order: 'DESC'
+    })
+    const { document } = (new JSDOM(response.payload)).window
+    expect(document.querySelectorAll('.govuk-table thead th a')[2].getAttribute('href')).toBe('/cdo/manage?sortKey=owner')
+    expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('descending')
+  })
+
+  test('GET /cdo/manage?sortKey=owner&sortOrder=DESC route returns 200', async () => {
+    getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({}))
+
+    const options = {
+      method: 'GET',
+      url: '/cdo/manage?sortKey=owner&sortOrder=DESC&noCache=Y',
+      auth
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(getLiveCdos).toHaveBeenCalledWith(true, user, {
       column: 'owner',
       order: 'DESC'
     })
@@ -217,7 +254,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getLiveCdosWithinMonth).toHaveBeenCalledWith(user, {
+    expect(getLiveCdosWithinMonth).toHaveBeenCalledWith(false, user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })
@@ -292,11 +329,11 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelector('ul[data-testid="tab-navigation"]')).toBeNull()
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelector('.govuk-button--secondary').textContent.trim()).toBe('Manage CDOs')
-    expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage')
+    expect(document.querySelector('.govuk-button--secondary').getAttribute('href')).toBe('/cdo/manage?noCache=Y')
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].textContent.trim()).toBe('Home')
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[0].getAttribute('href')).toBe('/')
     expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].textContent.trim()).toBe('Manage CDOs')
-    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/cdo/manage')
+    expect(document.querySelectorAll('.govuk-breadcrumbs__link')[1].getAttribute('href')).toBe('/cdo/manage?noCache=Y')
     expect(document.querySelectorAll('.govuk-table thead th')[0].textContent.trim()).toBe('Interim exempt for')
     expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('descending')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/interim?sortOrder=ASC')
@@ -422,7 +459,7 @@ describe('Manage Live Cdos test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(getExpiredCdos).toHaveBeenCalledWith(user, {
+    expect(getExpiredCdos).toHaveBeenCalledWith(false, user, {
       column: 'cdoExpiry',
       order: 'ASC'
     })
