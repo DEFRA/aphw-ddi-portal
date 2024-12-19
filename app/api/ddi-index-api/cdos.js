@@ -93,11 +93,12 @@ const summaryCdoMapper = (summaryCdo) => {
  */
 /**
  * @param {CdoFilter} filter
+ * @param noCache
  * @param user
  * @param {CdoSort} sort
  * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
-const getSummaryCdos = async (filter, user, sort = {}) => {
+const getSummaryCdos = async (filter, noCache, user, sort = {}) => {
   const searchParams = new URLSearchParams()
 
   if (filter.status) {
@@ -122,6 +123,10 @@ const getSummaryCdos = async (filter, user, sort = {}) => {
     searchParams.set('sortOrder', sort.order)
   }
 
+  if (noCache) {
+    searchParams.set('noCache', true)
+  }
+
   const queryParams = searchParams.toString()
   const payload = await get(`${cdosEndpoint}?${queryParams}`, user)
   const cdos = payload.cdos.map(summaryCdoMapper)
@@ -133,26 +138,28 @@ const getSummaryCdos = async (filter, user, sort = {}) => {
 }
 
 /**
+ * @param noCache
  * @param user
  * @param sort
  * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
-const getLiveCdos = async (user, sort = {}) => {
+const getLiveCdos = async (noCache, user, sort = {}) => {
   const filter = { status: ['PreExempt'] }
-  return getSummaryCdos(filter, user, sort)
+  return getSummaryCdos(filter, noCache, user, sort)
 }
 
 /**
+ * @param noCache
  * @param user
  * @param sort
  * @return {Promise<SummaryCdo[]>}
  */
-const getLiveCdosWithinMonth = async (user, sort = {}) => {
+const getLiveCdosWithinMonth = async (noCache, user, sort = {}) => {
   /**
    * @type {CdoFilter}
    */
   const filter = { status: ['PreExempt'], dueWithin: 30 }
-  return getSummaryCdos(filter, user, sort)
+  return getSummaryCdos(filter, noCache, user, sort)
 }
 
 /**
@@ -189,20 +196,21 @@ const getInterimExemptions = async (user, interimExemptForSort = {}) => {
    * @type {CdoFilter}
    */
   const filter = { status: ['InterimExempt'] }
-  return getSummaryCdos(filter, user, interimSort)
+  return getSummaryCdos(filter, false, user, interimSort)
 }
 
 /**
+ * @param noCache
  * @param user
  * @param {CdoSort} [sort]
  * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
-const getExpiredCdos = async (user, sort = {}) => {
+const getExpiredCdos = async (noCache, user, sort = {}) => {
   /**
    * @type {CdoFilter}
    */
   const filter = { status: ['Failed'], nonComplianceLetterSent: false }
-  return getSummaryCdos(filter, user, sort)
+  return getSummaryCdos(filter, noCache, user, sort)
 }
 
 module.exports = {

@@ -111,12 +111,12 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
   if (tab === 'interim') {
     secondaryBtn = {
       label: 'Manage CDOs',
-      link: constants.routes.manage.get
+      link: `${constants.routes.manage.get}?noCache=Y`
     }
 
     breadcrumbs.push({
       label: 'Manage CDOs',
-      link: constants.routes.manage.get
+      link: `${constants.routes.manage.get}?noCache=Y`
     })
   }
 

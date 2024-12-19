@@ -36,6 +36,7 @@ module.exports = [
 
         const order = request.query.sortOrder ?? defaultOrder
         const column = request.query.sortKey ?? defaultColumn
+        const noCache = request.query.noCache
 
         const sort = {
           column,
@@ -45,13 +46,13 @@ module.exports = [
         let cdos, counts
 
         if (tab === 'due') {
-          ({ cdos, counts } = await getLiveCdosWithinMonth(user, sort))
+          ({ cdos, counts } = await getLiveCdosWithinMonth(noCache, user, sort))
         } else if (tab === 'interim') {
           ({ cdos, counts } = await getInterimExemptions(user, sort))
         } else if (tab === 'expired') {
-          ({ cdos, counts } = await getExpiredCdos(user, sort))
+          ({ cdos, counts } = await getExpiredCdos(noCache, user, sort))
         } else {
-          ({ cdos, counts } = await getLiveCdos(user, sort))
+          ({ cdos, counts } = await getLiveCdos(noCache, user, sort))
         }
 
         return h.view(views.manage, new ViewModel(cdos, counts, tab, sort, backNav))

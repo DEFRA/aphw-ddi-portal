@@ -139,16 +139,16 @@ describe('CDO API endpoints', () => {
         policeForce: 'Cheshire Constabulary'
       }
 
-      const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] }, user)
+      const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] }, true, user)
 
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30&noCache=true', user)
       expect(summaryCdoDtos).toEqual({ cdos: [expectedSummaryCdoDto], counts: buildCdoCounts({ total: 1 }) })
     })
 
     test('should call endpoint with a single status', async () => {
       get.mockResolvedValue(buildSummaryCdosApiResponse({}))
 
-      await cdos.getSummaryCdos({ status: ['PreExempt'] }, user)
+      await cdos.getSummaryCdos({ status: ['PreExempt'] }, false, user)
 
       expect(get).toBeCalledWith('cdos?status=PreExempt', user)
     })
@@ -158,7 +158,7 @@ describe('CDO API endpoints', () => {
         cdos: []
       }))
 
-      await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] }, user)
+      await cdos.getSummaryCdos({ status: ['PreExempt', 'InterimExempt'] }, false, user)
 
       expect(get).toBeCalledWith('cdos?status=PreExempt&status=InterimExempt', user)
     })
@@ -167,7 +167,7 @@ describe('CDO API endpoints', () => {
       get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: []
       }))
-      await cdos.getSummaryCdos({ dueWithin: 30 }, user)
+      await cdos.getSummaryCdos({ dueWithin: 30 }, false, user)
 
       expect(get).toBeCalledWith('cdos?withinDays=30', user)
     })
@@ -182,7 +182,7 @@ describe('CDO API endpoints', () => {
         order: 'DESC'
       }
 
-      await cdos.getSummaryCdos({ status: ['InterimExempt'] }, user, sort)
+      await cdos.getSummaryCdos({ status: ['InterimExempt'] }, false, user, sort)
 
       expect(get).toBeCalledWith('cdos?status=InterimExempt&sortKey=joinedExemptionScheme&sortOrder=DESC', user)
     })
@@ -223,8 +223,8 @@ describe('CDO API endpoints', () => {
 
       const sort = {}
 
-      const results = await cdos.getLiveCdos(user, sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt', user)
+      const results = await cdos.getLiveCdos(true, user, sort)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&noCache=true', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
 
@@ -252,7 +252,7 @@ describe('CDO API endpoints', () => {
         counts: buildCdoCounts({ total: 1 })
       }))
 
-      const results = await cdos.getLiveCdos(user)
+      const results = await cdos.getLiveCdos(false, user)
       expect(get).toBeCalledWith('cdos?status=PreExempt', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
@@ -284,8 +284,8 @@ describe('CDO API endpoints', () => {
       }))
       const sort = {}
 
-      const results = await cdos.getLiveCdosWithinMonth(user, sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
+      const results = await cdos.getLiveCdosWithinMonth(true, user, sort)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30&noCache=true', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ within30: 1 }) })
     })
 
@@ -294,7 +294,7 @@ describe('CDO API endpoints', () => {
         cdos: []
       })
 
-      await cdos.getLiveCdosWithinMonth(user)
+      await cdos.getLiveCdosWithinMonth(false, user)
       expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
     })
   })
@@ -400,8 +400,8 @@ describe('CDO API endpoints', () => {
       }))
       const sort = {}
 
-      const results = await cdos.getExpiredCdos(user, sort)
-      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
+      const results = await cdos.getExpiredCdos(true, user, sort)
+      expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false&noCache=true', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 }) })
     })
 
@@ -430,7 +430,7 @@ describe('CDO API endpoints', () => {
         counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 })
       }))
 
-      const results = await cdos.getExpiredCdos(user)
+      const results = await cdos.getExpiredCdos(false, user)
       expect(get).toBeCalledWith('cdos?status=Failed&nonComplianceLetterSent=false', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ nonComplianceLetterNotSent: 1 }) })
     })
