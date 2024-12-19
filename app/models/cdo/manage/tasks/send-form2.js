@@ -15,7 +15,7 @@ function ViewModel (data, backNav, errors) {
       items: [
         {
           value: 'Y',
-          text: 'I have sent the Form 2',
+          text: 'I have requested the Form 2',
           checked: data.task.completed,
           disabled: data.task.completed
         }

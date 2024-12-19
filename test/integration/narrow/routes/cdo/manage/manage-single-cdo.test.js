@@ -100,7 +100,7 @@ describe('Manage Cdo test', () => {
     expect(getTaskListItemStatusText(document, cdoApplicationPackOrder.recordMicrochipNumber)).toBe('Cannot start yet')
     expect(getTaskListItemNameText(document, cdoApplicationPackOrder.recordApplicationFeePayment)).toBe('Record application fee payment')
     expect(getTaskListItemStatusText(document, cdoApplicationPackOrder.recordApplicationFeePayment)).toBe('Cannot start yet')
-    expect(getTaskListItemNameText(document, cdoApplicationPackOrder.sendForm2)).toBe('Send Form 2')
+    expect(getTaskListItemNameText(document, cdoApplicationPackOrder.sendForm2)).toBe('Request Form 2')
     expect(getTaskListItemStatusText(document, cdoApplicationPackOrder.sendForm2)).toBe('Cannot start yet')
     expect(getTaskListItemNameText(document, cdoApplicationPackOrder.recordVerificationDate)).toBe('Record the verification date for microchip and neutering')
     expect(getTaskListItemStatusText(document, cdoApplicationPackOrder.recordVerificationDate)).toBe('Cannot start yet')
