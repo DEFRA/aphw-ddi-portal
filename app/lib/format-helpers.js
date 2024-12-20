@@ -126,6 +126,14 @@ const titleCase = str => {
   return splitStr.join(' ')
 }
 
+const stripTimestampFromExtension = (filename, extension) => {
+  if (!filename) {
+    return filename
+  }
+  const dotPos = filename.toLowerCase().lastIndexOf(extension.toLowerCase())
+  return dotPos === -1 ? filename : filename.substring(0, dotPos + extension.length)
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
@@ -134,5 +142,6 @@ module.exports = {
   formatDogRadioAsHtml,
   containsPossibleInjectedCode,
   formatNumberWithCommas,
-  titleCase
+  titleCase,
+  stripTimestampFromExtension
 }

@@ -1,7 +1,7 @@
 const { blobConfig } = require('../../config')
 const { Readable } = require('stream')
 const { routes, views, keys, stages } = require('../../constants/upload')
-const { uploadRegisterFile } = require('../../storage/repos/register-blob')
+const { uploadFile } = require('../../storage/repos/blob')
 const Joi = require('joi')
 const ViewModel = require('../../models/upload/register')
 const { admin } = require('../../auth/permissions')
@@ -60,7 +60,7 @@ module.exports = [{
       stream.push(fileBuffer)
       stream.push(null)
 
-      await uploadRegisterFile(blobConfig.registerContainer, filename, stream)
+      await uploadFile(blobConfig.registerContainer, filename, stream)
 
       const res = await doImport(filename, stages.spreadsheetValidation, getUser(request))
 

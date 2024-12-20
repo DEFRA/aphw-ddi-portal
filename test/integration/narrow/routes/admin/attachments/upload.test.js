@@ -1,18 +1,18 @@
-const { auth, user } = require('../../../../mocks/auth')
+const { auth, user } = require('../../../../../mocks/auth')
 const { Readable } = require('stream')
 const FormData = require('form-data')
 
-describe('Upload XLB', () => {
-  jest.mock('../../../../../app/auth')
-  const mockAuth = require('../../../../../app/auth')
+describe('Upload attachments', () => {
+  jest.mock('../../../../../../app/auth')
+  const mockAuth = require('../../../../../../app/auth')
 
-  jest.mock('../../../../../app/storage/repos/blob')
-  const { uploadFile } = require('../../../../../app/storage/repos/blob')
+  jest.mock('../../../../../../app/storage/repos/blob')
+  const { uploadFile } = require('../../../../../../app/storage/repos/blob')
 
-  jest.mock('../../../../../app/api/ddi-index-api/import')
-  const { doImport } = require('../../../../../app/api/ddi-index-api/import')
+  jest.mock('../../../../../../app/api/ddi-index-api/import')
+  const { doImport } = require('../../../../../../app/api/ddi-index-api/import')
 
-  const createServer = require('../../../../../app/server')
+  const createServer = require('../../../../../../app/server')
   let server
 
   beforeEach(async () => {
@@ -22,11 +22,11 @@ describe('Upload XLB', () => {
     await server.initialize()
   })
 
-  describe('GET /upload/import-xlb route', () => {
+  describe('GET /admin/attachments/upload route', () => {
     test('returns 200', async () => {
       const options = {
         method: 'GET',
-        url: '/upload/import-xlb',
+        url: '/admin/attachments/upload',
         auth
       }
 
@@ -36,16 +36,16 @@ describe('Upload XLB', () => {
     })
   })
 
-  describe('POST /upload/import-xlb route', () => {
+  describe('POST /admin/attachments/uploadroute', () => {
     test('returns 302', async () => {
       const file = Buffer.from('test')
 
       const fd = new FormData()
-      fd.append('register', file, { filename: 'test.xlsx' })
+      fd.append('upload', file, { filename: 'test.pdf' })
 
       const options = {
         method: 'POST',
-        url: '/upload/import-xlb',
+        url: '/admin/attachments/upload',
         auth,
         headers: fd.getHeaders(),
         payload: fd.getBuffer()
@@ -56,7 +56,7 @@ describe('Upload XLB', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(uploadFile).toHaveBeenCalledWith('uploads', 'ddi-upload-2023-11-14T00:00:00.000Z', expect.any(Readable))
+      expect(uploadFile).toHaveBeenCalledWith('attachments', 'test.pdf-2023-11-14T00:00:00.000Z', expect.any(Readable))
     })
 
     test('with missing register returns 200', async () => {
@@ -64,7 +64,7 @@ describe('Upload XLB', () => {
 
       const options = {
         method: 'POST',
-        url: '/upload/import-xlb',
+        url: '/admin/attachments/upload',
         auth,
         headers: fd.getHeaders(),
         payload: fd.getBuffer()

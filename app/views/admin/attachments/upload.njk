@@ -1,0 +1,54 @@
+{% extends '_layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageHeading = "Upload attachments" %}
+{% block pageTitle %}{{ pageHeading }} - Admin - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/admin/index">Admin</a>
+      </li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate="novalidate" enctype="multipart/form-data">
+    {% block formContent %}
+      <div class="govuk-body">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+              {{ pageHeading }}
+            </h1>
+            <div id="location-upload-hint">
+              <p>The file should:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>have an extension of .pdf</li>
+                <li>be no larger than 10 MB</li>
+              </ul>
+            </div>
+              {{ govukFileUpload(model) }}
+
+              {{ govukButton({
+                text: "Upload",
+                attributes: {
+                  id: "continue",
+                  "data-testid": "continue"
+                }
+              }) }}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </form>
+{% endblock %}

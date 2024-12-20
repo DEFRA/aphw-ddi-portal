@@ -78,6 +78,9 @@ const routes = [].concat(
   require('../routes/admin/external-events'),
   require('../routes/admin/audit/audit-query-type'),
   require('../routes/admin/audit/audit-query-details'),
+  require('../routes/admin/attachments/list'),
+  require('../routes/admin/attachments/upload'),
+  require('../routes/admin/attachments/template-test'),
   require('../routes/jobs'),
   require('../routes/swagger'),
   require('../routes/documentation')
