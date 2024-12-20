@@ -1,5 +1,5 @@
 const { user } = require('../../../mocks/auth')
-const { buildSummaryCdosApiResponse, buildCdoCounts } = require('../../../mocks/cdo/cdos')
+const { buildSummaryCdosApiResponse, buildCdoCounts, buildSummaryTaskList } = require('../../../mocks/cdo/cdos')
 describe('CDO API endpoints', () => {
   jest.mock('../../../../app/api/ddi-index-api/base')
   const { get } = require('../../../../app/api/ddi-index-api/base')
@@ -33,7 +33,8 @@ describe('CDO API endpoints', () => {
           policeForce: 'Cheshire Constabulary',
           cdoExpiry: '2024-04-19',
           joinedExemptionScheme: null
-        }
+        },
+        taskList: buildSummaryTaskList()
       }
       /**
        * @type {SummaryCdo}
@@ -48,7 +49,8 @@ describe('CDO API endpoints', () => {
         humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: null,
         interimExemptFor: null,
-        policeForce: 'Cheshire Constabulary'
+        policeForce: 'Cheshire Constabulary',
+        taskList: buildSummaryTaskList()
       }
       expect(summaryCdoMapper(summaryCdoDto)).toEqual(expectedSummaryCdoDto)
     })
@@ -88,7 +90,8 @@ describe('CDO API endpoints', () => {
         humanReadableCdoExpiry: '',
         joinedExemptionScheme: new Date('2024-04-19'),
         interimExemptFor: 'Less than 1 month',
-        policeForce: 'Cheshire Constabulary'
+        policeForce: 'Cheshire Constabulary',
+        taskList: []
       }
       expect(summaryCdoMapper(summaryCdoDto)).toEqual(expectedSummaryCdoDto)
     })
@@ -136,7 +139,8 @@ describe('CDO API endpoints', () => {
         humanReadableCdoExpiry: '19 April 2024',
         joinedExemptionScheme: new Date('2024-04-19'),
         interimExemptFor: 'Less than 1 month',
-        policeForce: 'Cheshire Constabulary'
+        policeForce: 'Cheshire Constabulary',
+        taskList: []
       }
 
       const summaryCdoDtos = await cdos.getSummaryCdos({ dueWithin: 30, status: ['PreExempt'] }, true, user)
@@ -170,6 +174,15 @@ describe('CDO API endpoints', () => {
       await cdos.getSummaryCdos({ dueWithin: 30 }, false, user)
 
       expect(get).toBeCalledWith('cdos?withinDays=30', user)
+    })
+
+    test('should call endpoint with showTasks', async () => {
+      get.mockResolvedValue(buildSummaryCdosApiResponse({
+        cdos: []
+      }))
+      await cdos.getSummaryCdos({ dueWithin: 30, showTasks: true }, false, user)
+
+      expect(get).toBeCalledWith('cdos?withinDays=30&showTasks=Y', user)
     })
 
     test('should call endpoint with a sort order', async () => {
@@ -260,6 +273,7 @@ describe('CDO API endpoints', () => {
 
   describe('getLiveCdosWithinMonth', () => {
     test('should get cdos due within one month', async () => {
+      const taskList = buildSummaryTaskList()
       get.mockResolvedValue(buildSummaryCdosApiResponse({
         cdos: [
           {
@@ -277,7 +291,8 @@ describe('CDO API endpoints', () => {
             exemption: {
               policeForce: 'Cheshire Constabulary',
               cdoExpiry: '2024-04-19'
-            }
+            },
+            taskList
           }
         ],
         counts: buildCdoCounts({ within30: 1 })
@@ -285,7 +300,7 @@ describe('CDO API endpoints', () => {
       const sort = {}
 
       const results = await cdos.getLiveCdosWithinMonth(true, user, sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30&noCache=true', user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30&noCache=true&showTasks=Y', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ within30: 1 }) })
     })
 
@@ -295,7 +310,7 @@ describe('CDO API endpoints', () => {
       })
 
       await cdos.getLiveCdosWithinMonth(false, user)
-      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30', user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&withinDays=30&showTasks=Y', user)
     })
   })
 

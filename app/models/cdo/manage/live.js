@@ -143,6 +143,48 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
     }
   ]
 
+  const applicationPackProcessed = 'Application pack'
+  const insuranceDetailsRecorded = 'Evidence of insurance'
+  const applicationFeePaid = 'Application fee'
+
+  const verificationDateRecorded = 'Form 2'
+
+  const taskMapper = {
+    applicationPackProcessed,
+    insuranceDetailsRecorded,
+    applicationFeePaid
+  }
+
+  const showList = Object.keys(taskMapper)
+  /**
+   * @return {(string[], CdoTaskDto) => string}
+   * @param {{key: ("applicationPackSent"|"applicationPackProcessed"|"insuranceDetailsRecorded"|"applicationFeePaid"|"form2Sent"|"verificationDateRecorded"), available: boolean, completed: boolean, readonly: boolean, timestamp: (string|undefined)[]} taskList
+   */
+  const taskListReducer = (tasks, task) => {
+    if (task.completed) {
+      return tasks
+    }
+
+    if (showList.includes(task.key)) {
+      return [...tasks, taskMapper[task.key]]
+    }
+
+    if (!tasks.length && task.key === 'verificationDateRecorded') {
+      return [verificationDateRecorded]
+    }
+
+    return tasks
+  }
+
+  const resultListMapper = ({ taskList, ...result }) => {
+    const notReceived = taskList !== undefined ? taskList.reduce(taskListReducer, []) : []
+
+    return {
+      ...result,
+      notReceived
+    }
+  }
+
   this.model = {
     title,
     breadcrumbs,
@@ -158,7 +200,7 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
       order: 'ASC',
       ...sort
     },
-    resultList
+    resultList: resultList.map(resultListMapper)
   }
 }
 
