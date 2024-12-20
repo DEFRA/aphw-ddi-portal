@@ -27,6 +27,7 @@ const cdosEndpoint = 'cdos'
  * @property {SummaryPersonDto} person
  * @property {SummaryDogDto} dog
  * @property {SummaryExemptionDto} exemption
+ * @property {CdoTaskDto[]} taskList
  */
 
 /**
@@ -41,6 +42,7 @@ const cdosEndpoint = 'cdos'
  * @property {Date|null} joinedExemptionScheme - e.g. 2024-03-01,
  * @property {string} interimExemptFor - e.g. 6 months
  * @property {string} policeForce - e.g. 'Cheshire Constabulary'
+ * @property {CdoTaskDto[]} [taskList] - e.g. 'Cheshire Constabulary'
  */
 
 /**
@@ -57,6 +59,7 @@ const summaryCdoMapper = (summaryCdo) => {
   const joinedExemptionSchemeDto = summaryCdo.exemption.joinedExemptionScheme ?? null
   const cdoExpiry = cdoExpiryDto !== null ? new Date(summaryCdo.exemption.cdoExpiry) : null
   const joinedExemptionScheme = joinedExemptionSchemeDto !== null ? new Date(joinedExemptionSchemeDto) : null
+  const taskList = summaryCdo.taskList ?? []
 
   return {
     id: summaryCdo.dog.id,
@@ -68,7 +71,8 @@ const summaryCdoMapper = (summaryCdo) => {
     cdoExpiry,
     humanReadableCdoExpiry: formatToGds(cdoExpiry) || '',
     joinedExemptionScheme: joinedExemptionScheme,
-    interimExemptFor: joinedExemptionSchemeDto !== null ? getMonthsSince(joinedExemptionScheme) : null
+    interimExemptFor: joinedExemptionSchemeDto !== null ? getMonthsSince(joinedExemptionScheme) : null,
+    taskList
   }
 }
 /**
@@ -85,6 +89,7 @@ const summaryCdoMapper = (summaryCdo) => {
  * @property {CdoStatusShort[]} [status]
  * @property {number} [dueWithin]
  * @property {boolean} [nonComplianceLetterSent]
+ * @property {boolean} [showTasks]
  */
 /**
  * @typedef CdoSort
@@ -127,6 +132,10 @@ const getSummaryCdos = async (filter, noCache, user, sort = {}) => {
     searchParams.set('noCache', true)
   }
 
+  if (filter.showTasks) {
+    searchParams.set('showTasks', 'Y')
+  }
+
   const queryParams = searchParams.toString()
   const payload = await get(`${cdosEndpoint}?${queryParams}`, user)
   const cdos = payload.cdos.map(summaryCdoMapper)
@@ -158,7 +167,7 @@ const getLiveCdosWithinMonth = async (noCache, user, sort = {}) => {
   /**
    * @type {CdoFilter}
    */
-  const filter = { status: ['PreExempt'], dueWithin: 30 }
+  const filter = { status: ['PreExempt'], dueWithin: 30, showTasks: true }
   return getSummaryCdos(filter, noCache, user, sort)
 }
 

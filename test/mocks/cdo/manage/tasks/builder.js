@@ -47,8 +47,8 @@ const buildTaskListTasks = (tasksPartial = {}) => ({
 })
 
 /**
- * @param {Partial<CdoSummary>} cdoSummaryPartial
- * @return {CdoSummary}
+ * @param {Partial<SummaryCdo>} cdoSummaryPartial
+ * @return {SummaryCdo}
  */
 const buildCdoSummary = (cdoSummaryPartial = {}) => ({
   dog: {
