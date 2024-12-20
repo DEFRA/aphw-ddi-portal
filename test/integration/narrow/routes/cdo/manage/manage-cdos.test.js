@@ -3,7 +3,8 @@ const FormData = require('form-data')
 jest.mock('../../../../../../app/session/session-wrapper')
 const { setInSession } = require('../../../../../../app/session/session-wrapper')
 const { JSDOM } = require('jsdom')
-const { buildSummaryCdoResponse, buildCdoCounts } = require('../../../../../mocks/cdo/cdos')
+const { buildSummaryCdoResponse, buildCdoCounts, buildSummaryTaskList } = require('../../../../../mocks/cdo/cdos')
+const { buildCdoSummary } = require('../../../../../mocks/cdo/manage/tasks/builder')
 jest.mock('../../../../../../app/api/ddi-index-api/search')
 
 describe('Manage Live Cdos test', () => {
@@ -220,7 +221,7 @@ describe('Manage Live Cdos test', () => {
   test('GET /cdo/manage/due route returns 200', async () => {
     getLiveCdosWithinMonth.mockResolvedValue(buildSummaryCdoResponse({
       cdos: [
-        {
+        buildCdoSummary({
           id: 20001,
           index: 'ED20001',
           status: 'Pre-exempt',
@@ -229,9 +230,10 @@ describe('Manage Live Cdos test', () => {
           cdoExpiry: new Date('2024-04-19'),
           humanReadableCdoExpiry: '19 April 2024',
           joinedExemptionScheme: null,
-          policeForce: 'Cheshire Constabulary'
-        },
-        {
+          policeForce: 'Cheshire Constabulary',
+          taskList: buildSummaryTaskList()
+        }),
+        buildCdoSummary({
           id: 20002,
           index: 'ED20002',
           status: 'Pre-exempt ',
@@ -240,8 +242,9 @@ describe('Manage Live Cdos test', () => {
           cdoExpiry: new Date('2024-04-20'),
           humanReadableCdoExpiry: '20 April 2024',
           joinedExemptionScheme: null,
-          policeForce: 'Kent Police '
-        }
+          policeForce: 'Kent Police ',
+          taskList: []
+        })
       ],
       counts: buildCdoCounts({ within30: 2 })
     }))
@@ -271,7 +274,7 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-table thead th')[1].textContent.trim()).toBe('Index number')
     expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('none')
     expect(document.querySelectorAll('.govuk-table thead th')[2].textContent.trim()).toBe('Owner')
-    expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Police force')
+    expect(document.querySelectorAll('.govuk-table thead th')[3].textContent.trim()).toBe('Not received')
 
     const cols = document.querySelectorAll('.govuk-table .govuk-table__row td')
 
@@ -279,7 +282,8 @@ describe('Manage Live Cdos test', () => {
     expect(cols[1].textContent.trim()).toBe('ED20001')
     expect(cols[1].querySelector('.govuk-link').getAttribute('href')).toContain('/cdo/view/dog-details/ED20001')
     expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')
-    expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
+    expect(cols[3].querySelectorAll('ul.govuk-list li')[0].textContent.trim()).toBe('Evidence of insurance')
+    expect(cols[3].querySelectorAll('ul.govuk-list li')[1].textContent.trim()).toBe('Application fee')
   })
 
   test('GET /cdo/manage/interim route returns 200', async () => {

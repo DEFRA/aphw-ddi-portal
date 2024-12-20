@@ -135,13 +135,23 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
       label: 'Owner',
       link: columnLink(tab, sort, 'owner'),
       ariaSort: getAriaSort(tab, sort, 'owner')
-    },
-    {
+    }
+
+  ]
+
+  if (tab === 'due') {
+    tableHeadings.push({
+      label: 'Not received',
+      link: undefined,
+      ariaSort: undefined
+    })
+  } else {
+    tableHeadings.push({
       label: 'Police force',
       link: columnLink(tab, sort, 'policeForce'),
       ariaSort: getAriaSort(tab, sort, 'policeForce')
-    }
-  ]
+    })
+  }
 
   const applicationPackProcessed = 'Application pack'
   const insuranceDetailsRecorded = 'Evidence of insurance'

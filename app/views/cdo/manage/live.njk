@@ -61,9 +61,13 @@
           <tr class="govuk-table__row">
             {% for colHeading in model.tableHeadings %}
               <th scope="col" class="govuk-table__header govuk-input--width-10" data-aria-sort="{{colHeading.ariaSort}}">
+                {% if colHeading.link %}
                 <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{colHeading.link}}">
                   {{colHeading.label}}
                 </a>
+                {% else %}
+                  {{colHeading.label}}
+                {% endif %}
               </th>
             {% endfor %}
           </tr>
@@ -78,7 +82,15 @@
             {% endif %}
             <td class="govuk-table__cell"><a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{cdo.index}}{{model.srcHashParam}}">{{cdo.index}}</a></td>
             <td class="govuk-table__cell">{{cdo.owner}}</td>
-            {% if cdo.policeForce %}
+            {% if model.tab == 'due' %}
+            <td class="govuk-table__cell">
+                <ul class="govuk-list govuk-!-margin-bottom-0">
+                  {% for task in cdo.notReceived %}
+                    <li>{{ task }}</li>
+                  {% endfor %}
+                </ul>
+            </td>
+            {% elif cdo.policeForce %}
             <td class="govuk-table__cell">{{cdo.policeForce}}</td>
             {% else %}
             <td class="govuk-table__cell defra-secondary-text">Not entered</td>

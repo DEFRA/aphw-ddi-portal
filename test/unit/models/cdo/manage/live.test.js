@@ -305,8 +305,14 @@ describe('Manage CDOs ', () => {
       })
     ]
 
-    const viewModel = new ViewModel(summaryCdos, counts, tab, sort, backNav)
+    const viewModel = new ViewModel(summaryCdos, counts, 'due', sort, backNav)
 
+    expect(viewModel.model.tab).toBe('due')
+    expect(viewModel.model.tableHeadings[3]).toEqual({
+      label: 'Not received',
+      link: undefined,
+      ariaSort: undefined
+    })
     expect(viewModel.model.resultList[0].notReceived).toEqual([
       APPLICATION_PACK,
       INSURANCE,
