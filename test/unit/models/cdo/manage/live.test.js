@@ -49,6 +49,7 @@ describe('Manage CDOs ', () => {
     title: 'Manage CDOs',
     backLink: '/',
     breadcrumbs: [{ label: 'Home', link: '/' }],
+    caption: 'Dogs that have received a CDO but not yet granted an exemption and the deadline has not yet passed.',
     resultList: [
       {
         cdoExpiry: '2024-12-31T00:00:00.000Z',

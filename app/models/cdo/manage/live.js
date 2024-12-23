@@ -65,6 +65,13 @@ const columnLink = (tab, sort, column) => {
 
   return base + queryParamStrWithQM
 }
+
+const captions = {
+  live: 'Dogs that have received a CDO but not yet granted an exemption and the deadline has not yet passed.',
+  expired: 'Dogs that have been issued a CDO but the expiry date has passed without a certificate of exemption being issued or non-compliance letter sent.',
+  due: 'Dogs that have received a CDO which is due to expire within 30 days.'
+}
+
 /**
  * @param {SummaryCdo[]} resultList
  * @param {ManageCdoCounts} counts
@@ -198,6 +205,7 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
   this.model = {
     title,
     breadcrumbs,
+    caption: captions[tab],
     showTabNav: tab !== 'interim',
     secondaryBtn,
     backLink: backNav.backLink,

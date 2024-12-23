@@ -25,7 +25,7 @@ describe('Manage Live Cdos test', () => {
     await server.initialize()
   })
 
-  test('GET /cdo/manage route returns 200', async () => {
+  test('GET /cdo/manage (Live CDOs) route returns 200', async () => {
     getLiveCdos.mockResolvedValue(buildSummaryCdoResponse({
       cdos: [
         {
@@ -69,6 +69,7 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelector('ul[data-testid="tab-navigation"]')).not.toBeNull()
+    expect(document.querySelector('#manage-cdo-tab caption').textContent.trim()).toBe('Dogs that have received a CDO but not yet granted an exemption and the deadline has not yet passed.')
     const LIVE_CDO_TEXT = 'Live CDOs (2)'
     expect(document.querySelectorAll('.govuk-tabs__list-item')[0].textContent.trim()).toBe(LIVE_CDO_TEXT)
     expect(document.querySelectorAll('.govuk-tabs__list-item')[1].textContent.trim()).toBe('Expired CDOs (4)')
@@ -218,7 +219,7 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-table thead th')[2].getAttribute('data-aria-sort')).toBe('descending')
   })
 
-  test('GET /cdo/manage/due route returns 200', async () => {
+  test('GET /cdo/manage/due (CDOs due) route returns 200', async () => {
     getLiveCdosWithinMonth.mockResolvedValue(buildSummaryCdoResponse({
       cdos: [
         buildCdoSummary({
@@ -264,6 +265,7 @@ describe('Manage Live Cdos test', () => {
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage CDOs')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('CDOs due within 30 days (2)')
+    expect(document.querySelector('#manage-cdo-tab caption').textContent.trim()).toBe('Dogs that have received a CDO which is due to expire within 30 days.')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)
     expect(document.querySelector('.govuk-table')).not.toBeNull()
     expect(document.querySelector('.govuk-breadcrumbs__link').textContent.trim()).toBe('Home')
@@ -424,7 +426,7 @@ describe('Manage Live Cdos test', () => {
     expect(document.querySelectorAll('.govuk-table thead th')[1].getAttribute('data-aria-sort')).toBe('descending')
   })
 
-  test('GET /cdo/manage/expired route returns 200', async () => {
+  test('GET /cdo/manage/expired (Expired CDOs) route returns 200', async () => {
     getExpiredCdos.mockResolvedValue(buildSummaryCdoResponse({
       cdos: [
         {
@@ -469,6 +471,7 @@ describe('Manage Live Cdos test', () => {
     })
     const { document } = (new JSDOM(response.payload)).window
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected')[0].textContent.trim()).toBe('Expired CDOs (2)')
+    expect(document.querySelector('#manage-cdo-tab caption').textContent.trim()).toBe('Dogs that have been issued a CDO but the expiry date has passed without a certificate of exemption being issued or non-compliance letter sent.')
     expect(document.querySelectorAll('.govuk-table thead th a')[0].getAttribute('href')).toBe('/cdo/manage/expired?sortOrder=DESC')
     expect(document.querySelectorAll('.govuk-table thead th')[0].getAttribute('data-aria-sort')).toBe('ascending')
     expect(document.querySelectorAll('.govuk-tabs__list-item--selected').length).toBe(1)
