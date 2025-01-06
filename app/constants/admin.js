@@ -182,7 +182,7 @@ const constants = {
     auditQueryDetails: 'admin/audit/audit-query-details',
     uploadAttachments: 'admin/attachments/upload',
     listAttachments: 'admin/attachments/list',
-    testAttachment: 'admin/attachments/test'
+    testAttachment: 'admin/attachments/testing'
   },
   breadcrumbs: [
     {

@@ -1,5 +1,5 @@
 const { routes, views, keys } = require('../../../constants/admin')
-const ViewModel = require('../../../models/admin/attachments/test')
+const ViewModel = require('../../../models/admin/attachments/testing')
 const { admin } = require('../../../auth/permissions')
 const { getFromSession, setInSession } = require('../../../session/session-wrapper')
 const { getUser } = require('../../../auth')
