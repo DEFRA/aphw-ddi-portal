@@ -65,6 +65,13 @@ const columnLink = (tab, sort, column) => {
 
   return base + queryParamStrWithQM
 }
+
+const captions = {
+  live: 'Dogs that have received a CDO but not yet granted an exemption and the deadline has not yet passed.',
+  expired: 'Dogs that have been issued a CDO but the expiry date has passed without a certificate of exemption being issued or non-compliance letter sent.',
+  due: 'Dogs that have received a CDO which is due to expire within 30 days.'
+}
+
 /**
  * @param {SummaryCdo[]} resultList
  * @param {ManageCdoCounts} counts
@@ -135,17 +142,70 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
       label: 'Owner',
       link: columnLink(tab, sort, 'owner'),
       ariaSort: getAriaSort(tab, sort, 'owner')
-    },
-    {
+    }
+
+  ]
+
+  if (tab === 'due') {
+    tableHeadings.push({
+      label: 'Not received',
+      link: undefined,
+      ariaSort: undefined
+    })
+  } else {
+    tableHeadings.push({
       label: 'Police force',
       link: columnLink(tab, sort, 'policeForce'),
       ariaSort: getAriaSort(tab, sort, 'policeForce')
+    })
+  }
+
+  const applicationPackProcessed = 'Application pack'
+  const insuranceDetailsRecorded = 'Evidence of insurance'
+  const applicationFeePaid = 'Application fee'
+
+  const verificationDateRecorded = 'Form 2'
+
+  const taskMapper = {
+    applicationPackProcessed,
+    insuranceDetailsRecorded,
+    applicationFeePaid
+  }
+
+  const showList = Object.keys(taskMapper)
+  /**
+   * @return {(string[], CdoTaskDto) => string}
+   * @param {{key: ("applicationPackSent"|"applicationPackProcessed"|"insuranceDetailsRecorded"|"applicationFeePaid"|"form2Sent"|"verificationDateRecorded"), available: boolean, completed: boolean, readonly: boolean, timestamp: (string|undefined)[]} taskList
+   */
+  const taskListReducer = (tasks, task) => {
+    if (task.completed) {
+      return tasks
     }
-  ]
+
+    if (showList.includes(task.key)) {
+      return [...tasks, taskMapper[task.key]]
+    }
+
+    if (!tasks.length && task.key === 'verificationDateRecorded') {
+      return [verificationDateRecorded]
+    }
+
+    return tasks
+  }
+
+  const resultListMapper = ({ taskList, ...result }) => {
+    const notReceived = taskList !== undefined ? taskList.reduce(taskListReducer, []) : []
+
+    return {
+      ...result,
+      notReceived
+    }
+  }
 
   this.model = {
     title,
     breadcrumbs,
+    caption: captions[tab],
     showTabNav: tab !== 'interim',
     secondaryBtn,
     backLink: backNav.backLink,
@@ -158,7 +218,7 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
       order: 'ASC',
       ...sort
     },
-    resultList
+    resultList: resultList.map(resultListMapper)
   }
 }
 

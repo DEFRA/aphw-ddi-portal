@@ -154,12 +154,7 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {boolean} allowNeuteringBypass
  * @property {boolean} showNeuteringBypass
  */
-/**
- * @typedef CdoSummary
- * @property {{ name: string }} dog
- * @property {{ cdoExpiry: Date|undefined }} exemption
- * @property {{ firstName: string; lastName: string }} person
- */
+
 /**
  * @typedef CdoTaskListDto
  * @property {CdoTaskListTasksDto} tasks
@@ -176,6 +171,12 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {Date|undefined} certificateIssued
  * @property {CdoVerificationOptions} verificationOptions
  * @property {CdoSummary} cdoSummary
+ */
+/**
+ * @typedef CdoSummary
+ * @property {{ name: string }} dog
+ * @property {{ cdoExpiry: Date|undefined }} exemption
+ * @property {{ firstName: string; lastName: string }} person
  */
 
 /**
