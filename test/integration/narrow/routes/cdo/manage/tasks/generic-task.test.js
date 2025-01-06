@@ -641,7 +641,7 @@ describe('Generic Task test', () => {
         payload: {
           'microchipDeadline-day': '27',
           'microchipDeadline-month': '12',
-          'microchipDeadline-year': '2024',
+          'microchipDeadline-year': '9999',
           taskName: 'record-microchip-deadline',
           dogNotFitForMicrochip: '',
           dogNotNeutered: '',
