@@ -1,42 +1,65 @@
-describe('storage', () => {
-  const DEFAULT_ENV = process.env
+const { blobServiceClient } = require('../../../app/storage/get-blob-client')
+jest.mock('../../../app/storage/get-blob-client')
 
-  let blobServiceClient
-  let defaultAzureCredential
+const uploadStreamFn = jest.fn()
+const deleteFn = jest.fn()
+const downloadFn = jest.fn()
 
+const getMockAsyncIterator = () => {
+  return (async function * () {
+    yield { segment: { blobItems: [{ name: 'file1' }, { name: 'file2' }] } }
+    yield { segment: { blobItems: [{ name: 'file3' }, { name: 'file4' }, { name: 'file5' }] } }
+  })()
+}
+
+blobServiceClient.getContainerClient.mockReturnValue({
+  createIfNotExists: jest.fn(),
+  getBlockBlobClient: jest.fn().mockResolvedValue({
+    uploadStream: uploadStreamFn,
+    delete: deleteFn,
+    downloadToBuffer: downloadFn
+  }),
+  listBlobsFlat: jest.fn().mockReturnValue({
+    byPage: getMockAsyncIterator
+  })
+})
+
+const { uploadFile, deleteFile, renameFile, listFiles } = require('../../../app/storage/repos/blob')
+
+describe('storage blob', () => {
   beforeEach(() => {
-    jest.resetModules()
-
-    jest.mock('@azure/storage-blob')
-    jest.mock('@azure/identity')
-
-    blobServiceClient = require('@azure/storage-blob').BlobServiceClient
-    defaultAzureCredential = require('@azure/identity').DefaultAzureCredential
-
-    process.env = { ...DEFAULT_ENV }
+    jest.clearAllMocks()
   })
 
-  afterAll(() => {
-    process.env = DEFAULT_ENV
+  describe('uploadFile', () => {
+    test('should upload file', async () => {
+      const res = await uploadFile()
+      expect(res).not.toBe(null)
+      expect(uploadStreamFn).toHaveBeenCalled()
+    })
   })
 
-  test('should use connection string if useConnectionString true', () => {
-    process.env.AZURE_STORAGE_USE_CONNECTION_STRING = 'true'
-
-    require('../../../app/storage/get-blob-client')
-
-    expect(blobServiceClient.fromConnectionString).toHaveBeenCalledTimes(1)
-    expect(blobServiceClient).not.toHaveBeenCalled()
-    expect(defaultAzureCredential).not.toHaveBeenCalled()
+  describe('renameFile', () => {
+    test('should rename file', async () => {
+      await renameFile()
+      expect(uploadStreamFn).toHaveBeenCalled()
+      expect(downloadFn).toHaveBeenCalled()
+      expect(deleteFn).toHaveBeenCalledWith({ deleteSnapshots: 'include' })
+    })
   })
 
-  test('should use DefaultAzureCredential if useConnectionString false', () => {
-    process.env.AZURE_STORAGE_USE_CONNECTION_STRING = 'false'
+  describe('deleteFile', () => {
+    test('should delete file', async () => {
+      const res = await deleteFile()
+      expect(res).not.toBe(null)
+      expect(deleteFn).toHaveBeenCalledWith({ deleteSnapshots: 'include' })
+    })
+  })
 
-    require('../../../app/storage/get-blob-client')
-
-    expect(blobServiceClient).toHaveBeenCalledTimes(1)
-    expect(defaultAzureCredential).toHaveBeenCalledTimes(1)
-    expect(blobServiceClient.fromConnectionString).not.toHaveBeenCalled()
+  describe('listFiles', () => {
+    test('should list file', async () => {
+      const res = await listFiles()
+      expect(res).toEqual(['file1', 'file2', 'file3', 'file4', 'file5'])
+    })
   })
 })
