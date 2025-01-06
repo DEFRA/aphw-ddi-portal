@@ -1,4 +1,4 @@
-const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas, titleCase } = require('../../../app/lib/format-helpers')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas, titleCase, stripTimestampFromExtension } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
@@ -259,6 +259,24 @@ describe('format-helpers', () => {
 
     test('should handle multiple hyphenated words', () => {
       expect(titleCase('testing-a-lot with several-tests and-other things to-be-done')).toBe('Testing-A-Lot With Several-Tests And-Other Things To-Be-Done')
+    })
+  })
+
+  describe('stripTimestampFromExtension', () => {
+    test('should handle null', () => {
+      expect(stripTimestampFromExtension(null)).toBe(null)
+    })
+
+    test('should handle pdf extension with timestamp', () => {
+      expect(stripTimestampFromExtension('abcdef.pdf12345', 'pdf')).toBe('abcdef.pdf')
+    })
+
+    test('should handle pdf extension without timestamp', () => {
+      expect(stripTimestampFromExtension('abcdef.pdf', 'pdf')).toBe('abcdef.pdf')
+    })
+
+    test('should handle missing extension', () => {
+      expect(stripTimestampFromExtension('abcdef', 'pdf')).toBe('abcdef')
     })
   })
 })
