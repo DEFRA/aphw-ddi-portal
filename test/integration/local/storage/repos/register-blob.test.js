@@ -1,6 +1,6 @@
 const { Readable } = require('stream')
 const { blobServiceClient } = require('../../../../../app/storage/get-blob-client')
-const { uploadRegisterFile } = require('../../../../../app/storage/repos/register-blob')
+const { uploadFile } = require('../../../../../app/storage/repos/blob')
 
 describe('register blob functions', () => {
   beforeAll(async () => {
@@ -14,7 +14,7 @@ describe('register blob functions', () => {
     stream.push('test stream')
     stream.push(null)
 
-    await uploadRegisterFile('uploads', filename, stream)
+    await uploadFile('uploads', filename, stream)
 
     const container = blobServiceClient.getContainerClient('uploads')
     const blobClient = await container.getBlockBlobClient(filename)

@@ -142,6 +142,18 @@ const constants = {
     auditQueryDetails: {
       get: '/admin/audit/audit-query-details',
       post: '/admin/audit/audit-query-details'
+    },
+    uploadAttachments: {
+      get: '/admin/attachments/upload',
+      post: '/admin/attachments/upload'
+    },
+    listAttachments: {
+      get: '/admin/attachments/list',
+      post: '/admin/attachments/list'
+    },
+    testAttachment: {
+      get: '/admin/attachments/test',
+      post: '/admin/attachments/test'
     }
   },
   views: {
@@ -167,7 +179,10 @@ const constants = {
     addPoliceUserConfirm: 'admin/users/add/confirm',
     userList: 'admin/users/police/list',
     auditQueryType: 'admin/audit/audit-query-type',
-    auditQueryDetails: 'admin/audit/audit-query-details'
+    auditQueryDetails: 'admin/audit/audit-query-details',
+    uploadAttachments: 'admin/attachments/upload',
+    listAttachments: 'admin/attachments/list',
+    testAttachment: 'admin/attachments/testing'
   },
   breadcrumbs: [
     {
@@ -215,7 +230,9 @@ const constants = {
     policeUsers: 'policeUsers',
     fromDate: 'fromDate',
     toDate: 'toDate',
-    auditQuery: 'auditQuery'
+    auditQuery: 'auditQuery',
+    attachmentFile: 'attachmentFile',
+    attachmentTestData: 'attachmentTestData'
   },
   documentation: {
     allowedEnvironments: ['dev', 'snd', 'local']

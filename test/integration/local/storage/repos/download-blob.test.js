@@ -1,7 +1,7 @@
 const { Readable } = require('stream')
 const { blobServiceClient } = require('../../../../../app/storage/get-blob-client')
 const { downloadBlob } = require('../../../../../app/storage/repos/download-blob')
-const { uploadRegisterFile } = require('../../../../../app/storage/repos/register-blob')
+const { uploadFile } = require('../../../../../app/storage/repos/blob')
 
 const streamToBuffer = async (readableStream) => {
   return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ describe('register blob functions', () => {
     stream.push('test stream')
     stream.push(null)
 
-    await uploadRegisterFile('certificates', filename, stream)
+    await uploadFile('certificates', filename, stream)
 
     const res = await downloadBlob('certificates', filename)
 

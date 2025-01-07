@@ -1,4 +1,5 @@
-const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas, titleCase } = require('../../../app/lib/format-helpers')
+const { UTCDate } = require('@date-fns/utc')
+const { mapOsCountryCodeToCountry, formatAddress, formatAddressSingleLine, formatDogRadioAsHtml, containsPossibleInjectedCode, formatNumberWithCommas, titleCase, stripTimestampFromExtension, addTimestampToFilename } = require('../../../app/lib/format-helpers')
 
 describe('format-helpers', () => {
   describe('formatAddress', () => {
@@ -259,6 +260,46 @@ describe('format-helpers', () => {
 
     test('should handle multiple hyphenated words', () => {
       expect(titleCase('testing-a-lot with several-tests and-other things to-be-done')).toBe('Testing-A-Lot With Several-Tests And-Other Things To-Be-Done')
+    })
+  })
+
+  describe('stripTimestampAndStatusFromExtension', () => {
+    test('should handle null', () => {
+      expect(stripTimestampFromExtension(null)).toBe(null)
+    })
+
+    test('should handle pdf extension but missing timestamp', () => {
+      expect(stripTimestampFromExtension('abcdef.draft.pdf', 'pdf')).toBe('abcdef.draft.pdf')
+    })
+
+    test('should handle pdf extension with timestamp', () => {
+      expect(stripTimestampFromExtension('abcdef.2024-11-14T12:24:33.123Z.draft.pdf', 'pdf')).toBe('abcdef.pdf')
+    })
+
+    test('should handle pdf extension without timestamp', () => {
+      expect(stripTimestampFromExtension('abcdef.pdf', 'pdf')).toBe('abcdef.pdf')
+    })
+
+    test('should handle missing extension', () => {
+      expect(stripTimestampFromExtension('abcdef', 'pdf')).toBe('abcdef')
+    })
+  })
+
+  describe('addTimestampToFilename', () => {
+    test('should handle filename', () => {
+      const currentTime = new UTCDate(2024, 6, 2, 11, 33, 56, 123)
+      expect(addTimestampToFilename('fileName1.someThing.pdf', 'pdf', currentTime)).toBe('fileName1.someThing.2024-07-02T11:33:56.123Z.draft.pdf')
+    })
+
+    test('should handle filename without extension', () => {
+      const currentTime = new UTCDate(2024, 6, 2, 11, 33, 56, 123)
+      expect(addTimestampToFilename('fileName2.someThing', 'pdf', currentTime)).toBe('fileName2.someThing')
+    })
+
+    test('should handle default date', () => {
+      const res = addTimestampToFilename('fileName1.someThing.pdf', 'pdf')
+      expect(res).toContain('fileName1.someThing.')
+      expect(res).toContain('Z.draft.pdf')
     })
   })
 })

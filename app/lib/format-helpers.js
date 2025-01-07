@@ -126,6 +126,31 @@ const titleCase = str => {
   return splitStr.join(' ')
 }
 
+const stripTimestampFromExtension = (filename, extension) => {
+  if (!filename) {
+    return filename
+  }
+
+  if (!filename.toLowerCase().endsWith('.draft.pdf')) {
+    return filename
+  }
+
+  const filenameSegements = filename.split('.')
+  const numSegments = filenameSegements.length
+
+  if (numSegments < 4) {
+    return filename
+  }
+
+  const filenameBase = filenameSegements.slice(0, numSegments - 4).join('.')
+  return `${filenameBase}.${extension.toLowerCase()}`
+}
+
+const addTimestampToFilename = (filename, extension, dateTime = new Date()) => {
+  const dotPos = filename.toLowerCase().lastIndexOf(`.${extension.toLowerCase()}`)
+  return dotPos === -1 ? filename : `${filename.substring(0, dotPos)}.${dateTime.toISOString()}.draft.${extension.toLowerCase()}`
+}
+
 module.exports = {
   formatAddress,
   mapOsCountryCodeToCountry,
@@ -134,5 +159,7 @@ module.exports = {
   formatDogRadioAsHtml,
   containsPossibleInjectedCode,
   formatNumberWithCommas,
-  titleCase
+  titleCase,
+  stripTimestampFromExtension,
+  addTimestampToFilename
 }

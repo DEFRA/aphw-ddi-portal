@@ -1,6 +1,6 @@
 const { blobServiceClient } = require('../get-blob-client')
 
-const downloadBlob = async (containerName, filename) => {
+const downloadBlob = async (containerName, filename, toBuffer = false) => {
   const container = blobServiceClient.getContainerClient(containerName)
 
   const blobClient = await container.getBlockBlobClient(filename)
@@ -12,7 +12,7 @@ const downloadBlob = async (containerName, filename) => {
     throw new Error(`File ${filename} does not exist`)
   }
 
-  return await blobClient.download()
+  return toBuffer ? await blobClient.downloadToBuffer() : await blobClient.download()
 }
 
 module.exports = {
