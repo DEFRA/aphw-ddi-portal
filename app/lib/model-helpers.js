@@ -178,6 +178,12 @@ const isNeuteringDeadlineVisibleInEditNearTop = exemption => {
   return exemption.exemptionOrder === '2015' && exemption.dogBreed === 'XL Bully'
 }
 
+const getNeuteringDeadlineHintText = exemption => {
+  return exemption.exemptionOrder === '2023'
+    ? 'The dog must be neutered by this date.'
+    : 'The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.'
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -193,5 +199,6 @@ module.exports = {
   isMicrochipDeadlineVisibleInView,
   isNeuteringDeadlineVisibleInView,
   isMicrochipDeadlineVisibleInEditNearTop,
-  isNeuteringDeadlineVisibleInEditNearTop
+  isNeuteringDeadlineVisibleInEditNearTop,
+  getNeuteringDeadlineHintText
 }

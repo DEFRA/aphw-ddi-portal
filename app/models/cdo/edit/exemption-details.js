@@ -1,6 +1,6 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherWithDate } = require('../../../lib/error-helpers')
-const { constructDateField, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop } = require('../../../lib/model-helpers')
+const { constructDateField, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../lib/model-helpers')
 
 function ViewModel (exemption, courts, policeForces, companies, backNav, errors) {
   this.model = {
@@ -99,7 +99,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
     joinedExemptionScheme: constructDateField(exemption, 'joinedExemptionScheme', 'Joined interim exemption scheme'),
     nonComplianceLetterSent: constructDateField(exemption, 'nonComplianceLetterSent', 'Non-compliance letter sent'),
     microchipDeadline: constructDateField(exemption, 'microchipDeadline', 'Microchip deadline', 'The dog must be microchipped by this date.'),
-    neuteringDeadline: constructDateField(exemption, 'neuteringDeadline', 'Neutering deadline', 'The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.'),
+    neuteringDeadline: constructDateField(exemption, 'neuteringDeadline', 'Neutering deadline', getNeuteringDeadlineHintText(exemption)),
     typedByDlo: constructDateField(exemption, 'typedByDlo', 'Examined by DLO'),
     withdrawn: constructDateField(exemption, 'withdrawn', 'Withdrawn from index', 'An owner can ask for their dog be withdrawn from the index. DLOs can ask for a dog to be withdrawn if they do not consider it to be an XL Bully.'),
     showMicrochipDeadlineNearTop: isMicrochipDeadlineVisibleInEditNearTop(exemption),

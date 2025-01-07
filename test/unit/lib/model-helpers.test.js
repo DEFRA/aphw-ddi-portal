@@ -1,4 +1,4 @@
-const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop } = require('../../../app/lib/model-helpers')
+const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails, getAddress } = require('../../../app/session/cdo/owner')
@@ -411,6 +411,17 @@ describe('ModelHelpers', () => {
     test('should return false for other', () => {
       const exemption = { exemptionOrder: '2023', dogBreed: 'XL Bully' }
       expect(isNeuteringDeadlineVisibleInEditNearTop(exemption)).toBeFalsy()
+    })
+  })
+
+  describe('getNeuteringDeadlineHintText', () => {
+    test('should return shorter text for 2023', () => {
+      const exemption = { exemptionOrder: '2023' }
+      expect(getNeuteringDeadlineHintText(exemption)).toBe('The dog must be neutered by this date.')
+    })
+    test('should return longer text for non-2023', () => {
+      const exemption = { exemptionOrder: '2015' }
+      expect(getNeuteringDeadlineHintText(exemption)).toBe('The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.')
     })
   })
 })
