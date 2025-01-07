@@ -36,7 +36,7 @@ describe('Upload attachments', () => {
     })
   })
 
-  describe('POST /admin/attachments/uploadroute', () => {
+  describe('POST /admin/attachments/upload route', () => {
     test('returns 302', async () => {
       const file = Buffer.from('test')
 
@@ -56,7 +56,7 @@ describe('Upload attachments', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(uploadFile).toHaveBeenCalledWith('attachments', 'test.pdf-2023-11-14T00:00:00.000Z', expect.any(Readable))
+      expect(uploadFile).toHaveBeenCalledWith('attachments', 'test.2023-11-14T00:00:00.000Z.draft.pdf', expect.any(Readable))
     })
 
     test('with missing register returns 200', async () => {

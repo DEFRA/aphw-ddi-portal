@@ -8,7 +8,7 @@ function ViewModel (attachments, validationError) {
     backLink: '/admin/index',
     attachments: attachments.map(att => ({
       filename: att,
-      isLive: att.toLowerCase().endsWith('.pdf')
+      isLive: !att.toLowerCase().endsWith('.draft.pdf')
     })),
     errors: []
   }

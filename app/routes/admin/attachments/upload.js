@@ -5,6 +5,7 @@ const { uploadFile } = require('../../../storage/repos/blob')
 const Joi = require('joi')
 const ViewModel = require('../../../models/admin/attachments/upload')
 const { admin } = require('../../../auth/permissions')
+const { addTimestampToFilename } = require('../../../lib/format-helpers')
 
 module.exports = [{
   method: 'GET',
@@ -50,12 +51,13 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const filename = `${request.payload.upload.hapi.filename}-${new Date().toISOString()}`
       const fileBuffer = request.payload.upload._data
 
       const stream = new Readable()
       stream.push(fileBuffer)
       stream.push(null)
+
+      const filename = addTimestampToFilename(request.payload.upload.hapi.filename, 'pdf')
 
       await uploadFile(blobConfig.attachmentsContainer, filename, stream)
 

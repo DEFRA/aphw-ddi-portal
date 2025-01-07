@@ -5,10 +5,10 @@ const { downloadBlob } = require('../storage/repos/download-blob')
 const { deleteFile } = require('../storage/repos/blob')
 const attachmentsContainer = config.attachmentsContainer
 
-const testTemplateFile = async (sourceFilename, fieldData, user) => {
+const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuidv4()) => {
   const fileInfo = {
     filename: sourceFilename,
-    fileGuid: uuidv4(),
+    fileGuid,
     saveFile: true
   }
   const results = await testAttachmentFile(fileInfo, fieldData, user)

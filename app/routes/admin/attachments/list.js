@@ -4,7 +4,7 @@ const { routes, views, keys } = require('../../../constants/admin')
 const ViewModel = require('../../../models/admin/attachments/list')
 const { admin } = require('../../../auth/permissions')
 const { listFiles, deleteFile, renameFile } = require('../../../storage/repos/blob')
-const { stripTimestampFromExtension } = require('../../../lib/format-helpers')
+const { stripTimestampFromExtension, addTimestampToFilename } = require('../../../lib/format-helpers')
 const { setInSession } = require('../../../session/session-wrapper')
 
 module.exports = [{
@@ -40,12 +40,12 @@ module.exports = [{
       }
 
       if (revoke) {
-        await renameFile(attachmentsContainer, revoke, `${revoke}-${new Date().toISOString()}`)
+        await renameFile(attachmentsContainer, revoke, `${addTimestampToFilename(stripTimestampFromExtension(revoke), 'pdf')}`)
         return h.redirect(routes.listAttachments.get)
       }
 
       if (golive) {
-        const liveFilename = stripTimestampFromExtension(golive, '.pdf')
+        const liveFilename = stripTimestampFromExtension(golive, 'pdf')
         const files = await listFiles(attachmentsContainer)
         if (files.includes(liveFilename)) {
           const errorMessage = `A file with name '${liveFilename}' is already live`
@@ -53,7 +53,7 @@ module.exports = [{
           return h.view(views.listAttachments, new ViewModel(files, error)).code(400).takeover()
         }
 
-        await renameFile(attachmentsContainer, golive, stripTimestampFromExtension(golive, '.pdf'))
+        await renameFile(attachmentsContainer, golive, stripTimestampFromExtension(golive, 'pdf'))
         return h.redirect(routes.listAttachments.get)
       }
 

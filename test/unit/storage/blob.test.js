@@ -1,13 +1,16 @@
+const { Readable } = require('stream')
+
 const { blobServiceClient } = require('../../../app/storage/get-blob-client')
 jest.mock('../../../app/storage/get-blob-client')
 
 const uploadStreamFn = jest.fn()
 const deleteFn = jest.fn()
-const downloadFn = jest.fn()
+const downloadFn = jest.fn().mockResolvedValue('12345678-pdf-content')
 
 const getMockAsyncIterator = () => {
   return (async function * () {
     yield { segment: { blobItems: [{ name: 'file1' }, { name: 'file2' }] } }
+    yield { segment: { bad: [{ name: 'fileBad' }] } }
     yield { segment: { blobItems: [{ name: 'file3' }, { name: 'file4' }, { name: 'file5' }] } }
   })()
 }
@@ -33,16 +36,19 @@ describe('storage blob', () => {
 
   describe('uploadFile', () => {
     test('should upload file', async () => {
-      const res = await uploadFile()
+      const res = await uploadFile('containerName', 'filename', 'stream1')
       expect(res).not.toBe(null)
-      expect(uploadStreamFn).toHaveBeenCalled()
+      expect(uploadStreamFn).toHaveBeenCalledWith('stream1')
     })
   })
 
   describe('renameFile', () => {
     test('should rename file', async () => {
-      await renameFile()
-      expect(uploadStreamFn).toHaveBeenCalled()
+      const stream = new Readable()
+      stream.push('12345678-pdf-content')
+      stream.push(null)
+      await renameFile('containerName', 'oldFilename', 'newFilename')
+      expect(uploadStreamFn).toHaveBeenCalledWith(stream)
       expect(downloadFn).toHaveBeenCalled()
       expect(deleteFn).toHaveBeenCalledWith({ deleteSnapshots: 'include' })
     })
@@ -50,9 +56,10 @@ describe('storage blob', () => {
 
   describe('deleteFile', () => {
     test('should delete file', async () => {
-      const res = await deleteFile()
+      const res = await deleteFile('containerName', 'fileName')
       expect(res).not.toBe(null)
       expect(deleteFn).toHaveBeenCalledWith({ deleteSnapshots: 'include' })
+      expect(blobServiceClient.getContainerClient).toHaveBeenCalledWith('containerName')
     })
   })
 

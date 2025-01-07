@@ -124,14 +124,14 @@ describe('Attachments list route', () => {
         method: 'POST',
         url: '/admin/attachments/list',
         auth,
-        payload: { golive: 'filename1.pdf-WithTimeStamp' }
+        payload: { golive: 'filename1.2024-12-12T10:00:00.001Z.draft.pdf' }
       }
 
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/admin/attachments/list')
-      expect(renameFile).toHaveBeenCalledWith('attachments', 'filename1.pdf-WithTimeStamp', 'filename1.pdf')
+      expect(renameFile).toHaveBeenCalledWith('attachments', 'filename1.2024-12-12T10:00:00.001Z.draft.pdf', 'filename1.pdf')
     })
 
     test('errors during go-live if filename is already live', async () => {
@@ -141,7 +141,7 @@ describe('Attachments list route', () => {
         method: 'POST',
         url: '/admin/attachments/list',
         auth,
-        payload: { golive: 'filename1.pdf-WithTimeStamp' }
+        payload: { golive: 'filename1.2024-12-12T10:01:02.123Z.draft.pdf' }
       }
 
       const response = await server.inject(options)

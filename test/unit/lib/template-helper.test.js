@@ -1,4 +1,5 @@
 const { user } = require('../../mocks/auth')
+const { v4: uuidv4 } = require('uuid')
 
 jest.mock('../../../app/api/ddi-index-api/attachments')
 const { testAttachmentFile } = require('../../../app/api/ddi-index-api/attachments')
@@ -25,7 +26,9 @@ describe('template helper', () => {
     testAttachmentFile.mockResolvedValue({ status: 'ok' })
     downloadBlob.mockResolvedValue('Some pdf content')
     deleteFile.mockResolvedValue()
-    const pdf = await testTemplateFile(sourceFilename, fieldData, user)
+    const guid1 = uuidv4()
+    const pdf = await testTemplateFile(sourceFilename, fieldData, user, guid1)
     expect(pdf).toBe('Some pdf content')
+    expect(deleteFile).toHaveBeenCalledWith('attachments', `temp-populations/${guid1}.pdf`)
   })
 })
