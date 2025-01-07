@@ -100,6 +100,7 @@ describe('Attachments list route', () => {
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/admin/attachments/test')
+      expect(setInSession).toHaveBeenCalledWith(expect.anything(), 'attachmentFile', 'filename1.pdf')
     })
 
     test('handles Remove', async () => {
@@ -164,7 +165,9 @@ describe('Attachments list route', () => {
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toBe('/admin/attachments/list')
-      expect(renameFile).toHaveBeenCalled()
+      expect(renameFile).toHaveBeenCalledWith('attachments', 'filename1.pdf', expect.anything(String))
+      expect(renameFile.mock.calls[0][2]).toContain('Z.draft.pdf')
+      expect(renameFile.mock.calls[0][2]).toContain('filename1.')
     })
   })
 })
