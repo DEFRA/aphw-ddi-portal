@@ -179,6 +179,79 @@ describe('Update dog details', () => {
     expect(updateExemption).toHaveBeenCalledTimes(1)
   })
 
+  test('POST /cdo/edit/exemption-details route should fail given 2023 Dog and no neutering deadline', async () => {
+    const payload = {
+      'certificateIssued-day': '',
+      'certificateIssued-month': '',
+      'certificateIssued-year': '',
+      policeForce: 'Metropolitan Police Service',
+      legislationOfficer: '',
+      'applicationFeePaid-day': '1',
+      'applicationFeePaid-month': '1',
+      'applicationFeePaid-year': '2024',
+      insuranceCompany: 'Axa Insurance',
+      'insuranceRenewal-day': '1',
+      'insuranceRenewal-month': '1',
+      'insuranceRenewal-year': '2025',
+      'neuteringConfirmation-day': '1',
+      'neuteringConfirmation-month': '1',
+      'neuteringConfirmation-year': '2024',
+      'microchipVerification-day': '',
+      'microchipVerification-month': '',
+      'microchipVerification-year': '',
+      'joinedExemptionScheme-day': '',
+      'joinedExemptionScheme-month': '',
+      'joinedExemptionScheme-year': '',
+      'nonComplianceLetterSent-day': '',
+      'nonComplianceLetterSent-month': '',
+      'nonComplianceLetterSent-year': '',
+      'neuteringDeadline-day': '',
+      'neuteringDeadline-month': '',
+      'neuteringDeadline-year': '',
+      'microchipDeadline-day': '29',
+      'microchipDeadline-month': '1',
+      'microchipDeadline-year': '2025',
+      'typedByDlo-day': '',
+      'typedByDlo-month': '',
+      'typedByDlo-year': '',
+      'withdrawn-day': '',
+      'withdrawn-month': '',
+      'withdrawn-year': '',
+      exemptionOrder: 2023,
+      indexNumber: 'ED400146',
+      status: 'Pre-exempt',
+      dogBreed: 'Pit Bull Terrier',
+      previousInsuranceCompany: 'Axa Insurance',
+      previousInsuranceRenewal: '2025-01-01T00:00:00.000Z',
+      certificateIssued: null,
+      applicationFeePaid: '2024-01-01T00:00:00.000Z',
+      neuteringConfirmation: '2024-01-01T00:00:00.000Z',
+      microchipVerification: null,
+      joinedExemptionScheme: null,
+      insuranceRenewal: '2025-01-01T00:00:00.000Z',
+      neuteringDeadline: null,
+      microchipDeadline: '2025-01-29T00:00:00.000Z',
+      typedByDlo: null,
+      withdrawn: null,
+      nonComplianceLetterSent: null
+    }
+
+    const options = {
+      method: 'POST',
+      url: '/cdo/edit/exemption-details',
+      auth,
+      payload
+    }
+
+    const response = await server.inject(options)
+    const { document } = new JSDOM(response.payload).window
+
+    expect(response.statusCode).toBe(400)
+    expect(updateExemption).not.toHaveBeenCalled()
+    const messages = [...document.querySelectorAll('.govuk-error-summary li a')].map(el => el.textContent.trim())
+    expect(messages).toContain('Enter a neutering deadline date')
+  })
+
   test('POST /cdo/edit/exemption-details route returns 400 when payload invalid', async () => {
     const payload = {
       indexNumber: 'ED1234'

@@ -10,6 +10,9 @@ describe('Exemption details validation', () => {
       'cdoIssued-day': '31',
       'cdoIssued-month': '12',
       'cdoIssued-year': '2020',
+      'neuteringDeadline-day': '31',
+      'neuteringDeadline-month': '12',
+      'neuteringDeadline-year': '2024',
       'cdoExpiry-day': '31',
       'cdoExpiry-month': '12',
       'cdoExpiry-year': '2020',
@@ -100,6 +103,29 @@ describe('Exemption details validation', () => {
     })
   })
 
+  test('should fail validation when 2023 and no neutering deadline exists', () => {
+    const payload = {
+      indexNumber: 'ED1234',
+      exemptionOrder: 2023,
+      status: 'DOG_IMPORTED',
+      'cdoIssued-day': '31',
+      'cdoIssued-month': '12',
+      'cdoIssued-year': '2020',
+      'cdoExpiry-day': '31',
+      'cdoExpiry-month': '12',
+      'cdoExpiry-year': '2020',
+      court: 'court1',
+      policeForce: 'policeForce1',
+      legislationOfficer: 'Legislation Officer',
+      insuranceCompany: 'company1',
+      'insuranceRenewal-day': '31',
+      'insuranceRenewal-month': '12',
+      'insuranceRenewal-year': '2020'
+    }
+
+    expect(() => validatePayload(payload)).toThrow('Enter a neutering deadline')
+  })
+
   test('should fail validation when 2015 and not interim exempt and no cdo issued', () => {
     const payload = {
       indexNumber: 'ED1234',
@@ -134,6 +160,9 @@ describe('Exemption details validation', () => {
       'cdoExpiry-day': '31',
       'cdoExpiry-month': '12',
       'cdoExpiry-year': '2020',
+      'neuteringDeadline-day': '31',
+      'neuteringDeadline-month': '12',
+      'neuteringDeadline-year': '9999',
       court: 'court1',
       policeForce: 'policeForce1',
       legislationOfficer: 'Legislation Officer',
@@ -156,6 +185,9 @@ describe('Exemption details validation', () => {
       'cdoExpiry-day': '31',
       'cdoExpiry-month': '12',
       'cdoExpiry-year': '2020',
+      'neuteringDeadline-day': '31',
+      'neuteringDeadline-month': '12',
+      'neuteringDeadline-year': '9999',
       court: 'court1',
       policeForce: 'policeForce1',
       legislationOfficer: 'Legislation Officer',
@@ -173,6 +205,9 @@ describe('Exemption details validation', () => {
       'cdoIssued-day': '31',
       'cdoIssued-month': '12',
       'cdoIssued-year': '2020',
+      'neuteringDeadline-day': '31',
+      'neuteringDeadline-month': '12',
+      'neuteringDeadline-year': '9999',
       'cdoExpiry-day': '31',
       'cdoExpiry-month': '12',
       'cdoExpiry-year': '2020',
@@ -209,6 +244,9 @@ describe('Exemption details validation', () => {
       'cdoExpiry-day': '31',
       'cdoExpiry-month': '12',
       'cdoExpiry-year': '2020',
+      'neuteringDeadline-day': '31',
+      'neuteringDeadline-month': '12',
+      'neuteringDeadline-year': '9999',
       court: 'court1',
       policeForce: 'policeForce1',
       legislationOfficer: 'Legislation Officer',
