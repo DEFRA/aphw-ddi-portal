@@ -44,7 +44,6 @@ const optionalDate = () => {
 }
 
 const optionalDatePreventFuture = () => {
-  console.log('~~~~~~ Chris Debug ~~~~~~ optional', '')
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
@@ -77,11 +76,8 @@ const optionalDateWhenNot2023 = (errorText, preventFutureDates) => {
     day: Joi.string().allow(null).allow('')
   }).when('exemptionOrder', {
     is: 2023,
-    then: Joi.required().custom((value, helper) => {
-      console.log('~~~~~~ Chris Debug ~~~~~~ optionalDateWhenNot2023', 'Value', value)
-      return validateDate(value, helper, true, preventFutureDates)
-    }),
-    otherwise: optionalDatePreventFuture()
+    then: Joi.required().custom((value, helper) => validateDate(value, helper, true, false)),
+    otherwise: optionalDate()
   }).messages({
     'any.required': errorText
   })
