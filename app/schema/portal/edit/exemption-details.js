@@ -44,6 +44,7 @@ const optionalDate = () => {
 }
 
 const optionalDatePreventFuture = () => {
+  console.log('~~~~~~ Chris Debug ~~~~~~ optional', '')
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
@@ -66,6 +67,23 @@ const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
     }).messages({
       'any.required': errorText
     })
+  })
+}
+
+const optionalDateWhenNot2023 = (errorText, preventFutureDates) => {
+  return Joi.object({
+    year: Joi.string().allow(null).allow(''),
+    month: Joi.string().allow(null).allow(''),
+    day: Joi.string().allow(null).allow('')
+  }).when('exemptionOrder', {
+    is: 2023,
+    then: Joi.required().custom((value, helper) => {
+      console.log('~~~~~~ Chris Debug ~~~~~~ optionalDateWhenNot2023', 'Value', value)
+      return validateDate(value, helper, true, preventFutureDates)
+    }),
+    otherwise: optionalDatePreventFuture()
+  }).messages({
+    'any.required': errorText
   })
 }
 
@@ -102,7 +120,7 @@ const exemptionDetailsSchema = Joi.object({
   previousInsuranceRenewal: Joi.string().allow('').optional(),
   exemptionOrder: Joi.number().required(),
   microchipDeadline: optionalDate(),
-  neuteringDeadline: optionalDate(),
+  neuteringDeadline: optionalDateWhenNot2023('Enter a neutering deadline date'),
   typedByDlo: optionalDatePreventFuture(),
   withdrawn: optionalDatePreventFuture(),
   nonComplianceLetterSent: optionalDatePreventFuture(),
