@@ -69,7 +69,7 @@ const optionalDateWhenInterimOr2023 = (errorText, preventFutureDates) => {
   })
 }
 
-const optionalDateWhenNot2023 = (errorText, preventFutureDates) => {
+const optionalDateWhenNot2023 = (errorText) => {
   return Joi.object({
     year: Joi.string().allow(null).allow(''),
     month: Joi.string().allow(null).allow(''),
