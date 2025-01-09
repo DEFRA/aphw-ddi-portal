@@ -1,0 +1,45 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}Application posting scheduled - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+<nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/">Home</a>
+    </li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+      <h1 class="govuk-panel__title">
+        Application posting scheduled
+      </h1>
+    </div>
+
+    <p class="govuk-body">
+      The application pack will be posted to:
+    </p>
+    <p class="govuk-body">
+      {{model.firstName}} {{model.lastName}}
+      <br>
+      {{model.addressLine1}}
+      <br>
+      {{model.town}}
+      <br>
+      {{model.postcode}}
+    </p>
+
+    <p class="govuk-body&quot;">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage/cdo/{{ model.indexNumber }}{{ model.srcHashParam }}">Manage CDO application for Dog {{ model.indexNumber }}</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

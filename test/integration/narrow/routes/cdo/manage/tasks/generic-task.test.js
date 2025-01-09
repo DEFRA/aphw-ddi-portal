@@ -129,6 +129,159 @@ describe('Generic Task test', () => {
     })
   })
 
+  describe('GET /cdo/manage/task/send-application-pack-2/:index-number', () => {
+    test('should return a 200 if Pre-exempt', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        ...notYetStartedTaskList,
+        cdoSummary: {
+          person: {
+            firstName: 'Garry',
+            lastName: 'McFadyen',
+            email: 'garrymcfadyen@hotmail.com',
+            addressLine1: '221b, Baker Street',
+            addressLine2: '',
+            town: 'London',
+            postcode: 'NW1 6XE'
+          }
+        }
+      })
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
+      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('How do you want to send the application pack?')
+      expect(document.querySelector('div#contact-hint').textContent.trim()).toBe('Select one option.')
+      expect(document.querySelectorAll('.govuk-radios__item label')[0].textContent.trim()).toBe('Email it to:garrymcfadyen@hotmail.com')
+      expect(document.querySelectorAll('.govuk-radios__item label')[1].textContent.trim()).toBe('Post it to:Garry McFadyen221b, Baker StreetLondonNW1 6XE')
+      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Send application')
+    })
+
+    test('should return 200 if Dog is failed', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        ...notYetStartedTaskList,
+        cdoSummary: {
+          person: {
+            firstName: 'Garry',
+            lastName: 'McFadyen',
+            email: 'garrymcfadyen@hotmail.com',
+            addressLine1: '221b, Baker Street',
+            addressLine2: '',
+            town: 'London',
+            postcode: 'NW1 6XE'
+          }
+        }
+      })
+      getCdo.mockResolvedValue({ dog: { status: 'Failed' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('should return 500 if invalid dog index', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        ...notYetStartedTaskList,
+        cdoSummary: {
+          person: {
+            firstName: 'Garry',
+            lastName: 'McFadyen',
+            email: 'garrymcfadyen@hotmail.com',
+            addressLine1: '221b, Baker Street',
+            addressLine2: '',
+            town: 'London',
+            postcode: 'NW1 6XE'
+          }
+        }
+      })
+      getCdo.mockResolvedValue(null)
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
+
+    test('should return 500 if dog at wrong status', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        ...notYetStartedTaskList,
+        cdoSummary: {
+          person: {
+            firstName: 'Garry',
+            lastName: 'McFadyen',
+            email: 'garrymcfadyen@hotmail.com',
+            addressLine1: '221b, Baker Street',
+            addressLine2: '',
+            town: 'London',
+            postcode: 'NW1 6XE'
+          }
+        }
+      })
+      getCdo.mockResolvedValue({ dog: { status: 'Exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
+
+    test('should return 200 given application back sent', async () => {
+      getCdoTaskDetails.mockResolvedValue({
+        ...notYetStartedTaskList,
+        tasks: {
+          ...notYetStartedTaskList.tasks,
+          applicationPackSent: {
+            available: true,
+            completed: true,
+            readonly: true
+          }
+        },
+        cdoSummary: {
+          person: {
+            firstName: 'Garry',
+            lastName: 'McFadyen',
+            email: 'garrymcfadyen@hotmail.com',
+            addressLine1: '221b, Baker Street',
+            addressLine2: '',
+            town: 'London',
+            postcode: 'NW1 6XE'
+          }
+        }
+      })
+      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
+
+      const options = {
+        method: 'GET',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+    })
+  })
+
   describe('GET /cdo/manage/task/process-application-pack/:index-number', () => {
     test('should return a 200 if Pre-exempt', async () => {
       getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
@@ -507,6 +660,86 @@ describe('Generic Task test', () => {
         url: '/cdo/manage/task/send-application-pack/ED20001',
         auth,
         payload: { taskName: 'send-application-pack', taskDone: 'Y' }
+      }
+      saveCdoTaskDetails.mockImplementation(() => {
+        throw new Error('dummy error')
+      })
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(500)
+    })
+  })
+
+  describe('POST /cdo/manage/task/send-application-pack-2/ED20001', () => {
+    test('returns 302 if not auth', async () => {
+      const fd = new FormData()
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        headers: fd.getHeaders(),
+        payload: fd.getBuffer()
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(302)
+    })
+
+    test('fails validation if invalid payload', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack-2' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(400)
+    })
+
+    test('sends application pack if called with email', async () => {
+      saveCdoTaskDetails.mockResolvedValue({
+        email: 'garrymcfadyen@hotmail.com'
+      })
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack-2', contact: 'email', email: 'garrymcfadyen@hotmail.com' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'emailApplicationPack', options.payload, userWithDisplayname)
+    })
+
+    test('sends application pack if called with post', async () => {
+      saveCdoTaskDetails.mockResolvedValue({
+        firstName: 'Garry',
+        lastName: 'McFadyen',
+        addressLine1: '122 Common Road',
+        addressLine2: '',
+        town: 'Bexhill-on-Sea',
+        postcode: 'TN39 4JB'
+      })
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack-2', contact: 'post' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'postApplicationPack', options.payload, userWithDisplayname)
+    })
+
+    test('handles non-ApiErrorFailure boom from API', async () => {
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack-2', contact: 'post' }
       }
       saveCdoTaskDetails.mockImplementation(() => {
         throw new Error('dummy error')

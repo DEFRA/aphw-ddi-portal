@@ -25,6 +25,11 @@ const mapBoomError = (e, request) => {
   return error
 }
 
+const sendApplicationPackTaskNames = {
+  email: 'email-application-pack',
+  post: 'post-application-pack'
+}
+
 module.exports = [
   {
     method: 'GET',
@@ -90,27 +95,36 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const dogIndex = request.params.dogIndex
-        const taskName = request.params.taskName
+        const indexNumber = request.params.dogIndex
+        let taskName = request.params.taskName
         const payload = request.payload
+
         const user = getUser(request)
+        const backNav = addBackNavigation(request)
+
+        if (taskName === 'record-verification-dates' && payload.dogNotFitForMicrochip === true) {
+          setVerificationPayload(request, payload)
+          return h.redirect(`${routes.manageCdoRecordMicrochipDeadline.get}/${indexNumber}${backNav.srcHashParam}`)
+        }
+
+        if (taskName === 'send-application-pack-2') {
+          taskName = sendApplicationPackTaskNames[payload.contact]
+          const { apiKey } = getTaskDetailsByKey(taskName)
+          const data = await saveCdoTaskDetails(indexNumber, apiKey, payload, user)
+
+          return h.view(`${views.taskViews}/${taskName}`, createModel(taskName, { indexNumber, ...data.payload }, backNav))
+        }
 
         const { apiKey } = getTaskDetailsByKey(taskName)
 
-        if (taskName === 'record-verification-dates' && payload.dogNotFitForMicrochip === true) {
-          const backNav = addBackNavigation(request)
-          setVerificationPayload(request, payload)
-          return h.redirect(`${routes.manageCdoRecordMicrochipDeadline.get}/${dogIndex}${backNav.srcHashParam}`)
-        }
-
         try {
-          await saveCdoTaskDetails(dogIndex, apiKey, payload, user)
+          await saveCdoTaskDetails(indexNumber, apiKey, payload, user)
 
           if (taskName === 'record-microchip-deadline') {
             clearVerificationPayload(request)
           }
 
-          return h.redirect(`${routes.manageCdo.get}/${dogIndex}`)
+          return h.redirect(`${routes.manageCdo.get}/${indexNumber}`)
         } catch (e) {
           if (e instanceof ApiErrorFailure) {
             const error = mapBoomError(e, request)
