@@ -154,7 +154,20 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {boolean} allowNeuteringBypass
  * @property {boolean} showNeuteringBypass
  */
-
+/**
+ * @typedef CdoSummary
+ * @property {{ name: string }} dog
+ * @property {{ cdoExpiry: Date|undefined }} exemption
+ * @property {{
+ *    firstName: string;
+ *    lastName: string;
+ *    email: string;
+ *    addressLine1: string;
+ *    addressLine2: string;
+ *    town: string;
+ *    postcode: string;
+ * }} person
+ */
 /**
  * @typedef CdoTaskListDto
  * @property {CdoTaskListTasksDto} tasks
@@ -172,17 +185,11 @@ const getManageCdoDetails = async (indexNumber, user) => {
  * @property {CdoVerificationOptions} verificationOptions
  * @property {CdoSummary} cdoSummary
  */
-/**
- * @typedef CdoSummary
- * @property {{ name: string }} dog
- * @property {{ cdoExpiry: Date|undefined }} exemption
- * @property {{ firstName: string; lastName: string }} person
- */
 
 /**
  * @param indexNumber
  * @param user
- * @return {Promise<unknown>}
+ * @return {Promise<CdoTaskListDto>}
  */
 const getCdoTaskDetails = async (indexNumber, user) => {
   return get(`${cdoEndpoint}/${indexNumber}/manage`, user)
@@ -192,6 +199,7 @@ const saveCdoTaskDetails = async (indexNumber, apiKey, payload, user) => {
   payload = removeIndividualDateComponents(payload)
 
   delete payload.taskName
+  delete payload.contact
   return boomRequest(`${cdoEndpoint}/${indexNumber}/manage:${apiKey}`, 'POST', payload, user)
 }
 

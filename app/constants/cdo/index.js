@@ -29,6 +29,9 @@ const constants = {
   },
   tasks: {
     applicationPackSent: 'applicationPackSent',
+    applicationPackSent2: 'applicationPackSent2',
+    applicationPackEmailed: 'applicationPackEmailed',
+    applicationPackPosted: 'applicationPackPosted',
     applicationPackProcessed: 'applicationPackProcessed',
     insuranceDetailsRecorded: 'insuranceDetailsRecorded',
     microchipNumberRecorded: 'microchipNumberRecorded',

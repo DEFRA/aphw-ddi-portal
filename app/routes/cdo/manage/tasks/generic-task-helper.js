@@ -1,5 +1,8 @@
 const { tasks } = require('../../../../constants/cdo/index')
 const ViewModelSendApplicationPack = require('../../../../models/cdo/manage/tasks/send-application-pack')
+const ViewModelSendApplicationPack2 = require('../../../../models/cdo/manage/tasks/send-application-pack-2')
+const ViewModelPostApplicationPack = require('../../../../models/cdo/manage/tasks/post-application-pack')
+const ViewModelEmailApplicationPack = require('../../../../models/cdo/manage/tasks/email-application-pack')
 const ViewModelProcessApplicationPack = require('../../../../models/cdo/manage/tasks/process-application-pack')
 const ViewModelRecordInsuranceDetails = require('../../../../models/cdo/manage/tasks/record-insurance-details')
 const ViewModelRecordMicrochipNumber = require('../../../../models/cdo/manage/tasks/record-microchip-number')
@@ -8,6 +11,7 @@ const ViewModelSendForm2 = require('../../../../models/cdo/manage/tasks/send-for
 const ViewModelRecordVerificationDates = require('../../../../models/cdo/manage/tasks/record-verification-dates')
 const ViewModelRecordMicrochipDeadline = require('../../../../models/cdo/manage/tasks/record-microchip-deadline')
 const { validateSendApplicationPack } = require('../../../../schema/portal/cdo/tasks/send-application-pack')
+const { validateSendApplicationPack2 } = require('../../../../schema/portal/cdo/tasks/send-application-pack-2')
 const { validatePayloadRecordInsuranceDetails } = require('../../../../schema/portal/cdo/tasks/record-insurance-details')
 const { validateMicrochipNumber } = require('../../../../schema/portal/cdo/tasks/record-microchip-number')
 const { validateApplicationFeePayment } = require('../../../../schema/portal/cdo/tasks/record-application-fee-payment')
@@ -21,6 +25,9 @@ const { validateProcessApplicationPack } = require('../../../../schema/portal/cd
 
 const taskList = [
   { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.applicationPackSent2, Model: ViewModelSendApplicationPack2, validation: validateSendApplicationPack2, key: 'send-application-pack-2', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.applicationPackEmailed, Model: ViewModelEmailApplicationPack, validation: validateSendApplicationPack2, key: 'email-application-pack', label: 'Send application pack', apiKey: 'emailApplicationPack', stateKey: 'applicationPackEmailed' },
+  { name: tasks.applicationPackPosted, Model: ViewModelPostApplicationPack, validation: validateSendApplicationPack2, key: 'post-application-pack', label: 'Send application pack', apiKey: 'postApplicationPack', stateKey: 'applicationPackPosted' },
   { name: tasks.applicationPackProcessed, Model: ViewModelProcessApplicationPack, validation: validateProcessApplicationPack, key: 'process-application-pack', label: 'Process application', apiKey: 'processApplicationPack', stateKey: 'applicationPackProcessed' },
   { name: tasks.insuranceDetailsRecorded, Model: ViewModelRecordInsuranceDetails, validation: validatePayloadRecordInsuranceDetails, key: 'record-insurance-details', label: 'Record insurance details', apiKey: 'recordInsuranceDetails', stateKey: 'insuranceDetailsRecorded' },
   { name: tasks.microchipNumberRecorded, Model: ViewModelRecordMicrochipNumber, validation: validateMicrochipNumber, key: 'record-microchip-number', label: 'Record microchip number', apiKey: 'recordMicrochipNumber', stateKey: 'microchipNumberRecorded' },

@@ -56,7 +56,12 @@ const buildCdoSummary = (cdoSummaryPartial = {}) => ({
   },
   person: {
     firstName: 'Alex',
-    lastName: 'Carter'
+    lastName: 'Carter',
+    email: '',
+    addressLine1: '221b, Baker Street',
+    addressLine2: '',
+    town: 'London',
+    postcode: 'NW1 6XE'
   },
   exemption: {
     cdoExpiry: new Date('2023-12-10')
