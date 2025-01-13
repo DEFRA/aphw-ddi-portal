@@ -45,6 +45,9 @@ const mapEventType = (eventType) => {
   if (eventType === 'uk.gov.defra.ddi.event.external.view.dog.activity') {
     return 'Check activity on dog'
   }
+  if (eventType === 'uk.gov.defra.ddi.event.external.view.dog.download') {
+    return 'Download dog record'
+  }
   if (eventType === 'uk.gov.defra.ddi.event.external.view.owner') {
     return 'View owner'
   }
