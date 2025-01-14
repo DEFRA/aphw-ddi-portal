@@ -26,6 +26,7 @@ describe('audit query helpers', () => {
       expect(mapEventType('uk.gov.defra.ddi.event.external.search')).toBe('Search')
       expect(mapEventType('uk.gov.defra.ddi.event.external.view.dog')).toBe('View dog')
       expect(mapEventType('uk.gov.defra.ddi.event.external.view.dog.activity')).toBe('Check activity on dog')
+      expect(mapEventType('uk.gov.defra.ddi.event.external.view.dog.download')).toBe('Download dog record')
       expect(mapEventType('uk.gov.defra.ddi.event.external.view.owner')).toBe('View owner')
       expect(mapEventType('uk.gov.defra.ddi.event.external.view.owner.activity')).toBe('Check activity on owner')
       expect(mapEventType('uk.gov.defra.ddi.event.external.xxx')).toBe('Unknown')
