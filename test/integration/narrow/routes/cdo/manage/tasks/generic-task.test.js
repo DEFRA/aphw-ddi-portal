@@ -130,7 +130,7 @@ describe('Generic Task test', () => {
   })
 
   describe('GET /cdo/manage/task/send-application-pack-2/:index-number', () => {
-    test('should return a 200 if Pre-exempt', async () => {
+    test('should return a 200 if Pre-exempt and email exists', async () => {
       getCdoTaskDetails.mockResolvedValue({
         ...notYetStartedTaskList,
         cdoSummary: {
@@ -163,16 +163,17 @@ describe('Generic Task test', () => {
       expect(document.querySelectorAll('.govuk-radios__item label')[0].textContent.trim()).toBe('Email it to:garrymcfadyen@hotmail.com')
       expect(document.querySelectorAll('.govuk-radios__item label')[1].textContent.trim()).toBe('Post it to:Garry McFadyen221b, Baker StreetLondonNW1 6XE')
       expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Send application')
+      expect(document.querySelector('#email').value).toBe('garrymcfadyen@hotmail.com')
     })
 
-    test('should return 200 if Dog is failed', async () => {
+    test('should return 200 if Dog is failed and email does not exist', async () => {
       getCdoTaskDetails.mockResolvedValue({
         ...notYetStartedTaskList,
         cdoSummary: {
           person: {
             firstName: 'Garry',
             lastName: 'McFadyen',
-            email: 'garrymcfadyen@hotmail.com',
+            email: null,
             addressLine1: '221b, Baker Street',
             addressLine2: '',
             town: 'London',
@@ -190,6 +191,10 @@ describe('Generic Task test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
+      const { document } = (new JSDOM(response.payload)).window
+      expect(document.querySelectorAll('.govuk-radios__item label')[0].textContent.trim()).toBe('Email')
+      expect(document.querySelector('.govuk-radios__conditional').textContent.trim()).toBe('Email address              Enter the dog owner’s email address.')
+      expect(document.querySelector('#email')).toBeNull()
     })
 
     test('should return 500 if invalid dog index', async () => {
@@ -696,7 +701,7 @@ describe('Generic Task test', () => {
       expect(response.statusCode).toBe(400)
     })
 
-    test('sends application pack if called with email', async () => {
+    test('opens next page application pack if called with email', async () => {
       saveCdoTaskDetails.mockResolvedValue({
         email: 'garrymcfadyen@hotmail.com'
       })

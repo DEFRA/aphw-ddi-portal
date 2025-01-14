@@ -46,8 +46,9 @@
         {{ govukRadios(model.contact) }}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
+        {% if model.person.email %}
         <input type="hidden" name="email" id="email" value="{{ model.person.email }}" />
-
+        {% endif %}
       </fieldset>
 
       {{ govukButton({
