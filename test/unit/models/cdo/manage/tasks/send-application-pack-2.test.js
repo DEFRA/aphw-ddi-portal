@@ -175,4 +175,76 @@ describe('send-application-pack-2', () => {
       }
     })
   })
+
+  test('should sanitise the email address', () => {
+    /**
+     * @type {CdoTaskListDto}
+     */
+    const taskListDto = {
+      ...notYetStartedTaskList,
+      taskName: 'send-application-pack-2',
+      task: {
+        completed: false
+      },
+      indexNumber: 'ED300001',
+      cdoSummary: {
+        person: {
+          firstName: 'Garry',
+          lastName: 'McFadyen',
+          email: 'garymcfadyen@hotmail.com<script>alert(\'beware\')</script>',
+          addressLine1: '221b, Baker Street',
+          addressLine2: '',
+          town: 'London',
+          postcode: 'NW1 6XE'
+        }
+      }
+    }
+
+    const backNav = {
+      backLink: '/',
+      srcHashParam: '?src=9f56-29eb'
+    }
+
+    const model = new ViewModel(taskListDto, backNav)
+    expect(model.model.contact.items[0]).toEqual({
+      html: 'Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">garymcfadyen@hotmail.com</p>',
+      value: 'email'
+    })
+  })
+
+  test('should return the email address', () => {
+    /**
+     * @type {CdoTaskListDto}
+     */
+    const taskListDto = {
+      ...notYetStartedTaskList,
+      taskName: 'send-application-pack-2',
+      task: {
+        completed: false
+      },
+      indexNumber: 'ED300001',
+      cdoSummary: {
+        person: {
+          firstName: 'Garry',
+          lastName: 'McFadyen',
+          email: 'garymcfadyen@hotmail.com',
+          addressLine1: '221b, Baker Street',
+          addressLine2: '',
+          town: 'London',
+          postcode: 'NW1 6XE'
+        }
+      }
+    }
+
+    const backNav = {
+      backLink: '/',
+      srcHashParam: '?src=9f56-29eb'
+    }
+
+    const model = new ViewModel(taskListDto, backNav).model
+    expect(model.contact.items[0]).toEqual({
+      html: 'Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">garymcfadyen@hotmail.com</p>',
+      value: 'email'
+    })
+  })
 })

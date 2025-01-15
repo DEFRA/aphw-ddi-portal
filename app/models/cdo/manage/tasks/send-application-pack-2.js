@@ -1,4 +1,20 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
+const jsdom = require('jsdom')
+
+const sanitiseEmail = emailString => {
+  if (!emailString) {
+    return undefined
+  }
+  const dom = new jsdom.JSDOM(`<body>${emailString}</body>`)
+  const document = dom.window.document
+  const scripts = document.querySelectorAll('script')
+
+  for (const script of scripts) {
+    script.remove()
+  }
+
+  return document.querySelector('body').textContent
+}
 
 /**
  * @param {CdoTaskListDto} data
@@ -17,9 +33,10 @@ function ViewModel (data, backNav, errors) {
     data.cdoSummary.person.postcode
   ].filter(Boolean).join('<br>')
 
-  const email = data.cdoSummary.person.email
+  const sanitisedEmail = sanitiseEmail(data.cdoSummary.person.email)
+  const email = sanitisedEmail
     ? {
-        html: `Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${data.cdoSummary.person.email}</p>`,
+        html: `Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${sanitisedEmail}</p>`,
         value: 'email'
       }
     : {
