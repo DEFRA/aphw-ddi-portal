@@ -11,7 +11,7 @@ const getMockAsyncIterator = () => {
   return (async function * () {
     yield { segment: { blobItems: [{ name: 'file1' }, { name: 'file2' }] } }
     yield { segment: { bad: [{ name: 'fileBad' }] } }
-    yield { segment: { blobItems: [{ name: 'file3' }, { name: 'file4' }, { name: 'file5' }] } }
+    yield { segment: { blobItems: [{ name: 'file3' }, { name: 'file4' }, { name: '/tempfile5' }, { name: 'file6' }] } }
   })()
 }
 
@@ -66,7 +66,7 @@ describe('storage blob', () => {
   describe('listFiles', () => {
     test('should list file', async () => {
       const res = await listFiles()
-      expect(res).toEqual(['file1', 'file2', 'file3', 'file4', 'file5'])
+      expect(res).toEqual(['file1', 'file2', 'file3', 'file4', 'file6'])
     })
   })
 })
