@@ -29,7 +29,9 @@ const listFiles = async (containerName) => {
   for await (const response of container.listBlobsFlat(listOptions).byPage({ maxPageSize })) {
     if (response.segment.blobItems) {
       for (const blob of response.segment.blobItems) {
-        files.push(blob.name)
+        if (blob.name.indexOf('/') === -1) {
+          files.push(blob.name)
+        }
       }
     }
   }
