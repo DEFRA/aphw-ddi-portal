@@ -1,4 +1,5 @@
 const { errorPusherDefault } = require('../../../../lib/error-helpers')
+const { sanitiseText } = require('../../../../lib/sanitise')
 
 /**
  * @param {CdoTaskListDto} data
@@ -16,17 +17,37 @@ function ViewModel (data, backNav, errors) {
     data.cdoSummary.person.town,
     data.cdoSummary.person.postcode
   ].filter(Boolean).join('<br>')
+
+  const sanitisedEmail = sanitiseText(data.cdoSummary.person.email)
+
+  const email = sanitisedEmail
+    ? {
+        html: `Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${sanitisedEmail}</p>`,
+        value: 'email'
+      }
+    : {
+        text: 'Email',
+        value: 'email',
+        conditional: {
+          html: '<div class="govuk-form-group">' +
+        '    <label class="govuk-label" for="new-email">\n' +
+        '      Email address' +
+        '    </label>' +
+        '    <div id="event-name-hint" class="govuk-hint">' +
+        '      Enter the dog owner’s email address.' +
+        '    </div>' +
+        '    <input class="govuk-input govuk-!-width-two-thirds" name="email" type="email">' +
+        '    <input name="updateEmail" type="hidden" value="true">' +
+        '  <div></div><div></div></div>'
+        }
+      }
   /**
-   *
    * @type {GovukRadios}
    */
   const contact = {
     name: 'contact',
     items: [
-      {
-        html: `Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${data.cdoSummary.person.email}</p>`,
-        value: 'email'
-      },
+      email,
       {
         html: `Post it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${address}</p>`,
         value: 'post'
