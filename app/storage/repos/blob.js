@@ -13,26 +13,15 @@ const uploadFile = async (containerName, filename, stream) => {
   return blob
 }
 
-const maxPageSize = 100
-
-const listOptions = {
-  includeMetadata: false,
-  includeSnapshots: false
-}
-
-const listFiles = async (containerName) => {
+const listFiles = async (containerName, folderName) => {
   const container = blobServiceClient.getContainerClient(containerName)
 
   await container.createIfNotExists()
 
   const files = []
-  for await (const response of container.listBlobsFlat(listOptions).byPage({ maxPageSize })) {
-    if (response.segment.blobItems) {
-      for (const blob of response.segment.blobItems) {
-        if (blob.name.indexOf('/') === -1) {
-          files.push(blob.name)
-        }
-      }
+  for await (const item of container.listBlobsByHierarchy('/', { prefix: `${folderName}/` })) {
+    if (item.name.startsWith(`${folderName}/`)) {
+      files.push(item.name.substr(folderName.length + 1))
     }
   }
 

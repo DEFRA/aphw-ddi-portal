@@ -42,6 +42,7 @@ describe('Upload attachments', () => {
 
       const fd = new FormData()
       fd.append('upload', file, { filename: 'test.pdf' })
+      fd.append('templateType', 'email-application-pack')
 
       const options = {
         method: 'POST',
@@ -56,7 +57,7 @@ describe('Upload attachments', () => {
       const response = await server.inject(options)
 
       expect(response.statusCode).toBe(302)
-      expect(uploadFile).toHaveBeenCalledWith('attachments', 'test.2023-11-14T00:00:00.000Z.draft.pdf', expect.any(Readable))
+      expect(uploadFile).toHaveBeenCalledWith('attachments', 'email-application-pack/test.2023-11-14T00:00:00.000Z.draft.pdf', expect.any(Readable))
     })
 
     test('with missing register returns 200', async () => {

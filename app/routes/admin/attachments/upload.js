@@ -44,14 +44,20 @@ module.exports = [{
           }).required().unknown(true)
         }).required().unknown(true).messages({
           '*': 'Select a file'
-        })
+        }),
+        templateType: Joi.string().required().messages({ '*': 'Select an option' })
       }).required().unknown(true),
       failAction: (request, h, err) => {
-        return h.view(views.uploadAttachments, new ViewModel(err)).takeover(400)
+        const details = {
+          upload: request.payload.upload,
+          templateType: request.payload.templateType
+        }
+        return h.view(views.uploadAttachments, new ViewModel(details, err)).takeover(400)
       }
     },
     handler: async (request, h) => {
       const fileBuffer = request.payload.upload._data
+      const templateType = request.payload.templateType
 
       const stream = new Readable()
       stream.push(fileBuffer)
@@ -59,7 +65,7 @@ module.exports = [{
 
       const filename = addTimestampToFilename(request.payload.upload.hapi.filename, 'pdf')
 
-      await uploadFile(blobConfig.attachmentsContainer, filename, stream)
+      await uploadFile(blobConfig.attachmentsContainer, `${templateType}/${filename}`, stream)
 
       return h.redirect(routes.listAttachments.get)
     }

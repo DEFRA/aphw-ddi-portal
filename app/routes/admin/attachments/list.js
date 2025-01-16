@@ -17,8 +17,9 @@ module.exports = [{
     },
     handler: async (request, h) => {
       setInSession(request, keys.attachmentFile, null)
-      const files = await listFiles(attachmentsContainer)
-      return h.view(views.listAttachments, new ViewModel(files))
+      const filesSendPack = await listFiles(attachmentsContainer, 'email-application-pack')
+      const filesPostPack = await listFiles(attachmentsContainer, 'post-application-pack')
+      return h.view(views.listAttachments, new ViewModel(filesSendPack, filesPostPack))
     }
   }
 },
@@ -29,6 +30,7 @@ module.exports = [{
     auth: { scope: [admin] },
     handler: async (request, h) => {
       const { test, remove, golive, revoke } = request.payload
+
       if (remove) {
         await deleteFile(attachmentsContainer, request.payload.remove)
         return h.redirect(routes.listAttachments.get)
@@ -46,11 +48,15 @@ module.exports = [{
 
       if (golive) {
         const liveFilename = stripTimestampFromExtension(golive, 'pdf')
-        const files = await listFiles(attachmentsContainer)
-        if (files.includes(liveFilename)) {
-          const errorMessage = `A file with name '${liveFilename}' is already live`
+        const folderName = golive.substr(0, golive.indexOf('/'))
+        const strippedFilename = liveFilename.substr(liveFilename.indexOf('/') + 1)
+        const files = await listFiles(attachmentsContainer, folderName)
+        if (files.includes(strippedFilename)) {
+          const errorMessage = `A file with name '${strippedFilename}' is already live for ${folderName}`
+          const filesSendPack = await listFiles(attachmentsContainer, 'email-application-pack')
+          const filesPostPack = await listFiles(attachmentsContainer, 'post-application-pack')
           const error = new Joi.ValidationError(errorMessage, [{ message: errorMessage, path: ['custom'], type: 'custom' }])
-          return h.view(views.listAttachments, new ViewModel(files, error)).code(400).takeover()
+          return h.view(views.listAttachments, new ViewModel(filesSendPack, filesPostPack, error)).code(400).takeover()
         }
 
         await renameFile(attachmentsContainer, golive, stripTimestampFromExtension(golive, 'pdf'))
