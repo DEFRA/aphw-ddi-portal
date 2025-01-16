@@ -10,7 +10,8 @@ const schema = Joi.object({
     is: 'email',
     then: Joi.string().email().required(),
     otherwise: Joi.any()
-  })
+  }),
+  updateEmail: Joi.boolean().default(false)
 })
 
 const validateSendApplicationPack2 = (payload) => {

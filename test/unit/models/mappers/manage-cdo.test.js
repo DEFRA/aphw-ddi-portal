@@ -64,7 +64,7 @@ const cdo = {
 describe('Manage CDO Mapper', () => {
   test('should handle a completed task', () => {
     const res = mapManageCdoDetails(details, cdo)
-    const sendApplicationPack = res.taskList.filter(task => task.key === 'send-application-pack')[0]
+    const sendApplicationPack = res.taskList.filter(task => task.key === 'send-application-pack-2')[0]
     expect(sendApplicationPack.status).toBe('Completed')
     expect(sendApplicationPack.completedDate).toBe('06 Aug 2024')
     const insuranceDetailsRecorded = res.taskList.filter(task => task.key === 'record-insurance-details')[0]

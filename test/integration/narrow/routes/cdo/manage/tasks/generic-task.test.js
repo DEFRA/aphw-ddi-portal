@@ -714,7 +714,29 @@ describe('Generic Task test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
-      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'emailApplicationPack', options.payload, userWithDisplayname)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'emailApplicationPack', {
+        ...options.payload,
+        updateEmail: false
+      }, userWithDisplayname)
+    })
+
+    test('opens next page application pack if called with updateEmail', async () => {
+      saveCdoTaskDetails.mockResolvedValue({
+        email: 'garrymcfadyen@hotmail.com'
+      })
+      const options = {
+        method: 'POST',
+        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        auth,
+        payload: { taskName: 'send-application-pack-2', contact: 'email', email: 'garrymcfadyen@hotmail.com', updateEmail: 'true' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(200)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'emailApplicationPack', {
+        ...options.payload,
+        updateEmail: true
+      }, userWithDisplayname)
     })
 
     test('sends application pack if called with post', async () => {
@@ -736,7 +758,10 @@ describe('Generic Task test', () => {
 
       const response = await server.inject(options)
       expect(response.statusCode).toBe(200)
-      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'postApplicationPack', options.payload, userWithDisplayname)
+      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'postApplicationPack', {
+        ...options.payload,
+        updateEmail: false
+      }, userWithDisplayname)
     })
 
     test('handles non-ApiErrorFailure boom from API', async () => {
