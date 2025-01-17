@@ -136,6 +136,8 @@ const getTaskData = async (dogIndex, taskName, user, request, payload = {}) => {
     data = verificationData(data, request, payload)
   } else if (taskName === 'record-microchip-deadline') {
     data.hidden = getVerificationPayload(request)
+  } else if (taskName === 'send-application-pack-2') {
+    data.payload = payload
   }
 
   return data

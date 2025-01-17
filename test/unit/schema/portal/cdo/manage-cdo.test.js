@@ -1,6 +1,28 @@
 const { microchipVerification, neuteringConfirmation, verificationDatesSchema } = require('../../../../../app/schema/portal/cdo/tasks/record-verification-dates')
+const { sendApplicationPackPayloadSchema } = require('../../../../../app/schema/portal/cdo/tasks/send-application-pack-2')
 const { ValidationError } = require('joi')
 describe('manage-cdo single cdo', () => {
+  describe('sendApplicationPack', () => {
+    test('should not validate if email is invalid', () => {
+      const sendApplicationPackPayload = {
+        taskName: 'send-application-pack-2',
+        contact: 'email',
+        email: 'garrymcfadyen.hotmail.com'
+      }
+      const { error } = sendApplicationPackPayloadSchema.validate(sendApplicationPackPayload)
+      expect(error).toEqual(new ValidationError('Enter an email address in the correct format, like name@example.com'))
+    })
+
+    test('should not validate if email is empty', () => {
+      const sendApplicationPackPayload = {
+        taskName: 'send-application-pack-2',
+        contact: 'email',
+        email: ''
+      }
+      const { error } = sendApplicationPackPayloadSchema.validate(sendApplicationPackPayload)
+      expect(error).toEqual(new ValidationError('Enter an email address'))
+    })
+  })
   describe('microchipVerification', () => {
     test('should have correct error message', () => {
       const microchipVerificationObject = {}

@@ -722,7 +722,7 @@ describe('Generic Task test', () => {
 
     test('opens next page application pack if called with updateEmail', async () => {
       saveCdoTaskDetails.mockResolvedValue({
-        email: 'garrymcfadyen@hotmail.com'
+        email: ''
       })
       const options = {
         method: 'POST',
