@@ -6,7 +6,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}Manage templates for email/letter - Admin - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Upload or manage templates for email or letter - Admin - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-breadcrumbs">
@@ -32,7 +32,7 @@
                     errorList: model.errors
                 }) }}
             {% endif %}
-            <h1 class="govuk-heading-l">Manage templates for email or letter</h1>
+            <h1 class="govuk-heading-l">Upload or manage templates for email or letter</h1>
             <form class="form" method="post" id="file-attachments" action="">
               <p>Files showing <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> will be used as an email attachment (if for email) or used as the letter content (if for posting by letter).</p>
               <ul class="govuk-list govuk-list--bullet">
@@ -40,7 +40,7 @@
                 <li>Press 'Revoke' to relegate a file from <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong>.</li>
                 <li>Each <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> file must have a unique filename.</li>
               </ul>
-              <p>Currently, only a <strong>single file</strong> is allowed to be live for each category</p>
+              <p>Currently, only a <strong>single file</strong> should be live for each category, but you can temporarily have two files live per category (if they have different filenames) to achieve seamless upgrades between template files (as the back-end processing will only pick the first of potentially multiple files).</p>
 
               <h2 class="govuk-heading-m">Template for Send Application Pack (by email)</h2>
               {% set templateFiles = model.sendPackTemplates %}

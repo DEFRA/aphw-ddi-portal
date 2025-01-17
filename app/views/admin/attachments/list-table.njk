@@ -7,13 +7,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% set alreadyLive = false %}
                     {% if templateFiles | length > 0 %}
-                        {% for attachment in templateFiles %}
-                        {% if attachment.isLive === true %}
-                        {% set alreadyLive = true %}
-                        {% endif %}
-                        {% endfor %}
                         {% for attachment in templateFiles %}
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell defra-align-table">{{ attachment.filename }}</td>
@@ -27,11 +21,9 @@
                                     Remove
                                 </button>
                                 &nbsp;&nbsp;
-                                {% if not alreadyLive %}
                                 <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="golive" value="{{ templateType}}/{{ attachment.filename }}">
                                     Go live
                                 </button>
-                                {% endif %}
                                 {% else %}
                                 &nbsp;&nbsp;
                                 <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="revoke" value="{{ templateType}}/{{ attachment.filename }}">
