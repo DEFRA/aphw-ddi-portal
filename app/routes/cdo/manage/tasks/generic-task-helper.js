@@ -24,8 +24,8 @@ const { getVerificationPayload } = require('../../../../session/cdo/manage')
 const { validateProcessApplicationPack } = require('../../../../schema/portal/cdo/tasks/process-application-pack')
 
 const taskList = [
-  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
-  { name: tasks.applicationPackSent2, Model: ViewModelSendApplicationPack2, validation: validateSendApplicationPack2, key: 'send-application-pack-2', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: 'to-delete', Model: ViewModelSendApplicationPack, validation: validateSendApplicationPack, key: 'send-application-pack', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
+  { name: tasks.applicationPackSent, Model: ViewModelSendApplicationPack2, validation: validateSendApplicationPack2, key: 'send-application-pack-2', label: 'Send application pack', apiKey: 'sendApplicationPack', stateKey: 'applicationPackSent' },
   { name: tasks.applicationPackEmailed, Model: ViewModelEmailApplicationPack, validation: validateSendApplicationPack2, key: 'email-application-pack', label: 'Send application pack', apiKey: 'emailApplicationPack', stateKey: 'applicationPackEmailed' },
   { name: tasks.applicationPackPosted, Model: ViewModelPostApplicationPack, validation: validateSendApplicationPack2, key: 'post-application-pack', label: 'Send application pack', apiKey: 'postApplicationPack', stateKey: 'applicationPackPosted' },
   { name: tasks.applicationPackProcessed, Model: ViewModelProcessApplicationPack, validation: validateProcessApplicationPack, key: 'process-application-pack', label: 'Process application', apiKey: 'processApplicationPack', stateKey: 'applicationPackProcessed' },
@@ -136,6 +136,8 @@ const getTaskData = async (dogIndex, taskName, user, request, payload = {}) => {
     data = verificationData(data, request, payload)
   } else if (taskName === 'record-microchip-deadline') {
     data.hidden = getVerificationPayload(request)
+  } else if (taskName === 'send-application-pack-2') {
+    data.payload = payload
   }
 
   return data

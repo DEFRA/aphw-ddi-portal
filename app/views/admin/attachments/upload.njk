@@ -3,7 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageHeading = "Upload attachments" %}
 {% block pageTitle %}{{ pageHeading }} - Admin - {{ serviceName }}{% endblock %}
@@ -27,9 +29,19 @@
       <div class="govuk-body">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
+            {% if model.errors | length > 0 %}
+              {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: model.errors
+              }) }}
+            {% endif %}
+
             <h1 class="govuk-heading-l">
               {{ pageHeading }}
             </h1>
+
+            {{ govukRadios(model.templateType) }}
+
             <div id="location-upload-hint">
               <p>The file should:</p>
               <ul class="govuk-list govuk-list--bullet">

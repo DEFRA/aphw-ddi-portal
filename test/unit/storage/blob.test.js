@@ -9,9 +9,13 @@ const downloadFn = jest.fn().mockResolvedValue('12345678-pdf-content')
 
 const getMockAsyncIterator = () => {
   return (async function * () {
-    yield { segment: { blobItems: [{ name: 'file1' }, { name: 'file2' }] } }
-    yield { segment: { bad: [{ name: 'fileBad' }] } }
-    yield { segment: { blobItems: [{ name: 'file3' }, { name: 'file4' }, { name: '/tempfile5' }, { name: 'file6' }] } }
+    yield { name: 'folder/file1' }
+    yield { name: 'folder/file2' }
+    yield { name: 'fileBad' }
+    yield { name: 'folder/file3' }
+    yield { name: 'folder/file4' }
+    yield { name: '/tempfile5' }
+    yield { name: 'folder/file6' }
   })()
 }
 
@@ -22,9 +26,7 @@ blobServiceClient.getContainerClient.mockReturnValue({
     delete: deleteFn,
     downloadToBuffer: downloadFn
   }),
-  listBlobsFlat: jest.fn().mockReturnValue({
-    byPage: getMockAsyncIterator
-  })
+  listBlobsByHierarchy: getMockAsyncIterator
 })
 
 const { uploadFile, deleteFile, renameFile, listFiles } = require('../../../app/storage/repos/blob')
@@ -65,7 +67,7 @@ describe('storage blob', () => {
 
   describe('listFiles', () => {
     test('should list file', async () => {
-      const res = await listFiles()
+      const res = await listFiles('attachments', 'folder')
       expect(res).toEqual(['file1', 'file2', 'file3', 'file4', 'file6'])
     })
   })

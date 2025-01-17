@@ -6,7 +6,7 @@
 
 {% extends '_layout.njk' %}
 
-{% block pageTitle %}Manage attachments - Admin - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Upload or manage templates for email or letter - Admin - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   <div class="govuk-breadcrumbs">
@@ -32,55 +32,25 @@
                     errorList: model.errors
                 }) }}
             {% endif %}
-            <h1 class="govuk-heading-l">Manage attachments</h1>
+            <h1 class="govuk-heading-l">Upload or manage templates for email or letter</h1>
             <form class="form" method="post" id="file-attachments" action="">
-                <p>Files showing <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> will be added to emails as attachments. Additional files may be uploaded, tested, and made live. Press 'Revoke' to relegate a file from <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong>. Each <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> file must have a unique filename.</p>
-                <h2 class="govuk-heading-m">Attachments for Application Pack email/letter</h2>
-                <table class="govuk-table govuk-!-margin-bottom-7" id="attachment-table">
-                    <caption class="govuk-visually-hidden">Attachment templates</caption>
-                    <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th scope="col" class="govuk-table__header">Filename</th>
-                        <th scope="col" class="govuk-table__header">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if model.attachments | length > 0 %}
-                        {% for attachment in model.attachments %}
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell defra-align-table">{{ attachment.filename }}</td>
-                            <td class="govuk-table__cell defra-align-table">
-                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="test" value="{{ attachment.filename }}">
-                                    Test
-                                </button>
-                                {% if attachment.isLive === false %}
-                                &nbsp;&nbsp;
-                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="remove" value="{{ attachment.filename }}">
-                                    Remove
-                                </button>
-                                &nbsp;&nbsp;
-                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="golive" value="{{ attachment.filename }}">
-                                    Go live
-                                </button>
-                                {% else %}
-                                &nbsp;&nbsp;
-                                <button type="submit" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" name="revoke" value="{{ attachment.filename }}">
-                                    Revoke
-                                </button>
-                                &nbsp;&nbsp;&nbsp;
-                                <strong class="govuk-tag defra-tag-nowrap govuk-tag--green govuk-!-margin-top-1">LIVE</strong>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell defra-align-table">No attachments</td>
-                            <td class="govuk-table__cell defra-align-table govuk-table__cell--numeric"></td>
-                        </tr>
-                    {% endif %}
-                    </tbody>
-                </table>
+              <p>Files showing <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> will be used as an email attachment (if for email) or used as the letter content (if for posting by letter).</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>Additional files may be uploaded, tested, and made live.</li>
+                <li>Press 'Revoke' to relegate a file from <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong>.</li>
+                <li>Each <strong class="govuk-tag defra-tag-nowrap govuk-tag--green">LIVE</strong> file must have a unique filename.</li>
+              </ul>
+              <p>Currently, only a <strong>single file</strong> should be live for each category, but you can temporarily have two files live per category (if they have different filenames) to achieve seamless upgrades between template files (as the back-end processing will only pick the first of potentially multiple files).</p>
+
+              <h2 class="govuk-heading-m">Template for Send Application Pack (by email)</h2>
+              {% set templateFiles = model.sendPackTemplates %}
+              {% set templateType = 'email-application-pack' %}
+              {% include "./admin/attachments/list-table.njk" %}
+
+              <h2 class="govuk-heading-m">Template for Post Application Pack (letter by post)</h2>
+              {% set templateFiles = model.postPackTemplates %}
+              {% set templateType = 'post-application-pack' %}
+              {% include "./admin/attachments/list-table.njk" %}
             </form>
             <div class="govuk-button-group">
               <a class="govuk-link govuk-link--no-visited-state" href="/admin/attachments/upload">Upload a file</a>

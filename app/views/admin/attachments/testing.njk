@@ -43,6 +43,13 @@
           </legend>
 
           {{ govukInput(model.ddi_index_number) }}
+          {{ govukInput(model.ddi_dog_name) }}
+          {{ govukInput(model.ddi_owner_name) }}
+          {{ govukInput(model.ddi_address_line_1) }}
+          {{ govukInput(model.ddi_address_line_2) }}
+          {{ govukInput(model.ddi_town) }}
+          {{ govukInput(model.ddi_postcode) }}
+          {{ govukInput(model.ddi_todays_date) }}
 
         </fieldset>
 
@@ -52,6 +59,9 @@
             name: "submitButton"
           }) }}
           <a class="govuk-link govuk-link--no-visited-state" href="{{ model.backLink }}">Cancel</a>
+        </div>
+        <div class="govuk-button-group">
+          <a class="govuk-link govuk-link--no-visited-state" href="/admin/attachments/test?default=true">Reset to default values</a>
         </div>
       </form>
     </div>
