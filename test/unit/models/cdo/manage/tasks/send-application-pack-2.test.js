@@ -68,6 +68,7 @@ describe('send-application-pack-2', () => {
             text: 'Email',
             value: 'email',
             conditional: {
+              type: 'email',
               html: '<div class="govuk-form-group">' +
                 '    <label class="govuk-label" for="new-email">\n' +
                 '      Email address' +
@@ -75,7 +76,7 @@ describe('send-application-pack-2', () => {
                 '    <div id="event-name-hint" class="govuk-hint">' +
                 '      Enter the dog owner’s email address.' +
                 '    </div>' +
-                '    <input class="govuk-input govuk-!-width-two-thirds" name="email" type="email">' +
+                '    <input class="govuk-input govuk-!-width-two-thirds" name="email" type="email" value="">' +
                 '    <input name="updateEmail" type="hidden" value="true">' +
                 '  <div></div><div></div></div>'
             }
@@ -155,6 +156,7 @@ describe('send-application-pack-2', () => {
             text: 'Email',
             value: 'email',
             conditional: {
+              type: 'email',
               html: '<div class="govuk-form-group">' +
                 '    <label class="govuk-label" for="new-email">\n' +
                 '      Email address' +
@@ -162,9 +164,146 @@ describe('send-application-pack-2', () => {
                 '    <div id="event-name-hint" class="govuk-hint">' +
                 '      Enter the dog owner’s email address.' +
                 '    </div>' +
-                '    <input class="govuk-input govuk-!-width-two-thirds" name="email" type="email">' +
+                '    <input class="govuk-input govuk-!-width-two-thirds" name="email" type="email" value="">' +
                 '    <input name="updateEmail" type="hidden" value="true">' +
                 '  <div></div><div></div></div>'
+            }
+          },
+          {
+            html: 'Post it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">Garry McFadyen<br>221b, Baker Street<br>London<br>NW1 6XE</p>',
+            value: 'post'
+          }
+        ]
+      }
+    })
+  })
+
+  test('should handle errors', () => {
+    /**
+     * @type {CdoTaskListDto}
+     */
+    const taskListDto = {
+      ...notYetStartedTaskList,
+      taskName: 'send-application-pack-2',
+      task: {
+        completed: false
+      },
+      indexNumber: 'ED300001',
+      cdoSummary: {
+        person: {
+          firstName: 'Garry',
+          lastName: 'McFadyen',
+          email: '',
+          addressLine1: '221b, Baker Street',
+          addressLine2: '',
+          town: 'London',
+          postcode: 'NW1 6XE'
+        }
+      },
+      payload: {
+        contact: 'email',
+        email: 'garrymcfadyen.hotmail.com',
+        updateEmail: 'true',
+        taskName: 'send-application-pack-2'
+      }
+    }
+
+    const backNav = {
+      backLink: '/cdo/manage/cdo/ED300001',
+      srcHashParam: '?src=9f56-29eb'
+    }
+    const errors = {
+      _original: {
+        contact: 'email',
+        email: 'garrymcfadyen.hotmail.com',
+        updateEmail: 'true',
+        taskName: 'send-application-pack-2'
+      },
+      details: [
+        {
+          message: 'Enter an email address in the correct format, like name@example.com',
+          path: ['email'],
+          type: 'string.email',
+          context: {
+            value: 'garrymcfadyen.hotmail.com',
+            invalids: ['garrymcfadyen.hotmail.com'],
+            label: 'email',
+            key: 'email'
+          }
+        }
+      ],
+      isBoom: true,
+      isServer: false,
+      data: null,
+      output: {
+        statusCode: 400,
+        payload: {
+          statusCode: 400,
+          error: 'Bad Request',
+          message: 'Enter an email address in the correct format, like name@example.com',
+          validation: { source: 'payload', keys: ['email'] }
+        },
+        headers: {}
+      }
+    }
+    const model = new ViewModel(taskListDto, backNav, errors)
+    expect(model.model).toEqual({
+      backLink: '/cdo/manage/cdo/ED300001',
+      srcHashParam: '?src=9f56-29eb',
+      continueLink: '/cdo/manage/cdo/ED300001?action=continue',
+      errors: [
+        {
+          href: '#email',
+          text: 'Enter an email address in the correct format, like name@example.com'
+        }
+      ],
+      indexNumber: 'ED300001',
+      person: {
+        firstName: 'Garry',
+        lastName: 'McFadyen',
+        email: '',
+        addressLine1: '221b, Baker Street',
+        addressLine2: '',
+        town: 'London',
+        postcode: 'NW1 6XE'
+      },
+      taskName: 'send-application-pack-2',
+      disabled: false,
+      taskDone: {
+        id: 'taskDone',
+        name: 'taskDone',
+        items: [
+          {
+            value: 'Y',
+            text: 'I have sent the application pack',
+            checked: false,
+            disabled: false
+          }
+        ]
+      },
+      contact: {
+        name: 'contact',
+        value: 'email',
+        items: [
+          {
+            text: 'Email',
+            value: 'email',
+            conditional: {
+              type: 'email',
+              errorMessage: { text: 'Enter an email address in the correct format, like name@example.com' },
+              html: '<div class="govuk-form-group govuk-form-group--error">' +
+                  '    <label class="govuk-label" for="new-email">\n' +
+                  '      Email address' +
+                  '    </label>' +
+                  '    <p id="contact-by-email-error" class="govuk-error-message">' +
+                  '      <span class="govuk-visually-hidden">Error:</span> Enter an email address in the correct format, like name@example.com' +
+                  '    </p>' +
+                  '    <div id="event-name-hint" class="govuk-hint">' +
+                  '      Enter the dog owner’s email address.' +
+                  '    </div>' +
+                  '    <input class="govuk-input govuk-!-width-two-thirds govuk-input--error" name="email" type="email" value="garrymcfadyen.hotmail.com">' +
+                  '    <input name="updateEmail" type="hidden" value="true">' +
+                  '  <div></div><div></div></div>'
             }
           },
           {
