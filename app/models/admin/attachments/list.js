@@ -3,10 +3,14 @@
  * @param [validationError]
  * @constructor
  */
-function ViewModel (attachments, validationError) {
+function ViewModel (sendPackFiles, postPackFiles, validationError) {
   this.model = {
     backLink: '/admin/index',
-    attachments: attachments.map(att => ({
+    sendPackTemplates: sendPackFiles.map(att => ({
+      filename: att,
+      isLive: !att.toLowerCase().endsWith('.draft.pdf')
+    })),
+    postPackTemplates: postPackFiles.map(att => ({
       filename: att,
       isLive: !att.toLowerCase().endsWith('.draft.pdf')
     })),

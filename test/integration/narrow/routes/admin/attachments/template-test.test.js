@@ -6,7 +6,7 @@ describe('Attachments template-test route', () => {
   const mockAuth = require('../../../../../../app/auth')
 
   jest.mock('../../../../../../app/session/session-wrapper')
-  const { getFromSession } = require('../../../../../../app/session/session-wrapper')
+  const { getFromSession, setInSession } = require('../../../../../../app/session/session-wrapper')
 
   jest.mock('../../../../../../app/lib/template-helper')
   const { testTemplateFile } = require('../../../../../../app/lib/template-helper')
@@ -17,6 +17,7 @@ describe('Attachments template-test route', () => {
   beforeEach(async () => {
     mockAuth.getUser.mockReturnValue(user)
     getFromSession.mockReturnValue()
+    setInSession.mockReturnValue()
     testTemplateFile.mockResolvedValue()
 
     server = await createServer()
@@ -43,6 +44,19 @@ describe('Attachments template-test route', () => {
       expect(response.statusCode).toBe(200)
       expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Test attachment file')
       expect(document.querySelector('#ddi_index_number').value).toContain('ED123456')
+    })
+
+    test('clear session param resets session', async () => {
+      const options = {
+        method: 'GET',
+        url: '/admin/attachments/test?default=true',
+        auth
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(setInSession).toHaveBeenCalledWith(expect.anything(), 'attachmentTestData', expect.anything())
     })
 
     test('returns 403 given user is standard user', async () => {
