@@ -1,5 +1,5 @@
 resources:
-  identity: aphw-ddi-api
+  identity: aphw-ddi-portal
   queues:
     - name: aphw-ddi-certificate-request
       role: sender
@@ -20,13 +20,3 @@ resources:
       supportOrdering: true
       autoDeleteOnIdle: "P10675199DT2H48M5.4775807S"
       express: false
-      subscriptions:
-        - name: aphw-ddi-event-hub
-          lockDuration: PT1M
-          session: false
-          messageTimeToLive: P100D
-          deadLetteringOnMessageExpiration: false
-          deadLetteringOnFilterEvaluationExceptions: false
-          batchedOperations: true
-          maxDeliveryCount: 10
-          autoDeleteOnIdle: P10675198DT2H48M5.477S
