@@ -1,5 +1,0 @@
-{{- if .Values.aadPodIdentity }}
-{{- include "ffc-helm-library.azure-identity" (list . "aphw-ddi-portal.azure-identity") -}}
-{{- end }}
-{{- define "aphw-ddi-portal.azure-identity" -}}
-{{- end -}}
