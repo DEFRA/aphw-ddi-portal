@@ -41,7 +41,7 @@ describe('Attachments list route', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage templates for email or letter')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Upload or manage templates for email or letter')
       expect(document.querySelectorAll('#attachment-table td')[0].textContent.trim()).toContain('No templates')
     })
 
@@ -58,7 +58,7 @@ describe('Attachments list route', () => {
       const { document } = new JSDOM(response.payload).window
 
       expect(response.statusCode).toBe(200)
-      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Manage templates for email or letter')
+      expect(document.querySelector('h1.govuk-heading-l').textContent.trim()).toBe('Upload or manage templates for email or letter')
       expect(document.querySelectorAll('#attachment-table td')[0].textContent.trim()).toContain('filename1.pdf')
     })
 
