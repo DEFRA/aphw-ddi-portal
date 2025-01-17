@@ -95,6 +95,17 @@ describe('Check History Mappers', () => {
           type: 'uk.gov.defra.ddi.event.activity'
         },
         expected: 'Form 2 from West Yorkshire Police requested'
+      },
+      {
+        event: {
+          activity: {
+            activityType: 'sent',
+            activityLabel: 'Application pack sent to somewhere'
+          },
+          operation: 'activity',
+          type: 'uk.gov.defra.ddi.event.activity'
+        },
+        expected: 'Application pack sent to somewhere'
       }
     ]
 
