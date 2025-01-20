@@ -3,7 +3,7 @@ const ViewModel = require('../../../models/admin/attachments/testing')
 const { admin } = require('../../../auth/permissions')
 const { getFromSession, setInSession } = require('../../../session/session-wrapper')
 const { getUser } = require('../../../auth')
-const { testTemplateFile } = require('../../../lib/template-helper')
+const { testTemplateFile, getFolderName } = require('../../../lib/template-helper')
 const { formatToGds } = require('../../../lib/date-helpers')
 
 const defaultFieldValues = {
@@ -32,6 +32,8 @@ module.exports = [{
       }
 
       const data = getFromSession(request, keys.attachmentTestData) || defaultFieldValues
+      const sourceFilename = getFromSession(request, keys.attachmentFile)
+      data.flattenPdf = getFolderName(sourceFilename).startsWith('post-')
       return h.view(views.testAttachment, new ViewModel(data))
     }
   }

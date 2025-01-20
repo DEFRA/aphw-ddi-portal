@@ -92,6 +92,7 @@ function ViewModel (payload, validationError) {
       autocomplete: forms.preventAutocomplete,
       attributes: { maxlength: '254' }
     },
+    flattenPdf: payload?.flattenPdf,
     errors: []
   }
 

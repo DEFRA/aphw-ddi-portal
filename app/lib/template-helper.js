@@ -6,11 +6,17 @@ const { deleteFile } = require('../storage/repos/blob')
 const { shuffleFieldDataIfNeeded } = require('../lib/address-helper')
 const attachmentsContainer = config.attachmentsContainer
 
+const getFolderName = (filename) => {
+  const fileNameParts = filename.split('/')
+  return fileNameParts.length > 1 ? fileNameParts[0] : ''
+}
+
 const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuidv4()) => {
   const fileInfo = {
     filename: sourceFilename,
     fileGuid,
-    saveFile: true
+    saveFile: true,
+    flattenPdf: getFolderName(sourceFilename).startsWith('post-')
   }
   const shuffledFieldData = shuffleFieldDataIfNeeded(fieldData)
   const results = await testAttachmentFile(fileInfo, shuffledFieldData, user)
@@ -28,5 +34,6 @@ const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuid
 }
 
 module.exports = {
-  testTemplateFile
+  testTemplateFile,
+  getFolderName
 }
