@@ -1,42 +1,24 @@
-const shuffleAddress = (address) => {
+const preparePostalNameAndAddress = (fieldData) => {
   const addrParts = []
-  if (address?.ddi_address_line_1 && address?.ddi_address_line_1 !== '') {
-    addrParts.push(address.ddi_address_line_1)
+  if (fieldData?.ddi_owner_name && fieldData?.ddi_owner_name !== '') {
+    addrParts.push(fieldData.ddi_owner_name)
   }
-  if (address?.ddi_address_line_2 && address?.ddi_address_line_2 !== '') {
-    addrParts.push(address.ddi_address_line_2)
+  if (fieldData?.ddi_address_line_1 && fieldData?.ddi_address_line_1 !== '') {
+    addrParts.push(fieldData.ddi_address_line_1)
   }
-  if (address?.ddi_town && address?.ddi_town !== '') {
-    addrParts.push(address.ddi_town)
+  if (fieldData?.ddi_address_line_2 && fieldData?.ddi_address_line_2 !== '') {
+    addrParts.push(fieldData.ddi_address_line_2)
   }
-  if (address?.ddi_postcode && address?.ddi_postcode !== '') {
-    addrParts.push(address.ddi_postcode)
+  if (fieldData?.ddi_town && fieldData?.ddi_town !== '') {
+    addrParts.push(fieldData.ddi_town)
   }
-
-  if (addrParts.length < 4) {
-    const blankRowsRequired = 4 - addrParts.length
-    for (let i = 0; i < blankRowsRequired; i++) {
-      addrParts.push('')
-    }
+  if (fieldData?.ddi_postcode && fieldData?.ddi_postcode !== '') {
+    addrParts.push(fieldData.ddi_postcode)
   }
 
-  return {
-    ddi_address_line_1: addrParts[0],
-    ddi_address_line_2: addrParts[1],
-    ddi_town: addrParts[2],
-    ddi_postcode: addrParts[3]
-  }
-}
-
-const shuffleFieldDataIfNeeded = (fieldData) => {
-  if ((fieldData.ddi_address_line_1 || fieldData.ddi_address_line_2) && fieldData.ddi_postcode) {
-    const address = shuffleAddress(fieldData)
-    return { ...fieldData, ...address }
-  }
-  return fieldData
+  return addrParts.join('\n')
 }
 
 module.exports = {
-  shuffleAddress,
-  shuffleFieldDataIfNeeded
+  preparePostalNameAndAddress
 }
