@@ -4,6 +4,7 @@ const { admin } = require('../../../auth/permissions')
 const { getFromSession, setInSession } = require('../../../session/session-wrapper')
 const { getUser } = require('../../../auth')
 const { testTemplateFile } = require('../../../lib/template-helper')
+const { getFolderName } = require('../../../lib/model-helpers')
 const { formatToGds } = require('../../../lib/date-helpers')
 
 const defaultFieldValues = {
@@ -32,6 +33,8 @@ module.exports = [{
       }
 
       const data = getFromSession(request, keys.attachmentTestData) || defaultFieldValues
+      const sourceFilename = getFromSession(request, keys.attachmentFile)
+      data.flattenPdf = getFolderName(sourceFilename).startsWith('post-')
       return h.view(views.testAttachment, new ViewModel(data))
     }
   }

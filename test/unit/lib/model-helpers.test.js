@@ -1,4 +1,4 @@
-const { extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../app/lib/model-helpers')
+const { getFolderName, extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails, getAddress } = require('../../../app/session/cdo/owner')
@@ -422,6 +422,21 @@ describe('ModelHelpers', () => {
     test('should return longer text for non-2023', () => {
       const exemption = { exemptionOrder: '2015' }
       expect(getNeuteringDeadlineHintText(exemption)).toBe('The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.')
+    })
+  })
+
+  describe('getFolderName', () => {
+    test('should handle null', () => {
+      expect(getFolderName(null)).toBe('')
+    })
+    test('should handle no folder', () => {
+      expect(getFolderName('file1.pdf')).toBe('')
+    })
+    test('should get folder', () => {
+      expect(getFolderName('folder2/file1.pdf')).toBe('folder2')
+    })
+    test('should get root folder if multiples', () => {
+      expect(getFolderName('folder3/folder2/file1.pdf')).toBe('folder3')
     })
   })
 })
