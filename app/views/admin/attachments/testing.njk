@@ -51,9 +51,6 @@
           {{ govukInput(model.ddi_postcode) }}
           {{ govukInput(model.ddi_todays_date) }}
 
-          <label class="govuk-label" for="flattenPdf">
-            flatten PDF: {{ model.flattenPdf }}
-          </label>
           <div id="flatten-pdf-hint" class="govuk-hint">
           {% if model.flattenPdf %}
             As this test is for a postal letter, the resultant PDF will be flattened to ensure that the form field content can be correctly read by the letter-posting service. 

@@ -4,12 +4,8 @@ const { testAttachmentFile } = require('../api/ddi-index-api/attachments')
 const { downloadBlob } = require('../storage/repos/download-blob')
 const { deleteFile } = require('../storage/repos/blob')
 const { shuffleFieldDataIfNeeded } = require('../lib/address-helper')
+const { getFolderName } = require('../lib/model-helpers')
 const attachmentsContainer = config.attachmentsContainer
-
-const getFolderName = (filename) => {
-  const fileNameParts = filename.split('/')
-  return fileNameParts.length > 1 ? fileNameParts[0] : ''
-}
 
 const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuidv4()) => {
   const fileInfo = {

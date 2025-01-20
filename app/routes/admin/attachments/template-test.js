@@ -3,7 +3,8 @@ const ViewModel = require('../../../models/admin/attachments/testing')
 const { admin } = require('../../../auth/permissions')
 const { getFromSession, setInSession } = require('../../../session/session-wrapper')
 const { getUser } = require('../../../auth')
-const { testTemplateFile, getFolderName } = require('../../../lib/template-helper')
+const { testTemplateFile } = require('../../../lib/template-helper')
+const { getFolderName } = require('../../../lib/model-helpers')
 const { formatToGds } = require('../../../lib/date-helpers')
 
 const defaultFieldValues = {
