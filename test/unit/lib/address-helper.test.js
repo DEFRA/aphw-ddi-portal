@@ -38,6 +38,14 @@ describe('address helper', () => {
         ddi_postcode: null
       })).toEqual('John Smith')
     })
+    test('should build address when no name', () => {
+      expect(preparePostalNameAndAddress({
+        ddi_address_line_1: 'addr1',
+        ddi_address_line_2: 'addr2',
+        ddi_town: 'town',
+        ddi_postcode: 'postcode'
+      })).toEqual('addr1\naddr2\ntown\npostcode')
+    })
   })
   describe('isStringSupplied test', () => {
     test('should handle null', () => {
