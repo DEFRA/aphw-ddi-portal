@@ -7,7 +7,8 @@ const schema = Joi.object({
   registerContainer: Joi.string().required(),
   certificateContainer: Joi.string().required(),
   attachmentsContainer: Joi.string().required(),
-  useConnectionString: Joi.boolean().default(false)
+  useConnectionString: Joi.boolean().default(false),
+  managedIdentityClientId: Joi.string().optional()
 })
 
 // Build config
@@ -17,7 +18,8 @@ const config = {
   registerContainer: 'uploads',
   certificateContainer: 'certificates',
   attachmentsContainer: 'attachments',
-  useConnectionString: process.env.AZURE_STORAGE_USE_CONNECTION_STRING
+  useConnectionString: process.env.AZURE_STORAGE_USE_CONNECTION_STRING,
+  managedIdentityClientId: process.env.AZURE_CLIENT_ID
 }
 
 // Validate config
