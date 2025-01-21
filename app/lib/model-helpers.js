@@ -184,6 +184,11 @@ const getNeuteringDeadlineHintText = exemption => {
     : 'The dog must be neutered by this date. The owner must provide evidence of neutering within 28 days.'
 }
 
+const getFolderName = (filename) => {
+  const fileNameParts = filename ? filename.split('/') : []
+  return fileNameParts.length > 1 ? fileNameParts[0] : ''
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -200,5 +205,6 @@ module.exports = {
   isNeuteringDeadlineVisibleInView,
   isMicrochipDeadlineVisibleInEditNearTop,
   isNeuteringDeadlineVisibleInEditNearTop,
-  getNeuteringDeadlineHintText
+  getNeuteringDeadlineHintText,
+  getFolderName
 }

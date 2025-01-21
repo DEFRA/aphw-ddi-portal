@@ -3,17 +3,23 @@ const config = require('../config/storage/blob')
 const { testAttachmentFile } = require('../api/ddi-index-api/attachments')
 const { downloadBlob } = require('../storage/repos/download-blob')
 const { deleteFile } = require('../storage/repos/blob')
-const { shuffleFieldDataIfNeeded } = require('../lib/address-helper')
+const { preparePostalNameAndAddress } = require('../lib/address-helper')
+const { getFolderName } = require('../lib/model-helpers')
 const attachmentsContainer = config.attachmentsContainer
 
 const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuidv4()) => {
+  const isPostalLetter = getFolderName(sourceFilename).startsWith('post-')
+
   const fileInfo = {
     filename: sourceFilename,
     fileGuid,
-    saveFile: true
+    saveFile: true,
+    flattenPdf: isPostalLetter
   }
-  const shuffledFieldData = shuffleFieldDataIfNeeded(fieldData)
-  const results = await testAttachmentFile(fileInfo, shuffledFieldData, user)
+  if (isPostalLetter) {
+    fieldData.ddi_postal_name_and_address = preparePostalNameAndAddress(fieldData)
+  }
+  const results = await testAttachmentFile(fileInfo, fieldData, user)
   const tempFilename = `temp-populations/${fileInfo.fileGuid}.pdf`
 
   if (results.status !== 'ok') {
@@ -28,5 +34,6 @@ const testTemplateFile = async (sourceFilename, fieldData, user, fileGuid = uuid
 }
 
 module.exports = {
-  testTemplateFile
+  testTemplateFile,
+  getFolderName
 }
