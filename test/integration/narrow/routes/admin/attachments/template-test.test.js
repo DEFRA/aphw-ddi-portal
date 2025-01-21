@@ -73,12 +73,23 @@ describe('Attachments template-test route', () => {
   })
 
   describe('POST /admin/attachments/test', () => {
-    test('returns payload', async () => {
+    test('returns payload if email type', async () => {
       const options = {
         method: 'POST',
         url: '/admin/attachments/test',
         auth,
-        payload: { filename: 'filename1.pdf' }
+        payload: { filename: 'email-folder/filename1.pdf' }
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(204)
+    })
+    test('returns payload if postal type', async () => {
+      const options = {
+        method: 'POST',
+        url: '/admin/attachments/test',
+        auth,
+        payload: { filename: 'post-folder/filename1.pdf' }
       }
 
       const response = await server.inject(options)

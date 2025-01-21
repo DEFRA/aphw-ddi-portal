@@ -31,4 +31,35 @@ describe('template helper', () => {
     expect(pdf).toBe('Some pdf content')
     expect(deleteFile).toHaveBeenCalledWith('attachments', `temp-populations/${guid1}.pdf`)
   })
+  test('should add postal address', async () => {
+    const sourceFilename = 'post-folder/test0file1.pdf'
+    const fieldData = {
+      ddi_index_number: 'ED12345',
+      ddi_owner_name: 'John Smith',
+      ddi_address_line_1: 'addr1',
+      ddi_postcode: 'postcode'
+    }
+    testAttachmentFile.mockResolvedValue({ status: 'ok' })
+    downloadBlob.mockResolvedValue('Some pdf content')
+    deleteFile.mockResolvedValue()
+    const guid1 = uuidv4()
+    const pdf = await testTemplateFile(sourceFilename, fieldData, user, guid1)
+    expect(pdf).toBe('Some pdf content')
+    expect(deleteFile).toHaveBeenCalledWith('attachments', `temp-populations/${guid1}.pdf`)
+    expect(testAttachmentFile).toHaveBeenCalledWith({
+      fileGuid: expect.anything(),
+      filename: 'post-folder/test0file1.pdf',
+      flattenPdf: true,
+      saveFile: true
+    },
+    {
+      ddi_postal_name_and_address: 'John Smith\naddr1\npostcode',
+      ddi_index_number: 'ED12345',
+      ddi_owner_name: 'John Smith',
+      ddi_address_line_1: 'addr1',
+      ddi_postcode: 'postcode'
+    },
+    expect.anything()
+    )
+  })
 })
