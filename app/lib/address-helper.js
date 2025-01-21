@@ -1,18 +1,22 @@
+const isStringSupplied = (str) => {
+  return str && str !== ''
+}
+
 const preparePostalNameAndAddress = (fieldData) => {
   const addrParts = []
-  if (fieldData?.ddi_owner_name && fieldData?.ddi_owner_name !== '') {
+  if (isStringSupplied(fieldData?.ddi_owner_name)) {
     addrParts.push(fieldData.ddi_owner_name)
   }
-  if (fieldData?.ddi_address_line_1 && fieldData?.ddi_address_line_1 !== '') {
+  if (isStringSupplied(fieldData?.ddi_address_line_1)) {
     addrParts.push(fieldData.ddi_address_line_1)
   }
-  if (fieldData?.ddi_address_line_2 && fieldData?.ddi_address_line_2 !== '') {
+  if (isStringSupplied(fieldData?.ddi_address_line_2)) {
     addrParts.push(fieldData.ddi_address_line_2)
   }
-  if (fieldData?.ddi_town && fieldData?.ddi_town !== '') {
+  if (isStringSupplied(fieldData?.ddi_town)) {
     addrParts.push(fieldData.ddi_town)
   }
-  if (fieldData?.ddi_postcode && fieldData?.ddi_postcode !== '') {
+  if (isStringSupplied(fieldData?.ddi_postcode)) {
     addrParts.push(fieldData.ddi_postcode)
   }
 
@@ -20,5 +24,6 @@ const preparePostalNameAndAddress = (fieldData) => {
 }
 
 module.exports = {
-  preparePostalNameAndAddress
+  preparePostalNameAndAddress,
+  isStringSupplied
 }
