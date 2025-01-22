@@ -49,6 +49,7 @@
               <dd class="govuk-summary-list__value">{{ model.exemption.exemptionOrder }}</dd>
             </div>
 
+            {% if model.exemption.exemptionOrder === '2023' %}
             <div class="govuk-summary-list__row govuk-summary-list__row">
               <dt class="govuk-summary-list__key">Withdrawn from index</dt>
               {% if model.exemption.withdrawn %}
@@ -62,6 +63,7 @@
                   </dd>
                 {% endif %}
             </div>
+            {% endif %}
 
 
             {% if model.exemption.cdoIssued %}
