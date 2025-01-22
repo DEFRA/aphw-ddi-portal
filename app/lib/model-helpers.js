@@ -1,3 +1,4 @@
+const { differenceInCalendarMonths } = require('date-fns')
 const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails, getAddress } = require('../session/cdo/owner')
 const { lookupPoliceForceByPostcode } = require('../api/police-area')
 const { getPoliceForceByApiCode } = require('../api/ddi-index-api/police-forces')
@@ -189,6 +190,12 @@ const getFolderName = (filename) => {
   return fileNameParts.length > 1 ? fileNameParts[0] : ''
 }
 
+const canDogBeWithdrawn = (cdo) => {
+  const now = new Date()
+  const dob = cdo.dog.dateOfBirth ? new Date(cdo.dog.dateOfBirth) : now
+  return cdo.exemption.exemptionOrder === '2023' && differenceInCalendarMonths(now, dob) > 18
+}
+
 module.exports = {
   extractEmail,
   extractLatestAddress,
@@ -206,5 +213,6 @@ module.exports = {
   isMicrochipDeadlineVisibleInEditNearTop,
   isNeuteringDeadlineVisibleInEditNearTop,
   getNeuteringDeadlineHintText,
-  getFolderName
+  getFolderName,
+  canDogBeWithdrawn
 }
