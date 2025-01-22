@@ -1,0 +1,3 @@
+---
+container.certificateRequestQueue: queue:aphw-ddi-certificate-request
+container.applyQueueAddress: queue:aphw-ddi-events
