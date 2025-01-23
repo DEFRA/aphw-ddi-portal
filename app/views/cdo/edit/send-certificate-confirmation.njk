@@ -1,0 +1,90 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends '_layout.njk' %}
+
+{% block pageTitle %}
+{% if model.sendOption === 'email' %}
+Email with the certificate sent - {{ serviceName }}
+{% else %}
+Generate a certificate of exemption to post - {{ serviceName }}
+{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/">Home</a>
+    </li>
+    {% if model.sendOption === 'post' %}
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/cdo/manage?noCache=Y">Manage CDOs</a>
+    </li>
+    {% endif %}
+  </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if model.sendOption === 'email' %}
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+      <h1 class="govuk-panel__title">Email with the certificate sent</h1>
+      <div class="govuk-panel__body">Dog {{ model.indexNumber }} is now exempt</div>
+    </div>
+    <p class="govuk-body">
+      The certificate has been emailed to <span class="govuk-!-font-weight-bold">{{ model.email }}</span>.
+    </p>
+    <p class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Check the record for Dog {{ model.indexNumber }}</a>
+    </p>
+
+    {% else %}
+
+    <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
+    <h1 class="govuk-heading-l">Generate a certificate of exemption to post</h1>
+
+      <ol class="govuk-list govuk-list--number">
+        <li>Select the generate certificate button.</li>
+        <li>Save the certificate to Sharepoint.</li>
+        <li>Print the certificate.</li>
+      </ol>
+
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-3">
+       Post the certificate to this address:
+      </h2>
+
+      <p class="govuk-body govuk-!-margin-bottom-6">
+        {{ model.name }}
+        <br>
+        {% for addressLine in model.addressArray %}
+          {{ addressLine }}
+          <br>
+        {% endfor %}
+      </p>
+
+      <form action="/cdo/view/certificate" method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+
+        <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}">
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Generate certificate",
+            name: "submitButton"
+          }) }}
+
+          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage?noCache=Y">Cancel</a>
+        </div>
+      </form>
+
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

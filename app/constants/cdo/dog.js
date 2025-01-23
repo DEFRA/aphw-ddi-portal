@@ -79,6 +79,13 @@ const constants = {
     deleteGeneric: {
       get: '/cdo/delete/dog',
       post: '/cdo/delete/dog'
+    },
+    sendCertificate: {
+      get: '/cdo/edit/send-certificate',
+      post: '/cdo/edit/send-certificate'
+    },
+    sendCertificateConfirmation: {
+      get: '/cdo/edit/send-certificate-confirmation'
     }
   },
   views: {
@@ -105,7 +112,9 @@ const constants = {
     confirmation: 'common/deleted/dog',
     confirmDogAndOwner: 'cdo/delete/confirmDogAndOwner',
     deleteGeneric: 'common/deleted/dog',
-    deleteDogAndOwner: 'common/deleted/dogAndOwner'
+    deleteDogAndOwner: 'common/deleted/dogAndOwner',
+    sendCertificate: 'cdo/edit/send-certificate',
+    sendCertificateConfirmation: 'cdo/edit/send-certificate-confirmation'
   },
   keys: {
     entry: 'dogs',

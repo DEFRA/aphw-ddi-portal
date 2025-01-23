@@ -26,7 +26,7 @@ module.exports = [
 
         const cdo = await getCdo(dogIndex, user)
 
-        return h.view(views.manageCdo, new ViewModel(details, cdo, backNav, `${dogRoutes.certificate.get}/${dogIndex}${backNav.srcHashParam}&origin=manage-cdo`))
+        return h.view(views.manageCdo, new ViewModel(details, cdo, backNav, `${dogRoutes.sendCertificate.get}/${dogIndex}${backNav.srcHashParam}&origin=manage-cdo`))
       }
     }
   }
