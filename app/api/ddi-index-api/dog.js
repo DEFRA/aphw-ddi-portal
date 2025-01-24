@@ -1,4 +1,4 @@
-const { get, callDelete, boomRequest } = require('./base')
+const { get, callDelete, boomRequest, post } = require('./base')
 const { ApiErrorFailure } = require('../../errors/api-error-failure')
 const { ApiConflictError } = require('../../errors/api-conflict-error')
 
@@ -113,11 +113,16 @@ const deleteDog = async (indexNumber, user) => {
   return callDelete(`${dogEndpoint}/${indexNumber}`, user)
 }
 
+const withdrawDog = async (details, user) => {
+  return post(`${dogEndpoint}/withdraw/${details.indexNumber}`, details, user)
+}
+
 module.exports = {
   updateDogDetails,
   updateStatus,
   getDogDetails,
   getDogOwner,
   getDogOwnerWithDogs,
-  deleteDog
+  deleteDog,
+  withdrawDog
 }

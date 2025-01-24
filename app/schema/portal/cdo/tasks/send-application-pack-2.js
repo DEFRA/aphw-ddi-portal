@@ -4,7 +4,7 @@ const { validatePayloadBuilder } = require('../../../../schema/common/validatePa
 const schema = Joi.object({
   taskName: Joi.string().required(),
   contact: Joi.string().messages({
-    '*': 'Select an option'
+    '*': 'Select how you want to send the application pack'
   }).required(),
   email: Joi.alternatives().conditional('contact', {
     is: 'email',
