@@ -59,8 +59,11 @@ Generate a certificate of exemption to post - {{ serviceName }}
     {% else %}
 
     <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
+    {% if model.firstCertificate %}
     <h1 class="govuk-heading-l">Generate a certificate of exemption to post</h1>
-
+    {% else %}
+    <h1 class="govuk-heading-l">Generate a replacement certificate of exemption to post</h1>
+    {% endif %}
       <ol class="govuk-list govuk-list--number">
         <li>Select the generate certificate button.</li>
         <li>Save the certificate to Sharepoint.</li>

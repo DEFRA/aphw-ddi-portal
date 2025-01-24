@@ -31,6 +31,13 @@ function ViewModel (cdo, firstCertificate, payload, backNav, errors) {
     errors: []
   }
 
+  // Force any back-end errors to appear against the only field of the page
+  if (errors) {
+    for (const error of errors.details) {
+      error.path = ['sendOption']
+    }
+  }
+
   errorPusherDefault(errors, this.model)
 }
 
