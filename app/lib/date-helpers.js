@@ -254,6 +254,21 @@ const getEndOfDayTime = (inDate) => {
   return endOfDay
 }
 
+const stripTime = date => {
+  const dateToStrip = new Date(date)
+  dateToStrip.setUTCHours(0, 0, 0, 0)
+
+  return dateToStrip
+}
+
+const addMonths = (date, months) => {
+  const base = new Date(date)
+  const newDate = stripTime(base)
+  newDate.setUTCMonth(newDate.getUTCMonth() + months)
+
+  return newDate
+}
+
 module.exports = {
   parseDate,
   dateComponentsToString,
@@ -275,5 +290,7 @@ module.exports = {
   getDateAsReadableString,
   removeIndividualDateComponents,
   getEndOfDayTime,
-  formatToDateConcise
+  formatToDateConcise,
+  addMonths,
+  stripTime
 }

@@ -1,4 +1,4 @@
-const { differenceInCalendarMonths } = require('date-fns')
+const { addMonths } = require('../lib/date-helpers')
 const { getOwnerDetails, getEnforcementDetails, setEnforcementDetails, getAddress } = require('../session/cdo/owner')
 const { lookupPoliceForceByPostcode } = require('../api/police-area')
 const { getPoliceForceByApiCode } = require('../api/ddi-index-api/police-forces')
@@ -193,7 +193,7 @@ const getFolderName = (filename) => {
 const canDogBeWithdrawn = (cdo) => {
   const now = new Date()
   const dob = cdo.dog.dateOfBirth ? new Date(cdo.dog.dateOfBirth) : now
-  return cdo.exemption.exemptionOrder === '2023' && differenceInCalendarMonths(now, dob) > 18
+  return cdo.exemption.exemptionOrder === '2023' && dob >= addMonths(now, -18)
 }
 
 module.exports = {
