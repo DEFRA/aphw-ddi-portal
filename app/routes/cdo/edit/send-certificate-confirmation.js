@@ -8,7 +8,7 @@ const getUser = require('../../../auth/get-user')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.sendCertificateConfirmation.get}/{indexNumber}/{sendOption}`,
+    path: `${routes.sendCertificateConfirmation.get}/{indexNumber}/{sendOption}/{firstOrReplacement}`,
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
@@ -22,7 +22,8 @@ module.exports = [
 
         const details = {
           cdo,
-          sendOption: request.params.sendOption
+          sendOption: request.params.sendOption,
+          firstCertificate: request.params.firstOrReplacement === 'first'
         }
 
         return h.view(views.sendCertificateConfirmation, new ViewModel(details, backNav))

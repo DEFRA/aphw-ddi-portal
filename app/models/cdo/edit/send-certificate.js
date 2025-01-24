@@ -3,18 +3,15 @@ const { errorPusherDefault } = require('../../../lib/error-helpers')
 const { extractEmail } = require('../../../lib/model-helpers')
 const { sanitiseText } = require('../../../lib/sanitise')
 
-function ViewModel (cdo, payload, backNav, errors) {
+function ViewModel (cdo, firstCertificate, payload, backNav, errors) {
   const email = sanitiseText(extractEmail(cdo.person.person_contacts))
 
   this.model = {
     backLink: backNav.backLink,
     srcHashParam: backNav.srcHashParam,
     indexNumber: cdo.dog.indexNumber,
+    titleText: firstCertificate ? 'How do you want to send the certificate of exemption?' : 'How do you want to send the replacement certificate of exemption?',
     sendOption: {
-      label: {
-        text: 'How do you want to send the certificate of exemption?',
-        classes: 'govuk-!-font-weight-bold defra-responsive-!-font-size-16'
-      },
       id: 'sendOption',
       name: 'sendOption',
       items: [

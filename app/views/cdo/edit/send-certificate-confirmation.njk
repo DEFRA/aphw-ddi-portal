@@ -33,17 +33,29 @@ Generate a certificate of exemption to post - {{ serviceName }}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {% if model.sendOption === 'email' %}
-    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
-      <h1 class="govuk-panel__title">Email with the certificate sent</h1>
-      <div class="govuk-panel__body">Dog {{ model.indexNumber }} is now exempt</div>
-    </div>
-    <p class="govuk-body">
-      The certificate has been emailed to <span class="govuk-!-font-weight-bold">{{ model.email }}</span>.
-    </p>
-    <p class="govuk-body">
-        <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Check the record for Dog {{ model.indexNumber }}</a>
-    </p>
-
+      {% if model.firstCertificate %}
+      <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+        <h1 class="govuk-panel__title">Email with the certificate sent</h1>
+        <div class="govuk-panel__body">Dog {{ model.indexNumber }} is now exempt</div>
+      </div>
+      <p class="govuk-body">
+        The certificate of exemption has been emailed to <span class="govuk-!-font-weight-bold">{{ model.email }}</span>.
+      </p>
+      <p class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Check the record for Dog {{ model.indexNumber }}</a>
+      </p>
+      {% else %}
+      <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
+        <h1 class="govuk-panel__title">Replacement certificate has been sent by email</h1>
+        <div class="govuk-panel__body">Dog {{ model.indexNumber }}</div>
+      </div>
+      <p class="govuk-body">
+        The replacement certificate of exemption has been emailed to <span class="govuk-!-font-weight-bold">{{ model.email }}</span>.
+      </p>
+      <p class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/search/basic">Search for another dog</a>
+      </p>
+      {% endif %}
     {% else %}
 
     <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
@@ -68,7 +80,7 @@ Generate a certificate of exemption to post - {{ serviceName }}
         {% endfor %}
       </p>
 
-      <form action="/cdo/view/certificate" method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
+      <form action="/cdo/view/certificate" method="POST" novalidate autocomplete="off">
 
         <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}">
 

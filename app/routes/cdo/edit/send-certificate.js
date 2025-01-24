@@ -13,7 +13,7 @@ const { issueCertTask } = require('../manage/tasks/issue-cert')
 module.exports = [
   {
     method: 'GET',
-    path: `${routes.sendCertificate.get}/{indexNumber}`,
+    path: `${routes.sendCertificate.get}/{indexNumber}/{firstOrReplacement}`,
     options: {
       auth: { scope: anyLoggedInUser },
       handler: async (request, h) => {
@@ -26,13 +26,14 @@ module.exports = [
 
         const backNav = addBackNavigation(request, false)
 
-        return h.view(views.sendCertificate, new ViewModel(cdo, {}, backNav))
+        const firstCertificate = request.params.firstOrReplacement === 'first'
+        return h.view(views.sendCertificate, new ViewModel(cdo, firstCertificate, {}, backNav))
       }
     }
   },
   {
     method: 'POST',
-    path: `${routes.sendCertificate.post}/{dummy?}`,
+    path: `${routes.sendCertificate.post}/{indexNumber}/{firstOrReplacement}`,
     options: {
       auth: { scope: anyLoggedInUser },
       // As a default radio value is used, we can't post invalid form values, hence no validation
@@ -41,6 +42,7 @@ module.exports = [
         const indexNumber = payload.indexNumber
         const sendOption = payload.sendOption
         const user = getUser(request)
+        const firstCertificate = request.params.firstOrReplacement === 'first'
 
         if (sendOption === 'email') {
           const cdo = await getCdo(indexNumber, user)
@@ -53,17 +55,14 @@ module.exports = [
           await downloadCertificate(indexNumber, certificateId)
           const email = sanitiseText(extractEmail(cdo.person.person_contacts))
 
-          console.log('JB email', email)
-          console.log('JB filename', certificateId)
-
-          const error = await issueCertTask(indexNumber, user, { filename: `${certificateId}.pdf` })
+          const error = await issueCertTask(indexNumber, user, { certificateId, email, sendOption, firstCertificate })
           if (error) {
             const backNav = addBackNavigationForErrorCondition(request)
             return h.view(views.sendCertificate, new ViewModel(cdo, request.payload, backNav, error))
           }
         }
 
-        return h.redirect(`${routes.sendCertificateConfirmation.get}/${indexNumber}/${sendOption}`)
+        return h.redirect(`${routes.sendCertificateConfirmation.get}/${indexNumber}/${sendOption}/${firstCertificate ? 'first' : 'replacement'}`)
       }
     }
   }

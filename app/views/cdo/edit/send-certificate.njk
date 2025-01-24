@@ -34,11 +34,11 @@
     {% endif %}
 
     <form method="POST" onsubmit="submitButton.disabled = true; return true;" novalidate autocomplete="off">
-    <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
+      <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
 
       {% call govukFieldset({
         legend: {
-          text: "How do you want to send the certificate of exemption?",
+          text: model.titleText,
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
