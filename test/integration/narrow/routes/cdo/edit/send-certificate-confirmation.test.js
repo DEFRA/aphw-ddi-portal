@@ -187,7 +187,7 @@ describe('Send certificate confirmation', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/edit/send-certificate-confirmation/ED12345/first',
+        url: '/cdo/edit/send-certificate-confirmation/ED12345/email/first',
         auth
       }
 

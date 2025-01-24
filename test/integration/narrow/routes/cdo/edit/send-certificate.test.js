@@ -193,6 +193,53 @@ describe('Send certificate', () => {
       )
     })
 
+    test('route returns 302 and sends replacement certificate by post', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          status: 'Interim exempt',
+          indexNumber: 'ED12345'
+        },
+        person: {
+          person_contacts: [{
+            contact_id: 1,
+            id: 1,
+            person_id: 2,
+            contact: {
+              contact_type: {
+                id: 1,
+                contact_type: 'Email'
+              },
+              contact_type_id: 1,
+              id: 1,
+              contact: 'bilbo.baggins@shire.co.uk'
+            }
+          }]
+        }
+      })
+
+      sendMessage.mockResolvedValue('certguid')
+      downloadCertificate.mockResolvedValue()
+      issueCertTask.mockResolvedValue()
+
+      const payload = {
+        indexNumber: 'ED12345',
+        sendOption: 'post'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/send-certificate/ED12345/replacement',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(issueCertTask).not.toHaveBeenCalled()
+      expect(response.headers.location).toBe('/cdo/edit/send-certificate-confirmation/ED12345/post/replacement')
+    })
+
     test('route returns 404 if invalid dog', async () => {
       getCdo.mockResolvedValue()
 
