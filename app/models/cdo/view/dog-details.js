@@ -1,6 +1,6 @@
 const { routes: ownerRoutes } = require('../../../constants/cdo/owner')
 const { formatToGds } = require('../../../lib/date-helpers')
-const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray } = require('../../../lib/model-helpers')
+const { extractEmail, extractLatestAddress, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, formatAddressAsArray, canDogBeWithdrawn } = require('../../../lib/model-helpers')
 const { getNewStatusLabel } = require('../../../lib/status-helper')
 const { isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView } = require('../../../lib/model-helpers')
 const { useManageCdo } = require('../../../lib/route-helpers')
@@ -72,7 +72,8 @@ function ViewModel (cdo, backNav) {
       typedByDlo: formatToGds(cdo.exemption.typedByDlo),
       withdrawn: formatToGds(cdo.exemption.withdrawn),
       microchipVerification: formatToGds(cdo.exemption.microchipVerification),
-      nonComplianceLetterSent: formatToGds(cdo.exemption.nonComplianceLetterSent)
+      nonComplianceLetterSent: formatToGds(cdo.exemption.nonComplianceLetterSent),
+      canWithdraw: canDogBeWithdrawn(cdo)
     },
     showNeuteringDeadline: isNeuteringDeadlineVisibleInView(cdo),
     showMicrochipDeadline: isMicrochipDeadlineVisibleInView(cdo)

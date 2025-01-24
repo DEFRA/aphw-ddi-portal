@@ -30,6 +30,8 @@ const routes = [].concat(
   require('../routes/cdo/edit/exemption-details'),
   require('../routes/cdo/edit/change-status'),
   require('../routes/cdo/edit/change-status-confirmation'),
+  require('../routes/cdo/edit/withdraw'),
+  require('../routes/cdo/edit/withdrawal-confirmation'),
   require('../routes/cdo/edit/add-activity'),
   require('../routes/cdo/edit/select-activity'),
   require('../routes/cdo/edit/activity-confirmation'),
