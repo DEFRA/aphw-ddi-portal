@@ -101,7 +101,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
     microchipDeadline: constructDateField(exemption, 'microchipDeadline', 'Microchip deadline', 'The dog must be microchipped by this date.'),
     neuteringDeadline: constructDateField(exemption, 'neuteringDeadline', 'Neutering deadline', getNeuteringDeadlineHintText(exemption)),
     typedByDlo: constructDateField(exemption, 'typedByDlo', 'Examined by DLO'),
-    withdrawn: constructDateField(exemption, 'withdrawn', 'Withdrawn from index', 'An owner can ask for their dog be withdrawn from the index. DLOs can ask for a dog to be withdrawn if they do not consider it to be an XL Bully.'),
+    withdrawn: constructDateField(exemption, 'withdrawn', 'Withdrawn from index', 'Notify the owner when a dog is withdrawn from the Index.'),
     showMicrochipDeadlineNearTop: isMicrochipDeadlineVisibleInEditNearTop(exemption),
     showNeuteringDeadlineNearTop: isNeuteringDeadlineVisibleInEditNearTop(exemption),
     errors: []

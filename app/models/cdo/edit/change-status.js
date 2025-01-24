@@ -38,10 +38,6 @@ function ViewModel (dog, backNav, errors) {
           text: 'In breach'
         },
         {
-          value: 'Withdrawn',
-          text: 'Withdrawn by owner'
-        },
-        {
           value: 'Inactive',
           text: 'Inactive'
         }
