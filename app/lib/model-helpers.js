@@ -193,7 +193,7 @@ const getFolderName = (filename) => {
 const canDogBeWithdrawn = (cdo) => {
   const now = new Date()
   const dob = cdo.dog.dateOfBirth ? new Date(cdo.dog.dateOfBirth) : now
-  return cdo.exemption.exemptionOrder === '2023' && dob >= addMonths(now, -18)
+  return cdo.exemption.exemptionOrder === '2023' && dob <= addMonths(now, -18)
 }
 
 module.exports = {
