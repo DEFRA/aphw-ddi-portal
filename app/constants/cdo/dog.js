@@ -80,6 +80,13 @@ const constants = {
       get: '/cdo/delete/dog',
       post: '/cdo/delete/dog'
     },
+    sendCertificate: {
+      get: '/cdo/edit/send-certificate',
+      post: '/cdo/edit/send-certificate'
+    },
+    sendCertificateConfirmation: {
+      get: '/cdo/edit/send-certificate-confirmation'
+    },
     withdraw: {
       get: '/cdo/edit/withdraw',
       post: '/cdo/edit/withdraw'
@@ -113,6 +120,8 @@ const constants = {
     confirmDogAndOwner: 'cdo/delete/confirmDogAndOwner',
     deleteGeneric: 'common/deleted/dog',
     deleteDogAndOwner: 'common/deleted/dogAndOwner',
+    sendCertificate: 'cdo/edit/send-certificate',
+    sendCertificateConfirmation: 'cdo/edit/send-certificate-confirmation',
     withdraw: 'cdo/edit/withdraw',
     withdrawalConfirmation: 'cdo/edit/withdrawal-confirmation'
   },
