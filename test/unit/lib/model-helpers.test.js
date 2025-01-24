@@ -1,4 +1,5 @@
-const { getFolderName, extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../app/lib/model-helpers')
+const { addMonths } = require('date-fns')
+const { canDogBeWithdrawn, getFolderName, extractEmail, cleanUserDisplayName, extractLatestPrimaryTelephoneNumber, extractLatestSecondaryTelephoneNumber, extractLatestAddress, extractLatestInsurance, setPoliceForce, dedupeAddresses, constructDateField, isMicrochipDeadlineVisibleInView, isNeuteringDeadlineVisibleInView, isMicrochipDeadlineVisibleInEditNearTop, isNeuteringDeadlineVisibleInEditNearTop, getNeuteringDeadlineHintText } = require('../../../app/lib/model-helpers')
 
 jest.mock('../../../app/session/cdo/owner')
 const { getEnforcementDetails, setEnforcementDetails, getOwnerDetails, getAddress } = require('../../../app/session/cdo/owner')
@@ -437,6 +438,21 @@ describe('ModelHelpers', () => {
     })
     test('should get root folder if multiples', () => {
       expect(getFolderName('folder3/folder2/file1.pdf')).toBe('folder3')
+    })
+  })
+
+  describe('canDogBeWithdrawn', () => {
+    test('should handle no dob', () => {
+      expect(canDogBeWithdrawn({ exemption: { exemptionOrder: '2023' }, dog: { dateOfBirth: null } })).toBeFalsy()
+    })
+    test('should handle younger than 18 months', () => {
+      expect(canDogBeWithdrawn({ exemption: { exemptionOrder: '2023' }, dog: { dateOfBirth: addMonths(new Date(), -10) } })).toBeFalsy()
+    })
+    test('should handle older than 18 months', () => {
+      expect(canDogBeWithdrawn({ exemption: { exemptionOrder: '2023' }, dog: { dateOfBirth: addMonths(new Date(), -20) } })).toBeTruthy()
+    })
+    test('should be false if not 2023', () => {
+      expect(canDogBeWithdrawn({ exemption: { exemptionOrder: '2015' }, dog: { dateOfBirth: addMonths(new Date(), -20) } })).toBeFalsy()
     })
   })
 })

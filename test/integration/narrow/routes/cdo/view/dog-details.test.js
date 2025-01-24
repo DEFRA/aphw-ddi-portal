@@ -380,13 +380,20 @@ describe('View dog details', () => {
       const [,
         firstCertificateIssuedKey,
         orderKey,
-        neuteringDeadlineKey,
-        policeForceKey
+        withdrawKey,
+        neuteringDeadlineKey
       ] = exemptionDetails.querySelectorAll('.govuk-summary-list__key')
+
+      const [,
+        ,
+        ,
+        withdrawValue
+      ] = exemptionDetails.querySelectorAll('.govuk-summary-list__value')
 
       expect(firstCertificateIssuedKey.textContent.trim()).toBe('First certificate issued')
       expect(orderKey.textContent.trim()).toBe('Order')
-      expect(policeForceKey.textContent.trim()).toBe('Police force')
+      expect(withdrawKey.textContent.trim()).toBe('Withdrawn from index')
+      expect(withdrawValue.textContent.trim()).toBe('Not withdrawn')
       expect(neuteringDeadlineKey.textContent.trim()).toBe('Neutering deadline')
     })
 

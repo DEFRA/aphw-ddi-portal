@@ -8,9 +8,9 @@ const mapBoomError = (e) => {
   return new Joi.ValidationError(message, [{ message, path: ['generalError'], type: 'custom' }])
 }
 
-const issueCertTask = async (indexNumber, user) => {
+const issueCertTask = async (indexNumber, user, payload = {}) => {
   try {
-    await saveCdoTaskDetails(indexNumber, 'issueCertificate', {}, user)
+    await saveCdoTaskDetails(indexNumber, 'issueCertificate', payload, user)
 
     return null
   } catch (e) {
