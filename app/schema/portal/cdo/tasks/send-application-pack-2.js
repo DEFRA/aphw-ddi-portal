@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const { validatePayloadBuilder } = require('../../../../schema/common/validatePayload')
+const { errorMessages } = require('../../../error-messages')
 
 const schema = Joi.object({
   taskName: Joi.string().required(),
@@ -10,11 +11,7 @@ const schema = Joi.object({
     is: 'email',
     then: Joi.string().email().required(),
     otherwise: Joi.any()
-  }).messages({
-    'string.empty': 'Enter an email address',
-    'any.required': 'Enter an email address',
-    'string.email': 'Enter an email address in the correct format, like name@example.com'
-  }),
+  }).messages(errorMessages.email),
   updateEmail: Joi.boolean().default(false)
 })
 
