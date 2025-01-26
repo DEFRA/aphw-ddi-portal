@@ -1,5 +1,7 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
+const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
+const { withdrawDog } = require('../../../../../../app/api/ddi-index-api/dog')
 
 describe('Withdraw', () => {
   jest.mock('../../../../../../app/auth')
@@ -92,7 +94,7 @@ describe('Withdraw', () => {
   })
 
   describe('POST /cdo/edit/withdraw', () => {
-    test('route returns 302', async () => {
+    test('route returns 302 if withdraw option is email', async () => {
       getCdo.mockResolvedValue({
         dog: {
           indexNumber: 'ED12345'
@@ -144,6 +146,34 @@ describe('Withdraw', () => {
 
       expect(response.statusCode).toBe(302)
       expect(withdrawDog).toHaveBeenCalledWith({ indexNumber: 'ED12345', withdrawOption: 'email', email: 'garrymcfadyen@hotmail.com', updateEmail: true }, expect.anything())
+    })
+
+    test('route returns 302 if withdraw option is post', async () => {
+      getCdo.mockResolvedValue({
+        dog: {
+          indexNumber: 'ED12345'
+        }
+      })
+      withdrawDog.mockResolvedValue()
+
+      const payload = {
+        indexNumber: 'ED12345',
+        email: '',
+        withdrawOption: 'post',
+        updateEmail: true
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/withdraw/ED12345',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(302)
+      expect(withdrawDog).toHaveBeenCalledWith({ indexNumber: 'ED12345', withdrawOption: 'post' }, expect.anything())
     })
 
     test('route returns 400 with invalid schema', async () => {

@@ -5,8 +5,17 @@ const { errorMessages } = require('../../error-messages')
 const withdrawalPayloadSchema = Joi.object({
   indexNumber: Joi.string().required(),
   withdrawOption: Joi.string().allow('email', 'post').required(),
-  email: Joi.string().email().optional().messages(errorMessages.email),
-  updateEmail: Joi.boolean().default(false)
+  updateEmail: Joi.boolean().default(false),
+  email: Joi.alternatives().conditional('withdrawOption', {
+    is: 'email',
+    then: Joi.alternatives().conditional('updateEmail',
+      {
+        is: true,
+        then: Joi.string().email().required(),
+        otherwise: Joi.forbidden()
+      }),
+    otherwise: Joi.any()
+  }).messages(errorMessages.email)
 }).required()
 
 const validateWithdrawal = validatePayloadBuilder(withdrawalPayloadSchema)
