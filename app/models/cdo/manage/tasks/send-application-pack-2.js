@@ -1,4 +1,5 @@
-const { sanitiseText } = require('../../../../lib/sanitise')
+const { errorPusherDefault, defaultPropCreator } = require('../../../../lib/error-helpers')
+const { conditionalEmailRadio } = require('../../../builders/email-conditional')
 
 /**
  * @param {CdoTaskListDto} data
@@ -17,46 +18,8 @@ function ViewModel (data, backNav, errors) {
     data.cdoSummary.person.postcode
   ].filter(Boolean).join('<br>')
 
-  const sanitisedEmail = sanitiseText(data.cdoSummary.person.email)
+  const email = conditionalEmailRadio(data.cdoSummary.person.email, data.payload?.email, { emailText: 'Email it to', noEmailText: 'Email' }, errors)
 
-  let emailError = errors?.details?.reduce((errorText, errorDetail) => {
-    if (errorDetail.path[0] === 'email' || errorDetail.context.path?.[0] === 'email') {
-      return errorDetail.message
-    }
-    return errorText
-  }, '') || ''
-
-  const emailValue = data.payload?.email ?? ''
-
-  if (emailError.length) {
-    emailError = `      <span class="govuk-visually-hidden">Error:</span> ${emailError}`
-    emailError = '    <p id="contact-by-email-error" class="govuk-error-message">' + emailError
-    emailError += '    </p>'
-  }
-
-  const email = sanitisedEmail
-    ? {
-        html: `Email it to:<p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${sanitisedEmail}</p>`,
-        value: 'email'
-      }
-    : {
-        text: 'Email',
-        value: 'email',
-        conditional: {
-          type: 'email',
-          html: `<div class="govuk-form-group${emailError.length ? ' govuk-form-group--error' : ''}">` +
-        '    <label class="govuk-label" for="new-email">\n' +
-        '      Email address' +
-        '    </label>' +
-              emailError +
-        '    <div id="event-name-hint" class="govuk-hint">' +
-        '      Enter the dog owner’s email address.' +
-        '    </div>' +
-        `    <input class="govuk-input govuk-!-width-two-thirds${emailError.length ? ' govuk-input--error' : ''}" name="email" type="email" value="${emailValue}">` +
-        '    <input name="updateEmail" type="hidden" value="true">' +
-        '  <div></div><div></div></div>'
-        }
-      }
   /**
    * @type {GovukRadios}
    */
@@ -96,21 +59,15 @@ function ViewModel (data, backNav, errors) {
     errors: []
   }
 
-  if (errors) {
-    for (const error of errors.details) {
-      const name = error.path[0] ?? error.context.path[0]
-      let prop = this.model[name]
-
-      if (name === 'email') {
-        const item = this.model.contact.items[0]
-        prop = item.conditional
-      }
-      if (prop) {
-        prop.errorMessage = { text: error.message }
-        this.model.errors.push({ text: error.message, href: `#${name}` })
-      }
+  const pushEmailError = (name, model) => {
+    if (name === 'email') {
+      const item = model.contact.items[0]
+      return item.conditional
     }
+    return defaultPropCreator(name, model)
   }
+
+  errorPusherDefault(errors, this.model, pushEmailError)
 }
 
 module.exports = ViewModel
