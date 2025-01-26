@@ -37,10 +37,6 @@ module.exports = [
         failAction: async (request, h, error) => {
           const user = getUser(request)
           const cdo = await getCdo(request.payload.indexNumber, user)
-
-          if (cdo == null) {
-            return h.response().code(404).takeover()
-          }
           const backNav = addBackNavigation(request, false)
 
           return h.view(views.withdraw, new ViewModel(cdo, request.payload, backNav, error)).code(400).takeover()

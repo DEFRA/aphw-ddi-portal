@@ -187,7 +187,6 @@ describe('Withdraw', () => {
       })
 
       const payload = {
-        indexNumber: 'ED12345',
         withdrawOption: 'email',
         email: ''
       }
