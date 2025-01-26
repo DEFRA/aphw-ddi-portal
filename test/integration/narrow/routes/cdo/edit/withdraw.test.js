@@ -1,7 +1,5 @@
 const { auth, user } = require('../../../../../mocks/auth')
 const { JSDOM } = require('jsdom')
-const { getCdo } = require('../../../../../../app/api/ddi-index-api/cdo')
-const { withdrawDog } = require('../../../../../../app/api/ddi-index-api/dog')
 
 describe('Withdraw', () => {
   jest.mock('../../../../../../app/auth')
