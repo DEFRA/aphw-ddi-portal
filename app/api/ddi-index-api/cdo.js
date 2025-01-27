@@ -200,6 +200,7 @@ const saveCdoTaskDetails = async (indexNumber, apiKey, payload, user) => {
 
   delete payload.taskName
   delete payload.contact
+
   return boomRequest(`${cdoEndpoint}/${indexNumber}/manage:${apiKey}`, 'POST', payload, user)
 }
 

@@ -9,6 +9,7 @@ const { sendMessage } = require('../../../messaging/outbound/certificate-request
 const { extractEmail } = require('../../../lib/model-helpers')
 const { sanitiseText } = require('../../../lib/sanitise')
 const { issueCertTask } = require('../manage/tasks/issue-cert')
+const { validateSendCertificate } = require('../../../schema/portal/edit/send-certificate')
 
 module.exports = [
   {
@@ -36,7 +37,23 @@ module.exports = [
     path: `${routes.sendCertificate.post}/{indexNumber}/{firstOrReplacement}`,
     options: {
       auth: { scope: anyLoggedInUser },
-      // As a default radio value is used, we can't post invalid form values, hence no validation
+      validate: {
+        payload: validateSendCertificate,
+        failAction: async (request, h, error) => {
+          const user = getUser(request)
+          const cdo = await getCdo(request.params.indexNumber, user)
+
+          if (cdo == null) {
+            return h.response().code(404).takeover()
+          }
+
+          const backNav = addBackNavigation(request, false)
+
+          const firstCertificate = request.params.firstOrReplacement === 'first'
+
+          return h.view(views.sendCertificate, new ViewModel(cdo, firstCertificate, request.payload, backNav, error)).code(400).takeover()
+        }
+      },
       handler: async (request, h) => {
         const payload = request.payload
         const indexNumber = payload.indexNumber
@@ -54,8 +71,15 @@ module.exports = [
           const certificateId = await sendMessage(cdo, user)
           await downloadCertificate(indexNumber, certificateId)
           const email = sanitiseText(extractEmail(cdo.person.person_contacts))
+          const details = { certificateId, email, sendOption, firstCertificate }
 
-          const error = await issueCertTask(indexNumber, user, { certificateId, email, sendOption, firstCertificate })
+          if (payload.updateEmail) {
+            details.updateEmail = true
+            details.email = payload.email
+          }
+
+          const error = await issueCertTask(indexNumber, user, details)
+
           if (error) {
             const backNav = addBackNavigationForErrorCondition(request)
             return h.view(views.sendCertificate, new ViewModel(cdo, firstCertificate, request.payload, backNav, error))

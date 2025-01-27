@@ -12,7 +12,7 @@ const conditionalEmailRadio = (email, payloadEmail, { emailText, noEmailText }, 
   const sanitisedEmail = sanitiseText(email)
   const emailValue = payloadEmail ?? ''
   let emailError = errors?.details?.reduce((errorText, errorDetail) => {
-    if (errorDetail.path[0] === 'email' || errorDetail.context.path?.[0] === 'email') {
+    if (errorDetail.path[0] === 'email' || errorDetail.context?.path?.[0] === 'email') {
       return errorDetail.message
     }
     return errorText
