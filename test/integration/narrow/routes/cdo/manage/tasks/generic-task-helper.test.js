@@ -28,9 +28,9 @@ describe('Generic Task Helper test', () => {
         srcHashParam: '?src=abc123'
       }
 
-      const res = createModel('send-application-pack', data, backNav)
+      const res = createModel('process-application-pack', data, backNav)
 
-      expect(res.model.taskName).toBe('send-application-pack')
+      expect(res.model.taskName).toBe('process-application-pack')
       expect(res.model.backLink).toBe('/back')
       expect(res.model.srcHashParam).toBe('?src=abc123')
     })
@@ -62,7 +62,7 @@ describe('Generic Task Helper test', () => {
     })
 
     test('should get correct validation for task 1 (Send application pack)', () => {
-      const payload = { taskName: 'send-application-pack', taskDone: 'Y' }
+      const payload = { taskName: 'send-application-pack', contact: 'email', email: 'garrymcfadyen@hotmail.com' }
       expect(() => getValidation(payload)).not.toThrow()
       const res = getValidation(payload)
       expect(res.taskName).toBe('send-application-pack')
