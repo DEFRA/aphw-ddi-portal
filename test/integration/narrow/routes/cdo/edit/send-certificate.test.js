@@ -367,17 +367,17 @@ describe('Send certificate', () => {
     })
 
     test('route displays error if error sending email', async () => {
-      getCdo.mockResolvedValue({
-        dog: {
+      getCdo.mockResolvedValue(buildCdo({
+        dog: buildCdoDog({
           status: 'Interim exempt',
           indexNumber: 'ED12345'
-        },
-        person: {
-          person_contacts: [{
+        }),
+        person: buildCdoPerson({
+          person_contacts: [buildCdoPersonContact({
             contact_id: 1,
             id: 1,
             person_id: 2,
-            contact: {
+            contact: buildCdoPersonContactContact({
               contact_type: {
                 id: 1,
                 contact_type: 'Email'
@@ -385,10 +385,10 @@ describe('Send certificate', () => {
               contact_type_id: 1,
               id: 1,
               contact: 'bilbo.baggins@shire.co.uk'
-            }
-          }]
-        }
-      })
+            })
+          })]
+        })
+      }))
 
       sendMessage.mockResolvedValue('certguid')
       downloadCertificate.mockResolvedValue()

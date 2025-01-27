@@ -79,6 +79,7 @@ module.exports = [
           }
 
           const error = await issueCertTask(indexNumber, user, details)
+
           if (error) {
             const backNav = addBackNavigationForErrorCondition(request)
             return h.view(views.sendCertificate, new ViewModel(cdo, firstCertificate, request.payload, backNav, error))
