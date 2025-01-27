@@ -366,6 +366,29 @@ describe('Send certificate', () => {
       expect(response.statusCode).toBe(404)
     })
 
+    test('route returns 404 if invalid dog and invalid payload', async () => {
+      getCdo.mockResolvedValue()
+
+      sendMessage.mockResolvedValue('certguid')
+      downloadCertificate.mockResolvedValue()
+      issueCertTask.mockResolvedValue()
+
+      const payload = {
+        indexNumber: 'ED12345'
+      }
+
+      const options = {
+        method: 'POST',
+        url: '/cdo/edit/send-certificate/ED12345/first',
+        auth,
+        payload
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(404)
+    })
+
     test('route displays error if error sending email', async () => {
       getCdo.mockResolvedValue(buildCdo({
         dog: buildCdoDog({
