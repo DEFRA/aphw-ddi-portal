@@ -107,7 +107,7 @@ module.exports = [
           return h.redirect(`${routes.manageCdoRecordMicrochipDeadline.get}/${indexNumber}${backNav.srcHashParam}`)
         }
 
-        if (taskName === 'send-application-pack-2') {
+        if (taskName === 'send-application-pack') {
           taskName = sendApplicationPackTaskNames[payload.contact]
           const { apiKey } = getTaskDetailsByKey(taskName)
           const data = await saveCdoTaskDetails(indexNumber, apiKey, payload, user)

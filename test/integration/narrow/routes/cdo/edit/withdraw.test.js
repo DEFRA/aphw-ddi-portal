@@ -46,7 +46,7 @@ describe('Withdraw', () => {
 
       const { document } = (new JSDOM(response.payload)).window
       expect(document.querySelectorAll('.govuk-radios__label')[0].textContent.trim()).toBe('Email confirmation to:adam.smith@testmail.com')
-      expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toBe('Postal confirmation')
+      expect(document.querySelectorAll('.govuk-radios__label')[1].textContent.trim()).toBe('Post confirmation')
     })
 
     test('route returns 200 whe no email exists', async () => {

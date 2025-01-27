@@ -36,100 +36,6 @@ describe('Generic Task test', () => {
   })
 
   describe('GET /cdo/manage/task/send-application-pack/:index-number', () => {
-    test('should return a 200 if Pre-exempt', async () => {
-      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
-
-      const options = {
-        method: 'GET',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(200)
-
-      const { document } = (new JSDOM(response.payload)).window
-      expect(document.querySelector('form span').textContent.trim()).toBe('Dog ED20001')
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
-      expect(document.querySelector('div#application-pack-hint').textContent.trim()).toBe('Confirm that you have sent the application pack to the dog owner.')
-      expect(document.querySelector('.govuk-checkboxes__item label').textContent.trim()).toBe('I have sent the application pack')
-      expect(document.querySelectorAll('button')[4].textContent.trim()).toBe('Save and continue')
-      expect(document.querySelector('#taskDone').getAttribute('checked')).toBeNull()
-      expect(document.querySelectorAll('button')[4].getAttribute('disabled')).toBeNull()
-    })
-
-    test('should return 200 if Dog is failed', async () => {
-      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-      getCdo.mockResolvedValue({ dog: { status: 'Failed' } })
-
-      const options = {
-        method: 'GET',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(200)
-    })
-
-    test('should return 500 if invalid dog index', async () => {
-      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-      getCdo.mockResolvedValue(null)
-
-      const options = {
-        method: 'GET',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(500)
-    })
-
-    test('should return 500 if dog at wrong status', async () => {
-      getCdoTaskDetails.mockResolvedValue(notYetStartedTaskList)
-      getCdo.mockResolvedValue({ dog: { status: 'Exempt' } })
-
-      const options = {
-        method: 'GET',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(500)
-    })
-
-    test('should return 200 given application back sent', async () => {
-      getCdoTaskDetails.mockResolvedValue({
-        tasks: {
-          applicationPackSent: {
-            available: true,
-            completed: true,
-            readonly: true
-          }
-        }
-      })
-      getCdo.mockResolvedValue({ dog: { status: 'Pre-exempt' } })
-
-      const options = {
-        method: 'GET',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(200)
-
-      const { document } = (new JSDOM(response.payload)).window
-      expect(document.querySelector('h1.govuk-fieldset__heading').textContent.trim()).toBe('Send application pack')
-      expect(document.querySelector('#taskDone')).toBeNull()
-      expect(document.querySelector('#application-pack-sent').textContent.trim()).toBe('The application pack has been sent.')
-    })
-  })
-
-  describe('GET /cdo/manage/task/send-application-pack-2/:index-number', () => {
     test('should return a 200 if Pre-exempt and email exists', async () => {
       getCdoTaskDetails.mockResolvedValue({
         ...notYetStartedTaskList,
@@ -149,7 +55,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth
       }
 
@@ -185,7 +91,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth
       }
 
@@ -216,7 +122,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth
       }
 
@@ -243,7 +149,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth
       }
 
@@ -278,7 +184,7 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'GET',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth
       }
 
@@ -606,20 +512,6 @@ describe('Generic Task test', () => {
       expect(response.statusCode).toBe(302)
     })
 
-    test('fails param validation if invalid task name', async () => {
-      const fd = new FormData()
-
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/invalid-task-name/ED20001',
-        auth,
-        payload: fd.getBuffer()
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(400)
-    })
-
     test('fails validation if invalid payload', async () => {
       const options = {
         method: 'POST',
@@ -632,84 +524,15 @@ describe('Generic Task test', () => {
       expect(response.statusCode).toBe(400)
     })
 
-    test('saves if valid payload', async () => {
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth,
-        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(302)
-      expect(saveCdoTaskDetails).toHaveBeenCalledWith('ED20001', 'sendApplicationPack', options.payload, userWithDisplayname)
-    })
-
-    test('handles boom from API', async () => {
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth,
-        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
-      }
-      saveCdoTaskDetails.mockImplementation(() => {
-        throw new ApiErrorFailure('dummy error', { payload: { microchipNumber: '12345', microchipNumbers: [] } })
-      })
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(400)
-    })
-
-    test('handles non-ApiErrorFailure boom from API', async () => {
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/send-application-pack/ED20001',
-        auth,
-        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
-      }
-      saveCdoTaskDetails.mockImplementation(() => {
-        throw new Error('dummy error')
-      })
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(500)
-    })
-  })
-
-  describe('POST /cdo/manage/task/send-application-pack-2/ED20001', () => {
-    test('returns 302 if not auth', async () => {
-      const fd = new FormData()
-
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
-        headers: fd.getHeaders(),
-        payload: fd.getBuffer()
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(302)
-    })
-
-    test('fails validation if invalid payload', async () => {
-      const options = {
-        method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
-        auth,
-        payload: { taskName: 'send-application-pack-2' }
-      }
-
-      const response = await server.inject(options)
-      expect(response.statusCode).toBe(400)
-    })
-
     test('opens next page application pack if called with email', async () => {
       saveCdoTaskDetails.mockResolvedValue({
         email: 'garrymcfadyen@hotmail.com'
       })
       const options = {
         method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth,
-        payload: { taskName: 'send-application-pack-2', contact: 'email', email: 'garrymcfadyen@hotmail.com' }
+        payload: { taskName: 'send-application-pack', contact: 'email', email: 'garrymcfadyen@hotmail.com' }
       }
 
       const response = await server.inject(options)
@@ -726,9 +549,9 @@ describe('Generic Task test', () => {
       })
       const options = {
         method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth,
-        payload: { taskName: 'send-application-pack-2', contact: 'email', email: 'garrymcfadyen@hotmail.com', updateEmail: 'true' }
+        payload: { taskName: 'send-application-pack', contact: 'email', email: 'garrymcfadyen@hotmail.com', updateEmail: 'true' }
       }
 
       const response = await server.inject(options)
@@ -751,9 +574,9 @@ describe('Generic Task test', () => {
 
       const options = {
         method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth,
-        payload: { taskName: 'send-application-pack-2', contact: 'post' }
+        payload: { taskName: 'send-application-pack', contact: 'post' }
       }
 
       const response = await server.inject(options)
@@ -767,9 +590,9 @@ describe('Generic Task test', () => {
     test('handles non-ApiErrorFailure boom from API', async () => {
       const options = {
         method: 'POST',
-        url: '/cdo/manage/task/send-application-pack-2/ED20001',
+        url: '/cdo/manage/task/send-application-pack/ED20001',
         auth,
-        payload: { taskName: 'send-application-pack-2', contact: 'post' }
+        payload: { taskName: 'send-application-pack', contact: 'post' }
       }
       saveCdoTaskDetails.mockImplementation(() => {
         throw new Error('dummy error')
@@ -839,7 +662,7 @@ describe('Generic Task test', () => {
         method: 'POST',
         url: '/cdo/manage/task/process-application-pack/ED20001',
         auth,
-        payload: { taskName: 'send-application-pack', taskDone: 'Y' }
+        payload: { taskName: 'process-application-pack', taskDone: 'Y' }
       }
       saveCdoTaskDetails.mockImplementation(() => {
         throw new Error('dummy error')
