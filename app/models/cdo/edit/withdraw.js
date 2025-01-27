@@ -1,10 +1,15 @@
 const { forms } = require('../../../constants/forms')
-const { errorPusherDefault } = require('../../../lib/error-helpers')
+const { errorPusherDefault, defaultPropCreator } = require('../../../lib/error-helpers')
 const { extractEmail } = require('../../../lib/model-helpers')
-const { sanitiseText } = require('../../../lib/sanitise')
+const { conditionalEmailRadio } = require('../../builders/email-conditional')
 
 function ViewModel (cdo, payload, backNav, errors) {
-  const email = sanitiseText(extractEmail(cdo.person.person_contacts))
+  const email = conditionalEmailRadio(
+    extractEmail(cdo.person.person_contacts),
+    payload?.email,
+    { emailText: 'Email confirmation to', noEmailText: 'Email confirmation' },
+    errors
+  )
 
   this.model = {
     backLink: backNav.backLink,
@@ -18,10 +23,7 @@ function ViewModel (cdo, payload, backNav, errors) {
       id: 'withdrawOption',
       name: 'withdrawOption',
       items: [
-        {
-          value: 'email',
-          html: `Email confirmation to: <p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${email}</p>`
-        },
+        email,
         {
           value: 'post',
           text: 'Postal confirmation'
@@ -34,7 +36,15 @@ function ViewModel (cdo, payload, backNav, errors) {
     errors: []
   }
 
-  errorPusherDefault(errors, this.model)
+  const pushEmailError = (name, model) => {
+    if (name === 'email') {
+      const item = model.withdrawOption.items[0]
+      return item.conditional
+    }
+    return defaultPropCreator(name, model)
+  }
+
+  errorPusherDefault(errors, this.model, pushEmailError)
 }
 
 module.exports = ViewModel

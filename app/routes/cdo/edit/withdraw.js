@@ -5,6 +5,7 @@ const ViewModel = require('../../../models/cdo/edit/withdraw')
 const { getCdo } = require('../../../api/ddi-index-api/cdo')
 const { withdrawDog } = require('../../../api/ddi-index-api/dog')
 const { addBackNavigation } = require('../../../lib/back-helpers')
+const { validateWithdrawal } = require('../../../schema/portal/cdo/withdraw')
 
 module.exports = [
   {
@@ -31,6 +32,16 @@ module.exports = [
     path: `${routes.withdraw.post}/{dummy?}`,
     options: {
       auth: { scope: anyLoggedInUser },
+      validate: {
+        payload: validateWithdrawal,
+        failAction: async (request, h, error) => {
+          const user = getUser(request)
+          const cdo = await getCdo(request.payload.indexNumber, user)
+          const backNav = addBackNavigation(request, false)
+
+          return h.view(views.withdraw, new ViewModel(cdo, request.payload, backNav, error)).code(400).takeover()
+        }
+      },
       // As a default radio value is used, we can't post invalid form values, hence no validation
       handler: async (request, h) => {
         const payload = request.payload
@@ -38,6 +49,11 @@ module.exports = [
         const details = {
           indexNumber: payload.indexNumber,
           withdrawOption: payload.withdrawOption
+        }
+
+        if (payload.email) {
+          details.updateEmail = true
+          details.email = payload.email
         }
 
         await withdrawDog(details, getUser(request))
