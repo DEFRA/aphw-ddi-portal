@@ -3,7 +3,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% extends '_layout.njk' %}
 
@@ -34,37 +34,27 @@
       }) }}
     {% endif %}
 
-    <form method="POST" novalidate autocomplete="off">
+    <form method="POST" onsubmit="confirmSubmit.disabled = true; return true;" novalidate autocomplete="off">
       <span class="govuk-caption-m">Dog {{ model.indexNumber }}</span>
       <fieldset class="govuk-fieldset" {% if model.disabled == false %} aria-describedby="application-pack-hint"{% endif %}>
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-5">
-          <h1 class="govuk-fieldset__heading">Send application pack</h1>
+          <h1 class="govuk-fieldset__heading">How do you want to send the application pack?</h1>
         </legend>
-
-        {% if model.disabled %}
-        <p class="govuk-body" id="application-pack-sent">The application pack has been sent.</p>
-        {% else %}
-        <div id="application-pack-hint" class="govuk-hint">
-          Confirm that you have sent the application pack to the dog owner.
+        <div id="contact-hint" class="govuk-hint">
+          Select one option.
         </div>
-
-        {{ govukCheckboxes(model.taskDone) }}
-        {% endif %}
+        {{ govukRadios(model.contact) }}
 
         <input type="hidden" name="taskName" id="taskName" value="{{ model.taskName }}" />
-
+        {% if model.person.email %}
+        <input type="hidden" name="email" id="email" value="{{ model.person.email }}" />
+        {% endif %}
       </fieldset>
 
-      {% if model.disabled %}
       {{ govukButton({
-        text: "Continue",
-        href: model.continueLink
+        text: "Send application",
+        name: "confirmSubmit" 
       }) }}
-      {% else %}
-      {{ govukButton({
-        text: "Save and continue"
-      }) }}
-      {% endif %}
     </form>
   </div>
 </div>

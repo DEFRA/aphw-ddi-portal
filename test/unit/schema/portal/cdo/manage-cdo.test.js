@@ -1,11 +1,11 @@
 const { microchipVerification, neuteringConfirmation, verificationDatesSchema } = require('../../../../../app/schema/portal/cdo/tasks/record-verification-dates')
-const { sendApplicationPackPayloadSchema } = require('../../../../../app/schema/portal/cdo/tasks/send-application-pack-2')
+const { sendApplicationPackPayloadSchema } = require('../../../../../app/schema/portal/cdo/tasks/send-application-pack')
 const { ValidationError } = require('joi')
 describe('manage-cdo single cdo', () => {
   describe('sendApplicationPack', () => {
     test('should not validate if email is invalid', () => {
       const sendApplicationPackPayload = {
-        taskName: 'send-application-pack-2',
+        taskName: 'send-application-pack',
         contact: 'email',
         email: 'garrymcfadyen.hotmail.com'
       }
@@ -15,7 +15,7 @@ describe('manage-cdo single cdo', () => {
 
     test('should not validate if email is empty', () => {
       const sendApplicationPackPayload = {
-        taskName: 'send-application-pack-2',
+        taskName: 'send-application-pack',
         contact: 'email',
         email: ''
       }
