@@ -20,11 +20,6 @@ Generate a certificate of exemption to post - {{ serviceName }}
     <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/">Home</a>
     </li>
-    {% if model.sendOption === 'post' %}
-    <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/cdo/manage?noCache=Y">Manage CDOs</a>
-    </li>
-    {% endif %}
   </ol>
 </div>
 {% endblock %}
@@ -93,7 +88,7 @@ Generate a certificate of exemption to post - {{ serviceName }}
             name: "submitButton"
           }) }}
 
-          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/manage?noCache=Y">Cancel</a>
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Cancel</a>
         </div>
       </form>
 
