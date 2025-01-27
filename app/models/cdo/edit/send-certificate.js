@@ -1,10 +1,10 @@
 const { forms } = require('../../../constants/forms')
 const { errorPusherDefault } = require('../../../lib/error-helpers')
 const { extractEmail } = require('../../../lib/model-helpers')
-const { sanitiseText } = require('../../../lib/sanitise')
+const { conditionalEmailRadio } = require('../../builders/email-conditional')
 
 function ViewModel (cdo, firstCertificate, payload, backNav, errors) {
-  const email = sanitiseText(extractEmail(cdo.person.person_contacts))
+  const email = conditionalEmailRadio(extractEmail(cdo.person.person_contacts), payload?.email, { emailText: 'Email it to', noEmailText: 'Email' }, errors)
 
   this.model = {
     backLink: backNav.backLink,
@@ -15,10 +15,7 @@ function ViewModel (cdo, firstCertificate, payload, backNav, errors) {
       id: 'sendOption',
       name: 'sendOption',
       items: [
-        {
-          value: 'email',
-          html: `Email it to: <p class="govuk-!-margin-top-1 govuk-!-margin-bottom-0">${email}</p>`
-        },
+        email,
         {
           value: 'post',
           text: 'Post it'
