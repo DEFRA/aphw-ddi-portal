@@ -26,7 +26,7 @@ function ViewModel (cdo, payload, backNav, errors) {
         email,
         {
           value: 'post',
-          text: 'Postal confirmation'
+          text: 'Post confirmation'
         }
       ],
       autocomplete: forms.preventAutocomplete,

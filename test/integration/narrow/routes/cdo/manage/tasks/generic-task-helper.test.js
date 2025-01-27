@@ -141,6 +141,24 @@ describe('Generic Task Helper test', () => {
 
         expect(() => getValidation(payload)).toThrow()
       })
+
+      test('should fail if invalid neuteringConfirmation on ', () => {
+        const payload = {
+          'microchipVerification-day': '10',
+          'microchipVerification-month': '10',
+          'microchipVerification-year': '2025',
+          dogNotFitForMicrochip: '',
+          'neuteringConfirmation-day': '41',
+          'neuteringConfirmation-month': '05',
+          'neuteringConfirmation-year': '2025',
+          dogNotNeutered: false,
+          taskName: 'record-microchip-deadline',
+          microchipVerification: { year: '', month: '', day: '' },
+          neuteringConfirmation: { year: '', month: '', day: '' }
+        }
+
+        expect(() => getValidation(payload)).toThrow()
+      })
     })
   })
 
