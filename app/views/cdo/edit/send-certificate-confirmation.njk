@@ -20,6 +20,11 @@ Generate a certificate of exemption to post - {{ serviceName }}
     <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/">Home</a>
     </li>
+    {% if model.firstCertificate %}
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/cdo/manage?noCache=Y">Manage CDOs</a>
+    </li>
+    {% endif %}
   </ol>
 </div>
 {% endblock %}
@@ -37,7 +42,7 @@ Generate a certificate of exemption to post - {{ serviceName }}
         The certificate of exemption has been emailed to <span class="govuk-!-font-weight-bold">{{ model.email }}</span>.
       </p>
       <p class="govuk-body">
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ model.actionLink }}">Check the record for Dog {{ model.indexNumber }}</a>
+          <a class="govuk-link govuk-link--no-visited-state" href="/cdo/view/dog-details/{{ model.indexNumber }}">Check the record for Dog {{ model.indexNumber }}</a>
       </p>
       {% else %}
       <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7">
