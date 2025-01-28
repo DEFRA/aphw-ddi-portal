@@ -18,12 +18,14 @@ module.exports = [
           return h.response().code(404).takeover()
         }
 
-        const backNav = { actionLink: getMainReturnPoint(request) }
-
         const details = {
           cdo,
           sendOption: request.params.sendOption,
           firstCertificate: request.params.firstOrReplacement === 'first'
+        }
+
+        const backNav = {
+          actionLink: details.firstCertificate ? `/cdo/manage/cdo/${request.params.indexNumber}` : getMainReturnPoint(request)
         }
 
         return h.view(views.sendCertificateConfirmation, new ViewModel(details, backNav))
