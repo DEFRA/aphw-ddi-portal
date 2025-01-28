@@ -139,6 +139,7 @@ describe('Send certificate confirmation', () => {
       const { document } = (new JSDOM(response.payload)).window
       expect(document.querySelectorAll('main .govuk-heading-l')[0].textContent.trim()).toBe('Generate a certificate of exemption to post')
       expect(document.querySelectorAll('main p')[0].textContent.trim()).toContain('John Smith')
+      expect(document.querySelectorAll('main .govuk-button-group a')[0].href).toBe('/cdo/manage/cdo/ED12345')
     })
 
     test('returns 200 for replacement certificate by post', async () => {
