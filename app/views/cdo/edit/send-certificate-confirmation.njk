@@ -86,6 +86,7 @@ Generate a certificate of exemption to post - {{ serviceName }}
       <form action="/cdo/view/certificate" method="POST" novalidate autocomplete="off">
 
         <input type="hidden" name="indexNumber" value="{{ model.indexNumber }}">
+        <input type="hidden" name="firstCertificate" value="{{ model.firstCertificate }}">
 
         <div class="govuk-button-group">
           {{ govukButton({
