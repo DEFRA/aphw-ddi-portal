@@ -84,7 +84,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -107,7 +108,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -130,7 +132,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -158,7 +161,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -179,7 +183,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -213,7 +218,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -234,7 +240,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -255,7 +262,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -278,7 +286,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 
@@ -302,7 +311,8 @@ describe('View certificate', () => {
         url: '/cdo/view/certificate',
         auth,
         payload: {
-          indexNumber: 'ED123'
+          indexNumber: 'ED123',
+          firstCertificate: true
         }
       }
 

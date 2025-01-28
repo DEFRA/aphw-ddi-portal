@@ -37,6 +37,7 @@ module.exports = [
       validate: {
         payload: Joi.object({
           indexNumber: Joi.string().required(),
+          firstCertificate: Joi.boolean().required(),
           submitButton: Joi.string().allow(null).allow('').optional()
         }),
         failAction: async (request, h, error) => {
@@ -68,7 +69,8 @@ module.exports = [
 
           if (certificateIsAvailable && useManageCdo(cdo)) {
             // Pre-exempt and all tasks completed
-            const error = await issueCertTask(indexNumber, user)
+            const details = { sendOption: 'post', firstCertificate: request.payload.firstCertificate }
+            const error = await issueCertTask(indexNumber, user, details)
             if (error) {
               const backNav = addBackNavigationForErrorCondition(request)
               return h.view(views.certificate, new ViewModel(indexNumber, origin, backNav, error))
