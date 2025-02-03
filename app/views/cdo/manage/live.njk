@@ -47,7 +47,7 @@
         {% for tab in model.tabs %}
         {% if tab.visible %}
         <li class="govuk-tabs__list-item {% if tab.active %}govuk-tabs__list-item--selected{% endif %}">
-          <a class="govuk-tabs__tab" href="{{tab.href}}">
+          <a class="govuk-tabs__tab" href="{{tab.href}}" id="{{model.tab}}">
             {{tab.label}}
           </a>
         </li>

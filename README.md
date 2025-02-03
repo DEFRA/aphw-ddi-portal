@@ -1,5 +1,5 @@
 # aphw-ddi-portal
- 
+
 Web frontend to support the dangerous dog index.
 
 ## Prerequisites
