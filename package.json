@@ -102,5 +102,8 @@
     "ignore": [
       "**/test-output/**"
     ]
-  }
+  },
+  "resolutions": {
+"prismjs": "^1.30.0"
+}
 }
