@@ -30,6 +30,8 @@
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--orange  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == 'Owner untraceable' %}
   <strong class="govuk-tag defra-tag-nowrap govuk-tag--yellow  {{ extraClasses }}">{{ status }}</strong>
+{% elif status == 'Insurance Spot Check' %}
+  <strong class="govuk-tag defra-tag-nowrap govuk-tag--light-blue  {{ extraClasses }}">{{ status }}</strong>
 {% elif status == undefined %}
   &nbsp;
 {% else %}

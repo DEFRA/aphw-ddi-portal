@@ -72,7 +72,9 @@
       {{ govukDateInput(model.cdoIssued) }}
 
       {{ govukDateInput(model.cdoExpiry) }}
-      
+      {% if model.status == 'Insurance Spot Check' %}
+      {{ govukDateInput(model.insurance_spotcheck_date) }}
+      {% endif %}
       {% if model.showNeuteringDeadlineNearTop %}
       {{ govukDateInput(model.neuteringDeadline) }}
       {% endif %}

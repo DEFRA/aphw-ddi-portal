@@ -33,6 +33,7 @@ function ViewModel (exemption, courts, policeForces, companies, backNav, errors)
     certificateIssued: constructDateField(exemption, 'certificateIssued', 'First certificate issued'),
     cdoIssued: constructDateField(exemption, 'cdoIssued', 'CDO issued'),
     cdoExpiry: constructDateField(exemption, 'cdoExpiry', 'CDO expiry'),
+    insurance_spotcheck_date: constructDateField(exemption, 'insurance_spotcheck_date', 'Insurance Spot Check Date'),
     court: {
       label: {
         text: 'Court',

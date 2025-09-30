@@ -104,6 +104,16 @@
             {% else %}
             <td class="govuk-table__cell defra-secondary-text">Not entered</td>
             {% endif %}
+             {% if model.tab == 'live' %}
+            <td class="govuk-table__cell">
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                {% for task in cdo.notReceived %}
+                <li>{{ task }}</li>
+                {% endfor %}
+              </ul>
+            </td>
+            {% endif %}
+
           </tr>
           {% endfor %}
           </tbody>
