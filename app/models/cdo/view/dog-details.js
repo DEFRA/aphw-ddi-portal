@@ -74,7 +74,7 @@ function ViewModel (cdo, backNav) {
       microchipVerification: formatToGds(cdo.exemption.microchipVerification),
       nonComplianceLetterSent: formatToGds(cdo.exemption.nonComplianceLetterSent),
       canWithdraw: canDogBeWithdrawn(cdo),
-      insurance_spotcheck_date: formatToGds(cdo.dog.insurance_spotcheck_date)
+      insurance_spotcheck_date: formatToGds(cdo.dog?.insurance_spotcheck_date)
 
     },
     showNeuteringDeadline: isNeuteringDeadlineVisibleInView(cdo),
