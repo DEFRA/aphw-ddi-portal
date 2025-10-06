@@ -33,10 +33,11 @@ module.exports = [
         exemption.indexNumber = cdo.dog.indexNumber
         exemption.insuranceCompany = exemption.insurance[0]?.company
         exemption.insuranceRenewal = exemption.insurance[0]?.insuranceRenewal
-
+        exemption.insurance_spotcheck_date = cdo.dog.insurance_spotcheck_date
         addDateComponents(exemption, 'certificateIssued')
         addDateComponents(exemption, 'cdoIssued')
         addDateComponents(exemption, 'cdoExpiry')
+        addDateComponents(exemption, 'insurance_spotcheck_date')
         addDateComponents(exemption, 'applicationFeePaid')
         addDateComponents(exemption, 'neuteringConfirmation')
         addDateComponents(exemption, 'microchipVerification')

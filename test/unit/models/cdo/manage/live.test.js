@@ -96,6 +96,11 @@ describe('Manage CDOs ', () => {
         ariaSort: 'none',
         label: 'Police force',
         link: '/cdo/manage?sortKey=policeForce'
+      },
+      {
+        ariaSort: undefined,
+        label: 'Not received',
+        link: undefined
       }
     ],
     tabs: [

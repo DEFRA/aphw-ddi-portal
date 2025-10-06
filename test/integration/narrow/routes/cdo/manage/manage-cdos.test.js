@@ -98,7 +98,7 @@ describe('Manage Live Cdos test', () => {
     expect(cols[1].textContent.trim()).toBe('ED20001')
     expect(cols[2].textContent.trim()).toBe('Scott Pilgrim')
     expect(cols[3].textContent.trim()).toBe('Cheshire Constabulary')
-    expect(cols[7].textContent.trim()).toBe('Not entered')
+    expect(cols[8].textContent.trim()).toBe('Not entered')
   })
 
   test('GET /cdo/manage?sortOrder=DESC route returns 200', async () => {

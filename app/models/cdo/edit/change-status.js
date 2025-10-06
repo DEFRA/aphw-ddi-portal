@@ -40,6 +40,10 @@ function ViewModel (dog, backNav, errors) {
         {
           value: 'Inactive',
           text: 'Inactive'
+        },
+        {
+          value: 'Insurance Spot Check',
+          text: 'Insurance Spot Check'
         }
       ],
       autocomplete: forms.preventAutocomplete,

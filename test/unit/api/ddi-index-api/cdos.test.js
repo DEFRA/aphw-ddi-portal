@@ -237,7 +237,7 @@ describe('CDO API endpoints', () => {
       const sort = {}
 
       const results = await cdos.getLiveCdos(true, user, sort)
-      expect(get).toBeCalledWith('cdos?status=PreExempt&noCache=true', user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&noCache=true&showTasks=Y', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
 
@@ -266,7 +266,7 @@ describe('CDO API endpoints', () => {
       }))
 
       const results = await cdos.getLiveCdos(false, user)
-      expect(get).toBeCalledWith('cdos?status=PreExempt', user)
+      expect(get).toBeCalledWith('cdos?status=PreExempt&showTasks=Y', user)
       expect(results).toEqual({ cdos: expect.any(Array), counts: buildCdoCounts({ total: 1 }) })
     })
   })

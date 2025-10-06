@@ -23,9 +23,7 @@ module.exports = [
         if (details == null) {
           return h.response().code(404).takeover()
         }
-
         const cdo = await getCdo(dogIndex, user)
-
         return h.view(views.manageCdo, new ViewModel(details, cdo, backNav, `${dogRoutes.sendCertificate.get}/${dogIndex}/first${backNav.srcHashParam}&origin=manage-cdo`))
       }
     }

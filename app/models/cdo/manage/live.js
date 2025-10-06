@@ -158,6 +158,13 @@ function ViewModel (resultList, counts, tab, sort, backNav) {
       link: columnLink(tab, sort, 'policeForce'),
       ariaSort: getAriaSort(tab, sort, 'policeForce')
     })
+    if (tab === 'live') {
+      tableHeadings.push({
+        label: 'Not received',
+        link: undefined,
+        ariaSort: undefined
+      })
+    }
   }
 
   const applicationPackProcessed = 'Application pack'

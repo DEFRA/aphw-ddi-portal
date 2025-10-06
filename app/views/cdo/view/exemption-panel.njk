@@ -30,6 +30,19 @@
             </div>
             {% endif %}
 
+              <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Insurance Spot Check Date</dt>
+              {% if model.exemption.insurance_spotcheck_date %}
+                {% if model.dog.status == 'Insurance Spot Check' %}
+                <dd class="govuk-summary-list__value">{{ model.exemption.insurance_spotcheck_date }}</dd>
+                 {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not Applicable</dd>
+                {% endif %}
+              {% else %}
+                <dd class="govuk-summary-list__value defra-secondary-text">Not Applicable</dd>
+              {% endif %}
+            </div>
+
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">First certificate issued</dt>
               {% if model.exemption.certificateIssued %}

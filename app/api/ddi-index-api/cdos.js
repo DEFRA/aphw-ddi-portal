@@ -153,7 +153,7 @@ const getSummaryCdos = async (filter, noCache, user, sort = {}) => {
  * @return {Promise<{ cdos: SummaryCdo[]; counts: ManageCdoCounts }>}
  */
 const getLiveCdos = async (noCache, user, sort = {}) => {
-  const filter = { status: ['PreExempt'] }
+  const filter = { status: ['PreExempt'], showTasks: true }
   return getSummaryCdos(filter, noCache, user, sort)
 }
 

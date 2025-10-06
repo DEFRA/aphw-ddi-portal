@@ -121,7 +121,9 @@ const exemptionDetailsSchema = Joi.object({
   withdrawn: optionalDatePreventFuture(),
   nonComplianceLetterSent: optionalDatePreventFuture(),
   dogBreed: Joi.string().allow(null).allow('').optional(),
-  submitButton: Joi.string().allow(null).allow('').optional()
+  submitButton: Joi.string().allow(null).allow('').optional(),
+  insurance_spotcheck_date: optionalDate()
+
 }).required()
 
 const validatePayload = (payload) => {
@@ -136,6 +138,7 @@ const validatePayload = (payload) => {
   payload.typedByDlo = getDateComponents(payload, 'typedByDlo')
   payload.withdrawn = getDateComponents(payload, 'withdrawn')
   payload.nonComplianceLetterSent = getDateComponents(payload, 'nonComplianceLetterSent')
+  payload.insurance_spotcheck_date = getDateComponents(payload, 'insurance_spotcheck_date')
 
   if (payload.exemptionOrder !== 2023 && payload.exemptionOrder !== '2023') {
     payload.cdoIssued = getDateComponents(payload, 'cdoIssued')
@@ -181,7 +184,10 @@ const validatePayload = (payload) => {
     'withdrawn-day': Joi.number().allow(null).allow(''),
     'nonComplianceLetterSent-year': Joi.number().allow(null).allow(''),
     'nonComplianceLetterSent-month': Joi.number().allow(null).allow(''),
-    'nonComplianceLetterSent-day': Joi.number().allow(null).allow('')
+    'nonComplianceLetterSent-day': Joi.number().allow(null).allow(''),
+    'insurance_spotcheck_date-year': Joi.number().allow(null).allow(''),
+    'insurance_spotcheck_date-month': Joi.number().allow(null).allow(''),
+    'insurance_spotcheck_date-day': Joi.number().allow(null).allow('')
   }).concat(exemptionDetailsSchema)
 
   const { value, error } = schema.validate(payload, { abortEarly: false })
