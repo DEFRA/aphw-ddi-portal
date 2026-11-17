@@ -1,1 +1,43 @@
 ---
+environment: production
+environmentCode: dev
+container:
+  messageQueueHost: DEVFFCINFSB1001.servicebus.windows.net
+  osPlacesBaseUrl: https://api.os.uk/search/places/v1
+  policeApiBaseUrl: https://data.police.uk/api
+  redisHostname: DEVFFCINFRD1001.redis.cache.windows.net
+  redisPort: 6380
+  certificateRequestQueue: aphw-ddi-certificate-request
+  ddiApiBaseUrl: http://aphw-ddi-api.aphw-ddi-dev
+  ddiEventsBaseUrl: http://aphw-ddi-events.aphw-ddi-dev
+ingress:
+  server: azure.defra.cloud
+  endpoint: aphw-ddi-portal-dev
+secretProviderClass:
+  azure:
+    keyvaultName: DEVFFCINFKV1001
+    objects:
+      - objectName: devtest-ffcahwr-appInsights-connectionString
+        objectType: secret
+      - objectName: DEV-aphw-ddi-portal-clientsecret
+        objectType: secret
+      - objectName: DEV-aphw-ddi-os-places-key
+        objectType: secret
+      - objectName: DEV-aphw-ddi-portal-jwt-private-key
+        objectType: secret
+      - objectName: dev-redisPassword
+        objectType: secret
+  secretObjects:
+    - secretName: aphw-ddi-portal
+      type: Opaque
+      data:
+        - objectName: devtest-ffcahwr-appInsights-connectionString
+          key: APPLICATIONINSIGHTS_CONNECTION_STRING
+        - objectName: DEV-aphw-ddi-portal-clientsecret
+          key: AZUREID_CLIENT_SECRET
+        - objectName: DEV-aphw-ddi-os-places-key
+          key: OS_PLACES_API_KEY
+        - objectName: DEV-aphw-ddi-portal-jwt-private-key
+          key: JWT_PRIVATE_KEY
+        - objectName: dev-redisPassword
+          key: REDIS_PASSWORD

@@ -11,7 +11,7 @@ function ViewModel (payload, insuranceCompanies, validationError) {
   this.model = {
     title: insuranceCompanies.length ? 'Add or remove dog insurers' : 'Add a dog insurer',
     backLink: '/admin/index',
-    insuranceCompanies: insuranceCompanies,
+    insuranceCompanies,
     name: {
       id: 'name',
       name: 'name',

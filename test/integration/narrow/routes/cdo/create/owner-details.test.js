@@ -178,7 +178,7 @@ describe('OwnerDetails test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
       'dateOfBirth-day': '',
@@ -206,7 +206,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: new Date('1999-01-01'),
@@ -242,7 +242,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
       dateOfBirth: new Date('1999-01-01'),
@@ -282,7 +282,7 @@ describe('OwnerDetails test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), {
       firstName: 'John',
       lastName: 'Smith',
       'dateOfBirth-day': '',

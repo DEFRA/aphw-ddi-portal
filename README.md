@@ -90,6 +90,36 @@ scripts/test
 scripts/test -w
 ```
 
+#### Azurite API version compatibility
+
+The test Compose files pin Azurite to `3.37.0`. The installed
+`@azure/storage-blob` version `12.34.0` sends storage API version `2026-10-06`,
+which this Azurite release rejects by default. An up-to-date SDK can target an
+API version newer than the emulator supports; updating Azurite alone may not
+resolve this.
+
+Both `docker-compose.test.yaml` and `docker-compose.test.parallel.yaml` start
+Azurite with `--skipApiVersionCheck` so local storage tests can use the current
+SDK without changing production client settings. Watch and debug tests inherit
+the same setting from `docker-compose.test.yaml`.
+
+For other projects with the same error, add this command to the Azurite service
+in each applicable test Compose file (retaining any existing startup options):
+
+```yaml
+command: azurite -l /data --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --skipApiVersionCheck
+```
+
+Overriding the image command replaces its defaults, so keep the host bindings
+to allow other containers to connect. Recreate the emulator using the same
+Compose files and project name as the test runner, or rerun `scripts/test`,
+which recreates the test environment. Restarting an existing container does not
+apply a changed command.
+
+This flag only bypasses API version validation; it does not implement newer
+storage features. Keep it limited to the local emulator and validate features
+not supported by Azurite against Azure Storage.
+
 # Running a subset of tests outside of Docker
 In order to run a single test or group of tests, you can use
 ```

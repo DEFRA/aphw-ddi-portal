@@ -117,9 +117,9 @@ describe('OwnerResults test', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(setInSession).toBeCalledWith(expect.anything(), 'persons', [resolvedPerson])
-    expect(getPersons).toBeCalledWith({ firstName: 'John', lastName: 'Smith' }, user)
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setInSession).toHaveBeenCalledWith(expect.anything(), 'persons', [resolvedPerson])
+    expect(getPersons).toHaveBeenCalledWith({ firstName: 'John', lastName: 'Smith' }, user)
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
       postcode: 'CO10 8QX',
@@ -151,7 +151,7 @@ describe('OwnerResults test', () => {
 
     expect(setAddress).not.toHaveBeenCalled()
 
-    expect(setInSession).toBeCalledWith(expect.anything(), 'persons', resolvedPersons)
+    expect(setInSession).toHaveBeenCalledWith(expect.anything(), 'persons', resolvedPersons)
     expect(document.querySelector('h1').textContent.trim()).toBe('There are existing dog owners named Jack Jones')
     expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('Bully Green Farm, Snow Hill, Sudbury CO10 8QX')
     expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
@@ -264,15 +264,15 @@ describe('OwnerResults test', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
       postcode: 'CO10 8QX',
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(setPoliceForce).toBeCalledTimes(1)
+    expect(setPoliceForce).toHaveBeenCalledTimes(1)
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
 
@@ -306,15 +306,15 @@ describe('OwnerResults test', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPersonFromSession, dateOfBirth: newDateOfBirth })
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), { ...resolvedPersonFromSession, dateOfBirth: newDateOfBirth })
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
       postcode: 'CO10 8QX',
       town: 'Sudbury',
       addressLine1: 'Bully Green Farm'
     })
-    expect(setPoliceForce).toBeCalledTimes(1)
+    expect(setPoliceForce).toHaveBeenCalledTimes(1)
     expect(response.headers.location).toBe(dogRoutes.microchipSearch.get)
   })
 
@@ -340,8 +340,8 @@ describe('OwnerResults test', () => {
     const response = await server.inject(options)
 
     expect(response.statusCode).toBe(302)
-    expect(setOwnerDetails).toBeCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setOwnerDetails).toHaveBeenCalledWith(expect.anything(), { ...resolvedPerson, dateOfBirth: resolvedPerson.birthDate })
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine2: 'Snow Hill',
       country: 'England',
       postcode: 'CO10 8QX',
@@ -373,7 +373,7 @@ describe('OwnerResults test', () => {
 
     expect(response.statusCode).toBe(302)
     expect(setOwnerDetails).not.toHaveBeenCalled()
-    expect(setAddress).toBeCalledWith(expect.anything(), {})
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {})
 
     expect(response.headers.location).toBe(routes.postcodeLookupCreate.get)
   })

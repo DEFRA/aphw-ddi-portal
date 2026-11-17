@@ -49,7 +49,7 @@ describe('Base API', () => {
   test('postWithBoom should call request POST', async () => {
     const res = await postWithBoom('endpoint2', { val: 123 }, user)
     expect(createBearerHeaderSpy).toHaveBeenCalledWith(audiences.events)
-    expect(wreck.read).toBeCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
+    expect(wreck.read).toHaveBeenCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
     expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
     expect(wreck.request).toHaveBeenCalledWith('POST', 'test-events/endpoint2', { payload: { val: 123 }, headers: { 'ddi-username': 'test@example.com', Authorization: expect.any(String) } })
   })

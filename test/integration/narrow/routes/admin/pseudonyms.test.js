@@ -122,8 +122,8 @@ describe('Pseudonyms', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
     const { document } = new JSDOM(response.payload).window
-    expect(createUser).toBeCalledWith({ username: 'new.user@example.com', pseudonym: 'George' }, user)
-    expect(getUsers).toBeCalledWith(user)
+    expect(createUser).toHaveBeenCalledWith({ username: 'new.user@example.com', pseudonym: 'George' }, user)
+    expect(getUsers).toHaveBeenCalledWith(user)
     expect(document.querySelector('#email').getAttribute('value')).toBe(null)
     expect(document.querySelector('#pseudonym').getAttribute('pseudonym')).toBe(null)
   })
@@ -308,7 +308,7 @@ describe('Pseudonyms', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(deleteUser).toBeCalledWith('old.user@example.com', user)
-    expect(getUsers).toBeCalledWith(user)
+    expect(deleteUser).toHaveBeenCalledWith('old.user@example.com', user)
+    expect(getUsers).toHaveBeenCalledWith(user)
   })
 })

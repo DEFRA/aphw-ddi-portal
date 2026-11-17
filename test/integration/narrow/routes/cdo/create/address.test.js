@@ -54,7 +54,7 @@ describe('Address test', () => {
 
     expect(response.statusCode).toBe(200)
 
-    expect(getCountries).toBeCalled()
+    expect(getCountries).toHaveBeenCalled()
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/postcode-lookup')
@@ -74,7 +74,7 @@ describe('Address test', () => {
 
     expect(response.statusCode).toBe(200)
 
-    expect(getCountries).toBeCalled()
+    expect(getCountries).toHaveBeenCalled()
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/select-owner')
@@ -92,7 +92,7 @@ describe('Address test', () => {
 
     expect(response.statusCode).toBe(200)
 
-    expect(getCountries).toBeCalled()
+    expect(getCountries).toHaveBeenCalled()
 
     expect(document.querySelectorAll('.govuk-select option')[1].textContent).toBe('England')
     expect(document.querySelector('.govuk-back-link').getAttribute('href')).toBe('/cdo/create/full-summary')
@@ -189,7 +189,7 @@ describe('Address test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine1: '1 Testing Street',
       town: 'Testington',
       postcode: 'AB1 1TT',
@@ -220,13 +220,13 @@ describe('Address test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(nextScreenUrl)
-    expect(setAddress).toBeCalledWith(expect.anything(), {
+    expect(setAddress).toHaveBeenCalledWith(expect.anything(), {
       addressLine1: '1 Testing Street',
       town: 'Testington',
       postcode: 'EH1 1AQ',
       country: 'Scotland'
     })
-    expect(setEnforcementDetails).toBeCalledWith(expect.anything(), { policeForce: 123 })
+    expect(setEnforcementDetails).toHaveBeenCalledWith(expect.anything(), { policeForce: 123 })
   })
 
   afterEach(async () => {

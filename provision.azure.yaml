@@ -1,9 +1,26 @@
 resources:
   identity: aphw-ddi-portal
-  queues:
-    - name: aphw-ddi-certificate-request
-      role: sender
-  topics:
-    - name: aphw-ddi-events
-      role: sender
-      duplicateDetection: true
+  service_bus:
+    queues:
+      - name: aphw-ddi-certificate-request
+        roles:
+          - name: sender
+    topics:
+      - name: aphw-ddi-events
+        requiresDuplicateDetection: true
+        duplicateDetectionHistoryTimeWindow: PT10M30S
+        defaultMessageTimeToLive: P100D
+        roles:
+          - name: sender
+  storage_accounts:
+    - name: aphw
+      containers:
+        - name: uploads
+          roles:
+            - name: blobContributor
+        - name: attachments
+          roles:
+            - name: blobContributor
+        - name: certificates
+          roles:
+            - name: blobContributor

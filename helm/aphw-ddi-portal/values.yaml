@@ -12,11 +12,10 @@ appInsights:
   connectionString:
 
 containerConfigMap:
-  name: aphw-ddi-portal-config-map
+  name: aphw-ddi-portal
 
 containerSecret:
-  name: aphw-ddi-portal-container-secret
-  type: Opaque
+  name: aphw-ddi-portal
 
 deployment:
   replicas: 1
@@ -35,17 +34,13 @@ container:
   ddiApiBaseUrl: ddi-index-api-base-url
   ddiEventsBaseUrl: ddi-events-api-base-url
   osPlacesBaseUrl: os-places-api-base-url
-  osPlacesApiKey: os-places-api-key
   policeApiBaseUrl: police-api-base-url
-  azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: dummy
   messageQueueHost: namespace.servicebus.windows.net
   certificateRequestQueue: aphw-ddi-certificate-request
-  jwtPrivateKey: not-a-real-private-key
   redisHostname: dummy
   redisPort: 6379
-  redisPassword: dummy
 
 livenessProbe:
   path: /healthz
@@ -81,6 +76,34 @@ service:
 azureAppRegistration:
   enabled: true
   clientId:
-  clientSecret:
   tenantId:
   redirectUrl: authenticate
+
+secretProviderClass:
+  azure:
+    keyvaultName: SNDFFCINFKV2001
+    objects:
+      - objectName: snd2-aphw-appinsights-connectionString
+        objectType: secret
+      - objectName: snd2-aphw-ddi-portal-clientsecret
+        objectType: secret
+      - objectName: snd2-aphw-ddi-os-places-key
+        objectType: secret
+      - objectName: snd2-aphw-ddi-portal-jwt-private-key
+        objectType: secret
+      - objectName: snd2-redisPassword
+        objectType: secret
+  secretObjects:
+    - secretName: aphw-ddi-portal
+      type: Opaque
+      data:
+        - objectName: snd2-aphw-appinsights-connectionString
+          key: APPLICATIONINSIGHTS_CONNECTION_STRING
+        - objectName: snd2-aphw-ddi-portal-clientsecret
+          key: AZUREID_CLIENT_SECRET
+        - objectName: snd2-aphw-ddi-os-places-key
+          key: OS_PLACES_API_KEY
+        - objectName: snd2-aphw-ddi-portal-jwt-private-key
+          key: JWT_PRIVATE_KEY
+        - objectName: snd2-redisPassword
+          key: REDIS_PASSWORD

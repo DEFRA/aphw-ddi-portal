@@ -1,0 +1,3 @@
+# Auto-detect text files and normalize line endings to LF, preventing shell
+# scripts (which run inside Linux containers) from breaking when checked out on Windows.
+* text=auto eol=lf

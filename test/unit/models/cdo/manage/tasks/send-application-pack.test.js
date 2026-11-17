@@ -1,4 +1,3 @@
-
 const ViewModel = require('../../../../../../app/models/cdo/manage/tasks/send-application-pack')
 const { notYetStartedTaskList } = require('../../../../../mocks/cdo/manage/tasks/not-yet-started')
 describe('send-application-pack', () => {

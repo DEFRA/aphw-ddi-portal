@@ -11,11 +11,11 @@ function ViewModel (results) {
 const mapRows = (rows) => {
   return rows
     ? rows.map((row, index) => ({
-        ownerNumber: index + 1,
-        ownerName: `${row.owner.firstName} ${row.owner.lastName}`,
-        postcode: row.owner.address.postcode,
-        dogs: row.dogs
-      }))
+      ownerNumber: index + 1,
+      ownerName: `${row.owner.firstName} ${row.owner.lastName}`,
+      postcode: row.owner.address.postcode,
+      dogs: row.dogs
+    }))
     : []
 }
 

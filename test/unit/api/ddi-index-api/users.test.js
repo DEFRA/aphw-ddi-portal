@@ -33,7 +33,7 @@ describe('DDI API users', () => {
 
       const userDto = 'ralph@wreckit.com'
 
-      await expect(addUser(userDto, user)).rejects.toThrowError(new ApiConflictError({
+      await expect(addUser(userDto, user)).rejects.toThrow(new ApiConflictError({
         message: 'This user is already in the allow list'
       }))
     })
@@ -48,7 +48,7 @@ describe('DDI API users', () => {
 
       const userDto = 'ralph@wreckit.com'
 
-      await expect(addUser(userDto, user)).rejects.toThrowError(new ApiConflictError({
+      await expect(addUser(userDto, user)).rejects.toThrow(new ApiConflictError({
         message: 'This user is already in the allow list'
       }))
     })
@@ -227,7 +227,7 @@ describe('DDI API users', () => {
         'harry.callahan@san-francisco.police.gov'
       ]
 
-      await expect(addUsers(usersDto, user)).rejects.toThrowError(new ApiConflictError({
+      await expect(addUsers(usersDto, user)).rejects.toThrow(new ApiConflictError({
         message: 'This user is already in the allow list'
       }))
 
@@ -267,7 +267,7 @@ describe('DDI API users', () => {
         'alex.murphy@ocp.police.gov'
       ]
 
-      await expect(addUsers(usersDto, user)).rejects.toThrowError(new ApiErrorFailure('500 error', {
+      await expect(addUsers(usersDto, user)).rejects.toThrow(new ApiErrorFailure('500 error', {
         message: 'This user is already in the allow list'
       }))
 

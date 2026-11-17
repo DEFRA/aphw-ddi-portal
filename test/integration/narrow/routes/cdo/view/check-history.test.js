@@ -199,8 +199,8 @@ describe('Check history', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getEvents).toBeCalledWith(['ED123', 'P-456'], user)
-    expect(cleanUserDisplayName).toBeCalledWith('Developer')
+    expect(getEvents).toHaveBeenCalledWith(['ED123', 'P-456'], user)
+    expect(cleanUserDisplayName).toHaveBeenCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('Dog ED123')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check history')
@@ -248,8 +248,8 @@ describe('Check history', () => {
 
     const { document } = new JSDOM(response.payload).window
 
-    expect(getEvents).toBeCalledWith(['P-123'], user)
-    expect(cleanUserDisplayName).toBeCalledWith('Developer')
+    expect(getEvents).toHaveBeenCalledWith(['P-123'], user)
+    expect(cleanUserDisplayName).toHaveBeenCalledWith('Developer')
     expect(response.statusCode).toBe(200)
     expect(document.querySelectorAll('.govuk-caption-l')[0].textContent.trim()).toBe('John Smith')
     expect(document.querySelectorAll('h1.govuk-heading-l')[0].textContent.trim()).toBe('Check owner history')

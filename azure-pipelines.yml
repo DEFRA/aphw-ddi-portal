@@ -1,0 +1,68 @@
+name: '$(Build.SourceBranchName)$(System.PullRequest.SourceBranch)$(Rev:.r)'
+
+trigger:
+  - main
+  - feature/*
+  - release/*
+
+pr:
+  - main
+  - releases/*
+
+parameters:
+  - name: prDeployment
+    type: boolean
+    default: true
+  - name: branchDeployment
+    type: boolean
+    default: true
+  - name: snd2Deployment
+    type: boolean
+    default: true
+  - name: snd1Deployment
+    type: boolean
+    default: false
+
+resources:
+  repositories:
+    - repository: templates
+      endpoint: DEFRA
+      type: github
+      name: defra/fcp-pipeline-common
+      # ref: branch-name
+
+extends:
+  template: fcp-common-pipeline.yaml@templates
+  parameters:
+    appFrameworkType: nodejs
+    prDeployment: ${{ parameters.prDeployment }}
+    branchDeployment: ${{ parameters.branchDeployment }}
+    sndDeployment: ${{ parameters.snd2Deployment }}
+    snd1Deployment: ${{ parameters.snd1Deployment }}
+    variableGroupName: aphw-ddi-portal-env-var
+    pr_params:
+      container.azureStorageAccountName: $(snd2_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(snd2_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(snd2_azureAppRegistration_tenantId)
+    snd2_params:
+      container.azureStorageAccountName: $(snd2_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(snd2_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(snd2_azureAppRegistration_tenantId)
+    dev_params:
+      container.azureStorageAccountName: $(dev_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(dev_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(dev_azureAppRegistration_tenantId)
+    test_params:
+      container.azureStorageAccountName: $(test_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(test_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(test_azureAppRegistration_tenantId)
+    pre_params:
+      container.azureStorageAccountName: $(pre_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(pre_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(pre_azureAppRegistration_tenantId)
+    prd_params:
+      container.azureStorageAccountName: $(prd_container_azureStorageAccountName)
+      azureAppRegistration.clientId: $(prd_azureAppRegistration_clientId)
+      azureAppRegistration.tenantId: $(prd_azureAppRegistration_tenantId)
+    enableServiceNowChangeCreationDev: false
+    enableServiceNowChangeCreation: true

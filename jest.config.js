@@ -9,7 +9,8 @@ module.exports = {
   coverageDirectory: 'test-output',
   coverageReporters: [
     'text-summary',
-    'lcov'
+    'lcov',
+    'cobertura'
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/app/dist/',

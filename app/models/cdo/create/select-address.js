@@ -4,9 +4,9 @@ const { dedupeAddresses } = require('../../../lib/model-helpers')
 function ViewModel (details, addresses = [], error) {
   const items = addresses
     ? addresses.map((address, index) => ({
-        text: `${address.addressLine1}, ${address.town}, ${address.postcode}`,
-        value: index
-      }))
+      text: `${address.addressLine1}, ${address.town}, ${address.postcode}`,
+      value: index
+    }))
     : []
 
   this.model = {

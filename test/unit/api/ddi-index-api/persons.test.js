@@ -16,7 +16,7 @@ describe('Persons test', () => {
         firstName: 'Homer',
         lastName: 'Simpson'
       }, user)
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
 
     test('should get people filtered by firstName and lastName and filter dobDay, dobMonth, dobYear', async () => {
@@ -28,7 +28,7 @@ describe('Persons test', () => {
         dobMonth: '',
         dobYear: ''
       }, user)
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
 
     test('should get people filtered by firstName and lastName and DOB', async () => {
@@ -41,7 +41,7 @@ describe('Persons test', () => {
         dobMonth: '05',
         dobYear: '1998'
       }, user)
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
     })
 
     test('should get people filtered by firstName and lastName and DOB as Date', async () => {
@@ -54,7 +54,7 @@ describe('Persons test', () => {
         dobMonth: '05',
         dobYear: '1998'
       }, user)
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson&dateOfBirth=1998-05-10', user)
     })
 
     test('should throw an error given empty object', async () => {
@@ -69,7 +69,7 @@ describe('Persons test', () => {
         lastName: 'Simpson',
         queryParam: '1234'
       }, user))
-      expect(get).toBeCalledWith('persons?firstName=Homer&lastName=Simpson', user)
+      expect(get).toHaveBeenCalledWith('persons?firstName=Homer&lastName=Simpson', user)
     })
   })
 
@@ -100,7 +100,7 @@ describe('Persons test', () => {
         }
       })
       await getOrphanedOwners(user)
-      expect(get).toBeCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', user)
+      expect(get).toHaveBeenCalledWith('persons?limit=-1&sortKey=owner&sortOrder=ASC&orphaned=true', user)
     })
   })
 

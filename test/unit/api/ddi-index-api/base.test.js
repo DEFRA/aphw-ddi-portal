@@ -95,7 +95,7 @@ describe('Base API', () => {
   describe('Boom Request', () => {
     test('boomRequest should call request PUT', async () => {
       const res = await boomRequest('endpoint2', 'PUT', { val: 123 })
-      expect(wreck.read).toBeCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
+      expect(wreck.read).toHaveBeenCalledWith({ statusCode: 200, statusMessage: 'Ok', payload: Buffer.from('{"resultCode": 200}') })
       expect(res).toEqual({ statusCode: 200, statusMessage: 'Ok', payload: { result: 'ok' } })
       expect(wreck.request).toHaveBeenCalledWith('PUT', 'http://test.com/endpoint2', { payload: { val: 123 } })
     })

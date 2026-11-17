@@ -32,8 +32,8 @@ const dogAndOwnerConfirmation = {
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
       firstName: dogOwner.firstName,
       lastName: dogOwner.lastName,
-      ownerPk: ownerPk,
-      pk: pk,
+      ownerPk,
+      pk,
       backLink
     })).code(200).takeover()
   },
@@ -64,8 +64,8 @@ const dogAndOwnerRadioValidation = {
     return h.view(views.confirmDogAndOwner, new ConfirmOwnerDeleteViewModel({
       firstName: dogOwner.firstName,
       lastName: dogOwner.lastName,
-      ownerPk: ownerPk,
-      pk: pk,
+      ownerPk,
+      pk,
       backLink
     }, undefined, error)).code(400).takeover()
   },

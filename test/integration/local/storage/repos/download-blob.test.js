@@ -3,6 +3,8 @@ const { blobServiceClient } = require('../../../../../app/storage/get-blob-clien
 const { downloadBlob } = require('../../../../../app/storage/repos/download-blob')
 const { uploadFile } = require('../../../../../app/storage/repos/blob')
 
+const containerName = 'download-blob-tests'
+
 const streamToBuffer = async (readableStream) => {
   return new Promise((resolve, reject) => {
     const chunks = []
@@ -18,8 +20,13 @@ const streamToBuffer = async (readableStream) => {
 
 describe('register blob functions', () => {
   beforeAll(async () => {
-    const container = blobServiceClient.getContainerClient('certificates')
+    const container = blobServiceClient.getContainerClient(containerName)
     await container.createIfNotExists()
+  })
+
+  afterAll(async () => {
+    const container = blobServiceClient.getContainerClient(containerName)
+    await container.deleteIfExists()
   })
 
   test('should download blob', async () => {
@@ -28,15 +35,15 @@ describe('register blob functions', () => {
     stream.push('test stream')
     stream.push(null)
 
-    await uploadFile('certificates', filename, stream)
+    await uploadFile(containerName, filename, stream)
 
-    const res = await downloadBlob('certificates', filename)
+    const res = await downloadBlob(containerName, filename)
 
     const downloaded = await streamToBuffer(res.readableStreamBody)
     expect(downloaded.toString()).toEqual('test stream')
   })
 
   test('should throw when not exists', async () => {
-    await expect(downloadBlob('certificates', 'not-found.csv')).rejects.toThrow('File not-found.csv does not exist')
+    await expect(downloadBlob(containerName, 'not-found.csv')).rejects.toThrow('File not-found.csv does not exist')
   })
 })

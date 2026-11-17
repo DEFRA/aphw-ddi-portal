@@ -70,7 +70,7 @@ const summaryCdoMapper = (summaryCdo) => {
     status: summaryCdo.dog.status,
     cdoExpiry,
     humanReadableCdoExpiry: formatToGds(cdoExpiry) || '',
-    joinedExemptionScheme: joinedExemptionScheme,
+    joinedExemptionScheme,
     interimExemptFor: joinedExemptionSchemeDto !== null ? getMonthsSince(joinedExemptionScheme) : null,
     taskList
   }

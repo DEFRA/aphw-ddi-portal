@@ -47,7 +47,7 @@ describe('users test', () => {
       }
 
       const user = await createUser(newUser, adminUser)
-      expect(postWithBoom).toBeCalledWith('users', newUser, adminUser)
+      expect(postWithBoom).toHaveBeenCalledWith('users', newUser, adminUser)
       expect(user).toEqual({ username: 'Joel.Murphy78', pseudonym: 'Tavares', rowKey: '1' })
     })
 
@@ -108,7 +108,7 @@ describe('users test', () => {
   describe('deleteUser', () => {
     test('should delete a user', async () => {
       await deleteUser('user@example.com', adminUser)
-      expect(callDelete).toBeCalledWith('users/user@example.com', adminUser)
+      expect(callDelete).toHaveBeenCalledWith('users/user@example.com', adminUser)
     })
 
     test('should deleteUser should not delete a user if no actioning user sent', async () => {

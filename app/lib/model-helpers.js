@@ -124,7 +124,7 @@ const constructDateField = (data, id, labelText, hint = null, labelClass = null,
 
   const fieldMetadata = {
     type: 'date',
-    id: id,
+    id,
     namePrefix: id,
     ...fieldset,
     items: [

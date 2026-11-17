@@ -62,7 +62,7 @@ describe('SelectExistingDog test', () => {
 
       const { document } = new JSDOM(response.payload).window
 
-      expect(getOwnerDetails).toBeCalledTimes(1)
+      expect(getOwnerDetails).toHaveBeenCalledTimes(1)
       expect(document.querySelector('h1').textContent.trim()).toBe('Select the dog for John Smith')
       expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('FidoBreed: Breed 1Index number: ED123Microchip number: 12345')
       expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
@@ -94,7 +94,7 @@ describe('SelectExistingDog test', () => {
 
       const { document } = new JSDOM(response.payload).window
 
-      expect(getOwnerDetails).toBeCalledTimes(1)
+      expect(getOwnerDetails).toHaveBeenCalledTimes(1)
       expect(document.querySelector('h1').textContent.trim()).toBe('Select the dog for John Smith')
       expect(document.querySelectorAll('form .govuk-radios__item label')[0].textContent.trim()).toContain('FidoBreed: Breed 1Index number: ED123Microchip number: 12345')
       expect(document.querySelectorAll('form .govuk-radios__item .govuk-radios__input')[0].getAttribute('value')).toBe('0')
